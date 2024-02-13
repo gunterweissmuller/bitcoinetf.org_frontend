@@ -7,7 +7,7 @@ import {ADAPTERS_ERRORS_CODES} from '~/src/shared/constants/ethCodes'
 
 const ETH_PREFIX = 'public'
 const ETH_PREFIX_WITHOUT_PUBLIC = ''
-const hostname = process.env.NUXT_PUBLIC_ETH_API || 'api.stage.techetf.org'
+const hostname = window.location.host === 'bitcoinetf.org' ? 'api.bitcoinetf.org' : 'api.stage.techetf.org'
 
 @injectable()
 export class EthAdapter extends ApiAdapter {
