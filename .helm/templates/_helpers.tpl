@@ -45,7 +45,7 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{- define "apps-env-var-values" -}}
-{{- $globals := ternary .Values.global.prod .Values.global.stage (eq .Values.global.env_name "prod") -}}
+{{- $globals := ternary .Values.global.stage (ternary .Values.global.prod .Values.global.dev (eq .Values.global.env_name "prod")) (eq .Values.global.env_name "stage") -}}
 - name: APP_NAME
   value: "{{ upper .Values.global.app_name }}"
 - name: APP_ENV
