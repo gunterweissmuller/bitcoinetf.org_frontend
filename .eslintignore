@@ -1,0 +1,7 @@
+components.d.ts
+nuxt.d.ts
+nuxt.config.ts
+public/gid.js
+.stylelintrc.js
+/**/node_modules/*
+node_modules/

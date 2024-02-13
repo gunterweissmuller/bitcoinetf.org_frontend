@@ -1,0 +1,49 @@
+.m-scroll-navigation {
+  position: fixed;
+  top: torem(150);
+  left: torem(20);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: torem(12);
+  color: var(--text-inverse-primary);
+
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+
+  &__indicator {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: torem(48);
+    height: torem(48);
+  }
+
+  &__circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+
+    circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100%;
+      min-height: 100%;
+      transform: rotate(-90deg) translate(-50%, -50%);
+      transform-origin: center;
+      stroke-offset: torem(2);
+      stroke-width: torem(2);
+      fill: none;
+      transition: all 0.6s ease;
+    }
+  }
+}

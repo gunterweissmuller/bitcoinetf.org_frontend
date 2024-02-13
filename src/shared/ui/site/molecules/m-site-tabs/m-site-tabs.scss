@@ -1,0 +1,25 @@
+.m-site-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: torem(12);
+
+  &__item {
+    font-size: torem(12);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: torem(4);
+    padding: torem(5);
+    transition: all 0.4s ease;
+
+    &.active {
+      color: var(--text-inverse-primary);
+      background: var(--accent-primary);
+    }
+
+    &:hover {
+      color: var(--text-inverse-primary);
+      background: var(--accent-primary);
+    }
+  }
+}

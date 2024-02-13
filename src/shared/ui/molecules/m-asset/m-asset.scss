@@ -1,0 +1,68 @@
+.m-asset {
+  min-height: torem(94);
+  padding: torem(16);
+  display: flex;
+  align-items: center;
+  background: var(--color-bgD);
+
+  &__type {
+    border-radius: 50%;
+    width: torem(24);
+    height: torem(24);
+    margin-right: torem(16);
+  }
+
+  &__name {
+    display: flex;
+    flex-direction: column;
+    font-family: Dm, sans-serif;
+
+    &-title {
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: torem(18);
+      margin-bottom: torem(4);
+    }
+
+    &-subtitle {
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-weight: 700;
+      line-height: torem(16);
+    }
+  }
+
+  &__info {
+    margin-left: auto;
+    text-align: end;
+    display: flex;
+    flex-direction: column;
+
+    &-earning {
+      margin-bottom: torem(4);
+      color: var(--text-primary, #22242B);
+      font-family: DM, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: normal;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: torem(2);
+      }
+
+    }
+
+    &-apy {
+      margin-bottom: torem(4);
+      color: var(--text-secondary, #3F424E);
+      text-align: right;
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-weight: 500;
+      line-height: normal;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+.w-fund-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: torem(8);
+  grid-template-rows:repeat(1, torem(167));
+  margin-bottom: var(--spacing-m-2);
+
+  //@include breakpoint($break-desktop-1024) {
+  //  display: none;
+  //  margin-bottom: 0;
+  //}
+}

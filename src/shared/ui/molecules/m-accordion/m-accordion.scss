@@ -1,0 +1,117 @@
+.m-accordion {
+  &__title {
+    padding-right: torem(16);
+    font-size: torem(16);
+    font-weight: 700;
+    line-height: torem(21);
+  }
+
+  &__content {
+    padding-top: torem(16);
+  }
+
+  &__pic {
+    margin-right: var(--spacing-m-1);
+  }
+
+  &__icon {
+    color: var(--text-tertiary)
+  }
+
+  &-radio {
+    padding: var(--spacing-m-1);
+    border-radius: var(--spacing-s);
+    border: torem(1) solid var(--surfaces-border-1);
+    background: var(--surfaces-surface-1);
+
+    &__top {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+
+      &-icon {
+        color: var(--text-tertiary);
+      }
+
+      .a-radio__label {
+        color: var(--text-primary);
+        font-family: Dm, sans-serif;
+        font-size: torem(16);
+        font-weight: 700;
+        line-height: normal;
+      }
+    }
+
+    &__content {
+      padding: var(--spacing-m-2) 0 var(--spacing-m-1) 0;
+    }
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    &-link {
+      width: 100%;
+      justify-content: flex-start;
+
+      .m-accordion {
+        &__pic {
+          color: var(--text-tertiary);
+        }
+
+        &__icon {
+          color: var(--text-tertiary);
+          margin-left: auto;
+        }
+
+        &__title {
+          color: var(--text-tertiary);
+          font-family: Dm, sans-serif;
+          font-size: torem(14);
+          font-weight: 700;
+          line-height: torem(18);
+          width: 100%;
+        }
+
+      }
+
+      &:hover {
+        .m-accordion {
+          &__pic {
+            color: var(--text-primary);
+          }
+
+          &__icon {
+            color: var(--text-primary);
+          }
+
+          &__title {
+            color: var(--text-primary);
+          }
+        }
+
+      }
+
+
+      &--active {
+        .m-accordion {
+          &__pic {
+            color: var(--text-primary);
+          }
+
+          &__icon {
+            color: var(--text-primary);
+          }
+
+          &__title {
+            color: var(--text-primary);
+          }
+        }
+
+      }
+    }
+  }
+}

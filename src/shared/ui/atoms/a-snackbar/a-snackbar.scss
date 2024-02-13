@@ -1,0 +1,42 @@
+.a-snackbar {
+  @include breakpoint($break-desktop-1024) {
+    max-width: torem(390);
+    min-height: torem(72);
+    padding: torem(16, 20, 16, 24);
+  }
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: torem(345);
+  min-height: torem(60);
+  padding: torem(16);
+  border-radius: var(--spacing-m-1);
+  border: torem(1) solid var(--surfaces-surface-glass-border);
+  background: var(--surfaces-surface-2);
+
+
+  &__text {
+    color: var(--text-color-text);
+  }
+
+  &__btn {
+    width: torem(24);
+    height: torem(24);
+    padding: torem(4);
+    color: var(--text-primary);
+    background: transparent;
+    border-radius: torem(50);
+    flex-basis: torem(24);
+    cursor: pointer;
+  }
+
+  &--error {
+    .a-snackbar {
+      &__text {
+        color: var(--accent-danger);
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+.font-button-s {
+  font-size: torem(14);
+  font-weight: 500;
+  line-height: torem(16);
+}
+
+@mixin font-button-s {
+  font-size: torem(14);
+  font-weight: 500;
+  line-height: torem(16);
+}
+
+.font-button-m {
+  font-size: torem(17);
+  font-weight: 500;
+  line-height: torem(24);
+}
+
+@mixin font-button-m {
+  font-size: torem(17);
+  font-weight: 500;
+  line-height: torem(24);
+}
+
+.font-button-l {
+  font-size: torem(20);
+  font-weight: 500;
+  line-height: torem(24);
+}
+
+@mixin font-button-l {
+  font-size: torem(20);
+  font-weight: 500;
+  line-height: torem(24);
+}
+
+.font-button-xl {
+  font-size: torem(28);
+  font-weight: 600;
+  line-height: torem(32);
+}
+
+@mixin font-button-xl {
+  font-size: torem(28);
+  font-weight: 600;
+  line-height: torem(32);
+}
+
+.font-control-m {
+  font-size: torem(16);
+  font-weight: 500;
+  line-height: torem(24);
+}
+
+@mixin font-control-m {
+  font-size: torem(16);
+  font-weight: 500;
+  line-height: torem(24);
+}
+
+.font-control-s {
+  font-size: torem(14);
+  font-weight: 500;
+  line-height: torem(20);
+}
+
+@mixin font-control-s {
+  font-size: torem(14);
+  font-weight: 500;
+  line-height: torem(20);
+}

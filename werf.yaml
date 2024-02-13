@@ -1,0 +1,59 @@
+{{ $_ := env "CI_PROJECT_PATH_SLUG"  | trunc 49 | trimSuffix "-" | set . "ProjectName" }}
+{{ $_ := env "ENV_FULL_NAME"  | trunc 49 | trimSuffix "-" | set . "EnvName" }}
+{{- $values := .Files.Get ".helm/values.yaml" | fromYaml -}}
+{{- $globals := ternary $values.global.prod $values.global.stage (eq .EnvName "prod") -}}
+
+---
+configVersion: 1
+project: {{ .ProjectName }}
+cleanup:
+  keepPolicies:
+    - references:
+        tag: /.*/
+        limit:
+          last: 2
+    - references:
+        branch: /.*/
+        limit:
+          last: 2
+          operator: And
+      imagesPerReference:
+        last: 2
+        operator: And
+    - references:
+        branch: /^(master)$/
+      imagesPerReference:
+        last: 2
+---
+image: app
+from: node:current-alpine
+docker:
+  WORKDIR: /app
+  USER: 1000
+  ENTRYPOINT: [ "node", ".output/server/index.mjs" ]
+git:
+  - add: /
+    to: /app
+    excludePaths:
+      - werf.yaml
+      - werf-giterminism.yaml
+      - .gitlab-ci.yml
+      - .helm
+    stageDependencies:
+      install:
+        - package.json
+        - pnpm-lock.yaml
+      beforeSetup:
+        - "**/*"
+shell:
+  install:
+    - cd /app
+    - corepack enable
+    - pnpm install
+  beforeSetup:
+    - cd /app
+    - export NODE_ENV="{{ .EnvName }}"
+    - export NUXT_PUBLIC_WEBSOCKET_URL={{- $globals.NuxtWsUrl }}
+    - export NUXT_PUBLIC_WEBSOCKET_TOKEN={{- $globals.NuxtWsToken }}
+    - pnpm build
+---

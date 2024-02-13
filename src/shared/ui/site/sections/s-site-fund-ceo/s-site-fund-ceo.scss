@@ -1,0 +1,224 @@
+.s-site-fund-ceo {
+  position: relative;
+  padding: torem(60, 0, 124);
+
+  @media (max-width: 767px) {
+    padding: torem(96, 0, 32);
+  }
+
+  &__title {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: torem(80);
+
+    @media (max-width: 991px) {
+      margin-bottom: 0;
+    }
+
+    span {
+      display: block;
+    }
+
+    &:before {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      content: '';
+      width: torem(722);
+      height: torem(160);
+      border-radius: tore(722);
+      background: rgba(1, 4, 15, 0.70);
+      filter: blur(40px);
+
+      @media (max-width: 767px) {
+        width: torem(260);
+        height: torem(80);
+        border-radius: torem(260);
+      }
+    }
+  }
+
+  &__info {
+    position: relative;
+    z-index: 2;
+    width: torem(327);
+    margin-left: auto;
+    margin-bottom: torem(100);
+
+    @media (max-width: 991px) {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    @media (max-width: 767px) {
+      text-align: center;
+      margin-bottom: torem(40);
+    }
+
+    &-text {
+      margin-bottom: torem(40);
+
+      p {
+        font-family: Jakarta, sans-serif;
+        font-size: torem(18);
+        line-height: 140%;
+
+        @media (max-width: 767px) {
+          font-size: torem(16);
+        }
+
+        &:not(:last-child) {
+          margin-bottom: torem(20);
+        }
+      }
+    }
+  }
+
+  &__points {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__point {
+    display: flex;
+    align-items: flex-start;
+    border-top: torem(1) solid rgba(#fff, 0.1);
+    padding: torem(32, 0);
+
+    @media (max-width: 767px) {
+      flex-direction: column;
+      text-align: center;
+      padding: torem(20, 0);
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    &-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: torem(40);
+      height: torem(40);
+      font-family: Jakarta, sans-serif;
+      font-size: torem(14);
+      font-weight: 800;
+      color: #01040F;
+      background: var(--color-bg);
+      border-radius: 100%;
+
+      @media (max-width: 767px) {
+        width: torem(32);
+        height: torem(32);
+        font-size: torem(12);
+        margin: 0 auto torem(12);
+      }
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    &-title {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(32);
+      line-height: 120%;
+      font-weight: 800;
+      margin-bottom: torem(12);
+
+      @media (max-width: 767px) {
+        font-size: torem(24);
+        margin-bottom: torem(8);
+      }
+    }
+
+    &-text {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(18);
+      line-height: 140%;
+      color: #FFFFFF80;
+
+      @media (max-width: 767px) {
+        font-size: torem(16);
+      }
+    }
+  }
+
+  &__container {
+    position: relative;
+    max-width: torem(1400);
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__img {
+    position: absolute;
+    top: torem(-140);
+    left: 50%;
+    z-index: 2;
+    transform: translateX(-50%);
+
+    @media (max-width: 991px) {
+      position: static;
+      transform: translateX(0);
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: torem(500);
+      margin: 0 auto;
+      margin-top: torem(-50);
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 767px) {
+      margin-top: torem(-20);
+    }
+  }
+
+  &__message {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    max-width: fit-content;
+    font-family: Jakarta, sans-serif;
+    font-size: torem(16);
+    line-height: torem(20);
+    color: #83F5B8;
+    transform: translate(-50%, -25%);
+
+    @media (max-width: 991px) {
+      top: torem(300);
+      left: torem(200);
+      transform: translate(0, 0);
+    }
+
+    @media (max-width: 767px) {
+      top: torem(200);
+      left: 0;
+    }
+
+    &-text {
+      max-width: torem(153);
+      transform: rotate(5deg);
+    }
+  }
+}

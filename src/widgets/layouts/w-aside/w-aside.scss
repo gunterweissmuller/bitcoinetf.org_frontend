@@ -1,0 +1,446 @@
+.w-aside {
+  z-index: 100;
+  position: fixed;
+  display: flex;
+  //background: var(--surfaces-surface-glass-2);
+  flex-direction: column;
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+  top: 0;
+  left: 0;
+  padding: torem(107, 15, 96, 15);
+  justify-content: flex-start;
+  display: none;
+
+  @include breakpoint($break-desktop-1024) {
+    display: flex;
+    width: torem(288);
+    padding: var(--spacing-l-2) var(--spacing-m-2);
+    position: fixed;
+    left: 0;
+    top: 0;
+    justify-content: flex-start;
+    background: var(--surfaces-surface-2);
+    height: 100vh;
+  }
+
+  &__refer {
+    margin-bottom: torem(24);
+
+    @include breakpoint($break-desktop-1024) {
+      display: none;
+    }
+  }
+
+  &__logo {
+    display: none;
+
+    @include breakpoint($break-desktop-1024) {
+      padding: var(--spacing-s) var(--spacing-m-1);
+      display: flex;
+      align-items: center;
+      margin-bottom: torem(32);
+    }
+
+    &-icon {
+      margin-right: var(--spacing-s);
+    }
+
+    &-text {
+      font-family: Ubuntu, sans-serif;
+      font-size: torem(16);
+      font-style: italic;
+      font-weight: 700;
+      line-height: torem(18);
+    }
+  }
+
+  &__links {
+    display: none;
+
+    @include breakpoint($break-desktop-1024) {
+      display: block;
+      padding-bottom: torem(16);
+      border-bottom: torem(1) solid var(--color-border-1);
+      margin-bottom: torem(16);
+    }
+  }
+
+
+  &__avatar {
+    padding: torem(24, 32);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include breakpoint($break-desktop-1024) {
+      display: none;
+    }
+
+    &-pic {
+      width: torem(64);
+      height: torem(64);
+      margin-bottom: torem(16);
+    }
+
+    &-title {
+      font-weight: 700;
+      font-size: torem(16);
+      line-height: torem(20);
+    }
+
+    &-subtitle {
+      font-family: Dm, sans-serif;
+      font-weight: 500;
+      font-size: torem(14);
+      line-height: torem(18);
+    }
+  }
+
+  &__button {
+    width: 100%;
+    margin-bottom: var(--spacing-m-3);
+
+    & > div {
+      width: 100%;
+
+      & > div {
+        width: 100%;
+      }
+    }
+
+    &-buy {
+      width: 100%;
+    }
+  }
+
+  &__sub-nav {
+    display: flex;
+    flex-direction: column;
+    margin-left: torem(12);
+    padding-left: torem(28);
+    border-left: torem(1) solid var(--surfaces-border-2);
+
+    &__link {
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: torem(18);
+
+      &:not(:last-child) {
+        margin-bottom: var(--spacing-m-2);
+      }
+
+      &--active {
+        color: var(--text-primary);
+      }
+    }
+  }
+
+  &__poster {
+    position: relative;
+    border-radius: var(--bradius-m);
+    padding: var(--spacing-m-1);
+    background: var(--accent-primary);
+    color: var(--color-text-inverse-primary);
+    margin-bottom: torem(24);
+    display: none;
+
+    &-title {
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      line-height: torem(18);
+      margin-bottom: torem(4);
+    }
+
+    &-text {
+      font-family: Dm, sans-serif;
+      font-weight: 400;
+      font-size: torem(14);
+      line-height: torem(18);
+    }
+
+    &-chevron {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: torem(16);
+    }
+  }
+
+  &__inner {
+    overflow-y: auto;
+    height: max-content;
+
+    @include breakpoint($break-desktop-1024) {
+      overflow-y: unset;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+  }
+
+  &__wrapper {
+    border-radius: var(--bradius-s);
+    border: torem(1) solid var(--color-border-1);
+    display: flex;
+    flex-direction: column;
+
+    @include breakpoint($break-desktop-1024) {
+      flex-grow: 1;
+      border: transparent;
+    }
+  }
+
+  &__list {
+    border-radius: torem(8);
+    border: torem(1) solid var(--surfaces-border-1);
+    background: var(--surfaces-surface-glass-2);
+    flex-direction: column;
+    display: flex;
+
+
+    @include breakpoint($break-desktop-1024) {
+      height: 100%;
+      border-radius: 0;
+      border: none;
+      background: transparent;
+    }
+
+  }
+
+  &__accordion {
+    padding: var(--spacing-s) var(--spacing-m-1);
+  }
+
+
+  &__item {
+    cursor: pointer;
+    position: relative;
+    @include breakpoint($break-desktop-1024) {
+      &:not(:last-child) {
+        margin-bottom: torem(16);
+      }
+    }
+
+    &--more {
+      display: none;
+
+      @include breakpoint($break-desktop-1024) {
+        display: block;
+      }
+
+    }
+
+    &-mobile {
+      @include breakpoint($break-desktop-1024) {
+        display: none;
+      }
+    }
+
+    &:last-child {
+      @include breakpoint($break-desktop-1024) {
+        &:before {
+          position: absolute;
+          bottom: torem(-16);
+          left: 50%;
+          transform: translateX(-50%);
+          content: '';
+          width: calc(100% - 32px);
+          height: torem(1);
+          background: var(--surfaces-border-1);
+        }
+
+      }
+
+    }
+
+
+    &--indent {
+      margin-top: auto;
+    }
+
+    &--avatar {
+      display: none;
+      @include breakpoint($break-desktop-1024) {
+        display: block;
+      }
+    }
+  }
+
+  &__link {
+    padding: torem(16);
+    display: flex;
+    width: 100%;
+    color: var(--text-primary);
+    align-items: center;
+
+    @include breakpoint($break-desktop-1024) {
+      padding: var(--spacing-s) var(--spacing-m-1);
+      color: var(--text-tertiary);
+
+      &:hover {
+        border-radius: var(--bradius-s);
+        background: var(--surfaces-surface-glass-2);
+        color: var(--text-primary);
+        box-shadow: var(--b-shadow-1);
+
+        @include breakpoint($break-desktop-1024) {
+          border-radius: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+
+        .w-aside__link-img {
+          color: var(--text-primary);
+        }
+
+      }
+    }
+
+    &-img {
+      color: var(--text-tertiary);
+      margin-right: torem(16);
+    }
+
+    &-text {
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: torem(18);
+    }
+
+    &-chevron {
+      color: var(--text-tertiary);
+      margin-left: auto;
+      @include breakpoint($break-desktop-1024) {
+        display: none;
+      }
+    }
+
+
+    &--active {
+      border-radius: var(--bradius-s);
+      background: var(--surfaces-surface-glass-2);
+      color: var(--text-primary);
+      box-shadow: var(--b-shadow-1);
+
+      @include breakpoint($break-desktop-1024) {
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .w-aside__link-img {
+        color: var(--text-primary);
+      }
+
+    }
+  }
+
+
+  &--page {
+    display: flex;
+    max-width: 100%;
+    position: static;
+    //background: var(--surfaces-surface-glass-2);
+    flex-direction: column;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: torem(0, 15, 0, 15);
+    height: 100%;
+    justify-content: flex-start;
+
+    @include breakpoint($break-desktop-1024) {
+      width: 100%;
+      padding: 0;
+      position: static;
+      left: unset;
+      top: unset;
+      justify-content: flex-start;
+      background: transparent;
+      height: auto;
+    }
+
+    .w-aside {
+      &__inner {
+        overflow: visible;
+        height: auto;
+      }
+
+      &__logo {
+        display: none;
+      }
+
+      &__links {
+        display: none;
+      }
+
+      &__item {
+        &--more {
+          display: none;
+        }
+      }
+
+      &__avatar {
+        display: flex;
+      }
+
+      &__refer {
+        display: block;
+
+        @include breakpoint($break-desktop-1024) {
+          display: none;
+        }
+
+      }
+
+      &__list {
+        border-radius: torem(8);
+        border: torem(1) solid var(--surfaces-border-1);
+        background: var(--surfaces-surface-glass-2);
+        flex-direction: column;
+        display: flex;
+      }
+
+      &__link {
+        padding: torem(16);
+        display: flex;
+        width: 100%;
+        color: var(--text-primary);
+
+        &-chevron {
+          @include breakpoint($break-desktop-1024) {
+            display: block;
+          }
+        }
+      }
+
+      &__item {
+        margin-bottom: 0;
+
+        &-mobile {
+          @include breakpoint($break-desktop-1024) {
+            display: block;
+          }
+        }
+
+
+        &--logout {
+          @include breakpoint($break-desktop-1024) {
+            display: none;
+          }
+        }
+
+        &--avatar {
+          display: none;
+        }
+      }
+
+    }
+  }
+
+}

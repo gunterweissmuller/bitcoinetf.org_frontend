@@ -1,0 +1,49 @@
+.e-buy-shares-processing-modal {
+
+  @include breakpoint($break-tablet) {
+    border-radius: var(--spacing-m-3);
+    background: var(--surfaces-surface-1);
+    width: 100%;
+    max-width: torem(480);
+    max-height: torem(390);
+  }
+
+  &__wrap {
+    display: flex;
+    padding: var(--spacing-l-2) var(--spacing-m-2);
+    flex-direction: column;
+    align-items: center;
+
+
+    &-pic {
+      width: torem(80);
+      height: torem(80);
+      margin: 0 auto var(--spacing-m-3);
+    }
+
+    &-title {
+      text-align: center;
+      font-family: Dm, sans-serif;
+      font-size: torem(18);
+      font-weight: 700;
+      line-height: normal;
+      margin-bottom: var(--spacing-s);
+    }
+
+    &-text {
+      color: var(--text-secondary);
+      text-align: center;
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 400;
+      line-height: normal;
+      margin-bottom: var(--spacing-m-3);
+    }
+
+    &-btn {
+      margin-top: auto;
+      width: 100%;
+    }
+  }
+
+}

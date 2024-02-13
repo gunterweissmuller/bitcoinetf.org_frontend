@@ -1,0 +1,105 @@
+.f-login {
+  padding: var(--spacing-m-2) 0 var(--spacing-m-3);
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  @include breakpoint($break-desktop-1024) {
+    padding: torem(67) 0 var(--spacing-m-3);
+    flex-grow: 0;
+  }
+
+  &__back {
+    display: flex;
+    margin-bottom: var(--spacing-m-1);
+
+    &-icon {
+      cursor: pointer;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+  }
+
+  &__password {
+    margin-bottom: var(--spacing-s);
+  }
+
+  &__forgot {
+
+    &-text {
+      display: inline-block;
+      cursor: pointer;
+      color: var(--accent-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      margin-bottom: var(--spacing-m-3);
+    }
+  }
+
+  &__error {
+    color: var(--accent-danger);
+    font-family: Dm, sans-serif;
+    margin-top: torem(16);
+    font-size: torem(16);
+    font-weight: 500;
+  }
+
+  &__title {
+    font-family: Dm, sans-serif;
+    font-size: torem(32);
+    font-weight: 700;
+    line-height: torem(42);
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__subtitle {
+    margin-bottom: torem(32);
+    font-weight: 400;
+    font-size: torem(16);
+    line-height: torem(21);
+    color: var(--text-secondary);
+
+    a {
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+  }
+
+  &__name {
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__email {
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__ref {
+    margin-bottom: var(--spacing-m-3);
+
+    &-code {
+      margin-bottom: var(--spacing-s);
+    }
+
+    &-link {
+      color: var(--accent-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+
+  &__button {
+    width: 100%;
+  }
+}

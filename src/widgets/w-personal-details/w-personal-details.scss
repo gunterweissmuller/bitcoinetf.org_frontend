@@ -1,0 +1,97 @@
+.w-personal-details {
+  &__wrap {
+    margin-bottom: torem(150);
+  }
+
+  &__inputs {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: var(--spacing-m-1);
+
+    @include breakpoint($break-desktop-1024) {
+      grid-template-columns: repeat(2, torem(294));
+      gap: var(--spacing-m-1);
+    }
+  }
+
+  &__info {
+    margin-bottom: var(--spacing-m-2);
+  }
+
+  &__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: var(--spacing-m-3);
+
+    &-pic {
+      width: torem(64);
+      height: torem(64);
+      margin-bottom: var(--spacing-m-1);
+    }
+
+    &-title {
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: torem(21);
+      text-align: center;
+    }
+
+    &-subtitle {
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 500;
+      line-height: torem(18);
+      text-align: center;
+    }
+  }
+
+  &__button {
+    cursor: pointer;
+    border-radius: torem(16);
+    box-shadow: var(--b-shadow-1);
+    background: var(--accent-primary);
+    padding: var(--spacing-m-1);
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+
+      &-title {
+        text-align: start;
+        color: var(--text-inverse-primary);
+        font-family: Dm, sans-serif;
+        font-size: torem(14);
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: var(--spacing-xs);
+      }
+
+      &-text {
+        text-align: start;
+        color: var(--text-inverse-secondary);
+        font-family: Dm, sans-serif;
+        font-size: torem(14);
+        font-weight: 400;
+        line-height: normal;
+      }
+    }
+
+    &-chevron {
+      margin-left: auto;
+      color: var(--text-inverse-secondary);
+    }
+  }
+
+  &__input {
+
+    &-email {
+      grid-column: 1 / -1;
+    }
+  }
+}

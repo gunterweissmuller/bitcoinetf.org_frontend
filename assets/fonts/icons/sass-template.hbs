@@ -1,0 +1,71 @@
+:root {
+{{#each codepoints}}
+  --{{../classPrefix}}{{@key}}-content: "\\{{this}}";
+{{/each}}
+}
+
+@font-face {
+font-family: "{{fontName}}";
+src: {{{src}}};
+font-weight: normal;
+font-style: normal;
+}
+
+{{baseSelector}} {
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+vertical-align: middle;
+width: 1em;
+height: 1em;
+position: relative;
+fill: currentColor;
+font-family: {{fontName}}, serif;
+font-weight: normal;
+font-style: normal;
+line-height: 1;
+text-transform: none;
+letter-spacing: normal;
+word-wrap: normal;
+white-space: nowrap;
+direction: ltr;
+
+/* Support for all WebKit browsers. */
+-webkit-font-smoothing: antialiased;
+
+/* Support for Safari and Chrome. */
+text-rendering: optimizeLegibility;
+
+/* Support for Firefox. */
+-moz-osx-font-smoothing: grayscale;
+
+/* Support for IE. */
+font-feature-settings: 'liga';
+}
+
+{{#each codepoints}}
+  .{{../classPrefix}}{{@key}}:before {
+  content: "\\{{this}}";
+  }
+
+  .{{../classPrefix}}{{@key}}-css,
+  %{{../classPrefix}}{{@key}}-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+{{/each}}

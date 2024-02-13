@@ -1,0 +1,42 @@
+.e-analytics-tabs {
+  margin-top: var(--spacing-m-1);
+  @include breakpoint($break-desktop-1024) {
+    display: none;
+  }
+
+  &__list {
+    padding: torem(0, 16);
+    max-width: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+  }
+
+  &__item {
+    position: relative;
+    display: block;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    font-size: torem(14);
+    line-height: torem(18);
+    padding: torem(0, 5, 16);
+    text-align: center;
+
+    &--active {
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - #{torem(16)});
+        height: torem(2);
+        background: var(--accent-primary);
+      }
+
+      color: var(--accent-primary);
+      font-weight: 700;
+    }
+  }
+}

@@ -1,0 +1,130 @@
+.e-referral-share-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    color: var(--text-inverse-primary);
+    font-family: Dm, sans-serif;
+    font-size: torem(32);
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: var(--spacing-m-1);
+
+    @include breakpoint($break-tablet) {
+      text-align: center;
+    }
+
+  }
+
+  &__text {
+    color: var(--text-inverse-secondary);
+    font-family: Dm, sans-serif;
+    font-size: torem(16);
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: var(--spacing-l-2);
+
+    @include breakpoint($break-tablet) {
+      text-align: center;
+    }
+  }
+
+  &__links {
+    padding: 0 var(--spacing-m-1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-m-3);
+  }
+
+  &__subtitle {
+    color: var(--text-inverse-primary);
+    font-family: Dm, sans-serif;
+    text-align: center;
+    font-size: torem(16);
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: var(--spacing-m-2);
+  }
+
+  &__link {
+    color: var(--text-inverse-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-s);
+    border-radius: var(--spacing-m-3);
+    background: var(--surfaces-surface-glass);
+
+    &-icon {
+      color: var(--text-inverse-primary);
+      width: var(--spacing-m-2);
+      height: var(--spacing-m-2);
+    }
+  }
+
+  &__controls {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__button {
+    width: 100%;
+
+    &:not(:last-child) {
+      margin-bottom: torem(12);
+    }
+
+    &-cancel {
+      .a-button__label {
+        color: var(--text-inverse-primary) !important;
+      }
+    }
+  }
+
+  .a-input__input-title {
+    color: rgba(136, 140, 160, 1);
+  }
+
+  .a-input__icon {
+    color: rgba(0, 102, 255, 1);
+  }
+}
+
+body[data-theme='dark'] {
+  .e-referral-share-modal {
+    .e-referral-share-modal__link {
+      background: rgba(255, 255, 255, 0.32);
+    }
+
+    .a-input__input-container {
+      background: rgba(227, 238, 255, 1);
+    }
+
+    .a-input__input {
+      background: rgba(227, 238, 255, 1);
+    }
+
+    .a-input__icon {
+      color: rgba(0, 102, 255, 1);
+    }
+
+    .a-input__input-title {
+      color: rgba(136, 140, 160, 1);
+    }
+
+    .a-input__input-text {
+      color: rgba(34, 36, 43, 1);
+    }
+  }
+}

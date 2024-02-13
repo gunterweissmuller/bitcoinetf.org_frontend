@@ -1,0 +1,26 @@
+export const INVERSIFY_TYPES = {
+  Application: Symbol.for('Application'),
+  FiltersPack: Symbol.for('FiltersPack'),
+  StorePack: Symbol.for('StorePack'),
+  LocalStorage: Symbol.for('LocalStorage'),
+  ApiPack: Symbol.for('ApiPack'),
+  InfoAdapter: Symbol.for('InfoAdapter'),
+  EthAdapter: Symbol.for('EthAdapter'),
+  ApiAdapter: Symbol.for('ApiAdapter'),
+
+  // Modules for api
+  EthPack: Symbol.for('EthPack'),
+  InfoPack: Symbol.for('InfoPack'),
+  AuthApiModule: Symbol.for('AuthApiModule'),
+  FundApiModule: Symbol.for('FundApiModule'),
+  EventApiModule: Symbol.for('EventApiModule'),
+  NewsApiModule: Symbol.for('NewsApiModule'),
+  StatisticApiModule: Symbol.for('StatisticApiModule'),
+  StatisticEthApiModule: Symbol.for('StatisticEthApiModule'),
+  KycApiModule: Symbol.for('KycApiModule'),
+  BillingEthApiModule: Symbol.for('BillingEthApiModule'),
+  BillingApiModule: Symbol.for('BillingApiModule'),
+  ReferralApiModule: Symbol.for('ReferralApiModule'),
+  PagesApiModule: Symbol.for('PagesApiModule'),
+  BlockchainProxyApiModule: Symbol.for('BlockchainProxyApiModule'),
+}

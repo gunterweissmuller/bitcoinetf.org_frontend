@@ -1,0 +1,367 @@
+<template>
+  <div class="w-dividends">
+    <div class="w-dividends__wrap">
+      <div class="w-dividends__amount">
+        <div class="w-dividends__amount-wrap">
+          <div class="w-dividends__amount-title">Total Balance</div>
+          <div class="w-dividends__amount-sum">
+            ${{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }}
+            <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
+              >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
+            >
+          </div>
+          <div v-if="walletDividends?.btc_amount" class="w-dividends__btc" v-html="btcAmount"></div>
+        </div>
+      </div>
+      <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
+        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name="Icon.ColorfulBitcoin" />
+        <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
+        <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
+      </button>
+      <div v-else class="w-dividends__amount-method" @click="openModal">
+        <div class="w-dividends__amount-method__wrap">
+          <a-icon width="24" height="24" class="w-dividends__amount-method__icon" :name="typeMethodIcon" />
+          <div class="w-dividends__amount-method-box">
+            <div class="w-dividends__amount-method__method">
+              <div class="w-dividends__amount-method__method-head">Withdrawal method</div>
+              <div class="w-dividends__amount-method__sum-head">{{ method === 'bitcoin_on_chain' ? 'On-chain' : 'Lightning'}}</div>
+            </div>
+            <div class="w-dividends__amount-method__sum">
+              <div class="w-dividends__amount-method__method-text">{{ address }}</div>
+            </div>
+          </div>
+
+          <a-icon width="18" height="18" class="w-dividends__amount-method__chevron" :name="Icon.MonoChevronRight" />
+        </div>
+      </div>
+      <div class="w-dividends__subtitle">Transactions</div>
+      <div v-if="personalDividends.length" class="w-dividends__list">
+        <transition-group name="fade" tag="div">
+          <div v-for="item in personalDividends" :key="item?.uuid" class="w-dividends__item">
+            <div
+              :class="['w-dividends__item-pic', { 'w-dividends__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
+            >
+              <a-icon
+                width="18"
+                height="18"
+                :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
+              />
+            </div>
+            <div class="w-dividends__item_info">
+              <div class="w-dividends__item_info-title">{{ getDividendsDesc(item) }}</div>
+              <div class="w-dividends__item_info-date">
+                {{ $app.filters.dayjs(item?.created_at)?.format('D MMMM YY') }}
+              </div>
+            </div>
+            <div v-if="item.status === 'pending'" class="w-dividends__item_sums">Pending</div>
+            <div v-else class="w-dividends__item_sums">
+              <div class="w-dividends__item_info-usd">
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 8) }}
+              </div>
+              <div class="w-dividends__item_info-btc">
+                <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
+                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span>
+              </div>
+            </div>
+          </div>
+        </transition-group>
+      </div>
+      <div v-if="personalDividends.length && hasNextPage" class="w-dividends__more">
+        <div @click="loadMoreDividends" class="w-dividends__more-text">Load more</div>
+      </div>
+      <div v-if="!personalDividends.length" class="w-dividends__empty">
+        <img class="w-dividends__empty-pic" src="/img/cloud.png" alt="empty" />
+        <div class="w-dividends__empty-title">You don’t have any transactions yet.</div>
+        <div class="w-dividends__empty-text">Buy your first ETF Shares and enjoy daily dividends!</div>
+      </div>
+    </div>
+  </div>
+  <f-withdrawal-modal :address="address" :method="method" v-model="isOpenModal" @accept="setMethod" />
+
+  <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" />
+</template>
+
+<script setup lang="ts">
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
+import { Icon } from '~/src/shared/constants/icons'
+import FWithdrawalModal from '~/src/features/f-withdrawal-modal/f-withdrawal-modal.vue'
+import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
+import { Centrifuge } from 'centrifuge'
+import { onUnmounted } from 'vue'
+import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
+
+const { $app } = useNuxtApp()
+
+const isOpenModal = ref(false)
+const transactionsKey = ref(0)
+
+const enum DIVIDENDS_TYPES {
+  PLUS = 'debit_to_client',
+  MINUS = 'credit_from_client',
+  ESCAPE = 'withdrawal',
+}
+
+const openModal = async () => {
+  const isKycFinished = await checkKyc()
+
+  if (isKycFinished) {
+    isOpenModal.value = true
+  } else {
+    navigateTo({ name: 'personal-kyc' })
+  }
+}
+
+const walletDividends = ref([])
+const personalDividends = ref([])
+const currentPage = ref(1)
+const hasNextPage = ref(true)
+const method = ref('')
+const address = ref('')
+const setMethodError = ref('')
+
+const centrifuge = ref(null)
+
+const setMethod = async (value) => {
+  let methodType
+  if (value.method !== 'none') {
+    methodType = value.method === 'bitcoin_lightning' ? 'bitcoin_lightning' : 'bitcoin_on_chain'
+  } else {
+    methodType = 'none'
+  }
+  await $app.api.info.billing
+    .setWithdrawalMethod({
+      address: value.address,
+      method: methodType,
+      walletType: 'dividends',
+    })
+    .then(async () => {
+      await getWalletDividends()
+    })
+    .catch((e) => {
+      if (e?.errors?.error?.message) {
+        setMethodError.value = e.errors.error.message
+      } else {
+        setMethodError.value = 'Something went wrong'
+      }
+    })
+}
+
+const typeWorkMethod = computed(() => {
+  return method.value === 'bitcoin_lightning' ? 'Automatic' : 'Manual'
+})
+
+const typeMethodIcon = computed(() => {
+  return method.value === 'bitcoin_lightning' ? Icon.ColorfulBtcLightning : Icon.ColorfulBitcoin
+})
+
+const selectedAddressShort = computed(() => {
+  if (!address.value) return ''
+  if (address.value.length <= 5) return address.value
+  return address.value.slice(0, 5) + '...' + address.value.slice(address.value.length - 4)
+})
+
+const getWalletDividends = async () => {
+  await $app.api.eth.billingEth
+    .getWallet({ type: 'dividends' })
+    .then((response: any) => {
+      walletDividends.value = response.data
+      $app.store.user.walletDividends = response.data
+      address.value = response.data?.withdrawal_address || ''
+      method.value = response.data?.withdrawal_method || ''
+      $app.store.user.dividends = response.data
+    })
+    .catch(() => {
+      // Todo: notify something went wrond
+    })
+}
+
+const selectedMethod = computed(() => {
+  return method.value === 'bitcoin_on_chain' || method.value === 'bitcoin_lightning'
+})
+
+const getDividendsDesc = (item) => {
+  if (item.type === DIVIDENDS_TYPES.ESCAPE) {
+    return 'Dividends Withdrawal (External Wallet)'
+  }
+
+  switch (item?.withdrawal_method) {
+    case 'bitcoin_lightning': {
+      return 'Lightning withdrawal'
+    }
+    case 'bitcoin_on_chain': {
+      return 'Bitcoin Withdrawal'
+    }
+    default:
+      return 'Dividends'
+  }
+}
+
+const getPersonalDividends = async (initial = false) => {
+  if (initial) {
+    currentPage.value = 1
+  }
+  await $app.api.eth.billingEth
+    .getTransactions({
+      page: currentPage.value,
+      per_page: 4,
+      type: 'dividends',
+    })
+    .then((response: any) => {
+      if (initial) {
+        personalDividends.value = []
+      }
+      hasNextPage.value = !!response.data.next_page_url
+      personalDividends.value = [...personalDividends.value, ...response.data.data]
+
+      transactionsKey.value += 1
+    })
+    .catch(() => {
+      // Todo: notify something went wrond
+    })
+}
+
+const loadMoreDividends = async () => {
+  currentPage.value += 1
+  await getPersonalDividends()
+}
+
+const usdAmount = computed(() => {
+  if (!walletDividends.value?.usd_amount) return 0
+
+  return $app.filters.rounded(walletDividends.value?.usd_amount, 2)
+})
+
+const btcAmount = computed(() => {
+  if (!walletDividends.value?.btc_amount) return 0
+
+  return $app.filters.convertValue($app.filters.rounded(walletDividends.value?.btc_amount, 8))
+})
+
+const isMore200Usd = computed(() => {
+  return walletDividends.value?.usd_amount > 100
+})
+
+const checkKyc = async () => {
+  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
+    return formsResponse.data[0].status === 'passed'
+  })
+}
+
+const withdrawalDividends = async () => {
+  $app.api.eth.billingEth
+    .withdrawalDividends()
+    .then(() => {
+      getWalletDividends()
+    })
+    .catch((e) => {
+      console.error(e.errors)
+    })
+}
+const config = useRuntimeConfig()
+const centrifugeURL = config.public.WS_URL
+const centrifugeToken = config.public.WS_TOKEN
+
+onMounted(async () => {
+  await getWalletDividends()
+  await getPersonalDividends()
+
+  centrifuge.value = new Centrifuge(centrifugeURL, {
+    token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
+  })
+
+  centrifuge.value.connect()
+
+  const sub = centrifuge.value.newSubscription(`wallet.${$app.store.user.info?.account?.uuid}`)
+
+  sub
+    .on('publication', async function (ctx) {
+      setTimeout(async () => {
+        await getPersonalDividends(true)
+        await getWalletDividends()
+      }, 1500)
+    })
+    .subscribe()
+})
+
+onUnmounted(() => {
+  centrifuge.value?.disconnect()
+})
+
+// Onboarding
+const { width } = useWindowSize()
+
+const journeySteps = computed(() => {
+  return [
+    {
+      attachTo: { element: width.value < 1024 ? '#menu-personal-dividends-bottom' : '#menu-personal-dividends' },
+      content: { title: 'Wallet', description: 'With BitcoinETF, manage three distinct digital wallets.' },
+      options: {
+        overlay: {
+          padding: 10,
+          borderRadius: 40,
+        },
+        popper: {
+          placement: width.value < 1024 ? 'top' : 'bottom',
+        },
+      },
+      on: {
+        beforeStep: async function (options) {
+          const elem = document.querySelector(options.step.attachTo.element)
+          elem?.classList.add('onboarding-index')
+        },
+        afterStep: async function (options) {
+          const elem = document.querySelector(options.step.attachTo.element)
+          elem?.classList.remove('onboarding-index')
+        },
+      },
+    },
+  ]
+})
+
+const steps = computed(() => {
+  return [
+    {
+      attachTo: { element: width.value < 1024 ? '#personal-dividends-tab-mobile' : '#personal-dividends-tab' },
+      content: {
+        title: 'Dividends Wallet',
+        description:
+          "This is your daily dividend destination, paid in Bitcoin. Convert to cash or retain as Bitcoin – we'll guide you through either choice.",
+      },
+      options: {
+        overlay: {
+          padding: 16,
+          borderRadius: 16,
+        },
+      },
+      on: {
+        beforeStep: async function (options) {
+          const elem = document.querySelector(options.step.attachTo.element)
+          elem?.classList.add('onboarding-index')
+        },
+        afterStep: function (options) {
+          const elem = document.querySelector(options.step.attachTo.element)
+          elem?.classList.remove('onboarding-index')
+        },
+      },
+    },
+  ]
+})
+
+const renderedSteps = computed(() => {
+  const journey = localStorage.getItem('journey')
+
+  if (!journey) {
+    return journeySteps.value.filter((step) => step.isRender !== false)
+  }
+
+  return steps.value.filter((step) => step.isRender !== false)
+})
+
+const nextRouteName = computed(() => {
+  return localStorage?.getItem('journey') ? 'personal-referrals' : 'personal-buy-shares'
+})
+</script>
+
+<style src="./w-dividends.scss" lang="scss" />
+
+<style lang="scss"></style>

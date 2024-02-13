@@ -1,0 +1,42 @@
+.a-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .arrow-next {
+    display: block;
+    transform: rotate(180deg);
+  }
+
+  &__button {
+    display: flex;
+    background: none;
+    border: none;
+    width: 30px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    max-width: fit-content;
+    min-height: 32px;
+    font-size: torem(16);
+    background: none;
+    color: var(--accent-primary);
+    cursor: pointer;
+    margin-right: 6px;
+
+    &.disabledPage {
+      color: var(--text-secondary);
+    }
+  }
+
+  &__selected {
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+}

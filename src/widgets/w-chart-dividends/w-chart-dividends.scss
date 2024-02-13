@@ -1,0 +1,208 @@
+.w-chart-dividends {
+  margin-bottom: var(--spacing-m-2);
+
+  //@include breakpoint($break-desktop-1440) {
+  //  margin-bottom: 0;
+  //}
+
+
+  &__chart {
+    height: torem(140);
+
+    @include breakpoint($break-desktop-1440) {
+      height: torem(68);
+    }
+  }
+
+  &__title {
+    font-family: Dm, sans-serif;
+    font-size: torem(16);
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__wrap {
+    padding: var(--spacing-m-1);
+    border-radius: var(--spacing-m-1);
+    border: torem(1) solid var(--surfaces-surface-glass-border);
+    background: var(--surfaces-surface-glass);
+    box-shadow: var(--b-shadow-1);
+    margin-bottom: var(--spacing-s);
+  }
+
+  &__subhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-s);
+
+    &-title {
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+
+  &__variants {
+    display: flex;
+    align-items: center;
+
+    &-item {
+      position: relative;
+      padding-left: torem(30);
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+
+      &:before {
+        position: absolute;
+        content: '';
+        border-radius: var(--spacing-s);
+        position: absolute;
+        width: torem(22);
+        height: torem(3);
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &:not(:last-child) {
+        margin-right: torem(8);
+      }
+    }
+
+    &-actual {
+      &:before {
+        background-color: var(--accent-success);
+      }
+    }
+
+    &-minimum {
+      &:before {
+        background-color: var(--accent-secondary);
+      }
+    }
+
+    &-projected {
+      &:before {
+        background-color: var(--accent-primary);
+      }
+    }
+  }
+
+  &__sums {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--spacing-s);
+  }
+
+  &__usd {
+    display: flex;
+    align-items: center;
+
+    &-title {
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      margin-right: var(--spacing-xs);
+    }
+
+    &-amount {
+      color: var(--accent-success);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+
+  &__btc {
+    display: flex;
+    align-items: center;
+
+    &-title {
+      display: flex;
+      align-items: center;
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      margin-right: var(--spacing-xs);
+
+      i {
+        margin-right: torem(2);
+      }
+    }
+
+    &-amount {
+      display: flex;
+      align-items: center;
+      color: var(--accent-success);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+
+      i {
+        margin-right: torem(2);
+      }
+    }
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: torem(8);
+
+    @include breakpoint($break-tablet-600) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    //@include breakpoint($break-desktop-1260) {
+    //  grid-template-columns: repeat(6, 1fr);
+    //  grid-template-areas:
+    //  "A A A A   B B"
+    //  "C C C D   D D";
+    //  grid-template-rows: repeat(2, torem(168));
+    //}
+    //
+    //&-a {
+    //  @include breakpoint($break-desktop-1260) {
+    //    grid-area: A;
+    //  }
+    //}
+    //
+    //&-b {
+    //  @include breakpoint($break-desktop-1260) {
+    //    grid-area: B;
+    //  }
+    //}
+    //
+    //&-c {
+    //  @include breakpoint($break-desktop-1260) {
+    //    grid-area: C;
+    //  }
+    //}
+    //
+    //&-d {
+    //  @include breakpoint($break-desktop-1260) {
+    //    grid-area: D;
+    //  }
+    //}
+  }
+}

@@ -1,0 +1,196 @@
+@import 'breakpoints';
+
+// Width breakpoints
+$width-desktop-4k: 3840;
+$width-desktop-2k: 2560;
+$width-desktop-fhd: 1920;
+
+$width-desktop-1600: 1600;
+$width-desktop-1440: 1440;
+$width-desktop-1366: 1366;
+$width-desktop-1260: 1260;
+$width-desktop-1024: 1024;
+$width-desktop-992: 992;
+
+$width-tablet: 768;
+$width-tablet-600: 600;
+$width-mobile-560: 560;
+$width-mobile-475: 475;
+$width-mobile-440: 440;
+$width-mobile-375: 375;
+$width-mobile-360: 360;
+
+// Main breakpoints
+$desktop-device: hover hover,
+pointer fine;
+$touch-device: hover none,
+pointer coarse;
+
+$break-mobile: min-width $width-mobile-360; // 360 +
+$break-mobile-375: min-width $width-mobile-375; // 375 +
+$break-mobile-375-minus: max-width $width-mobile-375 - 1; // 375 -
+$break-mobile-475: min-width $width-mobile-475; // 475 +
+$break-mobile-475-minus: max-width $width-mobile-475 - 1; // 475 -
+$break-mobile-560-minus: max-width $width-mobile-560 - 1; //560 -
+$break-tablet-600: min-width $width-tablet-600; // 600 +
+$break-tablet: min-width $width-tablet; // 768 +
+$break-tablet-minus: max-width $width-tablet - 1; // 767 -
+$break-desktop-992-minus: max-width $width-desktop-992 - 1; // 991 -
+$break-desktop-1024-minus: max-width $width-desktop-1024 - 1; // 1024 -
+$break-desktop-1024: min-width $width-desktop-1024; // 1024 +
+$break-desktop-1260-minus: max-width $width-desktop-1260 - 1; // 1260 -
+$break-desktop-1260: min-width $width-desktop-1260; // 1260 +
+$break-desktop-xs-minus: max-width $width-desktop-1366; // 1366 -
+$break-desktop-range: min-width $width-desktop-1366,
+max-width $width-desktop-fhd; // 1366 - 1920
+$break-desktop-1440-minus: max-width $width-desktop-1440 - 1; // 1440 -
+$break-desktop-1440: min-width $width-desktop-1440; // 1440 +
+$break-desktop-1600-minus: max-width $width-desktop-1600 - 1; // 1600 -
+$break-desktop-1600: min-width $width-desktop-1600; // 1600 +
+$break-desktop-fhd-minus: max-width $width-desktop-fhd - 1; // 1920 -
+$break-desktop-fhd: min-width $width-desktop-fhd; // 1920 +
+
+// Mobile menu
+$mobile-menu-height: 66;
+$mobile-menu-tablet-height: 74;
+
+// Container width
+$container-width: 1256;
+
+// Header height
+$header-height-mobile: 110;
+$header-height-break-tablet: 60;
+$header-height-desktop-1024: 80;
+$header-height-desktop-1440: 80;
+$header-height-desktop-fhd: 88;
+$header-notification-height-1024: 120;
+$header-notification-height-1440: 96;
+$header-notification-height-fhd: 96;
+
+@mixin touch-device() {
+  @include breakpoint($touch-device) {
+    @content;
+  }
+}
+
+@mixin desktop-device() {
+  @include breakpoint($desktop-device) {
+    @content;
+  }
+}
+
+
+.l {
+  &-container {
+    width: auto;
+    margin: torem(0, 16);
+
+    @include breakpoint($break-desktop-1024) {
+      margin: torem(0, 48);
+    }
+  }
+
+  &-page {
+    display: flex;
+    flex-direction: column;
+    padding-top: torem(100);
+  }
+
+  &-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  &-main {
+    background: linear-gradient(180deg, rgba(234, 243, 255, 0.10) 0%, rgba(228, 254, 226, 0.10) 33.33%, rgba(249, 228, 254, 0.10) 66.67%, rgba(223, 211, 255, 0.10) 100%), var(--surfaces-background);;
+    display: flex;
+    flex-direction: column;
+    padding-top: torem($header-height-mobile);
+    padding-bottom: torem(115);
+    min-height: vh(100);
+    overflow: hidden;
+
+    &--no-indent {
+      padding-bottom: 0;
+    }
+
+    &--indent {
+      padding-top: torem(164);
+
+      &-wallet {
+        padding-top: torem(116);
+      }
+
+      &-more {
+        padding-top: torem(71);
+      }
+
+      @include breakpoint($break-desktop-1024) {
+        padding-top: 0;
+      }
+    }
+
+    @include breakpoint($break-desktop-1024) {
+      padding-left: torem(288);
+      padding-top: 0;
+    }
+
+    &--notification-in-header {
+      @include breakpoint($break-desktop-1024) {
+        padding-top: torem($header-height-desktop-1024 + $header-notification-height-1024);
+      }
+
+      @include breakpoint($break-desktop-1440) {
+        padding-top: torem($header-height-desktop-1440 + $header-notification-height-1440);
+      }
+
+      @include breakpoint($break-desktop-fhd) {
+        padding-top: torem($header-height-desktop-fhd + $header-notification-height-fhd);
+      }
+    }
+
+    &-container {
+      display: flex;
+    }
+  }
+
+  &-auth {
+    display: flex;
+    flex-direction: column;
+    height: vh(100);
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-grow: 1;
+      height: 100%;
+    }
+
+    &-container {
+      flex-grow: 1;
+      height: 100%;
+      width: auto;
+      margin: torem(0, 16);
+      max-width: torem(410);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      @include breakpoint($break-desktop-1024) {
+        margin: torem(0) auto;
+      }
+    }
+  }
+
+  &-desktop {
+    &-container {
+      @include breakpoint($break-desktop-1024) {
+        max-width: torem(606);
+      }
+    }
+  }
+}

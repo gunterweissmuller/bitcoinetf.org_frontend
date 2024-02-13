@@ -1,0 +1,173 @@
+.w-chart-earnings {
+  background-color: #0066ff;
+  background-repeat: no-repeat;
+  background-position: center center;
+  box-shadow: var(--b-shadow-1);
+  padding: var(--spacing-m-2) var(--spacing-m-1);
+  border-radius: var(--spacing-m-1);
+  max-height: torem(557);
+  margin-bottom: var(--spacing-m-2);
+
+  //@include breakpoint($break-desktop-1440) {
+  //  max-width: torem(606);
+  //  margin-bottom: 0;
+  //}
+
+
+  &__chart {
+    height: torem(140);
+
+    @include breakpoint($break-desktop-1440) {
+      height: torem(246);
+    }
+  }
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-m-1);
+
+    &-title {
+      color: var(--text-inverse-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: torem(18);
+    }
+
+    &-subtitle {
+      color: var(--text-inverse-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-weight: 500;
+      line-height: torem(16);
+    }
+  }
+
+  &__wrap {
+    background: rgba(255, 255, 255, 0.32); // Todo: edit same as light theme
+    padding: var(--spacing-m-1);
+    border-radius: var(--spacing-s);
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__subhead {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__projected {
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      color: var(--text-inverse-secondary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-weight: 700;
+      line-height: torem(16);
+    }
+
+    &-usd {
+      color: var(--text-inverse-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(20);
+      font-weight: 700;
+      line-height: torem(26);
+    }
+
+    &-btc {
+      display: flex;
+      align-items: center;
+      color: var(--text-inverse-secondary);
+      font-family: Dm, sans-serif;
+      font-weight: 700;
+      font-size: torem(14);
+      line-height: torem(18);
+
+      i {
+        margin-right: torem(2);
+      }
+    }
+  }
+
+  &__origin {
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      color: var(--text-inverse-secondary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-weight: 700;
+      line-height: torem(16);
+    }
+
+    &-amount {
+      color: var(--text-inverse-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(20);
+      font-weight: 700;
+      line-height: torem(26);
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-m-1);
+
+  }
+
+  &__tab {
+    cursor: pointer;
+    width: calc(50% - var(--spacing-s));
+    border-radius: var(--spacing-s);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-inverse-primary);
+    background: rgba(255, 255, 255, 0.32); // Todo: edit same as light theme
+    padding: var(--spacing-s);
+
+    &--active {
+      outline: torem(1) solid var(--text-inverse-primary);
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-inverse-primary);
+    font-family: Dm, sans-serif;
+    font-size: torem(14);
+    font-weight: 700;
+    line-height: torem(18);
+    margin-bottom: var(--spacing-m-1);
+
+    &:hover {
+      color: var(--text-inverse-primary);
+    }
+
+    @include breakpoint($break-desktop-1440) {
+      margin-bottom: var(--spacing-m-1);
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-inverse-tertiary);
+    font-family: Dm, sans-serif;
+    font-size: torem(10);
+    font-weight: 700;
+    line-height: torem(13);
+  }
+
+}
