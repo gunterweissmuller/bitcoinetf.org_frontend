@@ -55,5 +55,9 @@ shell:
     - export NODE_ENV="{{ .EnvName }}"
     - export NUXT_PUBLIC_WEBSOCKET_URL={{- $globals.NuxtWsUrl }}
     - export NUXT_PUBLIC_WEBSOCKET_TOKEN={{- $globals.NuxtWsToken }}
+    - export NUXT_PUBLIC_INFO_API={{- $globals.NuxtInfoApi }}
+    - export NUXT_PUBLIC_ETH_API={{- $globals.NuxtEthApi }}
+    - export NUXT_PUBLIC_EXPLORER_API={{- $globals.NuxtExplorerApi }}
+    - export NUXT_PUBLIC_ICON_API={{- $globals.NuxtIconsApi }}
     - pnpm build
 ---
