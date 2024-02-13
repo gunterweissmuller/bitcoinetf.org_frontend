@@ -7,7 +7,6 @@ import {ADAPTERS_ERRORS_CODES} from '~/src/shared/constants/ethCodes'
 
 const ETH_PREFIX = 'public'
 const ETH_PREFIX_WITHOUT_PUBLIC = ''
-console.log('host')
 const hostname = window.location.host === 'bitcoinetf.org' ? 'api.bitcoinetf.org' : 'api.stage.techetf.org'
 
 @injectable()
