@@ -1,7 +1,7 @@
 {{ $_ := env "CI_PROJECT_PATH_SLUG"  | trunc 49 | trimSuffix "-" | set . "ProjectName" }}
 {{ $_ := env "ENV_FULL_NAME"  | trunc 49 | trimSuffix "-" | set . "EnvName" }}
 {{- $values := .Files.Get ".helm/values.yaml" | fromYaml -}}
-{{- $globals := ternary $values.global.prod $values.global.stage (eq .EnvName "prod") -}}
+{{- $globals := ternary $values.global.prod $values.global.stage (eq .EnvName "production") -}}
 
 ---
 configVersion: 1
