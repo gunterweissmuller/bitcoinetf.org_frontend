@@ -1,0 +1,52 @@
+.w-statements {
+  &__list {
+    border-radius: torem(8);
+    border: torem(1) solid var(--surfaces-border-1);
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__item {
+    padding: var(--spacing-m-1);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &-icon {
+      padding: torem(7);
+      color: var(--accent-primary);
+      border-radius: torem(32);
+      background: var(--blue-200);
+      margin-right: var(--spacing-m-1);
+    }
+
+    &-text {
+      color: var(--text-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    &-chevron {
+      color: var(--text-tertiary);
+      margin-left: auto;
+    }
+  }
+
+  &__more {
+    margin-top: torem(33);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-text {
+      cursor: pointer;
+      color: var(--accent-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: torem(21);
+      user-select: none;
+    }
+  }
+}

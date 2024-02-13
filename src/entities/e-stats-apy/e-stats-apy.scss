@@ -1,0 +1,38 @@
+.e-stats-apy {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-m-2);
+
+  &--big {
+    .e-stat-default__title-text {
+      font-family: Dm, sans-serif;
+      font-size: torem(42);
+      font-weight: 800;
+      line-height: torem(55);
+    }
+  }
+
+  &__title {
+    font-family: Dm, sans-serif;
+    font-size: torem(16);
+    font-weight: 700;
+    line-height: torem(21);
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: torem(8);
+
+    //@include breakpoint($break-desktop-1440) {
+    //  grid-template-columns: torem(430) 1fr;
+    //}
+  }
+
+  &__wrap {
+    display: grid;
+    grid-template-rows: repeat(2, torem(80));
+    gap: torem(8);
+  }
+}

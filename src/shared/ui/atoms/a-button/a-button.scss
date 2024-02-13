@@ -1,0 +1,131 @@
+.a-button {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition-duration: 0.4s;
+
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &__icon {
+    flex: none;
+    flex-grow: 0;
+  }
+
+  &__label {
+    flex: none;
+    flex-grow: 0;
+  }
+
+  &__loading {
+    animation: spinner 0.6s linear infinite;
+  }
+
+  &--primary {
+    color: var(--text-inverse-primary);
+    background: var(--button-primary);
+
+    .a-button__label {
+      color: var(--color-text-contrast);
+    }
+
+    .a-button__icon {
+      color: var(--color-icon-tertiary);
+    }
+  }
+
+  &--secondary {
+    background: var(--button-secondary);
+
+    .a-button__label {
+      color: var(--accent-primary);
+    }
+
+    .a-button__icon {
+      color: var(--accent-primary);
+    }
+  }
+
+  &--tertiary {
+    background: transparent;
+
+    .a-button__label {
+      color: var(--accent-primary);
+    }
+
+    .a-button__icon {
+      color: var(--accent-primary);
+    }
+  }
+
+  &--default {
+    height: torem(56);
+    padding: torem(18, 20);
+    border-radius: torem(8);
+
+    .a-button__label {
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: torem(21);
+    }
+  }
+
+  &--small {
+    height: torem(34);
+    padding: torem(8, 16);
+    border-radius: torem(8);
+
+    .a-button__label {
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: torem(18);
+    }
+  }
+
+  &__icon {
+    width: torem(18);
+    height: torem(18);
+    font-size: torem(15);
+  }
+
+  &--left {
+    .a-button__icon {
+      order: 0;
+      margin-right: torem(8);
+    }
+
+    .a-button__label {
+      order: 1;
+    }
+  }
+
+  &--right {
+    .a-button__icon {
+      order: 1;
+      margin-left: torem(8);
+    }
+
+    .a-button__label {
+      order: 0;
+    }
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}

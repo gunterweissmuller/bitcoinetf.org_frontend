@@ -1,0 +1,261 @@
+.s-site-fund {
+  padding: torem(60, 0);
+
+  @media (max-width: 767px) {
+    padding: torem(96, 0, 32);
+  }
+
+  &__title {
+    position: relative;
+    text-align: right;
+    margin-bottom: torem(60);
+
+    @media (max-width: 767px) {
+      text-align: left;
+      margin-bottom: torem(32);
+    }
+
+    &:after {
+      position: absolute;
+      top: 0;
+      right: torem(30);
+      z-index: 1;
+      content: '';
+      width: torem(460);
+      height: torem(100);
+      border-radius: torem(460);
+      transform: rotate(-30deg);
+      background: rgba(1, 4, 15, 0.70);
+      filter: blur(40px);
+
+      @media (max-width: 767px) {
+        right: torem(-120);
+      }
+    }
+  }
+
+  .m-slider__swiper .swiper-slide {
+    //height: 100%;
+  }
+
+  &__slide {
+    max-width: torem(658);
+    color: #01040F;
+    border-radius: torem(20);
+    background: #fff;
+    padding: torem(32);
+
+    @media (max-width: 767px) {
+      padding: torem(20);
+    }
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: torem(9);
+
+    @media (max-width: 767px) {
+      margin-bottom: torem(24);
+    }
+
+    &-title {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(32);
+      line-height: torem(38);
+      font-weight: 700;
+      max-width: torem(360);
+
+      @media (max-width: 767px) {
+        max-width: torem(211);
+        font-size: torem(24);
+        line-height: 120%;
+      }
+    }
+  }
+
+  &__img {
+    @media (max-width: 767px) {
+      max-width: torem(132);
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  &__apy {
+    font-family: Jakarta, sans-serif;
+
+    @media (max-width: 767px) {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    &-percents {
+      font-size: torem(32);
+      line-height: torem(38);
+      font-weight: 700;
+
+      @media (max-width: 767px) {
+        font-size: torem(24);
+        line-height: 120%;
+      }
+    }
+
+    &-text {
+      font-size: torem(18);
+      line-height: torem(21);
+      font-weight: 700;
+      text-align: right;
+      color: #01040F80;
+
+      @media (max-width: 767px) {
+        font-size: torem(16);
+        line-height: 120%;
+      }
+    }
+  }
+
+  &__label {
+    font-size: torem(14);
+    line-height: torem(16);
+    color: #01040F80;
+    margin-top: torem(28);
+    margin-bottom: torem(8);
+
+    @media (max-width: 767px) {
+      font-size: torem(12);
+      line-height: 120%;
+      margin-top: 0;
+    }
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 767px) {
+      align-items: flex-start;
+    }
+  }
+
+  &__ticker {
+    @media (max-width: 767px) {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-content {
+      display: flex;
+    }
+
+    &-icon {
+      width: torem(40);
+      height: torem(40);
+      border-radius: 100%;
+      margin-right: torem(4);
+    }
+
+    &-abbr {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(14);
+      line-height: torem(16);
+      font-weight: 700;
+      text-transform: uppercase;
+      //color: #E1527D;
+      border-radius: torem(1000);
+      //background: #E1527D26;
+      padding: torem(10, 20);
+
+      @media (max-width: 767px) {
+        font-size: torem(12);
+        padding: torem(0, 16);
+        line-height: torem(40);
+      }
+    }
+  }
+
+  &__about {
+    @media (max-width: 767px) {
+      margin-top: torem(12);
+    }
+
+    &-title {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(18);
+      line-height: torem(21);
+      font-weight: 700;
+      padding-bottom: torem(28);
+      border-bottom: torem(1) solid #01040F1A;
+
+      @media (max-width: 767px) {
+        font-size: torem(16);
+        line-height: 120%;
+        padding-bottom: torem(16);
+      }
+    }
+
+    &-text {
+      font-family: Jakarta, sans-serif;
+      padding-top: torem(28);
+
+      @media (max-width: 767px) {
+        position: relative;
+        padding-top: torem(16);
+
+
+        &.show-more {
+          max-height: none;
+
+          &:after {
+            display: none;
+          }
+
+          & ~ .s-site-fund__about-more {
+            display: none;
+          }
+        }
+      }
+
+      p {
+        font-size: torem(18);
+        line-height: torem(25);
+
+        @media (max-width: 767px) {
+          font-size: torem(16);
+        }
+
+        &:not(:last-child) {
+          margin-bottom: torem(20);
+        }
+      }
+    }
+
+    &-more {
+      display: none;
+      font-family: Jakarta, sans-serif;
+      font-size: torem(14);
+      font-weight: 600;
+      line-height: 120%;
+      color: #074DFF;
+
+      @media (max-width: 767px) {
+        display: block;
+      }
+    }
+  }
+
+  .l-site {
+    overflow: visible;
+  }
+
+  .swiper {
+    overflow: visible;
+  }
+
+  .m-slider__wrap {
+    overflow: visible;
+  }
+}

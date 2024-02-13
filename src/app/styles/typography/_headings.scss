@@ -1,0 +1,120 @@
+.font-title {
+  font-size: torem(48);
+  font-weight: 600;
+  line-height: torem(56);
+
+  @include touch-device {
+    font-size: torem(30);
+    line-height: torem(32);
+  }
+}
+
+@mixin font-title {
+  font-size: torem(48);
+  font-weight: 600;
+  line-height: torem(56);
+
+  @include touch-device {
+    font-size: torem(30);
+    line-height: torem(32);
+  }
+}
+
+.font-h1 {
+  font-size: torem(34);
+  font-weight: 600;
+  line-height: torem(40);
+
+  @include touch-device {
+    font-size: torem(26);
+    line-height: torem(32);
+  }
+}
+
+@mixin font-h1 {
+  font-size: torem(34);
+  font-weight: 600;
+  line-height: torem(40);
+
+  @include touch-device {
+    font-size: torem(26);
+    line-height: torem(32);
+  }
+}
+
+.font-h2 {
+  font-size: torem(26);
+  font-weight: 600;
+  line-height: torem(32);
+
+  @include touch-device {
+    font-size: torem(22);
+    line-height: torem(28);
+  }
+}
+
+@mixin font-h2 {
+  font-size: torem(26);
+  font-weight: 600;
+  line-height: torem(32);
+
+  @include touch-device {
+    font-size: torem(22);
+    line-height: torem(28);
+  }
+}
+
+.font-h3 {
+  font-size: torem(20);
+  font-weight: 600;
+  line-height: torem(26);
+
+  @include touch-device {
+    font-size: torem(16);
+    line-height: torem(24);
+  }
+}
+
+@mixin font-h3 {
+  font-size: torem(20);
+  font-weight: 600;
+  line-height: torem(26);
+
+  @include touch-device {
+    font-size: torem(16);
+    line-height: torem(24);
+  }
+}
+
+.font-h4 {
+  font-size: torem(16);
+  font-weight: 600;
+  line-height: torem(24);
+
+  @include touch-device {
+    font-size: torem(14);
+    line-height: torem(20);
+  }
+}
+
+@mixin font-h4 {
+  font-size: torem(16);
+  font-weight: 600;
+  line-height: torem(24);
+
+  @include touch-device {
+    font-size: torem(14);
+    line-height: torem(20);
+  }
+}
+
+.font-section-header {
+  font-size: torem(14);
+  font-weight: 600;
+  line-height: torem(17);
+}
+
+.font-section-subheader {
+  font-size: torem(9);
+  line-height: torem(11);
+}

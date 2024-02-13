@@ -1,0 +1,132 @@
+.s-site-main {
+  padding-top: torem(196);
+  padding-bottom: torem(80);
+
+  @media (max-width: 767px) {
+    padding-top: torem(160);
+    padding-bottom: torem(64);
+  }
+
+  .l-site-dark {
+    @media (max-width: 767px) {
+      padding: 0;
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+
+    @media (max-width: 991px) {
+      flex-direction: column;
+    }
+  }
+
+  &__img {
+    position: absolute;
+    z-index: 1;
+    top: torem(120);
+    left: torem(200);
+
+    @media (max-width: 767px) {
+      top: torem(120);
+      left: 0;
+      max-width: torem(343);
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+
+  &__info {
+    z-index: 2;
+    max-width: torem(400);
+
+    @media (max-width: 991px) {
+      max-width: 100%;
+    }
+
+    @media (max-width: 767px) {
+      padding: torem(0, 16);
+    }
+  }
+
+  &__title {
+    margin-bottom: torem(32);
+
+    @media (max-width: 991px) {
+      max-width: torem(400);
+      margin-bottom: torem(163);
+    }
+
+    @media (max-width: 767px) {
+      max-width: torem(250);
+    }
+  }
+
+  .swiper, .m-slider__wrap {
+    overflow: visible;
+  }
+
+  .swiper-wrapper {
+    gap: torem(8);
+
+    @media (min-width: 992px) {
+      flex-direction: column;
+      pointer-events: none;
+      transform: translate3d(0, 0, 0) !important;
+    }
+  }
+
+  &__items {
+    @media (max-width: 991px) {
+      margin-bottom: torem(24);
+    }
+  }
+
+  &__item {
+    text-align: center;
+    background: linear-gradient(0deg, rgba(34, 36, 43, 0.5), rgba(34, 36, 43, 0.5)), linear-gradient(0deg, rgba(63, 66, 78, 0.08), rgba(63, 66, 78, 0.08));
+    border: 1px solid #3F424E14;
+    border-radius: torem(16);
+    box-shadow: 0px 0px 6px 0px #0000000F;
+    backdrop-filter: blur(32.5px);
+    padding: torem(40, 24);
+
+    @media (max-width: 991px) {
+      max-width: torem(320);
+    }
+
+    &-value {
+      font-family: Jakarta, sans-serif;
+      //font-size: torem(42);
+      font-size: clamp(32px, 4vw, 42px);
+      line-height: 130%;
+      font-weight: 800;
+      margin-bottom: torem(4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-description {
+      font-family: DM, sans-serif;
+      font-size: torem(20);
+      line-height: 1;
+      color: #ABAEBE;
+    }
+  }
+  &__calculator{
+    margin-left: auto;
+    z-index: 2;
+    width: 100%;
+    max-width: torem(536);
+
+    @media (max-width: 991px) {
+      max-width: 100%;
+      margin-left: 0;
+    }
+  }
+}

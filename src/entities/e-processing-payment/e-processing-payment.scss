@@ -1,0 +1,44 @@
+.e-processing-payment {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-m-1);
+  border-radius: var(--spacing-s);
+  border: torem(1) solid var(--surfaces-surface-glass-border);
+  background: var(--surfaces-surface-glass);
+  -webkit-box-shadow: var(--b-shadow-1);
+  box-shadow: var(--b-shadow-1);
+  margin-bottom: var(--spacing-m-1);
+
+  &__icon {
+    margin-right: torem(16);
+    color: var(--text-tertiary);
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: torem(40);
+      height: torem(40);
+      background: var(--surfaces-surface-2);
+      border-radius: 100%;
+    }
+  }
+
+  &__info {
+    font-family: Dm, sans-serif;
+    font-size: torem(14);
+    line-height: torem(18);
+
+    &-title {
+      color: var(--text-primary);
+      font-weight: 700;
+      margin-bottom: torem(4);
+    }
+
+    &-description {
+      max-width: torem(225);
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+  }
+}

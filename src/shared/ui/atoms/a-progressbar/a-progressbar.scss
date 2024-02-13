@@ -1,0 +1,42 @@
+.a-progressbar {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    color: var(--gray-900);
+  }
+
+  &__subtitle {
+    color: var(--gray-700);
+
+    span {
+      color: var(--gray-900);
+    }
+  }
+
+  &__additional {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 14px;
+    color: var(--gray-700);
+
+    b {
+      color: var(--gray-900);
+    }
+  }
+
+  &__percents {
+    border-radius: 11px;
+    height: 8px;
+    background: var(--accent-primary);
+    transition: width 0.3s;
+  }
+
+  &__wrapper {
+    background: var(--blue-100);
+  }
+}

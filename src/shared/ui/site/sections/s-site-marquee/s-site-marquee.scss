@@ -1,0 +1,47 @@
+.s-site-marquee {
+  position: relative;
+
+  .swiper-wrapper {
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+  }
+
+
+  .l-site-dark {
+    padding: 0;
+    overflow: visible;
+  }
+
+  &__wrapper {
+    padding: torem(32, 0);
+  }
+
+  &__items {
+    img {
+      width: auto;
+      height: torem(24);
+
+    }
+  }
+
+  &__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+
+    margin-right: torem(207);
+
+    @media (max-width: 899px) {
+      margin-right: torem(32);
+    }
+
+    a {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

@@ -1,0 +1,151 @@
+.w-asset {
+  position: relative;
+
+  .w-trades {
+    margin-bottom: var(--spacing-m-2);
+  }
+
+  .w-activity {
+    margin-bottom: var(--spacing-m-2);
+  }
+
+  .w-news {
+    @include breakpoint($break-desktop-1440) {
+      max-width: torem(606);
+    }
+  }
+
+  @include breakpoint($break-desktop-1440) {
+    display: grid;
+    grid-template-columns: torem(606) 1fr;
+  }
+
+  &__container {
+    @include breakpoint($break-desktop-1440) {
+      margin-right: var(--spacing-m-2);
+    }
+
+    @include breakpoint($break-desktop-1024) {
+      padding-top: 0
+    }
+
+    padding-top: torem(44); // Todo: need to rethink
+
+  }
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--spacing-m-2);
+
+    &-ticker {
+      font-family: Dm, sans-serif;
+      color: var(--text-tertiary);
+      line-height: torem(18);
+      font-size: torem(14);
+      font-weight: 500;
+      padding-bottom: torem(8);
+    }
+  }
+
+  &__type {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-s);
+
+    &-pic {
+      border-radius: 50%;
+      width: var(--spacing-m-2);
+      height: var(--spacing-m-2);
+      margin-right: var(--spacing-s);
+    }
+
+    &-text {
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+
+  &__title {
+    font-family: Dm, sans-serif;
+    font-size: torem(32);
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__subtitle {
+    font-family: Dm, sans-serif;
+    font-size: torem(32);
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  &__amount {
+    display: flex;
+    align-items: center;
+
+    &-title {
+      color: var(--text-secondary);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      margin-right: var(--spacing-xs);
+    }
+
+    &-sum {
+      color: var(--text-secondary);
+      font-family: Dm, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+
+  &__info {
+    margin-bottom: torem(16);
+    height: torem(168);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    &--full {
+      height: 100%;
+    }
+
+    &-text {
+      position: relative;
+      height: min-content;
+      color: var(--text-secondary);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-style: normal;
+      font-weight: 400;
+      line-height: 130%;
+    }
+
+
+    &-more {
+      cursor: pointer;
+      color: var(--accent-primary, #06F);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      margin-bottom: var(--spacing-m-2);
+    }
+  }
+
+  &__button {
+    margin-bottom: var(--spacing-m-2);
+  }
+}

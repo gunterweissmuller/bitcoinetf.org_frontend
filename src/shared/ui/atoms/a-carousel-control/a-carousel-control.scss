@@ -1,0 +1,61 @@
+.a-carousel-control {
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  border-radius: torem(16);
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    .a-icons {
+      color: var(--color-icon-contrast);
+    }
+  }
+
+  &:focus {
+    .a-icons {
+      color: var(--color-icon-contrast);
+    }
+  }
+
+  &__icon {
+    .a-icons {
+      color: var(--color-icon-secondary);
+    }
+  }
+
+  &--default {
+    @include breakpoint($break-desktop-1440) {
+      width: torem(48);
+    }
+
+    top: torem(10);
+    width: torem(40);
+    height: 100%;
+  }
+
+  &--ghost {
+    width: torem(48);
+    height: torem(48);
+    background: var(--color-bg-badge);
+    backdrop-filter: blur(13px);
+    border: torem(1) solid;
+    border-color: var(--color-grey);
+
+    &:hover {
+      background: var(--color-overlay);
+      border-color: var(--color-icon-contrast);
+    }
+
+    &:focus {
+      background: var(--color-state-focus);
+    }
+  }
+
+  &--disabled {
+    display: none;
+  }
+}

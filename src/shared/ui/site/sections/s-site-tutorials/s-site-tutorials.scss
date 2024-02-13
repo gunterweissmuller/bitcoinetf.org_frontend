@@ -1,0 +1,64 @@
+.s-site-tutorials {
+  max-width: torem(736);
+  color: #ABAEBE;
+  @include breakpoint($break-tablet) {
+    overflow: auto;
+  }
+
+
+  @media (max-width: 991px) {
+    padding-right: torem(16);
+  }
+
+  @media (max-width: 767px) {
+    text-align: center;
+    padding-left: torem(16);
+  }
+
+  &__title {
+    margin-bottom: torem(32);
+    color: #fff;
+  }
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: torem(102);
+
+      @media (max-width: 767px) {
+        margin-bottom: torem(48);
+      }
+    }
+
+    &-description {
+      margin-bottom: torem(48);
+    }
+  }
+
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: torem(32);
+
+    @media (max-width: 767px) {
+      flex-direction: column;
+      gap: torem(16);
+    }
+
+    &:not(:last-child) {
+      margin-bottom: torem(24);
+    }
+
+    &-title {
+      font-size: torem(20);
+      line-height: torem(26);
+      font-weight: 600;
+      margin-bottom: torem(16);
+    }
+
+    p {
+      font-size: torem(16);
+      line-height: torem(20);
+      margin: torem(16) 0;
+    }
+  }
+}

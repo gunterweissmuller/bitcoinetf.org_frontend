@@ -1,0 +1,51 @@
+@function addBreakpoints($result, $param, $breakpoint) {
+  @if type-of($breakpoint) == 'number' {
+    $breakpoint: $breakpoint + 'px';
+  }
+  @if $param != false {
+    @if $result != false {
+      $result: $result + ' ' + and + ' (' + $param + ': ' + $breakpoint + ')';
+    } @else {
+      $result: '(' + $param + ': ' + $breakpoint + ')';
+    }
+  } @else {
+    @if $result != false {
+      $result: $result + $breakpoint + ')';
+    } @else {
+      $result: '(' + $breakpoint + ': ';
+    }
+  }
+  @return $result;
+}
+
+@mixin breakpoint($breakpointsArgs...) {
+  $result-breakpoints: false;
+
+  @if length($breakpointsArgs) > 1 {
+    @each $param, $breakpoint in $breakpointsArgs {
+      $result-breakpoints: addBreakpoints($result-breakpoints, $param, $breakpoint);
+    }
+  } @else {
+    $oneArgumentInVariable: false;
+
+    @each $breakpoints in $breakpointsArgs {
+      @each $param, $breakpoint in $breakpoints {
+        @if type-of($breakpoint) != 'null' {
+          $result-breakpoints: addBreakpoints($result-breakpoints, $param, $breakpoint);
+        } @else {
+          $oneArgumentInVariable: true;
+        }
+      }
+
+      @if $oneArgumentInVariable {
+        @each $breakpoint in $breakpoints {
+          $result-breakpoints: addBreakpoints($result-breakpoints, false, $breakpoint);
+        }
+      }
+    }
+  }
+
+  @media screen and #{$result-breakpoints} {
+    @content;
+  }
+}

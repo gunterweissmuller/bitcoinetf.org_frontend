@@ -1,0 +1,38 @@
+.e-assets {
+  box-shadow: var(--b-shadow-1);
+  border: torem(1) solid var(--surfaces-surface-glass-border);
+  border-radius: var(--spacing-s);
+  margin-bottom: var(--spacing-m-2);
+  background: var(--surfaces-surface-glass-2);
+
+  @include breakpoint($break-desktop-1440) {
+    //margin-bottom: 0;
+  }
+
+  &__head {
+    padding: torem(8, 16);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Dm, sans-serif;
+    font-size: torem(10);
+    font-weight: 700;
+    line-height: torem(13);
+
+    &-title {
+      color: var(--text-primary)
+    }
+
+    &-info {
+      color: var(--text-tertiary);
+
+      &--wrapper {
+        text-align: right;
+      }
+
+      &--paid {
+        padding-bottom: torem(4);
+      }
+    }
+  }
+}

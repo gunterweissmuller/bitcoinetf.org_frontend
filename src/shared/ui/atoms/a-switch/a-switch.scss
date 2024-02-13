@@ -1,0 +1,115 @@
+.a-switch {
+  &__container {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__label {
+    margin-left: torem(12);
+    color: var(--text-tertiary);
+  }
+
+  &__input {
+    position: absolute;
+    overflow: hidden;
+    width: torem(1);
+    height: torem(1);
+    margin: torem(-1);
+    padding: 0;
+  }
+
+  &__switch {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    width: torem(48);
+    height: torem(28);
+    background-color: var(--surfaces-border-2);
+    border-radius: torem(999);
+    transition: background-color 0.25s ease-in-out;
+    flex-basis: torem(56);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: torem(2);
+      width: torem(24);
+      height: torem(24);
+      background-color: #ffffff; // Todo: edit same as light theme
+      border-radius: 100%;
+      box-shadow: var(--b-shadow-1);
+      transition: transform 0.375s ease-in-out;
+    }
+  }
+
+  &__spinner {
+    position: relative;
+    left: torem(4);
+    visibility: hidden;
+    width: torem(24);
+    height: torem(24);
+    transition: transform 0.4s ease-in-out;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: torem(24);
+      height: torem(24);
+      border: torem(3) solid var(--color-control-primary);
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: switch-loader 1s cubic-bezier(0.6, 0.9, 1, 0.8) infinite;
+    }
+  }
+
+  &__input:checked + &__switch {
+    background-color: var(--accent-primary);
+  }
+
+  &__input:checked + &__switch::before {
+    transform: translateX(torem(20));
+  }
+
+  &__input:checked + &__switch &__spinner {
+    transform: translateX(torem(20));
+  }
+
+  &__error-text {
+    margin-top: torem(8);
+    margin-bottom: 0;
+    color: var(--accent-danger);
+  }
+
+  &--loading &__input + &__switch &__spinner {
+    visibility: visible;
+  }
+
+  &--disabled {
+    opacity: 0.48;
+  }
+
+  &--disabled &__input + &__switch::before {
+    box-shadow: none;
+  }
+
+  &--left &__container {
+    flex-direction: row-reverse;
+  }
+
+  &--left &__label {
+    margin: torem(0, 12, 0, 0);
+  }
+}
+
+@keyframes switch-loader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

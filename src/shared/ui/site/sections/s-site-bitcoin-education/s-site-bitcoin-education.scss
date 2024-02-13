@@ -1,0 +1,33 @@
+.s-site-bitcoin-education {
+  padding: torem(60, 0);
+
+  @media (max-width: 767px) {
+    padding: torem(96, 0, 32);
+  }
+
+  &__title {
+    position: relative;
+    text-align: right;
+    margin-bottom: torem(60);
+
+    @media (max-width: 767px) {
+      text-align: left;
+      margin-bottom: torem(32);
+    }
+
+
+    &:after {
+      position: absolute;
+      top: 0;
+      right: torem(30);
+      z-index: 1;
+      content: '';
+      width: torem(460);
+      height: torem(100);
+      border-radius: torem(460);
+      transform: rotate(-30deg);
+      background: rgba(1, 4, 15, 0.70);
+      filter: blur(40px);
+    }
+  }
+}

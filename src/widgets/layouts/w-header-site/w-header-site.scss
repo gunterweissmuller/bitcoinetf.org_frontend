@@ -1,0 +1,211 @@
+.w-header-site {
+  position: absolute;
+  width: 100%;
+  color: var(--text-inverse-primary);
+  background: none;
+  border-radius: 0 0 torem(16) torem(16);
+  box-shadow: 0 0 torem(6) 0 rgba(0, 0, 0, 0.06);
+  padding: torem(16);
+  transition: background 0.4s ease;
+
+  @include breakpoint($break-desktop-1024) {
+    padding: torem(32) torem(80);
+  }
+
+  &--fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background: var(--accent-primary);
+  }
+
+  &__wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    z-index: 101;
+    max-width: torem(190);
+    width: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__burger {
+    cursor: pointer;
+    width: torem(24);
+    height: torem(24);
+    position: relative;
+    z-index: 101;
+    overflow: hidden;
+
+    @include breakpoint($break-tablet) {
+      display: none;
+    }
+
+    span {
+      width: torem(24);
+      height: torem(2);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--surfaces-surface-1);
+      transition: all 0.5s;
+
+      &:nth-of-type(2) {
+        top: calc(50% - #{torem(5)});
+      }
+
+      &:nth-of-type(3) {
+        top: calc(50% + #{torem(5)});
+      }
+    }
+
+    &__active {
+      span:nth-of-type(1) {
+        display: none;
+      }
+
+      span:nth-of-type(2) {
+        top: 50%;
+        transform: translate(-50%, 0%) rotate(45deg);
+      }
+
+      span:nth-of-type(3) {
+        top: 50%;
+        transform: translate(-50%, 0%) rotate(-45deg);
+      }
+    }
+
+  }
+
+
+  &__box {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: torem(80) var(--spacing-m-1) var(--spacing-m-1) var(--spacing-m-1);
+    background: var(--surfaces-surface-2);
+    transform: translateY(-100%);
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+
+    &__active {
+      transform: translateY(0);
+    }
+
+    @include breakpoint($break-tablet) {
+      z-index: 100;
+      position: static;
+      top: unset;
+      left: unset;
+      padding: 0;
+      transform: unset;
+      background: transparent;
+      flex-direction: row;
+      justify-content: space-between;
+      width: auto;
+    }
+
+    @media (max-width: 1199px) {
+      background: var(--accent-primary);
+    }
+  }
+
+  &__links {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+    gap: var(--spacing-m-3);
+
+    @include breakpoint($break-tablet) {
+      display: flex;
+      align-items: center;
+      gap: unset;
+    }
+
+  }
+
+  &__link {
+    color: var(--text-inverse-primary);
+    font-family: Dm, sans-serif;
+    font-size: torem(16);
+    font-weight: 700;
+    line-height: normal;
+
+    @include breakpoint($break-tablet) {
+      &:not(:last-child) {
+        margin-right: var(--spacing-m-1);
+      }
+    }
+    @include breakpoint($break-desktop-1024) {
+      &:not(:last-child) {
+        margin-right: var(--spacing-m-3);
+      }
+    }
+
+    &:hover {
+      color: var(--text-inverse-primary);
+      opacity: .5;
+    }
+
+  }
+
+  &__controls {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-s);
+
+    &-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-bottom: var(--spacing-m-3);
+      @include breakpoint($break-tablet) {
+        margin-bottom: 0;
+      }
+
+      &--mobile {
+        @include breakpoint($break-tablet) {
+          display: none;
+        }
+      }
+
+    }
+
+    @include breakpoint($break-tablet) {
+      display: flex;
+      align-items: center;
+    }
+
+    &-desktop {
+      display: none;
+      @include breakpoint($break-tablet) {
+        display: flex;
+      }
+    }
+
+    &-mobile {
+      @include breakpoint($break-tablet) {
+        display: none;
+      }
+    }
+
+  }
+}

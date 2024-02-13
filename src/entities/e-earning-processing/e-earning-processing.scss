@@ -1,0 +1,44 @@
+.e-earning-processing {
+  padding-top: torem(24);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  @include breakpoint($break-desktop-1024) {
+    padding-top: torem(100);
+  }
+
+  &__pic {
+    width: torem(343);
+    height: torem(240);
+    margin: 0 auto var(--spacing-m-1);
+  }
+
+  &__title {
+    color: var(--text-primary);
+    text-align: center;
+    font-family: Dm, sans-serif;
+    font-size: torem(24);
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__text {
+    color: var(--text-secondary);
+    text-align: center;
+    font-family: Dm, sans-serif;
+    font-size: torem(16);
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: var(--spacing-m-3);
+  }
+
+  &__btn {
+    max-width: torem(343);
+    width: 100%;
+  }
+}

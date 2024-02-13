@@ -1,0 +1,149 @@
+.a-pincode-input {
+  position: relative;
+
+  &__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: max-content;
+  }
+
+  &__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: transparent;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    opacity: 0;
+  }
+
+  &__hidden-input {
+    position: fixed;
+    top: torem(-10000);
+    left: torem(-10000);
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &__numbers {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    &__item {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: torem(51);
+      height: torem(53);
+      padding: torem(16, 20);
+      outline: none;
+      color: var(--accent-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      text-align: center;
+      user-select: none;
+      flex-shrink: 0;
+      border-radius: var(--spacing-s);
+      border: 1px solid var(--surfaces-border-1);
+      background: var(--surfaces-surface-2);
+
+      &:not(:last-child) {
+        margin-right: torem(7);
+
+        @include breakpoint($break-tablet) {
+          margin-right: torem(20);
+        }
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: torem(-2);
+        width: 100%;
+        height: torem(2);
+        background-color: var(--color-icon-secondary);
+        border-radius: torem(8);
+      }
+
+      &--is-current {
+        &::before {
+          background-color: var(--color-icon-primary);
+        }
+
+        &::after {
+          content: '';
+          top: 50%;
+          left: 50%;
+          display: block;
+          width: torem(1);
+          height: torem(22);
+          background-color: var(--text-primary);
+          animation-name: pincode-blink;
+          animation-duration: 1.05s;
+          animation-iteration-count: infinite;
+          animation-fill-mode: both;
+        }
+      }
+
+      &--is-filled {
+        &::before {
+          background-color: var(--color-icon-primary);
+        }
+      }
+
+      &--is-current-last-cell {
+        &::after {
+          position: absolute;
+          top: 50%;
+          right: torem(5);
+          margin-left: auto;
+          transform: translateY(-50%);
+        }
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &__error-text {
+    position: absolute;
+    margin-top: torem(4);
+    color: var(--color-error);
+    text-align: left;
+  }
+
+  &--error &__numbers__item--is-filled::before {
+    background-color: var(--color-error);
+  }
+
+  &--disabled {
+    background: var(--color-control-secondary);
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+@keyframes pincode-blink {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,28 @@
+.m-stepper {
+  &__progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: var(--spacing-m-3);
+
+    &-item {
+      height: torem(4);
+      width: 100%;
+      background: var(--blue-200);
+      border-radius: torem(4);
+
+      &.active {
+        background: var(--accent-primary);
+      }
+
+      &.done {
+        background: var(--accent-primary);
+      }
+    }
+
+    &-item + .m-stepper__progress-item {
+      margin-left: torem(4);
+    }
+  }
+}

@@ -1,0 +1,24 @@
+.e-stats-protection {
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    font-family: Dm, sans-serif;
+    font-size: torem(16);
+    font-weight: 700;
+    line-height: torem(21);
+    margin-bottom: var(--spacing-m-1);
+  }
+
+  &__wrap {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: torem(8);
+
+    @include breakpoint($break-desktop-1440) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+}
+

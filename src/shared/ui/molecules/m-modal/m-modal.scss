@@ -1,0 +1,162 @@
+.m-modal {
+  &-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #00000054;
+    display: table;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(32.5px);
+  }
+
+  &-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+    overflow-y: scroll;
+  }
+
+  &-container {
+    margin: 0 auto;
+    transition: all 0.3s ease;
+  }
+
+  &-header h3 {
+    margin-top: 0;
+    color: #42b983;
+  }
+
+  &-body {
+    margin: 20px 0;
+  }
+
+  &-default-button {
+    float: right;
+  }
+
+  &-enter-from, &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-active &-container,
+  &-leave-active &-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  &-fullscreen {
+    display: flex;
+
+    @include breakpoint($break-tablet) {
+      display: table;
+    }
+
+    .m-modal {
+      &-wrapper {
+        display: flex;
+        height: 100%;
+        background-size: cover;
+        background-image: url("/img/ref-bg.jpg");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: var(--blue-500);
+        width: 100%;
+        padding: torem(56) torem(16) torem(32) torem(16);
+
+        @include breakpoint($break-tablet) {
+          padding: 0;
+          background-color: #00000054;
+          background-image: none;
+          width: auto;
+          display: table-cell;
+        }
+      }
+
+      &-container {
+        width: 100%;
+        margin: 0;
+
+        @include breakpoint($break-tablet) {
+          padding: var(--spacing-l-2);
+          border-radius: var(--spacing-m-3);
+          margin: 0 auto;
+          max-width: torem(480);
+          background-size: cover;
+          background-image: url("/img/ref-bg.jpg");
+          background-repeat: no-repeat;
+          background-position: center top;
+        }
+      }
+    }
+
+  }
+
+  &-kyc {
+    display: flex;
+
+    @include breakpoint($break-tablet) {
+      display: table;
+    }
+
+    .m-modal {
+      &-wrapper {
+        display: flex;
+        height: 100%;
+        background: var(--blue-500);
+        width: 100%;
+
+        padding: torem(56) torem(16) torem(32) torem(16);
+
+        @include breakpoint($break-tablet) {
+          padding: 0;
+          background-color: #00000054;
+          background-image: none;
+          width: auto;
+          display: table-cell;
+        }
+      }
+
+      &-container {
+        width: 100%;
+        margin: 0;
+
+        @include breakpoint($break-tablet) {
+          padding: var(--spacing-l-2);
+          border-radius: var(--spacing-m-3);
+          margin: 0 auto;
+          max-width: torem(480);
+          background: var(--blue-500);
+        }
+      }
+    }
+  }
+}
+
+.bottom-sheet {
+  &__overlay {
+    backdrop-filter: blur(32.5px);
+    background-color: #00000054 !important;
+  }
+
+  &__content {
+    background: var(--surfaces-surface-1) !important;
+    height: 100% !important;
+  }
+
+  &__draggable-thumb {
+    border-radius: torem(100) !important;
+    background: var(--gray-200) !important;
+  }
+
+  &__draggable-area {
+    padding: var(--spacing-s) !important;
+  }
+
+  &__main {
+    margin-bottom: var(--spacing-m-3);
+  }
+}
+
+

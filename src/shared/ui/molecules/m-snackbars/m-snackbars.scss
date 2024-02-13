@@ -1,0 +1,44 @@
+.m-snackbars {
+  position: fixed;
+  z-index: 10;
+  left: torem(16);
+  bottom: torem(124);
+  width: torem(390);
+
+  @include breakpoint($break-tablet) {
+    left: torem(53);
+    bottom: torem(148);
+  }
+
+  @include breakpoint($break-desktop-1024) {
+    left: torem(40);
+    bottom: torem(40);
+  }
+
+  @include breakpoint($break-desktop-1260) {
+    left: torem(92);
+    bottom: torem(44);
+  }
+
+  @include breakpoint($break-desktop-1600) {
+    left: torem(120);
+    bottom: torem(52);
+  }
+
+  .a-snackbar {
+    margin-top: torem(12);
+  }
+}
+
+.m-snackbars-enter-active,
+.m-snackbars-leave-active,
+.m-snackbars-move {
+  transition:
+    transform 0.5s,
+    opacity 0.5s;
+}
+
+.m-snackbars-enter,
+.m-snackbars-leave-to {
+  opacity: 0;
+}

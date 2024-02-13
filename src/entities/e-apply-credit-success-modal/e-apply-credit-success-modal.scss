@@ -1,0 +1,48 @@
+.e-apply-credit-success-modal {
+
+  @include breakpoint($break-tablet) {
+    border-radius: var(--spacing-m-3);
+    background: var(--surfaces-surface-1);
+    width: 100%;
+    max-width: torem(480);
+    max-height: torem(348);
+  }
+
+  &__wrap {
+    display: flex;
+    padding: var(--spacing-l-2) var(--spacing-m-2);
+    flex-direction: column;
+    align-items: center;
+
+
+    &-pic {
+      width: torem(80);
+      height: torem(80);
+      margin: 0 auto var(--spacing-m-3) auto;
+    }
+
+    &-title {
+      text-align: center;
+      color: var(--text-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(18);
+      font-weight: 700;
+      line-height: torem(23);
+      margin-bottom: var(--spacing-s);
+    }
+
+    &-text {
+      text-align: center;
+      color: var(--text-secondary);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 400;
+      line-height: torem(21);
+      margin-bottom: var(--spacing-m-3);
+    }
+
+    &-btn {
+      width: 100%;
+    }
+  }
+}

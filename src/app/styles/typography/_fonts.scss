@@ -1,0 +1,122 @@
+@font-face {
+  font-family: Caption;
+  src: local('caption-regular'),
+  url('/assets/fonts/caption/static/caption-regular.woff') format('woff'),
+  url('/assets/fonts/caption/static/caption-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Caption;
+  src: local('caption-regular'),
+  url('/assets/fonts/caption/static/caption-bold.woff') format('woff'),
+  url('/assets/fonts/caption/static/caption-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Dm, sans-serif;
+  src: local('dm-medium'),
+  url('/assets/fonts/dm/static/dm-medium.woff') format('woff'),
+  url('/assets/fonts/dm/static/dm-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Dm;
+  src: local('dm-bold'),
+  url('/assets/fonts/dm/static/dm-bold.woff') format('woff'),
+  url('/assets/fonts/dm/static/dm-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Dm;
+  src: local('dm-regular'),
+  url('/assets/fonts/dm/static/dm-regular.woff') format('woff'),
+  url('/assets/fonts/dm/static/dm-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Ubuntu;
+  src: local('ubuntu-bold-italic'),
+  url('/assets/fonts/ubuntu/static/ubuntu-bold-Italic.woff') format('woff'),
+  url('/assets/fonts/ubuntu/static/ubuntu-bold-Italic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Jakarta;
+  src: local('PlusJakartaSans-Regular'),
+  url('/assets/fonts/jakarta/PlusJakartaSans-Regular.woff') format('woff'),
+  url('/assets/fonts/jakarta/PlusJakartaSans-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Jakarta;
+  src: local('PlusJakartaSans-Light'),
+  url('/assets/fonts/jakarta/PlusJakartaSans-Light.woff') format('woff'),
+  url('/assets/fonts/jakarta/PlusJakartaSans-Light.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Jakarta;
+  src: local('PlusJakartaSans-Bold'),
+  url('/assets/fonts/jakarta/PlusJakartaSans-Bold.woff') format('woff'),
+  url('/assets/fonts/jakarta/PlusJakartaSans-Bold.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  src: local('Inter-Bold'),
+  url('/assets/fonts/inter/Inter-Bold.woff') format('woff'),
+  url('/assets/fonts/inter/Inter-Bold.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Gilroy;
+  src: local('Gilroy-Light'),
+  url('/assets/fonts/gilroy/Gilroy-Light.woff') format('woff'),
+  url('/assets/fonts/gilroy/Gilroy-Light.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Gilroy;
+  src: local('Gilroy-Bold'),
+  url('/assets/fonts/gilroy/Gilroy-Bold.woff') format('woff'),
+  url('/assets/fonts/gilroy/Gilroy-Bold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Gilroy;
+  src: local('Gilroy-Extrabold'),
+  url('/assets/fonts/gilroy/Gilroy-Extrabold.woff') format('woff'),
+  url('/assets/fonts/gilroy/Gilroy-Extrabold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}

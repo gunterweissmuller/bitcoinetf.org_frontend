@@ -1,0 +1,50 @@
+.e-send-to-buy-shares {
+  cursor: pointer;
+  border-radius: torem(16);
+  box-shadow: var(--b-shadow-1);
+  background: var(--accent-primary);
+  padding: var(--spacing-m-1);
+  display: none;
+  align-items: center;
+  width: 100%;
+  margin-bottom: var(--spacing-m-3);
+  height: torem(106);
+  @include breakpoint($break-desktop-1024) {
+    display: flex;
+  }
+
+  @include breakpoint($break-desktop-1440) {
+    margin-bottom: 0;
+    margin-left: var(--spacing-m-2);
+  }
+
+
+  &-info {
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      text-align: start;
+      color: var(--text-inverse-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: normal;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    &-text {
+      text-align: start;
+      color: var(--text-inverse-secondary);
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+
+  &-chevron {
+    margin-left: auto;
+    color: var(--text-inverse-secondary);
+  }
+}

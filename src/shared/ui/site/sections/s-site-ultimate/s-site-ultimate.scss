@@ -1,0 +1,235 @@
+.s-site-ultimate {
+  position: relative;
+  padding: torem(60, 0);
+
+  @media (max-width: 767px) {
+    padding: torem(32, 0);
+  }
+
+  &__title {
+    position: relative;
+    text-align: center;
+    margin-bottom: torem(80);
+
+    @media (max-width: 799px) {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 767px) {
+      text-align: left;
+    }
+
+    span {
+      display: block;
+    }
+
+    &:before {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      content: '';
+      width: torem(722);
+      height: torem(160);
+      border-radius: 722px;
+      background: rgba(1, 4, 15, 0.70);
+      filter: blur(40px);
+    }
+  }
+
+  &__info {
+    width: torem(327);
+
+    @media (max-width: 991px) {
+      width: 100%;
+    }
+
+    &-text {
+      margin-bottom: torem(40);
+
+      p {
+        font-family: Jakarta, sans-serif;
+        font-size: torem(18);
+        line-height: 140%;
+
+        &:not(:last-child) {
+          margin-bottom: torem(20);
+        }
+      }
+    }
+  }
+
+  &__points {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__point {
+    display: flex;
+    align-items: flex-start;
+    padding: torem(32, 0);
+    border-top: torem(1) solid rgba(#fff, 0.1);
+
+    @media (max-width: 991px) {
+      align-items: center;
+      flex-direction: column;
+    }
+
+    @media (max-width: 767px) {
+      padding: torem(20, 0);
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    &-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: torem(40);
+      height: torem(40);
+      font-family: Jakarta, sans-serif;
+      font-size: torem(14);
+      font-weight: 800;
+      color: #01040F;
+      background: var(--color-bg);
+      border-radius: 100%;
+
+      @media (max-width: 991px) {
+        margin-bottom: torem(12);
+      }
+
+      @media (max-width: 767px) {
+        width: torem(32);
+        height: torem(32);
+        font-size: torem(12);
+      }
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    &-title {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(32);
+      line-height: 120%;
+      font-weight: 800;
+      margin-bottom: torem(12);
+
+      @media (max-width: 767px) {
+        font-size: torem(24);
+        margin-bottom: torem(8);
+      }
+    }
+
+    &-text {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(18);
+      line-height: 140%;
+      color: #FFFFFF80;
+
+      @media (max-width: 767px) {
+        font-size: torem(16);
+      }
+    }
+  }
+
+  &__container {
+    position: relative;
+    max-width: torem(1400);
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  &__img {
+    position: absolute;
+    top: torem(44);
+    left: torem(-300);
+    z-index: 2;
+
+    @media (max-width: 1199px) {
+      top: torem(0);
+      left: torem(-500);
+    }
+
+    @media (max-width: 799px) {
+      top: 0;
+      left: torem(-100);
+      width: torem(580);
+      height: torem(239);
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 767px) {
+      top: torem(50);
+      left: torem(-180);
+    }
+  }
+
+  &__content {
+    display: flex;
+    margin-bottom: torem(81);
+
+    @media (max-width: 991px) {
+      flex-direction: column;
+    }
+  }
+
+  &__message {
+    max-width: fit-content;
+    margin-top: torem(280);
+    margin-left: auto;
+    margin-right: torem(200);
+
+    @media (max-width: 1299px) {
+      margin-top: torem(300);
+      margin-right: torem(20);
+    }
+
+    @media (max-width: 991px) {
+      margin-top: torem(300);
+      margin-right: torem(200);
+      margin-bottom: torem(80);
+    }
+
+    @media (max-width: 799px) {
+      margin-top: torem(150);
+      margin-right: torem(100);
+      margin-bottom: torem(50);
+    }
+
+    @media (max-width: 767px) {
+      margin-top: torem(200);
+      margin-right: torem(80);
+    }
+
+    &-text {
+      font-family: Jakarta, sans-serif;
+      font-size: torem(16);
+      line-height: torem(20);
+      color: #83F5B8;
+      width: torem(110);
+      transform: translateY(torem(20)) translateX(torem(100)) rotate(5deg);
+
+      @media (max-width: 767px) {
+        font-size: torem(14);
+      }
+    }
+
+    img {
+      @media (max-width: 767px) {
+        width: torem(101);
+      }
+    }
+  }
+}

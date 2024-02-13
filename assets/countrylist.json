@@ -1,0 +1,137 @@
+[
+  {
+    "label": "Armenia",
+    "value": "AM",
+    "icon": "https://flagcdn.com/am.svg"
+  },
+  {
+    "label": "Azerbaijan",
+    "value": "AZ",
+    "icon": "https://flagcdn.com/az.svg"
+  },
+  {
+    "label": "Bahrain",
+    "value": "BH",
+    "icon": "https://flagcdn.com/bh.svg"
+  },
+  {
+    "label": "Bangladesh",
+    "value": "BD",
+    "icon": "https://flagcdn.com/bd.svg"
+  },
+  {
+    "label": "Belarus",
+    "value": "BY",
+    "icon": "https://flagcdn.com/by.svg"
+  },
+  {
+    "label": "European Union",
+    "value": "EU",
+    "icon": "https://flagcdn.com/eu.svg"
+  },
+  {
+    "label": "Georgia",
+    "value": "GE",
+    "icon": "https://flagcdn.com/ge.svg"
+  },
+  {
+    "label": "Hong Kong",
+    "value": "HK",
+    "icon": "https://flagcdn.com/hk.svg"
+  },
+  {
+    "label": "India",
+    "value": "IN",
+    "icon": "https://flagcdn.com/in.svg"
+  },
+  {
+    "label": "Indonesia",
+    "value": "ID",
+    "icon": "https://flagcdn.com/id.svg"
+  },
+  {
+    "label": "Kazakhstan",
+    "value": "KZ",
+    "icon": "https://flagcdn.com/kz.svg"
+  },
+  {
+    "label": "Kyrgyz Republic",
+    "value": "KG",
+    "icon": "https://flagcdn.com/kg.svg"
+  },
+  {
+    "label": "Malaysia",
+    "value": "MY",
+    "icon": "https://flagcdn.com/my.svg"
+  },
+  {
+    "label": "Moldova",
+    "value": "MD",
+    "icon": "https://flagcdn.com/md.svg"
+  },
+  {
+    "label": "Nigeria",
+    "value": "NG",
+    "icon": "https://flagcdn.com/ng.svg"
+  },
+  {
+    "label": "Philippines",
+    "value": "PH",
+    "icon": "https://flagcdn.com/ph.svg"
+  },
+  {
+    "label": "Qatar",
+    "value": "QA",
+    "icon": "https://flagcdn.com/qa.svg"
+  },
+  {
+    "label": "Russian Federation",
+    "value": "RU",
+    "icon": "https://flagcdn.com/ru.svg"
+  },
+  {
+    "label": "Saudi Arabia",
+    "value": "SA",
+    "icon": "https://flagcdn.com/sa.svg"
+  },
+  {
+    "label": "Singapore",
+    "value": "SG",
+    "icon": "https://flagcdn.com/sg.svg"
+  },
+  {
+    "label": "Thailand",
+    "value": "TH",
+    "icon": "https://flagcdn.com/th.svg"
+  },
+  {
+    "label": "Turkey",
+    "value": "TR",
+    "icon": "https://flagcdn.com/tr.svg"
+  },
+  {
+    "label": "United Arab Emirates",
+    "value": "AE",
+    "icon": "https://flagcdn.com/ae.svg"
+  },
+  {
+    "label": "Ukraine",
+    "value": "UA",
+    "icon": "https://flagcdn.com/ua.svg"
+  },
+  {
+    "label": "Uzbekistan",
+    "value": "UZ",
+    "icon": "https://flagcdn.com/uz.svg"
+  },
+  {
+    "label": "Vietnam",
+    "value": "VN",
+    "icon": "https://flagcdn.com/vn.svg"
+  },
+  {
+    "label": "Rest of the World",
+    "value": "WORLD",
+    "icon": "https://www.activistpost.com/wp-content/uploads/2015/10/UN-Cannabis-1024x522.jpg"
+  }
+]

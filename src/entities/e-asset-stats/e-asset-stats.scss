@@ -1,0 +1,22 @@
+.e-asset-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, torem(167));
+  gap: torem(8);
+  margin-bottom: var(--spacing-m-2);
+
+  &--brf {
+    grid-template-rows: repeat(1, torem(167));
+
+  }
+
+  &-group {
+    display: grid;
+    grid-template-rows: repeat(2, torem(80));
+    gap: torem(8);
+
+    &--brf {
+      grid-template-rows: auto;
+    }
+  }
+}

@@ -1,0 +1,228 @@
+.e-stat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-m-1);
+  box-shadow: var(--b-shadow-1);
+  border: torem(1) solid var(--surfaces-surface-glass-border);
+  background: var(--surfaces-surface-glass);
+  border-radius: torem(8);
+  //height: 100%;
+
+  &-default {
+
+    &__head {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      &--fixed {
+        position: absolute;
+        right: torem(16);
+        top: torem(16);
+      }
+
+      &-toggle {
+        cursor: pointer;
+        border-radius: torem(4);
+        height: torem(21);
+        padding: torem(4) torem(8);
+        min-width: torem(81);
+        background: var(--surfaces-surface-2);
+        color: var(--text-secondary);
+        font-family: Dm, sans-serif;
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+      }
+
+      &-popper {
+        margin-left: auto;
+        cursor: pointer;
+      }
+
+      &-icon {
+        margin-left: auto;
+        color: var(--text-tertiary);
+      }
+    }
+
+    &__wrap {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+
+    &__title {
+      display: flex;
+      align-items: center;
+
+      &-text {
+        font-family: Dm, sans-serif;
+        font-size: torem(20);
+        font-weight: 700;
+        line-height: torem(26);
+
+        &--primary {
+          color: var(--accent-primary);
+        }
+
+        &--success {
+          color: var(--accent-success);
+        }
+      }
+
+      &-difference {
+        margin-left: torem(4);
+        font-family: Dm, sans-serif;
+        font-size: torem(10);
+        font-weight: 700;
+        line-height: torem(13);
+        color: var(--accent-success);
+      }
+    }
+
+
+    &__subtitle {
+      display: inline-flex;
+      align-items: center;
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-weight: 500;
+      line-height: torem(16);
+      color: var(--text-tertiary);
+
+      i {
+        margin-right: torem(2);
+      }
+    }
+
+    &__info {
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-weight: 700;
+      line-height: torem(13);
+      color: var(--text-tertiary);
+    }
+
+    &__date {
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      margin-top: var(--spacing-s);
+    }
+  }
+
+  &-list {
+
+    &__title {
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      margin-bottom: var(--spacing-m-1);
+    }
+
+    &__list {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    &__item {
+      display: flex;
+      justify-content: space-between;
+
+      &:not(:last-child) {
+        margin-bottom: var(--spacing-xs);
+      }
+
+      &-left {
+        display: flex;
+        flex-direction: column;
+      }
+
+      &-right {
+        display: flex;
+        flex-direction: column;
+        text-align: end;
+        &--minus{
+          .e-stat-list__usd{
+            color: var(--accent-danger);
+          }
+          .e-stat-list__btc{
+            color: var(--accent-danger);
+          }
+        }
+      }
+    }
+
+    &__date {
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+
+    &__time {
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    &__usd {
+      color: var(--accent-success);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    &__btc {
+      color: var(--accent-success);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    &__file {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      &:not(:last-child) {
+        margin-bottom: var(--spacing-s);
+      }
+
+      &-icon {
+        margin-right: var(--spacing-xs);
+      }
+
+      &-text {
+        color: var(--text-secondary);
+        font-family: Dm, sans-serif;
+        font-weight: 700;
+        font-size: torem(12);
+        line-height: torem(16);
+      }
+    }
+  }
+}

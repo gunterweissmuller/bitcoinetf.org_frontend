@@ -1,0 +1,29 @@
+.e-breadcrumbs {
+  &__list {
+    display: flex;
+    align-items: center;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    color: var(--text-tertiary);
+    font-family: Dm, sans-serif;
+    font-size: torem(20);
+    font-weight: 700;
+    line-height: normal;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+
+    &-icon {
+      color: var(--text-primary);
+      margin: 0 torem(4);
+    }
+
+    &--active {
+      color: var(--text-primary);
+    }
+  }
+}

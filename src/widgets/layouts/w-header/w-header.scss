@@ -1,0 +1,207 @@
+.w-header {
+  position: fixed;
+  max-width: 100vw;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: torem(54);
+  display: flex;
+  align-items: center;
+  padding: torem(16, 0);
+  background: var(--surfaces-surface-glass-2);
+  backdrop-filter: blur(32.5px);
+  box-shadow: var(--b-shadow-1);
+
+  &--no-indent {
+    padding-bottom: 0;
+  }
+
+  @include breakpoint($break-desktop-1024) {
+    backdrop-filter: none;
+    padding: var(--spacing-l-2) var(--spacing-l-2) var(--spacing-m-3) var(--spacing-l-2);
+    position: unset;
+    box-shadow: none;
+    background: transparent;
+    border-radius: 0;
+    border: none;
+    max-width: 100%;
+  }
+
+  &__wrap {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__head {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include breakpoint($break-desktop-1024) {
+      justify-content: space-between;
+    }
+
+    &__back {
+      position: absolute;
+      left: torem(16);
+      top: 50%;
+      transform: translateY(-50%);
+
+      @include breakpoint($break-desktop-1024) {
+        display: none;
+      }
+    }
+
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    font-family: Dm, sans-serif;
+    font-size: torem(18);
+    font-weight: 700;
+    line-height: torem(23);
+
+    &-container {
+      display: flex;
+      align-items: center;
+
+      img {
+        margin: 0 var(--spacing-xs);
+      }
+    }
+  }
+
+  &__info {
+    margin-top: torem(16);
+    @include breakpoint($break-desktop-1024) {
+      display: none !important;
+    }
+  }
+
+  &__buy {
+    width: 100%;
+
+    &-container {
+      @include breakpoint($break-desktop-1024) {
+        margin-right: var(--spacing-l-2);
+      }
+
+      &--no-indent {
+        margin-right: 0;
+      }
+
+    }
+
+  }
+
+  &__img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: absolute;
+    width: torem(22);
+    height: torem(22);
+    padding-left: torem(7);
+    right: torem(16);
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include breakpoint($break-desktop-1024) {
+      right: 0;
+    }
+
+    &--left {
+      @include breakpoint($break-desktop-1024) {
+        position: static;
+        transform: unset;
+      }
+
+      position: absolute;
+      transform: translateY(-50%);
+      right: torem(16);
+    }
+
+    img {
+      border-radius: 50%;
+      background: transparent;
+      max-width: torem(24);
+      width: torem(24);
+      height: torem(24);
+    }
+  }
+
+  &__list {
+    position: relative;
+    padding-left: torem(42);
+
+    &:before {
+      position: absolute;
+      border-radius: 50%;
+      content: '';
+      width: torem(18);
+      height: torem(18);
+      left: torem(16);
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 16%;
+      background-color: var(--accent-success);
+    }
+
+    &:after {
+      position: absolute;
+      border-radius: 50%;
+      content: '';
+      width: torem(6);
+      height: torem(6);
+      left: torem(22);
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: var(--accent-success);
+    }
+  }
+
+  &__slide {
+    border-radius: var(--spacing-xs);
+    background: var(--surfaces-selection);
+    padding: var(--spacing-xs) var(--spacing-s);
+    width: auto;
+  }
+
+  &__item {
+    width: auto;
+    border-radius: var(--spacing-xs);
+    margin-right: var(--spacing-s);
+    background: var(--surfaces-selection);
+    padding: torem(4, 8);
+    font-family: Dm, sans-serif;
+
+    &-title {
+      font-weight: 700;
+      color: var(--text-tertiary);
+      font-size: torem(10);
+      line-height: torem(13);
+    }
+
+    &-text {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: torem(14);
+      line-height: torem(18);
+      color: var(--accent-primary);
+    }
+  }
+
+  .swiper-wrapper {
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+  }
+}

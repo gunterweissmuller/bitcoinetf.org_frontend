@@ -1,0 +1,52 @@
+.s-site-blogs-education {
+  padding: torem(179, 0);
+
+  @media (max-width: 991px) {
+    padding: torem(184, 0);
+  }
+
+  &__title {
+    margin-bottom: torem(32);
+  }
+
+  &__description {
+    font-size: torem(20);
+    line-height: torem(26);
+    margin-bottom: torem(48);
+
+    @media (max-width: 600px) {
+      font-size: torem(16);
+      line-height: torem(20);
+    }
+  }
+
+  &__items {
+    display: grid;
+    gap: torem(48, 24);
+    grid-template-columns: repeat(6, 1fr);
+    padding-bottom: torem(48);
+    border-bottom: torem(1) solid var(--surfaces-border-2);
+
+    .m-site-blog {
+      grid-column: span 2;
+
+      @media (max-width: 991px) {
+        grid-column: span 3;
+      }
+
+      @media (max-width: 767px) {
+        grid-column: span 6;
+      }
+
+      //&:nth-child(4), &:nth-child(5) {
+      //  @media (min-width: 992px) {
+      //    grid-column: span 3;
+      //  }
+      //}
+    }
+  }
+
+  .m-site-tabs {
+    margin-bottom: torem(48);
+  }
+}

@@ -1,0 +1,18 @@
+global:
+  app_name: 'frontend'
+  prod:
+    nodeEnv: 'production'
+    NuxtWsUrl: 'wss://wss.bitcoinetf.org/connection/websocket'
+    NuxtWsToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5OWI0Y2M2NC05YjFjLTQ1MDctYmNlMS1mMGRjODkzMjAzZjEiLCJleHAiOjQ4NTkwMjAzMzF9.v2cENQVgWMmR2xfhDUSt7_NUvfj0nlZtQHtdXtZwlf0'
+    NuxtInfoApi: 'apiv1.bitcoinetf.org'
+    NuxtEthApi: 'api.bitcoinetf.org'
+    NuxtExplorerApi: 'explorer.nextdev.org'
+    NuxtIconsApi: 'icons.bitcoinetf.org'
+  stage:
+    nodeEnv: 'development'
+    NuxtWsUrl: 'wss://wss.stage.techetf.org/connection/websocket'
+    NuxtWsToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMWE2MGM5YS0xYTVhLTQ4YTMtYjU4MC1kY2JlOWNjYzVmMTAiLCJleHAiOjQ4NjMyNjEyNDB9.3cu4Ghqub2Kb3rzu2OwfevT0BHsysl30g0hzuPkbo8Y'
+    NuxtInfoApi: 'apiv1.stage.techetf.org'
+    NuxtEthApi: 'api.stage.techetf.org'
+    NuxtExplorerApi: 'explorer.stage.techetf.org'
+    NuxtIconsApi: 'icons.stage.techetf.org'

@@ -1,0 +1,99 @@
+.w-chart-portfolio {
+  padding: var(--spacing-m-1) var(--spacing-m-2);
+  margin-bottom: var(--spacing-m-2);
+  border-radius: torem(8);
+  border: torem(1) solid var(--surfaces-surface-glass-border);
+  background: var(--surfaces-surface-glass);
+  box-shadow: var(--b-shadow-1);
+
+  //@include breakpoint($break-desktop-1440) {
+  //  margin-bottom: 0;
+  //}
+
+  @include breakpoint($break-desktop-1024) {
+    padding: var(--spacing-m-2);
+  }
+
+  &__types {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-m-2);
+  }
+
+  &__type {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-s);
+
+    &:not(:last-child) {
+      margin-right: torem(4);
+
+      @include breakpoint($break-desktop-1024) {
+        margin-right: torem(34);
+      }
+    }
+
+    &-symbol {
+      border-radius: 50%;
+      width: torem(18);
+      height: torem(18);
+      margin-right: torem(4);
+    }
+
+    &-text {
+      color: var(--text-tertiary, #888CA0);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+
+  &__chart {
+    position: relative;
+    height: torem(311);
+
+    @include breakpoint($break-desktop-1024) {
+      height: torem(400);
+    }
+  }
+
+  &__info {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &-title {
+      text-align: center;
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-weight: 700;
+      line-height: normal;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    &-usd {
+      text-align: center;
+      color: var(--text-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: normal;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    &-btc {
+      text-align: center;
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(10);
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{{- $globals := ternary .Values.global.stage (ternary .Values.global.prod .Values.global.dev (eq .Values.global.env_name "prod")) (eq .Values.global.env_name "stage") -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.app_name }}
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.global.app_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.global.app_name }}
+        ksync: {{ .Values.global.app_name }}
+    spec:
+      containers:
+        - name: {{ .Values.global.app_name }}
+          image: {{ .Values.werf.image.app }}
+          env:
+{{ include "apps-env-var-values" . | indent 12 }}
+            - name: HOST
+              value: "0"
+            - name: PORT
+              value: "3000"
+          ports:
+            - name: http
+              containerPort: 3000
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+      imagePullSecrets:
+        - name: docker-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.global.app_name }}
+spec:
+  ports:
+    - port: 3000
+      name: http
+  selector:
+    app: {{ .Values.global.app_name }}
+---

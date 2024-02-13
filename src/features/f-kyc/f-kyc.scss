@@ -1,0 +1,145 @@
+.f-kyc {
+  padding-bottom: torem(20);
+
+  &__back {
+    margin-top: torem(24);
+    width: torem(24);
+    margin-bottom: var(--spacing-m-3);
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      margin-bottom: torem(16);
+      font-family: Dm, sans-serif;
+      font-size: torem(32);
+      line-height: torem(42);
+      font-weight: 700;
+    }
+
+    &-description {
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 400;
+      line-height: torem(21);
+      margin-bottom: var(--spacing-m-3);
+    }
+  }
+
+  &__input {
+    &-error {
+      width: 100%;
+      color: var(--accent-danger);
+      text-align: left;
+      word-wrap: break-word;
+      font-family: Dm, sans-serif;
+      margin-top: torem(8);
+      font-size: torem(12);
+      font-weight: 500;
+      line-height: torem(16);
+    }
+
+    &__camera {
+      width: 100%;
+
+      @include breakpoint($break-desktop-1024) {
+        display: none;
+      }
+    }
+
+    &__progressbar {
+      width: 100%;
+      margin-right: var(--spacing-s);
+    }
+
+    &__files {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: var(--spacing-m-1);
+    }
+
+    &__file {
+      display: flex;
+      align-items: center;
+
+      &:not(:last-child) {
+        margin-bottom: var(--spacing-s);
+      }
+
+      &-img {
+        width: torem(100);
+        height: torem(100);
+        object-fit: contain;
+        margin-right: var(--spacing-s);
+      }
+
+      &-text {
+        font-family: Dm, sans-serif;
+        font-size: torem(16);
+        font-weight: 400;
+        margin-right: var(--spacing-s);
+      }
+
+      &-delete {
+        margin-left: auto;
+        cursor: pointer;
+      }
+    }
+
+    &-radio-group {
+      padding: var(--spacing-xs);
+      border-radius: var(--spacing-s);
+      border: torem(1) solid var(--surfaces-border-1);
+    }
+
+    &-radio {
+      padding: var(--spacing-m-1);
+      border-radius: 6px;
+
+      &--active {
+        background: var(--surfaces-selection, #F3F8FF);
+      }
+    }
+
+    &-dropfile {
+      display: none;
+      margin-bottom: torem(16);
+
+      @include breakpoint($break-desktop-1024) {
+        display: block;
+      }
+    }
+
+    &-camera {
+      .a-button {
+        width: 100%;
+      }
+    }
+  }
+
+  &__button {
+    @include breakpoint($break-desktop-1440) {
+      margin-left: auto;
+      width: torem(168);
+    }
+  }
+
+  &__inputs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-m-1);
+
+    &--grid {
+      @include breakpoint($break-desktop-1440) {
+        max-height: torem(563);
+        grid-column: revert;
+        grid-template-columns: repeat(2, torem(295));
+        grid-auto-flow: dense;
+      }
+    }
+
+    margin-bottom: var(--spacing-m-3);
+  }
+}

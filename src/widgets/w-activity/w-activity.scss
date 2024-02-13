@@ -1,0 +1,53 @@
+.w-activity {
+  margin-bottom: var(--spacing-m-2);
+
+  @include breakpoint($break-desktop-1440) {
+    //margin-bottom: 0;
+  }
+
+
+  &__head {
+    margin-bottom: torem(16);
+    display: flex;
+    justify-content: space-between;
+
+    &-title {
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: torem(21);
+    }
+
+    &-info {
+      color: var(--accent-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(14);
+      font-weight: 700;
+      line-height: torem(18);
+    }
+  }
+
+  &__content {
+    background: var(--surfaces-surface-1);
+    box-shadow: var(--b-shadow-1);
+    border: torem(1) solid var(--surfaces-surface-glass-border);
+    border-radius: var(--spacing-s);
+  }
+
+  &__more {
+    margin-top: torem(33);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-text {
+      cursor: pointer;
+      color: var(--accent-primary);
+      font-family: Dm, sans-serif;
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: torem(21);
+      user-select: none;
+    }
+  }
+}

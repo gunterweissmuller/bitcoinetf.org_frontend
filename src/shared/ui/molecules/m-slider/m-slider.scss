@@ -1,0 +1,125 @@
+.m-slider {
+  position: relative;
+  width: 100%;
+
+  &__swiper {
+    overflow: visible;
+
+    /* stylelint-disable-next-line */
+    .swiper-slide {
+      height: auto;
+    }
+  }
+
+  &__wrap {
+    overflow: hidden;
+    margin: torem(-10, -8, -10, -8);
+    padding: torem(10, 8, 10, 8);
+  }
+
+  &__container {
+    position: relative;
+    width: 100%;
+    padding: 0;
+  }
+
+  &__button {
+    @include breakpoint($break-desktop-1024) {
+      display: flex;
+    }
+
+    position: absolute;
+    display: none;
+
+    &--disabled {
+      opacity: 0;
+      cursor: not-allowed;
+    }
+
+    &-next,
+    &-prev {
+      &::after {
+        display: none;
+      }
+    }
+
+    &-prev {
+      @include breakpoint($break-desktop-1440) {
+        left: torem(-48);
+      }
+
+      position: absolute;
+      left: torem(-40);
+    }
+
+    &-next {
+      @include breakpoint($break-desktop-1440) {
+        right: torem(-48);
+      }
+
+      right: torem(-40);
+    }
+  }
+
+  &__pagination {
+    position: relative;
+    z-index: 1;
+    bottom: 0;
+    margin-top: torem(20);
+
+    /* stylelint-disable */
+    &.swiper-pagination {
+      &-horizontal {
+        bottom: 0;
+      }
+
+      &-bullets-dynamic {
+        span {
+          opacity: 1;
+          margin: torem(0, 2);
+          background-color: var(--color-icon-secondary);
+        }
+
+        .swiper-pagination-bullet-active {
+          background-color: var(--color-true-white);
+        }
+      }
+    }
+
+    /* stylelint-enable */
+  }
+
+  &__scrollbar {
+    font-family: Jakarta, sans-serif;
+    width: 50%;
+    height: torem(2);
+    display: flex;
+    align-items: center;
+    font-size: torem(16);
+    line-height: torem(19);
+    margin-top: torem(56);
+    margin-left: auto;
+
+    @media (max-width: 991px) {
+      width: 100%;
+      font-size: torem(14);
+      line-height: torem(16);
+      margin-top: torem(32);
+    }
+  }
+
+  .swiper-scrollbar {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: torem(2);
+    margin: torem(0, 16);
+    background: rgba(255, 255, 255, 0.10);
+  }
+
+  .swiper-scrollbar-drag {
+    border-radius: torem(100);
+    background: var(--color-bg);
+  }
+}
