@@ -171,16 +171,3 @@ Tell friends about BitcoinETF. You get 5% of what they buy, always. They get bet
 #### Страница смены темы сайта - personal/more/theme
 
 На странице есть возможность смены темы
-
-
-
-
-
-
-
-
-
-
-
-
-
