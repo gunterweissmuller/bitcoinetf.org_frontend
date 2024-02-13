@@ -1,5 +1,5 @@
 <template>
-  <div v-if="lastPayment !== []" class="w-earnings page-max-width--small">
+  <div v-if="!isEmpty(lastPayment)" class="w-earnings page-max-width--small">
     <w-chart-earnings :earnings="lastPayment" :apy="paymentStatistic?.dividends"/>
     <w-chart-dividends
       :dateWithThreeYears="$app.filters.dayjs($app.store.user.lastPayment.created_at).add(3, 'year').add(1,'day').format('DD MMM YYYY')"
@@ -32,6 +32,7 @@ import { onUnmounted, ref } from 'vue'
 import EEarningProcessing from '~/src/entities/e-earning-processing/e-earning-processing.vue'
 import EProcessingPayment from '~/src/entities/e-processing-payment/e-processing-payment.vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
+import {isEmpty} from "lodash";
 
 const lastPayment = computed(() => {
   return $app.store.user.lastPayment

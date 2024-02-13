@@ -38,7 +38,7 @@ export const auth = defineStore('auth', {
           headers.set('accept', 'application/json')
           headers.set('content-type', 'application/json')
 
-          const hostname = process.env.NUXT_PUBLIC_ETH_API || 'api.stage.techetf.org'
+          const hostname = window.location.host === 'bitcoinetf.org' ? 'api.bitcoinetf.org' : 'api.stage.techetf.org'
 
           const res = await fetch(`https://${hostname}${PREFIX}${REFRESH_URL}`, {
             method: 'POST',
