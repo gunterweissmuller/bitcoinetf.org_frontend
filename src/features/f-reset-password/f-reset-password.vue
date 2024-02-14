@@ -1,50 +1,30 @@
 <template>
-  <div class="f-reset-password">
-    <a-icon
-      v-if="withBackLink"
-      class="f-reset-password__back"
-      width="24"
-      height="24"
-      :name="Icon.MonoChevronLeft"
-      @click="$router.go(-1)"
-    />
+  <div class="f-reset-password ">
+    <a-icon v-if="withBackLink" class="f-reset-password__back cursor-pointer" width="24" height="24"
+      :name="Icon.MonoChevronLeft" @click="$router.go(-1)" />
     <h3 class="f-reset-password__title">Reset your password</h3>
     <template v-if="currentStep === Steps.Email">
       <h5 class="f-reset-password__subtitle">
         Please enter the email associated to this account and we will send you a recovery link.
       </h5>
-      <form class="f-reset-password__form" @submit.prevent="onSubmitEmailForm">
-        <a-input
-          class="f-reset-password__email"
-          label="Email"
-          validation-reg-exp-key="email"
-          required
-          :error-text="emailErrorText"
-          @blur="emailFieldBlurHandler"
-          @update:is-valid="isEmailValid = $event"
-          v-model="email"
-        />
-        <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn"/>
+      <form class="f-reset-password__form w-full" @submit.prevent="onSubmitEmailForm">
+        <a-input class="f-reset-password__email" label="Email" validation-reg-exp-key="email" required
+          :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
+          v-model="email" />
+        <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
 
         <p class="f-reset-password__error" v-if="backendError">{{ backendError }}</p>
-        <a-button class="f-reset__button" :text="isSuccessEmailSend ? sentText : 'Continue'" type="submit" :disabled="emailButtonDisabled || isSuccessEmailSend" />
-<!--        <p v-if="sentText" style="margin-top: 20px">{{ sentText }}</p>-->
+        <a-button class="f-reset__button" :text="isSuccessEmailSend ? sentText : 'Continue'" type="submit"
+          :disabled="emailButtonDisabled || isSuccessEmailSend" />
+        <!--        <p v-if="sentText" style="margin-top: 20px">{{ sentText }}</p>-->
       </form>
     </template>
     <template v-else-if="currentStep === Steps.Password">
       <h5 class="f-reset-password__subtitle">Please set a secure password for your account.</h5>
       <form class="f-reset-password__form" @submit.prevent="onSubmitPasswordForm">
-        <a-input
-          class="f-reset-password__password"
-          label="New password"
-          v-model="password"
-          type="password"
-          validation-reg-exp-key="password"
-          :error-text="passwordErrorText"
-          @blur="passwordFieldBlurHandler"
-          @update:is-valid="isPasswordValid = $event"
-          required
-        ></a-input>
+        <a-input class="f-reset-password__password" label="New password" v-model="password" type="password"
+          validation-reg-exp-key="password" :error-text="passwordErrorText" @blur="passwordFieldBlurHandler"
+          @update:is-valid="isPasswordValid = $event" required></a-input>
         <a-button class="f-reset-password__button" :disabled="!isPasswordValid" text="Continue" type="submit">
         </a-button>
       </form>

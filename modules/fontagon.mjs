@@ -46,9 +46,9 @@ export default async (options, nuxt) => {
 
     try {
       tempDir = fs.mkdtempSync(join(os.tmpdir(), prefixTempDir))
-      const paths = glob.sync(join(options.iconDir, svgPattern).replace(/\\/g, '/'))
+      const paths = glob?.sync(join(options.iconDir, svgPattern).replace(/\\/g, '/'))
 
-      if (!paths.length) {
+      if (!paths) {
         return
       }
 

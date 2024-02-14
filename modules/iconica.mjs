@@ -31,7 +31,13 @@ export default async ({ iconDir, outputFile }, nuxt) => {
       return
     }
 
-    const paths = glob.sync(join(iconDir, pattern).replace(/\\/g, '/'))
+    const paths = glob?.sync(join(iconDir, pattern).replace(/\\/g, '/'))
+
+    if (!paths) {
+      return
+    }
+
+
     let filesIconTemplate = 'export const files = {' + EOL
     let enumIconTemplate = '// eslint-disable-next-line no-shadow' + EOL
 

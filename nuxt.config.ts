@@ -59,6 +59,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxt/devtools',
+    '@nuxt/image',
     [
       '@/modules/iconica',
       {
@@ -222,6 +223,13 @@ export default defineNuxtConfig({
       routes.push(...extendedRoutes)
     },
   },
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+
   devtools: {
     timeline: {
       enabled: true,
