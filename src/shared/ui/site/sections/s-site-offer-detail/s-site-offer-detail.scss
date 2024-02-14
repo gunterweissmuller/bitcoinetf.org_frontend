@@ -1,0 +1,80 @@
+.s-site-offer-detail {
+  padding: torem(80, 0);
+
+  @media (max-width: 767px) {
+    padding: torem(64, 0);
+  }
+
+  &__title {
+    margin-bottom: torem(16);
+  }
+
+  &__subtitle {
+    font-size: torem(24);
+    line-height: torem(31);
+    margin-bottom: torem(48);
+
+    @media (max-width: 767px) {
+      font-size: torem(16);
+      line-height: torem(20);
+      margin-bottom: torem(32);
+    }
+  }
+
+  .m-banner {
+    margin-bottom: torem(48);
+  }
+
+  &__texts {
+    max-width: torem(846);
+    margin: 0 auto;
+  }
+
+  &__item {
+    margin-bottom: torem(42);
+
+    h2 {
+      font-size: torem(20);
+      line-height: torem(26);
+      font-weight: 900;
+      margin-bottom: torem(24);
+    }
+
+    p {
+      font-size: torem(16);
+      margin: torem(20, 0);
+    }
+  }
+
+  &__steps {
+    max-width: torem(846);
+    text-align: center;
+    margin: 0 auto;
+    margin-top: torem(42);
+
+    &-title {
+      font-size: torem(32);
+      line-height: torem(41);
+      font-weight: 900;
+      margin-bottom: torem(48);
+    }
+
+    &-img {
+      &:not(:last-child) {
+        margin-bottom: torem(48);
+      }
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+
+  &__banner {
+    .l-site {
+      @media (max-width: 767px) {
+        padding: 0;
+      }
+    }
+  }
+}
