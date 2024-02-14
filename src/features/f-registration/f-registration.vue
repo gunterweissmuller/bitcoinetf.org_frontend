@@ -143,6 +143,7 @@ import ERegistrationBonusModal from '~/src/entities/e-registration-bonus-modal/e
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import VueTurnstile from 'vue-turnstile';
 
+//test
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
