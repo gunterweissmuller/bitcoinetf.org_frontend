@@ -1,0 +1,43 @@
+.s-site-text {
+  font-family: Dm, sans-serif;
+  padding: torem(179, 0);
+
+  @media (max-width: 767px) {
+    padding: torem(184, 0);
+  }
+
+  ol li {
+    list-style: decimal;
+  }
+
+  ul li {
+    list-style: disc;
+  }
+
+  ol, ul {
+    padding-left: torem(24);
+  }
+
+  h1 {
+    font-size: torem(32);
+    line-height: torem(41);
+    font-weight: 600;
+    margin-bottom: torem(32);
+  }
+
+  h2, h3, h4, h5, h6 {
+    font-size: torem(32);
+    line-height: 130%;
+    font-weight: 600;
+    margin: torem(32, 0, 24);
+
+    @media (max-width: 767px) {
+      font-size: torem(24);
+    }
+  }
+
+  p, li {
+    font-size: torem(16);
+    line-height: torem(20);
+  }
+}
