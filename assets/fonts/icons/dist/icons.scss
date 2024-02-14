@@ -1,0 +1,2841 @@
+:root {
+  --icon-colorful--alpha-content: "\f101";
+  --icon-colorful--asset-baa-content: "\f102";
+  --icon-colorful--asset-boa-content: "\f103";
+  --icon-colorful--asset-brf-content: "\f104";
+  --icon-colorful--asset-fba-content: "\f105";
+  --icon-colorful--asset-sba-content: "\f106";
+  --icon-colorful--asset-usd-content: "\f107";
+  --icon-colorful--asset-vault-content: "\f108";
+  --icon-colorful--bitcoin-font-content: "\f109";
+  --icon-colorful--bitcoin-full-content: "\f10a";
+  --icon-colorful--bitcoin-content: "\f10b";
+  --icon-colorful--btc-dark-logo-content: "\f10c";
+  --icon-colorful--btc-lightning-content: "\f10d";
+  --icon-colorful--camera-content: "\f10e";
+  --icon-colorful--comment-content: "\f10f";
+  --icon-colorful--copy-content: "\f110";
+  --icon-colorful--facebook-content: "\f111";
+  --icon-colorful--fk-content: "\f112";
+  --icon-colorful--folder-content: "\f113";
+  --icon-colorful--google-pay-content: "\f114";
+  --icon-colorful--logo-white-content: "\f115";
+  --icon-colorful--mail-content: "\f116";
+  --icon-colorful--mastercard-content: "\f117";
+  --icon-colorful--mir-content: "\f118";
+  --icon-colorful--piastrix-content: "\f119";
+  --icon-colorful--raiffeisen-content: "\f11a";
+  --icon-colorful--sber-content: "\f11b";
+  --icon-colorful--sbp-content: "\f11c";
+  --icon-colorful--telegram-content: "\f11d";
+  --icon-colorful--tinkoff-content: "\f11e";
+  --icon-colorful--tron-content: "\f11f";
+  --icon-colorful--twitter-content: "\f120";
+  --icon-colorful--usdant-content: "\f121";
+  --icon-colorful--usdttron-content: "\f122";
+  --icon-colorful--visa-content: "\f123";
+  --icon-colorful--visawhite-content: "\f124";
+  --icon-colorful--vk-content: "\f125";
+  --icon-colorful--vtb-content: "\f126";
+  --icon-colorful--yoomoney-content: "\f127";
+  --icon-mono--action--check-mark-content: "\f128";
+  --icon-mono--action--close-content: "\f129";
+  --icon-mono--action--cross-content: "\f12a";
+  --icon-mono--action--edit-content: "\f12b";
+  --icon-mono--action--favorite-filled-content: "\f12c";
+  --icon-mono--action--favorite-content: "\f12d";
+  --icon-mono--action--filter-content: "\f12e";
+  --icon-mono--action--maximize-content: "\f12f";
+  --icon-mono--action--menu-content: "\f130";
+  --icon-mono--action--minimize-content: "\f131";
+  --icon-mono--action--more-content: "\f132";
+  --icon-mono--action--play-filled-content: "\f133";
+  --icon-mono--action--play-outline-content: "\f134";
+  --icon-mono--action--play-content: "\f135";
+  --icon-mono--action--player-pause-content: "\f136";
+  --icon-mono--action--plus-content: "\f137";
+  --icon-mono--action--program-content: "\f138";
+  --icon-mono--action--resizer-content: "\f139";
+  --icon-mono--action--settings-content: "\f13a";
+  --icon-mono--action--share-arrow-content: "\f13b";
+  --icon-mono--action--share-content: "\f13c";
+  --icon-mono--action--skip-left-content: "\f13d";
+  --icon-mono--action--skip-right-content: "\f13e";
+  --icon-mono--action--sort-content: "\f13f";
+  --icon-mono--action--trash-content: "\f140";
+  --icon-mono--action--volume-off-content: "\f141";
+  --icon-mono--action--volume-on-content: "\f142";
+  --icon-mono--action--watch-next-content: "\f143";
+  --icon-mono--analytics-content: "\f144";
+  --icon-mono--apple-pay-content: "\f145";
+  --icon-mono--bit-content: "\f146";
+  --icon-mono--bitcoin-b-content: "\f147";
+  --icon-mono--blog-content: "\f148";
+  --icon-mono--btc-uni-content: "\f149";
+  --icon-mono--chevron-bottom-content: "\f14a";
+  --icon-mono--chevron-left-content: "\f14b";
+  --icon-mono--chevron-right-content: "\f14c";
+  --icon-mono--chevron-top-content: "\f14d";
+  --icon-mono--copy-content: "\f14e";
+  --icon-mono--credit-card-content: "\f14f";
+  --icon-mono--earnings-content: "\f150";
+  --icon-mono--eye-crossed-content: "\f151";
+  --icon-mono--eye-content: "\f152";
+  --icon-mono--facebook-black-content: "\f153";
+  --icon-mono--facebook-content: "\f154";
+  --icon-mono--file-content: "\f155";
+  --icon-mono--info-content: "\f156";
+  --icon-mono--instagram-black-content: "\f157";
+  --icon-mono--learn-content: "\f158";
+  --icon-mono--link-content: "\f159";
+  --icon-mono--linkedin-black-content: "\f15a";
+  --icon-mono--lock-content: "\f15b";
+  --icon-mono--logout-content: "\f15c";
+  --icon-mono--mail-content: "\f15d";
+  --icon-mono--medium-content: "\f15e";
+  --icon-mono--menu-content: "\f15f";
+  --icon-mono--message-content: "\f160";
+  --icon-mono--minus-content: "\f161";
+  --icon-mono--more-content: "\f162";
+  --icon-mono--navigation--arrow-bottom-content: "\f163";
+  --icon-mono--navigation--arrow-left-white-content: "\f164";
+  --icon-mono--navigation--arrow-left-content: "\f165";
+  --icon-mono--navigation--arrow-right-content: "\f166";
+  --icon-mono--navigation--arrow-top-content: "\f167";
+  --icon-mono--navigation--chevron-bottom-content: "\f168";
+  --icon-mono--navigation--chevron-left-content: "\f169";
+  --icon-mono--navigation--chevron-right-content: "\f16a";
+  --icon-mono--navigation--chevron-top-content: "\f16b";
+  --icon-mono--navigation--download-order-content: "\f16c";
+  --icon-mono--navigation--download-pause-content: "\f16d";
+  --icon-mono--navigation--download-stoped-content: "\f16e";
+  --icon-mono--navigation--download-content: "\f16f";
+  --icon-mono--navigation--downloaded-content: "\f170";
+  --icon-mono--navigation--items-content: "\f171";
+  --icon-mono--navigation--loader-content: "\f172";
+  --icon-mono--navigation--logout-content: "\f173";
+  --icon-mono--navigation--search-content: "\f174";
+  --icon-mono--navigation--user-content: "\f175";
+  --icon-mono--paste-content: "\f176";
+  --icon-mono--plus-content: "\f177";
+  --icon-mono--profile-content: "\f178";
+  --icon-mono--satoshi-uni-content: "\f179";
+  --icon-mono--support-content: "\f17a";
+  --icon-mono--telegram-black-content: "\f17b";
+  --icon-mono--telegram-content: "\f17c";
+  --icon-mono--telegram2-black-content: "\f17d";
+  --icon-mono--terms-content: "\f17e";
+  --icon-mono--theme-content: "\f17f";
+  --icon-mono--twitter-content: "\f180";
+  --icon-mono--unknown-black-content: "\f181";
+  --icon-mono--vk-content: "\f182";
+  --icon-mono--wallet-content: "\f183";
+  --icon-mono--withdraw-content: "\f184";
+  --icon-mono--x-content: "\f185";
+}
+
+@font-face {
+font-family: "icons";
+src: url("icons.eot?f55bd7d9cfdcadf9681b5cc49d88130a?#iefix") format("embedded-opentype"),
+url("icons.woff2?f55bd7d9cfdcadf9681b5cc49d88130a") format("woff2"),
+url("icons.woff?f55bd7d9cfdcadf9681b5cc49d88130a") format("woff");
+font-weight: normal;
+font-style: normal;
+}
+
+.a-icons {
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+vertical-align: middle;
+width: 1em;
+height: 1em;
+position: relative;
+fill: currentColor;
+font-family: icons, serif;
+font-weight: normal;
+font-style: normal;
+line-height: 1;
+text-transform: none;
+letter-spacing: normal;
+word-wrap: normal;
+white-space: nowrap;
+direction: ltr;
+
+/* Support for all WebKit browsers. */
+-webkit-font-smoothing: antialiased;
+
+/* Support for Safari and Chrome. */
+text-rendering: optimizeLegibility;
+
+/* Support for Firefox. */
+-moz-osx-font-smoothing: grayscale;
+
+/* Support for IE. */
+font-feature-settings: 'liga';
+}
+
+  .icon-colorful--alpha:before {
+  content: "\f101";
+  }
+
+  .icon-colorful--alpha-css,
+  %icon-colorful--alpha-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--asset-baa:before {
+  content: "\f102";
+  }
+
+  .icon-colorful--asset-baa-css,
+  %icon-colorful--asset-baa-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--asset-boa:before {
+  content: "\f103";
+  }
+
+  .icon-colorful--asset-boa-css,
+  %icon-colorful--asset-boa-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--asset-brf:before {
+  content: "\f104";
+  }
+
+  .icon-colorful--asset-brf-css,
+  %icon-colorful--asset-brf-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--asset-fba:before {
+  content: "\f105";
+  }
+
+  .icon-colorful--asset-fba-css,
+  %icon-colorful--asset-fba-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--asset-sba:before {
+  content: "\f106";
+  }
+
+  .icon-colorful--asset-sba-css,
+  %icon-colorful--asset-sba-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--asset-usd:before {
+  content: "\f107";
+  }
+
+  .icon-colorful--asset-usd-css,
+  %icon-colorful--asset-usd-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--asset-vault:before {
+  content: "\f108";
+  }
+
+  .icon-colorful--asset-vault-css,
+  %icon-colorful--asset-vault-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--bitcoin-font:before {
+  content: "\f109";
+  }
+
+  .icon-colorful--bitcoin-font-css,
+  %icon-colorful--bitcoin-font-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--bitcoin-full:before {
+  content: "\f10a";
+  }
+
+  .icon-colorful--bitcoin-full-css,
+  %icon-colorful--bitcoin-full-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--bitcoin:before {
+  content: "\f10b";
+  }
+
+  .icon-colorful--bitcoin-css,
+  %icon-colorful--bitcoin-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--btc-dark-logo:before {
+  content: "\f10c";
+  }
+
+  .icon-colorful--btc-dark-logo-css,
+  %icon-colorful--btc-dark-logo-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--btc-lightning:before {
+  content: "\f10d";
+  }
+
+  .icon-colorful--btc-lightning-css,
+  %icon-colorful--btc-lightning-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--camera:before {
+  content: "\f10e";
+  }
+
+  .icon-colorful--camera-css,
+  %icon-colorful--camera-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--comment:before {
+  content: "\f10f";
+  }
+
+  .icon-colorful--comment-css,
+  %icon-colorful--comment-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--copy:before {
+  content: "\f110";
+  }
+
+  .icon-colorful--copy-css,
+  %icon-colorful--copy-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--facebook:before {
+  content: "\f111";
+  }
+
+  .icon-colorful--facebook-css,
+  %icon-colorful--facebook-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--fk:before {
+  content: "\f112";
+  }
+
+  .icon-colorful--fk-css,
+  %icon-colorful--fk-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--folder:before {
+  content: "\f113";
+  }
+
+  .icon-colorful--folder-css,
+  %icon-colorful--folder-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--google-pay:before {
+  content: "\f114";
+  }
+
+  .icon-colorful--google-pay-css,
+  %icon-colorful--google-pay-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--logo-white:before {
+  content: "\f115";
+  }
+
+  .icon-colorful--logo-white-css,
+  %icon-colorful--logo-white-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--mail:before {
+  content: "\f116";
+  }
+
+  .icon-colorful--mail-css,
+  %icon-colorful--mail-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--mastercard:before {
+  content: "\f117";
+  }
+
+  .icon-colorful--mastercard-css,
+  %icon-colorful--mastercard-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--mir:before {
+  content: "\f118";
+  }
+
+  .icon-colorful--mir-css,
+  %icon-colorful--mir-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--piastrix:before {
+  content: "\f119";
+  }
+
+  .icon-colorful--piastrix-css,
+  %icon-colorful--piastrix-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--raiffeisen:before {
+  content: "\f11a";
+  }
+
+  .icon-colorful--raiffeisen-css,
+  %icon-colorful--raiffeisen-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--sber:before {
+  content: "\f11b";
+  }
+
+  .icon-colorful--sber-css,
+  %icon-colorful--sber-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--sbp:before {
+  content: "\f11c";
+  }
+
+  .icon-colorful--sbp-css,
+  %icon-colorful--sbp-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--telegram:before {
+  content: "\f11d";
+  }
+
+  .icon-colorful--telegram-css,
+  %icon-colorful--telegram-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--tinkoff:before {
+  content: "\f11e";
+  }
+
+  .icon-colorful--tinkoff-css,
+  %icon-colorful--tinkoff-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--tron:before {
+  content: "\f11f";
+  }
+
+  .icon-colorful--tron-css,
+  %icon-colorful--tron-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--twitter:before {
+  content: "\f120";
+  }
+
+  .icon-colorful--twitter-css,
+  %icon-colorful--twitter-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--usdant:before {
+  content: "\f121";
+  }
+
+  .icon-colorful--usdant-css,
+  %icon-colorful--usdant-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--usdttron:before {
+  content: "\f122";
+  }
+
+  .icon-colorful--usdttron-css,
+  %icon-colorful--usdttron-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--visa:before {
+  content: "\f123";
+  }
+
+  .icon-colorful--visa-css,
+  %icon-colorful--visa-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--visawhite:before {
+  content: "\f124";
+  }
+
+  .icon-colorful--visawhite-css,
+  %icon-colorful--visawhite-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--vk:before {
+  content: "\f125";
+  }
+
+  .icon-colorful--vk-css,
+  %icon-colorful--vk-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--vtb:before {
+  content: "\f126";
+  }
+
+  .icon-colorful--vtb-css,
+  %icon-colorful--vtb-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-colorful--yoomoney:before {
+  content: "\f127";
+  }
+
+  .icon-colorful--yoomoney-css,
+  %icon-colorful--yoomoney-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--check-mark:before {
+  content: "\f128";
+  }
+
+  .icon-mono--action--check-mark-css,
+  %icon-mono--action--check-mark-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--close:before {
+  content: "\f129";
+  }
+
+  .icon-mono--action--close-css,
+  %icon-mono--action--close-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--cross:before {
+  content: "\f12a";
+  }
+
+  .icon-mono--action--cross-css,
+  %icon-mono--action--cross-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--edit:before {
+  content: "\f12b";
+  }
+
+  .icon-mono--action--edit-css,
+  %icon-mono--action--edit-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--favorite-filled:before {
+  content: "\f12c";
+  }
+
+  .icon-mono--action--favorite-filled-css,
+  %icon-mono--action--favorite-filled-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--favorite:before {
+  content: "\f12d";
+  }
+
+  .icon-mono--action--favorite-css,
+  %icon-mono--action--favorite-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--filter:before {
+  content: "\f12e";
+  }
+
+  .icon-mono--action--filter-css,
+  %icon-mono--action--filter-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--maximize:before {
+  content: "\f12f";
+  }
+
+  .icon-mono--action--maximize-css,
+  %icon-mono--action--maximize-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--menu:before {
+  content: "\f130";
+  }
+
+  .icon-mono--action--menu-css,
+  %icon-mono--action--menu-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--minimize:before {
+  content: "\f131";
+  }
+
+  .icon-mono--action--minimize-css,
+  %icon-mono--action--minimize-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--more:before {
+  content: "\f132";
+  }
+
+  .icon-mono--action--more-css,
+  %icon-mono--action--more-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--play-filled:before {
+  content: "\f133";
+  }
+
+  .icon-mono--action--play-filled-css,
+  %icon-mono--action--play-filled-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--play-outline:before {
+  content: "\f134";
+  }
+
+  .icon-mono--action--play-outline-css,
+  %icon-mono--action--play-outline-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--play:before {
+  content: "\f135";
+  }
+
+  .icon-mono--action--play-css,
+  %icon-mono--action--play-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--player-pause:before {
+  content: "\f136";
+  }
+
+  .icon-mono--action--player-pause-css,
+  %icon-mono--action--player-pause-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--plus:before {
+  content: "\f137";
+  }
+
+  .icon-mono--action--plus-css,
+  %icon-mono--action--plus-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--program:before {
+  content: "\f138";
+  }
+
+  .icon-mono--action--program-css,
+  %icon-mono--action--program-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--resizer:before {
+  content: "\f139";
+  }
+
+  .icon-mono--action--resizer-css,
+  %icon-mono--action--resizer-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--settings:before {
+  content: "\f13a";
+  }
+
+  .icon-mono--action--settings-css,
+  %icon-mono--action--settings-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--share-arrow:before {
+  content: "\f13b";
+  }
+
+  .icon-mono--action--share-arrow-css,
+  %icon-mono--action--share-arrow-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--share:before {
+  content: "\f13c";
+  }
+
+  .icon-mono--action--share-css,
+  %icon-mono--action--share-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--skip-left:before {
+  content: "\f13d";
+  }
+
+  .icon-mono--action--skip-left-css,
+  %icon-mono--action--skip-left-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--skip-right:before {
+  content: "\f13e";
+  }
+
+  .icon-mono--action--skip-right-css,
+  %icon-mono--action--skip-right-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--sort:before {
+  content: "\f13f";
+  }
+
+  .icon-mono--action--sort-css,
+  %icon-mono--action--sort-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--trash:before {
+  content: "\f140";
+  }
+
+  .icon-mono--action--trash-css,
+  %icon-mono--action--trash-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--volume-off:before {
+  content: "\f141";
+  }
+
+  .icon-mono--action--volume-off-css,
+  %icon-mono--action--volume-off-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--volume-on:before {
+  content: "\f142";
+  }
+
+  .icon-mono--action--volume-on-css,
+  %icon-mono--action--volume-on-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--action--watch-next:before {
+  content: "\f143";
+  }
+
+  .icon-mono--action--watch-next-css,
+  %icon-mono--action--watch-next-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--analytics:before {
+  content: "\f144";
+  }
+
+  .icon-mono--analytics-css,
+  %icon-mono--analytics-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--apple-pay:before {
+  content: "\f145";
+  }
+
+  .icon-mono--apple-pay-css,
+  %icon-mono--apple-pay-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--bit:before {
+  content: "\f146";
+  }
+
+  .icon-mono--bit-css,
+  %icon-mono--bit-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--bitcoin-b:before {
+  content: "\f147";
+  }
+
+  .icon-mono--bitcoin-b-css,
+  %icon-mono--bitcoin-b-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--blog:before {
+  content: "\f148";
+  }
+
+  .icon-mono--blog-css,
+  %icon-mono--blog-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--btc-uni:before {
+  content: "\f149";
+  }
+
+  .icon-mono--btc-uni-css,
+  %icon-mono--btc-uni-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--chevron-bottom:before {
+  content: "\f14a";
+  }
+
+  .icon-mono--chevron-bottom-css,
+  %icon-mono--chevron-bottom-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--chevron-left:before {
+  content: "\f14b";
+  }
+
+  .icon-mono--chevron-left-css,
+  %icon-mono--chevron-left-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--chevron-right:before {
+  content: "\f14c";
+  }
+
+  .icon-mono--chevron-right-css,
+  %icon-mono--chevron-right-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--chevron-top:before {
+  content: "\f14d";
+  }
+
+  .icon-mono--chevron-top-css,
+  %icon-mono--chevron-top-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--copy:before {
+  content: "\f14e";
+  }
+
+  .icon-mono--copy-css,
+  %icon-mono--copy-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--credit-card:before {
+  content: "\f14f";
+  }
+
+  .icon-mono--credit-card-css,
+  %icon-mono--credit-card-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--earnings:before {
+  content: "\f150";
+  }
+
+  .icon-mono--earnings-css,
+  %icon-mono--earnings-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--eye-crossed:before {
+  content: "\f151";
+  }
+
+  .icon-mono--eye-crossed-css,
+  %icon-mono--eye-crossed-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--eye:before {
+  content: "\f152";
+  }
+
+  .icon-mono--eye-css,
+  %icon-mono--eye-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--facebook-black:before {
+  content: "\f153";
+  }
+
+  .icon-mono--facebook-black-css,
+  %icon-mono--facebook-black-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--facebook:before {
+  content: "\f154";
+  }
+
+  .icon-mono--facebook-css,
+  %icon-mono--facebook-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--file:before {
+  content: "\f155";
+  }
+
+  .icon-mono--file-css,
+  %icon-mono--file-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--info:before {
+  content: "\f156";
+  }
+
+  .icon-mono--info-css,
+  %icon-mono--info-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--instagram-black:before {
+  content: "\f157";
+  }
+
+  .icon-mono--instagram-black-css,
+  %icon-mono--instagram-black-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--learn:before {
+  content: "\f158";
+  }
+
+  .icon-mono--learn-css,
+  %icon-mono--learn-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--link:before {
+  content: "\f159";
+  }
+
+  .icon-mono--link-css,
+  %icon-mono--link-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--linkedin-black:before {
+  content: "\f15a";
+  }
+
+  .icon-mono--linkedin-black-css,
+  %icon-mono--linkedin-black-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--lock:before {
+  content: "\f15b";
+  }
+
+  .icon-mono--lock-css,
+  %icon-mono--lock-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--logout:before {
+  content: "\f15c";
+  }
+
+  .icon-mono--logout-css,
+  %icon-mono--logout-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--mail:before {
+  content: "\f15d";
+  }
+
+  .icon-mono--mail-css,
+  %icon-mono--mail-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--medium:before {
+  content: "\f15e";
+  }
+
+  .icon-mono--medium-css,
+  %icon-mono--medium-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--menu:before {
+  content: "\f15f";
+  }
+
+  .icon-mono--menu-css,
+  %icon-mono--menu-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--message:before {
+  content: "\f160";
+  }
+
+  .icon-mono--message-css,
+  %icon-mono--message-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--minus:before {
+  content: "\f161";
+  }
+
+  .icon-mono--minus-css,
+  %icon-mono--minus-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--more:before {
+  content: "\f162";
+  }
+
+  .icon-mono--more-css,
+  %icon-mono--more-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--arrow-bottom:before {
+  content: "\f163";
+  }
+
+  .icon-mono--navigation--arrow-bottom-css,
+  %icon-mono--navigation--arrow-bottom-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--arrow-left-white:before {
+  content: "\f164";
+  }
+
+  .icon-mono--navigation--arrow-left-white-css,
+  %icon-mono--navigation--arrow-left-white-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--arrow-left:before {
+  content: "\f165";
+  }
+
+  .icon-mono--navigation--arrow-left-css,
+  %icon-mono--navigation--arrow-left-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--arrow-right:before {
+  content: "\f166";
+  }
+
+  .icon-mono--navigation--arrow-right-css,
+  %icon-mono--navigation--arrow-right-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--arrow-top:before {
+  content: "\f167";
+  }
+
+  .icon-mono--navigation--arrow-top-css,
+  %icon-mono--navigation--arrow-top-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--chevron-bottom:before {
+  content: "\f168";
+  }
+
+  .icon-mono--navigation--chevron-bottom-css,
+  %icon-mono--navigation--chevron-bottom-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--chevron-left:before {
+  content: "\f169";
+  }
+
+  .icon-mono--navigation--chevron-left-css,
+  %icon-mono--navigation--chevron-left-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--chevron-right:before {
+  content: "\f16a";
+  }
+
+  .icon-mono--navigation--chevron-right-css,
+  %icon-mono--navigation--chevron-right-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--chevron-top:before {
+  content: "\f16b";
+  }
+
+  .icon-mono--navigation--chevron-top-css,
+  %icon-mono--navigation--chevron-top-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--download-order:before {
+  content: "\f16c";
+  }
+
+  .icon-mono--navigation--download-order-css,
+  %icon-mono--navigation--download-order-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--download-pause:before {
+  content: "\f16d";
+  }
+
+  .icon-mono--navigation--download-pause-css,
+  %icon-mono--navigation--download-pause-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--download-stoped:before {
+  content: "\f16e";
+  }
+
+  .icon-mono--navigation--download-stoped-css,
+  %icon-mono--navigation--download-stoped-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--download:before {
+  content: "\f16f";
+  }
+
+  .icon-mono--navigation--download-css,
+  %icon-mono--navigation--download-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--downloaded:before {
+  content: "\f170";
+  }
+
+  .icon-mono--navigation--downloaded-css,
+  %icon-mono--navigation--downloaded-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--items:before {
+  content: "\f171";
+  }
+
+  .icon-mono--navigation--items-css,
+  %icon-mono--navigation--items-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--loader:before {
+  content: "\f172";
+  }
+
+  .icon-mono--navigation--loader-css,
+  %icon-mono--navigation--loader-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--logout:before {
+  content: "\f173";
+  }
+
+  .icon-mono--navigation--logout-css,
+  %icon-mono--navigation--logout-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--search:before {
+  content: "\f174";
+  }
+
+  .icon-mono--navigation--search-css,
+  %icon-mono--navigation--search-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--navigation--user:before {
+  content: "\f175";
+  }
+
+  .icon-mono--navigation--user-css,
+  %icon-mono--navigation--user-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--paste:before {
+  content: "\f176";
+  }
+
+  .icon-mono--paste-css,
+  %icon-mono--paste-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--plus:before {
+  content: "\f177";
+  }
+
+  .icon-mono--plus-css,
+  %icon-mono--plus-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--profile:before {
+  content: "\f178";
+  }
+
+  .icon-mono--profile-css,
+  %icon-mono--profile-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--satoshi-uni:before {
+  content: "\f179";
+  }
+
+  .icon-mono--satoshi-uni-css,
+  %icon-mono--satoshi-uni-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--support:before {
+  content: "\f17a";
+  }
+
+  .icon-mono--support-css,
+  %icon-mono--support-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--telegram-black:before {
+  content: "\f17b";
+  }
+
+  .icon-mono--telegram-black-css,
+  %icon-mono--telegram-black-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--telegram:before {
+  content: "\f17c";
+  }
+
+  .icon-mono--telegram-css,
+  %icon-mono--telegram-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--telegram2-black:before {
+  content: "\f17d";
+  }
+
+  .icon-mono--telegram2-black-css,
+  %icon-mono--telegram2-black-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--terms:before {
+  content: "\f17e";
+  }
+
+  .icon-mono--terms-css,
+  %icon-mono--terms-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--theme:before {
+  content: "\f17f";
+  }
+
+  .icon-mono--theme-css,
+  %icon-mono--theme-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--twitter:before {
+  content: "\f180";
+  }
+
+  .icon-mono--twitter-css,
+  %icon-mono--twitter-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--unknown-black:before {
+  content: "\f181";
+  }
+
+  .icon-mono--unknown-black-css,
+  %icon-mono--unknown-black-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--vk:before {
+  content: "\f182";
+  }
+
+  .icon-mono--vk-css,
+  %icon-mono--vk-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--wallet:before {
+  content: "\f183";
+  }
+
+  .icon-mono--wallet-css,
+  %icon-mono--wallet-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--withdraw:before {
+  content: "\f184";
+  }
+
+  .icon-mono--withdraw-css,
+  %icon-mono--withdraw-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--x:before {
+  content: "\f185";
+  }
+
+  .icon-mono--x-css,
+  %icon-mono--x-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+

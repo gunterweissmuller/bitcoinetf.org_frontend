@@ -3,7 +3,7 @@ nuxt.d.ts
 .env
 node_modules
 .nuxt
-dist
+# dist
 .output
 .idea
 yarn-error.log
