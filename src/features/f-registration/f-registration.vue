@@ -200,6 +200,7 @@ import ERegistrationBonusModal from '~/src/entities/e-registration-bonus-modal/e
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import VueTurnstile from 'vue-turnstile';
 import { SiweMessage } from 'siwe';
+import { BrowserProvider, parseUnits } from "ethers";
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -301,23 +302,28 @@ const handleMetamaskConnect = async () => {
           // let chainIdDec = parseInt(chainId, 16);
 
           //switch to eth chain
-          (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(() => {
+          (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(async () => {
+              const provider = new BrowserProvider((window as any).ethereum);
+              const signer = await provider.getSigner();
+
               const message = new SiweMessage({
                   domain: window.location.host,
-                  address: "0x461103cb5Ec52FBc0f20c6a7Ca3Ca5860e11a362", // error with accounts[0] ?
+                  address: signer.address, // error with accounts[0] ?
                   statement: "I accept the MetaMask Terms of Service: https://community.metamask.io/tos",
-                  uri: window.location.host,
+                  uri: window.location.origin,
                   version: '1',
                   chainId: 1
               });
               //message.prepareMessage()
-              const msg = `${window.location.host} wants you to sign in with your Ethereum account:\n${accounts[0]}\n\nI accept the MetaMask Terms of Service: https://community.metamask.io/tos\n\nURI: https://${window.location.host}\nVersion: 1\nChain ID: 1\nNonce: 32891757\nIssued At: 2021-09-30T16:25:24.000Z`;
+
+              const msg = `${window.location.host} wants you to sign in with your Ethereum account:\n${accounts[0]}\n\nI accept the MetaMask Terms of Service: https://community.metamask.io/tos\n\nURI: ${window.location.origin}\nVersion: 1\nChain ID: 1\nNonce: 32891757\nIssued At: 2021-09-30T16:25:24.000Z`;
 
               //sign message
               (window as any).ethereum.request({
                   "method": "personal_sign",
                   "params": [
-                      msg,
+                    //   msg,
+                    message.prepareMessage(),
                       accounts[0],
                   ]
               }).then((msg: string) => {
