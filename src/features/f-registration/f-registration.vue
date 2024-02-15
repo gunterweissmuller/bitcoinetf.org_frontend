@@ -206,8 +206,6 @@ const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const token = ref('')
-//@fixme-v
-console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 const siteKey = ref((process.dev) ? '1x00000000000000000000AA' : '0x4AAAAAAAO0YJKv_riZdNZX')
 const enum Steps {
   Terms = 'Terms',
