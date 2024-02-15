@@ -7,12 +7,12 @@
           <div class="s-site-fund-ceo__img">
             <img :src="data.img"/>
           </div>
-          <div class="s-site-fund-ceo__message">
+          <!--<div class="s-site-fund-ceo__message">
             <div class="s-site-fund-ceo__message-text">{{ data.message }}</div>
             <div class="s-site-fund-ceo__message-arrow">
               <img src="/img/site-dark/s-site-fund-ceo/arrow.svg" alt=""/>
             </div>
-          </div>
+          </div>-->
           <div class="s-site-fund-ceo__info">
             <div v-html="data.info.text" class="s-site-fund-ceo__info-text"/>
             <nuxt-link to="/personal/registration">
