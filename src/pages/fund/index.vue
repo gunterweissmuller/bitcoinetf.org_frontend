@@ -116,7 +116,7 @@ const visionData = {
 
 const ceoData = {
   name: 'Our CEO',
-  title: 'MEET JALAL <span>OUR TRUSTED CEO</span>',
+  title: 'MEET JALAL SAID <span>OUR TRUSTED CEO</span>',
   img: '/img/site-dark/s-site-fund-ceo/1.png',
   info: {
     text: `
