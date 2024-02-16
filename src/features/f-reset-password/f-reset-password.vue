@@ -39,12 +39,13 @@ import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import VueTurnstile from 'vue-turnstile';
+import { ref } from 'vue'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const token = ref('')
-const siteKey = ref(process.dev ? '1x00000000000000000000AA' : '0x4AAAAAAAO0YJKv_riZdNZX')
+const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const props = withDefaults(
   defineProps<{
     withBackLink: boolean
