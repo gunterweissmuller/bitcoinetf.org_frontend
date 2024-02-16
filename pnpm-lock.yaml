@@ -77,6 +77,9 @@ dependencies:
   vue-turnstile:
     specifier: ^1.0.6
     version: 1.0.7(vue@3.4.15)
+  vue3-google-login:
+    specifier: ^2.0.25
+    version: 2.0.25(vue@3.4.15)
   vue3-marquee:
     specifier: ^4.1.0
     version: 4.1.0(vue@3.4.15)
@@ -12905,6 +12908,14 @@ packages:
     resolution: {integrity: sha512-IWYbp+hg0vNi3V/JJF0g8B1s+cX1XpEqtiEOuUwlcylKQOI9KxKnLagdRtSSkvuJJEAPeFRE42atzgU4GGRUJQ==}
     peerDependencies:
       vue: ^3.2.45
+    dependencies:
+      vue: 3.4.15(typescript@5.3.3)
+    dev: false
+
+  /vue3-google-login@2.0.25(vue@3.4.15):
+    resolution: {integrity: sha512-b6EfYFF2KH1qSiiCKI9WmPB79GdXifPB8qOt48RRmo1F5h3UcigrrqzQCosjcRLcTqUpRQcZ9TeKYP4ZVroNHQ==}
+    peerDependencies:
+      vue: ^3.0.3
     dependencies:
       vue: 3.4.15(typescript@5.3.3)
     dev: false

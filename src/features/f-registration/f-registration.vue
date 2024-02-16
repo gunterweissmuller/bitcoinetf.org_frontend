@@ -65,13 +65,23 @@
               </div>
 
 
-              <div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
+              <div @click="handleGoogleConnect"
+                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
                           class="aspect-square w-[18px]" />
                       <div class="grow">Sign up with Google</div>
                   </div>
+              </div>
+
+              <div v-if="googleData">
+                <h2>User Details</h2>
+                <p>Name: {{ googleData.name }}</p>
+                <p>Email: {{ googleData.email }}</p>
+                <p>Profile Picture: 
+                    <img :src="googleData.picture" alt="Profile Picture">
+                </p>
+                <button @click="handleGoogleDisconnect">Disconnect</button>
               </div>
 
               <div
@@ -201,6 +211,8 @@ import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import VueTurnstile from 'vue-turnstile';
 import { SiweMessage } from 'siwe';
 import { BrowserProvider, parseUnits } from "ethers";
+import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
+import axios from "axios";
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -343,6 +355,99 @@ const handleMetamaskConnect = async () => {
   }).catch((err: any) => {
       console.error(err);
   });
+}
+
+const googleData : any = ref();
+
+const handleGoogleDisconnect = () => {
+    googleData.value = null;
+
+    googleLogout();
+}
+
+const callbackWithoutBackend = async (code : string) => {
+    //request google account data
+    try {
+        const responseAuth = await axios.post(
+        "https://oauth2.googleapis.com/token",
+        {
+            code: code,
+            client_id:
+            "399661064024-419ov8ld07kjf8ddguvjkoa2l3u3toli.apps.googleusercontent.com",
+            client_secret: "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",
+            redirect_uri: "postmessage",
+            grant_type: "authorization_code"
+        }
+        );
+
+        const accessToken = responseAuth.data.access_token;
+        console.log(accessToken);
+
+        // Fetch user details using the access token
+        const userResponse = await axios.get(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        {
+            headers: {
+            Authorization: `Bearer ${accessToken}`
+            }
+        }
+        );
+
+        if (userResponse && userResponse.data) {
+            // Set the userDetails data property to the userResponse object
+            console.log("userResponse", userResponse);
+            googleData.value = userResponse.data;
+        } else {
+            // Handle the case where userResponse or userResponse.data is undefined
+            console.error("Failed to fetch user details.");
+        }
+    } catch (error : any) {
+        console.error("Token exchange failed:", error.response.data);
+    }
+}
+
+const callbackWithBackend = async (code: string) => {
+    // NOT WORK
+    try {
+        const headers = {
+          Authorization: code
+        };
+        const response = await axios.post("http://localhost:3000/auth", null, { headers });
+        const userDetails = response.data;
+        console.log("User Details:", userDetails);
+        googleData.value = userDetails;
+
+        // Redirect to the homepage ("/")
+      } catch (error) {
+        console.error("Failed to send authorization code:", error);
+      }
+}
+
+
+const handleGoogleConnect = () => {
+    googleSdkLoaded(google => {
+        // console.log("google",google);
+        google.accounts.oauth2
+          .initCodeClient({
+            client_id:
+              "399661064024-419ov8ld07kjf8ddguvjkoa2l3u3toli.apps.googleusercontent.com", // client secret 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
+            scope: "email profile openid",
+            redirect_uri: "http://localhost:3000",
+            callback: async (response) => {
+                // console.log("code",response);
+              if (response.code) {
+
+                //DEMO
+                callbackWithoutBackend(response.code);
+                
+                //SOON
+                // callbackWithBackend(response.code);
+
+              }
+            }
+          })
+          .requestCode();
+      });
 }
 
 
