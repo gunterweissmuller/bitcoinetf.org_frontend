@@ -16,7 +16,7 @@
           class="flex justify-center items-center px-16 py-5  max-w-full text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/mono/mail-light.svg" width="18" height="14" class="aspect-square w-[18px]" />
-            <div class="grow">Sign up with Email</div>
+            <div class="grow">Log in with Email</div>
           </div>
         </div>
 
@@ -24,7 +24,7 @@
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18" class="aspect-square w-[18px]" />
-            <div class="grow">Sign up with Metamask</div>
+            <div class="grow">Log in with Metamask</div>
           </div>
         </div>
 
@@ -32,7 +32,7 @@
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18" class="aspect-square w-[18px]" />
-            <div class="grow">Sign up with Google</div>
+            <div class="grow">Log in with Google</div>
           </div>
         </div>
 
@@ -40,7 +40,7 @@
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18" class="self-start aspect-square w-[18px]" />
-            <div class="grow">Sign up with Apple</div>
+            <div class="grow">Log in with Apple</div>
           </div>
         </div>
       </div>

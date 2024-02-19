@@ -57,12 +57,12 @@
                   </div>
               </div>
 
-              <div v-if="address !== ''">
+              <!-- <div v-if="address !== ''">
                   MM Connected : {{ computedAddress }}
                   <button @click="handleDisconnect">Disconnect</button>
                   <br />
                   {{ metamaskError }}
-              </div>
+              </div> -->
 
 
               <div @click="handleGoogleConnect"
@@ -74,7 +74,7 @@
                   </div>
               </div>
 
-              <div v-if="googleData">
+              <!-- <div v-if="googleData">
                 <h2>User Details</h2>
                 <p>Name: {{ googleData.name }}</p>
                 <p>Email: {{ googleData.email }}</p>
@@ -82,7 +82,7 @@
                     <img :src="googleData.picture" alt="Profile Picture">
                 </p>
                 <button @click="handleGoogleDisconnect">Disconnect</button>
-              </div>
+              </div> -->
 
               <div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
@@ -112,7 +112,7 @@
 
               <a-input v-model="firstName" label="First name" required class="f-registration__name" />
               <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" required
+              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupWith.Google ? true : false" required
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
@@ -227,7 +227,14 @@ const enum Steps {
   Password = 'Password',
   Bonus = 'Bonus',
 }
+const enum SignupWith {
+  Email = 'Email',
+  Metamask = 'Metamask',
+  Google = 'Google',
+  Apple = 'Apple',
+}
 
+const currentSignup = ref(SignupWith.Email);
 const currentStep = ref(Steps.Terms)
 const backendError = ref('')
 
@@ -260,9 +267,32 @@ const termsContinueDisabled = computed<boolean>(() => {
 const termsContinue = () => {
   currentStep.value = Steps.Choice
 }
+
+// Email Field
+const firstName = ref('')
+const lastName = ref('')
+const email = ref('')
+const emailErrorText = ref('')
+const isEmailValid = ref(false)
+
+function emailFieldBlurHandler() {
+  if (isEmailValid.value) {
+      emailErrorText.value = ''
+      return
+  }
+
+  if (email.value) {
+      emailErrorText.value = 'Invalid email address'
+      return
+  }
+
+  emailErrorText.value = 'Required'
+}
+
 // Choice step
 const choiceToEmail = () => {
-  currentStep.value = Steps.Email
+  currentStep.value = Steps.Email;
+  currentSignup.value = SignupWith.Email;
 }
 
 const isMetamaskSupported = ref(false);
@@ -302,6 +332,8 @@ const handleMetamaskConnect = async () => {
       return;
   }
 
+  currentSignup.value = SignupWith.Metamask;
+
   //get accounts
   (window as any).ethereum.request({ method: "eth_requestAccounts" }).then((accounts: string[]) => {
       address.value = accounts[0];
@@ -340,6 +372,7 @@ const handleMetamaskConnect = async () => {
                   ]
               }).then((msg: string) => {
                   console.log("SIGNED MSG", msg);
+                  currentStep.value = Steps.Email;
               }).catch((err: any) => {
                   console.error(err);
               });
@@ -425,6 +458,7 @@ const callbackWithBackend = async (code: string) => {
 
 
 const handleGoogleConnect = () => {
+    currentSignup.value = SignupWith.Google;
     googleSdkLoaded(google => {
         // console.log("google",google);
         google.accounts.oauth2
@@ -438,7 +472,13 @@ const handleGoogleConnect = () => {
               if (response.code) {
 
                 //DEMO
-                callbackWithoutBackend(response.code);
+                callbackWithoutBackend(response.code).then(()=>{
+                    currentStep.value = Steps.Email;
+                    firstName.value = googleData.value.given_name;
+                    lastName.value = googleData.value.family_name;
+                    email.value = googleData.value.email;
+                });
+
                 
                 //SOON
                 // callbackWithBackend(response.code);
@@ -448,28 +488,6 @@ const handleGoogleConnect = () => {
           })
           .requestCode();
       });
-}
-
-
-// Email Field
-const firstName = ref('')
-const lastName = ref('')
-const email = ref('')
-const emailErrorText = ref('')
-const isEmailValid = ref(false)
-
-function emailFieldBlurHandler() {
-  if (isEmailValid.value) {
-      emailErrorText.value = ''
-      return
-  }
-
-  if (email.value) {
-      emailErrorText.value = 'Invalid email address'
-      return
-  }
-
-  emailErrorText.value = 'Required'
 }
 
 // Ref code field
