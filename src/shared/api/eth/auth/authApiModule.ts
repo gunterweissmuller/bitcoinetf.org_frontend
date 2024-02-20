@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify'
 import { HTTPMethod } from '~/src/shared/constants/httpMethods'
 import { ApiErrorFlow } from '~/src/shared/toolkit/apiErrorFlow'
 import { INVERSIFY_TYPES } from '~/src/shared/types/inversifyTypes'
+import { SignupMethods } from '~/src/shared/constants/signupMethods'
 
 @injectable()
 export default class AuthApiModule {
@@ -14,7 +15,14 @@ export default class AuthApiModule {
     this.store = store
   }
 
-  async init(payload: { username: string; email: string; refcode?: string }) {
+  async init(payload: { username: string; email: string; refcode?: string, method?: SignupMethods }) {
+
+    if(payload?.method === SignupMethods.Google) {
+      console.log(this.adapter);
+
+      // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
+    }
+
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/register/init',

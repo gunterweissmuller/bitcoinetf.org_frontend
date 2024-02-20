@@ -112,7 +112,7 @@
 
               <a-input v-model="firstName" label="First name" required class="f-registration__name" />
               <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupWith.Google ? true : false" required
+              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google ? true : false" required
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
@@ -213,6 +213,7 @@ import { SiweMessage } from 'siwe';
 import { BrowserProvider, parseUnits } from "ethers";
 import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
 import axios from "axios";
+import { SignupMethods } from '~/src/shared/constants/signupMethods'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -227,14 +228,9 @@ const enum Steps {
   Password = 'Password',
   Bonus = 'Bonus',
 }
-const enum SignupWith {
-  Email = 'Email',
-  Metamask = 'Metamask',
-  Google = 'Google',
-  Apple = 'Apple',
-}
 
-const currentSignup = ref(SignupWith.Email);
+
+const currentSignup = ref(SignupMethods.Email);
 const currentStep = ref(Steps.Terms)
 const backendError = ref('')
 
@@ -292,7 +288,7 @@ function emailFieldBlurHandler() {
 // Choice step
 const choiceToEmail = () => {
   currentStep.value = Steps.Email;
-  currentSignup.value = SignupWith.Email;
+  currentSignup.value = SignupMethods.Email;
 }
 
 const isMetamaskSupported = ref(false);
@@ -332,7 +328,7 @@ const handleMetamaskConnect = async () => {
       return;
   }
 
-  currentSignup.value = SignupWith.Metamask;
+  currentSignup.value = SignupMethods.Metamask;
 
   //get accounts
   (window as any).ethereum.request({ method: "eth_requestAccounts" }).then((accounts: string[]) => {
@@ -391,6 +387,16 @@ const handleMetamaskConnect = async () => {
 }
 
 const googleData : any = ref();
+const googleUrl = ref("");
+
+
+onMounted(() => {
+  axios.get("http://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
+    // googleUrl.value = url.data.url;
+    // "https://accounts.google.com/o/oauth2/auth?client_id=745955834530-cp4m04pm6sv2emqkll922blijde5o1u2.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google&scope=openid+profile+email&response_type=code"
+    googleUrl.value = "https://accounts.google.com/o/oauth2/auth?client_id=745955834530-cp4m04pm6sv2emqkll922blijde5o1u2.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google&scope=openid+profile+email&response_type=code"
+  });
+})
 
 const handleGoogleDisconnect = () => {
     googleData.value = null;
@@ -442,13 +448,22 @@ const callbackWithoutBackend = async (code : string) => {
 const callbackWithBackend = async (code: string) => {
     // NOT WORK
     try {
+        // const headers = {
+        //   Authorization: code
+        // };
+        // const response = await axios.post("http://localhost:3000/auth", null, { headers });
+
+        console.log(code);
+            
         const headers = {
           Authorization: code
         };
-        const response = await axios.post("http://localhost:3000/auth", null, { headers });
-        const userDetails = response.data;
-        console.log("User Details:", userDetails);
-        googleData.value = userDetails;
+        const response2 = await axios.post("http://api.stage.techetf.org/v1/auth/provider/google-auth/init", {ref_code: refCode.value}, { headers });
+        console.log(response2);
+
+        // const userDetails = response.data;
+        // console.log("User Details:", userDetails);
+        // googleData.value = userDetails;
 
         // Redirect to the homepage ("/")
       } catch (error) {
@@ -457,8 +472,17 @@ const callbackWithBackend = async (code: string) => {
 }
 
 
-const handleGoogleConnect = () => {
-    currentSignup.value = SignupWith.Google;
+const handleGoogleConnect = async () => {
+    currentSignup.value = SignupMethods.Google;
+
+    console.log(googleUrl.value);
+    window.open(googleUrl.value, '_blank');
+
+    return;
+
+    const redirect = await axios.get("http://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url");
+    console.log(redirect.data.url);
+
     googleSdkLoaded(google => {
         // console.log("google",google);
         google.accounts.oauth2
@@ -466,22 +490,23 @@ const handleGoogleConnect = () => {
             client_id:
               "399661064024-419ov8ld07kjf8ddguvjkoa2l3u3toli.apps.googleusercontent.com", // client secret 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
             scope: "email profile openid",
-            redirect_uri: "http://localhost:3000",
+            redirect_uri: redirect.data.url,
             callback: async (response) => {
                 // console.log("code",response);
               if (response.code) {
 
+                console.log(response.code);
                 //DEMO
-                callbackWithoutBackend(response.code).then(()=>{
-                    currentStep.value = Steps.Email;
-                    firstName.value = googleData.value.given_name;
-                    lastName.value = googleData.value.family_name;
-                    email.value = googleData.value.email;
-                });
+                // callbackWithoutBackend(response.code).then(()=>{
+                //     currentStep.value = Steps.Email;
+                //     firstName.value = googleData.value.given_name;
+                //     lastName.value = googleData.value.family_name;
+                //     email.value = googleData.value.email;
+                // });
 
                 
                 //SOON
-                // callbackWithBackend(response.code);
+                callbackWithBackend(response.code);
 
               }
             }
@@ -498,7 +523,7 @@ const refCode = ref('')
 
 const onSubmitEmailForm = async () => {
   backendError.value = ''
-  const initPayload = { first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value) }
+  const initPayload = { method: currentSignup.value, first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value) }
 
   if (refCode.value) {
       initPayload.ref_code = refCode.value
