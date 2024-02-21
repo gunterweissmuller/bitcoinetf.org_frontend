@@ -377,7 +377,7 @@ const googleUrl = ref("");
 
 
 onMounted(() => {
-  axios.get("http://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
+  axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 

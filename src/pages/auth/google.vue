@@ -20,7 +20,7 @@
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
-    axios.get("http://api.stage.techetf.org/v1/auth/provider/google-auth/init"+searchReplaced+refParam, {headers}).then((data: any) => {
+    axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/init"+searchReplaced+refParam, {headers}).then((data: any) => {
         $app.store.authGoogle.setResponse({response: data.data.data, method: SignupMethods.Google});
 
         if(data.data.data.email) {
