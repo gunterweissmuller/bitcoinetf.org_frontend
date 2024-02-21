@@ -15,15 +15,10 @@ export default class AuthApiModule {
     this.store = store
   }
 
-  async init(payload: { username: string; email: string; refcode?: string, method?: SignupMethods }) {
-
-    if(payload?.method === SignupMethods.Google) {
-      console.log(this.adapter);
-
-      // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
-    }
+  async init(payload: { username: string; email: string; refcode?: string }) {
 
     try {
+      
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/register/init',
         request: {
@@ -33,6 +28,31 @@ export default class AuthApiModule {
         operationDescription: 'User email registration',
         withoutPublic: true,
       })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initGoogle(payload: { username: string; email: string; refcode?: string, method?: SignupMethods }) {
+
+    try {
+
+      if(payload?.method === SignupMethods.Google) {
+        return await this.adapter.requestJsonAsync({
+          parameterValue: "auth/provider/google-auth/confirm", 
+          request: {
+            method: HTTPMethod.POST,
+          },
+          data: payload,
+          operationDescription: 'User email registration',
+          withoutPublic: true,
+        });
+      }
+      
     } catch (e) {
       if (e instanceof ApiErrorFlow) {
         throw new ApiErrorFlow(e.errors)

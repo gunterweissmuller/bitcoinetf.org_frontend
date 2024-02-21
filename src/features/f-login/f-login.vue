@@ -29,7 +29,8 @@
         </div>
 
         <div
-          class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
+          @click="handleGoogleConnect"
+          class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18" class="aspect-square w-[18px]" />
             <div class="grow">Log in with Google</div>
@@ -79,6 +80,12 @@
       </form>
     </div>
   </template>
+
+  <template v-else-if="currentStep === Steps.Loading">
+    <div class="f-login">
+      Loading...
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -87,6 +94,9 @@ import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
+import axios from "axios";
+import { SignupMethods } from '~/src/shared/constants/signupMethods'
+import { HttpStatusCode } from '~/src/shared/constants/httpStatusCodes'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -94,8 +104,9 @@ const router = useRouter()
 const enum Steps {
   Choice = 'Choice',
   Login = 'Login',
+  Loading = 'Loading',
 }
-
+const currentLogin = ref(SignupMethods.Email);
 const currentStep = ref(Steps.Choice)
 
 // Choice step
@@ -154,12 +165,46 @@ const onSubmitEmailForm = () => {
       await router.push('/personal/analytics/performance')
     })
     .catch((e) => {
+
       if (e?.errors?.error?.message) {
         backendError.value = e.errors.error.message
       } else {
         backendError.value = 'Something went wrong'
       }
+
+      if(e?.errors === HttpStatusCode.CONFLICT) {
+        backendError.value = 'email is already in use';
+      }
     })
+}
+
+// google
+
+const googleUrl = ref("");
+
+onMounted(() => {
+  axios.get("http://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
+    googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
+  });
+
+  if($app.store.authGoogle.response?.access_token) {
+    currentStep.value = Steps.Loading;
+
+    $app.store.auth.setTokens($app.store.authGoogle.response)
+    $app.store.authGoogle.setResponse({}, SignupMethods.Google);
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    })
+
+    $app.store.auth.reInitData()
+    router.push('/personal/analytics/performance')
+   
+  }
+});
+
+const handleGoogleConnect = () => {
+  currentLogin.value = SignupMethods.Google;
+  window.location.href = googleUrl.value;
 }
 
 const onForgotPasswordClick = () => {

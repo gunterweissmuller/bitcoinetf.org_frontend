@@ -74,16 +74,6 @@
                   </div>
               </div>
 
-              <!-- <div v-if="googleData">
-                <h2>User Details</h2>
-                <p>Name: {{ googleData.name }}</p>
-                <p>Email: {{ googleData.email }}</p>
-                <p>Profile Picture: 
-                    <img :src="googleData.picture" alt="Profile Picture">
-                </p>
-                <button @click="handleGoogleDisconnect">Disconnect</button>
-              </div> -->
-
               <div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
                   <div class="flex gap-2 items-center">
@@ -100,7 +90,7 @@
           <div class='f-registration__back' @click='currentStep = Steps.Choice'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
-          <h3 class="f-registration__title">Sign up with Email</h3>
+          <h3 class="f-registration__title">Sign up with {{ currentSignup }}</h3>
           <h5 class="f-registration__subtitle">
               Enter your details below and press Continue. We will send you a confirmation code shortly.
           </h5>
@@ -122,11 +112,6 @@
                   <a href="/" target="_blank" class="f-registration__ref-link">How to get referral codes</a>
               </m-accordion> -->
 
-              <!-- <div class="f-registration__agree">
-                  <a-checkbox v-model="registrationAgreed" id="with_email"
-                      label="<p>I agree to the <span class='link'>Terms & Conditions</a></p>"
-                      @label-click="openTermsModal" single />
-              </div> -->
               <a-button class="f-registration__button" :disabled="emailButtonDisabled" type="submit"
                   text="Continue"></a-button>
 
@@ -229,6 +214,7 @@ const enum Steps {
   Bonus = 'Bonus',
 }
 
+const confirmResponse = ref(null)
 
 const currentSignup = ref(SignupMethods.Email);
 const currentStep = ref(Steps.Terms)
@@ -392,11 +378,17 @@ const googleUrl = ref("");
 
 onMounted(() => {
   axios.get("http://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
-    // googleUrl.value = url.data.url;
-    // "https://accounts.google.com/o/oauth2/auth?client_id=745955834530-cp4m04pm6sv2emqkll922blijde5o1u2.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google&scope=openid+profile+email&response_type=code"
-    googleUrl.value = "https://accounts.google.com/o/oauth2/auth?client_id=745955834530-cp4m04pm6sv2emqkll922blijde5o1u2.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google&scope=openid+profile+email&response_type=code"
+    googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
-})
+
+  if($app.store.authGoogle.response?.email) {
+    currentStep.value = Steps.Email;
+    currentSignup.value = SignupMethods.Google;
+    firstName.value = $app.store.authGoogle.response.first_name;
+    lastName.value = $app.store.authGoogle.response.last_name;
+    email.value =$app.store.authGoogle.response.email;
+  }
+});
 
 const handleGoogleDisconnect = () => {
     googleData.value = null;
@@ -404,115 +396,10 @@ const handleGoogleDisconnect = () => {
     googleLogout();
 }
 
-const callbackWithoutBackend = async (code : string) => {
-    //request google account data
-    try {
-        const responseAuth = await axios.post(
-        "https://oauth2.googleapis.com/token",
-        {
-            code: code,
-            client_id:
-            "399661064024-419ov8ld07kjf8ddguvjkoa2l3u3toli.apps.googleusercontent.com",
-            client_secret: "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",
-            redirect_uri: "postmessage",
-            grant_type: "authorization_code"
-        }
-        );
-
-        const accessToken = responseAuth.data.access_token;
-        console.log(accessToken);
-
-        // Fetch user details using the access token
-        const userResponse = await axios.get(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        {
-            headers: {
-            Authorization: `Bearer ${accessToken}`
-            }
-        }
-        );
-
-        if (userResponse && userResponse.data) {
-            // Set the userDetails data property to the userResponse object
-            console.log("userResponse", userResponse);
-            googleData.value = userResponse.data;
-        } else {
-            // Handle the case where userResponse or userResponse.data is undefined
-            console.error("Failed to fetch user details.");
-        }
-    } catch (error : any) {
-        console.error("Token exchange failed:", error.response.data);
-    }
-}
-
-const callbackWithBackend = async (code: string) => {
-    // NOT WORK
-    try {
-        // const headers = {
-        //   Authorization: code
-        // };
-        // const response = await axios.post("http://localhost:3000/auth", null, { headers });
-
-        console.log(code);
-            
-        const headers = {
-          Authorization: code
-        };
-        const response2 = await axios.post("http://api.stage.techetf.org/v1/auth/provider/google-auth/init", {ref_code: refCode.value}, { headers });
-        console.log(response2);
-
-        // const userDetails = response.data;
-        // console.log("User Details:", userDetails);
-        // googleData.value = userDetails;
-
-        // Redirect to the homepage ("/")
-      } catch (error) {
-        console.error("Failed to send authorization code:", error);
-      }
-}
-
 
 const handleGoogleConnect = async () => {
     currentSignup.value = SignupMethods.Google;
-
-    console.log(googleUrl.value);
-    window.open(googleUrl.value, '_blank');
-
-    return;
-
-    const redirect = await axios.get("http://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url");
-    console.log(redirect.data.url);
-
-    googleSdkLoaded(google => {
-        // console.log("google",google);
-        google.accounts.oauth2
-          .initCodeClient({
-            client_id:
-              "399661064024-419ov8ld07kjf8ddguvjkoa2l3u3toli.apps.googleusercontent.com", // client secret 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
-            scope: "email profile openid",
-            redirect_uri: redirect.data.url,
-            callback: async (response) => {
-                // console.log("code",response);
-              if (response.code) {
-
-                console.log(response.code);
-                //DEMO
-                // callbackWithoutBackend(response.code).then(()=>{
-                //     currentStep.value = Steps.Email;
-                //     firstName.value = googleData.value.given_name;
-                //     lastName.value = googleData.value.family_name;
-                //     email.value = googleData.value.email;
-                // });
-
-                
-                //SOON
-                callbackWithBackend(response.code);
-
-              }
-            }
-          })
-          .requestCode();
-      });
+    window.location.href = googleUrl.value;
 }
 
 // Ref code field
@@ -525,8 +412,42 @@ const onSubmitEmailForm = async () => {
   backendError.value = ''
   const initPayload = { method: currentSignup.value, first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value) }
 
-  if (refCode.value) {
+  if (refCode.value ) {
       initPayload.ref_code = refCode.value
+  }
+
+  console.log(currentSignup.value, initPayload.ref_code);
+
+  if (currentSignup.value === SignupMethods.Google) {
+
+    if ($app.store.auth.refCode !== "") {
+        initPayload.ref_code = $app.store.auth.refCode
+        $app.store.auth.setRefCode("");
+    }
+    
+    $app.api.eth.auth
+      .initGoogle(initPayload)
+      .then((tokens: any) => {
+        $app.store.auth.setTokens(tokens.data)
+        $app.store.authGoogle.setResponse({}, SignupMethods.Google);
+        confirmResponse.value = tokens.data
+        currentStep.value = Steps.Bonus
+      })
+      .then(async () => {
+            await $app.api.eth.auth.getUser().then((resp) => {
+                $app.store.user.info = resp?.data
+            })
+        })
+      .catch((e) => {
+        console.error(e);
+          if (e?.errors?.error?.message) {
+              backendError.value = e.errors.error.message
+          } else {
+              backendError.value = 'Something went wrong'
+          }
+      })
+
+    return;
   }
 
   await $app.api.eth.auth
@@ -648,7 +569,7 @@ function passwordFieldBlurHandler() {
   passwordErrorText.value = 'Required'
 }
 
-const confirmResponse = ref(null)
+
 
 const onSubmitPasswordForm = async () => {
   backendError.value = ''
@@ -670,6 +591,7 @@ const onSubmitPasswordForm = async () => {
           })
       })
       .catch((e) => {
+        console.error(e);
           if (e?.errors?.error?.message) {
               backendError.value = e.errors.error.message
           } else {
@@ -685,6 +607,7 @@ const getBonus = () => {
 
 onMounted(() => {
   if (route.query.referral) {
+      $app.store.auth.setRefCode({ref_code: route.query.referral});
       refCode.value = route.query.referral
       accordionRef.value?.open()
   }
