@@ -73,7 +73,6 @@
                       <div class="grow">Sign up with Google</div>
                   </div>
               </div>
-
               <div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
                   <div class="flex gap-2 items-center">
@@ -329,16 +328,21 @@ const handleMetamaskConnect = async () => {
 
           //switch to eth chain
           (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(async () => {
+
+            axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message").then(async (res: any) => {
+              metamaskSignatureMessage.value = res.data.message;
+
               const provider = new BrowserProvider((window as any).ethereum);
               const signer = await provider.getSigner();
+              metamaskWalletAddress.value = signer.address;
 
               const message = new SiweMessage({
-                  domain: window.location.host,
-                  address: signer.address, // error with accounts[0] ?
-                  statement: "I accept the MetaMask Terms of Service: https://community.metamask.io/tos",
-                  uri: window.location.origin,
-                  version: '1',
-                  chainId: 1
+                domain: window.location.host,
+                address: signer.address, // error with accounts[0] ?
+                statement: res.data.message,
+                uri: window.location.origin,
+                version: '1',
+                chainId: 1
               });
               //message.prepareMessage()
 
@@ -346,19 +350,23 @@ const handleMetamaskConnect = async () => {
 
               //sign message
               (window as any).ethereum.request({
-                  "method": "personal_sign",
-                  "params": [
-                    //   msg,
-                    message.prepareMessage(),
-                      accounts[0],
-                  ]
+                "method": "personal_sign",
+                "params": [
+                  //   msg,
+                  res.data.message,
+                  accounts[0],
+                ]
               }).then((msg: string) => {
-                  console.log("SIGNED MSG", msg);
-                  currentStep.value = Steps.Email;
+                console.log("SIGNED MSG", msg);
+                metamaskSignature.value = msg;
+                currentStep.value = Steps.Email;
               }).catch((err: any) => {
-                  console.error(err);
+                console.error(err);
               });
 
+            }).catch((err: any) => {
+              console.log(err);
+            });
           }).catch((err: any) => {
               console.log(err);
           });
@@ -396,7 +404,6 @@ const handleGoogleDisconnect = () => {
     googleLogout();
 }
 
-
 const handleGoogleConnect = async () => {
     currentSignup.value = SignupMethods.Google;
     window.location.href = googleUrl.value;
@@ -406,11 +413,24 @@ const handleGoogleConnect = async () => {
 const emailCode = ref('')
 const pincodeErrorText = ref('')
 const refCode = ref('')
-
+const metamaskSignatureMessage = ref('')
+const metamaskSignature = ref('')
+const metamaskWalletAddress = ref('')
 
 const onSubmitEmailForm = async () => {
   backendError.value = ''
-  const initPayload = { method: currentSignup.value, first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value) }
+  const initPayload = {
+    method: currentSignup.value,
+    first_name: $app.filters.trimSpaceIntoString(firstName.value),
+    last_name: $app.filters.trimSpaceIntoString(lastName.value),
+    email: $app.filters.trimSpaceIntoString(email.value)
+  }
+
+  if(currentSignup.value === SignupMethods.Metamask) {
+    initPayload.message = metamaskSignatureMessage.value
+    initPayload.signature = metamaskSignature.value
+    initPayload.wallet_address = metamaskWalletAddress.value
+  }
 
   if (refCode.value ) {
       initPayload.ref_code = refCode.value
@@ -424,7 +444,7 @@ const onSubmitEmailForm = async () => {
         initPayload.ref_code = $app.store.auth.refCode
         $app.store.auth.setRefCode("");
     }
-    
+
     $app.api.eth.auth
       .initGoogle(initPayload)
       .then((tokens: any) => {
@@ -450,19 +470,36 @@ const onSubmitEmailForm = async () => {
     return;
   }
 
-  await $app.api.eth.auth
-      .init(initPayload)
+  if (currentSignup.value === SignupMethods.Metamask) {
+    await $app.api.eth.auth
+      .initMetamask(initPayload)
       .then(() => {
-          currentStep.value = Steps.Code
+        currentStep.value = Steps.Code
       })
       .catch((e) => {
 
-          if (e?.errors?.error?.message) {
-              backendError.value = e.errors.error.message
-          } else {
-              backendError.value = 'Something went wrong'
-          }
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
       })
+  } else {
+
+    await $app.api.eth.auth
+      .init(initPayload)
+      .then(() => {
+        currentStep.value = Steps.Code
+      })
+      .catch((e) => {
+
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  }
 }
 
 const timer = ref<NodeJS.Timer | null>(null)
@@ -515,8 +552,36 @@ const onCodeInput = async (codePayload) => {
   }
 }
 
-const codeContinue = () => {
-  currentStep.value = Steps.Password
+const codeContinue = async () => {
+  if(currentSignup.value === SignupMethods.Metamask) {
+    backendError.value = ''
+      await $app.api.eth.auth.
+        confirmMetamask({
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+        fast: true,
+      })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data)
+          confirmResponse.value = jwtResponse.data
+          currentStep.value = Steps.Bonus
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data
+          })
+        })
+        .catch((e) => {
+          if (e?.errors?.error?.message) {
+            backendError.value = e.errors.error.message
+          } else {
+            backendError.value = 'Something went wrong'
+          }
+        })
+  } else {
+    currentStep.value = Steps.Password
+  }
 }
 
 const resendCodeClick = async () => {

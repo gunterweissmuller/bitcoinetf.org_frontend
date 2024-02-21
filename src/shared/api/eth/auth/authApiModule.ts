@@ -15,12 +15,56 @@ export default class AuthApiModule {
     this.store = store
   }
 
-  async init(payload: { username: string; email: string; refcode?: string }) {
+  async init(payload: {
+    username: string;
+    email: string;
+    refcode?: string,
+    method?: SignupMethods,
+    signature?: string,
+    wallet_address?: string,
+    message?: string,
+  }) {
+
+    if(payload?.method === SignupMethods.Google) {
+      console.log(this.adapter);
+
+      // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
+    }
 
     try {
-      
+
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/register/init',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'User email registration',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initMetamask(payload: {
+    username: string;
+    email: string;
+    refcode?: string,
+    method?: SignupMethods,
+    signature?: string,
+    wallet_address?: string,
+    message?: string,
+  }) {
+
+    try {
+
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/init',
         request: {
           method: HTTPMethod.POST,
         },
@@ -43,7 +87,7 @@ export default class AuthApiModule {
 
       if(payload?.method === SignupMethods.Google) {
         return await this.adapter.requestJsonAsync({
-          parameterValue: "auth/provider/google-auth/confirm", 
+          parameterValue: "auth/provider/google-auth/confirm",
           request: {
             method: HTTPMethod.POST,
           },
@@ -52,7 +96,7 @@ export default class AuthApiModule {
           withoutPublic: true,
         });
       }
-      
+
     } catch (e) {
       if (e instanceof ApiErrorFlow) {
         throw new ApiErrorFlow(e.errors)
@@ -86,6 +130,26 @@ export default class AuthApiModule {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/register/confirm',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async confirmMetamask(payload: { email: string; code: string; fast: boolean }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/confirm',
         request: {
           method: HTTPMethod.POST,
         },
