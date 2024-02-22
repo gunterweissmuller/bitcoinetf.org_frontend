@@ -37,7 +37,7 @@ html {
 html,
 body {
   height: vh(100);
-  min-width: torem(#{$width-mobile-375}px);
+  min-width: torem(#{$width-mobile-360}px);
 
   @include breakpoint($break-mobile-375-minus) {
     overflow-x: hidden;

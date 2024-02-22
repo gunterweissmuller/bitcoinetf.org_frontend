@@ -1,5 +1,14 @@
 import { defineStore } from 'pinia'
 import { useNuxtApp } from '#app'
+import { SignupMethods } from '~/src/shared/constants/signupMethods';
+
+interface authState {
+  accessToken: string,
+    refreshToken: string,
+    userAgent: string,
+    websocketToken: string,
+    refCode: string,
+}
 
 export const auth = defineStore('auth', {
   state: () => ({
@@ -7,7 +16,8 @@ export const auth = defineStore('auth', {
     refreshToken: '',
     userAgent: '',
     websocketToken: '',
-  }),
+    refCode: '',
+  } as authState),
 
   actions: {
     setTokens(payload: { access_token: string; refresh_token: string; websocket_token: string }) {
@@ -147,6 +157,11 @@ export const auth = defineStore('auth', {
         //   }),
       ])
     },
+
+    setRefCode(payload: {ref_code: string }) {
+      this.refCode = payload.ref_code;
+    }
+   
   },
 
   getters: {

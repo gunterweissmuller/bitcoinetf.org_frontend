@@ -57,23 +57,22 @@
                   </div>
               </div>
 
-              <div v-if="address !== ''">
+              <!-- <div v-if="address !== ''">
                   MM Connected : {{ computedAddress }}
                   <button @click="handleDisconnect">Disconnect</button>
                   <br />
                   {{ metamaskError }}
-              </div>
+              </div> -->
 
 
-              <div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
+              <div @click="handleGoogleConnect"
+                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
                           class="aspect-square w-[18px]" />
                       <div class="grow">Sign up with Google</div>
                   </div>
               </div>
-
               <div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
                   <div class="flex gap-2 items-center">
@@ -90,7 +89,7 @@
           <div class='f-registration__back' @click='currentStep = Steps.Choice'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
-          <h3 class="f-registration__title">Sign up with Email</h3>
+          <h3 class="f-registration__title">Sign up with {{ currentSignup }}</h3>
           <h5 class="f-registration__subtitle">
               Enter your details below and press Continue. We will send you a confirmation code shortly.
           </h5>
@@ -102,7 +101,7 @@
 
               <a-input v-model="firstName" label="First name" required class="f-registration__name" />
               <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" required
+              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google ? true : false" required
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
@@ -112,11 +111,6 @@
                   <a href="/" target="_blank" class="f-registration__ref-link">How to get referral codes</a>
               </m-accordion> -->
 
-              <!-- <div class="f-registration__agree">
-                  <a-checkbox v-model="registrationAgreed" id="with_email"
-                      label="<p>I agree to the <span class='link'>Terms & Conditions</a></p>"
-                      @label-click="openTermsModal" single />
-              </div> -->
               <a-button class="f-registration__button" :disabled="emailButtonDisabled" type="submit"
                   text="Continue"></a-button>
 
@@ -200,12 +194,16 @@ import ERegistrationBonusModal from '~/src/entities/e-registration-bonus-modal/e
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import VueTurnstile from 'vue-turnstile';
 import { SiweMessage } from 'siwe';
+import { BrowserProvider, parseUnits } from "ethers";
+import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
+import axios from "axios";
+import { SignupMethods } from '~/src/shared/constants/signupMethods'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const token = ref('')
-const siteKey = ref(process.dev ? '1x00000000000000000000AA' : '0x4AAAAAAAO0YJKv_riZdNZX')
+const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
   Terms = 'Terms',
   Choice = 'Choice',
@@ -215,6 +213,9 @@ const enum Steps {
   Bonus = 'Bonus',
 }
 
+const confirmResponse = ref(null)
+
+const currentSignup = ref(SignupMethods.Email);
 const currentStep = ref(Steps.Terms)
 const backendError = ref('')
 
@@ -247,98 +248,6 @@ const termsContinueDisabled = computed<boolean>(() => {
 const termsContinue = () => {
   currentStep.value = Steps.Choice
 }
-// Choice step
-const choiceToEmail = () => {
-  currentStep.value = Steps.Email
-}
-
-const isMetamaskSupported = ref(false);
-const address = ref("");
-const metamaskError = ref("");
-const computedAddress = computed(() => address.value.substring(0, 8) + '...');
-
-onMounted(() => {
-  isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
-
-  (window as any).ethereum.on("chainChanged", (chainId: string) => {
-      console.log(chainId);
-      if (chainId !== "0x1") {
-          metamaskError.value = "This network is not supported. Please change the network to Ethereum."
-      } else if (chainId === "0x1") {
-          metamaskError.value = "";
-      }
-  });
-})
-
-const handleDisconnect = () => {
-  (window as any).ethereum.request({
-      method: "wallet_revokePermissions",
-      params: [
-          {
-              eth_accounts: {},
-          },
-      ],
-  });
-  address.value = "";
-}
-
-const handleMetamaskConnect = async () => {
-  //if metamask is not installed
-  if (!isMetamaskSupported.value) {
-      window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
-      return;
-  }
-
-  //get accounts
-  (window as any).ethereum.request({ method: "eth_requestAccounts" }).then((accounts: string[]) => {
-      address.value = accounts[0];
-
-      //get chain id
-      (window as any).ethereum.request({
-          "method": "eth_chainId",
-          "params": []
-      }).then((chainId: string) => {
-          // let chainIdDec = parseInt(chainId, 16);
-
-          //switch to eth chain
-          (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(() => {
-              const message = new SiweMessage({
-                  domain: window.location.host,
-                  address: "0x461103cb5Ec52FBc0f20c6a7Ca3Ca5860e11a362", // error with accounts[0] ?
-                  statement: "I accept the MetaMask Terms of Service: https://community.metamask.io/tos",
-                  uri: window.location.host,
-                  version: '1',
-                  chainId: 1
-              });
-              //message.prepareMessage()
-              const msg = `${window.location.host} wants you to sign in with your Ethereum account:\n${accounts[0]}\n\nI accept the MetaMask Terms of Service: https://community.metamask.io/tos\n\nURI: https://${window.location.host}\nVersion: 1\nChain ID: 1\nNonce: 32891757\nIssued At: 2021-09-30T16:25:24.000Z`;
-
-              //sign message
-              (window as any).ethereum.request({
-                  "method": "personal_sign",
-                  "params": [
-                      msg,
-                      accounts[0],
-                  ]
-              }).then((msg: string) => {
-                  console.log("SIGNED MSG", msg);
-              }).catch((err: any) => {
-                  console.error(err);
-              });
-
-          }).catch((err: any) => {
-              console.log(err);
-          });
-
-      }).catch((err: any) => {
-          console.error(err);
-      });
-
-  }).catch((err: any) => {
-      console.error(err);
-  });
-}
-
 
 // Email Field
 const firstName = ref('')
@@ -361,33 +270,213 @@ function emailFieldBlurHandler() {
   emailErrorText.value = 'Required'
 }
 
+// Choice step
+const choiceToEmail = () => {
+  currentStep.value = Steps.Email;
+  currentSignup.value = SignupMethods.Email;
+}
+
+const isMetamaskSupported = ref(false);
+const address = ref("");
+const metamaskError = ref("");
+const computedAddress = computed(() => address.value.substring(0, 8) + '...');
+
+onMounted(() => {
+  isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+
+  (window as any).ethereum.on("chainChanged", (chainId: string) => {
+      if (chainId !== "0x1") {
+          metamaskError.value = "This network is not supported. Please change the network to Ethereum."
+      } else if (chainId === "0x1") {
+          metamaskError.value = "";
+      }
+  });
+})
+
+const handleDisconnect = () => {
+  (window as any).ethereum.request({
+      method: "wallet_revokePermissions",
+      params: [
+          {
+              eth_accounts: {},
+          },
+      ],
+  });
+  address.value = "";
+}
+
+const isMetamaskConnecting = ref(false);
+
+const handleMetamaskConnect = async () => {
+  // if metamask button is already clicked
+  if(isMetamaskConnecting.value) return;
+  isMetamaskConnecting.value = true;
+
+  //if metamask is not installed
+  if (!isMetamaskSupported.value) {
+      window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+      isMetamaskConnecting.value = false;
+      return;
+  }
+
+  currentSignup.value = SignupMethods.Metamask;
+
+  try {
+    const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
+    const chainId: string = await (window as any).ethereum.request({"method": "eth_chainId","params": []});
+    const responseSwitchChain: any = await(window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] });
+    const responseBackend: any = await axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message");
+
+    metamaskSignatureMessage.value = responseBackend.data.message;
+    address.value = accounts[0];
+    const provider = new BrowserProvider((window as any).ethereum);
+    const signer = await provider.getSigner();
+    metamaskWalletAddress.value = signer.address;
+
+    const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
+
+    console.log("SIGNED MSG", signedMsg);
+    metamaskSignature.value = signedMsg;
+    isMetamaskConnecting.value = false;
+    currentStep.value = Steps.Email;
+
+  } catch (e) {
+    console.error(e);
+    isMetamaskConnecting.value = false;
+  }
+
+}
+
+const googleData : any = ref();
+const googleUrl = ref("");
+
+
+onMounted(() => {
+  axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
+    googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
+  });
+
+  if($app.store.authGoogle.response?.email) {
+    currentStep.value = Steps.Email;
+    currentSignup.value = SignupMethods.Google;
+    firstName.value = $app.store.authGoogle.response.first_name;
+    lastName.value = $app.store.authGoogle.response.last_name;
+    email.value =$app.store.authGoogle.response.email;
+  }
+});
+
+const handleGoogleDisconnect = () => {
+    googleData.value = null;
+
+    googleLogout();
+}
+
+const handleGoogleConnect = async () => {
+    currentSignup.value = SignupMethods.Google;
+    window.location.href = googleUrl.value;
+}
+
 // Ref code field
 const emailCode = ref('')
 const pincodeErrorText = ref('')
 const refCode = ref('')
+const metamaskSignatureMessage = ref('')
+const metamaskSignature = ref('')
+const metamaskWalletAddress = ref('')
 
+const isSubmitEmailForm = ref(false);
 
 const onSubmitEmailForm = async () => {
-  backendError.value = ''
-  const initPayload = { first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value) }
 
-  if (refCode.value) {
+  if(isSubmitEmailForm.value) return;
+  isSubmitEmailForm.value = true;
+
+  backendError.value = ''
+  const initPayload = {
+    method: currentSignup.value,
+    first_name: $app.filters.trimSpaceIntoString(firstName.value),
+    last_name: $app.filters.trimSpaceIntoString(lastName.value),
+    email: $app.filters.trimSpaceIntoString(email.value)
+  }
+
+  if(currentSignup.value === SignupMethods.Metamask) {
+    initPayload.message = metamaskSignatureMessage.value
+    initPayload.signature = metamaskSignature.value
+    initPayload.wallet_address = metamaskWalletAddress.value
+  }
+
+  if (refCode.value ) {
       initPayload.ref_code = refCode.value
   }
 
-  await $app.api.eth.auth
-      .init(initPayload)
-      .then(() => {
-          currentStep.value = Steps.Code
-      })
-      .catch((e) => {
+  console.log(currentSignup.value, initPayload.ref_code);
 
+  if (currentSignup.value === SignupMethods.Google) {
+
+    if ($app.store.auth.refCode !== "") {
+        initPayload.ref_code = $app.store.auth.refCode
+        $app.store.auth.setRefCode("");
+    }
+
+    $app.api.eth.auth
+      .initGoogle(initPayload)
+      .then((tokens: any) => {
+        $app.store.auth.setTokens(tokens.data)
+        $app.store.authGoogle.setResponse({}, SignupMethods.Google);
+        confirmResponse.value = tokens.data
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Bonus
+      })
+      .then(async () => {
+            await $app.api.eth.auth.getUser().then((resp) => {
+                $app.store.user.info = resp?.data
+            })
+        })
+      .catch((e) => {
+        console.error(e);
+        isSubmitEmailForm.value = false;
           if (e?.errors?.error?.message) {
               backendError.value = e.errors.error.message
           } else {
               backendError.value = 'Something went wrong'
           }
       })
+
+    return;
+  }
+
+  if (currentSignup.value === SignupMethods.Metamask) {
+    await $app.api.eth.auth
+      .initMetamask(initPayload)
+      .then(() => {
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
+      })
+      .catch((e) => {
+        isSubmitEmailForm.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else {
+
+    await $app.api.eth.auth
+      .init(initPayload)
+      .then(() => {
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code
+      })
+      .catch((e) => {
+        isSubmitEmailForm.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  }
 }
 
 const timer = ref<NodeJS.Timer | null>(null)
@@ -440,8 +529,44 @@ const onCodeInput = async (codePayload) => {
   }
 }
 
-const codeContinue = () => {
-  currentStep.value = Steps.Password
+const isCodeContinueProcess = ref(false);
+
+const codeContinue = async () => {
+
+  if(isCodeContinueProcess.value) return;
+  isCodeContinueProcess.value = true;
+
+  if(currentSignup.value === SignupMethods.Metamask) {
+    backendError.value = ''
+      await $app.api.eth.auth.
+        confirmMetamask({
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+        fast: true,
+      })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data)
+          confirmResponse.value = jwtResponse.data
+          currentStep.value = Steps.Bonus
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data
+          })
+        })
+        .catch((e) => {
+          isCodeContinueProcess.value = false;
+          if (e?.errors?.error?.message) {
+            backendError.value = e.errors.error.message
+          } else {
+            backendError.value = 'Something went wrong'
+          }
+        })
+  } else {
+    currentStep.value = Steps.Password
+  }
+  isCodeContinueProcess.value = false;
 }
 
 const resendCodeClick = async () => {
@@ -494,9 +619,13 @@ function passwordFieldBlurHandler() {
   passwordErrorText.value = 'Required'
 }
 
-const confirmResponse = ref(null)
+const isSubmitPasswordForm = ref(false);
 
 const onSubmitPasswordForm = async () => {
+
+  if(isSubmitPasswordForm.value) return;
+  isSubmitPasswordForm.value = true;
+
   backendError.value = ''
   await $app.api.eth.auth
       .confirm({
@@ -508,6 +637,7 @@ const onSubmitPasswordForm = async () => {
           // TODO falling user/me
           $app.store.auth.setTokens(jwtResponse.data)
           confirmResponse.value = jwtResponse.data
+          isSubmitPasswordForm.value = false;
           currentStep.value = Steps.Bonus
       })
       .then(async () => {
@@ -516,6 +646,8 @@ const onSubmitPasswordForm = async () => {
           })
       })
       .catch((e) => {
+        console.error(e);
+        isSubmitPasswordForm.value = false;
           if (e?.errors?.error?.message) {
               backendError.value = e.errors.error.message
           } else {
@@ -531,6 +663,7 @@ const getBonus = () => {
 
 onMounted(() => {
   if (route.query.referral) {
+      $app.store.auth.setRefCode({ref_code: route.query.referral});
       refCode.value = route.query.referral
       accordionRef.value?.open()
   }

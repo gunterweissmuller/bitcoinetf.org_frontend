@@ -1,5 +1,5 @@
 <template>
-  <m-modal class="e-page-info-modal" :max-height="MAX_HEIGHT" v-model="isOpenModal" @close="close">
+  <m-modal class="e-page-info-modal" :max-height="MAX_HEIGHT" kyc v-model="isOpenModal" @close="close">
     <div class="e-page-info-modal__wrap">
       <div class="e-page-info-modal__head">
         <div class="e-page-info-modal__head-title">{{ title }}</div>
@@ -43,6 +43,7 @@ const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
 const isOpenModal = computed({
   get() {
+    console.log(props.modelValue);
     return props.modelValue
   },
   set(value) {
