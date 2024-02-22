@@ -2,7 +2,7 @@ import {useNuxtApp} from '#app'
 
 export default defineNuxtRouteMiddleware((to) => {
   const {$app} = useNuxtApp()
-  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
+  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-registration-buy']
   const includedRouteMask = to.path.includes('personal')
 
   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
