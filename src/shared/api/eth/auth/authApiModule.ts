@@ -226,6 +226,26 @@ export default class AuthApiModule {
     }
   }
 
+  async loginMetamask(payload: { signature: string; message: string, wallet_address }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/login',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Authorization. Retrieving a JWT pair',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async refresh(payload: { refresh_token: string }) {
     try {
       return await this.adapter.requestJsonAsync({

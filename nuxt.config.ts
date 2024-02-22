@@ -40,6 +40,9 @@ export default defineNuxtConfig({
           children: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5VFHBBD7 height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
         },
       ],
+      script: [
+        { type: 'text/javascript', id: 'pap_x2s6df8d', src: 'https://bitcoinetf.postaffiliatepro.com/scripts/h4zgmkh6yj' },
+      ]
     },
   },
   telemetry: false,

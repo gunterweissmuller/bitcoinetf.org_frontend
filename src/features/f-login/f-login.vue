@@ -21,7 +21,8 @@
         </div>
 
         <div
-          class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
+          @click="handleMetamaskConnect"
+          class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18" class="aspect-square w-[18px]" />
             <div class="grow">Log in with Metamask</div>
@@ -97,6 +98,9 @@ import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { HttpStatusCode } from '~/src/shared/constants/httpStatusCodes'
+import { SiweMessage } from 'siwe'
+import { computed, ref } from 'vue'
+import { BrowserProvider, parseUnits } from "ethers";
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -182,7 +186,24 @@ const onSubmitEmailForm = () => {
 
 const googleUrl = ref("");
 
+const isMetamaskSupported = ref(false);
+const address = ref("");
+const metamaskError = ref("");
+const computedAddress = computed(() => address.value.substring(0, 8) + '...');
+
 onMounted(() => {
+
+  isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+
+  (window as any).ethereum.on("chainChanged", (chainId: string) => {
+    console.log(chainId);
+    if (chainId !== "0x1") {
+      metamaskError.value = "This network is not supported. Please change the network to Ethereum."
+    } else if (chainId === "0x1") {
+      metamaskError.value = "";
+    }
+  });
+
   axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
@@ -198,13 +219,114 @@ onMounted(() => {
 
     $app.store.auth.reInitData()
     router.push('/personal/analytics/performance')
-   
+
   }
 });
 
 const handleGoogleConnect = () => {
   currentLogin.value = SignupMethods.Google;
   window.location.href = googleUrl.value;
+}
+
+const metamaskSignatureMessage = ref('')
+const metamaskSignature = ref('')
+const metamaskWalletAddress = ref('')
+
+const handleMetamaskConnect = async () => {
+  //if metamask is not installed
+  if (!isMetamaskSupported.value) {
+    window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+    return;
+  }
+
+  //currentSignup.value = SignupMethods.Metamask;
+
+  //get accounts
+  (window as any).ethereum.request({ method: "eth_requestAccounts" }).then((accounts: string[]) => {
+    address.value = accounts[0];
+
+    //get chain id
+    (window as any).ethereum.request({
+      "method": "eth_chainId",
+      "params": []
+    }).then((chainId: string) => {
+      // let chainIdDec = parseInt(chainId, 16);
+
+      //switch to eth chain
+      (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(async () => {
+
+        axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message").then(async (res: any) => {
+          metamaskSignatureMessage.value = res.data.message;
+
+          const provider = new BrowserProvider((window as any).ethereum);
+          const signer = await provider.getSigner();
+          metamaskWalletAddress.value = signer.address;
+
+          const message = new SiweMessage({
+            domain: window.location.host,
+            address: signer.address, // error with accounts[0] ?
+            statement: res.data.message,
+            uri: window.location.origin,
+            version: '1',
+            chainId: 1
+          });
+          //message.prepareMessage()
+
+          const msg = `${window.location.host} wants you to sign in with your Ethereum account:\n${accounts[0]}\n\nI accept the MetaMask Terms of Service: https://community.metamask.io/tos\n\nURI: ${window.location.origin}\nVersion: 1\nChain ID: 1\nNonce: 32891757\nIssued At: 2021-09-30T16:25:24.000Z`;
+
+          //sign message
+          (window as any).ethereum.request({
+            "method": "personal_sign",
+            "params": [
+              //   msg,
+              res.data.message,
+              accounts[0],
+            ]
+          }).then((msg: string) => {
+            console.log("SIGNED MSG", msg);
+            metamaskSignature.value = msg;
+            $app.api.eth.auth
+              .loginMetamask({ signature: msg, message: res.data.message, wallet_address: signer.address})
+              .then((jwtResponse: any) => {
+                // TODO falling user/me
+                $app.store.auth.setTokens(jwtResponse.data)
+                //confirmResponse.value = jwtResponse.data
+                //currentStep.value = Steps.Bonus
+              })
+              .then(async () => {
+                await $app.api.eth.auth.getUser().then((resp) => {
+                  $app.store.user.info = resp?.data
+                })
+
+                $app.store.auth.reInitData()
+                router.push('/personal/analytics/performance')
+              })
+              .catch((e) => {
+                if (e?.errors?.error?.message) {
+                  backendError.value = e.errors.error.message
+                } else {
+                  backendError.value = 'Something went wrong'
+                }
+              })
+            //currentStep.value = Steps.Email;
+          }).catch((err: any) => {
+            console.error(err);
+          });
+
+        }).catch((err: any) => {
+          console.log(err);
+        });
+      }).catch((err: any) => {
+        console.log(err);
+      });
+
+    }).catch((err: any) => {
+      console.error(err);
+    });
+
+  }).catch((err: any) => {
+    console.error(err);
+  });
 }
 
 const onForgotPasswordClick = () => {
