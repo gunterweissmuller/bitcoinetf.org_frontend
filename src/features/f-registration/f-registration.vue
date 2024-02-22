@@ -285,7 +285,6 @@ onMounted(() => {
   isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
 
   (window as any).ethereum.on("chainChanged", (chainId: string) => {
-      console.log(chainId);
       if (chainId !== "0x1") {
           metamaskError.value = "This network is not supported. Please change the network to Ethereum."
       } else if (chainId === "0x1") {
@@ -306,78 +305,46 @@ const handleDisconnect = () => {
   address.value = "";
 }
 
+const isMetamaskConnecting = ref(false);
+
 const handleMetamaskConnect = async () => {
+  // if metamask button is already clicked
+  if(isMetamaskConnecting.value) return;
+  isMetamaskConnecting.value = true;
+
   //if metamask is not installed
   if (!isMetamaskSupported.value) {
       window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+      isMetamaskConnecting.value = false;
       return;
   }
 
   currentSignup.value = SignupMethods.Metamask;
 
-  //get accounts
-  (window as any).ethereum.request({ method: "eth_requestAccounts" }).then((accounts: string[]) => {
-      address.value = accounts[0];
+  try {
+    const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
+    const chainId: string = await (window as any).ethereum.request({"method": "eth_chainId","params": []});
+    const responseSwitchChain: any = await(window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] });
+    const responseBackend: any = await axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message");
 
-      //get chain id
-      (window as any).ethereum.request({
-          "method": "eth_chainId",
-          "params": []
-      }).then((chainId: string) => {
-          // let chainIdDec = parseInt(chainId, 16);
+    metamaskSignatureMessage.value = responseBackend.data.message;
+    address.value = accounts[0];
+    const provider = new BrowserProvider((window as any).ethereum);
+    const signer = await provider.getSigner();
+    metamaskWalletAddress.value = signer.address;
 
-          //switch to eth chain
-          (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(async () => {
+    const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
 
-            axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message").then(async (res: any) => {
-              metamaskSignatureMessage.value = res.data.message;
+    console.log("SIGNED MSG", signedMsg);
+    metamaskSignature.value = signedMsg;
+    isMetamaskConnecting.value = false;
+    currentStep.value = Steps.Email;
 
-              const provider = new BrowserProvider((window as any).ethereum);
-              const signer = await provider.getSigner();
-              metamaskWalletAddress.value = signer.address;
+  } catch (e) {
+    console.error(e);
+    isMetamaskConnecting.value = false;
+  }
 
-              const message = new SiweMessage({
-                domain: window.location.host,
-                address: signer.address, // error with accounts[0] ?
-                statement: res.data.message,
-                uri: window.location.origin,
-                version: '1',
-                chainId: 1
-              });
-              //message.prepareMessage()
-
-              const msg = `${window.location.host} wants you to sign in with your Ethereum account:\n${accounts[0]}\n\nI accept the MetaMask Terms of Service: https://community.metamask.io/tos\n\nURI: ${window.location.origin}\nVersion: 1\nChain ID: 1\nNonce: 32891757\nIssued At: 2021-09-30T16:25:24.000Z`;
-
-              //sign message
-              (window as any).ethereum.request({
-                "method": "personal_sign",
-                "params": [
-                  //   msg,
-                  res.data.message,
-                  accounts[0],
-                ]
-              }).then((msg: string) => {
-                console.log("SIGNED MSG", msg);
-                metamaskSignature.value = msg;
-                currentStep.value = Steps.Email;
-              }).catch((err: any) => {
-                console.error(err);
-              });
-
-            }).catch((err: any) => {
-              console.log(err);
-            });
-          }).catch((err: any) => {
-              console.log(err);
-          });
-
-      }).catch((err: any) => {
-          console.error(err);
-      });
-
-  }).catch((err: any) => {
-      console.error(err);
-  });
 }
 
 const googleData : any = ref();
@@ -417,7 +384,13 @@ const metamaskSignatureMessage = ref('')
 const metamaskSignature = ref('')
 const metamaskWalletAddress = ref('')
 
+const isSubmitEmailForm = ref(false);
+
 const onSubmitEmailForm = async () => {
+
+  if(isSubmitEmailForm.value) return;
+  isSubmitEmailForm.value = true;
+
   backendError.value = ''
   const initPayload = {
     method: currentSignup.value,
@@ -451,6 +424,7 @@ const onSubmitEmailForm = async () => {
         $app.store.auth.setTokens(tokens.data)
         $app.store.authGoogle.setResponse({}, SignupMethods.Google);
         confirmResponse.value = tokens.data
+        isSubmitEmailForm.value = false;
         currentStep.value = Steps.Bonus
       })
       .then(async () => {
@@ -460,6 +434,7 @@ const onSubmitEmailForm = async () => {
         })
       .catch((e) => {
         console.error(e);
+        isSubmitEmailForm.value = false;
           if (e?.errors?.error?.message) {
               backendError.value = e.errors.error.message
           } else {
@@ -474,10 +449,11 @@ const onSubmitEmailForm = async () => {
     await $app.api.eth.auth
       .initMetamask(initPayload)
       .then(() => {
-        currentStep.value = Steps.Code
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
       })
       .catch((e) => {
-
+        isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -489,10 +465,11 @@ const onSubmitEmailForm = async () => {
     await $app.api.eth.auth
       .init(initPayload)
       .then(() => {
+        isSubmitEmailForm.value = false;
         currentStep.value = Steps.Code
       })
       .catch((e) => {
-
+        isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -552,7 +529,13 @@ const onCodeInput = async (codePayload) => {
   }
 }
 
+const isCodeContinueProcess = ref(false);
+
 const codeContinue = async () => {
+
+  if(isCodeContinueProcess.value) return;
+  isCodeContinueProcess.value = true;
+
   if(currentSignup.value === SignupMethods.Metamask) {
     backendError.value = ''
       await $app.api.eth.auth.
@@ -573,6 +556,7 @@ const codeContinue = async () => {
           })
         })
         .catch((e) => {
+          isCodeContinueProcess.value = false;
           if (e?.errors?.error?.message) {
             backendError.value = e.errors.error.message
           } else {
@@ -582,6 +566,7 @@ const codeContinue = async () => {
   } else {
     currentStep.value = Steps.Password
   }
+  isCodeContinueProcess.value = false;
 }
 
 const resendCodeClick = async () => {
@@ -634,9 +619,13 @@ function passwordFieldBlurHandler() {
   passwordErrorText.value = 'Required'
 }
 
-
+const isSubmitPasswordForm = ref(false);
 
 const onSubmitPasswordForm = async () => {
+
+  if(isSubmitPasswordForm.value) return;
+  isSubmitPasswordForm.value = true;
+
   backendError.value = ''
   await $app.api.eth.auth
       .confirm({
@@ -648,6 +637,7 @@ const onSubmitPasswordForm = async () => {
           // TODO falling user/me
           $app.store.auth.setTokens(jwtResponse.data)
           confirmResponse.value = jwtResponse.data
+          isSubmitPasswordForm.value = false;
           currentStep.value = Steps.Bonus
       })
       .then(async () => {
@@ -657,6 +647,7 @@ const onSubmitPasswordForm = async () => {
       })
       .catch((e) => {
         console.error(e);
+        isSubmitPasswordForm.value = false;
           if (e?.errors?.error?.message) {
               backendError.value = e.errors.error.message
           } else {
