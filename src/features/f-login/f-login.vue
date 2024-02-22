@@ -154,13 +154,21 @@ function passwordFieldBlurHandler() {
   passwordErrorText.value = 'Required'
 }
 
+const isSubmitEmailForm = ref(false);
+
 const onSubmitEmailForm = () => {
+
+  if(isSubmitEmailForm.value) return;
+  isSubmitEmailForm.value = true;
+
   $app.api.eth.auth
     .login({ email: $app.filters.trimSpaceIntoString(email.value), password: $app.filters.trimSpaceIntoString(password.value) })
     .then((jwtResponse: any) => {
       $app.store.auth.setTokens(jwtResponse.data)
     })
     .then(async () => {
+      isSubmitEmailForm.value = false;
+
       await $app.api.eth.auth.getUser().then((resp) => {
         $app.store.user.info = resp?.data
       })
@@ -169,7 +177,7 @@ const onSubmitEmailForm = () => {
       await router.push('/personal/analytics/performance')
     })
     .catch((e) => {
-
+      isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
         backendError.value = e.errors.error.message
       } else {
