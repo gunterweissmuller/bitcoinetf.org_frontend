@@ -87,7 +87,9 @@ const getTransactions = async () => {
     .then((response: any) => {
       transactions.value = response.data.data
       if (transactions.value?.length) {
-        transactions.value.pop()
+        if (transactions.value?.length >= 4) {
+          transactions.value.pop()
+        }
         transactions.value = transactions.value.map((item) => ({
           date: $app.filters.dayjs(item.created_at).format('D MMM YY'),
           time: $app.filters.dayjs(item.created_at).format('mm:ss'),
