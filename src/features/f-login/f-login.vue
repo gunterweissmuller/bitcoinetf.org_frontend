@@ -38,13 +38,13 @@
           </div>
         </div>
 
-        <div
+        <!--<div
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18" class="self-start aspect-square w-[18px]" />
             <div class="grow">Log in with Apple</div>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
 
