@@ -187,27 +187,50 @@
               You can request the code again via {{ timeLeft }} sec.
           </p>
           <a-button :disabled="timerStarted" class="f-registration__button-resend " text="Resend Link"
-              :loading="pincodeTrigger && !isCodeCorrect" variant="tertiary" @click="resendCodeClick" />
+               :loading="pincodeTrigger && !isCodeCorrect" variant="tertiary"  /> <!--@click="resendCodeClick" -->
 
           <button @click="currentStep=Steps.Invest">CONTINUE (test)</button>
 
       </template>
+      
 
       <template v-else-if="currentStep === Steps.Invest">
           
         <div class="flex flex-col justify-end items-start px-4 pt-2 max-w-[375px]">
           <header class="flex gap-4 text-3xl font-medium text-center whitespace-nowrap">
             <h1 class="grow text-zinc-800">I want to invest</h1>
-            <div class="grow justify-center px-2.5 text-gray-400 bg-sky-50 rounded"> $2,500 </div>
+
+            <div class=" grow flex justify-center text-gray-400 bg-sky-50 rounded">
+              <span class="flex items-center px-2">$</span>
+              <input v-model.number="investmentAmount" class="max-w-[105px] text-center flex-1 bg-transparent" type="number" placeholder="2,500"/>
+            </div>
+
           </header>
           <p class="mt-3.5 text-3xl font-medium text-center text-zinc-800">and receive my daily</p>
           <div class="flex gap-2 mt-3.5 font-medium text-center whitespace-nowrap text-zinc-800">
             <span class="grow text-3xl">dividends in</span>
-            <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
+
+            <div class="relative">
+              <div class="flex gap-2 font-medium text-center whitespace-nowrap text-zinc-800 rounded">
+                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 py-1.5 pr-6 pl-2.5 text-xl text-gray-400 bg-sky-50 rounded cursor-pointer">
+                  <NuxtImg src="/img/icons/colorful/usdt.svg" class="w-6 aspect-square cursor-pointer" alt="USDT logo" />
+                  <span>{{ selectedCurrency }}</span>
+                  <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="w-[18px] aspect-square cursor-pointer" alt="Down arrow icon" />
+                </div>
+              </div>
+              <div v-if="showDropdown" class="w-full absolute mt-1 bg-white shadow-lg rounded-lg z-10">
+                <ul class="text-sm font-medium text-gray-700">
+                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ currency }}</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
               <NuxtImg src="/img/icons/colorful/usdt.svg" class="self-start w-6 aspect-square" alt="USDT logo" />
               <span>USDT</span>
               <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="my-auto aspect-square w-[18px]" alt="Down arrow icon" />
-            </div>
+            </div> -->
+
           </div>
           <article class="flex flex-col justify-center self-stretch mt-6 whitespace-nowrap rounded-lg">
             <div class="flex overflow-hidden relative flex-col justify-center p-4 w-full aspect-[1.72] rounded-lg">
@@ -489,6 +512,7 @@ import { BrowserProvider, parseUnits } from "ethers";
 import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
 import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
+import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -512,7 +536,7 @@ const enum Steps {
 const confirmResponse = ref(null)
 
 const currentSignup = ref(SignupMethods.Email);
-const currentStep = ref(Steps.Purchase)
+const currentStep = ref(Steps.Invest)
 const backendError = ref('')
 
 const isOpenModal = ref(false)
@@ -982,6 +1006,22 @@ onMounted(() => {
       accordionRef.value?.open()
   }
 })
+
+// Invest Step
+const investmentAmount = ref();
+const selectedCurrency = ref('USDT');
+const currencies = ref(['USDT', 'BTC', 'ETH']); 
+const showDropdown = ref(false);
+
+const toggleCurrencyDropdown = () => {
+  showDropdown.value = !showDropdown.value;
+};
+
+const selectCurrency = (currency : any) => {
+  selectedCurrency.value = currency;
+  toggleCurrencyDropdown();
+}
+
 </script>
 
 <style lang="scss" src="./f-registration-buy.scss" />
