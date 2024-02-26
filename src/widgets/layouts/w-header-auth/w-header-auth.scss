@@ -109,7 +109,7 @@
 
     &__active {
       transform: translateY(0);
-      height: 100vh;
+      height: calc(100vh - 58px);
     }
 
     @include breakpoint($break-tablet) {
