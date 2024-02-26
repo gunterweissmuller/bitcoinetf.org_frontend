@@ -101,6 +101,7 @@ import { HttpStatusCode } from '~/src/shared/constants/httpStatusCodes'
 import { SiweMessage } from 'siwe'
 import { computed, ref } from 'vue'
 import { BrowserProvider, parseUnits } from "ethers";
+import { hostname } from '~/src/app/adapters/ethAdapter'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -212,7 +213,7 @@ onMounted(() => {
     }
   });
 
-  axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
+  axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
@@ -263,7 +264,7 @@ const handleMetamaskConnect = async () => {
       //switch to eth chain
       (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(async () => {
 
-        axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message").then(async (res: any) => {
+        axios.get(`https://${hostname}/v1/auth/provider/metamask/message`).then(async (res: any) => {
           metamaskSignatureMessage.value = res.data.message;
 
           const provider = new BrowserProvider((window as any).ethereum);

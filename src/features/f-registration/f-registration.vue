@@ -199,6 +199,7 @@ import { BrowserProvider, parseUnits } from "ethers";
 import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
 import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
+import { hostname } from '~/src/app/adapters/ethAdapter'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -326,7 +327,7 @@ const handleMetamaskConnect = async () => {
     const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
     const chainId: string = await (window as any).ethereum.request({"method": "eth_chainId","params": []});
     const responseSwitchChain: any = await(window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] });
-    const responseBackend: any = await axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message");
+    const responseBackend: any = await axios.get(`https://${hostname}/v1/auth/provider/metamask/message`);
 
     metamaskSignatureMessage.value = responseBackend.data.message;
     address.value = accounts[0];
@@ -353,7 +354,7 @@ const googleUrl = ref("");
 
 
 onMounted(() => {
-  axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
+  axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
