@@ -49,6 +49,34 @@
 }
 
 @font-face {
+  font-family: Dm;
+  src: local('dm-light'),
+  url('/assets/fonts/dm/static/dm-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Dm;
+  src: local('dm-semi-bold'),
+  url('/assets/fonts/dm/static/dm-semi-bold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Dm;
+  src: local('dm-black'),
+  url('/assets/fonts/dm/static/dm-black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
   font-family: Ubuntu;
   src: local('ubuntu-bold-italic'),
   url('/assets/fonts/ubuntu/static/ubuntu-bold-Italic.woff') format('woff'),

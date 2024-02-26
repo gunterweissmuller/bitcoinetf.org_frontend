@@ -1,43 +1,43 @@
-.a-input {
+.a-input-with-button {
   @include desktop-device {
-    &__input-container:hover &__input {
+    &__input-container:hover {
+     
       background-color: var(--surfaces-surface-2);
-      border-color: var(--accent-primary);
+        border: 1px solid var(--accent-primary);
 
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
     }
 
-    &__input-container:focus &__input {
+    &__input-container:focus {
       background-color: var(--surfaces-surface-2);
       border-color: var(--accent-primary);
 
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
     }
 
     &__input-container:hover &__icon {
-      background-color: var(--surfaces-surface-2);
-      color: var(--accent-primary);
+      
 
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
     }
   }
 
   @include desktop-device {
-    &--error &__input-container:hover &__input {
+    &--error &__input-container:hover {
       background-color: var(--surfaces-surface-2);
-      border-color: var(--accent-danger);
+      border: 1px solid var(--accent-danger);
     }
   }
 
   position: relative;
 
-  .a-input__icon {
+  .a-input-with-button__icon {
     position: absolute;
     z-index: 1;
     color: var(--color-icon-secondary);
@@ -115,44 +115,52 @@
       padding-left: torem(40);
     }
 
+    &-container {
+      border: 1px solid transparent;
+      &--focused {
+        background-color: var(--surfaces-surface-2);
+        border: 1px solid var(--accent-primary);
+      }
+    }
+
 
     &:hover {
-      background: var(--surfaces-surface-2);
-      border-color: var(--accent-primary);
+      
 
-      &::placeholder {
-        color: var(--text-primary);
-      }
-
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
 
     }
 
     &:focus {
-      background: var(--surfaces-surface-2);
-      border: torem(1) solid var(--accent-primary);
+      
+      
 
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
     }
 
     &:active {
-      border-color: var(--accent-primary);
-      background-color: var(--surfaces-surface-2);
+    
+     
 
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
     }
 
     &--focused {
-      background: var(--surfaces-surface-2);
-      border: torem(1) solid var(--accent-primary);
+      
+      .a-input-with-button__input-container {
+        background-color: var(--surfaces-surface-2);
+      border-color: var(--accent-primary);
 
-      .a-input__input-title--small {
+      }
+  
+      
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
     }
@@ -169,10 +177,6 @@
       line-height: torem(21);
       transition: .15s cubic-bezier(.4, 0, .2, 1);
       pointer-events: none;
-
-      &--bold {
-        font-weight: 600 ;
-      }
 
       &--small {
         position: absolute;
@@ -201,10 +205,6 @@
       color: var(--text-primary);
       background: transparent;
 
-      &--bold {
-        font-weight: 600;
-      }
-
       &--hidden {
         position: absolute;
         opacity: 0;
@@ -226,8 +226,7 @@
     }
 
     &--focused {
-      background: var(--surfaces-surface-2);
-      border-color: var(--accent-primary);
+     
     }
 
     &::placeholder {
@@ -255,22 +254,33 @@
     &:-webkit-autofill:hover,
     &:autofill:hover {
       background-color: var(--color-state-hover);
-      border-color: var(--accent-primary);
+      // border-color: var(--accent-primary);
       box-shadow: torem(0, 0, 0, 1000) var(--color-state-hover) inset;
 
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
     }
 
     &:-webkit-autofill:focus,
     &:autofill:focus {
-      border-color: var(--accent-primary);
+      // border-color: var(--accent-primary);
       box-shadow: torem(0, 0, 0, 1000) var(--color-state-focus) inset;
 
-      .a-input__input-title--small {
+      .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
+    }
+
+    &-button {
+      color: #ffffff;
+      background: var(--accent-primary);;
+      border-radius: 4px;
+      padding: var(--spacing-xs) var(--spacing-s);
+      width: fit-content;
+      margin-right: var(--spacing-m-1);
+      cursor: pointer;
+      font-size: 10px;
     }
   }
 
@@ -333,13 +343,12 @@
     }
 
     &:hover {
-      background-color: var(--color-state-hover);
-      border-color: var(--accent-success);
+      
     }
 
     &:focus {
-      background-color: var(--color-state-focus);
-      border-color: var(--accent-success);
+      
+     
     }
 
     &:-internal-autofill-selected {
@@ -361,4 +370,6 @@
   &--full-width {
     width: 100%;
   }
+
+  
 }

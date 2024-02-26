@@ -286,13 +286,19 @@ const computedAddress = computed(() => address.value.substring(0, 8) + '...');
 onMounted(() => {
   isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
 
-  (window as any).ethereum.on("chainChanged", (chainId: string) => {
-      if (chainId !== "0x1") {
-          metamaskError.value = "This network is not supported. Please change the network to Ethereum."
-      } else if (chainId === "0x1") {
-          metamaskError.value = "";
-      }
-  });
+  if(isMetamaskSupported.value) {
+    console.log("support");
+    (window as any).ethereum.on("chainChanged", (chainId: string) => {
+        if (chainId !== "0x1") {
+            metamaskError.value = "This network is not supported. Please change the network to Ethereum."
+        } else if (chainId === "0x1") {
+            metamaskError.value = "";
+        }
+    });
+  } else {
+    console.log("Metamask is not installed");
+  }
+  
 })
 
 const handleDisconnect = () => {
