@@ -100,9 +100,9 @@
           <header class="flex f-registration__invest-text font-medium text-center whitespace-nowrap"> <!--gap-4-->
             <h1 class="grow text-zinc-800">I want to invest</h1>
 
-            <div class="ml-4 grow flex justify-center text-gray-400 bg-sky-50 rounded">
-              <span class="flex items-center px-2">$</span>
-              <input v-model.number="investmentAmount" class="max-w-[105px] text-center flex-1 bg-transparent" type="number" placeholder="2,500"/>
+            <div class="ml-4 grow flex justify-center text-gray-400 font-semibold bg-sky-50 rounded">
+              <span class="flex items-center pl-2">$</span>
+              <input v-model.number="investmentAmount" class="max-w-[90px] flex-1 bg-transparent" type="number" placeholder="2,500"/>
             </div>
 
           </header>
@@ -112,15 +112,15 @@
 
             <div class="relative">
               <div class="flex gap-2 font-medium text-center whitespace-nowrap text-zinc-800 rounded">
-                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 py-1.5 pr-6 pl-2.5 text-xl text-gray-400 bg-sky-50 rounded cursor-pointer">
+                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 py-1.5 pr-2.5 pl-2.5 text-xl text-gray-400 bg-sky-50 rounded cursor-pointer">
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" />
-                  <span>{{ selectedCurrency.value }}</span>
-                  <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="w-[18px] aspect-square cursor-pointer" alt="Down arrow icon" />
+                  <span class="font-semibold text-black">{{ selectedCurrency.value }}</span>
+                  <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
                 </div>
               </div>
               <div v-if="showDropdown" class="w-full absolute mt-1 bg-white shadow-lg rounded-lg z-10">
                 <ul class="text-sm font-medium text-gray-700">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ currency.value }}</li>
+                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
               </div>
             </div>
@@ -163,7 +163,7 @@
 
       <template v-else-if="currentStep === Steps.Purchase">
         <main class="flex flex-col mx-auto w-full max-w-[480px]">
-          <header class="f-registration__purchase-head flex gap-4 self-stretch py-4 pr-4 pl-14 text-lg font-bold text-center whitespace-nowrap text-zinc-800">
+          <header class=" flex gap-4 self-stretch mb-6 py-4 pr-4 pl-14 text-lg font-bold text-center whitespace-nowrap text-zinc-800"> <!-- f-registration__purchase-head -->
             <h1 class="grow">Complete your purchase</h1>
             <m-popper hover :title="'Title Info'" :text="'Text Info'">
               <a-icon class="w-6 aspect-square" width="24" height="28" :name="Icon.MonoInfo" />
@@ -175,7 +175,7 @@
             <header class="flex gap-2 font-bold whitespace-nowrap cursor-pointer" @click="confirmShow = !confirmShow">
               <div class="justify-center items-center px-2.5 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">1</div>
               <h1 class="flex-auto text-base text-black">Confirm</h1>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="w-6 aspect-square" alt="Down arrow icon" />
+              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" />
             </header>
             <div v-if="confirmShow">
               <p class="mt-4 text-sm font-medium text-gray-400">Amount of Shares You’re Buying</p>
@@ -223,11 +223,11 @@
             </header>
           </section>
 
-          <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm">
+          <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm cursor-pointer">
             <header @click="payShow = !payShow" class="flex gap-2">
               <div class="justify-center items-center px-2 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">3</div>
               <h2 class="flex-auto text-base text-black">Pay</h2>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="w-6 aspect-square" alt="Down arrow icon" />
+              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" />
             </header>
 
             <div v-if="payShow">
