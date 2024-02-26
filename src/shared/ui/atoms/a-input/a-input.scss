@@ -170,6 +170,10 @@
       transition: .15s cubic-bezier(.4, 0, .2, 1);
       pointer-events: none;
 
+      &--bold {
+        font-weight: 600 ;
+      }
+
       &--small {
         position: absolute;
         top: torem(13);
@@ -196,6 +200,10 @@
       min-height: torem(20);
       color: var(--text-primary);
       background: transparent;
+
+      &--bold {
+        font-weight: 600;
+      }
 
       &--hidden {
         position: absolute;

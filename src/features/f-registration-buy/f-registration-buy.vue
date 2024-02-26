@@ -1,6 +1,7 @@
 <template>
   <div class="f-registration w-full">
-      <template v-if="currentStep === Steps.Terms">
+
+      <!-- <template v-if="currentStep === Steps.Terms">
           <div class='f-registration__back' @click='$router.back()'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
@@ -22,11 +23,10 @@
           </div>
           <a-button class="f-registration__button" :disabled="termsContinueDisabled" @click="termsContinue"
               text="Continue"></a-button>
+      </template> -->
 
-
-      </template>
-      <template v-else-if="currentStep === Steps.Choice">
-          <div class='f-registration__back' @click='currentStep = Steps.Terms'>
+      <template v-if="currentStep === Steps.Choice">
+          <div class='f-registration__back' @click='$router.back()'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
           <h3 class="f-registration__title">Sign up</h3>
@@ -35,85 +35,17 @@
               <nuxt-link to="/personal/login">log in here.</nuxt-link>
           </h5>
 
-          <div class="flex flex-col items-center pb-12">
-              <div @click="choiceToEmail"
-                  class="flex justify-center items-center px-16 py-5 mt-8 max-w-full text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg max-w-[410px] w-full max-md:px-5 cursor-pointer">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/mono/mail-light.svg" width="18" height="14"
-                          class="aspect-square w-[18px]" />
-                      <div class="grow">Sign up with Email</div>
-                  </div>
+          <div v-for="choice in choices">
+            <div @click="choice.hadnleClick" :class="['f-registration__choice-button', {'flex justify-center items-center mt-4 px-16 py-5 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer': choice.title !== 'Sign up with Email'}, {'flex justify-center items-center px-16 py-5 max-w-full text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg max-w-[410px] w-full max-md:px-5 cursor-pointer': choice.title == 'Sign up with Email'}]" >
+              <div class="flex gap-2 items-center">
+                  <NuxtImg :src="choice.icon" width="18" height="18"
+                      class="aspect-square w-[18px]" />
+                  <div class="grow">{{ choice.title }}</div>
               </div>
-
-
-
-              <div @click="handleMetamaskConnect"
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
-                      <div v-if="isMetamaskSupported" class="grow">Sign up with Metamask</div>
-                      <div v-else class="grow">Install Metamask Extension</div>
-                  </div>
-              </div>
-
-              <div @click="handleGoogleConnect"
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
-                      <div class="grow">Sign up with Google</div>
-                  </div>
-              </div>
-
-              <div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
-                      <div class="grow">Sign up with Apple</div>
-                  </div>
-              </div>
-
-              <div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/colorful/facebook-circle.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
-                      <div class="grow">Sign up with Facebook</div>
-                  </div>
-              </div>
-
-              <div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/colorful/walletConnect.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
-                      <div class="grow">Sign up with WalletConnect</div>
-                  </div>
-              </div>
-
-              <div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/colorful/whatsApp.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
-                      <div class="grow">Sign up with WhatsApp</div>
-                  </div>
-              </div>
-
-              <div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
-                  <div class="flex gap-2 items-center">
-                      <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
-                      <div class="grow">Sign up with Telegram</div>
-                  </div>
-              </div>
+            </div>
           </div>
-
-
       </template>
+
       <template v-else-if="currentStep === Steps.Email">
           <div class='f-registration__back' @click='currentStep = Steps.Choice'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
@@ -122,10 +54,6 @@
           <h5 class="f-registration__subtitle">
               Enter your details below and press Continue. We will send you a confirmation code shortly.
           </h5>
-          <!-- <h5 class="f-registration__subtitle">
-              We will send you a confirmation code shortly. If you already have an account, you can
-              <nuxt-link to="/personal/login">log in here.</nuxt-link>
-          </h5> -->
           <form class="f-registration__form" @submit.prevent="onSubmitEmailForm">
 
               <a-input v-model="firstName" label="First name" required class="f-registration__name" />
@@ -138,10 +66,6 @@
                 v-model="phone" />
 
               <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-              <!-- <m-accordion ref="accordionRef" class="f-registration__ref" title="Referral code">
-                  <a-input label="Referral code" class="f-registration__ref-code" v-model="refCode" />
-                  <a href="/" target="_blank" class="f-registration__ref-link">How to get referral codes</a>
-              </m-accordion> -->
 
               <a-button class="f-registration__button" :disabled="emailButtonDisabled" type="submit"
                   text="Continue"></a-button>
@@ -150,33 +74,10 @@
           </form>
       </template>
 
-      <!-- <template v-else-if="currentStep === Steps.Code">
-          <div class='f-registration__back' @click='currentStep = Steps.Email'>
-              <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-          </div>
-          <h3 class="f-registration__title">
-              Enter your <br />
-              confirmation code
-          </h3>
-          <h5 class="f-registration__subtitle">Please enter the 6 digit confirmation code we sent to your email.</h5>
-
-          <a-pincode-input class="f-registration__opt" v-model="emailCode" :error-text="pincodeErrorText"
-              :autofocus="true" :number-digits="6" name="pincode" @update:completed="onCodeInput" />
-          <p v-show="backendError" class="f-registration__error">{{ backendError }}</p>
-          <p v-show="timerStarted" class="f-registration__resend-code">
-              You can request the code again via {{ timeLeft }} sec.
-          </p>
-          <a-button :disabled="timerStarted" class="f-registration__button" text="Resend"
-              :loading="pincodeTrigger && !isCodeCorrect" variant="tertiary" @click="resendCodeClick" />
-
-          <a-button class="f-registration__button" :disabled="!isCodeCorrect" @click="() => codeContinue()"
-              text="Continue"></a-button>
-      </template> -->
-
       <template v-else-if="currentStep === Steps.Code">
-          <div class='f-registration__back' @click='currentStep = Steps.Email'>
+          <!-- <div class='f-registration__back' @click='currentStep = Steps.Email'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-          </div>
+          </div> -->
           <h3 class="f-registration__title">
               Confirm your Email
           </h3>
@@ -195,7 +96,6 @@
       
 
       <template v-else-if="currentStep === Steps.Invest">
-          
         <div class="f-registration__invest flex flex-col justify-end items-start px-4 pt-2 "> <!--max-w-[375px]-->
           <header class="flex f-registration__invest-text font-medium text-center whitespace-nowrap"> <!--gap-4-->
             <h1 class="grow text-zinc-800">I want to invest</h1>
@@ -233,9 +133,9 @@
 
           </div>
           <article class="flex flex-col justify-center self-stretch mt-6 whitespace-nowrap rounded-lg">
-            <div class="flex overflow-hidden relative flex-col justify-center p-4 w-full aspect-[1.72] rounded-lg">
+            <div class="f-registration__invest-font flex overflow-hidden relative flex-col justify-center p-4 w-full aspect-[1.72] rounded-lg">
               <NuxtImg :src="selectedCurrency.background" alt="Total Projected Payout backdrop" class="object-cover absolute inset-0 size-full" />
-              <p class="relative text-xs font-bold text-white text-opacity-80"> In Total Projected Payout </p>
+              <p class="relative text-xs font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
               <p class="relative mt-1 text-2xl font-black text-white"> $3,457,938.00 </p>
               <p class="relative mt-1 text-xs font-medium text-white text-opacity-80"> Interest + Original Investment Amount + Instant Bonus </p>
               <div class="relative shrink-0 mt-4 h-px bg-white bg-opacity-10"></div>
@@ -262,10 +162,8 @@
       </template>
 
       <template v-else-if="currentStep === Steps.Purchase">
-
         <main class="flex flex-col mx-auto w-full max-w-[480px]">
-
-          <header class="flex gap-4 self-stretch py-4 pr-4 pl-14 text-lg font-bold text-center whitespace-nowrap text-zinc-800">
+          <header class="f-registration__purchase-head flex gap-4 self-stretch py-4 pr-4 pl-14 text-lg font-bold text-center whitespace-nowrap text-zinc-800">
             <h1 class="grow">Complete your purchase</h1>
             <m-popper hover :title="'Title Info'" :text="'Text Info'">
               <a-icon class="w-6 aspect-square" width="24" height="28" :name="Icon.MonoInfo" />
@@ -273,7 +171,7 @@
             <!-- <NuxtImg src="/img/icons/mono/info.svg" class="w-6 aspect-square" alt="Confirmation icon" /> -->
           </header>
 
-          <section class="flex flex-col justify-end p-4 w-full bg-white rounded-lg shadow-sm">
+          <section class="f-registration__purchase-drop-down flex flex-col justify-end p-4 w-full bg-white rounded-lg shadow-sm">
             <header class="flex gap-2 font-bold whitespace-nowrap cursor-pointer" @click="confirmShow = !confirmShow">
               <div class="justify-center items-center px-2.5 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">1</div>
               <h1 class="flex-auto text-base text-black">Confirm</h1>
@@ -292,6 +190,7 @@
                 label="Referral code"
                 class="py-3 mt-4"
                 v-model="refCode"
+                
               />
 
               <p class="mt-4 text-sm font-medium text-gray-400">Investment Currency</p>
@@ -316,14 +215,15 @@
             </div>
           </section>
 
-          <section class="flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm">
+          <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm">
             <header class="flex gap-2">
               <div class="justify-center items-center px-2 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">2</div>
               <h2 class="flex-auto text-base text-black">Sign</h2>
               <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="w-6 aspect-square" alt="Down arrow icon" />
             </header>
           </section>
-          <section class="flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm">
+
+          <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm">
             <header @click="payShow = !payShow" class="flex gap-2">
               <div class="justify-center items-center px-2 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">3</div>
               <h2 class="flex-auto text-base text-black">Pay</h2>
@@ -332,63 +232,20 @@
 
             <div v-if="payShow">
               <template v-if="currentPayStep === StepsPay.PayWith">
-                <div @click="currentPayStep = StepsPay.Process" class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                  <div class="flex flex-col justify-center p-5 w-full bg-white">
-                    <div class="flex gap-1">
-                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="w-6 aspect-square" />
-                      <p class="flex-auto">Pay with USDT (TRC20)</p>
-                      <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                  <div class="flex flex-col justify-center p-5 w-full bg-white">
-                    <div class="flex gap-1">
-                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="w-6 aspect-square" />
-                      <p class="flex-auto">Pay with USDT (BEP-20)</p>
-                      <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                  <div class="flex flex-col justify-center p-5 w-full bg-white">
-                    <div class="flex gap-1">
-                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="w-6 aspect-square" />
-                      <p class="flex-auto">Pay with USDT (ERC-20)</p>
-                      <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                  <div class="flex flex-col justify-center p-5 w-full bg-white">
-                    <div class="flex gap-1">
-                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="w-6 aspect-square" />
-                      <p class="flex-auto">Pay with USDT (Liquid)</p>
-                      <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                  <div class="flex flex-col justify-center p-5 w-full bg-white">
-                    <div class="flex gap-1">
-                      <NuxtImg src="/img/icons/colorful/metamask.svg" alt="WalletConnect option" class="w-6 aspect-square" />
-                      <p class="flex-auto">Pay with WalletConnect</p>
-                      <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                  <div class="flex flex-col justify-center p-5 w-full bg-white">
-                    <div class="flex gap-1">
-                      <NuxtImg src="/img/icons/colorful/metamask.svg" alt="Metamask option" class="w-6 aspect-square" />
-                      <p class="flex-auto">Pay with Metamask</p>
-                      <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
+                <div v-for="pay in payWith">
+                  <div @click="currentPayStep = StepsPay.Process" class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
+                    <div class="flex flex-col justify-center p-5 w-full bg-white">
+                      <div class="flex gap-1">
+                        <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" />
+                        <p class="flex-auto font-semibold">{{ pay.title }}</p>
+                        <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
+                      </div>
                     </div>
                   </div>
                 </div>
               </template>
-              <template v-if="currentPayStep === StepsPay.Process">
 
+              <template v-if="currentPayStep === StepsPay.Process">
                 <div class="flex flex-col">
                   <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
                     <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" />
@@ -397,7 +254,7 @@
                     <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" />
                     <div class="flex flex-col flex-1 pr-9">
                       <p class="text-xs font-bold text-gray-400">Deposit Method:</p>
-                      <p class="text-base whitespace-nowrap text-zinc-800">Tether USDT (Tron, TRC-20)</p>
+                      <p class="text-base whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
                     </div>
                   </article>
 
@@ -411,6 +268,7 @@
                     :icon="Icon.ColorfulCopy"
                     position-icon="right"
                     @on-input-click="() => copyToClipboardAddress()"
+                    isBoldInput
                   />
                   <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
                     <div class="flex flex-col flex-1 pr-2.5">
@@ -430,6 +288,7 @@
                     :icon="Icon.ColorfulCopy"
                     position-icon="right"
                     @on-input-click="() => copyToClipboardAmount()"
+                    isBoldInput
                   />
                   <!-- <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
                     <div class="flex flex-col flex-1">
@@ -458,14 +317,10 @@
                   </footer>
                 </div>
               </template>
-              
             </div>
-
           </section>
         </main>
-
       </template>
-
 
       <template v-else-if="currentStep === Steps.Password">
           <div class='f-registration__back' @click='currentStep = Steps.Code'>
@@ -555,7 +410,7 @@ const enum StepsPay {
 const confirmResponse = ref(null)
 
 const currentSignup = ref(SignupMethods.Email);
-const currentStep = ref(Steps.Terms);
+const currentStep = ref(Steps.Choice);
 const backendError = ref('')
 
 const isOpenModal = ref(false)
@@ -628,6 +483,7 @@ function phoneFieldBlurHandler() {
 }
 
 // Choice step
+
 const choiceToEmail = () => {
   currentStep.value = Steps.Email;
   currentSignup.value = SignupMethods.Email;
@@ -732,6 +588,77 @@ const handleGoogleConnect = async () => {
     currentSignup.value = SignupMethods.Google;
     window.location.href = googleUrl.value;
 }
+
+const choices = ref([
+  {
+    title: 'Sign up with Email',
+    icon: "/img/icons/mono/mail-light.svg",
+    hadnleClick: choiceToEmail,
+  },
+  {
+    title: 'Sign up with Metamask',
+    icon: "/img/icons/colorful/metamask.svg",
+    hadnleClick: handleMetamaskConnect,
+  },
+  {
+    title: 'Sign up with Google',
+    icon: "/img/icons/colorful/google.svg",
+    hadnleClick: handleGoogleConnect,
+  },
+  {
+    title: 'Sign up with Apple',
+    icon: "/img/icons/mono/apple.svg",
+    hadnleClick: () => {},
+  },
+  {
+    title: 'Sign up with Facebook',
+    icon: "/img/icons/colorful/facebook-circle.svg",
+    hadnleClick: () => {},
+  },
+  {
+    title: 'Sign up with WalletConnect',
+    icon: "/img/icons/colorful/walletConnect.svg",
+    hadnleClick: () => {},
+  },
+  {
+    title: 'Sign up with WhatsApp',
+    icon: "/img/icons/colorful/whatsApp.svg",
+    hadnleClick: handleGoogleConnect,
+  },
+  {
+    title: 'Sign up with Telegram',
+    icon: "/img/icons/colorful/telegram2.svg",
+    hadnleClick: handleGoogleConnect,
+  }
+]);
+
+const payWith = ref([
+  {
+    icon: "/img/icons/colorful/usdt-trc20.svg",
+    title: "Pay with USDT (TRC20)"
+  },
+  {
+    icon: "/img/icons/colorful/usdt-trc20.svg",
+    title: "Pay with USDT (BEP-20)"
+  },
+  {
+    icon: "/img/icons/colorful/usdt-trc20.svg",
+    title: "Pay with USDT (ERC-20)"
+  },
+  {
+    icon: "/img/icons/colorful/usdt-trc20.svg",
+    title: "Pay with USDT (Liquid)"
+  },
+  {
+    icon: "/img/icons/colorful/metamask.svg",
+    title: "Pay with WalletConnect"
+  },
+  {
+    icon: "/img/icons/colorful/metamask.svg",
+    title: "Pay with Metamask"
+  },
+  
+]);
 
 // Ref code field
 const emailCode = ref('')

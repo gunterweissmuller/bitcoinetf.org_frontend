@@ -32,7 +32,7 @@
               <div :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }]">
                 {{ label }}
               </div>
-              <div class="a-input__input-text">{{ modelValue }}</div>
+              <div :class="['a-input__input-text']">{{ modelValue }}</div>
             </div>
             <a-icon
               v-if="icon"
@@ -54,12 +54,12 @@
             >
               <div
                 tabindex="-1"
-                :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }]"
+                :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }, ]"
               >
                 {{ label }}
               </div>
               <input
-                :class="['a-input__input-text', { 'a-input__input-text--hidden': !isFocused && !modelValue?.length }]"
+                :class="['a-input__input-text', { 'a-input__input-text--hidden': !isFocused && !modelValue?.length }, {'a-input__input-text--bold': props?.isBoldInput}]"
                 ref="inputFormRef"
                 :type="inputType"
                 :value="modelValue"
@@ -161,6 +161,7 @@ const props = withDefaults(
     textIconText?: string
     maxLength?: number | null
     imgTrue?:boolean
+    isBoldInput?:boolean
   }>(),
   {
     modelValue: '',
@@ -186,7 +187,8 @@ const props = withDefaults(
     textIcon: false,
     textIconText: '',
     maxLength: null,
-    imgTrue:false
+    imgTrue:false,
+    isBoldInput:false,
   },
 )
 
