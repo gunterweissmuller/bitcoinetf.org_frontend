@@ -176,6 +176,7 @@ $header-notification-height-fhd: 96;
       width: auto;
       margin: torem(0, 16);
       max-width: torem(410);
+      width: torem(410);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -183,6 +184,11 @@ $header-notification-height-fhd: 96;
       @include breakpoint($break-desktop-1024) {
         margin: torem(0) auto;
       }
+      @include breakpoint($break-mobile-475-minus) {
+        width: auto;
+        max-width: 100%;
+      }
+
     }
   }
 

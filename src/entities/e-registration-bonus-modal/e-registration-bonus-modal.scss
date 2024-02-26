@@ -1,5 +1,7 @@
 .e-registration-bonus-modal {
 
+  overflow: hidden;
+
   @include breakpoint($break-tablet) {
     border-radius: var(--spacing-m-3);
     background: var(--surfaces-surface-1);

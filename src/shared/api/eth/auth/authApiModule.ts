@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify'
 import { HTTPMethod } from '~/src/shared/constants/httpMethods'
 import { ApiErrorFlow } from '~/src/shared/toolkit/apiErrorFlow'
 import { INVERSIFY_TYPES } from '~/src/shared/types/inversifyTypes'
+import { SignupMethods } from '~/src/shared/constants/signupMethods'
 
 @injectable()
 export default class AuthApiModule {
@@ -14,8 +15,24 @@ export default class AuthApiModule {
     this.store = store
   }
 
-  async init(payload: { username: string; email: string; refcode?: string }) {
+  async init(payload: {
+    username: string;
+    email: string;
+    refcode?: string,
+    method?: SignupMethods,
+    signature?: string,
+    wallet_address?: string,
+    message?: string,
+  }) {
+
+    if(payload?.method === SignupMethods.Google) {
+      console.log(this.adapter);
+
+      // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
+    }
+
     try {
+
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/register/init',
         request: {
@@ -25,6 +42,61 @@ export default class AuthApiModule {
         operationDescription: 'User email registration',
         withoutPublic: true,
       })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initMetamask(payload: {
+    username: string;
+    email: string;
+    refcode?: string,
+    method?: SignupMethods,
+    signature?: string,
+    wallet_address?: string,
+    message?: string,
+  }) {
+
+    try {
+
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/init',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'User email registration',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initGoogle(payload: { username: string; email: string; refcode?: string, method?: SignupMethods }) {
+
+    try {
+
+      if(payload?.method === SignupMethods.Google) {
+        return await this.adapter.requestJsonAsync({
+          parameterValue: "auth/provider/google-auth/confirm",
+          request: {
+            method: HTTPMethod.POST,
+          },
+          data: payload,
+          operationDescription: 'User email registration',
+          withoutPublic: true,
+        });
+      }
+
     } catch (e) {
       if (e instanceof ApiErrorFlow) {
         throw new ApiErrorFlow(e.errors)
@@ -58,6 +130,26 @@ export default class AuthApiModule {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/register/confirm',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async confirmMetamask(payload: { email: string; code: string; fast: boolean }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/confirm',
         request: {
           method: HTTPMethod.POST,
         },
@@ -118,6 +210,26 @@ export default class AuthApiModule {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/login',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Authorization. Retrieving a JWT pair',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginMetamask(payload: { signature: string; message: string, wallet_address }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/login',
         request: {
           method: HTTPMethod.POST,
         },

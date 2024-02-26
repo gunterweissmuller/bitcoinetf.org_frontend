@@ -95,7 +95,7 @@ const props = withDefaults(
   },
 )
 const token = ref('')
-const siteKey = ref(process.dev ? '1x00000000000000000000AA' : '0x4AAAAAAAO0YJKv_riZdNZX')
+const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const backendError = ref('')
 
 const firstName = ref('')

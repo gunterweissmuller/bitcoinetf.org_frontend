@@ -26,104 +26,104 @@
 </template>
 
 <script setup lang="ts">
-import useMediaDevice from '~/composables/useMediaDevice'
-import { ref, watch } from 'vue'
-import { onClickOutside } from '@vueuse/core'
-import { useNuxtApp } from '#app'
-import MModalMobile from '~/src/shared/ui/molecules/m-modal-mobile/m-modal-mobile.vue'
+  import useMediaDevice from '~/composables/useMediaDevice'
+  import { ref, watch } from 'vue'
+  import { onClickOutside } from '@vueuse/core'
+  import { useNuxtApp } from '#app'
+  import MModalMobile from '~/src/shared/ui/molecules/m-modal-mobile/m-modal-mobile.vue'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: boolean
-    fullScreen?: boolean
-    maxWidth?: number | undefined
-    maxHeight?: number | undefined
-    kyc?: boolean
-  }>(),
-  {
-    modelValue: false,
-    fullScreen: false,
-    maxWidth: undefined,
-    maxHeight: undefined,
-    kyc: false,
-  },
-)
+  const props = withDefaults(
+    defineProps<{
+      modelValue: boolean
+      fullScreen?: boolean
+      maxWidth?: number | undefined
+      maxHeight?: number | undefined
+      kyc?: boolean
+    }>(),
+    {
+      modelValue: false,
+      fullScreen: false,
+      maxWidth: undefined,
+      maxHeight: undefined,
+      kyc: false,
+    },
+  )
 
-const emit = defineEmits(['update:modelValue', 'close'])
+  const emit = defineEmits(['update:modelValue', 'close'])
 
-const { isMobile } = useMediaDevice()
+  const { isMobile } = useMediaDevice()
 
-const myBottomSheet = ref()
+  const myBottomSheet = ref()
 
-const modalRef = ref(null)
+  const modalRef = ref(null)
 
-const isPageFinished = ref(false)
+  const isPageFinished = ref(false)
 
-const closeModal = () => {
-  isOpenModal.value = false
-  emit('close')
-}
-
-const isOpenModal = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emit('update:modelValue', value)
-  },
-})
-
-const isShowFullScreen = computed(() => {
-  if (!props.fullScreen) {
-    return !isMobile.value && isOpenModal.value
-  } else {
-    return isOpenModal.value
+  const closeModal = () => {
+    isOpenModal.value = false
+    emit('close')
   }
-})
 
-onClickOutside(modalRef, closeModal)
+  const isOpenModal = computed({
+    get() {
+      return props.modelValue
+    },
+    set(value) {
+      emit('update:modelValue', value)
+    },
+  })
 
-const onClose = () => {
-  isOpenModal.value = false
-  emit('close')
-}
-
-watch(
-  () => props.modelValue,
-  (value) => {
-    if (value) {
-      document.body.classList.add('no-scroll')
+  const isShowFullScreen = computed(() => {
+    if (!props.fullScreen) {
+      return !isMobile.value && isOpenModal.value
     } else {
-      document.body.classList.remove('no-scroll')
+      return isOpenModal.value
     }
-    if (isMobile.value && !props.fullScreen) {
-      value ? myBottomSheet.value?.open() : myBottomSheet.value?.close()
-    }
-  },
-)
+  })
 
-useNuxtApp().hook('page:finish', (): void => {
-  isPageFinished.value = true
-})
+  onClickOutside(modalRef, closeModal)
 
-watch(isOpenModal, (boolean) => {
-  const chatTemplate = document.querySelector('#chatbot-chat')
-
-  if (!boolean) {
-    const modal = document.querySelector('.bottom-sheet__main')
-    if (modal) {
-      modal.scrollTo(0, 0)
-    }
+  const onClose = () => {
+    isOpenModal.value = false
+    emit('close')
   }
 
-  if (chatTemplate) {
-    if (boolean) {
-      chatTemplate.classList.add('hidden')
-    } else {
-      chatTemplate.classList.remove('hidden')
+  watch(
+    () => props.modelValue,
+    (value) => {
+      if (value) {
+        document.body.classList.add('no-scroll')
+      } else {
+        document.body.classList.remove('no-scroll')
+      }
+      if (isMobile.value && !props.fullScreen) {
+        value ? myBottomSheet.value?.open() : myBottomSheet.value?.close()
+      }
+    },
+  )
+
+  useNuxtApp().hook('page:finish', (): void => {
+    isPageFinished.value = true
+  })
+
+  watch(isOpenModal, (boolean) => {
+    const chatTemplate = document.querySelector('#chatbot-chat')
+
+    if (!boolean) {
+      const modal = document.querySelector('.bottom-sheet__main')
+      if (modal) {
+        modal.scrollTo(0, 0)
+      }
     }
-  }
-})
+
+    if (chatTemplate) {
+      if (boolean) {
+        chatTemplate.classList.add('hidden')
+      } else {
+        chatTemplate.classList.remove('hidden')
+      }
+    }
+  })
 
 
 </script>

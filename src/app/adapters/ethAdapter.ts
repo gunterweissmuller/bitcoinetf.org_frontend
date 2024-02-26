@@ -7,7 +7,7 @@ import {ADAPTERS_ERRORS_CODES} from '~/src/shared/constants/ethCodes'
 
 const ETH_PREFIX = 'public'
 const ETH_PREFIX_WITHOUT_PUBLIC = ''
-const hostname = window.location.host === 'bitcoinetf.org' ? 'api.bitcoinetf.org' : 'api.stage.techetf.org'
+export const hostname = window.location.host === 'bitcoinetf.org' ? 'api.bitcoinetf.org' : 'api.stage.techetf.org'
 
 @injectable()
 export class EthAdapter extends ApiAdapter {
@@ -71,6 +71,11 @@ export class EthAdapter extends ApiAdapter {
         const msg = `\x1B[103m ${method}\x1B[30m |${operationDescription}: failed, status ${response.status} / ${response.statusText}`
         console.error(msg)
         const errors = await response.json()
+
+        if(response.status === HttpStatusCode.CONFLICT) {
+          throw new ApiErrorFlow(response.status as any);
+        }
+
         if (response.status === HttpStatusCode.BAD_REQUEST || response.status === HttpStatusCode.UNPROCESSABLE_ENTITY) {
           throw new ApiErrorFlow(errors)
         }

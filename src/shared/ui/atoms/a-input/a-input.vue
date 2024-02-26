@@ -63,6 +63,7 @@
                 ref="inputFormRef"
                 :type="inputType"
                 :value="modelValue"
+                :disabled="props?.disabled ? true : false"
                 @input="onInput"
                 @focusin="onFocus(true)"
                 @focusout="startValidate"
