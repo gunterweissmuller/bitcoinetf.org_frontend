@@ -100,6 +100,7 @@
     left: 0;
     width: 100%;
     // height: calc(100vh - env(safe-area-inset-bottom));
+    height: calc(var(--vh, 1vh) * 100);
     padding: torem(80) var(--spacing-m-1) var(--spacing-m-1) var(--spacing-m-1);
     background: var(--surfaces-surface-2);
     transform: translateY(-100%);
@@ -109,9 +110,9 @@
 
     &__active {
       transform: translateY(0);
-      height: 100vh;
-      width: 100vw;
-      position: absolute;
+      // height: 100vh;
+      // width: 100vw;
+      // position: absolute;
     }
 
     @include breakpoint($break-tablet) {
@@ -206,11 +207,11 @@
     }
 
     &-mobile {
-      position: absolute;
-      left: 0px;
-      bottom: var(--spacing-m-1);
-      width: 100%;
-      padding: 0px var(--spacing-m-1);
+      // position: absolute;
+      // left: 0px;
+      // bottom: var(--spacing-m-1);
+      // width: 100%;
+      // padding: 0px var(--spacing-m-1);
 
       @include breakpoint($break-tablet) {
         display: none;
