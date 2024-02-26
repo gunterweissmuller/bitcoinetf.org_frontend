@@ -110,9 +110,6 @@
 
     &__active {
       transform: translateY(0);
-      // height: 100vh;
-      // width: 100vw;
-      // position: absolute;
     }
 
     @include breakpoint($break-tablet) {
@@ -207,12 +204,6 @@
     }
 
     &-mobile {
-      // position: absolute;
-      // left: 0px;
-      // bottom: var(--spacing-m-1);
-      // width: 100%;
-      // padding: 0px var(--spacing-m-1);
-
       @include breakpoint($break-tablet) {
         display: none;
       }
