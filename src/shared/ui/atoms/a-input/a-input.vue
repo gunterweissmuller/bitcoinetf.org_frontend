@@ -59,7 +59,7 @@
                 {{ label }}
               </div>
               <input
-                :class="['a-input__input-text', { 'a-input__input-text--hidden': !isFocused && !modelValue?.length }, {'a-input__input-text--bold': props?.isBoldInput}]"
+                :class="['a-input__input-text', { 'a-input__input-text--hidden': !isFocused && !modelValue?.length }, {'a-input__input-text--bold': props?.isBoldInput}, {'a-input__input-text--small': props?.isTextInputSmall} ]"
                 ref="inputFormRef"
                 :type="inputType"
                 :value="modelValue"
@@ -162,6 +162,7 @@ const props = withDefaults(
     maxLength?: number | null
     imgTrue?:boolean
     isBoldInput?:boolean
+    isTextInputSmall?:boolean,
   }>(),
   {
     modelValue: '',
@@ -189,6 +190,7 @@ const props = withDefaults(
     maxLength: null,
     imgTrue:false,
     isBoldInput:false,
+    isTextInputSmall:false,
   },
 )
 

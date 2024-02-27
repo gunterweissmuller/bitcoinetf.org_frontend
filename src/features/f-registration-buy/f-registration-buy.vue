@@ -100,9 +100,9 @@
           <header class="flex f-registration__invest-text font-medium text-center whitespace-nowrap"> <!--gap-4-->
             <h1 class="grow text-zinc-800">I want to invest</h1>
 
-            <div class="ml-4 grow flex justify-center text-gray-400 font-semibold bg-sky-50 rounded">
-              <span class="flex items-center pl-2">$</span>
-              <input v-model.number="investmentAmount" class="max-w-[90px] flex-1 bg-transparent" type="number" placeholder="2,500"/>
+            <div class="f-registration__invest-input ml-4 grow flex justify-center text-gray-400 font-semibold bg-sky-50 rounded">
+              <span class="f-registration__invest-input-text flex items-center pl-2">$</span>
+              <input v-model="investmentAmountModified" class="f-registration__invest-input-text max-w-[90px] flex-1 bg-transparent" placeholder="2,500"/>
             </div>
 
           </header>
@@ -132,24 +132,24 @@
             </div> -->
 
           </div>
-          <article class="flex flex-col justify-center self-stretch mt-6 whitespace-nowrap rounded-lg">
+          <article class="f-registration__invest flex flex-col justify-center self-stretch mt-6 whitespace-nowrap rounded-lg">
             <div class="f-registration__invest-font flex overflow-hidden relative flex-col justify-center p-4 w-full aspect-[1.72] rounded-lg">
               <NuxtImg :src="selectedCurrency.background" alt="Total Projected Payout backdrop" class="object-cover absolute inset-0 size-full" />
-              <p class="relative text-xs font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-              <p class="relative mt-1 text-2xl font-black text-white"> $3,457,938.00 </p>
-              <p class="relative mt-1 text-xs font-medium text-white text-opacity-80"> Interest + Original Investment Amount + Instant Bonus </p>
+              <p class="f-registration__invest-title relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
+              <p class="f-registration__invest-sum relative font-black text-white"> $3,457,938.00 </p>
+              <p class="f-registration__invest-subtitle relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount + Instant Bonus </p>
               <div class="relative shrink-0 mt-4 h-px bg-white bg-opacity-10"></div>
               <div class="flex relative gap-0 mt-4">
-                <div class="flex flex-col flex-1">
-                  <p class="text-xs font-medium text-white text-opacity-80"> Daily </p>
-                  <p class="text-lg font-black text-white">$24.70</p>
+                <div class="f-registration__invest--stats flex flex-col flex-1">
+                  <p class="f-registration__invest--stats-title font-medium text-white text-opacity-80"> Daily </p>
+                  <p class="f-registration__invest--stats-value text-lg font-black text-white">$24.70</p>
                 </div>
                 <div class="flex flex-col flex-1">
-                  <p class="text-xs font-medium text-white text-opacity-80"> Total Profit </p>
+                  <p class="f-registration__invest--stats-title font-medium text-white text-opacity-80"> Total Profit </p>
                   <p class="text-lg font-black text-white">100%+</p>
                 </div>
                 <div class="flex flex-col flex-1">
-                  <p class="text-xs font-medium text-white text-opacity-80"> Monthly </p>
+                  <p class="f-registration__invest--stats-title font-medium text-white text-opacity-80"> Monthly </p>
                   <p class="text-lg font-black text-white">$24.70</p>
                 </div>
               </div>
@@ -172,9 +172,9 @@
           </header>
 
           <section class="f-registration__purchase-drop-down flex flex-col justify-end p-4 w-full bg-white rounded-lg shadow-sm">
-            <header class="flex gap-2 font-bold whitespace-nowrap cursor-pointer" @click="confirmShow = !confirmShow">
+            <header class="f-registration__purchase-title flex gap-2 font-bold whitespace-nowrap cursor-pointer" @click="confirmShow = !confirmShow">
               <div class="justify-center items-center px-2.5 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">1</div>
-              <h1 class="flex-auto text-base text-black">Confirm</h1>
+              <h1 class="f-registration__purchase-title-text flex-auto text-black">Confirm</h1>
               <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" />
             </header>
             <div v-if="confirmShow">
@@ -211,22 +211,22 @@
               <p class="self-start text-sm font-bold whitespace-nowrap text-zinc-800">Automatic with $100 min. threshold</p>
               <p class="mt-4 text-sm font-medium text-gray-400">Total Guaranteed Payout</p>
               <p class="text-sm font-bold text-zinc-800">US$14,700</p>
-              <button @click="() => {confirmShow = false; payShow = true}" class="w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">Continue</button>
+              <button @click="() => {confirmShow = false; payShow = true}" class="f-registration__purchase--confirm-button w-full justify-center items-center px-16 py-5 mt-4 font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">Continue</button>
             </div>
           </section>
 
           <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm">
-            <header class="flex gap-2">
+            <header class="f-registration__purchase-title flex gap-2">
               <div class="justify-center items-center px-2 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">2</div>
-              <h2 class="flex-auto text-base text-black">Sign</h2>
+              <h2 class="f-registration__purchase-title-text flex-auto text-black">Sign</h2>
               <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="w-6 aspect-square" alt="Down arrow icon" />
             </header>
           </section>
 
           <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm cursor-pointer">
-            <header @click="payShow = !payShow" class="flex gap-2">
+            <header @click="payShow = !payShow" class="f-registration__purchase-title flex gap-2">
               <div class="justify-center items-center px-2 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">3</div>
-              <h2 class="flex-auto text-base text-black">Pay</h2>
+              <h2 class="f-registration__purchase-title-text flex-auto text-black">Pay</h2>
               <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" />
             </header>
 
@@ -246,20 +246,20 @@
               </template>
 
               <template v-if="currentPayStep === StepsPay.Process">
-                <div class="flex flex-col">
+                <div class="f-registration__purchase--process flex flex-col">
                   <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
                     <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" />
                   </div>
                   <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
                     <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" />
                     <div class="flex flex-col flex-1 pr-9">
-                      <p class="text-xs font-bold text-gray-400">Deposit Method:</p>
-                      <p class="text-base whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
+                      <p class="f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
+                      <p class="f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
                     </div>
                   </article>
 
                   <a-input
-                    class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100"
+                    class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100 "
                     label="Deposit address on Tron chain:"
                     :model-value="'TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi'"
                     :disabled="true"
@@ -269,6 +269,7 @@
                     position-icon="right"
                     @on-input-click="() => copyToClipboardAddress()"
                     isBoldInput
+                    isTextInputSmall
                   />
                   <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
                     <div class="flex flex-col flex-1 pr-2.5">
@@ -955,6 +956,21 @@ onMounted(() => {
 
 // Invest Step
 const investmentAmount = ref();
+const investmentAmountModified = computed<string>({
+  get: () => investmentAmount.value, 
+  set: (newValue) => {
+    const originalNumber = newValue.split(",").join("");
+    investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+},
+});
+
+watch(
+  () => investmentAmount.value,
+  () => {
+      console.log(investmentAmount.value);
+  },
+)
+
 const currencies = ref([
   {
     value: 'USDT',
