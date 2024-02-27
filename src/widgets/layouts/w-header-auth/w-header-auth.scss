@@ -99,7 +99,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100vh - env(safe-area-inset-bottom));
+    // height: calc(100vh - env(safe-area-inset-bottom));
+    height: calc(var(--vh, 1vh) * 100);
     padding: torem(80) var(--spacing-m-1) var(--spacing-m-1) var(--spacing-m-1);
     background: var(--surfaces-surface-2);
     transform: translateY(-100%);
