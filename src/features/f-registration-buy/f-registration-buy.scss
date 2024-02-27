@@ -147,32 +147,71 @@
 
 
   &__invest {
-    &-text {
-      font-size: torem(28);
-      font-weight: 600;
+
+    &--card {
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--tether-500, #1BA27A);
+      position: relative;
+      padding: var(--spacing-m-1);
+
+
+      &-icon {
+        position: absolute;
+        right: var(--spacing-m-1);
+        top: var(--spacing-m-1);
+      }
+
+    }
+
+    &--text {
+      &-main {
+        font-size: torem(24);
+        font-weight: 500;
+      }
+
+      &-primary {
+        color: var(--text-primary)
+      }
+
+      &-secondary {
+        color: var(--text-secondary)
+      }
     }
 
     &-font {
       font-family: Dm, sans-serif;
     }
 
-    &-title {
-      font-size: torem(12);
-      font-weight: 700;
-      line-height: torem(26);
+    &--card {
+      &-title {
+        font-size: torem(14);
+        font-weight: 700;
+        line-height: torem(26);
+      }
+  
+      &-sum {
+        font-size: torem(24);
+        font-weight: 700;
+        line-height: torem(26);
+      }
+  
+      &-subtitle {
+        font-size: torem(10);
+        font-weight: 500;
+        // line-height: torem(26);
+        margin-top: var(--spacing-xs);
+        line-height: normal;
+      }
+
+      &-term {
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--text-inverse-tertiary);
+        line-height: normal;
+        margin-top: var(--spacing-s);
+      }
     }
 
-    &-sum {
-      font-size: torem(22);
-      font-weight: 900;
-      line-height: torem(26);
-    }
-
-    &-subtitle {
-      font-size: torem(10);
-      font-weight: 500;
-      line-height: torem(26);
-    }
+    
 
     &-input {
       line-height: 36px;
@@ -183,13 +222,32 @@
 
     &--stats {
       &-title {
-        font-size: 10px;
+        font-size: 12px;
+        font-weight: 700;
         line-height: torem(13);
       }
     }
   }
 
   &__purchase {
+
+    &-title {
+      position: relative;
+    }
+
+    &-back {
+      position: absolute;
+      left: 0px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    &-line {
+      border-top: 1px solid var(--Surfaces-Border-1, #F1F2F4);
+      margin: var(--spacing-m-1) 0rem;
+    }
+
     &-head {
       box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
       backdrop-filter: blur(32.5px);
