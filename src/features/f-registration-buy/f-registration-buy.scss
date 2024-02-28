@@ -3,7 +3,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: 60px;
+  padding-bottom: torem(60);
   font-family: Dm, sans-serif;
 
   @include breakpoint($break-desktop-1024) {
@@ -102,7 +102,7 @@
   &__agree {
     padding: var(--spacing-m-1);
     border-radius: var(--spacing-s);
-    border: 1px solid var(--surfaces-border-1);
+    border: torem(1) solid var(--surfaces-border-1);
     margin-bottom: var(--spacing-m-3);
   }
 
@@ -113,7 +113,7 @@
   &__button-resend {
     width: 100%;
     justify-content: start;
-    padding-left: 0px;
+    padding-left: 0rem;
   }
 
   &__opt {
@@ -140,15 +140,52 @@
 
   &__choice {
     &-button {
-      box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.16);
+      box-shadow: 0rem 0rem torem(9) 0rem rgba(0, 0, 0, 0.16);
     }
   }
 
 
+  &--text {
+    &-normal {
+      height: auto;
+      line-height: normal;
+    }
+  }
 
   &__invest {
 
+    &--text {
+      &-main {
+        font-size: torem(24);
+        font-weight: 500;
+      }
+
+      &-input {
+        font-size: torem(20);
+        font-weight: 500;
+        
+      }
+
+      &-primary {
+        color: var(--text-primary)
+      }
+
+      &-secondary {
+        color: var(--text-secondary)
+      }
+
+
+      &-spacing {
+        margin-top: var(--spacing-s);
+      }
+    }
+
+    &-font {
+      font-family: Dm, sans-serif;
+    }
+
     &--card {
+
       background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--tether-500, #1BA27A);
       position: relative;
       padding: var(--spacing-m-1);
@@ -160,124 +197,182 @@
         top: var(--spacing-m-1);
       }
 
-    }
-
-    &--text {
-      &-main {
-        font-size: torem(24);
-        font-weight: 500;
+      &-wrapper {
+        margin-top: var(--spacing-m-1);
       }
 
-      &-primary {
-        color: var(--text-primary)
-      }
-
-      &-secondary {
-        color: var(--text-secondary)
-      }
-    }
-
-    &-font {
-      font-family: Dm, sans-serif;
-    }
-
-    &--card {
       &-title {
         font-size: torem(14);
         font-weight: 700;
-        line-height: torem(26);
       }
   
       &-sum {
         font-size: torem(24);
         font-weight: 700;
-        line-height: torem(26);
+        margin-top: var(--spacing-xs);
       }
   
       &-subtitle {
         font-size: torem(10);
         font-weight: 500;
-        // line-height: torem(26);
         margin-top: var(--spacing-xs);
-        line-height: normal;
+      }
+
+      &-stats {
+        &-title {
+          font-size: torem(12);
+          font-weight: 700;
+        }
+  
+        &-value {
+          font-size: torem(18);
+          font-weight: 700;
+          margin-top: var(--spacing-xs);
+        }
+      }
+
+      &-rating {
+        color: var(--text-inverse-secondary);
+        font-size: torem(10);
+        font-weight: 500;
+        margin-top: var(--spacing-m-1);
+
+        &-stars {
+          margin: 0rem var(--spacing-s);
+        }
       }
 
       &-term {
-        font-size: 10px;
+        font-size: torem(10);
         font-weight: 500;
         color: var(--text-inverse-tertiary);
-        line-height: normal;
         margin-top: var(--spacing-s);
       }
     }
 
-    
-
     &-input {
-      line-height: 36px;
+      line-height: torem(36);
+      padding: var(--spacing-xs) var(--spacing-m-1);
+      background: var(--surfaces-selection);
+      border-radius: var(--spacing-xs);
+
       &-text {
-        line-height: 36px;
+        line-height: torem(36);
       }
     }
 
-    &--stats {
-      &-title {
-        font-size: 12px;
-        font-weight: 700;
-        line-height: torem(13);
+    &-select {
+      padding: var(--spacing-xs) var(--spacing-m-1);
+      gap: var(--spacing-s);
+      border-radius: var(--spacing-xs);
+      background: var(--surfaces-selection);
+
+      &-text {
+        color: var(--text-primary);
+        font-size: torem(20);
+        font-weight: 500;
       }
+
     }
+    
   }
 
   &__purchase {
 
     &-title {
       position: relative;
+      color: var(--text-primary);
+      font-size: torem(18);
+      font-weight: 700;
     }
 
     &-back {
       position: absolute;
-      left: 0px;
+      left: var(--spacing-m-1);
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
     }
 
     &-line {
-      border-top: 1px solid var(--Surfaces-Border-1, #F1F2F4);
+      border-top: torem(1) solid var(--surfaces-border-1);
       margin: var(--spacing-m-1) 0rem;
     }
 
     &-head {
-      box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
+      box-shadow: 0rem 0rem torem(6) 0rem rgba(0, 0, 0, 0.06);
       backdrop-filter: blur(32.5px);
-      border-radius: 0px 0px 16px 16px;
+      border-radius: 0rem 0rem torem(16) torem(16);
     }
 
-    &-drop-down {
-      box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
+    &-steps {
+      border: torem(1) solid var(--surfaces-border-1);
+      border-radius: var(--spacing-s);
+    
     }
 
-    &-title {
+    &--drop-down:first-child {
+      border-top: none;
+    }
+
+    &--drop-down {
+      border-top: torem(1) solid var(--surfaces-border-1);
+      padding: var(--spacing-m-1);
+      background: var(--surfaces-surface-1);
+
+      &-title {
+        &-text {
+          color: var(--text-primary);
+          font-size: torem(16);
+          font-weight: 700;
+        }
+  
+        &-number {
+          background: var(--surfaces-selection);
+          color: var(--accent-primary);
+          font-size: torem(14);
+          font-weight: 700;
+        }
+      }
+    }
+
+    &--step {
+      &-title {
+        color: var(--text-tertiary);
+        font-size: torem(14);
+        font-weight: 500;
+        margin-top: var(--spacing-m-1);
+      }
+
       &-text {
+        color: var(--text-primary);
+        font-size: torem(16);
+        font-weight: 500;
+
+        &-sale {
+          color: var(--accent-danger);
+          text-decoration-line: line-through;
+        }
+      }
+
+      &-btn {
         font-size: torem(16);
         font-weight: 700;
-        line-height: torem(20);
+        border-radius: var(--spacing-s);
+        background: var(--button-primary);
+        padding: var(--spacing-m-1) var(--spacing-l-2);
+        color: var(--text-inverse-primary);
+        margin-top: var(--spacing-m-1);
       }
+
     }
 
-    &--confirm {
-      &-button {
-        font-size: 16px;
-        font-weight: 700;
-        line-height: torem(20);
-      }
-    }
+   
 
     &--process {
       &-field {
         &-text {
-          font-size: 16px;
+          font-size: torem(16);
           font-weight: 400;
           line-height: torem(20);
         }
