@@ -65,6 +65,10 @@
         width: 100%;
         padding: torem(56) torem(16) torem(32) torem(16);
 
+        &-basic {
+          background: var(--surfaces-surface-1);
+        }
+
         @include breakpoint($break-tablet) {
           padding: 0;
           background-color: #00000054;
@@ -87,6 +91,11 @@
           background-image: url("/img/ref-bg.jpg");
           background-repeat: no-repeat;
           background-position: center top;
+
+          &-basic {
+            background: var(--surfaces-surface-1);
+          }
+
         }
       }
     }
@@ -132,6 +141,7 @@
       }
     }
   }
+
 }
 
 .bottom-sheet {

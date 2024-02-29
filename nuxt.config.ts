@@ -221,6 +221,11 @@ export default defineNuxtConfig({
           path: '/personal/wallet/bonus',
           file: '~/src/widgets/w-wallet/w-wallet.vue',
         },
+        {
+          name: 'personal-registration-buy',
+          path: '/personal/registration-buy',
+          file: '~/src/features/f-registration-buy/f-registration-buy.vue',
+        },
       ]
 
       routes.push(...extendedRoutes)

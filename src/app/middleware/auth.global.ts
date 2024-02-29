@@ -5,6 +5,11 @@ export default defineNuxtRouteMiddleware((to) => {
   const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-registration-buy']
   const includedRouteMask = to.path.includes('personal')
 
+
+  if (to.name === 'personal-registration-buy') {
+    return navigateTo({name: 'personal-registration-buy'})
+  }
+
   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
     return navigateTo({name: 'personal-login'})
   }

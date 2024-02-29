@@ -1,8 +1,8 @@
 <template>
   <Teleport to="body">
-    <div v-if="isShowFullScreen" :class="['m-modal-mask', { 'm-modal-fullscreen': fullScreen, 'm-modal-kyc': kyc }]">
-      <div class="m-modal-wrapper">
-        <div ref="modalRef" class="m-modal-container" :class="$attrs.class">
+    <div v-if="isShowFullScreen" :class="['m-modal-mask', { 'm-modal-fullscreen': fullScreen, 'm-modal-kyc': kyc}]">
+      <div :class="['m-modal-wrapper', { 'm-modal-wrapper-basic': bgBasic }]">
+        <div ref="modalRef" :class="['m-modal-container', { 'm-modal-container-basic': bgBasic } , $attrs.class]">
           <slot />
         </div>
       </div>
@@ -39,6 +39,7 @@
       maxWidth?: number | undefined
       maxHeight?: number | undefined
       kyc?: boolean
+      bgBasic?: boolean
     }>(),
     {
       modelValue: false,
@@ -46,6 +47,7 @@
       maxWidth: undefined,
       maxHeight: undefined,
       kyc: false,
+      bgBasic: false,
     },
   )
 
