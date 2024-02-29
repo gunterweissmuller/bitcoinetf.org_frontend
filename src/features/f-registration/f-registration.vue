@@ -87,7 +87,7 @@
 
       </template>
       <template v-else-if="currentStep === Steps.Email">
-          <div class='f-registration__back' @click='currentStep = Steps.Choice'>
+          <div class='f-registration__back' @click='handleEmailBack'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
           <h3 class="f-registration__title">Sign up with {{ currentSignup }}</h3>
@@ -272,6 +272,15 @@ function emailFieldBlurHandler() {
   emailErrorText.value = 'Required'
 }
 
+const handleEmailBack = () => {
+  currentStep.value = Steps.Choice;
+  firstName.value = '';
+  lastName.value = '';
+  email.value = '';
+  emailErrorText.value = '';
+  isEmailValid.value = false;
+}
+
 // Choice step
 const choiceToEmail = () => {
   currentStep.value = Steps.Email;
@@ -383,6 +392,7 @@ const handleGoogleConnect = async () => {
     window.location.href = googleUrl.value;
 }
 
+
 // Ref code field
 const emailCode = ref('')
 const pincodeErrorText = ref('')
@@ -432,6 +442,9 @@ const onSubmitEmailForm = async () => {
         $app.store.authGoogle.setResponse({}, SignupMethods.Google);
         confirmResponse.value = tokens.data
         isSubmitEmailForm.value = false;
+        firstName.value = '';
+        lastName.value = '';
+        email.value = '';
         currentStep.value = Steps.Bonus
       })
       .then(async () => {
