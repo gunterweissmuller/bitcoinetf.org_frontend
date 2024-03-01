@@ -74,6 +74,18 @@
                   </div>
               </div>
 
+
+            <div @click="handleTelegramConnect"
+                 class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
+              <div class="flex gap-2 items-center">
+                <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
+                         class="aspect-square w-[18px]" />
+                <div class="grow">Sign up with Telegram</div>
+              </div>
+            </div>
+
+            <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="BitcoinETFlogin_bot" data-size="large" data-auth-url="https://front.stage.techetf.org/auth/telegram" data-request-access="write"></component>
+
               <!--<div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
                   <div class="flex gap-2 items-center">
@@ -375,6 +387,13 @@ const handleGoogleDisconnect = () => {
 const handleGoogleConnect = async () => {
     currentSignup.value = SignupMethods.Google;
     window.location.href = googleUrl.value;
+}
+
+const handleTelegramConnect = async () => {
+  axios.get("https://api.stage.techetf.org/v1/auth/provider/telegram/credentials").then((r: any) => {
+    const s = '<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-login=\"samplebot\" data-size=\"large\" data-auth-url=\"\" data-request-access=\"write\"><\/script>';
+    document.body.append(s);
+  })
 }
 
 // Ref code field
