@@ -405,7 +405,7 @@ const handleGoogleConnect = async () => {
 }
 
 const handleTelegramConnect = async () => {
-  axios.get("https://api.stage.techetf.org/v1/auth/provider/telegram/credentials").then((r: any) => {
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
     const s = '<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-login=\"samplebot\" data-size=\"large\" data-auth-url=\"\" data-request-access=\"write\"><\/script>';
     document.body.append(s);
   })
@@ -591,7 +591,14 @@ const codeContinue = async () => {
         .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
-          })
+          });
+
+          const aAid = window.localStorage.getItem('a_aid');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({ query: `pap_id=${aAid}&utm_label=${window.localStorage.getItem('a_utm')}`}).then((r: any) => {
+              window.localStorage.removeItem('a_aid');
+            });
+          }
         })
         .catch((e) => {
           isCodeContinueProcess.value = false;
@@ -681,7 +688,14 @@ const onSubmitPasswordForm = async () => {
       .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
               $app.store.user.info = resp?.data
-          })
+          });
+
+        const aAid = window.localStorage.getItem('a_aid');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({ query: `pap_id=${aAid}&utm_label=${window.localStorage.getItem('a_utm')}`}).then((r: any) => {
+            window.localStorage.removeItem('a_aid');
+          });
+        }
       })
       .catch((e) => {
         console.error(e);

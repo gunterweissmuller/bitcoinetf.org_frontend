@@ -361,4 +361,22 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  async papSignUp({ query }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'pap/signup?' + query,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        operationDescription: 'Getting information about the user',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
 }
