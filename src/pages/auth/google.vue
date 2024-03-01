@@ -7,6 +7,7 @@
   import { onMounted } from 'vue';
   import axios from "axios";
   import { SignupMethods } from '~/src/shared/constants/signupMethods';
+  import { hostname } from '~/src/app/adapters/ethAdapter';
   
   const { $app } = useNuxtApp()
   const router = useRouter()
@@ -20,7 +21,7 @@
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
-    axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/init"+searchReplaced+refParam, {headers}).then((data: any) => {
+    axios.get(`https://${hostname}/v1/auth/provider/google-auth/init${searchReplaced}${refParam}`, {headers}).then((data: any) => {
         $app.store.authGoogle.setResponse({response: data.data.data, method: SignupMethods.Google});
 
         if(data.data.data.email) {

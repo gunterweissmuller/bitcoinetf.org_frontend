@@ -75,16 +75,16 @@
               </div>
 
 
-            <div @click="handleTelegramConnect"
+            <!--<div @click="handleTelegramConnect"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
                 <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
                          class="aspect-square w-[18px]" />
                 <div class="grow">Sign up with Telegram</div>
               </div>
-            </div>
+            </div>-->
 
-            <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="BitcoinETFlogin_bot" data-size="large" data-auth-url="https://front.stage.techetf.org/auth/telegram" data-request-access="write"></component>
+            <!--<component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="BitcoinETFlogin_bot" data-size="large" data-auth-url="https://front.stage.techetf.org/auth/telegram" data-request-access="write"></component>-->
 
               <!--<div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
@@ -99,7 +99,7 @@
 
       </template>
       <template v-else-if="currentStep === Steps.Email">
-          <div class='f-registration__back' @click='currentStep = Steps.Choice'>
+          <div class='f-registration__back' @click='handleEmailBack'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
           <h3 class="f-registration__title">Sign up with {{ currentSignup }}</h3>
@@ -211,6 +211,7 @@ import { BrowserProvider, parseUnits } from "ethers";
 import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
 import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
+import { hostname } from '~/src/app/adapters/ethAdapter'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -283,6 +284,15 @@ function emailFieldBlurHandler() {
   emailErrorText.value = 'Required'
 }
 
+const handleEmailBack = () => {
+  currentStep.value = Steps.Choice;
+  firstName.value = '';
+  lastName.value = '';
+  email.value = '';
+  emailErrorText.value = '';
+  isEmailValid.value = false;
+}
+
 // Choice step
 const choiceToEmail = () => {
   currentStep.value = Steps.Email;
@@ -297,13 +307,18 @@ const computedAddress = computed(() => address.value.substring(0, 8) + '...');
 onMounted(() => {
   isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
 
-  (window as any).ethereum.on("chainChanged", (chainId: string) => {
-      if (chainId !== "0x1") {
-          metamaskError.value = "This network is not supported. Please change the network to Ethereum."
-      } else if (chainId === "0x1") {
-          metamaskError.value = "";
-      }
-  });
+  if(isMetamaskSupported.value) {
+    (window as any).ethereum.on("chainChanged", (chainId: string) => {
+        if (chainId !== "0x1") {
+            metamaskError.value = "This network is not supported. Please change the network to Ethereum."
+        } else if (chainId === "0x1") {
+            metamaskError.value = "";
+        }
+    });
+  } else {
+    console.log("Metamask is not installed");
+  }
+
 })
 
 const handleDisconnect = () => {
@@ -338,7 +353,7 @@ const handleMetamaskConnect = async () => {
     const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
     const chainId: string = await (window as any).ethereum.request({"method": "eth_chainId","params": []});
     const responseSwitchChain: any = await(window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] });
-    const responseBackend: any = await axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message");
+    const responseBackend: any = await axios.get(`https://${hostname}/v1/auth/provider/metamask/message`);
 
     metamaskSignatureMessage.value = responseBackend.data.message;
     address.value = accounts[0];
@@ -365,7 +380,7 @@ const googleUrl = ref("");
 
 
 onMounted(() => {
-  axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
+  axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
@@ -445,6 +460,9 @@ const onSubmitEmailForm = async () => {
         $app.store.authGoogle.setResponse({}, SignupMethods.Google);
         confirmResponse.value = tokens.data
         isSubmitEmailForm.value = false;
+        firstName.value = '';
+        lastName.value = '';
+        email.value = '';
         currentStep.value = Steps.Bonus
       })
       .then(async () => {

@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%" @click="onInputClick">
-    <div class="a-input" :class="[inputClasses, $attrs.class]">
+    <div class="a-input-with-button" :class="[inputClasses, $attrs.class]">
       <a-tooltip
         :text="validationErrors[0]"
         position="top,left"
@@ -8,58 +8,58 @@
         :force-show-mode="errorInTooltip"
         :force-show="!validation.isValid"
       >
-        <label :class="['a-input__label-container', { 'a-input__label-container--custom': custom }]">
+        <label :class="['a-input-with-button__label-container', { 'a-input-with-button__label-container--custom': custom }]">
           <div
             v-if="custom"
             :class="[
-              'a-input__input-container',
-              'a-input__input-container--custom',
-              { 'a-input__input-container--focused': isFocused },
-              { 'a-input__input-container--open': $attrs.open },
+              'a-input-with-button__input-container',
+              'a-input-with-button__input-container--custom',
+              { 'a-input-with-button__input-container--focused': isFocused },
+              { 'a-input-with-button__input-container--open': $attrs.open },
             ]"
           >
             <div
               v-bind="$attrs"
               ref="inputRef"
               :class="[
-                'a-input__input',
-                'a-input__input--custom',
-                { 'a-input__input--focused': $attrs.open },
-                { 'a-input__input-icon-left': leftIcon },
+                'a-input-with-button__input',
+                'a-input-with-button__input--custom',
+                { 'a-input-with-button__input--focused': $attrs.open },
+                { 'a-input-with-button__input-icon-left': leftIcon },
               ]"
             >
-              <a-icon v-if="leftIcon" width="24" height="24" :class="[`a-input__left-icon`]" :name="leftIcon" :imgTrue="imgTrue"/>
-              <div :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }]">
+              <a-icon v-if="leftIcon" width="24" height="24" :class="[`a-input-with-button__left-icon`]" :name="leftIcon" :imgTrue="imgTrue"/>
+              <div :class="['a-input-with-button__input-title', { 'a-input-with-button__input-title--small': isFocused || modelValue?.length }]">
                 {{ label }}
               </div>
-              <div :class="['a-input__input-text']">{{ modelValue }}</div>
+              <div class="a-input-with-button__input-text">{{ modelValue }}</div>
             </div>
             <a-icon
               v-if="icon"
               width="18"
               height="18"
               :class="[
-                `a-input__icon`,
-                `a-input__icon--${positionIcon}`,
-                iconWithAction ? 'a-input__icon--clickable' : '',
+                `a-input-with-button__icon`,
+                `a-input-with-button__icon--${positionIcon}`,
+                iconWithAction ? 'a-input-with-button__icon--clickable' : '',
               ]"
               :name="icon"
               @click="iconClickHandler()"
             />
           </div>
-          <div v-else @click="focusOnInput" ref="inputContainerRef" class="a-input__input-container">
+          <div v-else @click="focusOnInput" ref="inputContainerRef" :class="['a-input-with-button__input-container', { 'a-input-with-button__input-container--focused': isFocused }]">
             <div
               ref="inputRef"
-              :class="['a-input__input', 'a-input__input--custom', { 'a-input__input--focused': isFocused }]"
+              :class="['a-input-with-button__input', 'a-input-with-button__input--custom', { 'a-input-with-button__input--focused': isFocused }]"
             >
               <div
                 tabindex="-1"
-                :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }, ]"
+                :class="['a-input-with-button__input-title', { 'a-input-with-button__input-title--small': isFocused || modelValue?.length }]"
               >
                 {{ label }}
               </div>
               <input
-                :class="['a-input__input-text', { 'a-input__input-text--hidden': !isFocused && !modelValue?.length }, {'a-input__input-text--bold': props?.isBoldInput}, {'a-input__input-text--small': props?.isTextInputSmall} ]"
+                :class="['a-input-with-button__input-text', { 'a-input-with-button__input-text--hidden': !isFocused && !modelValue?.length }]"
                 ref="inputFormRef"
                 :type="inputType"
                 :value="modelValue"
@@ -71,30 +71,39 @@
                 @focus="$emit('focus')"
                 @keydown="$emit('key-down', $event)"
               />
+
+
+              
             </div>
+            
+            <button class="a-input-with-button__input-button">Apply</button>
+            
             <template v-if="icon">
               <span
                 v-if="textIcon && textIconText"
                 :class="[
-                  `a-input__icon`,
-                  `a-input__icon--${positionIcon}`,
-                  iconWithAction ? 'a-input__icon--clickable' : '',
+                  `a-input-with-button__icon`,
+                  `a-input-with-button__icon--${positionIcon}`,
+                  iconWithAction ? 'a-input-with-button__icon--clickable' : '',
                 ]"
                 >{{ textIconText }}</span
               >
               <a-icon
                 v-else
                 :class="[
-                  `a-input__icon`,
-                  `a-input__icon--${positionIcon}`,
-                  iconWithAction ? 'a-input__icon--clickable' : '',
+                  `a-input-with-button__icon`,
+                  `a-input-with-button__icon--${positionIcon}`,
+                  iconWithAction ? 'a-input-with-button__icon--clickable' : '',
                 ]"
                 :name="icon"
                 @click="iconClickHandler()"
               />
+              
             </template>
 
-            <!--          <div v-show="isNotEmptyInputValue && !hiddenButton" class="a-input__btn-clear" @click="buttonEvent">-->
+            
+
+            <!--          <div v-show="isNotEmptyInputValue && !hiddenButton" class="a-input-with-button__btn-clear" @click="buttonEvent">-->
             <!--            <a-icon :name="inputButtonIcon" :width="24" :height="24" />-->
             <!--          </div>-->
           </div>
@@ -104,7 +113,7 @@
         <template v-for="(errorMsg, index) in validationErrors" :key="index">
           <p
             v-show="errorMsg"
-            :class="`a-input__error-text a-input__error-text--size-${props.errorSize}`"
+            :class="`a-input-with-button__error-text a-input-with-button__error-text--size-${props.errorSize}`"
             data-qa-selector="error"
           >
             {{ errorMsg }}
@@ -113,7 +122,7 @@
       </template>
       <p
         v-show="errorText.length"
-        :class="`a-input__error-text a-input__error-text--size-${props.errorSize}`"
+        :class="`a-input-with-button__error-text a-input-with-button__error-text--size-${props.errorSize}`"
         v-html="errorText"
         data-qa-selector="error"
       ></p>
@@ -161,8 +170,6 @@ const props = withDefaults(
     textIconText?: string
     maxLength?: number | null
     imgTrue?:boolean
-    isBoldInput?:boolean
-    isTextInputSmall?:boolean,
   }>(),
   {
     modelValue: '',
@@ -188,9 +195,7 @@ const props = withDefaults(
     textIcon: false,
     textIconText: '',
     maxLength: null,
-    imgTrue:false,
-    isBoldInput:false,
-    isTextInputSmall:false,
+    imgTrue:false
   },
 )
 
@@ -498,11 +503,11 @@ const updateCountryISO = () => {
 const inputClasses = computed<{
   [key: string]: boolean
 }>(() => ({
-  'a-input--icon': Boolean(props.icon),
-  [`a-input--icon-${props.positionIcon}`]: Boolean(props.positionIcon && props.icon),
-  'a-input--error': Boolean((isStartValidation.value && !validation.isValid) || props.errorText?.length),
-  'a-input--disabled': props.disabled,
-  'a-input--valid': validation.isValid,
+  'a-input-with-button--icon': Boolean(props.icon),
+  [`a-input-with-button--icon-${props.positionIcon}`]: Boolean(props.positionIcon && props.icon),
+  'a-input-with-button--error': Boolean((isStartValidation.value && !validation.isValid) || props.errorText?.length),
+  'a-input-with-button--disabled': props.disabled,
+  'a-input-with-button--valid': validation.isValid,
 }))
 
 const isFocused = ref<boolean>(false)
@@ -539,4 +544,4 @@ export default {
 }
 </script>
 
-<style lang="scss" src="./a-input.scss" />
+<style lang="scss" src="./a-input-with-button.scss" />
