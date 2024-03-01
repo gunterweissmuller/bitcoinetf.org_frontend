@@ -45,9 +45,9 @@ export default defineNuxtConfig({
       ]
     },
   },
-  devServer: {
+  /*devServer: {
     port: 80
-  },
+  },*/
   telemetry: false,
   experimental: {
     inlineSSRStyles: false,
