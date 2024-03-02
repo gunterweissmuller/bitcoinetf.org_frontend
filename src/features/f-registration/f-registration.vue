@@ -84,8 +84,6 @@
               </div>
             </div>
 
-            <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="BitcoinETFlogin_bot" data-size="large" data-auth-url="http://front.stage.techetf.org/auth/telegram" data-request-access="write"></component>
-
               <!--<div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
                   <div class="flex gap-2 items-center">
@@ -97,6 +95,18 @@
           </div>
 
 
+      </template>
+      <template v-else-if="currentStep === Steps.TelegramSign">
+        <div class='f-registration__back' @click='handleEmailBack'>
+          <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+        </div>
+        <h3 class="f-registration__title">Sign up with Telegram</h3>
+        <h5 class="f-registration__subtitle">
+        </h5>
+
+        <div class="flex flex-col items-center pb-12">
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="BitcoinETFlogin_bot" data-size="large" data-auth-url="http://front.stage.techetf.org/auth/telegram" data-request-access="write"></component>
+        </div>
       </template>
       <template v-else-if="currentStep === Steps.Email">
           <div class='f-registration__back' @click='handleEmailBack'>
@@ -212,6 +222,7 @@ import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
 import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
+import { document } from 'postcss'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -225,6 +236,7 @@ const enum Steps {
   Code = 'Code',
   Password = 'Password',
   Bonus = 'Bonus',
+  TelegramSign = 'TelegramSign'
 }
 
 const confirmResponse = ref(null)
@@ -406,8 +418,10 @@ const handleGoogleConnect = async () => {
 
 const handleTelegramConnect = async () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    const s = '<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-login=\"samplebot\" data-size=\"large\" data-auth-url=\"\" data-request-access=\"write\"><\/script>';
-    document.body.append(s);
+    currentStep.value = Steps.TelegramSign;
+    currentSignup.value = SignupMethods.Telegram;
+    //const s = '<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-login=\"samplebot\" data-size=\"large\" data-auth-url=\"\" data-request-access=\"write\"><\/script>';
+    //document.body.append(s);
   })
 }
 
@@ -719,6 +733,12 @@ onMounted(() => {
       refCode.value = route.query.referral
       accordionRef.value?.open()
   }
+
+  setTimeout(() => {
+    const event = new Event('click');
+    const el = window.document.getElementById('widget_login');
+    el.dispatchEvent(event);
+  }, 6000);
 })
 </script>
 
