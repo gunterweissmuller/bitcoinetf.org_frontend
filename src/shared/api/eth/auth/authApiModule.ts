@@ -362,13 +362,14 @@ export default class AuthApiModule {
     }
   }
 
-  async papSignUp({ query }) {
+  async papSignUp({ payload }) {
     try {
       return await this.adapter.requestJsonAsync({
-        parameterValue: 'pap/signup?' + query,
+        parameterValue: 'pap/signup',
         request: {
           method: HTTPMethod.POST,
         },
+        data: payload,
         operationDescription: 'Getting information about the user',
       })
     } catch (e) {

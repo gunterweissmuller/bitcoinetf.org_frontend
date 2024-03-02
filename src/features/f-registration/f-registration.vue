@@ -609,9 +609,13 @@ const codeContinue = async () => {
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
           if(aAid) {
-            $app.api.eth.auth.papSignUp({ query: `pap_id=${aAid}&utm_label=${window.localStorage.getItem('a_utm')}`}).then((r: any) => {
-              window.localStorage.removeItem('a_aid');
-              window.localStorage.removeItem('a_utm');
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+                window.localStorage.removeItem('a_aid');
+                window.localStorage.removeItem('a_utm');
             });
           }
         })
@@ -707,7 +711,11 @@ const onSubmitPasswordForm = async () => {
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
         if(aAid) {
-          $app.api.eth.auth.papSignUp({ query: `pap_id=${aAid}&utm_label=${window.localStorage.getItem('a_utm')}`}).then((r: any) => {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
             window.localStorage.removeItem('a_aid');
             window.localStorage.removeItem('a_utm');
           });
