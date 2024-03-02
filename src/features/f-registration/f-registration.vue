@@ -483,7 +483,19 @@ const onSubmitEmailForm = async () => {
             await $app.api.eth.auth.getUser().then((resp) => {
                 $app.store.user.info = resp?.data
             })
-        })
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+              window.localStorage.removeItem('a_aid');
+              window.localStorage.removeItem('a_utm');
+            });
+          }
+      })
       .catch((e) => {
         console.error(e);
         isSubmitEmailForm.value = false;
