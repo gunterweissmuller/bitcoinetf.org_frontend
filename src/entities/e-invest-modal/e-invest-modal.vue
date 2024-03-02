@@ -1,7 +1,7 @@
 <template>
     <div class="e-invest w-full">
       <m-modal bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow">
-        <div class="e-invest__invest flex flex-col justify-end items-start px-4 pt-2 "> <!--max-w-[375px]-->
+        <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
               <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest</h1>
   
@@ -73,7 +73,7 @@
                 <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
               </div>
             </article>
-            <button @click="handleContinue" tabindex="0" class="justify-center items-center self-stretch px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
+            <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
           </div>
       </m-modal>
     </div>

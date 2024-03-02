@@ -5,6 +5,7 @@
       { 'l-main--indent': isVisibleInfo },
       { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
+      { 'l-main--purchase': route.name === 'personal-purchase' },
     ]"
   >
     <w-header :list-info="listInfo" />
