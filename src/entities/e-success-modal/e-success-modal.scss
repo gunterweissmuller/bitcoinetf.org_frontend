@@ -1,0 +1,170 @@
+.e-success {
+
+    font-family: Dm, sans-serif;
+
+    &-wrapper {
+        margin: auto;
+        padding: var(--spacing-m-2) var(--spacing-m-2) var(--spacing-l-2) var(--spacing-m-2);
+        // border-radius: var(--spacing-m-3,);
+        // background: var(--surfaces-surface-1);
+        // box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
+    }
+
+    &--certificate {
+        position: relative;
+
+        // width: 298px;
+        // height: 196px;
+
+        width: 305px;
+        height: 200px;
+
+        &-img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        &-text {
+            position: absolute;
+            z-index: 2;
+
+            left: 42px; //32
+            bottom: 37px;
+
+            &-name {
+                color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.80));
+                font-size: 12px;
+                font-weight: 700;
+                font-family: Dm, sans-serif;
+            }
+
+            &-amount {
+                margin-top: var(--spacing-xs);
+                color: var(--Text-Inverse-Primary, #FFF);
+                font-size: 32px;
+                font-weight: 700;
+                font-family: Dm, sans-serif;
+
+                &-name {
+                    color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.80));
+                    font-size: 12px;
+                    font-weight: 700;
+                    font-family: Dm, sans-serif;
+                }
+
+            }
+
+            &-text {
+                margin-top: var(--spacing-xs);
+                color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.80));
+                font-size: 10px;
+                font-weight: 700;
+                font-family: Dm, sans-serif;
+            }
+
+
+        }
+
+
+    }
+
+    &--timer {
+        &-title {
+            margin-top: var(--spacing-m-3);
+            text-align: center;
+            font-family: Dm, sans-serif;
+        }
+
+        &-number {
+            border-radius: 2px;
+            padding: 10px;
+            background: var(--surfaces-selection);
+            font-family: Dm, sans-serif;
+
+            &-name {
+                margin-top: var(--spacing-xs);
+                font-family: Dm, sans-serif;
+            }
+        }
+
+
+    }
+
+    &-title {
+        margin-top: var(--spacing-m-3);
+        text-align: center;
+        font-family: Dm, sans-serif;
+    }
+
+    &-subtitle {
+        margin-top: var(--spacing-s);
+        margin-bottom: var(--spacing-m-3);
+        text-align: center;
+        font-family: Dm, sans-serif;
+    }
+
+    &-button {
+        border-radius: var(--spacing-s);
+        background: var(--button-primary);
+        padding: var(--spacing-m-1) var(--spacing-l-2);
+        font-family: Dm, sans-serif;
+    }
+
+    &--text {
+
+        &-normal {
+            height: auto;
+            line-height: normal;
+            font-family: Dm, sans-serif;
+        }
+
+        &-primary {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 700;
+            font-family: Dm, sans-serif;
+
+            &-big {
+                color: var(--text-primary);
+                font-size: 18px;
+                font-weight: 700;
+                font-family: Dm, sans-serif;
+            }
+        }
+
+        &-secondary {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 400;
+            font-family: Dm, sans-serif;
+        }
+
+        &-inverse {
+            color: var(--text-inverse-primary);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: Dm, sans-serif;
+        }
+
+        &-blue {
+            color: var(--accent-primary);
+            font-size: 14px;
+            font-weight: 700;
+            font-family: Dm, sans-serif;
+        }
+
+        &-gray {
+            color: var(--text-tertiary);
+            font-size: 10px;
+            font-weight: 700;
+            font-family: Dm, sans-serif;
+        }
+
+
+    }
+
+}

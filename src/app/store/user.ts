@@ -32,11 +32,15 @@ export const user = defineStore('user', {
     latestTrade:'',
 
     isInvestModalShow: false,
+    isInvestModalReinvest: false,
   }),
 
   actions: {
     setIsInvestModalShow(payload: { show: boolean }) {
       this.isInvestModalShow = payload.show;
+    },
+    setInvestModalReinvest(payload: { reinvest: boolean }) {
+      this.isInvestModalReinvest = payload.reinvest;
     },
   },
 

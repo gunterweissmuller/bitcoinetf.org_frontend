@@ -222,9 +222,9 @@ export default defineNuxtConfig({
           file: '~/src/widgets/w-wallet/w-wallet.vue',
         },
         {
-          name: 'personal-registration-buy',
-          path: '/personal/registration-buy',
-          file: '~/src/features/f-registration-buy/f-registration-buy.vue',
+          name: 'personal-purchaseb',
+          path: '/personal/purchaseb',
+          file: '~/src/pages/personal/purchaseb.vue',
         },
       ]
 

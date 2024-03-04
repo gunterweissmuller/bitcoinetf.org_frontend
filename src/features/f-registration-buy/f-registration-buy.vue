@@ -1,10 +1,12 @@
 <template>
   <div class="f-registration w-full">
 
+      <e-success-modal :isBtc="isBtcModal" :model-value="succesModalVisible" @update:modelValue="updateModalVisible"></e-success-modal>
+
       <template v-if="currentStep === Steps.Purchase">
         <main class="f-registration__purchase flex flex-col mx-auto w-full">
           <header class="f-registration__purchase-head f-registration__purchase-title f-registration--text-normal flex self-stretch whitespace-nowrap"> <!--  -->
-            <div class='f-registration__purchase-back' @click='currentStep = Steps.Code'>
+            <div class='f-registration__purchase-back' @click='router.back()'>
                 <a-icon class='' width='24' :name='Icon.MonoChevronLeft' />
             </div>
             
@@ -70,7 +72,12 @@
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
-                    <p class="f-registration__purchase--step-title f-registration--text-normal">Buy Back Guarantee (Per Share)</p>
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Buy Back Guarantee (Per Share) 
+                      
+                      <m-popper class="f-registration__purchase--step-title-popper" hover :title="purchasePopperText.title" :text="purchasePopperText.text">
+                        <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
+                      </m-popper>
+                    </p>
                     <p class="f-registration__purchase--step-text f-registration--text-normal">US$1</p>
                   </div>
 
@@ -217,7 +224,10 @@
                       Cancel Order
                     </button>
                     <footer class="text-center py-6">
-                      <a href="#" class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</a>
+                      <nuxt-link to="/personal/support" target="_blank">
+                        <span  class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</span>
+                      </nuxt-link>
+                    
                     </footer>
                   </div>
                 </template>
@@ -225,6 +235,10 @@
                 <template v-if="currentPayStep === StepsPay.Loading">
                   <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
                     <p class="mt-4 text-base text-black">Processing payment, please wait</p>
+
+                    <button @click="() => {isBtcModal = false; succesModalVisible = true}" style="color: var(--text-secondary)">Open success USDT</button>
+                    <button @click="() => {isBtcModal = true; succesModalVisible = true}" style="color: var(--text-secondary)">Open success BTC</button>
+
                     <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
                       Having trouble? Contact Support
                     </footer>
@@ -261,6 +275,9 @@ import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { useClipboard } from '@vueuse/core'
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
+import eSuccessModal from '~/src/entities/e-success-modal/e-success-modal.vue'
+
+const emit = defineEmits([ 'update'])
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -268,14 +285,7 @@ const route = useRoute()
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
-  Terms = 'Terms',
-  Choice = 'Choice',
-  Email = 'Email',
-  Code = 'Code',
-  Invest = 'Invest',
-  Purchase = 'Purchase',
-  Password = 'Password',
-  Bonus = 'Bonus',
+  Purchase = 'Purchase'
 }
 const enum StepsPay {
   PayWith = 'PayWith',
@@ -863,6 +873,11 @@ enum PurchaseSteps {
   Pay = 'Pay',
 }
 
+const purchasePopperText = {
+  title: 'Buy Back Guarantee',
+  text: 'The fund promises shareholders that at the end of the investment period, they can sell their shares back to the fund at the original purchase price of $1 per share. No fees, commissions, or discounts will be deducted, even if a discount was initially given. Each share is always valued at $1.'
+}
+
 const purchaseStepsArr = [{name: PurchaseSteps.Confirm, value: confirmShow},{name: PurchaseSteps.Sign, value: signShow},{name: PurchaseSteps.Pay, value: payShow}];
 
 const openPurchase = (target: any) => {
@@ -885,6 +900,16 @@ const togglePurchase = (target: any) => {
     }
   }
 
+}
+
+// Success modal
+
+const succesModalVisible = ref(false);
+const isBtcModal = ref(false);
+
+const updateModalVisible = (isVisible: boolean) => {
+  succesModalVisible.value = isVisible
+  emit('update', isVisible)
 }
 
 

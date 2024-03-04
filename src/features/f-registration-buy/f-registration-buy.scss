@@ -311,6 +311,18 @@
         font-size: torem(14);
         font-weight: 500;
 
+        position: relative;
+
+        &-popper {
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          margin: 0 !important;
+          z-index: 10;
+          cursor: pointer;
+        }
+
         // @include breakpoint($break-desktop-1024-minus) {
         //   margin-top: var(--spacing-m-1);
         // }
