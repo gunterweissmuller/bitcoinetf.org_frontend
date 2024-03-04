@@ -5,6 +5,7 @@
       { 'l-main--indent': isVisibleInfo },
       { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
+      { 'l-main--purchase': route.name === 'personal-purchase' },
     ]"
   >
     <w-header :list-info="listInfo" />
@@ -15,6 +16,7 @@
     <main v-show="loading" class="l-main__content">
       <div class="l-container">
         <e-buy-shares-success-modal :values="infoPayment" v-model="isOpenSuccessModal" />
+        <e-invest-modal />
         <slot />
       </div>
     </main>
@@ -35,6 +37,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import EProcessingPayment from '~/src/entities/e-processing-payment/e-processing-payment.vue'
 import { Centrifuge } from 'centrifuge'
 import EBuySharesSuccessModal from '~/src/entities/e-buy-shares-success-modal/e-buy-shares-success-modal.vue'
+import EInvestModal from '~/src/entities/e-invest-modal/e-invest-modal.vue'
 import MLoading from '~/src/shared/ui/molecules/m-loading/m-loading.vue'
 
 const route = useRoute()
@@ -75,6 +78,7 @@ const changeLoadingStatus = async (status: boolean) => {
 }
 
 const isVisibleInfo = computed(() => {
+  console.log("",route.name)
   return (
     route.name === 'personal-analytics' ||
     route.name === 'personal-performance' ||

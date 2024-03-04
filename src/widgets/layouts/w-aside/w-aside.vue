@@ -15,6 +15,7 @@
             text="Buy Bitcoin ETF Shares"
             @click="$router.push({ name: 'personal-buy-shares' })"
           />
+          
         </div>
         <div class="w-aside__links">
           <ul class="w-aside__list">

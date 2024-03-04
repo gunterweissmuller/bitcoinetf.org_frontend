@@ -1,367 +1,255 @@
 <template>
   <div class="f-registration w-full">
 
-      <!-- <template v-if="currentStep === Steps.Terms">
-          <div class='f-registration__back' @click='$router.back()'>
-              <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-          </div>
-          <h3 class="f-registration__title">Sign up</h3>
-          <h5 class="f-registration__subtitle">
-              If you already have an account, you can
-              <nuxt-link to="/personal/login">log in here.</nuxt-link>
-          </h5>
+      <e-success-modal :isBtc="isBtcModal" :model-value="succesModalVisible" @update:modelValue="updateModalVisible"></e-success-modal>
 
-          <div class="f-registration__agree">
-              <div class="mb-10">
-                  <a-checkbox v-model="registrationAgreedUS" id="with_email"
-                      label="<p >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>"
-                      single />
-              </div>
-              <a-checkbox v-model="registrationAgreedTerms" id="with_email1"
-                  label="<p>I agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal"
-                  single />
-          </div>
-          <a-button class="f-registration__button" :disabled="termsContinueDisabled" @click="termsContinue"
-              text="Continue"></a-button>
-      </template> -->
-
-      <template v-if="currentStep === Steps.Choice">
-          <div class='f-registration__back' @click='$router.back()'>
-              <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-          </div>
-          <h3 class="f-registration__title">Sign up</h3>
-          <h5 class="f-registration__subtitle">
-              If you already have an account, you can
-              <nuxt-link to="/personal/login">log in here.</nuxt-link>
-          </h5>
-
-          <div v-for="choice in choices">
-            <div @click="choice.hadnleClick" :class="['f-registration__choice-button', {'flex justify-center items-center mt-4 px-16 py-5 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer': choice.title !== 'Sign up with Email'}, {'flex justify-center items-center px-16 py-5 max-w-full text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg max-w-[410px] w-full max-md:px-5 cursor-pointer': choice.title == 'Sign up with Email'}]" >
-              <div class="flex gap-2 items-center">
-                  <NuxtImg :src="choice.icon" width="18" height="18"
-                      class="aspect-square w-[18px]" />
-                  <div class="grow">{{ choice.title }}</div>
-              </div>
+      <template v-if="currentStep === Steps.Purchase">
+        <main class="f-registration__purchase flex flex-col mx-auto w-full">
+          <header class="f-registration__purchase-head f-registration__purchase-title f-registration--text-normal flex self-stretch whitespace-nowrap"> <!--  -->
+            <div class='f-registration__purchase-back' @click='router.back()'>
+                <a-icon class='' width='24' :name='Icon.MonoChevronLeft' />
             </div>
-          </div>
-      </template>
-
-      <template v-else-if="currentStep === Steps.Email">
-          <div class='f-registration__back' @click='currentStep = Steps.Choice'>
-              <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-          </div>
-          <h3 class="f-registration__title">Sign up with {{ currentSignup }}</h3>
-          <h5 class="f-registration__subtitle">
-              Enter your details below and press Continue. We will send you a confirmation code shortly.
-          </h5>
-          <form class="f-registration__form" @submit.prevent="onSubmitEmailForm">
-
-              <a-input v-model="firstName" label="First name" required class="f-registration__name" />
-              <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google ? true : false" required
-                  :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
-                  v-model="email" />
-              <a-input class="f-registration__phone" type="tel" label="Phone Number" validation-reg-exp-key="tel" required
-                :error-text="phoneErrorText" @blur="phoneFieldBlurHandler" @update:is-valid="isPhoneValid = $event"
-                v-model="phone" />
-
-              <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-
-              <a-button class="f-registration__button" :disabled="emailButtonDisabled" type="submit"
-                  text="Continue"></a-button>
-
-              <p class="f-registration__error" v-if="backendError">{{ backendError }}</p>
-          </form>
-      </template>
-
-      <template v-else-if="currentStep === Steps.Code">
-          <!-- <div class='f-registration__back' @click='currentStep = Steps.Email'>
-              <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-          </div> -->
-          <h3 class="f-registration__title">
-              Confirm your Email
-          </h3>
-          <h5 class="f-registration__subtitle">Please open the link we just sent to your email in order to continue.</h5>
-
-          <p v-show="backendError" class="f-registration__error">{{ backendError }}</p>
-          <p v-show="timerStarted" class="f-registration__resend-code">
-              You can request the code again via {{ timeLeft }} sec.
-          </p>
-          <a-button :disabled="timerStarted" class="f-registration__button-resend " text="Resend Link"
-               :loading="pincodeTrigger && !isCodeCorrect" variant="tertiary"  /> <!--@click="resendCodeClick" -->
-
-          <button @click="currentStep=Steps.Invest">CONTINUE (test)</button>
-
-      </template>
-      
-
-      <template v-else-if="currentStep === Steps.Invest">
-        <div class="f-registration__invest flex flex-col justify-end items-start px-4 pt-2 "> <!--max-w-[375px]-->
-          <header class="flex f-registration__invest-text font-medium text-center whitespace-nowrap"> <!--gap-4-->
-            <h1 class="grow text-zinc-800">I want to invest</h1>
-
-            <div class="f-registration__invest-input ml-4 grow flex justify-center text-gray-400 font-semibold bg-sky-50 rounded">
-              <span class="f-registration__invest-input-text flex items-center pl-2">$</span>
-              <input v-model="investmentAmountModified" class="f-registration__invest-input-text max-w-[90px] flex-1 bg-transparent" placeholder="2,500"/>
+            
+            <h1 class="">Complete your purchase</h1>
+            
+            <div class="f-registration__purchase-steps-desktop">
+              <div @click="() => {openPurchase(purchaseStepsArr[0])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': confirmShow}]">1. Confirm</div>
+              <div @click="() => {openPurchase(purchaseStepsArr[1])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': signShow}]">2. Sign</div>
+              <div @click="() => {openPurchase(purchaseStepsArr[2])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
             </div>
 
           </header>
-          <p class="mt-3.5 f-registration__invest-text font-medium text-center text-zinc-800">and receive my daily</p>
-          <div class="flex gap-2 mt-3.5 f-registration__invest-text font-medium text-center whitespace-nowrap text-zinc-800">
-            <span class="grow">dividends in</span>
 
-            <div class="relative">
-              <div class="flex gap-2 font-medium text-center whitespace-nowrap text-zinc-800 rounded">
-                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 py-1.5 pr-2.5 pl-2.5 text-xl text-gray-400 bg-sky-50 rounded cursor-pointer">
-                  <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" />
-                  <span class="font-semibold text-black">{{ selectedCurrency.value }}</span>
-                  <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
+          <div class="f-registration__purchase-steps">
+            <section :class="['f-registration__purchase--drop-down flex flex-col justify-end w-full bg-white', {'f-registration__purchase--drop-down-desktop': confirmShow}]">
+              <header class="f-registration__purchase--drop-down-title flex gap-2 whitespace-nowrap cursor-pointer" @click="() => {togglePurchase(purchaseStepsArr[0])}">
+                <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2.5 h-6 text-center aspect-square rounded-full" aria-hidden="true">1</div>
+                <h1 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Confirm</h1>
+                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" />
+              </header>
+
+              
+
+              <div v-if="confirmShow">
+                <div class="f-registration__purchase-line"></div>
+
+                <div class="f-registration__purchase--confirm-wrapper">
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Amount of Shares You’re Buying</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal"> {{  '10,000'}} </p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Total Investment Amount</p>
+                    <div class="flex gap-2 justify-between">
+                      <p class="f-registration__purchase--step-text-sale f-registration--text-normal"> US${{ '10,000'}} </p>
+                      <p class="f-registration__purchase--step-text f-registration--text-normal flex-auto">US${{ '10,500'}} <span class="f-registration__purchase--step-title">(-$500 off)</span></p>
+                    </div>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item-full">
+                    <a-input-with-button 
+                      label="Referral code"
+                      v-model="refCode"
+                    />
+                  </div>
+
+                 
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Investment Currency</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">Tether (USDT)</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Interest Type</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">Fixed in USD</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Price per Share</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$1</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Buy Back Guarantee (Per Share) 
+                      
+                      <m-popper class="f-registration__purchase--step-title-popper" hover :title="purchasePopperText.title" :text="purchasePopperText.text">
+                        <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
+                      </m-popper>
+                    </p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$1</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Total Projected Interest</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">100%+</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Total Guaranteed Interest</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">42%</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Dividends Schedule</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">Daily in USDT</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Dividends Withdrawal</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">Automatic with $100 min. threshold</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Total Guaranteed Payout</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$14,700</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item-btn">
+                    <button @click="() => {openPurchase(purchaseStepsArr[1])}" class="f-registration__purchase--step-btn f-registration__button-continue f-registration--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">Continue</button>
+                  </div>
+                  
                 </div>
-              </div>
-              <div v-if="showDropdown" class="w-full absolute mt-1 bg-white shadow-lg rounded-lg z-10">
-                <ul class="text-sm font-medium text-gray-700">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
-              <NuxtImg src="/img/icons/colorful/usdt.svg" class="self-start w-6 aspect-square" alt="USDT logo" />
-              <span>USDT</span>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="my-auto aspect-square w-[18px]" alt="Down arrow icon" />
-            </div> -->
-
-          </div>
-          <article class="f-registration__invest flex flex-col justify-center self-stretch mt-6 whitespace-nowrap rounded-lg">
-            <div class="f-registration__invest-font flex overflow-hidden relative flex-col justify-center p-4 w-full aspect-[1.72] rounded-lg">
-              <NuxtImg :src="selectedCurrency.background" alt="Total Projected Payout backdrop" class="object-cover absolute inset-0 size-full" />
-              <p class="f-registration__invest-title relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-              <p class="f-registration__invest-sum relative font-black text-white"> $3,457,938.00 </p>
-              <p class="f-registration__invest-subtitle relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount + Instant Bonus </p>
-              <div class="relative shrink-0 mt-4 h-px bg-white bg-opacity-10"></div>
-              <div class="flex relative gap-0 mt-4">
-                <div class="f-registration__invest--stats flex flex-col flex-1">
-                  <p class="f-registration__invest--stats-title font-medium text-white text-opacity-80"> Daily </p>
-                  <p class="f-registration__invest--stats-value text-lg font-black text-white">$24.70</p>
-                </div>
-                <div class="flex flex-col flex-1">
-                  <p class="f-registration__invest--stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                  <p class="text-lg font-black text-white">100%+</p>
-                </div>
-                <div class="flex flex-col flex-1">
-                  <p class="f-registration__invest--stats-title font-medium text-white text-opacity-80"> Monthly </p>
-                  <p class="text-lg font-black text-white">$24.70</p>
-                </div>
-              </div>
-              <p class="relative mt-4 text-xs font-medium text-white text-opacity-80"> Safety Rating <span v-for="item in new Array(selectedCurrency.stars)">⭐</span> {{selectedCurrency.stars}}/10 </p>
-            </div>
-          </article>
-          <button @click="currentStep = Steps.Purchase" tabindex="0" class="justify-center items-center self-stretch px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
-        </div>
-
-      </template>
-
-      <template v-else-if="currentStep === Steps.Purchase">
-        <main class="flex flex-col mx-auto w-full max-w-[480px]">
-          <header class=" flex gap-4 self-stretch mb-6 py-4 pr-4 pl-14 text-lg font-bold text-center whitespace-nowrap text-zinc-800"> <!-- f-registration__purchase-head -->
-            <h1 class="grow">Complete your purchase</h1>
-            <m-popper hover :title="'Title Info'" :text="'Text Info'">
-              <a-icon class="w-6 aspect-square" width="24" height="28" :name="Icon.MonoInfo" />
-            </m-popper>
-            <!-- <NuxtImg src="/img/icons/mono/info.svg" class="w-6 aspect-square" alt="Confirmation icon" /> -->
-          </header>
-
-          <section class="f-registration__purchase-drop-down flex flex-col justify-end p-4 w-full bg-white rounded-lg shadow-sm">
-            <header class="f-registration__purchase-title flex gap-2 font-bold whitespace-nowrap cursor-pointer" @click="confirmShow = !confirmShow">
-              <div class="justify-center items-center px-2.5 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">1</div>
-              <h1 class="f-registration__purchase-title-text flex-auto text-black">Confirm</h1>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" />
-            </header>
-            <div v-if="confirmShow">
-              <p class="mt-4 text-sm font-medium text-gray-400">Amount of Shares You’re Buying</p>
-              <p class="text-sm font-bold text-zinc-800"> {{ investmentAmount ?? '10,000'}} </p>
-              <p class="mt-4 text-sm font-medium text-gray-400">Total Investment Amount</p>
-              <div class="flex gap-2 justify-between text-sm font-bold">
-                <p class="text-red-600 line-through"> US${{ investmentAmount ?? '10,000'}} </p>
-                <p class="flex-auto text-zinc-800">US${{ investmentAmount ? investmentAmount+500 : '10,500'}} (-$500 off)</p>
-              </div>
-
-              <a-input-with-button 
-                label="Referral code"
-                class="py-3 mt-4"
-                v-model="refCode"
                 
-              />
+              </div>
+            </section>
 
-              <p class="mt-4 text-sm font-medium text-gray-400">Investment Currency</p>
-              <p class="text-sm font-bold text-zinc-800">Tether (USDT)</p>
-              <p class="self-start mt-4 text-sm font-medium text-gray-400 whitespace-nowrap">Interest Type</p>
-              <p class="self-start text-sm font-bold whitespace-nowrap text-zinc-800">Fixed in USD</p>
-              <p class="self-start mt-4 text-sm font-medium text-gray-400 whitespace-nowrap">Price per Share</p>
-              <p class="self-start text-sm font-bold text-zinc-800">US$1</p>
-              <p class="mt-4 text-sm font-medium text-gray-400">Buy Back Guarantee (Per Share)</p>
-              <p class="text-sm font-bold text-zinc-800">US$1</p>
-              <p class="mt-4 text-sm font-medium text-gray-400">Total Projected Interest</p>
-              <p class="text-sm font-bold text-zinc-800">100%+</p>
-              <p class="mt-4 text-sm font-medium text-gray-400">Total Guaranteed Interest</p>
-              <p class="text-sm font-bold text-zinc-800">42%</p>
-              <p class="mt-4 text-sm font-medium text-gray-400">Dividends Schedule</p>
-              <p class="text-sm font-bold text-zinc-800">Daily in {{ selectedCurrency.value ?? 'USDT' }}</p>
-              <p class="self-start mt-4 text-sm font-medium text-gray-400">Dividends Withdrawal</p>
-              <p class="self-start text-sm font-bold whitespace-nowrap text-zinc-800">Automatic with $100 min. threshold</p>
-              <p class="mt-4 text-sm font-medium text-gray-400">Total Guaranteed Payout</p>
-              <p class="text-sm font-bold text-zinc-800">US$14,700</p>
-              <button @click="() => {confirmShow = false; payShow = true}" class="f-registration__purchase--confirm-button w-full justify-center items-center px-16 py-5 mt-4 font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">Continue</button>
-            </div>
-          </section>
+            <section :class="['f-registration__purchase--drop-down flex flex-col justify-center p-4 w-full font-bold whitespace-nowrap bg-white rounded-lg', {'f-registration__purchase--drop-down-desktop': signShow}]" >
+              <header @click="() => {togglePurchase(purchaseStepsArr[1])}" class="f-registration__purchase--drop-down-title flex gap-2">
+                <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">2</div>
+                <h2 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Sign</h2>
+                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': signShow}]" alt="Down arrow icon" />
+              </header>
 
-          <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm">
-            <header class="f-registration__purchase-title flex gap-2">
-              <div class="justify-center items-center px-2 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">2</div>
-              <h2 class="f-registration__purchase-title-text flex-auto text-black">Sign</h2>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="w-6 aspect-square" alt="Down arrow icon" />
-            </header>
-          </section>
+              <div v-if="signShow">
+                <div class="f-registration__purchase-line"></div>
+                <div class="f-registration__agree">
+                    <div class="mb-10">
+                        <a-checkbox v-model="registrationAgreedUS" id="with_email"
+                            label="<p style='white-space: break-spaces' >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>"
+                            single />
+                    </div>
+                    <a-checkbox v-model="registrationAgreedTerms" id="with_email1"
+                        label="<p style='white-space: break-spaces' >I agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal"
+                        single />
+                </div>
+                <a-button variant="secondary" class="f-registration__button f-registration__button-back" @click="() => {openPurchase(purchaseStepsArr[0])}"
+                    text="Back"></a-button>
+                <a-button class="f-registration__button f-registration__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2])}"
+                    text="Continue"></a-button>
+              </div>
+            </section>
 
-          <section class="f-registration__purchase-drop-down flex flex-col justify-center p-4 mt-2 w-full font-bold whitespace-nowrap bg-white rounded-lg shadow-sm cursor-pointer">
-            <header @click="payShow = !payShow" class="f-registration__purchase-title flex gap-2">
-              <div class="justify-center items-center px-2 h-6 text-sm text-center text-blue-600 bg-sky-50 aspect-square rounded-full" aria-hidden="true">3</div>
-              <h2 class="f-registration__purchase-title-text flex-auto text-black">Pay</h2>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" />
-            </header>
+            <section :class="['f-registration__purchase--drop-down flex flex-col justify-center p-4 w-full font-bold whitespace-nowrap bg-white cursor-pointer', {'f-registration__purchase--drop-down-desktop': payShow}]">
+              <header @click="() => {togglePurchase(purchaseStepsArr[2])}" class="f-registration__purchase--drop-down-title flex gap-2">
+                <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">3</div>
+                <h2 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Pay</h2>
+                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" />
+              </header>
 
-            <div v-if="payShow">
-              <template v-if="currentPayStep === StepsPay.PayWith">
-                <div v-for="pay in payWith">
-                  <div @click="currentPayStep = StepsPay.Process" class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                    <div class="flex flex-col justify-center p-5 w-full bg-white">
-                      <div class="flex gap-1">
-                        <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" />
-                        <p class="flex-auto font-semibold">{{ pay.title }}</p>
-                        <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
+              <div v-if="payShow">
+                <div class="f-registration__purchase-line"></div>
+                <template v-if="currentPayStep === StepsPay.PayWith">
+                  <div v-for="pay in payWith">
+                    <div @click="currentPayStep = StepsPay.Process" class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
+                      <div class="flex flex-col justify-center p-5 w-full bg-white">
+                        <div class="flex gap-1">
+                          <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" />
+                          <p class="flex-auto font-semibold">{{ pay.title }}</p>
+                          <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </template>
+                </template>
 
-              <template v-if="currentPayStep === StepsPay.Process">
-                <div class="f-registration__purchase--process flex flex-col">
-                  <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
-                    <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" />
+                <template v-if="currentPayStep === StepsPay.Process">
+                  <div class="f-registration__purchase--process flex flex-col">
+                    <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
+                      <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" />
+                    </div>
+                    <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
+                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" />
+                      <div class="flex flex-col flex-1 pr-9">
+                        <p class="f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
+                        <p class="f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
+                      </div>
+                    </article>
+
+                    <a-input
+                      class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100 "
+                      label="Deposit address on Tron chain:"
+                      :model-value="'TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi'"
+                      :disabled="true"
+                      :text-icon="addressCopied"
+                      text-icon-text="Copied!"
+                      :icon="Icon.ColorfulCopy"
+                      position-icon="right"
+                      @on-input-click="() => copyToClipboardAddress()"
+                      isBoldInput
+                      isTextInputSmall
+                    />
+                    <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
+                      <div class="flex flex-col flex-1 pr-2.5">
+                        <p class="text-xs font-bold text-gray-400">Deposit address on Tron chain:</p>
+                        <p class="text-xs font-medium text-zinc-800">TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi</p>
+                      </div>
+                      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
+                    </article> -->
+
+                    <a-input
+                      class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100"
+                      label="Amount"
+                      :model-value="'1,002.93 USDT'"
+                      :disabled="true"
+                      :text-icon="amountCopied"
+                      text-icon-text="Copied!"
+                      :icon="Icon.ColorfulCopy"
+                      position-icon="right"
+                      @on-input-click="() => copyToClipboardAmount()"
+                      isBoldInput
+                    />
+                    <!-- <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
+                      <div class="flex flex-col flex-1">
+                        <p class="text-xs font-bold text-gray-400">Amount</p>
+                        <p class="text-base text-zinc-800">1,002.93 USDT</p>
+                      </div>
+                      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
+                    </article> -->
+                    <button @click="currentPayStep = StepsPay.Loading" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
+                      I Have Paid
+                    </button>
+                    <button @click="currentPayStep = StepsPay.PayWith" class="block w-full justify-center items-center px-16 py-5 mt-2 text-base font-bold text-blue-600 whitespace-nowrap bg-sky-100 rounded-lg" tabindex="0">
+                      Cancel Order
+                    </button>
+                    <footer class="text-center py-6">
+                      <nuxt-link to="/personal/support" target="_blank">
+                        <span  class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</span>
+                      </nuxt-link>
+                    
+                    </footer>
                   </div>
-                  <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
-                    <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" />
-                    <div class="flex flex-col flex-1 pr-9">
-                      <p class="f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
-                      <p class="f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
-                    </div>
-                  </article>
+                </template>
 
-                  <a-input
-                    class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100 "
-                    label="Deposit address on Tron chain:"
-                    :model-value="'TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi'"
-                    :disabled="true"
-                    :text-icon="addressCopied"
-                    text-icon-text="Copied!"
-                    :icon="Icon.ColorfulCopy"
-                    position-icon="right"
-                    @on-input-click="() => copyToClipboardAddress()"
-                    isBoldInput
-                    isTextInputSmall
-                  />
-                  <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
-                    <div class="flex flex-col flex-1 pr-2.5">
-                      <p class="text-xs font-bold text-gray-400">Deposit address on Tron chain:</p>
-                      <p class="text-xs font-medium text-zinc-800">TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi</p>
-                    </div>
-                    <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-                  </article> -->
+                <template v-if="currentPayStep === StepsPay.Loading">
+                  <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
+                    <p class="mt-4 text-base text-black">Processing payment, please wait</p>
 
-                  <a-input
-                    class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100"
-                    label="Amount"
-                    :model-value="'1,002.93 USDT'"
-                    :disabled="true"
-                    :text-icon="amountCopied"
-                    text-icon-text="Copied!"
-                    :icon="Icon.ColorfulCopy"
-                    position-icon="right"
-                    @on-input-click="() => copyToClipboardAmount()"
-                    isBoldInput
-                  />
-                  <!-- <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
-                    <div class="flex flex-col flex-1">
-                      <p class="text-xs font-bold text-gray-400">Amount</p>
-                      <p class="text-base text-zinc-800">1,002.93 USDT</p>
-                    </div>
-                    <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-                  </article> -->
-                  <button @click="currentPayStep = StepsPay.Loading" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
-                    I Have Paid
-                  </button>
-                  <button @click="currentPayStep = StepsPay.PayWith" class="block w-full justify-center items-center px-16 py-5 mt-2 text-base font-bold text-blue-600 whitespace-nowrap bg-sky-100 rounded-lg" tabindex="0">
-                    Cancel Order
-                  </button>
-                  <footer class="text-center py-6">
-                    <a href="#" class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</a>
-                  </footer>
-                </div>
-              </template>
+                    <button @click="() => {isBtcModal = false; succesModalVisible = true}" style="color: var(--text-secondary)">Open success USDT</button>
+                    <button @click="() => {isBtcModal = true; succesModalVisible = true}" style="color: var(--text-secondary)">Open success BTC</button>
 
-              <template v-if="currentPayStep === StepsPay.Loading">
-                <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
-                  <p class="mt-4 text-base text-black">Processing payment, please wait</p>
-                  <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
-                    Having trouble? Contact Support
-                  </footer>
-                </div>
-              </template>
-            </div>
-          </section>
+                    <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
+                      Having trouble? Contact Support
+                    </footer>
+                  </div>
+                </template>
+              </div>
+            </section>
+          </div>
         </main>
       </template>
-
-      <template v-else-if="currentStep === Steps.Password">
-          <div class='f-registration__back' @click='currentStep = Steps.Code'>
-              <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-          </div>
-          <h3 class="f-registration__title">Set your password</h3>
-          <h5 class="f-registration__subtitle">Please set a secure password for your account.</h5>
-
-          <form class="f-registration__form" @submit.prevent="onSubmitPasswordForm">
-
-              <a-input class="f-registration__password" label="Password" :type="isPasswordType ? 'password' : 'text'"
-                  validation-reg-exp-key="password" required :icon="Icon.MonoEye" iconWithAction
-                  @icon-click-handler="passwordIconClickHandler" positionIcon="right" :error-text="passwordErrorText"
-                  @blur="passwordFieldBlurHandler" @update:is-valid="isPasswordValid = $event"
-                  v-model="password"></a-input>
-
-
-              <div class="f-registration__password_info">
-                  Must include a mix of upper case, lower case, numeric and special character.
-              </div>
-              <a-button class="f-registration__button" :disabled="!isPasswordValid" type="submit"
-                  text="Continue"></a-button>
-          </form>
-      </template>
-      <!--    <template v-else-if="currentStep === Steps.Bonus">-->
-      <!--      <div class="f-registration__bonus">-->
-      <!--        <div class="f-registration__bonus-wrap">-->
-      <!--          <img src="/img/bonus.png" alt="bonus" class="f-registration__bonus-wrap-pic" />-->
-      <!--          <div class="f-registration__bonus-wrap-title">$50 Welcome and referral bonus!</div>-->
-      <!--          <div class="f-registration__bonus-wrap-text">-->
-      <!--            You just earned a $50 bonus for signing up! Your bonus can be accessed in your bonus wallet, and can be-->
-      <!--            applied to your ETF purchases.-->
-      <!--          </div>-->
-      <!--          <a-button class="f-registration__bonus-wrap-btn" @click="getBonus" text="Got it!"></a-button>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--    </template>-->
   </div>
-  <e-registration-bonus-modal :confirmData="confirmResponse" v-model="isOpenModal" @accept="getBonus" @close="getBonus" />
-  <f-terms-modal v-model="isOpenTermsModal" />
 </template>
 
 <script setup lang="ts">
@@ -386,6 +274,10 @@ import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { useClipboard } from '@vueuse/core'
+import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
+import eSuccessModal from '~/src/entities/e-success-modal/e-success-modal.vue'
+
+const emit = defineEmits([ 'update'])
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -393,14 +285,7 @@ const route = useRoute()
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
-  Terms = 'Terms',
-  Choice = 'Choice',
-  Email = 'Email',
-  Code = 'Code',
-  Invest = 'Invest',
-  Purchase = 'Purchase',
-  Password = 'Password',
-  Bonus = 'Bonus',
+  Purchase = 'Purchase'
 }
 const enum StepsPay {
   PayWith = 'PayWith',
@@ -411,7 +296,7 @@ const enum StepsPay {
 const confirmResponse = ref(null)
 
 const currentSignup = ref(SignupMethods.Email);
-const currentStep = ref(Steps.Choice);
+const currentStep = ref(Steps.Purchase);
 const backendError = ref('')
 
 const isOpenModal = ref(false)
@@ -954,49 +839,6 @@ onMounted(() => {
   }
 })
 
-// Invest Step
-const investmentAmount = ref();
-const investmentAmountModified = computed<string>({
-  get: () => investmentAmount.value, 
-  set: (newValue) => {
-    const originalNumber = newValue.split(",").join("");
-    investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-},
-});
-
-watch(
-  () => investmentAmount.value,
-  () => {
-      console.log(investmentAmount.value);
-  },
-)
-
-const currencies = ref([
-  {
-    value: 'USDT',
-    icon: "/img/icons/colorful/usdt.svg",
-    background: "/img/usdtbg2.png",
-    stars: 10,
-    
-  }, 
-  {
-    value: 'Bitcoin',
-    icon: "/img/icons/colorful/bitcoin.svg",
-    background: "/img/bitcoinbg.png",
-    stars: 8,
-    
-  }, ]);
-const selectedCurrency = ref(currencies.value[0]);
-const showDropdown = ref(false);
-
-const toggleCurrencyDropdown = () => {
-  showDropdown.value = !showDropdown.value;
-};
-
-const selectCurrency = (currency : any) => {
-  selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
-  toggleCurrencyDropdown();
-}
 
 // Purchase Step
 
@@ -1022,6 +864,54 @@ const copyToClipboardAmount = () => {
   copy(copiedAmountValue.value);
   amountCopied.value = true;
 }
+
+//change purchase steps 
+
+enum PurchaseSteps {
+  Confirm = 'Confirm',
+  Sign = 'Sign',
+  Pay = 'Pay',
+}
+
+const purchasePopperText = {
+  title: 'Buy Back Guarantee',
+  text: 'The fund promises shareholders that at the end of the investment period, they can sell their shares back to the fund at the original purchase price of $1 per share. No fees, commissions, or discounts will be deducted, even if a discount was initially given. Each share is always valued at $1.'
+}
+
+const purchaseStepsArr = [{name: PurchaseSteps.Confirm, value: confirmShow},{name: PurchaseSteps.Sign, value: signShow},{name: PurchaseSteps.Pay, value: payShow}];
+
+const openPurchase = (target: any) => {
+  confirmShow.value = false;
+  signShow.value = false;
+  payShow.value = false;
+
+  target.value.value = true;
+}
+
+const togglePurchase = (target: any) => {
+
+  if (window.innerWidth < 1024) {
+    for(let i = 0; i < purchaseStepsArr.length; i++) {
+      if(purchaseStepsArr[i].name === target.name) {
+        purchaseStepsArr[i].value.value = !purchaseStepsArr[i].value.value;
+      } else {
+        purchaseStepsArr[i].value.value = false;
+      }
+    }
+  }
+
+}
+
+// Success modal
+
+const succesModalVisible = ref(false);
+const isBtcModal = ref(false);
+
+const updateModalVisible = (isVisible: boolean) => {
+  succesModalVisible.value = isVisible
+  emit('update', isVisible)
+}
+
 
 
 </script>
