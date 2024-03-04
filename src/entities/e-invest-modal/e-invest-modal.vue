@@ -133,10 +133,13 @@
             <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
           </div>
       </m-modal>
+
+      <!-- REINVEST -->
       <m-modal v-else-if="$app.store.user.isInvestModalReinvest" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow">
         <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
-              <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1>
+              <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />
+              <!-- <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1> -->
   
             </header>
             <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center flex">
@@ -146,10 +149,12 @@
                 <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModifiedReinvest" class="e-invest__invest--text-input e-invest--text-normal max-w-[60px] flex-1 bg-transparent" placeholder="2,500"/>
               </div>
 
-              and increase my
+              <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" />
+              <!-- and increase my -->
             </p>
             <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center gap-2 font-medium text-center whitespace-nowrap">
-              <span class="grow">daily dividends in</span>
+              <VueWriter :start="2800" :typeSpeed="60" class="grow" :array="['daily dividends in']" :iterations="1" />
+              <!-- <span class="grow">daily dividends in</span> -->
   
               <div class="relative opacity-50">
                 <div class="e-invest__invest-select flex text-center whitespace-nowrap">

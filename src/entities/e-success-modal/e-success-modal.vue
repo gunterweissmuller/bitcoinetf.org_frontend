@@ -1,5 +1,5 @@
 <template>
-      <m-modal v-if="!props.isBtc" bgBasic @close="close" full-screen v-model="isOpenModal">
+      <m-modal v-if="!props.isBtc" modalSmall @close="close" v-model="isOpenModal">
         <article class="e-success-wrapper flex flex-col font-bold max-w-[343px] ">
             <div class="e-success--certificate">
                 <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-usdt.svg" />
@@ -48,7 +48,7 @@
       </m-modal>
 
       <!-- BITCOIN -->
-      <m-modal v-else-if="props.isBtc" bgBasic @close="close" full-screen v-model="isOpenModal">
+      <m-modal v-else-if="props.isBtc" modalSmall @close="close" v-model="isOpenModal">
         <article class="e-success-wrapper flex flex-col font-bold max-w-[343px] ">
             <div class="e-success--certificate">
                 <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-btc.svg" />

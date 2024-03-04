@@ -1,13 +1,13 @@
 <template>
   <Teleport to="body">
-    <div v-if="isShowFullScreen" :class="['m-modal-mask', { 'm-modal-fullscreen': fullScreen, 'm-modal-kyc': kyc}]">
+    <div v-if="isShowFullScreen" :class="['m-modal-mask', { 'm-modal-fullscreen': fullScreen, 'm-modal-kyc': kyc, 'm-modal-small': modalSmall}]">
       <div :class="['m-modal-wrapper', { 'm-modal-wrapper-basic': bgBasic }]">
         <div ref="modalRef" :class="['m-modal-container', { 'm-modal-container-basic': bgBasic } , $attrs.class]">
           <slot />
         </div>
       </div>
     </div>
-    <template v-if="isMobile && isPageFinished">
+    <template v-if="isMobile && isPageFinished && !modalSmall">
       <client-only>
         <m-modal-mobile
           v-show="isMobile && !fullScreen"
@@ -39,7 +39,8 @@
       maxWidth?: number | undefined
       maxHeight?: number | undefined
       kyc?: boolean
-      bgBasic?: boolean
+      bgBasic?: boolean,
+      modalSmall: boolean,
     }>(),
     {
       modelValue: false,
@@ -48,6 +49,7 @@
       maxHeight: undefined,
       kyc: false,
       bgBasic: false,
+      modalSmall: false,
     },
   )
 
@@ -77,7 +79,11 @@
 
   const isShowFullScreen = computed(() => {
     if (!props.fullScreen) {
-      return !isMobile.value && isOpenModal.value
+      if(props.modalSmall) {
+        return isOpenModal.value
+      } else {
+        return !isMobile.value && isOpenModal.value
+      }
     } else {
       return isOpenModal.value
     }
