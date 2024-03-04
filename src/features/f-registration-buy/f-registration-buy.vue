@@ -115,7 +115,7 @@
               </div>
             </section>
 
-            <section :class="['f-registration__purchase--drop-down flex flex-col justify-center p-4 w-full font-bold whitespace-nowrap bg-white rounded-lg', {'f-registration__purchase--drop-down-desktop': signShow}]" >
+            <section :class="['f-registration__purchase--drop-down flex flex-col justify-center p-4 w-full font-bold whitespace-nowrap bg-white', {'f-registration__purchase--drop-down-desktop': signShow}]" >
               <header @click="() => {togglePurchase(purchaseStepsArr[1])}" class="f-registration__purchase--drop-down-title flex gap-2">
                 <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">2</div>
                 <h2 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Sign</h2>

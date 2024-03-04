@@ -270,10 +270,12 @@
       padding: var(--spacing-m-1);
       background: var(--surfaces-surface-1);
       display: none;
+      border-radius: var(--spacing-s);
 
       @include breakpoint($break-desktop-1024-minus) {
         border-top: torem(1) solid var(--surfaces-border-1);
         display: block;
+        border-radius: 0;
       }
 
       &-title {
