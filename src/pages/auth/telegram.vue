@@ -41,9 +41,21 @@
         $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
         router.push("/personal/registration");
       } else {
+        $app.api.eth.auth.
+          loginTelegram({
+            telegram_data: JSON.stringify(tgData),
+          })
+            .then((jwtResponse: any) => {
+              $app.store.auth.setTokens(jwtResponse.data)
+            })
+            .then(async () => {
+              await $app.api.eth.auth.getUser().then((resp) => {
+                $app.store.user.info = resp?.data
+              });
 
+              await router.push('/personal/analytics/performance')
+            });
       }
-      console.log(r);
     })
   });
 

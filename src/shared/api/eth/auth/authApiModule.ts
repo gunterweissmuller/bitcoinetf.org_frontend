@@ -190,7 +190,27 @@ export default class AuthApiModule {
   async confirmTelegram(payload: { telegram_data: string, email: string; code: string; fast: boolean }) {
     try {
       return await this.adapter.requestJsonAsync({
-        parameterValue: 'auth/provider/metamask/confirm',
+        parameterValue: 'auth/provider/telegram/confirm',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginTelegram(payload: { telegram_data: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/telegram/login',
         request: {
           method: HTTPMethod.POST,
         },
