@@ -403,6 +403,14 @@ onMounted(() => {
     lastName.value = $app.store.authGoogle.response.last_name;
     email.value =$app.store.authGoogle.response.email;
   }
+
+  if($app.store.authTelegram.response?.id) {
+    currentStep.value = Steps.Email;
+    currentSignup.value = SignupMethods.Telegram;
+    firstName.value = $app.store.authTelegram.response.first_name;
+    lastName.value = $app.store.authTelegram.response.last_name;
+    email.value = $app.store.authTelegram.response.email;
+  }
 });
 
 const handleGoogleDisconnect = () => {
@@ -491,8 +499,8 @@ const onSubmitEmailForm = async () => {
                 pap_id: aAid,
                 utm_label: window.localStorage.getItem('a_utm'),
               }}).then((r: any) => {
-              window.localStorage.removeItem('a_aid');
-              window.localStorage.removeItem('a_utm');
+              //window.localStorage.removeItem('a_aid');
+              //window.localStorage.removeItem('a_utm');
             });
           }
       })
@@ -505,6 +513,30 @@ const onSubmitEmailForm = async () => {
               backendError.value = 'Something went wrong'
           }
       })
+
+    return;
+  }
+
+  if(currentSignup.value === SignupMethods.Telegram) {
+    $app.api.eth.auth
+      .initTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+      }).then((r: any) => {
+        console.log('ww');
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
+    }).catch((e) => {
+      isSubmitEmailForm.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
 
     return;
   }
@@ -626,8 +658,8 @@ const codeContinue = async () => {
                 pap_id: aAid,
                 utm_label: window.localStorage.getItem('a_utm'),
               }}).then((r: any) => {
-                window.localStorage.removeItem('a_aid');
-                window.localStorage.removeItem('a_utm');
+                //window.localStorage.removeItem('a_aid');
+                //window.localStorage.removeItem('a_utm');
             });
           }
         })
@@ -639,6 +671,45 @@ const codeContinue = async () => {
             backendError.value = 'Something went wrong'
           }
         })
+  } else if(currentSignup.value === SignupMethods.Telegram) {
+    backendError.value = ''
+    await $app.api.eth.auth.
+      confirmTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        currentStep.value = Steps.Bonus
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
   } else {
     currentStep.value = Steps.Password
   }
@@ -728,8 +799,8 @@ const onSubmitPasswordForm = async () => {
               pap_id: aAid,
               utm_label: window.localStorage.getItem('a_utm'),
             }}).then((r: any) => {
-            window.localStorage.removeItem('a_aid');
-            window.localStorage.removeItem('a_utm');
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
           });
         }
       })
@@ -755,12 +826,6 @@ onMounted(() => {
       refCode.value = route.query.referral
       accordionRef.value?.open()
   }
-
-  setTimeout(() => {
-    const event = new Event('click');
-    const el = window.document.getElementById('widget_login');
-    el.dispatchEvent(event);
-  }, 6000);
 })
 </script>
 

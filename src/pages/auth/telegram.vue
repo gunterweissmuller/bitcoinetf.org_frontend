@@ -4,13 +4,46 @@
 
 <script setup lang="ts">
   import { useNuxtApp, useRouter, useRoute } from '#app'
+  import { SignupMethods } from '~/src/shared/constants/signupMethods';
+
   const { $app } = useNuxtApp()
+  const router = useRouter()
 
   onMounted(()=>{
-    const search = location.search.substring(1);
+
+    function searchParamsToJson(searchParams) {
+      if (searchParams.startsWith('?')) {
+        searchParams = searchParams.substr(1);
+      }
+
+      const pairs = searchParams.split('&');
+
+      const result = {};
+
+      pairs.forEach(pair => {
+        const [key, value] = pair.split('=');
+        if(key === 'id' || key === 'auth_date') {
+          result[key] = +decodeURIComponent(value || '');
+        } else {
+          result[key] = decodeURIComponent(value || '');
+        }
+      });
+
+      return result;
+    }
+
+    const tgData = searchParamsToJson(window.location.search);
 
     $app.api.eth.auth.telegramGetAuthType({
-      telegram_data: '{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}'
+      telegram_data: JSON.stringify(tgData),
+    }).then((r: any) => {
+      if(r.data.auth_type === 'registration') {
+        $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+        router.push("/personal/registration");
+      } else {
+
+      }
+      console.log(r);
     })
   });
 

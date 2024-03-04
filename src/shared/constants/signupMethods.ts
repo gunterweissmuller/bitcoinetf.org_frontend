@@ -3,4 +3,5 @@ export const enum SignupMethods {
     Metamask = 'Metamask',
     Google = 'Google',
     Apple = 'Apple',
+    Telegram = 'Telegram',
   }
