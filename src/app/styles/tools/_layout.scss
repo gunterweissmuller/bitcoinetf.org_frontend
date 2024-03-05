@@ -113,6 +113,10 @@ $header-notification-height-fhd: 96;
     min-height: vh(100);
     overflow: hidden;
 
+    &--purchase {
+      padding-top: 0;
+    }
+
     &--no-indent {
       padding-bottom: 0;
     }

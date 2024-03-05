@@ -1,7 +1,7 @@
 <template>
   <header
     v-if="route.name !== 'personal-kyc'"
-    :class="['w-header', { 'w-header--no-indent': route.path.includes('analytics') || route.path.includes('wallet') }]"
+    :class="['w-header', { 'w-header--no-indent': route.path.includes('analytics') || route.path.includes('wallet'), 'w-header--empty': route.name === 'personal-purchase' }]"
   >
     <div class='w-header__wrap'>
       <div class='w-header__head'>

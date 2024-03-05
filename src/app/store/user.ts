@@ -30,7 +30,19 @@ export const user = defineStore('user', {
     personalDividends: [],
     news: [],
     latestTrade:'',
+
+    isInvestModalShow: false,
+    isInvestModalReinvest: false,
   }),
+
+  actions: {
+    setIsInvestModalShow(payload: { show: boolean }) {
+      this.isInvestModalShow = payload.show;
+    },
+    setInvestModalReinvest(payload: { reinvest: boolean }) {
+      this.isInvestModalReinvest = payload.reinvest;
+    },
+  },
 
   getters: {
     userInfo: (state) => state.info,
