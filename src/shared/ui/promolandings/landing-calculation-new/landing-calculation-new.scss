@@ -299,6 +299,13 @@
     }
   }
 
+  &--text {
+    &-normal {
+      line-height: normal;
+      height: auto;
+    }
+  }
+
   &__journey {
   
     max-width: 1096px;
@@ -566,6 +573,61 @@
 
       &-btc {
         color: var(--btcoin-500, #FF8D07);
+      }
+    }
+  }
+
+  &__signup {
+
+    margin-top: 60px;
+    max-width: 648px;
+    margin-left: auto;
+    margin-right: auto;
+
+    &-title {
+      color: #FFF;
+      text-align: center;
+      // font-family: DM, sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    &-subtitle {
+      margin-top: var(--spacing-m-2);
+      color: var(--Text-Secondary, #ABAEBE);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 400;
+
+      &-link {
+        color: var(--Accent-Primary, #4D94FF);
+        font-weight: 700;
+      }
+    }
+
+    &-line {
+      background: var(--Surfaces-Border-2, rgba(63, 66, 78, 0.20));
+      height: 1px;
+      width: 100%;
+      margin: var(--spacing-m-2) 0;
+
+    }
+
+    &-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: var(--spacing-m-2);
+      
+      &-item {
+        cursor: pointer;
+        padding: var(--spacing-m-1);
+        border-radius: 8px;
+        background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+
+        &-img {
+          width: 16px;
+          height: 16px;
+        }
       }
     }
   }
