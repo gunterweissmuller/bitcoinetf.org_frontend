@@ -81,7 +81,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="false" @click="termsContinue" text="$1,000 BUY"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="false" @click="signupAndBuy" text="$1,000 BUY"></a-button>
 
         </div>
       </template>
@@ -272,6 +272,13 @@ const isOpenTermsModal = ref(false)
 
 function openTermsModal() {
   isOpenTermsModal.value = true
+}
+
+
+
+const signupAndBuy = () => {
+
+ 
 }
 
 </script>
