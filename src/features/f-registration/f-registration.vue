@@ -78,7 +78,7 @@
             <div @click="handleTelegramConnect"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
-                <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
+                <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
                          class="aspect-square w-[18px]" />
                 <div class="grow">Sign up with Telegram</div>
               </div>
@@ -105,7 +105,7 @@
         </h5>
 
         <div class="flex flex-col items-center pb-12">
-          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="BitcoinETFlogin_bot" data-size="large" data-auth-url="http://front.stage.techetf.org/auth/telegram" data-request-access="write"></component>
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
         </div>
       </template>
       <template v-else-if="currentStep === Steps.Email">
@@ -424,12 +424,19 @@ const handleGoogleConnect = async () => {
     window.location.href = googleUrl.value;
 }
 
+const telegramRedirectUrl = ref('')
+const telegramBotName = ref('')
+
 const handleTelegramConnect = async () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
     currentStep.value = Steps.TelegramSign;
     currentSignup.value = SignupMethods.Telegram;
-    //const s = '<script async src=\"https://telegram.org/js/telegram-widget.js?22\" data-telegram-login=\"samplebot\" data-size=\"large\" data-auth-url=\"\" data-request-access=\"write\"><\/script>';
-    //document.body.append(s);
+
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+
+    //console.log(r);
+
   })
 }
 
