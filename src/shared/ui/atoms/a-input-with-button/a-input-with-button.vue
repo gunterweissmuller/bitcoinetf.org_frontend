@@ -76,7 +76,7 @@
               
             </div>
             
-            <button class="a-input-with-button__input-button">Apply</button>
+            <button class="a-input-with-button__input-button">{{ buttonText }}</button>
             
             <template v-if="icon">
               <span
@@ -170,6 +170,7 @@ const props = withDefaults(
     textIconText?: string
     maxLength?: number | null
     imgTrue?:boolean
+    buttonText: string
   }>(),
   {
     modelValue: '',
@@ -195,7 +196,8 @@ const props = withDefaults(
     textIcon: false,
     textIconText: '',
     maxLength: null,
-    imgTrue:false
+    imgTrue:false,
+    buttonText: '',
   },
 )
 

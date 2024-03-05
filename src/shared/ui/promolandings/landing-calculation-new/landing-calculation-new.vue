@@ -36,22 +36,63 @@
       <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
       <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
       <div class="landing-calculation__signup-buttons">
-        <div class="landing-calculation__signup-buttons-item">
-          <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+        <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
+          <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
         </div>
 
-        <div class="landing-calculation__signup-buttons-item">
+        <div @click="() => signupToggle(SignupMethods.Metamask)" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
           <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
         </div>
 
-        <div class="landing-calculation__signup-buttons-item">
+        <div @click="() => signupToggle(SignupMethods.Google)" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
           <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
         </div>
       </div>
       <div class="landing-calculation__signup-line"></div>
+
+      <template v-if="signupStep === SignupSteps.Signup">
+        <div class="landing-calculation__signup-main">
+          <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+
+          <a-input-with-button 
+            class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
+            label="Email"
+            v-model="email"
+            buttonText="Get Confirmation Code"
+            validation-reg-exp-key="email"
+            :disabled="false"
+            required
+            :error-text="emailErrorText"
+            @blur="emailFieldBlurHandler"
+            @update:is-valid="isEmailValid = $event"
+          />
+          <a-input v-model="codeEmail" label="Email Confirmation Code" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
+          <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <!-- <a-input type="tel" v-model="phone" label="Phone Number" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-phone" /> -->
+          
+          <vue-tel-input v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <!-- <VueTelInput></VueTelInput> -->
+
+          <div class="landing-calculation__signup-main__agree">
+              <div class="mb-10">
+                  <a-checkbox v-model="registrationAgreedUS" id="with_email" label="<p >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>" single />
+              </div>
+              <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
+          </div>
+
+          <a-button class="landing-calculation__signup-main__button" :disabled="false" @click="termsContinue" text="$1,000 BUY"></a-button>
+
+        </div>
+      </template>
+
+      
+
     </div>
 
   </div>
+
+  <f-terms-modal v-model="isOpenTermsModal" />
 </template>
 
 <script setup lang="ts">
@@ -64,6 +105,15 @@ import {Icon} from "~/src/shared/constants/icons";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
+import VueTurnstile from 'vue-turnstile';
+import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
+import AInputWithButton from '~/src/shared/ui/atoms/a-input-with-button/a-input-with-button.vue'
+import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
+import ACheckbox from '~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue'
+import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
+import aInputPhoneCountry from "../../atoms/a-input-phone-country/a-input-phone-country.vue";
+import 'vue-tel-input/vue-tel-input.css';
+
 
 const { $app } = useNuxtApp()
 const { width } = useWindowSize()
@@ -76,7 +126,11 @@ const props = withDefaults(
   },
 )
 
+const token = ref('')
+const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 onMounted(()=>{
+  localStorage.setItem('theme', 'dark');
+  $app.store.user.setTheme({theme: 'dark'});
   initializeTronClock()
 })
 function getTimeTron() {
@@ -150,6 +204,75 @@ const scrollToChat = () =>{
   }
 }
 
+// sign up 
+
+enum SignupSteps {
+  Default = "Default",
+  Signup = "Signup",
+  // Purchase = "Purchase"
+}
+
+enum SignupMethods {
+  None = "None",
+  Email = "Email",
+  Metamask = "Metamask",
+  Google = "Google",
+}
+
+const signupStep = ref(SignupSteps.Default);
+const signupMethod = ref(SignupMethods.None);
+
+const signupToggle = (method: any) => {
+  if(signupStep.value === SignupSteps.Default) {
+      signupStep.value = SignupSteps.Signup;
+      signupMethod.value = method;
+  } else {
+
+    if(method === signupMethod.value) {
+      signupStep.value = SignupSteps.Default;
+      signupMethod.value = SignupMethods.None;
+    } else {
+      signupStep.value = SignupSteps.Signup;
+      signupMethod.value = method;
+    }
+
+    
+  }
+
+
+}
+
+const email = ref('')
+const codeEmail = ref('')
+const firstName = ref('')
+const lastName = ref('')
+const phone = ref(null)
+
+const emailErrorText = ref('')
+const isEmailValid = ref(false)
+
+function emailFieldBlurHandler() {
+  if (isEmailValid.value) {
+      emailErrorText.value = ''
+      return
+  }
+
+  if (email.value) {
+      emailErrorText.value = 'Invalid email address'
+      return
+  }
+
+  emailErrorText.value = 'Required'
+}
+
+// sign up / terms
+const registrationAgreedUS = ref(false)
+const registrationAgreedTerms = ref(false)
+const isOpenTermsModal = ref(false)
+
+function openTermsModal() {
+  isOpenTermsModal.value = true
+}
 
 </script>
 

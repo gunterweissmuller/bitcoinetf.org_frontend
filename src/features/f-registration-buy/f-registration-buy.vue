@@ -51,6 +51,7 @@
                     <a-input-with-button 
                       label="Referral code"
                       v-model="refCode"
+                      buttonText="Apply"
                     />
                   </div>
 

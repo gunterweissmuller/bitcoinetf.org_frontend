@@ -42,6 +42,9 @@ export const user = defineStore('user', {
     setInvestModalReinvest(payload: { reinvest: boolean }) {
       this.isInvestModalReinvest = payload.reinvest;
     },
+    setTheme(payload: {theme: string}) {
+      this.theme = payload.theme;
+    }
   },
 
   getters: {

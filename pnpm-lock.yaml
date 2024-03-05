@@ -74,6 +74,9 @@ dependencies:
   v-onboarding:
     specifier: ^2.6.0
     version: 2.6.0(vue@3.4.15)
+  vue-tel-input:
+    specifier: ^8.3.1
+    version: 8.3.1(typescript@5.3.3)
   vue-turnstile:
     specifier: ^1.0.6
     version: 1.0.7(vue@3.4.15)
@@ -95,6 +98,9 @@ dependencies:
   vue3-popper:
     specifier: ^1.5.0
     version: 1.5.0(vue@3.4.15)
+  vue3-tel-input-js:
+    specifier: ^1.0.0
+    version: 1.0.0(typescript@5.3.3)
   webfont:
     specifier: ^11.2.26
     version: 11.2.26
@@ -5940,6 +5946,11 @@ packages:
     resolution: {integrity: sha512-iV9Pd/PsgjNWBXeq8XRtWVSgz2tKAfhfvBs7qxYty+RlRd+OCksaWmOnc4JKrTc1cToXL1N0s3l/vwlxPtdElw==}
     dependencies:
       browserslist: 4.22.3
+    dev: false
+
+  /core-js@3.36.0:
+    resolution: {integrity: sha512-mt7+TUBbTFg5+GngsAxeKBTl5/VS0guFeJacYge9OmHb+m058UwwIm41SE9T4Den7ClatV57B6TYTuJ0CX1MAw==}
+    requiresBuild: true
     dev: false
 
   /core-util-is@1.0.2:
@@ -12533,6 +12544,10 @@ packages:
   /urlpattern-polyfill@8.0.2:
     resolution: {integrity: sha512-Qp95D4TPJl1kC9SKigDcqgyM2VDVO4RiJc2d4qe5GrYm+zbIQCWWKAFaJNQ4BhdFeDGwBmAxqJBwWSJDb9T3BQ==}
 
+  /user@0.0.0:
+    resolution: {integrity: sha512-eRNM5isOvr6aEFAGi1CqAkmLkYxW2NJ5ThhbD+6IJXYKM1mo7Gtxx4mQIveHz/5K3p/SVnlW9k17ETn+QAu8IQ==}
+    dev: false
+
   /utf-8-validate@6.0.3:
     resolution: {integrity: sha512-uIuGf9TWQ/y+0Lp+KGZCMuJWc3N9BHA+l/UmHd/oUHwJJDeysyTRxNQVkbzsIWfGFbRe3OcgML/i0mvVRPOyDA==}
     engines: {node: '>=6.14.2'}
@@ -12917,6 +12932,15 @@ packages:
       '@vue/devtools-api': 6.5.1
       vue: 3.4.15(typescript@5.3.3)
 
+  /vue-tel-input@8.3.1(typescript@5.3.3):
+    resolution: {integrity: sha512-+YMFf1Dq/H9xJ2QQ0dDtPrCRNdfWCMCZ78/29qV9BJ9cf7BAFv4jpBPNQU4DyOqoOd0BEujVw9SRJ+fcXPO21Q==}
+    dependencies:
+      libphonenumber-js: 1.10.55
+      vue: 3.4.15(typescript@5.3.3)
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /vue-turnstile@1.0.7(vue@3.4.15):
     resolution: {integrity: sha512-IWYbp+hg0vNi3V/JJF0g8B1s+cX1XpEqtiEOuUwlcylKQOI9KxKnLagdRtSSkvuJJEAPeFRE42atzgU4GGRUJQ==}
     peerDependencies:
@@ -12972,6 +12996,17 @@ packages:
       '@popperjs/core': 2.11.8
       debounce: 1.2.1
       vue: 3.4.15(typescript@5.3.3)
+    dev: false
+
+  /vue3-tel-input-js@1.0.0(typescript@5.3.3):
+    resolution: {integrity: sha512-81PSwP5kbou1BeIxM04rCQkjuPegpH65qqH8LE/Mrgp9/eKV2U+GHGT22eDoTThQm8V6Q/3W4jpEyjH5fKV88Q==}
+    dependencies:
+      core-js: 3.36.0
+      libphonenumber-js: 1.10.55
+      user: 0.0.0
+      vue: 3.4.15(typescript@5.3.3)
+    transitivePeerDependencies:
+      - typescript
     dev: false
 
   /vue@3.4.15(typescript@5.3.3):
