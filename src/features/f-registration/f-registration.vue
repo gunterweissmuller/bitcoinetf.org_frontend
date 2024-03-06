@@ -128,7 +128,11 @@
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
-              <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+            <div class="f-registration__wrap_phone">
+              <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+            </div>
+
+            <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
               <!-- <m-accordion ref="accordionRef" class="f-registration__ref" title="Referral code">
                   <a-input label="Referral code" class="f-registration__ref-code" v-model="refCode" />
                   <a href="/" target="_blank" class="f-registration__ref-link">How to get referral codes</a>
@@ -217,6 +221,7 @@ import ERegistrationBonusModal from '~/src/entities/e-registration-bonus-modal/e
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import VueTurnstile from 'vue-turnstile';
 import { SiweMessage } from 'siwe';
+import 'vue-tel-input/vue-tel-input.css';
 import { BrowserProvider, parseUnits } from "ethers";
 import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
 import axios from "axios";
@@ -237,6 +242,14 @@ const enum Steps {
   Password = 'Password',
   Bonus = 'Bonus',
   TelegramSign = 'TelegramSign'
+}
+
+const phone = ref(null);
+const countryCode = ref(null);
+
+const countryChanged = (country) => {
+  // console.log(country, phone);
+  countryCode.value = country.dialCode;
 }
 
 const confirmResponse = ref(null)
@@ -460,7 +473,9 @@ const onSubmitEmailForm = async () => {
     method: currentSignup.value,
     first_name: $app.filters.trimSpaceIntoString(firstName.value),
     last_name: $app.filters.trimSpaceIntoString(lastName.value),
-    email: $app.filters.trimSpaceIntoString(email.value)
+    email: $app.filters.trimSpaceIntoString(email.value),
+    phone_number: phone.value,
+    phone_number_code: '1',
   }
 
   if(currentSignup.value === SignupMethods.Metamask) {

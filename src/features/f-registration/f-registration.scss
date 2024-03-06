@@ -72,6 +72,10 @@
 
   &__email {
     // margin-top: var(--spacing-s);
+    // margin-bottom: var(--spacing-m-3);
+  }
+
+  &__wrap_phone {
     margin-bottom: var(--spacing-m-3);
   }
 
@@ -130,3 +134,31 @@
 #telegram-login-BitcoinETFlogin_bot {
   /*height: 0px !important;*/
 }
+
+.vue-tel-input {
+  margin-top: var(--spacing-m-2);
+  border-radius: 8px;
+  background: var(--surfaces-surface-2);
+  border: none;
+  padding: var(--spacing-m-1) var(--spacing-s);
+  box-shadow: none !important;
+}
+
+.vti__dropdown {
+  background: var(--surfaces-surface-2) !important;
+
+  &-list {
+    background: var(--surfaces-surface-2);
+    border: none;
+  }
+
+  &-item.highlighted {
+    background: var(--surfaces-surface-1);
+  }
+}
+
+.vti__input {
+  background: var(--surfaces-surface-2);
+  border: transparent
+}
+
