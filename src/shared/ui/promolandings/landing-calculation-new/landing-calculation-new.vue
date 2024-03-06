@@ -28,7 +28,7 @@
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
     <m-profit-calculator-new @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
-    
+
 
 
     <!-- SIGNUP LAYOUT -->
@@ -36,11 +36,11 @@
       <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
       <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
       <div class="landing-calculation__signup-buttons">
-        <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
+        <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
           <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
         </div>
 
-        <div @click="() => signupToggle(SignupMethods.Metamask)" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
+        <div @click="() => handleMetamaskConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
           <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
         </div>
 
@@ -49,17 +49,25 @@
         </div>
       </div>
       <div class="landing-calculation__signup-line"></div>
+      <template v-if="signupStep === SignupSteps.TelegramButton">
+        <h3 class="f-registration__title">Sign up with Telegram</h3>
+        <h5 class="f-registration__subtitle">
+        </h5>
 
-      <template v-if="signupStep === SignupSteps.Signup">
+        <div class="flex flex-col items-center pb-12">
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
+        </div>
+      </template>
+      <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
 
-          
+
           <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
-          
-          <a-input-with-button 
+
+          <a-input-with-button
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
@@ -74,8 +82,8 @@
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-          <a-input v-model="codeEmail" label="Email Confirmation Code" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
-          
+          <a-input v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
+
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -92,7 +100,7 @@
       <template v-if="signupStep === SignupSteps.Google">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-          
+
           <a-input
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
@@ -135,7 +143,7 @@
           </nuxt-link>
         </div>
       </template>
-      
+
 
     </div>
 
@@ -150,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+  import { computed, ref } from 'vue'
 import {useNuxtApp, useRouter, useRoute} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
@@ -170,6 +178,7 @@ import 'vue-tel-input/vue-tel-input.css';
 import ERegistrationBonusModal from "~/src/entities/e-registration-bonus-modal/e-registration-bonus-modal.vue";
 import axios from "axios";
 import { hostname } from '~/src/app/adapters/ethAdapter'
+import { BrowserProvider, parseUnits } from "ethers";
 
 const router = useRouter()
 const route = useRoute()
@@ -184,13 +193,80 @@ const props = withDefaults(
   },
 )
 
+
+  const isMetamaskSupported = ref(false);
+  const address = ref("");
+  const metamaskError = ref("");
+  const computedAddress = computed(() => address.value.substring(0, 8) + '...');
+
+
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 onMounted(()=>{
+  isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+  if(isMetamaskSupported.value) {
+    (window as any).ethereum.on("chainChanged", (chainId: string) => {
+      if (chainId !== "0x1") {
+        metamaskError.value = "This network is not supported. Please change the network to Ethereum."
+      } else if (chainId === "0x1") {
+        metamaskError.value = "";
+      }
+    });
+  } else {
+    console.log("Metamask is not installed");
+  }
+
   localStorage.setItem('theme', 'dark');
   $app.store.user.setTheme({theme: 'dark'});
   initializeTronClock()
 })
+
+const isMetamaskConnecting = ref(false);
+const metamaskSignatureMessage = ref('')
+const metamaskSignature = ref('')
+const metamaskWalletAddress = ref('')
+
+const handleMetamaskConnect = async () => {
+  // if metamask button is already clicked
+  if(isMetamaskConnecting.value) return;
+    isMetamaskConnecting.value = true;
+
+  //if metamask is not installed
+  if (!isMetamaskSupported.value) {
+    window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+    isMetamaskConnecting.value = false;
+    return;
+  }
+
+  //currentSignup.value = SignupMethods.Metamask;
+
+  try {
+    const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
+    const chainId: string = await (window as any).ethereum.request({"method": "eth_chainId","params": []});
+    const responseSwitchChain: any = await(window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] });
+    const responseBackend: any = await axios.get(`https://${hostname}/v1/auth/provider/metamask/message`);
+
+    metamaskSignatureMessage.value = responseBackend.data.message;
+    address.value = accounts[0];
+    const provider = new BrowserProvider((window as any).ethereum);
+    const signer = await provider.getSigner();
+    metamaskWalletAddress.value = signer.address;
+
+    const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
+
+    console.log("SIGNED MSG", signedMsg);
+    metamaskSignature.value = signedMsg;
+    isMetamaskConnecting.value = false;
+    //currentStep.value = Steps.Email;
+    signupStep.value = SignupSteps.Signup;
+    signupMethod.value = SignupMethods.Metamask;
+
+  } catch (e) {
+    console.error(e);
+    isMetamaskConnecting.value = false;
+  }
+
+}
 
 const backendError = ref('')
 
@@ -266,12 +342,13 @@ const scrollToChat = () =>{
   }
 }
 
-// sign up 
+// sign up
 
 enum SignupSteps {
   Default = "Default",
   Signup = "Signup",
   Google = "Google",
+  TelegramButton = 'TelegramButton',
 }
 
 enum PurchaseSteps {
@@ -312,9 +389,6 @@ const firstName = ref('')
 const lastName = ref('')
 const phone = ref(null);
 const countryCode = ref(null);
-
-
-
 
 const countryChanged = (country) => {
   // console.log(country, phone);
@@ -366,8 +440,26 @@ onMounted(() => {
     lastName.value = $app.store.authGoogle.response.last_name;
     email.value = $app.store.authGoogle.response.email;
   }
-  
+
 });
+
+  const telegramRedirectUrl = ref('')
+  const telegramBotName = ref('')
+  const currentStep = ref('')
+
+const handleTelegramConnect = async () => {
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+
+
+    signupStep.value = SignupSteps.TelegramButton;
+
+    //console.log(r);
+
+  })
+}
 
 const handleGoogleConnect = async () => {
   localStorage.setItem('googleRedirect', router.currentRoute.value.fullPath)
@@ -398,24 +490,44 @@ const sendCode = async () => {
 
   const initPayload = { first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value), phone_number: $app.filters.trimSpaceIntoString(tempPhone), phone_number_code: $app.filters.trimSpaceIntoString(countryCode.value) , refcode: $app.filters.trimSpaceIntoString(refCode.value) }
 
-  await $app.api.eth.auth
-    .init(initPayload).then(()=>{
-      sendCodeLoading.value = false
-      codeSended.value = true
-    })
-    .catch((e) => {
-      console.error("ERROR", e);
-      if (e?.errors?.error?.message) {
-        if (e.errors.error.code === 'ETF:011002') {
-          router.push('/personal/login')
-        }
-        backendError.value = e.errors.error.message
-        sendCodeLoading.value = false
-      } else {
-        backendError.value = 'Something went wrong'
-      }
-    })
+  if(signupMethod.value === SignupMethods.Metamask) {
+    initPayload.message = metamaskSignatureMessage.value
+    initPayload.signature = metamaskSignature.value
+    initPayload.wallet_address = metamaskWalletAddress.value
 
+    await $app.api.eth.auth
+      .initMetamask(initPayload)
+      .then(() => {
+        //isSubmitEmailForm.value = false;
+        //currentStep.value = Steps.Code;
+      })
+      .catch((e) => {
+        //isSubmitEmailForm.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else {
+    await $app.api.eth.auth
+      .init(initPayload).then(() => {
+        sendCodeLoading.value = false
+        codeSended.value = true
+      })
+      .catch((e) => {
+        console.error("ERROR", e);
+        if (e?.errors?.error?.message) {
+          if (e.errors.error.code === 'ETF:011002') {
+            router.push('/personal/login')
+          }
+          backendError.value = e.errors.error.message
+          sendCodeLoading.value = false
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  }
 }
 
 const isOpenModal = ref(false)
@@ -479,7 +591,7 @@ const signupAndBuy = async () => {
         backendError.value = 'Something went wrong'
       }
     })
- 
+
 }
 
 const isSignupAndBuyGoogle = ref(false);
@@ -511,7 +623,7 @@ const signupAndBuyGoogle = () => {
     last_name: $app.filters.trimSpaceIntoString(lastName.value),
     email: $app.filters.trimSpaceIntoString(email.value),
     phone_number: $app.filters.trimSpaceIntoString(tempPhone),
-    phone_number_code: $app.filters.trimSpaceIntoString(countryCode.value) 
+    phone_number_code: $app.filters.trimSpaceIntoString(countryCode.value)
   }
 
   if (refCode.value ) {
