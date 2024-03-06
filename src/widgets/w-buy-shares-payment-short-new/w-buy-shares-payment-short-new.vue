@@ -260,6 +260,7 @@ onMounted(async () => {
     timerStarted.value = true
   }
   initializeTronClock()
+  startTronTimer();
 })
 
 watch(
