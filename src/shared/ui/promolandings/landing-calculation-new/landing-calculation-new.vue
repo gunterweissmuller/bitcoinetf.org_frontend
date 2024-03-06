@@ -44,7 +44,7 @@
           <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
         </div>
 
-        <div @click="() => signupToggle(SignupMethods.Google)" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
+        <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
           <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
         </div>
       </div>
@@ -122,7 +122,7 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {useNuxtApp} from "#app";
+import {useNuxtApp, useRouter, useRoute} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
 import WBuySharesPaymentShortNew from "~/src/widgets/w-buy-shares-payment-short-new/w-buy-shares-payment-short-new.vue";
@@ -139,8 +139,11 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import aInputPhoneCountry from "../../atoms/a-input-phone-country/a-input-phone-country.vue";
 import 'vue-tel-input/vue-tel-input.css';
 import ERegistrationBonusModal from "~/src/entities/e-registration-bonus-modal/e-registration-bonus-modal.vue";
+import axios from "axios";
+import { hostname } from '~/src/app/adapters/ethAdapter'
 
-
+const router = useRouter()
+const route = useRoute()
 const { $app } = useNuxtApp()
 const { width } = useWindowSize()
 const props = withDefaults(
@@ -312,6 +315,32 @@ const isOpenTermsModal = ref(false)
 
 function openTermsModal() {
   isOpenTermsModal.value = true
+}
+
+// signup / google
+
+const googleData : any = ref();
+const googleUrl = ref("");
+
+onMounted(() => {
+  axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
+    googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
+  });
+
+  if($app.store.authGoogle.response?.email) {
+    signupStep.value = SignupSteps.Signup;
+    signupMethod.value = SignupMethods.Google;
+    firstName.value = $app.store.authGoogle.response.first_name;
+    lastName.value = $app.store.authGoogle.response.last_name;
+    email.value =$app.store.authGoogle.response.email;
+  }
+  
+});
+
+const handleGoogleConnect = async () => {
+  localStorage.setItem('googleRedirect', router.currentRoute.value.fullPath)
+  signupMethod.value = SignupMethods.Google;
+  window.location.href = googleUrl.value;
 }
 
 
