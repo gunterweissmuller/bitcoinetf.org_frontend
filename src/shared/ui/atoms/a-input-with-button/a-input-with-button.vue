@@ -76,7 +76,7 @@
               
             </div>
             
-            <button class="a-input-with-button__input-button">{{ buttonText }}</button>
+            <button @click="handleButtonClick" class="a-input-with-button__input-button">{{ isButtonClicked ? buttonTextClicked : buttonText   }}</button>
             
             <template v-if="icon">
               <span
@@ -171,6 +171,9 @@ const props = withDefaults(
     maxLength?: number | null
     imgTrue?:boolean
     buttonText: string
+    buttonTextClicked?: string
+    buttonClick?: any
+    buttonClickEnable?: boolean
   }>(),
   {
     modelValue: '',
@@ -197,7 +200,10 @@ const props = withDefaults(
     textIconText: '',
     maxLength: null,
     imgTrue:false,
+    buttonTextClicked: '',
     buttonText: '',
+    buttonClick: () => {},
+    buttonClickEnable: true,
   },
 )
 
@@ -221,6 +227,17 @@ const emit = defineEmits([
 
 const onInputClick = () => {
   emit('on-input-click')
+}
+
+const isButtonClicked = ref(false);
+
+const handleButtonClick = () => {
+
+  if(props.buttonClickEnable) {
+    isButtonClicked.value = true;
+    props.buttonClick();
+  }
+
 }
 
 watch(

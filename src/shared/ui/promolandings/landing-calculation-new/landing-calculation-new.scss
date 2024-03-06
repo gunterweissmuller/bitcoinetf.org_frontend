@@ -400,6 +400,10 @@
       }
     }
   }
+
+  &__error {
+    color: var(--accent-danger)
+  }
 }
 
 .vue-tel-input {

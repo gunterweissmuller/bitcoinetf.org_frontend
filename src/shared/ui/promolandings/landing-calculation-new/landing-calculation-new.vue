@@ -59,6 +59,9 @@
             label="Email"
             v-model="email"
             buttonText="Get Confirmation Code"
+            buttonTextClicked="Received"
+            :buttonClick="() => {sendCode()}"
+            :buttonClickEnable="!codeSended"
             validation-reg-exp-key="email"
             :disabled="false"
             required
@@ -71,8 +74,8 @@
           <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <!-- <a-input type="tel" v-model="phone" label="Phone Number" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-phone" /> -->
           
-          <vue-tel-input v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
-          <!-- <VueTelInput></VueTelInput> -->
+          <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
               <div class="mb-10">
@@ -82,10 +85,27 @@
           </div>
 
           <a-button class="landing-calculation__signup-main__button" :disabled="false" @click="signupAndBuy" text="$1,000 BUY"></a-button>
-
         </div>
       </template>
 
+      <template v-if="signupStep === SignupSteps.Signup">
+        <w-buy-shares-payment-short v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
+
+        <div class="langing-calculation__chat" v-if="width > 767">
+          <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
+        </div>
+        <div class="w-buy-shares-payment__divider">Or</div>
+        <div class="langing-calculation__processWith">
+          <span>Proceed with</span>
+          <nuxt-link to="/tetherspecial" v-if="isFiatLanding">
+            <a-icon :name="Icon.ColorfulUsdttron" class="langing-calculation__processWith--tron"/>
+          </nuxt-link>
+          <nuxt-link to="/weloverussia" v-if="!isFiatLanding">
+            <a-icon :name="Icon.ColorfulVisawhite"/>
+            <a-icon :name="Icon.ColorfulMastercard"/>
+          </nuxt-link>
+        </div>
+      </template>
       
 
     </div>
@@ -93,6 +113,11 @@
   </div>
 
   <f-terms-modal v-model="isOpenTermsModal" />
+  <e-registration-bonus-modal
+    :confirmData="confirmResponse"
+    v-model="isOpenModal"
+    @close="closeModal"
+  />
 </template>
 
 <script setup lang="ts">
@@ -113,6 +138,7 @@ import ACheckbox from '~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import aInputPhoneCountry from "../../atoms/a-input-phone-country/a-input-phone-country.vue";
 import 'vue-tel-input/vue-tel-input.css';
+import ERegistrationBonusModal from "~/src/entities/e-registration-bonus-modal/e-registration-bonus-modal.vue";
 
 
 const { $app } = useNuxtApp()
@@ -133,6 +159,9 @@ onMounted(()=>{
   $app.store.user.setTheme({theme: 'dark'});
   initializeTronClock()
 })
+
+const backendError = ref('')
+
 function getTimeTron() {
   let createdDate = $app.filters.dayjs($app.store.user.statistic?.trc_bonus?.decrease)
   const nowDate = $app.filters.dayjs()
@@ -212,6 +241,11 @@ enum SignupSteps {
   // Purchase = "Purchase"
 }
 
+enum PurchaseSteps {
+  Default = "Default",
+  Purchase = "Purchase",
+}
+
 enum SignupMethods {
   None = "None",
   Email = "Email",
@@ -219,7 +253,8 @@ enum SignupMethods {
   Google = "Google",
 }
 
-const signupStep = ref(SignupSteps.Default);
+const signupStep = ref(SignupSteps.Signup);
+const purchaseStep = ref(PurchaseSteps.Purchase);
 const signupMethod = ref(SignupMethods.None);
 
 const signupToggle = (method: any) => {
@@ -235,18 +270,23 @@ const signupToggle = (method: any) => {
       signupStep.value = SignupSteps.Signup;
       signupMethod.value = method;
     }
-
-    
   }
-
-
 }
 
 const email = ref('')
 const codeEmail = ref('')
 const firstName = ref('')
 const lastName = ref('')
-const phone = ref(null)
+const phone = ref(null);
+const countryCode = ref(null);
+
+
+
+
+const countryChanged = (country) => {
+  // console.log(country, phone);
+  countryCode.value = country.dialCode;
+}
 
 const emailErrorText = ref('')
 const isEmailValid = ref(false)
@@ -275,9 +315,105 @@ function openTermsModal() {
 }
 
 
+const sendCodeLoading = ref(false)
+const codeSended = ref(false)
 
-const signupAndBuy = () => {
+const sendCode = async () => {
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
 
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+
+  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid || token.value === '') {
+    backendError.value = 'Fill in all the fields';
+    return;
+  }
+
+  const tempPhone = phone.value.slice(countryCode.value.length+1);
+  backendError.value = '';
+  sendCodeLoading.value = true;
+
+  const initPayload = { first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value), phone_number: $app.filters.trimSpaceIntoString(tempPhone), phone_number_code: $app.filters.trimSpaceIntoString(countryCode.value) , refcode: $app.filters.trimSpaceIntoString(refCode.value) }
+
+  await $app.api.eth.auth
+    .init(initPayload).then(()=>{
+      sendCodeLoading.value = false
+      codeSended.value = true
+    })
+    .catch((e) => {
+      console.error("ERROR", e);
+      if (e?.errors?.error?.message) {
+        if (e.errors.error.code === 'ETF:011002') {
+          router.push('/personal/login')
+        }
+        backendError.value = e.errors.error.message
+        sendCodeLoading.value = false
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+
+}
+
+const isOpenModal = ref(false)
+const closeModal = () =>{
+  isOpenModal.value = false
+}
+
+const confirmResponse = ref(null)
+
+const signupAndBuy = async () => {
+
+  backendError.value = ''
+  await $app.api.eth.auth
+    .confirmFast({
+      email: $app.filters.trimSpaceIntoString(email.value),
+      code: $app.filters.trimSpaceIntoString(codeEmail.value),
+    })
+    .then((jwtResponse: any) => {
+      // TODO falling user/me
+      $app.store.auth.setTokens(jwtResponse.data)
+      confirmResponse.value = jwtResponse.data
+      isOpenModal.value = true
+    })
+    .then(async () => {
+      await $app.api.eth.auth.getUser().then((resp) => {
+        $app.store.user.info = resp?.data
+      })
+      await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+        $app.store.user.blockchainUserWallet = resp?.data.uid
+      })
+    })
+    .then(async () => {
+      purchaseStep.value = PurchaseSteps.Purchase;
+      if (props.isFiat) {
+        await $app.api.eth.billingEth
+          .buyShares({
+            amount: 1000,
+            dividends: false,
+            referral: false,
+            bonus: false,
+          })
+          .then(({ data }) => {
+            if (data) {
+              router.replace({
+                query: { replenishment: data.uuid }
+              })
+              $app.store.user.buyShares = data
+            }
+          })
+      }
+    })
+    .catch((e) => {
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
  
 }
 
