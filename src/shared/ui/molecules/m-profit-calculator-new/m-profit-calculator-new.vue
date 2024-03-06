@@ -11,7 +11,20 @@
 
         <div class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary ml-4 grow flex justify-center font-semibold">
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
-          <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/>
+          <!-- <input v-bind="investmentAmountModified" v-on="{ ...$listeners,  input: e => $emit('input', e.target.value)}" :style="'max-width: '+inputMaxWidth+'px'" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
+          <!-- <InputNumber inputId="integeronly" v-model="investmentAmount" inputId="minmax" :min="0" :max="500000" /> -->
+          <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
+          <input 
+            :style="'max-width: '+inputMaxWidth+'px'"
+            :value="investmentAmount"
+            class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
+            placeholder="2,500"
+            type="text"
+            @keypress="validate"
+            :min="1"
+            :max="10000000"
+            @input="onPickerValueInput"
+          />
         </div>
 
       </header>
@@ -144,9 +157,10 @@ import AInput from "~/src/shared/ui/atoms/a-input/a-input.vue";
 import {computed, ref, watch} from "vue";
 import {useNuxtApp} from "#app";
 import VueWriter from 'vue-writer'
+import InputNumber from 'primevue/inputnumber';
 
 const { $app } = useNuxtApp()
-const emit = defineEmits(['calculator-amount','refCode'])
+const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
 let apyValue = ref(33)
@@ -155,23 +169,63 @@ const refCode = ref('')
 const refCodeValid = ref(false)
 const typeAPY = ref('Projected')
 
+
+
 const inputMaxWidth = ref(100);
-const investmentAmount = ref('2,500');
+// const investmentAmount = ref('2,500');
+const investmentAmount = ref(2500);
+
+function validate(event) {
+  if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false
+}
+
+const onPickerValueInput = (event) => {
+  const replacedStringValue = event.target.value.replace(/,/g, '').replaceAll('$', '')
+  investmentAmount.value = Number(replacedStringValue)
+}
+
+watch(
+  () => investmentAmount.value,
+  (newValue) => {
+    if (+newValue > 500000) {
+      investmentAmount.value = 500000;
+    }
+
+    if(String(newValue).length <= 4) {
+      inputMaxWidth.value = 100;
+    } else if(String(newValue).length > 4 && String(newValue).length < 7) {
+      inputMaxWidth.value =  100+((String(newValue).length - 4)*20);
+    }
+
+  },
+)
+
+
 const investmentAmountModified = computed<string>({
   get: () => investmentAmount.value,
   set: (newValue) => {
-    const originalNumber = newValue.split(",").join("");
+    let originalNumber = newValue.split(",").join("");
+
+    // console.log(originalNumber)
+
+    if(Number(originalNumber) > 500000) {
+      originalNumber = String(500000);
+    }
+
+    // console.log("TEST", originalNumber);
+
     if(originalNumber.length <= 4) {
       inputMaxWidth.value = 100;
     } else if(originalNumber.length > 4 && originalNumber.length < 7) {
-      inputMaxWidth.value =  100+((originalNumber.length - 4)*40);
+      inputMaxWidth.value =  100+((originalNumber.length - 4)*28);
     }
+    // console.log("TEST2", originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), originalNumber)
     investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
 
     pickerValue.value = Number(investmentAmount.value.split(",").join(""));
-    console.log(pickerValue.value);
+    // console.log(pickerValue.value, investmentAmount.value);
   },
 });
 

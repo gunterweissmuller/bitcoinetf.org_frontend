@@ -24,8 +24,9 @@
     axios.get(`https://${hostname}/v1/auth/provider/google-auth/init${searchReplaced}${refParam}`, {headers}).then((data: any) => {
         $app.store.authGoogle.setResponse({response: data.data.data, method: SignupMethods.Google});
 
+        console.log(localStorage.getItem('googleRedirect').search('/tetherspecialnew') , "/tetherspecialnew?test=test".search('/tetherspecialnew'))
         if(data.data.data.email) {
-          if(localStorage.getItem('googleRedirect') == '/tetherspecialnew' || localStorage.getItem('googleRedirect') == '/tetherspecial') {
+          if(localStorage.getItem('googleRedirect').search('/tetherspecialnew') !== -1 || localStorage.getItem('googleRedirect').search('/tetherspecial') !== -1) {
             router.push("/tetherspecialnew");
           } else {
             router.push("/personal/registration");

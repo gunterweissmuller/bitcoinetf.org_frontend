@@ -62,9 +62,15 @@
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
 
+<<<<<<< HEAD
 
           <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+=======
+
+          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+>>>>>>> d191f7437b575d409717e4b7da5bae23fada46cb
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
@@ -76,14 +82,19 @@
             :buttonClick="() => {sendCode()}"
             :buttonClickEnable="!codeSended"
             validation-reg-exp-key="email"
-            :disabled="false"
+            :disabled="dataDisabled"
             required
             :error-text="emailErrorText"
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
+<<<<<<< HEAD
           <a-input v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
 
+=======
+          <a-input :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
+
+>>>>>>> d191f7437b575d409717e4b7da5bae23fada46cb
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -93,7 +104,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '1,000') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -109,8 +120,8 @@
             :disabled="true"
             required
           />
-          <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
@@ -121,7 +132,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '1,000') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -389,6 +400,12 @@ const firstName = ref('')
 const lastName = ref('')
 const phone = ref(null);
 const countryCode = ref(null);
+<<<<<<< HEAD
+=======
+const dataDisabled = ref(false);
+
+
+>>>>>>> d191f7437b575d409717e4b7da5bae23fada46cb
 
 const countryChanged = (country) => {
   // console.log(country, phone);
@@ -510,23 +527,32 @@ const sendCode = async () => {
         }
       })
   } else {
-    await $app.api.eth.auth
-      .init(initPayload).then(() => {
-        sendCodeLoading.value = false
-        codeSended.value = true
-      })
-      .catch((e) => {
-        console.error("ERROR", e);
-        if (e?.errors?.error?.message) {
-          if (e.errors.error.code === 'ETF:011002') {
-            router.push('/personal/login')
-          }
-          backendError.value = e.errors.error.message
-          sendCodeLoading.value = false
-        } else {
-          backendError.value = 'Something went wrong'
+
+  await $app.api.eth.auth
+    .init(initPayload).then(()=>{
+      sendCodeLoading.value = false
+      codeSended.value = true
+
+      const aAid = window.localStorage.getItem('PAPVisitorId');
+      if(aAid) {
+        $app.api.eth.auth.papSignUp({
+          payload: {
+            pap_id: aAid,
+            utm_label: window.localStorage.getItem('a_utm'),
+          }}).then((r: any) => {
+          //window.localStorage.removeItem('a_aid');
+          //window.localStorage.removeItem('a_utm');
+        });
+      }
+    })
+    .catch((e) => {
+      console.error("ERROR", e);
+      if (e?.errors?.error?.message) {
+        if (e.errors.error.code === 'ETF:011002') {
+          router.push('/personal/login')
         }
-      })
+      }
+    })
   }
 }
 
@@ -554,12 +580,26 @@ const signupAndBuy = async () => {
       // TODO falling user/me
       $app.store.auth.setTokens(jwtResponse.data)
       confirmResponse.value = jwtResponse.data
-      isOpenModal.value = true
+      isOpenModal.value = true;
+      dataDisabled.value = true;
     })
     .then(async () => {
       await $app.api.eth.auth.getUser().then((resp) => {
         $app.store.user.info = resp?.data
       })
+
+      const aAid = window.localStorage.getItem('PAPVisitorId');
+      if(aAid) {
+        $app.api.eth.auth.papSignUp({
+          payload: {
+            pap_id: aAid,
+            utm_label: window.localStorage.getItem('a_utm'),
+          }}).then((r: any) => {
+          //window.localStorage.removeItem('a_aid');
+          //window.localStorage.removeItem('a_utm');
+        });
+      }
+
       await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
         $app.store.user.blockchainUserWallet = resp?.data.uid
       })
@@ -644,9 +684,10 @@ const signupAndBuyGoogle = () => {
       $app.store.authGoogle.setResponse({}, SignupMethods.Google);
       confirmResponse.value = tokens.data
       isSignupAndBuyGoogle.value = false;
-      firstName.value = '';
-      lastName.value = '';
-      email.value = '';
+      // firstName.value = '';
+      // lastName.value = '';
+      // email.value = '';
+      dataDisabled.value = true;
       purchaseStep.value = PurchaseSteps.Purchase;
     })
     .then(async () => {
