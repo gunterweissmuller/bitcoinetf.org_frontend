@@ -61,16 +61,8 @@
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-
-<<<<<<< HEAD
-
-          <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-=======
-
           <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
->>>>>>> d191f7437b575d409717e4b7da5bae23fada46cb
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
@@ -88,13 +80,7 @@
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-<<<<<<< HEAD
-          <a-input v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
-
-=======
-          <a-input :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
-
->>>>>>> d191f7437b575d409717e4b7da5bae23fada46cb
+          <a-input :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
