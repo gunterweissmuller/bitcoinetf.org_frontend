@@ -327,6 +327,8 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
+  console.log($app.store.authGoogle);
+
   if($app.store.authGoogle.response?.email) {
     signupStep.value = SignupSteps.Signup;
     signupMethod.value = SignupMethods.Google;
