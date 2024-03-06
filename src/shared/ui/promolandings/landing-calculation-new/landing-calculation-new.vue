@@ -89,7 +89,7 @@
       </template>
 
       <template v-if="signupStep === SignupSteps.Signup">
-        <w-buy-shares-payment-short v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -125,7 +125,7 @@ import {ref} from "vue";
 import {useNuxtApp} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
-import WBuySharesPaymentShort from "~/src/widgets/w-buy-shares-payment-short/w-buy-shares-payment-short.vue";
+import WBuySharesPaymentShortNew from "~/src/widgets/w-buy-shares-payment-short-new/w-buy-shares-payment-short-new.vue";
 import {Icon} from "~/src/shared/constants/icons";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 import VueWriter from 'vue-writer'
