@@ -36,7 +36,7 @@
       <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
       <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
       <div class="landing-calculation__signup-buttons">
-        <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
+        <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
           <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
         </div>
 

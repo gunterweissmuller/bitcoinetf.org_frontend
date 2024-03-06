@@ -14,7 +14,7 @@
           <!-- <input v-bind="investmentAmountModified" v-on="{ ...$listeners,  input: e => $emit('input', e.target.value)}" :style="'max-width: '+inputMaxWidth+'px'" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <!-- <InputNumber inputId="integeronly" v-model="investmentAmount" inputId="minmax" :min="0" :max="500000" /> -->
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
-          <input 
+          <input
             :style="'max-width: '+inputMaxWidth+'px'"
             :value="investmentAmount"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -182,11 +182,21 @@ function validate(event) {
 const onPickerValueInput = (event) => {
   const replacedStringValue = event.target.value.replace(/,/g, '').replaceAll('$', '')
   investmentAmount.value = Number(replacedStringValue)
+
+
+  let originalNumber = investmentAmount.value;
+
+  investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
+
+  pickerValue.value = Number(investmentAmount.value.split(",").join(""));
 }
 
 watch(
   () => investmentAmount.value,
   (newValue) => {
+    let originalNumber = newValue.split(",").join("");
     if (+newValue > 500000) {
       investmentAmount.value = 500000;
     }
@@ -196,6 +206,12 @@ watch(
     } else if(String(newValue).length > 4 && String(newValue).length < 7) {
       inputMaxWidth.value =  100+((String(newValue).length - 4)*20);
     }
+
+    investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
+
+    pickerValue.value = Number(investmentAmount.value.split(",").join(""));
 
   },
 )
