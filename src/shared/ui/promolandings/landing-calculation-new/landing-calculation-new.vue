@@ -400,12 +400,8 @@ const firstName = ref('')
 const lastName = ref('')
 const phone = ref(null);
 const countryCode = ref(null);
-<<<<<<< HEAD
-=======
+
 const dataDisabled = ref(false);
-
-
->>>>>>> d191f7437b575d409717e4b7da5bae23fada46cb
 
 const countryChanged = (country) => {
   // console.log(country, phone);
