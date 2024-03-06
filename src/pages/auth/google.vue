@@ -24,6 +24,7 @@
     axios.get(`https://${hostname}/v1/auth/provider/google-auth/init${searchReplaced}${refParam}`, {headers}).then((data: any) => {
         $app.store.authGoogle.setResponse({response: data.data.data, method: SignupMethods.Google});
 
+        console.log("debug", data.data.data, localStorage.getItem('googleRedirect'))
         if(data.data.data.email) {
           if(localStorage.getItem('googleRedirect') == '/tetherspecialnew' || localStorage.getItem('googleRedirect') == '/tetherspecial') {
             router.push("/tetherspecialnew");
