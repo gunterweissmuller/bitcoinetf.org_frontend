@@ -55,8 +55,8 @@
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
 
           
-          <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           
           <a-input-with-button 
@@ -68,13 +68,13 @@
             :buttonClick="() => {sendCode()}"
             :buttonClickEnable="!codeSended"
             validation-reg-exp-key="email"
-            :disabled="false"
+            :disabled="dataDisabled"
             required
             :error-text="emailErrorText"
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-          <a-input v-model="codeEmail" label="Email Confirmation Code" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
+          <a-input :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
           
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
@@ -101,8 +101,8 @@
             :disabled="true"
             required
           />
-          <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
@@ -312,7 +312,7 @@ const firstName = ref('')
 const lastName = ref('')
 const phone = ref(null);
 const countryCode = ref(null);
-
+const dataDisabled = ref(false);
 
 
 
@@ -454,7 +454,8 @@ const signupAndBuy = async () => {
       // TODO falling user/me
       $app.store.auth.setTokens(jwtResponse.data)
       confirmResponse.value = jwtResponse.data
-      isOpenModal.value = true
+      isOpenModal.value = true;
+      dataDisabled.value = true;
     })
     .then(async () => {
       await $app.api.eth.auth.getUser().then((resp) => {
@@ -557,9 +558,10 @@ const signupAndBuyGoogle = () => {
       $app.store.authGoogle.setResponse({}, SignupMethods.Google);
       confirmResponse.value = tokens.data
       isSignupAndBuyGoogle.value = false;
-      firstName.value = '';
-      lastName.value = '';
-      email.value = '';
+      // firstName.value = '';
+      // lastName.value = '';
+      // email.value = '';
+      dataDisabled.value = true;
       purchaseStep.value = PurchaseSteps.Purchase;
     })
     .then(async () => {
