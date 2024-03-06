@@ -11,7 +11,9 @@
             Your order will automatically close in:
           </div>
           <div class="w-buy-shares-payment__tron-timer">
-            29:59
+            <vue-countdown @end="onCountdownEnd" :time="30 * 60 * 1000" v-slot="{ days, hours, minutes, seconds }">
+              {{ minutes }} : {{ seconds }}
+            </vue-countdown>
           </div>
         </div>
 
@@ -125,6 +127,7 @@ import QrcodeVue from 'qrcode.vue'
 import EBuySharesSuccessModal from "~/src/entities/e-buy-shares-success-modal/e-buy-shares-success-modal.vue";
 import {Centrifuge} from "centrifuge";
 import ACheckbox from "~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue";
+import VueCountdown from '@chenfengyuan/vue-countdown';
 
 const props = withDefaults(
   defineProps<{
@@ -141,6 +144,12 @@ const props = withDefaults(
 const router = useRouter()
 const route = useRoute()
 const { $app } = useNuxtApp()
+
+const onCountdownEnd = () => {
+  window.history.pushState({}, document.title, window.location.pathname);
+  location.reload();
+}
+
 const addressCopied = ref(false)
 const amountCopied = ref(false)
 const BANK_VARIANTS = [

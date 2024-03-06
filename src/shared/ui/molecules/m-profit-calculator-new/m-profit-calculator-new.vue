@@ -168,6 +168,8 @@ const investmentAmountModified = computed<string>({
     }
     investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+    $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
+
     pickerValue.value = Number(investmentAmount.value.split(",").join(""));
     console.log(pickerValue.value);
   },

@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new></m-profit-calculator-new>
+    <m-profit-calculator-new @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
     
 
 
@@ -84,11 +84,11 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="false" @click="signupAndBuy" text="$1,000 BUY"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="false" @click="signupAndBuy" :text=" '$' + ($app.store.user.investAmount.original !== 0 ? $app.store.user.investAmount.parsed : '1,000') + ' BUY'"></a-button>
         </div>
       </template>
 
-      <template v-if="signupStep === SignupSteps.Signup">
+      <template v-if="purchaseStep === PurchaseSteps.Purchase">
         <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
@@ -200,7 +200,7 @@ function initializeTronClock() {
   timeinterval = setInterval(updateClockTron, 30000);
 }
 
-const calcAmount = ref(1000)
+const calcAmount = ref(2500)
 const calcAmountUpdated = (e) =>{
   calcAmount.value = e
 }

@@ -33,6 +33,10 @@ export const user = defineStore('user', {
 
     isInvestModalShow: false,
     isInvestModalReinvest: false,
+    investAmount: {
+      original: 0,
+      parsed: 0
+    },
   }),
 
   actions: {
@@ -44,6 +48,9 @@ export const user = defineStore('user', {
     },
     setTheme(payload: {theme: string}) {
       this.theme = payload.theme;
+    },
+    setInvestAmount(payload: {amount: any}) {
+      this.investAmount = payload.amount;
     }
   },
 
