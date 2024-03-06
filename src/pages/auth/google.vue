@@ -24,13 +24,23 @@
     axios.get(`https://${hostname}/v1/auth/provider/google-auth/init${searchReplaced}${refParam}`, {headers}).then((data: any) => {
         $app.store.authGoogle.setResponse({response: data.data.data, method: SignupMethods.Google});
 
-        if(localStorage.getItem('googleRedirect') == '/tetherspecialnew' || localStorage.getItem('googleRedirect') == '/tetherspecial') {
-          router.push("/tetherspecialnew");
-        }else if(data.data.data.email) {
-          router.push("/personal/registration");
+        if(data.data.data.email) {
+          if(localStorage.getItem('googleRedirect') == '/tetherspecialnew' || localStorage.getItem('googleRedirect') == '/tetherspecial') {
+            router.push("/tetherspecialnew");
+          } else {
+            router.push("/personal/registration");
+          }
         } else {
           router.push("/personal/login");
         }
+
+        // if(localStorage.getItem('googleRedirect') == '/tetherspecialnew' || localStorage.getItem('googleRedirect') == '/tetherspecial' && data.data.data.email) {
+        //   router.push("/tetherspecialnew");
+        // }else if(data.data.data.email) {
+        //   router.push("/personal/registration");
+        // } else {
+        //   router.push("/personal/login");
+        // }
     })
   })
 

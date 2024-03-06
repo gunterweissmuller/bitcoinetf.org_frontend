@@ -88,6 +88,38 @@
         </div>
       </template>
 
+      <template v-if="signupStep === SignupSteps.Google">
+        <div class="landing-calculation__signup-main">
+          <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+          
+          <a-input
+            class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
+            label="Email"
+            v-model="email"
+            validation-reg-exp-key="email"
+            :disabled="true"
+            required
+          />
+          <a-input v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+
+
+          <!-- <a-input type="tel" v-model="phone" label="Phone Number" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-phone" /> -->
+          
+          <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
+
+          <div class="landing-calculation__signup-main__agree">
+              <div class="mb-10">
+                  <a-checkbox v-model="registrationAgreedUS" id="with_email" label="<p >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>" single />
+              </div>
+              <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
+          </div>
+
+          <a-button class="landing-calculation__signup-main__button" :disabled="false" @click="signupAndBuyGoogle" :text=" '$' + ($app.store.user.investAmount.original !== 0 ? $app.store.user.investAmount.parsed : '1,000') + ' BUY'"></a-button>
+        </div>
+      </template>
+
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
         <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
 
@@ -241,7 +273,7 @@ const scrollToChat = () =>{
 enum SignupSteps {
   Default = "Default",
   Signup = "Signup",
-  // Purchase = "Purchase"
+  Google = "Google",
 }
 
 enum PurchaseSteps {
@@ -330,18 +362,17 @@ onMounted(() => {
   console.log($app.store.authGoogle);
 
   if($app.store.authGoogle.response?.email) {
-    signupStep.value = SignupSteps.Signup;
+    signupStep.value = SignupSteps.Google;
     signupMethod.value = SignupMethods.Google;
     firstName.value = $app.store.authGoogle.response.first_name;
     lastName.value = $app.store.authGoogle.response.last_name;
-    email.value =$app.store.authGoogle.response.email;
+    email.value = $app.store.authGoogle.response.email;
   }
   
 });
 
 const handleGoogleConnect = async () => {
   localStorage.setItem('googleRedirect', router.currentRoute.value.fullPath)
-  signupMethod.value = SignupMethods.Google;
   window.location.href = googleUrl.value;
 }
 
@@ -396,7 +427,12 @@ const closeModal = () =>{
 
 const confirmResponse = ref(null)
 
+const isSignupAndBuy = ref(false);
+
 const signupAndBuy = async () => {
+
+  if(isSignupAndBuy.value) return;
+  isSignupAndBuy.value = true;
 
   backendError.value = ''
   await $app.api.eth.auth
@@ -446,6 +482,91 @@ const signupAndBuy = async () => {
       }
     })
  
+}
+
+const isSignupAndBuyGoogle = ref(false);
+
+const signupAndBuyGoogle = () => {
+
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
+
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+
+  if(isSignupAndBuyGoogle.value) return;
+  isSignupAndBuyGoogle.value = true;
+
+  if(firstName.value === '' || lastName.value === '' ) {
+    backendError.value = 'Fill in all the fields';
+    isSignupAndBuyGoogle.value = false;
+    return;
+  }
+
+  const tempPhone = phone.value.slice(countryCode.value.length+1);
+
+  const initPayload = {
+    method: signupMethod.value,
+    first_name: $app.filters.trimSpaceIntoString(firstName.value),
+    last_name: $app.filters.trimSpaceIntoString(lastName.value),
+    email: $app.filters.trimSpaceIntoString(email.value),
+    phone_number: $app.filters.trimSpaceIntoString(tempPhone),
+    phone_number_code: $app.filters.trimSpaceIntoString(countryCode.value) 
+  }
+
+  if (refCode.value ) {
+      initPayload.ref_code = refCode.value
+  }
+
+  if ($app.store.auth.refCode !== "") {
+      initPayload.ref_code = $app.store.auth.refCode
+      $app.store.auth.setRefCode("");
+  }
+
+  console.log(initPayload);
+
+  $app.api.eth.auth
+    .initGoogle(initPayload)
+    .then((tokens: any) => {
+      $app.store.auth.setTokens(tokens.data)
+      $app.store.authGoogle.setResponse({}, SignupMethods.Google);
+      confirmResponse.value = tokens.data
+      isSignupAndBuyGoogle.value = false;
+      firstName.value = '';
+      lastName.value = '';
+      email.value = '';
+      purchaseStep.value = PurchaseSteps.Purchase;
+    })
+    .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+              $app.store.user.info = resp?.data
+          })
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+    })
+    .catch((e) => {
+      console.error(e);
+      isSubmitEmailForm.value = false;
+        if (e?.errors?.error?.message) {
+            backendError.value = e.errors.error.message
+        } else {
+            backendError.value = 'Something went wrong'
+        }
+    })
+
+  return;
 }
 
 </script>
