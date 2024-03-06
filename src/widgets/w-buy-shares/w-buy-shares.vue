@@ -44,7 +44,7 @@
             Apply dividends
           </div>
           <div class="w-buy-shares__switch-button">
-            <a-switch v-model="switches.dividends" :label="dividendsAmount" label-position="left" :disabled="!wallets?.dividends?.btc_amount || wallets?.dividends?.usd_amount < 1"></a-switch>
+            <a-switch v-model="switches.dividends" :label="dividendsAmount" label-position="left" :disabled="!wallets?.dividends?.usd_amount || wallets?.dividends?.usd_amount < 1"></a-switch>
           </div>
         </div>
       </div>
@@ -235,7 +235,7 @@ const buyButtonText = computed(() => {
   }
 
   if (switches.dividends) {
-    sum -= wallets.value?.dividends?.btc_amount * $app.store.user.btcValue
+    sum -= wallets.value?.dividends?.usd_amount
   }
 
   if (switches.referral) {
@@ -252,7 +252,7 @@ const bonusAmount = computed(() => {
   return `$${$app.filters.rounded(wallets.value?.bonus?.usd_amount, 2) || 0}`
 })
 const dividendsAmount = computed(() => {
-  return `$${$app.filters.rounded(wallets.value?.dividends?.btc_amount * $app.store.user.btcValue, 2) || 0}`
+  return `$${$app.filters.rounded(wallets.value?.dividends?.usd_amount, 2) || 0}`
 })
 
 const buyShares = () => {
