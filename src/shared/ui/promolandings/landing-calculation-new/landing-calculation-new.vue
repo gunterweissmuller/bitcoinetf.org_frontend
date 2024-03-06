@@ -85,7 +85,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '1,000') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -113,7 +113,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '1,000') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
         </div>
       </template>
 

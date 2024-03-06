@@ -59,6 +59,9 @@ dependencies:
   pinia:
     specifier: ^2.1.6
     version: 2.1.7(typescript@5.3.3)(vue@3.4.15)
+  primevue:
+    specifier: ^3.49.1
+    version: 3.49.1(vue@3.4.15)
   print-js:
     specifier: ^1.6.0
     version: 1.6.0
@@ -10404,6 +10407,14 @@ packages:
       '@jest/schemas': 29.6.3
       ansi-styles: 5.2.0
       react-is: 18.2.0
+    dev: false
+
+  /primevue@3.49.1(vue@3.4.15):
+    resolution: {integrity: sha512-OmUTqbKbPB63Zqf7uA49cipDi+Qh+/13AYJPwgvsVsI4QmAKIkeibBwkOgj1CNIFlopfF79YmyBshFUAPqlw9A==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.4.15(typescript@5.3.3)
     dev: false
 
   /print-js@1.6.0:

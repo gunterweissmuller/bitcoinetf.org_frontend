@@ -52,6 +52,7 @@
     "lodash": "^4.17.21",
     "nostr-tools": "^1.15.0",
     "pinia": "^2.1.6",
+    "primevue": "^3.49.1",
     "print-js": "^1.6.0",
     "qrcode.vue": "^3.4.1",
     "reflect-metadata": "^0.1.13",
