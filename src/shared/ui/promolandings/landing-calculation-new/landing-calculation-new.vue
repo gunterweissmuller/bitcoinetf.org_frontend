@@ -122,6 +122,7 @@
         </div>
       </template>
 
+      <div class="w-buy-shares-payment-short-new"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
         <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
@@ -397,7 +398,6 @@ const investScrolltoSignup = () => {
 }
 
 const scrollToSignup = () => {
-  console.log("TEst")
   const element = document.querySelector(".landing-calculation__signup");
   let headerOffset
   if (window.innerWidth < 768) {
@@ -417,8 +417,8 @@ const scrollToSignup = () => {
 }
 
 const scrollToPurchase = () => {
-  console.log("TEst2")
-  const element = document.querySelector(".w-buy-shares-payment");
+  // const element = document.querySelector(".w-buy-shares-payment");
+  const element = document.querySelector(".w-buy-shares-payment-short-new");
   let headerOffset
   if (window.innerWidth < 768) {
     headerOffset = 145;
@@ -428,10 +428,14 @@ const scrollToPurchase = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: "smooth",
-  });
+  console.log(offsetPosition, elementPosition);
+
+  setTimeout(()=>{
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  },1)
 }
 
 const email = ref('')
