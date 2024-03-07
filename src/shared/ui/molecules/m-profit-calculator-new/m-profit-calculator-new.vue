@@ -212,8 +212,8 @@ watch(
       investmentAmount.value = 500000;
     }
 
-    if (+newValue <= 0) {
-      investmentAmount.value = 1;
+    if (+newValue < 0) {
+      investmentAmount.value = 0;
     }
 
     localStorage.setItem('investmentAmount', String(investmentAmount.value));
