@@ -75,14 +75,14 @@
               </div>
 
 
-            <!--<div @click="handleTelegramConnect"
+            <div @click="handleTelegramConnect"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
                 <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
                          class="aspect-square w-[18px]" />
                 <div class="grow">Sign up with Telegram</div>
               </div>
-            </div>-->
+            </div>
 
               <!--<div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
