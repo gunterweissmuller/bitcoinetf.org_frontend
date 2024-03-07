@@ -147,7 +147,7 @@
         }
 
         &-front {
-          -webkit-transform:rotateY(0deg);
+          // -webkit-transform:rotateY(0deg);
         }
 
         &-front, &-back {
@@ -157,7 +157,7 @@
           -moz-backface-visibility: hidden;
           -o-backface-visibility: hidden;
           -ms-backface-visibility: hidden;
-          -webkit-backface-visibility: hidden; /* Safari */
+          -webkit-backface-visibility: hidden !important;  /* Safari */
           backface-visibility: hidden;
 
           color: white;
