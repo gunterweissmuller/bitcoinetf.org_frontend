@@ -457,7 +457,7 @@ const handleTelegramConnect = async () => {
 
 const handleTelegramAuth = async () => {
   (window as any).Telegram.Login.auth(
-  { bot_id: 'YOUR_BOT_ID', request_access: true },
+  { bot_id: telegramBotName, request_access: true },
   (data) => {
     if (!data) {
       // authorization failed
