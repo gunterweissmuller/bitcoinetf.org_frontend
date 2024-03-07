@@ -175,11 +175,11 @@ const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-let apyValue = ref(14)
+let apyValue = ref(33)
 const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
-const typeAPY = ref('Guaranteed')
+const typeAPY = ref('Projected')
 
 const inputMaxWidth = ref(width.value < 768 ? 40 : 100);
 // const investmentAmount = ref('2,500');
