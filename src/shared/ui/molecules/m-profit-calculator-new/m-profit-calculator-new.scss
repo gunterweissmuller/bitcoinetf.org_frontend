@@ -148,6 +148,9 @@
 
         &-front {
           // -webkit-transform:rotateY(0deg);
+          transform: rotateY(0deg) ;
+          -webkit-transform: rotateY(0deg) ;
+          -moz-transform: rotateY(0deg);
         }
 
         &-front, &-back {
@@ -171,6 +174,10 @@
         &-back {
           transform: rotateY(180deg);
           background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--btcoin-500, #FF8D07);
+
+          transform: rotateY(180deg) translateZ(1px);
+          -webkit-transform: rotateY(180deg) translateZ(1px);
+          -moz-transform: rotateY(180deg) translateZ(1px); 
         }
 
         &-icon {
