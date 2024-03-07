@@ -615,70 +615,139 @@ const signupAndBuy = async () => {
   isSignupAndBuy.value = true;
 
   backendError.value = ''
-  await $app.api.eth.auth
-    .confirmFast({
+
+  if(signupMethod.value === SignupMethods.Metamask) {
+    await $app.api.eth.auth.
+    confirmMetamask({
       email: $app.filters.trimSpaceIntoString(email.value),
       code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      fast: true,
     })
-    .then((jwtResponse: any) => {
-      // TODO falling user/me
-      $app.store.auth.setTokens(jwtResponse.data)
-      confirmResponse.value = jwtResponse.data
-      isOpenModal.value = true;
-      dataDisabled.value = true;
-    })
-    .then(async () => {
-      await $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        isOpenModal.value = true;
+        dataDisabled.value = true;
       })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        })
 
-      const aAid = window.localStorage.getItem('PAPVisitorId');
-      if(aAid) {
-        $app.api.eth.auth.papSignUp({
-          payload: {
-            pap_id: aAid,
-            utm_label: window.localStorage.getItem('a_utm'),
-          }}).then((r: any) => {
-          //window.localStorage.removeItem('a_aid');
-          //window.localStorage.removeItem('a_utm');
-        });
-      }
-
-      await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
-        $app.store.user.blockchainUserWallet = resp?.data.uid
-      })
-    })
-    .then(async () => {
-      purchaseStep.value = PurchaseSteps.Purchase;
-
-
-
-      if (props.isFiat) {
-      console.log("TRUE IS FIAT");
-        await $app.api.eth.billingEth
-          .buyShares({
-            amount: 1000,
-            dividends: false,
-            referral: false,
-            bonus: false,
-          })
-          .then(({ data }) => {
-            if (data) {
-              router.replace({
-                query: { replenishment: data.uuid }
-              })
-              $app.store.user.buyShares = data
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if (aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
             }
-          })
-      }
-    })
-    .catch((e) => {
-      if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
-      } else {
-        backendError.value = 'Something went wrong'
-      }
-    })
+          }).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+
+        await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+          $app.store.user.blockchainUserWallet = resp?.data.uid
+        })
+      })
+      .then(async () => {
+        purchaseStep.value = PurchaseSteps.Purchase;
+
+
+        if (props.isFiat) {
+          console.log("TRUE IS FIAT");
+          await $app.api.eth.billingEth
+            .buyShares({
+              amount: 1000,
+              dividends: false,
+              referral: false,
+              bonus: false,
+            })
+            .then(({ data }) => {
+              if (data) {
+                router.replace({
+                  query: { replenishment: data.uuid }
+                })
+                $app.store.user.buyShares = data
+              }
+            })
+        }
+      })
+      .catch((e) => {
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else {
+    await $app.api.eth.auth
+      .confirmFast({
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        isOpenModal.value = true;
+        dataDisabled.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        })
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if (aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }
+          }).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+
+        await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+          $app.store.user.blockchainUserWallet = resp?.data.uid
+        })
+      })
+      .then(async () => {
+        purchaseStep.value = PurchaseSteps.Purchase;
+
+
+        if (props.isFiat) {
+          console.log("TRUE IS FIAT");
+          await $app.api.eth.billingEth
+            .buyShares({
+              amount: 1000,
+              dividends: false,
+              referral: false,
+              bonus: false,
+            })
+            .then(({ data }) => {
+              if (data) {
+                router.replace({
+                  query: { replenishment: data.uuid }
+                })
+                $app.store.user.buyShares = data
+              }
+            })
+        }
+      })
+      .catch((e) => {
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  }
 
 }
 
