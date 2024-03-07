@@ -227,7 +227,11 @@
   
         &-stats {
           &-wrapper {
-            flex-direction: column;
+
+            @include breakpoint($break-tablet-minus) {
+              flex-direction: column;
+            }
+            
           }
 
           &-title {
