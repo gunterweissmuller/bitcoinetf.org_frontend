@@ -105,7 +105,9 @@
         </h5>
 
         <div class="flex flex-col items-center pb-12">
-          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
+          <button @click="">TEST</button>
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
+          <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
         </div>
       </template>
       <template v-else-if="currentStep === Steps.Email">
@@ -451,6 +453,19 @@ const handleTelegramConnect = async () => {
     //console.log(r);
 
   })
+}
+
+const handleTelegramAuth = async () => {
+  (window as any).Telegram.Login.auth(
+  { bot_id: 'YOUR_BOT_ID', request_access: true },
+  (data) => {
+    if (!data) {
+      // authorization failed
+    }
+    console.log(data)
+    // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+  }
+);
 }
 
 // Ref code field
