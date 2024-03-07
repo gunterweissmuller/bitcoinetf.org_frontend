@@ -397,6 +397,7 @@ const investScrolltoSignup = () => {
 }
 
 const scrollToSignup = () => {
+  console.log("TEst")
   const element = document.querySelector(".landing-calculation__signup");
   let headerOffset
   if (window.innerWidth < 768) {
@@ -407,6 +408,8 @@ const scrollToSignup = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
+  console.log(elementPosition, offsetPosition)
+
   window.scrollTo({
     top: offsetPosition,
     behavior: "smooth",
@@ -414,6 +417,7 @@ const scrollToSignup = () => {
 }
 
 const scrollToPurchase = () => {
+  console.log("TEst2")
   const element = document.querySelector(".w-buy-shares-payment");
   let headerOffset
   if (window.innerWidth < 768) {
