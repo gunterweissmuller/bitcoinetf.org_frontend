@@ -651,7 +651,7 @@ const signupAndBuy = async () => {
     .then(async () => {
       purchaseStep.value = PurchaseSteps.Purchase;
 
-      
+
 
       if (props.isFiat) {
         await $app.api.eth.billingEth
