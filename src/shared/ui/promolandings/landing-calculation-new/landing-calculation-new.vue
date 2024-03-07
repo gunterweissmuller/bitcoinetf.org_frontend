@@ -676,7 +676,6 @@ const signupAndBuy = async () => {
         }
       })
       .catch((e) => {
-        isSignupAndBuy.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -831,8 +830,8 @@ const signupAndBuyGoogle = () => {
         })
     })
     .catch((e) => {
-      isSignupAndBuyGoogle.value = false;
       console.error(e);
+      isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
             backendError.value = e.errors.error.message
         } else {
