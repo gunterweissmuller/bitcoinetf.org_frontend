@@ -408,12 +408,12 @@ const scrollToSignup = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
-  console.log(elementPosition, offsetPosition)
-
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: "smooth",
-  });
+  setTimeout(()=>{
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  },1)
 }
 
 const scrollToPurchase = () => {
