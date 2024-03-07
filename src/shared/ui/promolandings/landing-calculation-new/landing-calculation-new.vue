@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
@@ -90,7 +90,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -118,12 +118,13 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
+      <div class="w-buy-shares-payment-short-new"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -151,6 +152,7 @@
     :confirmData="confirmResponse"
     v-model="isOpenModal"
     @close="closeModal"
+    :onComplete="scrollToPurchase"
   />
 </template>
 
@@ -264,6 +266,16 @@ const handleMetamaskConnect = async () => {
   }
 
 }
+
+// const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
+const buyAmount = ref($app.store.user.investAmount);
+
+watch(
+  () => $app.store.user.investAmount,
+  (newValue) => {
+    buyAmount.value = newValue;
+  }
+)
 
 const backendError = ref('')
 
@@ -380,6 +392,52 @@ const signupToggle = (method: any) => {
   }
 }
 
+const investScrolltoSignup = () => {
+  signupStep.value = SignupSteps.Signup;
+  signupMethod.value = SignupMethods.Email;
+}
+
+const scrollToSignup = () => {
+  const element = document.querySelector(".landing-calculation__signup");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  setTimeout(()=>{
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  },1)
+}
+
+const scrollToPurchase = () => {
+  // const element = document.querySelector(".w-buy-shares-payment");
+  const element = document.querySelector(".w-buy-shares-payment-short-new");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  console.log(offsetPosition, elementPosition);
+
+  setTimeout(()=>{
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  },1)
+}
+
 const email = ref('')
 const codeEmail = ref('')
 const firstName = ref('')
@@ -438,6 +496,8 @@ onMounted(() => {
     firstName.value = $app.store.authGoogle.response.first_name;
     lastName.value = $app.store.authGoogle.response.last_name;
     email.value = $app.store.authGoogle.response.email;
+
+    scrollToSignup()
   }
 
 });
@@ -547,6 +607,8 @@ const confirmResponse = ref(null)
 
 const isSignupAndBuy = ref(false);
 
+
+
 const signupAndBuy = async () => {
 
   if(isSignupAndBuy.value) return;
@@ -588,6 +650,9 @@ const signupAndBuy = async () => {
     })
     .then(async () => {
       purchaseStep.value = PurchaseSteps.Purchase;
+
+      
+
       if (props.isFiat) {
         await $app.api.eth.billingEth
           .buyShares({
@@ -671,6 +736,7 @@ const signupAndBuyGoogle = () => {
       // email.value = '';
       dataDisabled.value = true;
       purchaseStep.value = PurchaseSteps.Purchase;
+      scrollToPurchase();
     })
     .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {

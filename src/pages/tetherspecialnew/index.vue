@@ -11,7 +11,7 @@
   import LandingCalculation from "~/src/shared/ui/promolandings/landing-calculation-new/landing-calculation-new.vue";
 
   definePageMeta({
-    layout: 'site-dark-launch',
+    layout: 'site-dark',
   })
   </script>
 

@@ -23,10 +23,12 @@ const props = withDefaults(
   defineProps<{
     modelValue: boolean
     confirmData: any
+    onComplete?: any
   }>(),
   {
     confirmData: null,
     modelValue: false,
+    onComplete: () => {}
   },
 )
 
@@ -65,6 +67,11 @@ const closeModal = () => {
 
 const acceptModal = () => {
   isOpenModal.value = false
+
+  if(props.onComplete) {
+    props.onComplete();
+  }
+
   emit('accept')
 }
 </script>

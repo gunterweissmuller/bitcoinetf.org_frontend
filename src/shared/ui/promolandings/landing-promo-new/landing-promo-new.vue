@@ -24,7 +24,7 @@ import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 
 
 const scrollToSection = () =>{
-  const element = document.querySelector(".langing-calculation__title");
+  const element = document.querySelector(".landing-calculation__journey");
   let headerOffset
   if (window.innerWidth < 768) {
     headerOffset = 145;
