@@ -654,6 +654,7 @@ const signupAndBuy = async () => {
       
 
       if (props.isFiat) {
+      console.log("TRUE IS FIAT");
         await $app.api.eth.billingEth
           .buyShares({
             amount: 1000,
@@ -739,9 +740,9 @@ const signupAndBuyGoogle = () => {
       scrollToPurchase();
     })
     .then(async () => {
-          await $app.api.eth.auth.getUser().then((resp) => {
-              $app.store.user.info = resp?.data
-          })
+        await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data
+        })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
         if(aAid) {
@@ -754,6 +755,10 @@ const signupAndBuyGoogle = () => {
             //window.localStorage.removeItem('a_utm');
           });
         }
+
+        await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+          $app.store.user.blockchainUserWallet = resp?.data.uid
+        })
     })
     .catch((e) => {
       console.error(e);
