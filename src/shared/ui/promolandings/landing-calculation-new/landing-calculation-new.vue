@@ -151,6 +151,7 @@
     :confirmData="confirmResponse"
     v-model="isOpenModal"
     @close="closeModal"
+    :onComplete="scrollToPurchase"
   />
 </template>
 
@@ -562,6 +563,23 @@ const confirmResponse = ref(null)
 
 const isSignupAndBuy = ref(false);
 
+const scrollToPurchase = () => {
+  const element = document.querySelector(".w-buy-shares-payment");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: "smooth",
+  });
+}
+
 const signupAndBuy = async () => {
 
   if(isSignupAndBuy.value) return;
@@ -603,6 +621,9 @@ const signupAndBuy = async () => {
     })
     .then(async () => {
       purchaseStep.value = PurchaseSteps.Purchase;
+
+      
+
       if (props.isFiat) {
         await $app.api.eth.billingEth
           .buyShares({
