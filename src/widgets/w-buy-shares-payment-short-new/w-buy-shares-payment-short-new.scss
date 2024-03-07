@@ -368,8 +368,8 @@
       display: block;
       height: 1px;
       content: '';
-      // background: var(--Surfaces-Border-2, #C8CAD7);
-      background: red;
+      background: var(--Surfaces-Border-2, #C8CAD7);
+      // background: red;
       width: 100%;
     }
     &:before{
