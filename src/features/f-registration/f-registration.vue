@@ -105,7 +105,7 @@
         </h5>
 
         <div class="flex flex-col items-center pb-12">
-          <button @click="">TEST</button>
+          <button @click="handleTelegramAuth">TEST</button>
           <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
           <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
         </div>
