@@ -90,7 +90,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -118,12 +118,12 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + (($app.store.user.investAmount.original !== 0 && $app.store.user.investAmount.original) ? $app.store.user.investAmount.parsed : '2,500') + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -264,6 +264,8 @@ const handleMetamaskConnect = async () => {
   }
 
 }
+
+const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
 
 const backendError = ref('')
 

@@ -63,7 +63,7 @@
           <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(pickerValue + guaranteedPayout * 3, 1) }} </p>
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="flex relative justify-around">
@@ -73,7 +73,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((pickerValue + guaranteedPayout * 3) - pickerValue) / pickerValue) * 100, 1) }}%</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1) }}%</p>
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
@@ -98,7 +98,7 @@
           <div class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(pickerValue + guaranteedPayout * 3, 1) }} </p>
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="flex relative justify-around">
@@ -108,7 +108,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((pickerValue + guaranteedPayout * 3) - pickerValue) / pickerValue) * 100, 1) }}%</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1) }}%</p>
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
@@ -175,6 +175,12 @@ const inputMaxWidth = ref(100);
 // const investmentAmount = ref('2,500');
 const investmentAmount = ref(2500);
 
+onMounted(()=>{
+  if(localStorage.getItem('investmentAmount')) {
+    investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+  }
+})
+
 function validate(event) {
   if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false
 }
@@ -190,7 +196,7 @@ const onPickerValueInput = (event) => {
 
   $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
 
-  pickerValue.value = Number(investmentAmount.value.split(",").join(""));
+  investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
 }
 
 watch(
@@ -201,49 +207,27 @@ watch(
       investmentAmount.value = 500000;
     }
 
+    if (+newValue <= 0) {
+      investmentAmount.value = 1;
+    }
+
+    localStorage.setItem('investmentAmount', String(investmentAmount.value));
+    // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+
     if(String(newValue).length <= 4) {
       inputMaxWidth.value = 100;
     } else if(String(newValue).length > 4 && String(newValue).length < 7) {
       inputMaxWidth.value =  100+((String(newValue).length - 4)*20);
     }
 
-    investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
-
-    pickerValue.value = Number(investmentAmount.value.split(",").join(""));
+    // investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
 
   },
 )
 
 
-const investmentAmountModified = computed<string>({
-  get: () => investmentAmount.value,
-  set: (newValue) => {
-    let originalNumber = newValue.split(",").join("");
-
-    // console.log(originalNumber)
-
-    if(Number(originalNumber) > 500000) {
-      originalNumber = String(500000);
-    }
-
-    // console.log("TEST", originalNumber);
-
-    if(originalNumber.length <= 4) {
-      inputMaxWidth.value = 100;
-    } else if(originalNumber.length > 4 && originalNumber.length < 7) {
-      inputMaxWidth.value =  100+((originalNumber.length - 4)*28);
-    }
-    // console.log("TEST2", originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), originalNumber)
-    investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-    $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
-
-    pickerValue.value = Number(investmentAmount.value.split(",").join(""));
-    // console.log(pickerValue.value, investmentAmount.value);
-  },
-});
 
 const dayliDivs = computed(() => {
   return (guaranteedPayout.value / 365).toFixed(2)
@@ -254,7 +238,7 @@ const apyValueComputed = computed(() => {
 })
 
 const guaranteedPayout = computed(() => {
-  return pickerValue.value * (apyValueComputed.value / 100)
+  return investmentAmount.value * (apyValueComputed.value / 100)
 })
 
 const currencies = ref([
