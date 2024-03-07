@@ -28,7 +28,7 @@
         console.log(localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') , "/tetherspecialnew?test=test"?.search('/tetherspecialnew'));
         console.log(localStorage.getItem('googleRedirect')?.search('/tetherspecialnew'), localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') !== -1, localStorage.getItem('googleRedirect')?.search('/tetherspecial') !== -1)
         if(data.data.data.email) {
-          if(localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') && ( localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') !== -1 || localStorage.getItem('googleRedirect')?.search('/tetherspecial') !== -1)) {
+          if(localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') !== undefined && ( localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') !== -1 || localStorage.getItem('googleRedirect')?.search('/tetherspecial') !== -1)) {
             localStorage.removeItem('googleRedirect');
             router.push("/tetherspecialnew");
           } else {
