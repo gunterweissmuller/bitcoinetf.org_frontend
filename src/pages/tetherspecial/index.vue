@@ -1,20 +1,18 @@
 <template>
-    <landing-promo-new/>
-    <landing-calculation-new />
-    <s-site-footer/>
-  </template>
+  <landing-promo/>
+  <landing-calculation />
+  <s-site-footer/>
+</template>
 
-  <script setup>
-  import {definePageMeta} from "#imports";
-  import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue";
-  import LandingPromoNew from "~/src/shared/ui/promolandings/landing-promo-new/landing-promo-new.vue";
-  import LandingCalculation from "~/src/shared/ui/promolandings/landing-calculation-new/landing-calculation-new.vue";
+<script setup>
+import {definePageMeta} from "#imports";
+import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
 
-  definePageMeta({
-    layout: 'site-dark',
-  })
-  </script>
+definePageMeta({
+  layout: 'site-dark',
+})
+</script>
 
-  <style lang="scss">
+<style lang="scss">
 
-  </style>
+</style>
