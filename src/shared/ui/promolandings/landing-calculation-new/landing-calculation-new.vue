@@ -396,6 +396,40 @@ const investScrolltoSignup = () => {
   signupMethod.value = SignupMethods.Email;
 }
 
+const scrollToSignup = () => {
+  const element = document.querySelector(".landing-calculation__signup");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: "smooth",
+  });
+}
+
+const scrollToPurchase = () => {
+  const element = document.querySelector(".w-buy-shares-payment");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: "smooth",
+  });
+}
+
 const email = ref('')
 const codeEmail = ref('')
 const firstName = ref('')
@@ -454,6 +488,8 @@ onMounted(() => {
     firstName.value = $app.store.authGoogle.response.first_name;
     lastName.value = $app.store.authGoogle.response.last_name;
     email.value = $app.store.authGoogle.response.email;
+
+    scrollToSignup()
   }
 
 });
@@ -563,22 +599,7 @@ const confirmResponse = ref(null)
 
 const isSignupAndBuy = ref(false);
 
-const scrollToPurchase = () => {
-  const element = document.querySelector(".w-buy-shares-payment");
-  let headerOffset
-  if (window.innerWidth < 768) {
-    headerOffset = 145;
-  } else {
-    headerOffset = 155;
-  }
-  const elementPosition = element.offsetTop;
-  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: "smooth",
-  });
-}
 
 const signupAndBuy = async () => {
 
@@ -707,6 +728,7 @@ const signupAndBuyGoogle = () => {
       // email.value = '';
       dataDisabled.value = true;
       purchaseStep.value = PurchaseSteps.Purchase;
+      scrollToPurchase();
     })
     .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
