@@ -178,6 +178,7 @@ const investmentAmount = ref(2500);
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+    $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
 })
 
@@ -202,7 +203,6 @@ const onPickerValueInput = (event) => {
 watch(
   () => investmentAmount.value,
   (newValue) => {
-    let originalNumber = newValue.split(",").join("");
     if (+newValue > 500000) {
       investmentAmount.value = 500000;
     }
@@ -212,7 +212,7 @@ watch(
     }
 
     localStorage.setItem('investmentAmount', String(investmentAmount.value));
-    // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+    $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
 
     if(String(newValue).length <= 4) {
       inputMaxWidth.value = 100;

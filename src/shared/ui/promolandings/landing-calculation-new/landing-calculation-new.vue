@@ -265,7 +265,15 @@ const handleMetamaskConnect = async () => {
 
 }
 
-const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
+// const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
+const buyAmount = ref($app.store.user.investAmount);
+
+watch(
+  () => $app.store.user.investAmount,
+  (newValue) => {
+    buyAmount.value = newValue;
+  }
+)
 
 const backendError = ref('')
 

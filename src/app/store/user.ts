@@ -33,10 +33,7 @@ export const user = defineStore('user', {
 
     isInvestModalShow: false,
     isInvestModalReinvest: false,
-    investAmount: {
-      original: 0,
-      parsed: 0
-    },
+    investAmount: 2500,
   }),
 
   actions: {
