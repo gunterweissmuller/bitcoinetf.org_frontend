@@ -146,6 +146,10 @@
           }
         }
 
+        &-front {
+          -webkit-transform:rotateY(0deg);
+        }
+
         &-front, &-back {
           position: absolute;
           width: 100%;
