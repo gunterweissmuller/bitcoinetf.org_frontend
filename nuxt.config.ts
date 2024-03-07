@@ -41,7 +41,7 @@ export default defineNuxtConfig({
         },
       ],
       script: [
-        { type: 'text/javascript', id: 'pap_x2s6df8d', src: 'https://bitcoinetf.postaffiliatepro.com/scripts/h4zgmkh6yj' },
+        { type: 'text/javascript', id: 'pap_x2s6df8d', src: 'https://bitcoinetf.postaffiliatepro.com/scripts/trackjs.js' },
       ]
     },
   },

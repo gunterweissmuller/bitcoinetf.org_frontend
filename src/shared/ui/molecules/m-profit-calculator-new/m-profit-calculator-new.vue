@@ -141,8 +141,6 @@
           </div>
         </div>
 
-
-
       </article>
       <button @click="handleContinue" tabindex="0" :class="[{'landing-calculation__journey__button-btc': selectedCurrency.value === 'Bitcoin'}]" class="landing-calculation__journey__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Buy Bitcoin ETFs </button>
     </div>
@@ -168,8 +166,6 @@ const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
 const typeAPY = ref('Projected')
-
-
 
 const inputMaxWidth = ref(100);
 // const investmentAmount = ref('2,500');

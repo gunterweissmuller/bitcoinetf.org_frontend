@@ -14,14 +14,6 @@
   <s-site-transparency :data="transparencyData"/>
   <s-site-news :data="blogNews" v-if="blogNews?.length"/>
   <s-site-footer/>
-
-  <component :is="'script'" id="pap_x2s6df8d" src="https://bitcoinetf.postaffiliatepro.com/scripts/trackjs.js"></component>
-  <component :is="'script'">
-    PostAffTracker.setAccountId('bitcoinetf.postaffiliatepro.com');
-    try {
-      PostAffTracker.track();
-    } catch (err) { }
-  </component>
 </template>
 
 <script setup lang="ts">
@@ -394,15 +386,5 @@ const getBlogNewsEdu = async (uuid = BITCOIN_EDUCATION_NEWS_UUID, page = 1) => {
 onMounted(async () => {
   await getBlogNews()
   await getBlogNewsEdu()
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const aAidParam = urlParams.get('a_aid');
-  if(aAidParam) {
-    const str = window.location.search.replace('?', '');
-    window.localStorage.setItem('a_aid', aAidParam);
-    window.localStorage.setItem('a_utm', str);
-
-
-  }
 })
 </script>

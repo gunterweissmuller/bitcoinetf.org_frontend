@@ -69,6 +69,21 @@ onMounted(() => {
 
   document.body.dataset.theme = localStorage.getItem('theme') || 'dark'
   $app.store.user.theme = localStorage.getItem('theme') || 'dark'
+
+  PostAffTracker.setAccountId('bitcoinetf.postaffiliatepro.com');
+  try {
+    PostAffTracker.track();
+  } catch (err) { }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const aAidParam = urlParams.get('a_aid');
+  if(aAidParam) {
+    const str = window.location.search.replace('?', '');
+    window.localStorage.setItem('a_aid', aAidParam);
+    window.localStorage.setItem('a_utm', str);
+
+
+  }
 })
 
 watch(
