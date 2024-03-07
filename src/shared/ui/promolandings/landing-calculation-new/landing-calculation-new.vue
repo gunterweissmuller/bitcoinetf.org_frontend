@@ -650,9 +650,6 @@ const signupAndBuy = async () => {
     })
     .then(async () => {
       purchaseStep.value = PurchaseSteps.Purchase;
-
-      
-
       if (props.isFiat) {
       console.log("TRUE IS FIAT");
         await $app.api.eth.billingEth
@@ -673,6 +670,7 @@ const signupAndBuy = async () => {
       }
     })
     .catch((e) => {
+      isSignupAndBuy.value = false;
       if (e?.errors?.error?.message) {
         backendError.value = e.errors.error.message
       } else {
@@ -762,7 +760,7 @@ const signupAndBuyGoogle = () => {
     })
     .catch((e) => {
       console.error(e);
-      isSubmitEmailForm.value = false;
+      isSignupAndBuyGoogle.value = false;
         if (e?.errors?.error?.message) {
             backendError.value = e.errors.error.message
         } else {
