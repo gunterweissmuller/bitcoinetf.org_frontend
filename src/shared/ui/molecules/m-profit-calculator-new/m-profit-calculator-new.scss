@@ -37,6 +37,11 @@
       font-weight: 800;
       line-height: 120%; /* 76.8px */
       text-transform: uppercase;
+
+      @include breakpoint($break-tablet-minus) {
+        font-size: 34px;
+        margin-bottom: var(--spacing-m-3);
+      }
     }
 
     &__invest {
@@ -69,6 +74,10 @@
           font-weight: 600;
           line-height: 130%;
           font-family: Jakarta, sans-serif;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(24);
+          }
         }
   
         &-input {
@@ -76,6 +85,10 @@
           font-weight: 600;
           line-height: 130%;
           font-family: Jakarta, sans-serif;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(14);
+          }
           
         }
   
@@ -117,6 +130,7 @@
 
           @include breakpoint($break-tablet-minus) {
             margin-top: var(--spacing-m-2);
+            height: 390px;
           }
         }
 
@@ -157,6 +171,10 @@
         &-title {
           font-size: torem(14);
           font-weight: 700;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(14);
+          }
         }
     
         &-sum {
@@ -166,12 +184,20 @@
           line-height: 130%; /* 54.6px */
           font-family: Jakarta, sans-serif;
 
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(30);
+          }
+
         }
     
         &-subtitle {
           font-size: torem(14);
           font-weight: 500;
           margin-top: var(--spacing-xs);
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(12);
+          }
         }
 
         &-line {
@@ -182,15 +208,27 @@
         }
   
         &-stats {
+          &-wrapper {
+            flex-direction: column;
+          }
+
           &-title {
             font-size: torem(14);
             font-weight: 500;
+
+            @include breakpoint($break-tablet-minus) {
+              font-size: torem(12);
+            }
           }
     
           &-value {
             font-size: torem(32);
             font-weight: 700;
             margin-top: var(--spacing-xs);
+
+            @include breakpoint($break-tablet-minus) {
+              font-size: torem(18);
+            }
           }
         }
   
@@ -210,6 +248,10 @@
           font-weight: 500;
           color: var(--text-inverse-tertiary);
           margin-top: var(--spacing-s);
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(12);
+          }
         }
       }
   
@@ -237,6 +279,10 @@
           font-weight: 600;
           font-family: Jakarta, sans-serif;
 
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(14);
+          }
+
         }
 
         &-dropdown {
@@ -250,6 +296,10 @@
             &:hover {
               background: rgba(255, 255, 255, 0.15);
               border-radius: var(--spacing-s);
+            }
+
+            @include breakpoint($break-tablet-minus) {
+              color: var(--button-secondary)
             }
           }
         }

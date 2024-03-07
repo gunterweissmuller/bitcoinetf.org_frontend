@@ -444,6 +444,9 @@ const telegramBotName = ref('')
 
 const handleTelegramConnect = async () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+
+    console.log(r);
+
     currentStep.value = Steps.TelegramSign;
     currentSignup.value = SignupMethods.Telegram;
 

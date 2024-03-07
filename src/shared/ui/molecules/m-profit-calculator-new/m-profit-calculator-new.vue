@@ -66,7 +66,7 @@
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
-            <div class="flex relative justify-around">
+            <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
                 <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
@@ -101,7 +101,7 @@
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
-            <div class="flex relative justify-around">
+            <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
                 <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
@@ -156,6 +156,11 @@ import {computed, ref, watch} from "vue";
 import {useNuxtApp} from "#app";
 import VueWriter from 'vue-writer'
 import InputNumber from 'primevue/inputnumber';
+import { useWindowSize } from '@vueuse/core'
+
+const { width } = useWindowSize()
+
+console.log("width", width.value  )
 
 const props = withDefaults(
   defineProps<{
@@ -176,7 +181,7 @@ const refCode = ref('')
 const refCodeValid = ref(false)
 const typeAPY = ref('Projected')
 
-const inputMaxWidth = ref(100);
+const inputMaxWidth = ref(width.value < 768 ? 40 : 100);
 // const investmentAmount = ref('2,500');
 const investmentAmount = ref(2500);
 
@@ -220,9 +225,9 @@ watch(
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
 
     if(String(newValue).length <= 4) {
-      inputMaxWidth.value = 100;
+      inputMaxWidth.value = width.value < 768 ? 40 : 100;
     } else if(String(newValue).length > 4 && String(newValue).length < 7) {
-      inputMaxWidth.value =  100+((String(newValue).length - 4)*20);
+      inputMaxWidth.value =  (width.value < 768 ? 40 : 100)+((String(newValue).length - 4)*(width.value < 768 ? 10 : 20));
     }
 
     // investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
