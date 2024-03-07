@@ -159,6 +159,15 @@ import {useNuxtApp} from "#app";
 import VueWriter from 'vue-writer'
 import InputNumber from 'primevue/inputnumber';
 
+const props = withDefaults(
+  defineProps<{
+    openSignup: any
+  }>(),
+  {
+    openSignup: () => {},
+  },
+)
+
 const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
@@ -266,6 +275,24 @@ const toggleCurrencyDropdown = () => {
 const selectCurrency = (currency : any) => {
   selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
   toggleCurrencyDropdown();
+}
+
+const handleContinue = () =>{
+  const element = document.querySelector(".landing-calculation__signup");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: "smooth",
+  });
+  props.openSignup();
 }
 </script>
 

@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
@@ -388,6 +388,11 @@ const signupToggle = (method: any) => {
       signupMethod.value = method;
     }
   }
+}
+
+const investScrolltoSignup = () => {
+  signupStep.value = SignupSteps.Signup;
+  signupMethod.value = SignupMethods.Email;
 }
 
 const email = ref('')
