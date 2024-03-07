@@ -171,7 +171,7 @@
       pointer-events: none;
 
       &--bold {
-        font-weight: 600 ;
+        font-weight: 600;
       }
 
       &--small {
@@ -203,6 +203,10 @@
 
       &--bold {
         font-weight: 600;
+      }
+
+      &--small {
+        font-size: torem(12);
       }
 
       &--hidden {

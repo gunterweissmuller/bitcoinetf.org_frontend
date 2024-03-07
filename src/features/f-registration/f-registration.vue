@@ -74,6 +74,16 @@
                   </div>
               </div>
 
+
+            <!--<div @click="handleTelegramConnect"
+                 class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
+              <div class="flex gap-2 items-center">
+                <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
+                         class="aspect-square w-[18px]" />
+                <div class="grow">Sign up with Telegram</div>
+              </div>
+            </div>-->
+
               <!--<div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
                   <div class="flex gap-2 items-center">
@@ -86,8 +96,20 @@
 
 
       </template>
+      <template v-else-if="currentStep === Steps.TelegramSign">
+        <div class='f-registration__back' @click='handleEmailBack'>
+          <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+        </div>
+        <h3 class="f-registration__title">Sign up with Telegram</h3>
+        <h5 class="f-registration__subtitle">
+        </h5>
+
+        <div class="flex flex-col items-center pb-12">
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
+        </div>
+      </template>
       <template v-else-if="currentStep === Steps.Email">
-          <div class='f-registration__back' @click='currentStep = Steps.Choice'>
+          <div class='f-registration__back' @click='handleEmailBack'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
           <h3 class="f-registration__title">Sign up with {{ currentSignup }}</h3>
@@ -106,7 +128,11 @@
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
-              <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+            <div class="f-registration__wrap_phone">
+              <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+            </div>
+
+            <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
               <!-- <m-accordion ref="accordionRef" class="f-registration__ref" title="Referral code">
                   <a-input label="Referral code" class="f-registration__ref-code" v-model="refCode" />
                   <a href="/" target="_blank" class="f-registration__ref-link">How to get referral codes</a>
@@ -195,11 +221,13 @@ import ERegistrationBonusModal from '~/src/entities/e-registration-bonus-modal/e
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import VueTurnstile from 'vue-turnstile';
 import { SiweMessage } from 'siwe';
+import 'vue-tel-input/vue-tel-input.css';
 import { BrowserProvider, parseUnits } from "ethers";
 import { googleSdkLoaded, googleLogout  } from "vue3-google-login";
 import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
+import { document } from 'postcss'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -213,6 +241,15 @@ const enum Steps {
   Code = 'Code',
   Password = 'Password',
   Bonus = 'Bonus',
+  TelegramSign = 'TelegramSign'
+}
+
+const phone = ref(null);
+const countryCode = ref(null);
+
+const countryChanged = (country) => {
+  // console.log(country, phone);
+  countryCode.value = country.dialCode;
 }
 
 const confirmResponse = ref(null)
@@ -272,6 +309,15 @@ function emailFieldBlurHandler() {
   emailErrorText.value = 'Required'
 }
 
+const handleEmailBack = () => {
+  currentStep.value = Steps.Choice;
+  firstName.value = '';
+  lastName.value = '';
+  email.value = '';
+  emailErrorText.value = '';
+  isEmailValid.value = false;
+}
+
 // Choice step
 const choiceToEmail = () => {
   currentStep.value = Steps.Email;
@@ -297,7 +343,7 @@ onMounted(() => {
   } else {
     console.log("Metamask is not installed");
   }
-  
+
 })
 
 const handleDisconnect = () => {
@@ -370,6 +416,14 @@ onMounted(() => {
     lastName.value = $app.store.authGoogle.response.last_name;
     email.value =$app.store.authGoogle.response.email;
   }
+
+  if($app.store.authTelegram.response?.id) {
+    currentStep.value = Steps.Email;
+    currentSignup.value = SignupMethods.Telegram;
+    firstName.value = $app.store.authTelegram.response.first_name;
+    lastName.value = $app.store.authTelegram.response.last_name;
+    email.value = $app.store.authTelegram.response.email;
+  }
 });
 
 const handleGoogleDisconnect = () => {
@@ -381,6 +435,22 @@ const handleGoogleDisconnect = () => {
 const handleGoogleConnect = async () => {
     currentSignup.value = SignupMethods.Google;
     window.location.href = googleUrl.value;
+}
+
+const telegramRedirectUrl = ref('')
+const telegramBotName = ref('')
+
+const handleTelegramConnect = async () => {
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+    currentStep.value = Steps.TelegramSign;
+    currentSignup.value = SignupMethods.Telegram;
+
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+
+    //console.log(r);
+
+  })
 }
 
 // Ref code field
@@ -403,7 +473,9 @@ const onSubmitEmailForm = async () => {
     method: currentSignup.value,
     first_name: $app.filters.trimSpaceIntoString(firstName.value),
     last_name: $app.filters.trimSpaceIntoString(lastName.value),
-    email: $app.filters.trimSpaceIntoString(email.value)
+    email: $app.filters.trimSpaceIntoString(email.value),
+    phone_number: phone.value,
+    phone_number_code: '1',
   }
 
   if(currentSignup.value === SignupMethods.Metamask) {
@@ -432,13 +504,28 @@ const onSubmitEmailForm = async () => {
         $app.store.authGoogle.setResponse({}, SignupMethods.Google);
         confirmResponse.value = tokens.data
         isSubmitEmailForm.value = false;
+        firstName.value = '';
+        lastName.value = '';
+        email.value = '';
         currentStep.value = Steps.Bonus
       })
       .then(async () => {
             await $app.api.eth.auth.getUser().then((resp) => {
                 $app.store.user.info = resp?.data
             })
-        })
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+              //window.localStorage.removeItem('a_aid');
+              //window.localStorage.removeItem('a_utm');
+            });
+          }
+      })
       .catch((e) => {
         console.error(e);
         isSubmitEmailForm.value = false;
@@ -448,6 +535,30 @@ const onSubmitEmailForm = async () => {
               backendError.value = 'Something went wrong'
           }
       })
+
+    return;
+  }
+
+  if(currentSignup.value === SignupMethods.Telegram) {
+    $app.api.eth.auth
+      .initTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+      }).then((r: any) => {
+        console.log('ww');
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
+    }).catch((e) => {
+      isSubmitEmailForm.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
 
     return;
   }
@@ -560,7 +671,19 @@ const codeContinue = async () => {
         .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
-          })
+          });
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+                //window.localStorage.removeItem('a_aid');
+                //window.localStorage.removeItem('a_utm');
+            });
+          }
         })
         .catch((e) => {
           isCodeContinueProcess.value = false;
@@ -570,6 +693,45 @@ const codeContinue = async () => {
             backendError.value = 'Something went wrong'
           }
         })
+  } else if(currentSignup.value === SignupMethods.Telegram) {
+    backendError.value = ''
+    await $app.api.eth.auth.
+      confirmTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        currentStep.value = Steps.Bonus
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
   } else {
     currentStep.value = Steps.Password
   }
@@ -650,7 +812,19 @@ const onSubmitPasswordForm = async () => {
       .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
               $app.store.user.info = resp?.data
-          })
+          });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
       })
       .catch((e) => {
         console.error(e);

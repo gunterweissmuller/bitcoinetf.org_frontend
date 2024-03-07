@@ -37,6 +37,7 @@ import SSiteNews from '~/src/shared/ui/site/sections/s-site-news/s-site-news.vue
 import {useWindowScroll} from '@vueuse/core'
 import {useWindowSize} from '@vueuse/core'
 import {useNuxtApp} from '#app'
+import localStorage from '../app/localStorage'
 
 definePageMeta({
   layout: 'site-dark',

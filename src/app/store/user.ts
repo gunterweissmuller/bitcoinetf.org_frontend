@@ -30,7 +30,26 @@ export const user = defineStore('user', {
     personalDividends: [],
     news: [],
     latestTrade:'',
+
+    isInvestModalShow: false,
+    isInvestModalReinvest: false,
+    investAmount: 2500,
   }),
+
+  actions: {
+    setIsInvestModalShow(payload: { show: boolean }) {
+      this.isInvestModalShow = payload.show;
+    },
+    setInvestModalReinvest(payload: { reinvest: boolean }) {
+      this.isInvestModalReinvest = payload.reinvest;
+    },
+    setTheme(payload: {theme: string}) {
+      this.theme = payload.theme;
+    },
+    setInvestAmount(payload: {amount: any}) {
+      this.investAmount = payload.amount;
+    }
+  },
 
   getters: {
     userInfo: (state) => state.info,

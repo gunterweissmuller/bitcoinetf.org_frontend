@@ -5,6 +5,8 @@ import { assets } from '~/src/app/store/assets'
 import { user } from '~/src/app/store/user'
 import { persiste } from '~/src/app/store/persiste'
 import { authGoogle } from '~/src/app/store/authGoogle'
+import { authTelegram } from '~/src/app/store/authTelegram'
+
 
 export interface IStorePack {
   _name: string
@@ -14,12 +16,14 @@ export interface IStorePack {
   _user: any
   _persiste: any
   _authGoogle: any
+  _authTelegram: any
   readonly name: string
   readonly auth: any
   readonly asset: any
   readonly user: any
   readonly persiste: any
   readonly authGoogle: any
+  readonly authTelegram: any
 }
 
 @injectable()
@@ -31,6 +35,7 @@ export default class StorePack implements IStorePack {
   readonly _user
   readonly _persiste
   readonly _authGoogle
+  readonly _authTelegram
 
   constructor() {
     this._auth = auth()
@@ -39,6 +44,7 @@ export default class StorePack implements IStorePack {
     this._assets = assets()
     this._persiste = persiste()
     this._authGoogle = authGoogle()
+    this._authTelegram = authTelegram()
   }
 
   get name() {
@@ -67,5 +73,9 @@ export default class StorePack implements IStorePack {
 
   get authGoogle() {
     return this._authGoogle
+  }
+
+  get authTelegram() {
+    return this._authTelegram
   }
 }

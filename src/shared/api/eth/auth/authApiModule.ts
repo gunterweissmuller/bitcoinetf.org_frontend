@@ -106,6 +106,27 @@ export default class AuthApiModule {
     }
   }
 
+  async initTelegram(payload: any) {
+
+    try {
+        return await this.adapter.requestJsonAsync({
+          parameterValue: "auth/provider/telegram/init",
+          request: {
+            method: HTTPMethod.POST,
+          },
+          data: payload,
+          operationDescription: 'User email registration',
+          withoutPublic: true,
+        });
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async check(payload: { email: string; code: string }) {
     try {
       return await this.adapter.requestJsonAsync({
@@ -165,6 +186,47 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  async confirmTelegram(payload: { telegram_data: string, email: string; code: string; fast: boolean }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/telegram/confirm',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginTelegram(payload: { telegram_data: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/telegram/login',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
 
   async confirmFast(payload: { email: string; code: string; }) {
     try {
@@ -352,6 +414,45 @@ export default class AuthApiModule {
           method: HTTPMethod.GET,
         },
         operationDescription: 'Getting information about the user',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async papSignUp({ payload }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'pap/signup',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Getting information about the user',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async telegramGetAuthType(payload: { telegram_data: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/telegram/get-auth-type',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Password reset process',
+        withoutPublic: true,
       })
     } catch (e) {
       if (e instanceof ApiErrorFlow) {

@@ -281,6 +281,10 @@
       margin-right: var(--spacing-m-1);
       cursor: pointer;
       font-size: 10px;
+      line-height: 13px;
+      white-space: nowrap;
+      z-index: 10;
+      position: relative;
     }
   }
 
@@ -326,8 +330,9 @@
     padding-right: torem(51);
   }
 
-  &--error &__input {
-    background-color: var(--color-bg-tertiary);
+  &--error &__input-container {
+
+    // background-color: var(--color-bg-tertiary);
     border-color: var(--accent-danger);
 
     &::placeholder {

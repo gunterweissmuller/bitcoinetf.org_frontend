@@ -41,10 +41,13 @@ export default defineNuxtConfig({
         },
       ],
       script: [
-        { type: 'text/javascript', id: 'pap_x2s6df8d', src: 'https://bitcoinetf.postaffiliatepro.com/scripts/h4zgmkh6yj' },
+        { type: 'text/javascript', id: 'pap_x2s6df8d', src: 'https://bitcoinetf.postaffiliatepro.com/scripts/trackjs.js' },
       ]
     },
   },
+  /*devServer: {
+    port: 80
+  },*/
   telemetry: false,
   experimental: {
     inlineSSRStyles: false,
@@ -220,6 +223,11 @@ export default defineNuxtConfig({
           name: 'personal-bonus',
           path: '/personal/wallet/bonus',
           file: '~/src/widgets/w-wallet/w-wallet.vue',
+        },
+        {
+          name: 'personal-purchaseb',
+          path: '/personal/purchaseb',
+          file: '~/src/pages/personal/purchaseb.vue',
         },
       ]
 

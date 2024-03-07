@@ -17,6 +17,12 @@
     padding-bottom: 0;
   }
 
+  &--empty {
+    height: 0;
+    min-height: 0;
+    padding: 0 !important;
+  }
+
   @include breakpoint($break-desktop-1024) {
     backdrop-filter: none;
     padding: var(--spacing-l-2) var(--spacing-l-2) var(--spacing-m-3) var(--spacing-l-2);
