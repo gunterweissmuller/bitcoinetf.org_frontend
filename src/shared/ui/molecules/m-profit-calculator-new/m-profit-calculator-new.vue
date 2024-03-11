@@ -185,6 +185,7 @@ const inputMaxWidth = ref(defaultInputWith.value);
 
 // const investmentAmount = ref('2,500');
 const investmentAmount = ref(2500);
+const investmentAmountWithDiscount = ref(2375);
 
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
@@ -229,7 +230,7 @@ watch(
     }
 
     if(isNaN(newValue)) {
-      investmentAmount.value = 2000;
+      investmentAmount.value = 2500;
     }
 
     // if (+newValue < 0) {
@@ -247,6 +248,17 @@ watch(
 
   },
 )
+
+// watch(
+//   () => investmentAmount.value,
+//   (newValue) => {
+//     investmentAmountWithDiscount.value = investmentAmount.value - (investmentAmount.value/100)*5;
+
+//     if(!Number.isInteger(investmentAmountWithDiscount.value)) {
+//       investmentAmountWithDiscount.value = investmentAmountWithDiscount.value.toFixed(1)
+//     }
+//   }
+//  )
 
 watch(
   () => width.value,

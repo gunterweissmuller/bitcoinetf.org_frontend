@@ -270,13 +270,20 @@ const handleMetamaskConnect = async () => {
 }
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
-const buyAmount = ref($app.store.user.investAmount);
+const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*5
+const buyAmount = ref(Math.ceil(defaultBuyAmount));
 // tether special discount 5%
 
 watch(
   () => $app.store.user.investAmount,
   (newValue) => {
-    buyAmount.value = newValue;
+    buyAmount.value = Math.ceil(newValue-(newValue/100)*5);
+
+    // if(!Number.isInteger(buyAmountNew)) {
+    //   buyAmount.value = buyAmountNew.toFixed(2); //.toFixed(1) ceil()
+    // } else {
+    //   buyAmount.value = buyAmountNew;
+    // }
   }
 )
 
@@ -375,7 +382,7 @@ enum SignupMethods {
   Google = "Google",
 }
 
-const signupStep = ref(SignupSteps.Default);
+const signupStep = ref(SignupSteps.Signup);
 const purchaseStep = ref(PurchaseSteps.Purchase);
 const signupMethod = ref(SignupMethods.None);
 
