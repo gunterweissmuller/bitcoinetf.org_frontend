@@ -371,7 +371,7 @@
     &-main {
 
       @include breakpoint($break-tablet-minus) {
-        padding: 0 var(--spacing-s);
+        padding: 0 var(--spacing-m-1);
       }
 
       &-input {

@@ -2,6 +2,10 @@
 
   margin-top: 60px;
 
+  @include breakpoint($break-tablet-minus) {
+    padding: 0 var(--spacing-m-1);
+  }
+
   &--landing{
     hr{
       margin: 48px 0;
@@ -95,7 +99,11 @@
 
       &-address {
         cursor: copy;
-        margin-bottom: var(--spacing-m-2) !important;
+        margin-bottom: var(--spacing-m-2);
+
+        @include breakpoint($break-tablet-minus) {
+          margin-bottom: var(--spacing-m-1);
+        }
 
         & .a-input__input-text {
           padding-right: torem(0);
@@ -105,7 +113,11 @@
 
       &-amount {
         cursor: copy;
-        margin-bottom: var(--spacing-m-2) !important;
+        margin-bottom: var(--spacing-m-2);
+
+        @include breakpoint($break-tablet-minus) {
+          margin-bottom: var(--spacing-m-1);
+        }
       }
     }
   }
@@ -459,5 +471,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-m-1);
+
+    @include breakpoint($break-tablet-minus) {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
   }
 }
