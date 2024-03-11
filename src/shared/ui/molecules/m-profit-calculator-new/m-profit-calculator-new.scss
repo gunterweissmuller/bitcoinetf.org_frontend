@@ -39,7 +39,8 @@
       text-transform: uppercase;
 
       @include breakpoint($break-tablet-minus) {
-        font-size: 34px;
+        font-size: 30px;
+        padding: 0 var(--spacing-m-1);
         margin-bottom: var(--spacing-m-3);
       }
     }
@@ -56,6 +57,7 @@
       @include breakpoint($break-tablet-minus) {
         max-width: 375px;
         margin: auto;
+        padding: var(--spacing-m-3) var(--spacing-m-1);
       }
   
       &-center {
@@ -130,7 +132,8 @@
 
           @include breakpoint($break-tablet-minus) {
             margin-top: var(--spacing-m-2);
-            height: 390px;
+            // height: 390px;
+            height: 300px;
           }
         }
 
@@ -229,7 +232,7 @@
           &-wrapper {
 
             @include breakpoint($break-tablet-minus) {
-              flex-direction: column;
+              // flex-direction: column;
             }
             
           }
@@ -295,7 +298,11 @@
         border-radius: var(--spacing-s);
         background: rgba(255, 255, 255, 0.10);
         backdrop-filter: blur(12px);
-  
+        
+        @include breakpoint($break-tablet-minus) {
+          padding: var(--spacing-xs) var(--spacing-s);
+        }
+
         &-text {
           font-size: torem(34);
           font-weight: 600;
@@ -307,10 +314,34 @@
 
         }
 
+        &-currency {
+          width: 40px;
+
+          @include breakpoint($break-tablet-minus) {
+            width: 20px;
+          }
+        }
+
+        &-arrow {
+          width: 32px;
+
+          @include breakpoint($break-tablet-minus) {
+            width: 20px;
+          }
+        }
+
         &-dropdown {
           border-radius: var(--spacing-s);
-          background: rgba(255, 255, 255, 0.10);
+          // background: rgba(255, 255, 255, 0.10);
           backdrop-filter: blur(32px);
+
+          &-btc {
+            background: #E9A14A;
+          }
+
+          &-usdt {
+            background: #57AE94;
+          }
 
           &-item {
             color: var(--Text-Inverse-Primary, #FFF);
@@ -320,9 +351,9 @@
               border-radius: var(--spacing-s);
             }
 
-            @include breakpoint($break-tablet-minus) {
-              color: var(--button-secondary)
-            }
+            // @include breakpoint($break-tablet-minus) {
+            //   color: var(--button-secondary)
+            // }
           }
         }
   

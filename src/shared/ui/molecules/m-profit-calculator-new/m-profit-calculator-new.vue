@@ -11,8 +11,6 @@
 
         <div class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary ml-4 grow flex justify-center font-semibold">
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
-          <!-- <input v-bind="investmentAmountModified" v-on="{ ...$listeners,  input: e => $emit('input', e.target.value)}" :style="'max-width: '+inputMaxWidth+'px'" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
-          <!-- <InputNumber inputId="integeronly" v-model="investmentAmount" inputId="minmax" :min="0" :max="500000" /> -->
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
             :style="'max-width: '+inputMaxWidth+'px'"
@@ -35,12 +33,12 @@
         <div class="relative">
           <div class="landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
-              <NuxtImg :src="selectedCurrency.icon" class="w-10 aspect-square cursor-pointer" alt="USDT logo" />
+              <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" />
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['w-[32px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
+              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
             </div>
           </div>
-          <div v-if="showDropdown" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <div v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
@@ -181,7 +179,10 @@ const refCode = ref('')
 const refCodeValid = ref(false)
 const typeAPY = ref('Guaranteed')
 
-const inputMaxWidth = ref(width.value < 768 ? 40 : 100);
+const defaultInputWith = ref(width.value < 768 ? 40 : 100);
+const defaultInputPlus = ref(width.value < 768 ? 10 : 20);
+const inputMaxWidth = ref(defaultInputWith.value);
+
 // const investmentAmount = ref('2,500');
 const investmentAmount = ref(2500);
 
@@ -193,7 +194,17 @@ onMounted(()=>{
 })
 
 function validate(event) {
-  if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false
+  console.log(event);
+  if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
+
+  // var theEvent = event || window.event;
+  // var key = theEvent.keyCode || theEvent.which;
+  // key = String.fromCharCode( key );
+  // var regex = /[0-9\s\+\-]|\./;
+  // if( !regex.test(key) ) {
+  //   theEvent.returnValue = false;
+  //   if(theEvent.preventDefault) theEvent.preventDefault();
+  // }
 }
 
 const onPickerValueInput = (event) => {
@@ -217,23 +228,42 @@ watch(
       investmentAmount.value = 500000;
     }
 
-    if (+newValue < 0) {
-      investmentAmount.value = 0;
+    if(isNaN(newValue)) {
+      investmentAmount.value = 2000;
     }
+
+    // if (+newValue < 0) {
+    //   investmentAmount.value = 0;
+    // }
 
     localStorage.setItem('investmentAmount', String(investmentAmount.value));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
 
     if(String(newValue).length <= 4) {
-      inputMaxWidth.value = width.value < 768 ? 40 : 100;
+      inputMaxWidth.value = defaultInputWith.value;
     } else if(String(newValue).length > 4 && String(newValue).length < 7) {
-      inputMaxWidth.value =  (width.value < 768 ? 40 : 100)+((String(newValue).length - 4)*(width.value < 768 ? 10 : 20));
+      inputMaxWidth.value =  defaultInputWith.value+((String(newValue).length - 4)*defaultInputPlus.value);
     }
 
-    // investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  },
+)
 
-    // investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
+watch(
+  () => width.value,
+  (newValue) => {
+    if(width.value < 768) {
+      defaultInputWith.value = 40;
+      defaultInputPlus.value = 10;
+    } else {
+      defaultInputWith.value = 100;
+      defaultInputPlus.value = 20;
+    }
 
+    if(String(investmentAmount.value).length <= 4) {
+      inputMaxWidth.value = defaultInputWith.value;
+    } else if(String(investmentAmount.value).length > 4 && String(investmentAmount.value).length < 7) {
+      inputMaxWidth.value =  defaultInputWith.value+((String(investmentAmount.value).length - 4)*defaultInputPlus.value);
+    }
   },
 )
 
