@@ -382,8 +382,8 @@ enum SignupMethods {
   Google = "Google",
 }
 
-const signupStep = ref(SignupSteps.Signup);
-const purchaseStep = ref(PurchaseSteps.Purchase);
+const signupStep = ref(SignupSteps.Default);
+const purchaseStep = ref(PurchaseSteps.Default);
 const signupMethod = ref(SignupMethods.None);
 
 const signupToggle = (method: any) => {
