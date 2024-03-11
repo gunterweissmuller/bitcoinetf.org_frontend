@@ -1,4 +1,4 @@
-.w-buy-shares-payment {
+.w-buy-shares-payment-new {
 
   margin-top: 60px;
 
@@ -10,12 +10,12 @@
       border:none
     }
     .a-input--error .a-input__input-container:hover .a-input__input{
-      background: #2E2F3880!important;
+      // background: #2E2F3880!important;
     }
     .a-input__input-container{
-      background: #2E2F3880;
+      // background: #2E2F3880;
       .a-input__input--custom{
-        background: #2E2F3880;
+        // background: #2E2F3880;
         border: none;
         .a-input__input-title{
           color: #888CA0;
@@ -181,7 +181,7 @@
 
       }
       &--unavailable{
-        .w-buy-shares-payment__variant-bank__item-icon{
+        .w-buy-shares-payment-new__variant-bank__item-icon{
           margin-bottom: 0;
           height: 24px;
           width: auto;

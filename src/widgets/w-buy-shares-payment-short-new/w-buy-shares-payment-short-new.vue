@@ -1,28 +1,29 @@
 <template>
-  <div class="w-buy-shares-payment w-buy-shares-payment--landing">
-    <div class="w-buy-shares-payment__wrap">
-      <div class="w-buy-shares-payment__tron" v-if="!isFiat">
-        <div class="w-buy-shares-payment__tron-wrapper">
+  <div class="w-buy-shares-payment-new w-buy-shares-payment-new--landing">
+    <div class="w-buy-shares-payment-new__wrap">
+      <div class="w-buy-shares-payment-new__tron" v-if="!isFiat">
+        <div class="w-buy-shares-payment-new__tron-wrapper">
           
-          <div class="w-buy-shares-payment__accordion-qr">
+          <div class="w-buy-shares-payment-new__accordion-qr">
             <qrcode-vue :value="$app.store.user.info?.account?.tron_wallet" level="L" render-as="svg" foreground="#000" background="#fff"/>
           </div>
-          <div class="w-buy-shares-payment__tron-subtitle">
+          <div class="w-buy-shares-payment-new__tron-subtitle">
             Your order will automatically close in:
           </div>
-          <div class="w-buy-shares-payment__tron-timer">
-            <vue-countdown @end="onCountdownEnd" :time="30 * 60 * 1000" v-slot="{ days, hours, minutes, seconds }">
+          <div class="w-buy-shares-payment-new__tron-timer">
+            <vue-countdown :transform="transformSlotProps" @end="onCountdownEnd" :time="30 * 60 * 1000" v-slot="{ days, hours, minutes, seconds }">
               {{ minutes }} : {{ seconds }}
             </vue-countdown>
           </div>
         </div>
 
-        <div class="w-buy-shares-payment__tron-discount">
+        <div class="w-buy-shares-payment-new__tron-discount">
           {{ $app.store.user.statistic?.trc_bonus?.percent }}% Discount Applied!
         </div>
 
         <a-input
-          class="w-buy-shares-payment__accordion-stable-method"
+          bgColor="tetherspecial"
+          class="w-buy-shares-payment-new__accordion-stable-method"
           label="Deposit method"
           model-value="Tether USDT (Tron, TRC-20)"
           :icon="Icon.ColorfulTron"
@@ -31,9 +32,10 @@
           @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
         />
 
-        <div class="w-buy-shares-payment__double-input">
-          <div class="w-buy-shares-payment__accordion-stable-address">
+        <div class="w-buy-shares-payment-new__double-input">
+          <div class="w-buy-shares-payment-new__accordion-stable-address">
             <a-input
+              bgColor="tetherspecial"
               label="Deposit address on Tron chain:"
               :model-value="$app.store.user?.info?.account.tron_wallet"
               disabled
@@ -44,8 +46,9 @@
               @on-input-click="copyToClipboard(true)"
             />
           </div>
-          <div class="w-buy-shares-payment__accordion-stable-amount">
+          <div class="w-buy-shares-payment-new__accordion-stable-amount">
             <a-input
+              bgColor="tetherspecial"
               label="Amount"
               :model-value="`${$app.filters.rounded(calcValue)} USDT`"
               disabled
@@ -58,32 +61,32 @@
           </div>
         </div>
         
-        <div class="w-buy-shares-payment__tron-info">
+        <div class="w-buy-shares-payment-new__tron-info">
           Deposit your funds and stay on this screen. Your Bitcoin ETF shares will arrive shortly.
         </div>
         <!-- <a-button :text="tronButtonCheckPayment"  isFullWidth @click="startTronTimer" :disabled="timerStarted"/> -->
       </div>
       <template v-if="isFiat">
-        <div class="w-buy-shares-payment__legacy" v-if="!merchant001Link && country === 'RU' ">
-          <div class="w-buy-shares-payment__accordion-title">Due to international and Russian regulations, there's a <span>2.5% foreign exchange commission and 2.5% card fee.</span> <nuxt-link to="/tetherspecial">Use USDT</nuxt-link> instead, and get a
+        <div class="w-buy-shares-payment-new__legacy" v-if="!merchant001Link && country === 'RU' ">
+          <div class="w-buy-shares-payment-new__accordion-title">Due to international and Russian regulations, there's a <span>2.5% foreign exchange commission and 2.5% card fee.</span> <nuxt-link to="/tetherspecial">Use USDT</nuxt-link> instead, and get a
             {{ $app.store.user.statistic?.trc_bonus?.percent }}% bonus.
           </div>
           <a-icon class="a-button__loading a-button__loading-methods a-button__icon" :name="Icon.MonoNavigationLoader" v-if="AVAILABLE_VARIANTS.length < 1"/>
 
-          <div :class="['w-buy-shares-payment__variant-bank', `w-buy-shares-payment__variant-bank--${country}`]" v-else>
+          <div :class="['w-buy-shares-payment-new__variant-bank', `w-buy-shares-payment-new__variant-bank--${country}`]" v-else>
             <div
               v-for="item in AVAILABLE_VARIANTS"
               :class="[
-              'w-buy-shares-payment__variant-bank__item',
-              { 'w-buy-shares-payment__variant-bank__item--active': selectedLegacyMethod === item.value },
+              'w-buy-shares-payment-new__variant-bank__item',
+              { 'w-buy-shares-payment-new__variant-bank__item--active': selectedLegacyMethod === item.value },
             ]"
               @click="selectVariantBank(item.value)"
             >
-              <a-icon class="w-buy-shares-payment__variant-bank__item-icon" :name="item.icon" />
-              <div class="w-buy-shares-payment__variant-bank__item-text">{{ item.text }}</div>
+              <a-icon class="w-buy-shares-payment-new__variant-bank__item-icon" :name="item.icon" />
+              <div class="w-buy-shares-payment-new__variant-bank__item-text">{{ item.text }}</div>
             </div>
           </div>
-          <div class="w-buy-shares-payment__legacy-agreeBlock">
+          <div class="w-buy-shares-payment-new__legacy-agreeBlock">
             <a-checkbox
               v-model="exchangeCommissionAgreed"
               id="exchange_Commission_Agreed"
@@ -99,9 +102,9 @@
               single
             />
           </div>
-          <a-button text="Continue" class="w-buy-shares-payment__legacy-button" is-full-width @click="createTransation" :loading="createButtonLoading" :disabled="!createButtonAccess"/>
+          <a-button text="Continue" class="w-buy-shares-payment-new__legacy-button" is-full-width @click="createTransation" :loading="createButtonLoading" :disabled="!createButtonAccess"/>
         </div>
-        <div class="w-buy-shares-payment__merchant" v-if="merchant001Link">
+        <div class="w-buy-shares-payment-new__merchant" v-if="merchant001Link">
           <img src="/img/waitmerchant.png" alt="">
           <span>Please wait</span>
           <span>We will redirect you automatically to the payment gateway.</span>
@@ -431,5 +434,16 @@ onMounted(async () => {
 onUnmounted(() => {
   centrifuge.value?.disconnect()
 })
+
+//countdown
+
+const transformSlotProps = (props) => {
+  const formattedProps = {};
+  Object.entries(props).forEach(([key, value]) => {
+    formattedProps[key] = value < 10 ? `0${value}` : String(value);
+  });
+  return formattedProps;
+}
+
 </script>
 <style src="./w-buy-shares-payment-short-new.scss" lang="scss" />

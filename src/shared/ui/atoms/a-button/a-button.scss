@@ -43,6 +43,19 @@
     }
   }
 
+  &--primary2 {
+    color: var(--text-inverse-primary);
+    background: #074DFF;
+
+    .a-button__label {
+      color: var(--color-text-contrast);
+    }
+
+    .a-button__icon {
+      color: var(--color-icon-tertiary);
+    }
+  }
+
   &--secondary {
     background: var(--button-secondary);
 
@@ -88,6 +101,14 @@
       font-size: torem(14);
       font-weight: 700;
       line-height: torem(18);
+    }
+  }
+
+  &--big-size {
+    .a-button__label {
+      font-size: 18px;
+      line-height: 140%;
+      font-weight: 400;
     }
   }
 

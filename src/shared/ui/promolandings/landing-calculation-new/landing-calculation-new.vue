@@ -61,11 +61,12 @@
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
+            bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
@@ -80,7 +81,7 @@
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-          <a-input :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -99,6 +100,7 @@
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
 
           <a-input
+            bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
@@ -106,8 +108,8 @@
             :disabled="true"
             required
           />
-          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
@@ -374,7 +376,7 @@ enum SignupMethods {
 }
 
 const signupStep = ref(SignupSteps.Default);
-const purchaseStep = ref(PurchaseSteps.Default);
+const purchaseStep = ref(PurchaseSteps.Purchase);
 const signupMethod = ref(SignupMethods.None);
 
 const signupToggle = (method: any) => {

@@ -236,7 +236,7 @@
 
           &-title {
             font-size: torem(14);
-            font-weight: 500;
+            font-weight: 700;
 
             @include breakpoint($break-tablet-minus) {
               font-size: torem(12);
