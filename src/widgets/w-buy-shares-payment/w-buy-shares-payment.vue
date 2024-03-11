@@ -85,7 +85,7 @@
         :options="countryList"
         v-if="!merchant001Link"
       />
-      <div class="w-buy-shares-payment__legacy" v-if="!merchant001Link && country === 'RU' ">
+      <div class="w-buy-shares-payment__legacy" v-if="!merchant001Link && country === 'RU/dirty' ">
         <div class="w-buy-shares-payment__accordion-title">Due to international and Russian regulations, there's a <span>2.5% foreign exchange commission and 2.5% card fee.</span> Use USDT instead, and get a
           {{ $app.store.user.statistic?.trc_bonus?.percent }}% bonus.
         </div>
@@ -120,7 +120,6 @@
         </div>
         <a-button text="Continue" class="w-buy-shares-payment__legacy-button" is-full-width @click="createTransation" :loading="createButtonLoading" :disabled="!createButtonAccess"/>
       </div>
-
       <div class="w-buy-shares-payment__legacy" v-else-if="!merchant001Link && country === 'NG' ">
         <div class="w-buy-shares-payment__accordion-title"><span>Payment Notice for Nigerian Clients:</span><br>Currently, we only accept USDT for payments from Nigeria. <span style="color: var(--accent-primary); cursor:pointer;" @click="scrollToSection">Enjoy a {{ $app.store.user.statistic?.trc_bonus?.percent }}% bonus on your deposit!</span>
         </div>
@@ -128,6 +127,11 @@
 
       <div class="w-buy-shares-payment__legacy" v-else-if="!merchant001Link && country === 'EU' ">
         <div class="w-buy-shares-payment__accordion-title"><span>Payment Notice for European Clients:</span><br>Currently, we only accept USDT for payments from Europe. <span style="color: var(--accent-primary);  cursor:pointer;" @click="scrollToSection">Enjoy a {{ $app.store.user.statistic?.trc_bonus?.percent }}% bonus on your deposit!</span>
+        </div>
+      </div>
+
+      <div class="w-buy-shares-payment__legacy" v-else-if="!merchant001Link && country === 'RU' ">
+        <div class="w-buy-shares-payment__accordion-title"><span>Payment Notice for European Clients:</span><br>Currently, we only accept USDT for payments from Russia. <span style="color: var(--accent-primary);  cursor:pointer;" @click="scrollToSection">Enjoy a {{ $app.store.user.statistic?.trc_bonus?.percent }}% bonus on your deposit!</span>
         </div>
       </div>
 
