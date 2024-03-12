@@ -321,6 +321,19 @@ const currencies = ref([
 const selectedCurrency = ref(currencies.value[0]);
 const showDropdown = ref(false);
 
+onMounted(()=>{
+  if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
+    selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
+  }
+});
+
+watch(
+  () => selectedCurrency.value,
+  (newValue) => {
+    localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
+  }
+)
+
 const toggleCurrencyDropdown = () => {
   showDropdown.value = !showDropdown.value;
 };
