@@ -61,9 +61,9 @@
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-          <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <vue-tel-input :disabled="dataDisabled || isMainInputDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
             bgColor="tetherspecial"
@@ -124,7 +124,7 @@
 
       <div class="w-buy-shares-payment-short-new"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -270,11 +270,13 @@ const handleMetamaskConnect = async () => {
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
 const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*5
 const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : Math.ceil(defaultBuyAmount));
+const buyAmountOriginal = ref($app.store.user.investAmount);
 // tether special discount 5%
 
 watch(
   () => $app.store.user.investAmount,
   (newValue) => {
+    buyAmountOriginal.value = newValue;
     const tempValue = Math.ceil(newValue-(newValue/100)*5);
 
     if(isNaN(tempValue)) {
@@ -539,6 +541,7 @@ const codeSended = ref(false);
 const timerStarted = ref(false);
 const codeSendText = ref('Get Confirmation Code');
 const codeSendedText = ref('Resend');
+const isMainInputDisabled = ref(false);
 
 
 
@@ -557,6 +560,8 @@ const sendCode = async () => {
   if(timerStarted.value) {
     return;
   }
+
+  isMainInputDisabled.value = true;
   
   const timer = (sec: number) => {
     if(sec <= 0) {
@@ -597,6 +602,7 @@ const sendCode = async () => {
       })
       .catch((e) => {
         //isSubmitEmailForm.value = false;
+        isMainInputDisabled.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -623,6 +629,7 @@ const sendCode = async () => {
       }
     })
     .catch((e) => {
+      isMainInputDisabled.value = false;
       console.error("ERROR", e);
       if (e?.errors?.error?.message) {
         if (e.errors.error.code === 'ETF:011002') {
