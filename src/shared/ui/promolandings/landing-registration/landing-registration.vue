@@ -53,7 +53,7 @@
       <div class="landing-registration__form-button">
         <a-button
           :disabled="emailButtonDisabled"
-          :text="`$${$app.filters.rounded(calcValue,1)} BUY`"
+          :text="`$${$app.filters.rounded(calcValueDiscount,1)} BUY`"
           is-full-width
           @click="fastRegistration"
         />
@@ -85,11 +85,13 @@ const router = useRouter()
 const props = withDefaults(
   defineProps<{
     calcValue: number
+    calcValueDiscount: number
     refCode: string
     isFiat: boolean
   }>(),
   {
     calcValue: 1000,
+    calcValueDiscount: 950,
     refCode: '',
     isFiat: false
   },

@@ -236,6 +236,9 @@ watch(
       investmentAmount.value = 500000;
     }
 
+    if (+newValue < 0) {
+      investmentAmount.value = 0;
+    }
     if(isNaN(newValue)) {
       investmentAmount.value = 2500;
     }
