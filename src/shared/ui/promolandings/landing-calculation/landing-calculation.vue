@@ -55,8 +55,8 @@
             <span>Need help? Talk to one of our support agents!</span>
             <a-icon :name="Icon.MonoChevronRight" />
           </div>
-          <landing-registration :calc-value="calcAmount" v-if="!isUserAuthenticated" :refCode="refCode" :is-fiat="isFiatLanding || true"/>
-          <w-buy-shares-payment-short v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
+          <landing-registration :calc-value-discount="calcAmountWithDiscount" :calc-value="calcAmount" v-if="!isUserAuthenticated" :refCode="refCode" :is-fiat="isFiatLanding"/>
+          <w-buy-shares-payment-short v-if="isUserAuthenticated" :calc-value-discount="calcAmountWithDiscount" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
           <div class="langing-calculation__chat" v-if="width > 767">
             <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
           </div>
@@ -136,10 +136,28 @@ function initializeTronClock() {
   timeinterval = setInterval(updateClockTron, 30000);
 }
 
-const calcAmount = ref(1000)
+const calcAmount = ref(1000);
 const calcAmountUpdated = (e) =>{
   calcAmount.value = e
 }
+
+
+
+const calcAmountWithDiscount = ref(950);
+
+watch(
+  () => calcAmount.value,
+  (newValue) => {
+    const tempValue = Math.ceil(newValue-(newValue/100)*5);
+
+    if(isNaN(tempValue)) {
+      calcAmountWithDiscount.value = 0;
+    } else {
+      calcAmountWithDiscount.value = tempValue;
+    }
+  }
+)
+
 const isUserAuthenticated = computed(() => {
   return $app.store.auth.isUserAuthenticated
 })
