@@ -870,10 +870,6 @@ const signupAndBuyGoogle = () => {
     .catch((e) => {
       isSignupAndBuyGoogle.value = false;
       console.error(e);
-<<<<<<< HEAD
-      isSignupAndBuyGoogle.value = false;
-=======
->>>>>>> 8db10579bea42b5134a0ebacb8901cffb7c1a5c7
         if (e?.errors?.error?.message) {
             backendError.value = e.errors.error.message
         } else {
