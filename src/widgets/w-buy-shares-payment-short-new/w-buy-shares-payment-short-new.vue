@@ -50,7 +50,7 @@
             <a-input
               bgColor="tetherspecial"
               label="Amount"
-              :model-value="`${$app.filters.rounded(calcValue)} USDT`"
+              :model-value="`${calcValue < 95 ? 95 : $app.filters.rounded(calcValue)} USDT`"
               disabled
               :text-icon="amountCopied"
               text-icon-text="Copied!"
@@ -237,13 +237,13 @@ const initPayment = async () =>{
   allPaymentsTypesMerchant.value = merchantMethods.data?.value?.data?.methods
 }
 onMounted(async () => {
-  if (props.isFiat && $app.store.user?.buyShares?.uuid) {
+  if (true && $app.store.user?.buyShares?.uuid) { //props.isFiat
     await initPayment()
   }
-  if (props.isFiat && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) {
+  if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
     await $app.api.eth.billingEth
       .buyShares({
-        amount: 100,
+        amount: props.calcValue < 95 ? 95 : props.calcValue,
         dividends: false,
         referral: false,
         bonus: false,

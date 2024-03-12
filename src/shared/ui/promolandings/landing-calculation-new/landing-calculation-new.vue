@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
@@ -89,7 +89,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmount < 95" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -118,7 +118,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmount < 95" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -691,7 +691,7 @@ const signupAndBuy = async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
 
 
-        // if (props.isFiat) {
+        if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
           await $app.api.eth.billingEth
             .buyShares({
@@ -708,7 +708,7 @@ const signupAndBuy = async () => {
                 $app.store.user.buyShares = data
               }
             })
-        // }
+        }
       })
       .catch((e) => {
         isSignupAndBuy.value = false;
@@ -757,7 +757,7 @@ const signupAndBuy = async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
 
 
-        // if (props.isFiat) {
+        if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
           await $app.api.eth.billingEth
             .buyShares({
@@ -774,7 +774,7 @@ const signupAndBuy = async () => {
                 $app.store.user.buyShares = data
               }
             })
-        // }
+        }
       })
       .catch((e) => {
         isSignupAndBuy.value = false;

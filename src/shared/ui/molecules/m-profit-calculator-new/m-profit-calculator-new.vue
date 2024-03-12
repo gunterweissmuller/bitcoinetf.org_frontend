@@ -13,6 +13,7 @@
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
+          :disabled="props.isInputDisbled"
             :style="'max-width: '+inputMaxWidth+'px'"
             :value="investmentAmount"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -165,9 +166,11 @@ console.log("width", width.value  )
 const props = withDefaults(
   defineProps<{
     openSignup: any
+    isInputDisbled: boolean
   }>(),
   {
     openSignup: () => {},
+    isInputDisbled: false
   },
 )
 
