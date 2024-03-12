@@ -63,7 +63,7 @@
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-          <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
             bgColor="tetherspecial"
@@ -91,7 +91,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -120,7 +120,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -271,19 +271,19 @@ const handleMetamaskConnect = async () => {
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
 const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*5
-const buyAmount = ref(Math.ceil(defaultBuyAmount));
+const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : Math.ceil(defaultBuyAmount));
 // tether special discount 5%
 
 watch(
   () => $app.store.user.investAmount,
   (newValue) => {
-    buyAmount.value = Math.ceil(newValue-(newValue/100)*5);
+    const tempValue = Math.ceil(newValue-(newValue/100)*5);
 
-    // if(!Number.isInteger(buyAmountNew)) {
-    //   buyAmount.value = buyAmountNew.toFixed(2); //.toFixed(1) ceil()
-    // } else {
-    //   buyAmount.value = buyAmountNew;
-    // }
+    if(isNaN(tempValue)) {
+      buyAmount.value = 0;
+    } else {
+      buyAmount.value = tempValue;
+    }
   }
 )
 
@@ -752,6 +752,7 @@ const signupAndBuy = async () => {
         }
       })
       .catch((e) => {
+        isSignupAndBuy.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -766,16 +767,17 @@ const isSignupAndBuyGoogle = ref(false);
 
 const signupAndBuyGoogle = () => {
 
+  if(isSignupAndBuyGoogle.value) return;
+  isSignupAndBuyGoogle.value = true;
+
   var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
   var valid = re.test(phone.value);
 
   if(!valid) {
     backendError.value = 'Phone number is not valid';
+    isSignupAndBuyGoogle.value = false;
     return;
   }
-
-  if(isSignupAndBuyGoogle.value) return;
-  isSignupAndBuyGoogle.value = true;
 
   if(firstName.value === '' || lastName.value === '' ) {
     backendError.value = 'Fill in all the fields';
@@ -811,7 +813,7 @@ const signupAndBuyGoogle = () => {
       $app.store.auth.setTokens(tokens.data)
       $app.store.authGoogle.setResponse({}, SignupMethods.Google);
       confirmResponse.value = tokens.data
-      isSignupAndBuyGoogle.value = false;
+      // isSignupAndBuyGoogle.value = false;
       // firstName.value = '';
       // lastName.value = '';
       // email.value = '';
