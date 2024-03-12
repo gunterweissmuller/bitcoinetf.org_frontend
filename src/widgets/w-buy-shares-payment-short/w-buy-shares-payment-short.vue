@@ -61,7 +61,7 @@
         <div class="w-buy-shares-payment__accordion-stable-amount">
           <a-input
             label="Amount"
-            :model-value="`${$app.filters.rounded(calcValue)} USDT`"
+            :model-value="`${$app.filters.rounded(calcValueDiscount)} USDT`"
             disabled
             :text-icon="amountCopied"
             text-icon-text="Copied!"
@@ -142,11 +142,13 @@ const props = withDefaults(
     justTron: boolean
     calcValue: number
     isFiat: boolean
+    calcValueDiscount: number
   }>(),
   {
     justTron: true,
-    calcValue: 100,
-    isFiat: false
+    calcValue: 1000,
+    isFiat: false,
+    calcValueDiscount: 950,
   },
 )
 const router = useRouter()
@@ -205,7 +207,7 @@ const copyToClipboard = (address = false) => {
       addressCopied.value = false
     }, 1000)
   } else {
-    copy(props.calcValue)
+    copy(props.calcValueDiscount)
     amountCopied.value = true
     setTimeout(() => {
       amountCopied.value = false
@@ -236,13 +238,13 @@ const initPayment = async () =>{
   allPaymentsTypesMerchant.value = merchantMethods.data?.value?.data?.methods
 }
 onMounted(async () => {
-  if (props.isFiat && $app.store.user?.buyShares?.uuid) {
+  if (true && $app.store.user?.buyShares?.uuid) { //props.isFiat
     await initPayment()
   }
-  if (props.isFiat && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) {
+  if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
     await $app.api.eth.billingEth
       .buyShares({
-        amount: 100,
+        amount: props.calcValue,
         dividends: false,
         referral: false,
         bonus: false,
@@ -267,7 +269,7 @@ onMounted(async () => {
 watch(
   () => route.query,
   async () => {
-    if (props.isFiat){
+    if (true){ //props.isFiat
       await initPayment()
     }
   },
