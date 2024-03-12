@@ -4,6 +4,7 @@
       <NuxtPage />
     </NuxtLayout>
     <notifications />
+    <component :is="'script'" id="pap_x2s6df8d" src="https://bitcoinetf.postaffiliatepro.com/scripts/trackjs.js"></component>
   </div>
 </template>
 
