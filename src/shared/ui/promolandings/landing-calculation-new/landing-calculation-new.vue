@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
@@ -61,18 +61,17 @@
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-          <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
+            bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
-            buttonText="Get Confirmation Code"
-            buttonTextClicked="Received"
+            :buttonText="codeSendText"
             :buttonClick="() => {sendCode()}"
-            :buttonClickEnable="!codeSended"
             validation-reg-exp-key="email"
             :disabled="dataDisabled"
             required
@@ -80,7 +79,7 @@
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-          <a-input :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -90,7 +89,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmount < 95" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -99,6 +98,7 @@
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
 
           <a-input
+            bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
@@ -106,9 +106,9 @@
             :disabled="true"
             required
           />
-          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-          <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -118,7 +118,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmount < 95" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -268,12 +268,20 @@ const handleMetamaskConnect = async () => {
 }
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
-const buyAmount = ref($app.store.user.investAmount);
+const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*5
+const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : Math.ceil(defaultBuyAmount));
+// tether special discount 5%
 
 watch(
   () => $app.store.user.investAmount,
   (newValue) => {
-    buyAmount.value = newValue;
+    const tempValue = Math.ceil(newValue-(newValue/100)*5);
+
+    if(isNaN(tempValue)) {
+      buyAmount.value = 0;
+    } else {
+      buyAmount.value = tempValue;
+    }
   }
 )
 
@@ -527,7 +535,12 @@ const handleGoogleConnect = async () => {
 
 
 const sendCodeLoading = ref(false)
-const codeSended = ref(false)
+const codeSended = ref(false);
+const timerStarted = ref(false);
+const codeSendText = ref('Get Confirmation Code');
+const codeSendedText = ref('Resend');
+
+
 
 const sendCode = async () => {
   var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
@@ -537,11 +550,33 @@ const sendCode = async () => {
     backendError.value = 'Phone number is not valid';
     return;
   }
-
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid || token.value === '') {
     backendError.value = 'Fill in all the fields';
     return;
   }
+  if(timerStarted.value) {
+    return;
+  }
+  
+  const timer = (sec: number) => {
+    if(sec <= 0) {
+      codeSendText.value = 'Get Confirmation Code';
+      timerStarted.value = false;
+      return;
+    }
+
+    if(sec == 30) {
+      codeSendText.value =  "Resend " + 30 + "s";
+    }
+    setTimeout(()=>{
+      sec -= 1;
+      codeSendText.value =  "Resend " + sec + "s";
+      timer(sec);
+    },1000);
+  }
+
+  timer(30);
+  timerStarted.value = true;
 
   const tempPhone = phone.value.slice(countryCode.value.length+1);
   backendError.value = '';
@@ -615,68 +650,141 @@ const signupAndBuy = async () => {
   isSignupAndBuy.value = true;
 
   backendError.value = ''
-  await $app.api.eth.auth
-    .confirmFast({
+
+  if(signupMethod.value === SignupMethods.Metamask) {
+    await $app.api.eth.auth.
+    confirmMetamask({
       email: $app.filters.trimSpaceIntoString(email.value),
       code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      fast: true,
     })
-    .then((jwtResponse: any) => {
-      // TODO falling user/me
-      $app.store.auth.setTokens(jwtResponse.data)
-      confirmResponse.value = jwtResponse.data
-      isOpenModal.value = true;
-      dataDisabled.value = true;
-    })
-    .then(async () => {
-      await $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        isOpenModal.value = true;
+        dataDisabled.value = true;
       })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        })
 
-      const aAid = window.localStorage.getItem('PAPVisitorId');
-      if(aAid) {
-        $app.api.eth.auth.papSignUp({
-          payload: {
-            pap_id: aAid,
-            utm_label: window.localStorage.getItem('a_utm'),
-          }}).then((r: any) => {
-          //window.localStorage.removeItem('a_aid');
-          //window.localStorage.removeItem('a_utm');
-        });
-      }
-
-      await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
-        $app.store.user.blockchainUserWallet = resp?.data.uid
-      })
-    })
-    .then(async () => {
-      purchaseStep.value = PurchaseSteps.Purchase;
-      if (props.isFiat) {
-      console.log("TRUE IS FIAT");
-        await $app.api.eth.billingEth
-          .buyShares({
-            amount: 1000,
-            dividends: false,
-            referral: false,
-            bonus: false,
-          })
-          .then(({ data }) => {
-            if (data) {
-              router.replace({
-                query: { replenishment: data.uuid }
-              })
-              $app.store.user.buyShares = data
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if (aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
             }
-          })
-      }
-    })
-    .catch((e) => {
-      isSignupAndBuy.value = false;
-      if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
-      } else {
-        backendError.value = 'Something went wrong'
-      }
-    })
+          }).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+
+        await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+          $app.store.user.blockchainUserWallet = resp?.data.uid
+        })
+      })
+      .then(async () => {
+        purchaseStep.value = PurchaseSteps.Purchase;
+
+
+        if (props.isFiat) {
+        //   console.log("TRUE IS FIAT");
+          await $app.api.eth.billingEth
+            .buyShares({
+              amount: 1000,
+              dividends: false,
+              referral: false,
+              bonus: false,
+            })
+            .then(({ data }) => {
+              if (data) {
+                router.replace({
+                  query: { replenishment: data.uuid }
+                })
+                $app.store.user.buyShares = data
+              }
+            })
+        }
+      })
+      .catch((e) => {
+        isSignupAndBuy.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else {
+    await $app.api.eth.auth
+      .confirmFast({
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        isOpenModal.value = true;
+        dataDisabled.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        })
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if (aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }
+          }).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+
+        await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+          $app.store.user.blockchainUserWallet = resp?.data.uid
+        })
+      })
+      .then(async () => {
+        purchaseStep.value = PurchaseSteps.Purchase;
+
+
+        if (props.isFiat) {
+        //   console.log("TRUE IS FIAT");
+          await $app.api.eth.billingEth
+            .buyShares({
+              amount: 1000,
+              dividends: false,
+              referral: false,
+              bonus: false,
+            })
+            .then(({ data }) => {
+              if (data) {
+                router.replace({
+                  query: { replenishment: data.uuid }
+                })
+                $app.store.user.buyShares = data
+              }
+            })
+        }
+      })
+      .catch((e) => {
+        isSignupAndBuy.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  }
 
 }
 
@@ -684,16 +792,17 @@ const isSignupAndBuyGoogle = ref(false);
 
 const signupAndBuyGoogle = () => {
 
+  if(isSignupAndBuyGoogle.value) return;
+  isSignupAndBuyGoogle.value = true;
+
   var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
   var valid = re.test(phone.value);
 
   if(!valid) {
     backendError.value = 'Phone number is not valid';
+    isSignupAndBuyGoogle.value = false;
     return;
   }
-
-  if(isSignupAndBuyGoogle.value) return;
-  isSignupAndBuyGoogle.value = true;
 
   if(firstName.value === '' || lastName.value === '' ) {
     backendError.value = 'Fill in all the fields';
@@ -729,7 +838,7 @@ const signupAndBuyGoogle = () => {
       $app.store.auth.setTokens(tokens.data)
       $app.store.authGoogle.setResponse({}, SignupMethods.Google);
       confirmResponse.value = tokens.data
-      isSignupAndBuyGoogle.value = false;
+      // isSignupAndBuyGoogle.value = false;
       // firstName.value = '';
       // lastName.value = '';
       // email.value = '';
@@ -759,8 +868,12 @@ const signupAndBuyGoogle = () => {
         })
     })
     .catch((e) => {
-      console.error(e);
       isSignupAndBuyGoogle.value = false;
+      console.error(e);
+<<<<<<< HEAD
+      isSignupAndBuyGoogle.value = false;
+=======
+>>>>>>> 8db10579bea42b5134a0ebacb8901cffb7c1a5c7
         if (e?.errors?.error?.message) {
             backendError.value = e.errors.error.message
         } else {

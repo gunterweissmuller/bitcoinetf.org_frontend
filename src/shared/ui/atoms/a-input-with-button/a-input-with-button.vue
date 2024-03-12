@@ -8,7 +8,7 @@
         :force-show-mode="errorInTooltip"
         :force-show="!validation.isValid"
       >
-        <label :class="['a-input-with-button__label-container', { 'a-input-with-button__label-container--custom': custom }]">
+        <label :class="['a-input-with-button__label-container',{ 'a-input-with-button__label-container--tetherspecial': props?.bgColor == 'tetherspecial' }, { 'a-input-with-button__label-container--custom': custom }]">
           <div
             v-if="custom"
             :class="[
@@ -76,7 +76,7 @@
               
             </div>
             
-            <button @click="handleButtonClick" class="a-input-with-button__input-button">{{ isButtonClicked ? buttonTextClicked : buttonText   }}</button>
+            <button @click="handleButtonClick" class="a-input-with-button__input-button">{{ buttonText }}</button>
             
             <template v-if="icon">
               <span
@@ -174,6 +174,7 @@ const props = withDefaults(
     buttonTextClicked?: string
     buttonClick?: any
     buttonClickEnable?: boolean
+    bgColor: 'default' | 'tetherspecial'
   }>(),
   {
     modelValue: '',
@@ -204,6 +205,7 @@ const props = withDefaults(
     buttonText: '',
     buttonClick: () => {},
     buttonClickEnable: true,
+    bgColor: 'default'
   },
 )
 

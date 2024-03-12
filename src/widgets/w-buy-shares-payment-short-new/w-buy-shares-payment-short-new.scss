@@ -1,6 +1,10 @@
-.w-buy-shares-payment {
+.w-buy-shares-payment-new {
 
   margin-top: 60px;
+
+  @include breakpoint($break-tablet-minus) {
+    padding: 0 var(--spacing-m-1);
+  }
 
   &--landing{
     hr{
@@ -10,12 +14,12 @@
       border:none
     }
     .a-input--error .a-input__input-container:hover .a-input__input{
-      background: #2E2F3880!important;
+      // background: #2E2F3880!important;
     }
     .a-input__input-container{
-      background: #2E2F3880;
+      // background: #2E2F3880;
       .a-input__input--custom{
-        background: #2E2F3880;
+        // background: #2E2F3880;
         border: none;
         .a-input__input-title{
           color: #888CA0;
@@ -95,7 +99,11 @@
 
       &-address {
         cursor: copy;
-        margin-bottom: var(--spacing-m-2) !important;
+        margin-bottom: var(--spacing-m-2);
+
+        @include breakpoint($break-tablet-minus) {
+          margin-bottom: var(--spacing-m-1);
+        }
 
         & .a-input__input-text {
           padding-right: torem(0);
@@ -105,7 +113,11 @@
 
       &-amount {
         cursor: copy;
-        margin-bottom: var(--spacing-m-2) !important;
+        margin-bottom: var(--spacing-m-2);
+
+        @include breakpoint($break-tablet-minus) {
+          margin-bottom: var(--spacing-m-1);
+        }
       }
     }
   }
@@ -181,7 +193,7 @@
 
       }
       &--unavailable{
-        .w-buy-shares-payment__variant-bank__item-icon{
+        .w-buy-shares-payment-new__variant-bank__item-icon{
           margin-bottom: 0;
           height: 24px;
           width: auto;
@@ -459,5 +471,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-m-1);
+
+    @include breakpoint($break-tablet-minus) {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
   }
 }
