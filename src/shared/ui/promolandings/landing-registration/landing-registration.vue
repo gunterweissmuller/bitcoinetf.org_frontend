@@ -53,7 +53,7 @@
       <div class="landing-registration__form-button">
         <a-button
           :disabled="emailButtonDisabled"
-          :text="`$${$app.filters.rounded(calcValue,1)} BUY`"
+          :text="`$${$app.filters.rounded(calcValueDiscount,1)} BUY`"
           is-full-width
           @click="fastRegistration"
         />
@@ -85,11 +85,13 @@ const router = useRouter()
 const props = withDefaults(
   defineProps<{
     calcValue: number
+    calcValueDiscount: number
     refCode: string
     isFiat: boolean
   }>(),
   {
     calcValue: 1000,
+    calcValueDiscount: 950,
     refCode: '',
     isFiat: false
   },
@@ -180,10 +182,23 @@ const fastRegistration = async () => {
       })
     })
     .then(async () => {
+
+      const aAid = window.localStorage.getItem('PAPVisitorId');
+      if(aAid) {
+        $app.api.eth.auth.papSignUp({
+          payload: {
+            pap_id: aAid,
+            utm_label: window.localStorage.getItem('a_utm'),
+          }}).then((r: any) => {
+          //window.localStorage.removeItem('a_aid');
+          //window.localStorage.removeItem('a_utm');
+        });
+      }
+
       if (props.isFiat) {
         await $app.api.eth.billingEth
           .buyShares({
-            amount: props.calcValue,
+            amount: 1000,
             dividends: false,
             referral: false,
             bonus: false,
