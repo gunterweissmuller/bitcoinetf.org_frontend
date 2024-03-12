@@ -55,7 +55,7 @@
             <span>Need help? Talk to one of our support agents!</span>
             <a-icon :name="Icon.MonoChevronRight" />
           </div>
-          <landing-registration :calc-value="calcAmount" v-if="!isUserAuthenticated" :refCode="refCode" :is-fiat="isFiatLanding"/>
+          <landing-registration :calc-value="calcAmount" v-if="!isUserAuthenticated" :refCode="refCode" :is-fiat="isFiatLanding || true"/>
           <w-buy-shares-payment-short v-if="isUserAuthenticated" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
           <div class="langing-calculation__chat" v-if="width > 767">
             <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>

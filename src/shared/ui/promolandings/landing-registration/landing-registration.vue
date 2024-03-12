@@ -183,7 +183,7 @@ const fastRegistration = async () => {
       if (props.isFiat) {
         await $app.api.eth.billingEth
           .buyShares({
-            amount: 1000,
+            amount: props.calcValue,
             dividends: false,
             referral: false,
             bonus: false,
