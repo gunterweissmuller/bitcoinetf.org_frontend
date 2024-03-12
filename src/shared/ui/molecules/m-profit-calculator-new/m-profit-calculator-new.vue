@@ -38,7 +38,7 @@
               <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
             </div>
           </div>
-          <div v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
@@ -155,6 +155,8 @@ import {useNuxtApp} from "#app";
 import VueWriter from 'vue-writer'
 import InputNumber from 'primevue/inputnumber';
 import { useWindowSize } from '@vueuse/core'
+import { vOnClickOutside } from '@vueuse/components'
+
 
 const { width } = useWindowSize()
 
@@ -192,6 +194,8 @@ onMounted(()=>{
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
+
+  
 })
 
 function validate(event) {
