@@ -70,10 +70,8 @@
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
-            buttonText="Get Confirmation Code"
-            buttonTextClicked="Received"
+            :buttonText="codeSendText"
             :buttonClick="() => {sendCode()}"
-            :buttonClickEnable="!codeSended"
             validation-reg-exp-key="email"
             :disabled="dataDisabled"
             required
@@ -537,7 +535,12 @@ const handleGoogleConnect = async () => {
 
 
 const sendCodeLoading = ref(false)
-const codeSended = ref(false)
+const codeSended = ref(false);
+const timerStarted = ref(false);
+const codeSendText = ref('Get Confirmation Code');
+const codeSendedText = ref('Resend');
+
+
 
 const sendCode = async () => {
   var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
@@ -547,11 +550,33 @@ const sendCode = async () => {
     backendError.value = 'Phone number is not valid';
     return;
   }
-
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid || token.value === '') {
     backendError.value = 'Fill in all the fields';
     return;
   }
+  if(timerStarted.value) {
+    return;
+  }
+  
+  const timer = (sec: number) => {
+    if(sec <= 0) {
+      codeSendText.value = 'Get Confirmation Code';
+      timerStarted.value = false;
+      return;
+    }
+
+    if(sec == 30) {
+      codeSendText.value =  "Resend " + 30 + "s";
+    }
+    setTimeout(()=>{
+      sec -= 1;
+      codeSendText.value =  "Resend " + sec + "s";
+      timer(sec);
+    },1000);
+  }
+
+  timer(30);
+  timerStarted.value = true;
 
   const tempPhone = phone.value.slice(countryCode.value.length+1);
   backendError.value = '';
@@ -666,8 +691,8 @@ const signupAndBuy = async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
 
 
-        if (props.isFiat) {
-          console.log("TRUE IS FIAT");
+        // if (props.isFiat) {
+        //   console.log("TRUE IS FIAT");
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,
@@ -683,7 +708,7 @@ const signupAndBuy = async () => {
                 $app.store.user.buyShares = data
               }
             })
-        }
+        // }
       })
       .catch((e) => {
         isSignupAndBuy.value = false;
@@ -732,8 +757,8 @@ const signupAndBuy = async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
 
 
-        if (props.isFiat) {
-          console.log("TRUE IS FIAT");
+        // if (props.isFiat) {
+        //   console.log("TRUE IS FIAT");
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,
@@ -749,7 +774,7 @@ const signupAndBuy = async () => {
                 $app.store.user.buyShares = data
               }
             })
-        }
+        // }
       })
       .catch((e) => {
         isSignupAndBuy.value = false;

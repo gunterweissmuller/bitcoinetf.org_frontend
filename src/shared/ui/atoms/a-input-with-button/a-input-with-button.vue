@@ -76,7 +76,7 @@
               
             </div>
             
-            <button @click="handleButtonClick" class="a-input-with-button__input-button">{{ isButtonClicked ? buttonTextClicked : buttonText   }}</button>
+            <button @click="handleButtonClick" class="a-input-with-button__input-button">{{ buttonText }}</button>
             
             <template v-if="icon">
               <span
