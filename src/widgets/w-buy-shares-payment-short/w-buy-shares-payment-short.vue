@@ -236,13 +236,13 @@ const initPayment = async () =>{
   allPaymentsTypesMerchant.value = merchantMethods.data?.value?.data?.methods
 }
 onMounted(async () => {
-  if (props.isFiat && $app.store.user?.buyShares?.uuid) {
+  if (true && $app.store.user?.buyShares?.uuid) { //props.isFiat
     await initPayment()
   }
-  if (props.isFiat && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) {
+  if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
     await $app.api.eth.billingEth
       .buyShares({
-        amount: 100,
+        amount: props.calcValue,
         dividends: false,
         referral: false,
         bonus: false,
@@ -267,7 +267,7 @@ onMounted(async () => {
 watch(
   () => route.query,
   async () => {
-    if (props.isFiat){
+    if (true){ //props.isFiat
       await initPayment()
     }
   },

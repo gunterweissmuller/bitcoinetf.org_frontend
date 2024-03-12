@@ -269,7 +269,7 @@ onMounted(async () => {
 watch(
   () => route.query,
   async () => {
-    if (props.isFiat){
+    if (true){ //props.isFiat
       await initPayment()
     }
   },
