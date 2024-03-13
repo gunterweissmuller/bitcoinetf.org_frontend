@@ -444,12 +444,12 @@
   background: transparent !important;
 
   &-list {
-    background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 1));
+    background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 1)) !important;
     border: none;
   }
 
   &-item.highlighted {
-    background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 1));
+    background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 1)) !important;
   }
 }
 
@@ -458,6 +458,14 @@
 .vti__input {
   background: transparent;
   border: transparent
+}
+
+.vti__dropdown-list {
+  z-index: 30;
+
+  @include breakpoint($break-tablet-minus) {
+    width: 328px;
+  }
 }
 
 // .vti__input:focus {
