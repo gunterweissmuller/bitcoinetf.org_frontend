@@ -1,7 +1,7 @@
 <template>
   <button
     class="a-button"
-    :class="[buttonTypeClass, buttonSizeClass, buttonIconPositionClass, buttonClasses]"
+    :class="[buttonTypeClass, buttonSizeClass, buttonIconPositionClass, buttonFontSizeClass, buttonClasses]"
     :variant="variant"
     :size="size"
     :iconPosition="iconPosition"
@@ -29,9 +29,10 @@ import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 
 const {$app} = useNuxtApp()
 const buttonVariants = {
-  types: ['primary', 'secondary', 'tertiary'],
+  types: ['primary', 'secondary', 'tertiary', 'primary2'],
   sizes: ['default', 'small'],
   iconPositions: ['left', 'right'],
+  fontSize: ['default-size', 'big-size'],
 }
 
 const props = withDefaults(
@@ -41,11 +42,12 @@ const props = withDefaults(
     disabled?: boolean
     icon?: Icon | null
     iconPosition?: 'left' | 'right'
-    variant?: 'primary' | 'secondary' | 'tertiary'
+    variant?: 'primary' | 'secondary' | 'tertiary' | 'primary2'
     size?: 'default' | 'small'
     type?: 'button' | 'submit' | 'reset'
     loading?: boolean
     isFullWidth?: boolean
+    fontSize?: 'default-size' | 'big-size'
   }>(),
   {
     text: '',
@@ -58,6 +60,7 @@ const props = withDefaults(
     loading: false,
     type: 'button',
     isFullWidth: false,
+    fontSize: 'default-size'
   },
 )
 
@@ -71,6 +74,10 @@ const buttonSizeClass = computed<string>(() => {
 
 const buttonIconPositionClass = computed<string>(() => {
   return $app.filters.setAtomClassByProp(props.iconPosition, buttonVariants.iconPositions, 'a-button')
+})
+
+const buttonFontSizeClass = computed<string>(() => {
+  return $app.filters.setAtomClassByProp(props.fontSize, buttonVariants.fontSize, 'a-button')
 })
 
 const buttonClasses = computed<Record<string, boolean>>(() => ({

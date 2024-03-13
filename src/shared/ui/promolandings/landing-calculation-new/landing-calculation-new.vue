@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
@@ -61,18 +61,17 @@
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-          <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <vue-tel-input :disabled="dataDisabled || isMainInputDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
+            bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
-            buttonText="Get Confirmation Code"
-            buttonTextClicked="Received"
+            :buttonText="codeSendText"
             :buttonClick="() => {sendCode()}"
-            :buttonClickEnable="!codeSended"
             validation-reg-exp-key="email"
             :disabled="dataDisabled"
             required
@@ -80,7 +79,7 @@
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-          <a-input :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -90,7 +89,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmount < 95" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -99,6 +98,7 @@
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
 
           <a-input
+            bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
             label="Email"
             v-model="email"
@@ -106,9 +106,9 @@
             :disabled="true"
             required
           />
-          <a-input :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-          <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -118,13 +118,13 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmount < 95" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
         </div>
       </template>
 
       <div class="w-buy-shares-payment-short-new"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -220,10 +220,23 @@ onMounted(()=>{
   initializeTronClock()
 })
 
+// watch(
+//   () => (window as any).ethereum,
+//   () => {
+//     isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+//     console.log("NEWWW", isMetamaskSupported.value);
+//   }
+// )
+
+const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
+
+console.log("Percent", discountPercent);
+
 const isMetamaskConnecting = ref(false);
-const metamaskSignatureMessage = ref('')
-const metamaskSignature = ref('')
-const metamaskWalletAddress = ref('')
+const metamaskSignatureMessage = ref('');
+const metamaskSignature = ref('');
+const metamaskWalletAddress = ref('');
+const isReload = ref(false);
 
 const handleMetamaskConnect = async () => {
   // if metamask button is already clicked
@@ -232,7 +245,16 @@ const handleMetamaskConnect = async () => {
 
   //if metamask is not installed
   if (!isMetamaskSupported.value) {
-    window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+
+    if(isReload.value) {
+      isReload.value = false;
+      location.reload();
+    } else {
+      isReload.value = true;
+    }
+
+    // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+    window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
     isMetamaskConnecting.value = false;
     return;
   }
@@ -268,12 +290,22 @@ const handleMetamaskConnect = async () => {
 }
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
-const buyAmount = ref($app.store.user.investAmount);
+const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*discountPercent
+const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : Math.ceil(defaultBuyAmount));
+const buyAmountOriginal = ref($app.store.user.investAmount);
+// tether special discount 5%
 
 watch(
   () => $app.store.user.investAmount,
   (newValue) => {
-    buyAmount.value = newValue;
+    buyAmountOriginal.value = newValue;
+    const tempValue = Math.ceil(newValue-(newValue/100)*discountPercent);
+
+    if(isNaN(tempValue)) {
+      buyAmount.value = 0;
+    } else {
+      buyAmount.value = tempValue;
+    }
   }
 )
 
@@ -428,8 +460,6 @@ const scrollToPurchase = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
-  console.log(offsetPosition, elementPosition);
-
   setTimeout(()=>{
     window.scrollTo({
       top: offsetPosition,
@@ -527,7 +557,13 @@ const handleGoogleConnect = async () => {
 
 
 const sendCodeLoading = ref(false)
-const codeSended = ref(false)
+const codeSended = ref(false);
+const timerStarted = ref(false);
+const codeSendText = ref('Get Confirmation Code');
+const codeSendedText = ref('Resend');
+const isMainInputDisabled = ref(false);
+
+
 
 const sendCode = async () => {
   var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
@@ -537,11 +573,35 @@ const sendCode = async () => {
     backendError.value = 'Phone number is not valid';
     return;
   }
-
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid || token.value === '') {
     backendError.value = 'Fill in all the fields';
     return;
   }
+  if(timerStarted.value) {
+    return;
+  }
+
+  isMainInputDisabled.value = true;
+  
+  const timer = (sec: number) => {
+    if(sec <= 0) {
+      codeSendText.value = 'Get Confirmation Code';
+      timerStarted.value = false;
+      return;
+    }
+
+    if(sec == 30) {
+      codeSendText.value =  "Resend " + 30 + "s";
+    }
+    setTimeout(()=>{
+      sec -= 1;
+      codeSendText.value =  "Resend " + sec + "s";
+      timer(sec);
+    },1000);
+  }
+
+  timer(30);
+  timerStarted.value = true;
 
   const tempPhone = phone.value.slice(countryCode.value.length+1);
   backendError.value = '';
@@ -562,6 +622,7 @@ const sendCode = async () => {
       })
       .catch((e) => {
         //isSubmitEmailForm.value = false;
+        isMainInputDisabled.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -588,6 +649,7 @@ const sendCode = async () => {
       }
     })
     .catch((e) => {
+      isMainInputDisabled.value = false;
       console.error("ERROR", e);
       if (e?.errors?.error?.message) {
         if (e.errors.error.code === 'ETF:011002') {
@@ -633,6 +695,7 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
+          console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -657,7 +720,7 @@ const signupAndBuy = async () => {
 
 
         if (props.isFiat) {
-          console.log("TRUE IS FIAT");
+        //   console.log("TRUE IS FIAT");
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,
@@ -722,7 +785,7 @@ const signupAndBuy = async () => {
 
 
         if (props.isFiat) {
-          console.log("TRUE IS FIAT");
+        //   console.log("TRUE IS FIAT");
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,
@@ -741,6 +804,7 @@ const signupAndBuy = async () => {
         }
       })
       .catch((e) => {
+        isSignupAndBuy.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -755,16 +819,17 @@ const isSignupAndBuyGoogle = ref(false);
 
 const signupAndBuyGoogle = () => {
 
+  if(isSignupAndBuyGoogle.value) return;
+  isSignupAndBuyGoogle.value = true;
+
   var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
   var valid = re.test(phone.value);
 
   if(!valid) {
     backendError.value = 'Phone number is not valid';
+    isSignupAndBuyGoogle.value = false;
     return;
   }
-
-  if(isSignupAndBuyGoogle.value) return;
-  isSignupAndBuyGoogle.value = true;
 
   if(firstName.value === '' || lastName.value === '' ) {
     backendError.value = 'Fill in all the fields';
@@ -800,17 +865,19 @@ const signupAndBuyGoogle = () => {
       $app.store.auth.setTokens(tokens.data)
       $app.store.authGoogle.setResponse({}, SignupMethods.Google);
       confirmResponse.value = tokens.data
-      isSignupAndBuyGoogle.value = false;
+      // isSignupAndBuyGoogle.value = false;
       // firstName.value = '';
       // lastName.value = '';
       // email.value = '';
       dataDisabled.value = true;
-      purchaseStep.value = PurchaseSteps.Purchase;
+      isOpenModal.value = true;
       scrollToPurchase();
     })
     .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
+            purchaseStep.value = PurchaseSteps.Purchase;
+
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');

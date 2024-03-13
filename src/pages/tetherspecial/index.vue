@@ -4,9 +4,11 @@
   <s-site-footer/>
 </template>
 
-<script setup>
-import {definePageMeta} from "#imports";
-import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
+  <script setup>
+  import {definePageMeta} from "#imports";
+  import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue";
+  import LandingPromo from "~/src/shared/ui/promolandings/landing-promo-new/landing-promo-new.vue";
+  import LandingCalculation from "~/src/shared/ui/promolandings/landing-calculation-new/landing-calculation-new.vue";
 
 definePageMeta({
   layout: 'site-dark',

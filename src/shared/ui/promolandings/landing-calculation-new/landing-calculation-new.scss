@@ -311,6 +311,11 @@
     margin-left: auto;
     margin-right: auto;
 
+    @include breakpoint($break-tablet-minus) {
+      max-width: 375px;
+      margin: 60px auto 0px auto;
+    }
+
     &-title {
       color: #FFF;
       text-align: center;
@@ -365,6 +370,10 @@
 
     &-main {
 
+      @include breakpoint($break-tablet-minus) {
+        padding: 0 var(--spacing-m-1);
+      }
+
       &-input {
         margin-top: 16px;
 
@@ -372,11 +381,11 @@
         font-weight: 400;
 
         &-email {
-          margin-top: var(--spacing-m-2);
+          margin-top: var(--spacing-m-1);
         }
 
         &-first-name {
-          margin-top: var(--spacing-m-2);
+          margin-top: var(--spacing-m-1);
         }
 
         &-phone {
@@ -389,7 +398,8 @@
         padding: var(--spacing-m-1);
         border-radius: var(--spacing-s, 8px);
         border: 1px solid var(--surfaces-border-1);
-        background: var(--surfaces-border-1);
+        // background: var(--surfaces-border-1);
+        background: var(--Surfaces-Surface-1, #22242B);
       }
 
       &__button {
@@ -405,32 +415,64 @@
 }
 
 .vue-tel-input {
-  margin-top: var(--spacing-m-2);
+  margin-top: var(--spacing-m-1);
   border-radius: 8px;
-  background: var(--surfaces-surface-2);
-  border: none;
-  padding: var(--spacing-m-1) var(--spacing-s);
+  // background: var(--surfaces-surface-2);
+  background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+  border: 1px solid transparent;
+  border-color: transparent;
+  // padding: var(--spacing-s) var(--spacing-s);
+  // padding: 0.6875rem 1.125rem 0.6875rem 1rem ;
+  padding: torem(11, 18, 11, 8);
   box-shadow: none !important;
+
+  transition: 0.4s;
+
+  &:hover {
+    border: 1px solid var(--accent-primary);
+  }
+  &:focus {
+    border: 1px solid var(--accent-primary);
+  }
+  &:focus-within {
+    border: 1px solid var(--accent-primary);
+  }
 }
 
+
 .vti__dropdown {
-  background: var(--surfaces-surface-2) !important;
+  background: transparent !important;
 
   &-list {
-    background: var(--surfaces-surface-2);
+    background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 1)) !important;
     border: none;
   }
 
   &-item.highlighted {
-    background: var(--surfaces-surface-1);
+    background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 1)) !important;
   }
 }
 
 
 
 .vti__input {
-  background: var(--surfaces-surface-2);
+  background: transparent;
   border: transparent
 }
+
+.vti__dropdown-list {
+  z-index: 30 !important;
+
+  @include breakpoint($break-tablet-minus) {
+    width: 328px !important;
+  }
+}
+
+// .vti__input:focus {
+//   .vue-tel-input {
+//     border: 1px solid red;
+//   }
+  
+// }
 
 

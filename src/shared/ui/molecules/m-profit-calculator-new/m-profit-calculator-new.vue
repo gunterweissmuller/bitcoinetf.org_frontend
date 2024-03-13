@@ -11,10 +11,9 @@
 
         <div class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary ml-4 grow flex justify-center font-semibold">
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
-          <!-- <input v-bind="investmentAmountModified" v-on="{ ...$listeners,  input: e => $emit('input', e.target.value)}" :style="'max-width: '+inputMaxWidth+'px'" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
-          <!-- <InputNumber inputId="integeronly" v-model="investmentAmount" inputId="minmax" :min="0" :max="500000" /> -->
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
+          :disabled="props.isInputDisbled"
             :style="'max-width: '+inputMaxWidth+'px'"
             :value="investmentAmount"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -35,12 +34,12 @@
         <div class="relative">
           <div class="landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
-              <NuxtImg :src="selectedCurrency.icon" class="w-10 aspect-square cursor-pointer" alt="USDT logo" />
+              <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" />
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['w-[32px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
+              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
             </div>
           </div>
-          <div v-if="showDropdown" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
@@ -63,10 +62,10 @@
           <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
-            <div class="flex relative justify-around">
+            <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
                 <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
@@ -95,13 +94,13 @@
 
           <!-- BACK -->
 
-          <div class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
+          <div v-if="selectedCurrency.value === 'Bitcoin'" class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
-            <div class="flex relative justify-around">
+            <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
                 <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
@@ -156,13 +155,22 @@ import {computed, ref, watch} from "vue";
 import {useNuxtApp} from "#app";
 import VueWriter from 'vue-writer'
 import InputNumber from 'primevue/inputnumber';
+import { useWindowSize } from '@vueuse/core'
+import { vOnClickOutside } from '@vueuse/components'
+
+
+const { width } = useWindowSize()
+
+console.log("width", width.value  )
 
 const props = withDefaults(
   defineProps<{
     openSignup: any
+    isInputDisbled: boolean
   }>(),
   {
     openSignup: () => {},
+    isInputDisbled: false
   },
 )
 
@@ -170,25 +178,41 @@ const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-let apyValue = ref(33)
+let apyValue = ref(14)
 const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
-const typeAPY = ref('Projected')
+const typeAPY = ref('Guaranteed')
 
-const inputMaxWidth = ref(100);
+const defaultInputWith = ref(width.value < 768 ? 40 : 100);
+const defaultInputPlus = ref(width.value < 768 ? 10 : 20);
+const inputMaxWidth = ref(defaultInputWith.value);
+
 // const investmentAmount = ref('2,500');
 const investmentAmount = ref(2500);
+const investmentAmountWithDiscount = ref(2375);
 
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
+
+
 })
 
 function validate(event) {
-  if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false
+  console.log(event);
+  if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
+
+  // var theEvent = event || window.event;
+  // var key = theEvent.keyCode || theEvent.which;
+  // key = String.fromCharCode( key );
+  // var regex = /[0-9\s\+\-]|\./;
+  // if( !regex.test(key) ) {
+  //   theEvent.returnValue = false;
+  //   if(theEvent.preventDefault) theEvent.preventDefault();
+  // }
 }
 
 const onPickerValueInput = (event) => {
@@ -215,20 +239,53 @@ watch(
     if (+newValue <= 0) {
       investmentAmount.value = 1;
     }
+    if(isNaN(newValue)) {
+      investmentAmount.value = 2500;
+    }
+
+    // if (+newValue < 0) {
+    //   investmentAmount.value = 0;
+    // }
 
     localStorage.setItem('investmentAmount', String(investmentAmount.value));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
 
     if(String(newValue).length <= 4) {
-      inputMaxWidth.value = 100;
+      inputMaxWidth.value = defaultInputWith.value;
     } else if(String(newValue).length > 4 && String(newValue).length < 7) {
-      inputMaxWidth.value =  100+((String(newValue).length - 4)*20);
+      inputMaxWidth.value =  defaultInputWith.value+((String(newValue).length - 4)*defaultInputPlus.value);
     }
 
-    // investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  },
+)
 
-    // investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
+// watch(
+//   () => investmentAmount.value,
+//   (newValue) => {
+//     investmentAmountWithDiscount.value = investmentAmount.value - (investmentAmount.value/100)*5;
 
+//     if(!Number.isInteger(investmentAmountWithDiscount.value)) {
+//       investmentAmountWithDiscount.value = investmentAmountWithDiscount.value.toFixed(1)
+//     }
+//   }
+//  )
+
+watch(
+  () => width.value,
+  (newValue) => {
+    if(width.value < 768) {
+      defaultInputWith.value = 40;
+      defaultInputPlus.value = 10;
+    } else {
+      defaultInputWith.value = 100;
+      defaultInputPlus.value = 20;
+    }
+
+    if(String(investmentAmount.value).length <= 4) {
+      inputMaxWidth.value = defaultInputWith.value;
+    } else if(String(investmentAmount.value).length > 4 && String(investmentAmount.value).length < 7) {
+      inputMaxWidth.value =  defaultInputWith.value+((String(investmentAmount.value).length - 4)*defaultInputPlus.value);
+    }
   },
 )
 
@@ -263,6 +320,19 @@ const currencies = ref([
   }, ]);
 const selectedCurrency = ref(currencies.value[0]);
 const showDropdown = ref(false);
+
+onMounted(()=>{
+  if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
+    selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
+  }
+});
+
+watch(
+  () => selectedCurrency.value,
+  (newValue) => {
+    localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
+  }
+)
 
 const toggleCurrencyDropdown = () => {
   showDropdown.value = !showDropdown.value;

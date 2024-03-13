@@ -66,6 +66,35 @@
     &--custom {
       min-width: inherit;
     }
+
+    &--tetherspecial {
+
+      &:hover {
+
+        .a-input__input-container {
+          // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+          background: transparent;
+        }
+
+        .a-input__input {
+          background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+          background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+          // border: 1px solid transparent;
+        }
+
+      }
+
+      .a-input__input-container {
+        // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+        background: transparent;
+      }
+
+      .a-input__input {
+        background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+        background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+        // border: 1px solid transparent;
+      }
+    }
   }
 
   &__label {
@@ -196,7 +225,9 @@
       font-family: Dm, sans-serif;
       font-size: torem(16);
       font-weight: 400;
-      line-height: torem(21);
+      // line-height: torem(21);
+      line-height: normal;
+      height: auto;
       min-height: torem(20);
       color: var(--text-primary);
       background: transparent;

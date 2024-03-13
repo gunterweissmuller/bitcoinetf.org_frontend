@@ -60,7 +60,7 @@
     span{
       padding: 0 16px;
       background: #1ba27a;
-      border-radius: 16px;
+      border-radius: var(--spacing-s);
       white-space: nowrap;
     }
     @media screen and (max-width: 991px) {

@@ -8,7 +8,7 @@
         :force-show-mode="errorInTooltip"
         :force-show="!validation.isValid"
       >
-        <label :class="['a-input__label-container', { 'a-input__label-container--custom': custom }]">
+        <label :class="['a-input__label-container', { 'a-input__label-container--tetherspecial': props?.bgColor == 'tetherspecial' }, { 'a-input__label-container--custom': custom }]">
           <div
             v-if="custom"
             :class="[
@@ -26,6 +26,7 @@
                 'a-input__input--custom',
                 { 'a-input__input--focused': $attrs.open },
                 { 'a-input__input-icon-left': leftIcon },
+                
               ]"
             >
               <a-icon v-if="leftIcon" width="24" height="24" :class="[`a-input__left-icon`]" :name="leftIcon" :imgTrue="imgTrue"/>
@@ -162,7 +163,8 @@ const props = withDefaults(
     maxLength?: number | null
     imgTrue?:boolean
     isBoldInput?:boolean
-    isTextInputSmall?:boolean,
+    isTextInputSmall?:boolean
+    bgColor: 'default' | 'tetherspecial'
   }>(),
   {
     modelValue: '',
@@ -191,6 +193,7 @@ const props = withDefaults(
     imgTrue:false,
     isBoldInput:false,
     isTextInputSmall:false,
+    bgColor: 'default',
   },
 )
 
