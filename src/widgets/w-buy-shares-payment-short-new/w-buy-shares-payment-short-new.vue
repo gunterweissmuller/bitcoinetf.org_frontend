@@ -426,6 +426,7 @@ onMounted(async () => {
 
   sub
     .on('publication', async function (ctx) {
+      console.log("publication123")
       if (ctx.data.message?.data?.status === 'success') {
         infoPayment.value = ctx.data.message?.data
       }

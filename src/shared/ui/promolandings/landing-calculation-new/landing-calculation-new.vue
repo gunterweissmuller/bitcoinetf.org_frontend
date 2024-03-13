@@ -220,14 +220,23 @@ onMounted(()=>{
   initializeTronClock()
 })
 
+// watch(
+//   () => (window as any).ethereum,
+//   () => {
+//     isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+//     console.log("NEWWW", isMetamaskSupported.value);
+//   }
+// )
+
 const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
 
 console.log("Percent", discountPercent);
 
 const isMetamaskConnecting = ref(false);
-const metamaskSignatureMessage = ref('')
-const metamaskSignature = ref('')
-const metamaskWalletAddress = ref('')
+const metamaskSignatureMessage = ref('');
+const metamaskSignature = ref('');
+const metamaskWalletAddress = ref('');
+const isReload = ref(false);
 
 const handleMetamaskConnect = async () => {
   // if metamask button is already clicked
@@ -236,6 +245,14 @@ const handleMetamaskConnect = async () => {
 
   //if metamask is not installed
   if (!isMetamaskSupported.value) {
+
+    if(isReload.value) {
+      isReload.value = false;
+      location.reload();
+    } else {
+      isReload.value = true;
+    }
+
     // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
     window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
     isMetamaskConnecting.value = false;
@@ -442,8 +459,6 @@ const scrollToPurchase = () => {
   }
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-
-  console.log(offsetPosition, elementPosition);
 
   setTimeout(()=>{
     window.scrollTo({
