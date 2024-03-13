@@ -128,7 +128,8 @@
           margin-top: var(--spacing-m-3);
           perspective: 551px;	
           width: 100%;
-          height: 318px;
+          // height: 318px;
+          height: 341px;
 
           @include breakpoint($break-tablet-minus) {
             margin-top: var(--spacing-m-2);
@@ -265,6 +266,8 @@
   
           &-stars {
             margin: 0rem var(--spacing-s);
+            display: flex;
+            gap: var(--spacing-xs);
           }
         }
   

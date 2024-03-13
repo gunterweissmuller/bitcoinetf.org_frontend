@@ -398,7 +398,8 @@
         padding: var(--spacing-m-1);
         border-radius: var(--spacing-s, 8px);
         border: 1px solid var(--surfaces-border-1);
-        background: var(--surfaces-border-1);
+        // background: var(--surfaces-border-1);
+        background: var(--Surfaces-Surface-1, #22242B);
       }
 
       &__button {
@@ -418,12 +419,26 @@
   border-radius: 8px;
   // background: var(--surfaces-surface-2);
   background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
-  border: none !important;
+  border: 1px solid transparent;
+  border-color: transparent;
   // padding: var(--spacing-s) var(--spacing-s);
   // padding: 0.6875rem 1.125rem 0.6875rem 1rem ;
   padding: torem(11, 18, 11, 8);
   box-shadow: none !important;
+
+  transition: 0.4s;
+
+  &:hover {
+    border: 1px solid var(--accent-primary);
+  }
+  &:focus {
+    border: 1px solid var(--accent-primary);
+  }
+  &:focus-within {
+    border: 1px solid var(--accent-primary);
+  }
 }
+
 
 .vti__dropdown {
   background: transparent !important;
@@ -444,5 +459,12 @@
   background: transparent;
   border: transparent
 }
+
+// .vti__input:focus {
+//   .vue-tel-input {
+//     border: 1px solid red;
+//   }
+  
+// }
 
 
