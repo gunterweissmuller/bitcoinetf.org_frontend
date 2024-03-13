@@ -15,7 +15,7 @@
             text="Buy Bitcoin ETF Shares"
             @click="$router.push({ name: 'personal-buy-shares' })"
           />
-          
+
         </div>
         <div class="w-aside__links">
           <ul class="w-aside__list">
@@ -249,7 +249,7 @@ const openTermsModal = () => {
 
 const routesList = [
   {
-    title: 'Analytics',
+    title: 'Fund',
     icon: Icon.MonoAnalytics,
     link: 'personal-performance',
     subNav: [
@@ -264,9 +264,9 @@ const routesList = [
         link: 'personal-portfolio',
       },
       {
-        title: 'Fund',
+        title: 'Shareholders',
         icon: Icon.MonoEarnings,
-        link: 'personal-fund',
+        link: 'personal-shareholders',
       },
     ],
   },

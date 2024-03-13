@@ -35,4 +35,4 @@ const globalStatistic = computed(() => {
 })
 </script>
 
-<style src="./w-fund-stats.scss" lang="scss" />
+<style src="./w-shareholders-stats.scss" lang="scss" />
