@@ -422,9 +422,10 @@ onMounted(async () => {
 
   centrifuge.value.connect()
 
-  const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
+  // const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
+  const sub = centrifuge.value.newSubscription(`replenishment.${$app.store.user.info?.account?.uuid}`)
 
-  console.log("mounted123", sub)
+  console.log("mounted123", sub, accountUuid, $app.store.user.info?.account?.uuid)
 
   sub
     .on('publication', async function (ctx) {
