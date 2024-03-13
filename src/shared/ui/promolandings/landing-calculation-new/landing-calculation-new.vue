@@ -852,6 +852,7 @@ const signupAndBuyGoogle = () => {
       // email.value = '';
       dataDisabled.value = true;
       purchaseStep.value = PurchaseSteps.Purchase;
+      isOpenModal.value = true;
       scrollToPurchase();
     })
     .then(async () => {
