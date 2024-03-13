@@ -872,7 +872,6 @@ const signupAndBuyGoogle = () => {
       // lastName.value = '';
       // email.value = '';
       dataDisabled.value = true;
-      purchaseStep.value = PurchaseSteps.Purchase;
       isOpenModal.value = true;
       scrollToPurchase();
     })
@@ -880,6 +879,8 @@ const signupAndBuyGoogle = () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
             console.log("$app.store.user.info", $app.store.user.info);
+            purchaseStep.value = PurchaseSteps.Purchase;
+
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
