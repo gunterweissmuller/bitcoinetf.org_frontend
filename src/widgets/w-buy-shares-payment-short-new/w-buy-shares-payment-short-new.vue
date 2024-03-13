@@ -424,9 +424,11 @@ onMounted(async () => {
 
   const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
 
+  console.log("mounted123", sub)
+
   sub
     .on('publication', async function (ctx) {
-      console.log("publication123")
+      console.log("publication123",ctx)
       if (ctx.data.message?.data?.status === 'success') {
         infoPayment.value = ctx.data.message?.data
       }

@@ -695,6 +695,7 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
+          console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -761,6 +762,7 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
+          console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -877,6 +879,7 @@ const signupAndBuyGoogle = () => {
     .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
+            console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
