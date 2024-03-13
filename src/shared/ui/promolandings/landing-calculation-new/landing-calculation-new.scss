@@ -461,7 +461,7 @@
 }
 
 .vti__dropdown-list {
-  z-index: 30;
+  z-index: 30 !important;
 
   @include breakpoint($break-tablet-minus) {
     width: 328px;
