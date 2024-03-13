@@ -194,9 +194,9 @@ const routeNames = computed(() => ({
     urlToBack: 'personal-performance',
     info: EPageInfoBuyShares,
   },
-  'personal-analytics': {
-    title: 'Analytics',
-    titleCrumb: 'Analytics',
+  'personal-fund': {
+    title: 'Shareholders',
+    titleCrumb: 'Shareholders',
     breadcrumbs: false,
     info: EPageInfoAnalytics,
   },
@@ -212,9 +212,9 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoAnalytics,
   },
-  'personal-fund': {
-    title: 'Analytics',
-    titleCrumb: 'Fund',
+  'personal-shareholders': {
+    title: 'Fund',
+    titleCrumb: 'Shareholders',
     breadcrumbs: false,
     info: EPageInfoAnalytics,
   },
@@ -291,12 +291,12 @@ const routeNames = computed(() => ({
   },
 }))
 
-const analyticsLinks = {
-  title: 'Analytics',
+const fundLinks = {
+  title: 'Fund',
   links: [
     { text: 'Performance', name: 'personal-performance' },
     { text: 'Portfolio', name: 'personal-portfolio' },
-    { text: 'Fund', name: 'personal-fund' },
+    { text: 'Shareholders', name: 'personal-shareholders' },
   ],
 }
 
@@ -310,10 +310,10 @@ const walletLinks = {
 }
 
 const linksList = {
-  'personal-analytics': analyticsLinks,
-  'personal-performance': analyticsLinks,
-  'personal-portfolio': analyticsLinks,
-  'personal-fund': analyticsLinks,
+  'personal-analytics': fundLinks,
+  'personal-performance': fundLinks,
+  'personal-portfolio': fundLinks,
+  'personal-shareholders': fundLinks,
   'personal-wallet': walletLinks,
   'personal-dividends': walletLinks,
   'personal-referrals': walletLinks,
@@ -322,9 +322,9 @@ const linksList = {
 
 const isVisibleInfo = computed(() => {
   return (
-    route.name === 'personal-analytics' ||
-    route.name === 'personal-performance' ||
     route.name === 'personal-fund' ||
+    route.name === 'personal-performance' ||
+    route.name === 'personal-shareholders' ||
     route.name === 'personal-portfolio'
   )
 })
@@ -387,8 +387,8 @@ const assetsByKey = computed(() => {
   }, {})
 })
 
-const fundTotalBtc = computed(() => {
-  return $app.store.assets.fundTotalBtc
+const shareholdersTotalBtc = computed(() => {
+  return $app.store.assets.shareholdersTotalBtc
 })
 
 const marqueList = computed(() => [
@@ -457,8 +457,8 @@ const marqueList = computed(() => [
   },
   {
     text: 'Bitcoin Reserve Fund Balance',
-    value: fundTotalBtc.value,
-    modifyValue: `${$app.filters.convertValue($app.filters.rounded(fundTotalBtc.value, 5)) }`,
+    value: shareholdersTotalBtc.value,
+    modifyValue: `${$app.filters.convertValue($app.filters.rounded(shareholdersTotalBtc.value, 5)) }`,
   },
   {
     text: 'BTC Options TD Balance',
@@ -477,8 +477,8 @@ const marqueList = computed(() => [
   },
   {
     text: 'Total AUM',
-    value: $app.filters.rounded(fundTotalUsd.value, 2),
-    modifyValue: `$${$app.filters.rounded(fundTotalUsd.value, 2)}`,
+    value: $app.filters.rounded(shareholdersTotalUsd.value, 2),
+    modifyValue: `$${$app.filters.rounded(shareholdersTotalUsd.value, 2)}`,
   },
   {
     text: 'Latest Bitcoin ETF Share Issuance',
@@ -492,8 +492,8 @@ const filteredMarqueList = computed(() => {
   return marqueList.value.filter((el) => el?.value)
 })
 
-const fundTotalUsd = computed(() => {
-  return $app.store.user.fundTotalUsd
+const shareholdersTotalUsd = computed(() => {
+  return $app.store.user.shareholdersTotalUsd
 })
 
 const getDividendsByYear = async () => {
@@ -511,7 +511,7 @@ const tabs = computed(() => {
     return [
       { text: 'Performance', name: 'personal-performance' },
       { text: 'Portfolio', name: 'personal-portfolio' },
-      { text: 'Fund', name: 'personal-fund' },
+      { text: 'Shareholders', name: 'personal-shareholders' },
     ]
   }
 

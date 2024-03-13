@@ -1,140 +1,52 @@
 <template>
-  <div class="w-fund page-max-width--small">
-    <w-chart-fund title="Total Assets Under Management (AUM)" is-main is-total-assets />
-    <w-fund-stats />
-    <w-shareholders />
-    <w-purchases />
-    <w-news />
-
-    <w-onboarding :steps="renderedSteps" :next-route-name="lastPayment ? 'personal-earnings' : 'personal-wallet'" />
+  <div class="w-analytics page-max-width--big">
+    <!--    <e-analytics-tabs v-model:active-tab="activeTab" :tab-bars="tabsList" />-->
+    <keep-alive>
+      <component v-if="activeComponent" :is="activeComponent.component" />
+    </keep-alive>
   </div>
 </template>
 
 <script setup lang="ts">
-import WFundStats from '~/src/widgets/w-fund-stats/w-fund-stats.vue'
-import WNews from '~/src/widgets/w-news/w-news.vue'
-import WShareholders from '~/src/widgets/w-shareholders/w-shareholders.vue'
-import WPurchases from '~/src/widgets/w-purchases/w-purchases.vue'
-import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue'
-import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
+import { defineAsyncComponent } from 'vue'
+import { useRoute } from 'vue-router'
+import EAnalyticsTabs from '~/src/features/e-analytics-tabs/e-analytics-tabs.vue'
 
-// Onboarding
-const { width } = useWindowSize()
+const route = useRoute()
 
-const { $app } = useNuxtApp()
+interface ITabsItem {
+  text: string
+  name: string
+}
 
-const lastPayment = computed(() => {
-  return $app.store.user.lastPayment
-})
+const tabsList = ref<ITabsItem[]>([
+  { text: 'Performance', name: 'personal-performance' },
+  { text: 'Portfolio', name: 'personal-portfolio' },
+  { text: 'Shareholders', name: 'personal-shareholders' },
+])
 
-const steps = computed(() => {
-  return [
-    {
-      attachTo: { element: width.value < 1024 ? '#personal-fund-tab-mobile' : '#personal-fund-tab' },
-      content: {
-        title: 'Fund',
-        description: "Witness the fund's growth journey.",
-      },
-      options: {
-        overlay: {
-          padding: 16,
-          borderRadius: 16,
-        },
-        popper: {
-          placement: width.value < 1024 ? 'bottom-start' : 'auto',
-        },
-      },
-      on: {
-        beforeStep: async function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.add('onboarding-index')
-        },
-        afterStep: function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.remove('onboarding-index')
-        },
-      },
-    },
-    {
-      attachTo: { element: '#fund-chart' },
-      content: {
-        title: 'Fund Management',
-        description: "Here's the total capital under our expert management.",
-      },
-      options: {
-        overlay: {
-          borderRadius: 16,
-        },
-      },
-      on: {
-        beforeStep: function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.add('onboarding-index')
+const activeTab = ref<string>('performance')
 
-          if (window.innerHeight < 700) {
-            const scrollPx = 700 - window.innerHeight
-            setTimeout(() => {
-              window.scrollTo(0, scrollPx * 2)
-            }, 0)
-          }
-        },
-        afterStep: function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.remove('onboarding-index')
-        },
-      },
-    },
-    {
-      attachTo: { element: '#shareholder' },
-      content: {
-        title: 'Shareholders Insight',
-        description: 'See the top 100 shareholders, their ownership, and Dividends.',
-      },
-      options: {
-        overlay: {
-          borderRadius: 16,
-        },
-      },
-      on: {
-        beforeStep: function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.add('onboarding-index')
-        },
-        afterStep: function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.remove('onboarding-index')
-        },
-      },
-    },
-    {
-      attachTo: { element: '#purchase' },
-      content: {
-        title: 'Latest Purchases',
-        description:
-          'Latest share issuance? Tap to view all transaction details. With blockchain verification, we offer unmatched transparency.',
-      },
-      options: {
-        overlay: {
-          borderRadius: 16,
-        },
-      },
-      on: {
-        beforeStep: function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.add('onboarding-index')
-        },
-        afterStep: function (options) {
-          const elem = document.querySelector(options.step.attachTo.element)
-          elem?.classList.remove('onboarding-index')
-        },
-      },
-    },
-  ]
-})
+const performance = defineAsyncComponent(() => import('~/src/widgets/w-performance/w-performance.vue'))
+const portfolio = defineAsyncComponent(() => import('~/src/widgets/w-portfolio/w-portfolio.vue'))
+const shareholders = defineAsyncComponent(() => import('~/src/widgets/w-shareholders/w-shareholders.vue'))
 
-const renderedSteps = computed(() => {
-  return steps.value.filter((step) => step.isRender !== false)
-})
+const components = {
+  'personal-performance': {
+    id: 'performance',
+    component: performance,
+  },
+  'personal-portfolio': {
+    id: 'portfolio',
+    component: portfolio,
+  },
+  'personal-shareholders': {
+    id: 'shareholders',
+    component: shareholders,
+  },
+}
+
+const activeComponent = computed(() => components[route.name])
 </script>
 
 <style src="./w-fund.scss" lang="scss" />
