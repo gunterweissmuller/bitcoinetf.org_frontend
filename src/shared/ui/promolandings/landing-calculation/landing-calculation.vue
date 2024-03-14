@@ -150,7 +150,7 @@ const calcAmountWithDiscount = ref(950);
 watch(
   () => calcAmount.value,
   (newValue) => {
-    const tempValue = Math.ceil(newValue-(newValue/100)*discountPercent);
+    const tempValue = $app.filters.rounded(newValue-(newValue/100)*discountPercent);
 
     if(isNaN(tempValue)) {
       calcAmountWithDiscount.value = 0;

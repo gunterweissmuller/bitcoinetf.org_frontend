@@ -291,7 +291,7 @@ const handleMetamaskConnect = async () => {
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
 const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*discountPercent
-const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : Math.ceil(defaultBuyAmount));
+const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : $app.filters.rounded(defaultBuyAmount));
 const buyAmountOriginal = ref($app.store.user.investAmount);
 // tether special discount 5%
 
@@ -299,7 +299,7 @@ watch(
   () => $app.store.user.investAmount,
   (newValue) => {
     buyAmountOriginal.value = newValue;
-    const tempValue = Math.ceil(newValue-(newValue/100)*discountPercent);
+    const tempValue = $app.filters.rounded(newValue-(newValue/100)*discountPercent);
 
     if(isNaN(tempValue)) {
       buyAmount.value = 0;

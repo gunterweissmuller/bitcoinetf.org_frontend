@@ -303,14 +303,17 @@ const guaranteedPayout = computed(() => {
   return investmentAmount.value * (apyValueComputed.value / 100)
 })
 
-const currencies = ref([
-  {
-    value: 'USDT',
-    icon: "/img/icons/colorful/usdt.svg",
-    background: "/img/usdtbg2.png",
-    stars: 5,
 
-  },
+// {
+//     value: 'USDT',
+//     icon: "/img/icons/colorful/usdt.svg",
+//     background: "/img/usdtbg2.png",
+//     stars: 5,
+
+//   },
+
+
+const currencies = ref([
   {
     value: 'Bitcoin',
     icon: "/img/icons/colorful/bitcoin.svg",
@@ -322,6 +325,7 @@ const selectedCurrency = ref(currencies.value[0]);
 const showDropdown = ref(false);
 
 onMounted(()=>{
+  localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
   if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
     selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
   }
