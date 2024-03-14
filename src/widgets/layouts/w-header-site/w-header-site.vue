@@ -10,7 +10,7 @@
           size="32px"
           class="w-header-site__controls-avatar w-header-site__controls-avatar--mobile"
           photo-src="/img/avatar.png"
-          @click="$router.push({ name: 'personal-performance' })"
+          @click="$router.push({ name: 'personal-protection' })"
         />
         <div class="w-header-site__links">
           <a v-for="(link, idx) in LINKS" :key="idx" :href="link.link" class="w-header-site__link">
@@ -53,7 +53,7 @@
           class="w-header-site__controls-avatar"
           photo-src="/img/avatar.png"
           :left-label="$app.store.user?.info?.account?.username"
-          @click="$router.push({ name: 'personal-performance' })"
+          @click="$router.push({ name: 'personal-protection' })"
         />
       </div>
       <div :class="['w-header-site__burger', { 'w-header-site__burger__active': isOpenMenu }]" @click="openMenu">

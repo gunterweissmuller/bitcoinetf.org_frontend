@@ -20,25 +20,25 @@ interface ITabsItem {
 }
 
 const tabsList = ref<ITabsItem[]>([
-  { text: 'Performance', name: 'personal-performance' },
+  { text: 'Protection', name: 'personal-protection' },
   { text: 'Portfolio', name: 'personal-portfolio' },
   { text: 'Shareholders', name: 'personal-shareholders' },
 ])
 
 const activeTab = ref<string>('performance')
 
-const performance = defineAsyncComponent(() => import('~/src/widgets/w-performance/w-performance.vue'))
+const protection = defineAsyncComponent(() => import('~/src/widgets/w-protection/w-protection.vue'))
 const portfolio = defineAsyncComponent(() => import('~/src/widgets/w-portfolio/w-portfolio.vue'))
 const shareholders = defineAsyncComponent(() => import('~/src/widgets/w-shareholders/w-shareholders.vue'))
 
 const components = {
-  'personal-performance': {
-    id: 'performance',
-    component: performance,
-  },
   'personal-portfolio': {
     id: 'portfolio',
     component: portfolio,
+  },
+  'personal-protection': {
+    id: 'protection',
+    component: protection,
   },
   'personal-shareholders': {
     id: 'shareholders',

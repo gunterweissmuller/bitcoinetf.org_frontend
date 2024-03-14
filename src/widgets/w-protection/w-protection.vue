@@ -1,7 +1,7 @@
 <template>
   <div class="w-performance page-max-width--small">
-    <w-chart-performance
-      ref="chartPerformanceRef"
+    <w-chart-protection
+      ref="chartProtectionRef"
       v-if="assets?.length"
       :assets="assets"
     />
@@ -29,7 +29,7 @@
 import EAssets from '~/src/entities/e-assets/e-assets.vue'
 import WTrades from '~/src/widgets/w-trades/w-trades.vue'
 import WNews from '~/src/widgets/w-news/w-news.vue'
-import WChartPerformance from '~/src/widgets/w-chart-performance/w-chart-performance.vue'
+import WChartProtection from '~/src/widgets/w-chart-protection/w-chart-protection.vue'
 import { useNuxtApp } from '#app'
 import { Centrifuge } from 'centrifuge'
 import { onMounted, onUnmounted, ref } from 'vue'
@@ -39,7 +39,7 @@ import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 const { $app } = useNuxtApp()
 
 const centrifuge = ref(null)
-const chartPerformanceRef = ref(null)
+const chartProtectionRef = ref(null)
 
 const assetsKey = ref(1)
 
@@ -221,12 +221,12 @@ onMounted(async () => {
 })
 
 const onMouseEnterAsset = (symbol) => {
-  chartPerformanceRef.value.triggerTooltip(symbol)
+  chartProtectionRef.value.triggerTooltip(symbol)
 }
 
 
 const onMouseLeaveAsset = () => {
-  chartPerformanceRef.value.hideTooltip()
+  chartProtectionRef.value.hideTooltip()
 }
 
 onUnmounted(() => {
@@ -234,4 +234,4 @@ onUnmounted(() => {
 })
 </script>
 
-<style src="./w-performance.scss" lang="scss" />
+<style src="./w-protection.scss" lang="scss" />

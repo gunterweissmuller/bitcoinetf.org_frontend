@@ -80,9 +80,9 @@ const changeLoadingStatus = async (status: boolean) => {
 const isVisibleInfo = computed(() => {
   console.log("",route.name)
   return (
-    route.name === 'personal-analytics' ||
-    route.name === 'personal-performance' ||
     route.name === 'personal-fund' ||
+    route.name === 'personal-protection' ||
+    route.name === 'personal-shareholders' ||
     route.name === 'personal-portfolio'
   )
 })

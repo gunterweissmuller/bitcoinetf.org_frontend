@@ -152,7 +152,7 @@ const routeNames = computed(() => ({
     title: 'More',
     titleCrumb: 'More',
     breadcrumbs: false,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
   },
   'personal-buy-shares-payment': {
     title: 'Payment',
@@ -191,23 +191,24 @@ const routeNames = computed(() => ({
     customTitle: true,
     titleCrumb: 'Buy ETF Shares',
     breadcrumbs: false,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
     info: EPageInfoBuyShares,
   },
+  // FIX THIS
   'personal-fund': {
     title: 'Shareholders',
     titleCrumb: 'Shareholders',
     breadcrumbs: false,
     info: EPageInfoAnalytics,
   },
-  'personal-performance': {
-    title: 'Analytics',
-    titleCrumb: 'Performance',
+  'personal-protection': {
+    title: 'Fund',
+    titleCrumb: 'Protection',
     breadcrumbs: false,
     info: EPageInfoAnalytics,
   },
   'personal-portfolio': {
-    title: 'Analytics',
+    title: 'Fund',
     titleCrumb: 'Portfolio',
     breadcrumbs: false,
     info: EPageInfoAnalytics,
@@ -250,25 +251,25 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoEarnings,
   },
-  'personal-analytics-performance-latest-trades': {
+  'personal-fund-protection-latest-trades': {
     title: 'Latest trades',
     titleCrumb: 'Latest trades',
     breadcrumbs: true,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
   },
-  'personal-analytics-fund-latest-purchases': {
+  'personal-fund-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
-    urlToBack: 'personal-fund',
+    urlToBack: 'personal-shareholders',
   },
-  'personal-analytics-fund-top-shareholders': {
+  'personal-fund-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
-    urlToBack: 'personal-fund',
+    urlToBack: 'personal-shareholders',
   },
-  'personal-analytics-portfolio-latest-activity': {
+  'personal-fund-portfolio-latest-activity': {
     title: 'Latest activity',
     titleCrumb: 'Latest activity',
     breadcrumbs: true,
@@ -286,16 +287,16 @@ const routeNames = computed(() => ({
     title: $app.store.asset?.name,
     titleCrumb: $app.store.asset?.name,
     breadcrumbs: true,
-    urlToBack: 'personal-performance',
-    customBreadcrumbs: ['personal-analytics', $app.store.asset?.name || ''],
+    urlToBack: 'personal-protection',
+    customBreadcrumbs: ['personal-fund', $app.store.asset?.name || ''],
   },
 }))
 
 const fundLinks = {
   title: 'Fund',
   links: [
-    { text: 'Performance', name: 'personal-performance' },
     { text: 'Portfolio', name: 'personal-portfolio' },
+    { text: 'Protection', name: 'personal-protection' },
     { text: 'Shareholders', name: 'personal-shareholders' },
   ],
 }
@@ -310,8 +311,8 @@ const walletLinks = {
 }
 
 const linksList = {
-  'personal-analytics': fundLinks,
-  'personal-performance': fundLinks,
+  'personal-fund': fundLinks,
+  'personal-protection': fundLinks,
   'personal-portfolio': fundLinks,
   'personal-shareholders': fundLinks,
   'personal-wallet': walletLinks,
@@ -323,7 +324,7 @@ const linksList = {
 const isVisibleInfo = computed(() => {
   return (
     route.name === 'personal-fund' ||
-    route.name === 'personal-performance' ||
+    route.name === 'personal-protection' ||
     route.name === 'personal-shareholders' ||
     route.name === 'personal-portfolio'
   )
@@ -507,9 +508,9 @@ const getDividendsByYear = async () => {
 }
 
 const tabs = computed(() => {
-  if (route.path.includes('analytics') || route.path.includes('asset')) {
+  if (route.path.includes('fund') || route.path.includes('asset')) {
     return [
-      { text: 'Performance', name: 'personal-performance' },
+      { text: 'Protection', name: 'personal-protection' },
       { text: 'Portfolio', name: 'personal-portfolio' },
       { text: 'Shareholders', name: 'personal-shareholders' },
     ]

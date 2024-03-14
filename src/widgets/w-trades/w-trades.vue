@@ -69,7 +69,7 @@ const expandMore = ref(2)
 const centrifuge = ref(null)
 
 const fullPageNuxtLink = computed(() => {
-  const nuxtLinkObject = { name: 'personal-analytics-performance-latest-trades', query: {} }
+  const nuxtLinkObject = { name: 'personal-fund-protection-latest-trades', query: {} }
   if (route.name === 'personal-asset-id') {
     nuxtLinkObject.query.asset_uuid = route.params.id
   }

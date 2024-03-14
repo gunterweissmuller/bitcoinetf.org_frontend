@@ -190,8 +190,8 @@ export default defineNuxtConfig({
           file: '~/src/widgets/w-fund/w-fund.vue',
         },
         {
-          name: 'personal-performance',
-          path: '/personal/fund/performance',
+          name: 'personal-protection',
+          path: '/personal/fund/protection',
           file: '~/src/widgets/w-fund/w-fund.vue',
         },
         {

@@ -148,7 +148,7 @@ const secondButtonClick = (isLast) => {
 
 const goToExtended = () => {
   localStorage.setItem('journey', 'finished')
-  router.push({ name: 'personal-analytics' })
+  router.push({ name: 'personal-fund' })
 }
 
 const loading = computed(() => {

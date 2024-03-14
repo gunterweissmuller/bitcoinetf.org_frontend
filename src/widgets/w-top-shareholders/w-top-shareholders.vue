@@ -4,7 +4,7 @@
       <div class="w-shareholders__head-title">Top 100 Shareholders</div>
       <nuxt-link
         v-if="!isPage && shareholders?.length"
-        :to="{ name: 'personal-analytics-fund-top-shareholders' }"
+        :to="{ name: 'personal-fund-shareholders-top-shareholders' }"
         class="w-shareholders__head-info"
         >View all
       </nuxt-link>

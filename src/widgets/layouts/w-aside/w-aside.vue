@@ -251,17 +251,17 @@ const routesList = [
   {
     title: 'Fund',
     icon: Icon.MonoAnalytics,
-    link: 'personal-performance',
+    link: 'personal-fund',
     subNav: [
-      {
-        title: 'Performance',
-        icon: Icon.MonoEarnings,
-        link: 'personal-performance',
-      },
       {
         title: 'Portfolio',
         icon: Icon.MonoEarnings,
         link: 'personal-portfolio',
+      },
+      {
+        title: 'Protection',
+        icon: Icon.MonoEarnings,
+        link: 'personal-protection',
       },
       {
         title: 'Shareholders',
@@ -366,9 +366,9 @@ const logout = () => {
 
 const activeLinkClass = (link: string): boolean => {
   switch (link) {
-    case 'personal-performance':
+    case 'personal-protection':
       return (
-        route.name === 'personal-performance' || route.name === 'personal-portfolio' || route.name === 'personal-fund'
+        route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
       )
     case 'personal-dividends':
       return (

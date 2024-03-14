@@ -90,7 +90,7 @@ const { $app } = useNuxtApp()
 const { isMobile, isTablet } = useMediaDevice()
 
 const navList = [
-  { title: 'Analytics', icon: Icon.MonoAnalytics, link: 'personal-performance' },
+  { title: 'Analytics', icon: Icon.MonoAnalytics, link: 'personal-protection' },
   { title: 'Dividends', icon: Icon.MonoEarnings, link: 'personal-earnings' },
   {
     title: "BUY <i class='a-icons icon-mono--btc-uni convert-icon' aria-hidden='true' ></i> ETF ",
@@ -169,11 +169,11 @@ const closePopper = () => {
 
 const activeLinkClass = (link: string): boolean => {
   switch (link) {
-    case 'personal-performance':
+    case 'personal-protection':
       return (
-        route.name === 'personal-performance' ||
+        route.name === 'personal-protection' ||
         route.name === 'personal-portfolio' ||
-        route.name === 'personal-fund' ||
+        route.name === 'personal-shareholders' ||
         route.name === 'personal-asset-id'
       )
     case 'personal-earnings':
