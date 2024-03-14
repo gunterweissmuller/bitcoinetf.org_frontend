@@ -90,7 +90,7 @@ const { $app } = useNuxtApp()
 const { isMobile, isTablet } = useMediaDevice()
 
 const navList = [
-  { title: 'Analytics', icon: Icon.MonoAnalytics, link: 'personal-protection' },
+  { title: 'Fund', icon: Icon.MonoAnalytics, link: 'personal-portfolio' },
   { title: 'Dividends', icon: Icon.MonoEarnings, link: 'personal-earnings' },
   {
     title: "BUY <i class='a-icons icon-mono--btc-uni convert-icon' aria-hidden='true' ></i> ETF ",
