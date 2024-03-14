@@ -68,7 +68,7 @@
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 1) }}</p>
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
@@ -103,7 +103,7 @@
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ dayliDivsDisplay }}</p> <!--{{ $app.filters.rounded(dayliDivs, 1) }}-->
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
@@ -111,7 +111,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs  * 31, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ monthlyDivsDisplay  }}</p>
               </div>
             </div>
             <p class="landing-calculation__journey__invest--card-rating landing-calculation__journey--text-normal relative flex items-center mx-auto">
@@ -180,7 +180,7 @@ const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-let apyValue = ref(42)
+let apyValue = ref(14)
 const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
@@ -297,7 +297,28 @@ watch(
 
 
 const dayliDivs = computed(() => {
-  return (guaranteedPayout.value / 365).toFixed(2)
+  return guaranteedPayout.value / 365
+  // return Math.trunc( (guaranteedPayout.value / 365) * 100 ) / 100;
+})
+const dayliDivsDisplay = computed(() => {
+  const tempVal = guaranteedPayout.value / 365;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();;
+
+  if(tempVal.toString().split(".")[1].length > 2) {
+    resValue = resValue + "+";
+  }
+  return resValue;
+})
+
+const monthlyDivsDisplay = computed(() => {
+  console.log(dayliDivs.value)
+  const tempVal = dayliDivs.value * 31;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();;
+
+  if(tempVal.toString().split(".")[1]?.length > 2) {
+    resValue = resValue + "+";
+  }
+  return resValue;
 })
 
 const apyValueComputed = computed(() => {
