@@ -1,6 +1,5 @@
 <template>
   <div class="w-wallet page-max-width--big">
-    <!--    <e-analytics-tabs v-model:active-tab="activeTab" :tab-bars="tabsList" />-->
     <div class="w-wallet__box">
       <e-send-to-buy-shares :active-component="activeComponent?.id" />
       <div class="w-wallet__box-main">
@@ -15,7 +14,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import EAnalyticsTabs from '~/src/features/e-analytics-tabs/e-analytics-tabs.vue'
 import ESendToBuyShares from '~/src/entities/e-send-to-buy-shares/e-send-to-buy-shares.vue'
 
 const route = useRoute()

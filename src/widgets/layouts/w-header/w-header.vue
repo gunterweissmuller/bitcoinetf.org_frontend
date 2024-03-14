@@ -99,7 +99,7 @@ import EPageInfoBuyShares from '~/src/entities/e-page-info-modal/ui/e-page-info-
 import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info-statements.vue'
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { nextTick, onUnmounted, onMounted, computed } from 'vue'
-import EAnalyticsTabs from '~/src/features/e-analytics-tabs/e-analytics-tabs.vue'
+import EAnalyticsTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
 import { Autoplay } from 'swiper'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
@@ -510,8 +510,8 @@ const getDividendsByYear = async () => {
 const tabs = computed(() => {
   if (route.path.includes('fund') || route.path.includes('asset')) {
     return [
-      { text: 'Protection', name: 'personal-protection' },
       { text: 'Portfolio', name: 'personal-portfolio' },
+      { text: 'Protection', name: 'personal-protection' },
       { text: 'Shareholders', name: 'personal-shareholders' },
     ]
   }
