@@ -137,11 +137,13 @@ const props = withDefaults(
     justTron: boolean
     calcValue: number
     isFiat: boolean
+    calcValueOriginal: number
   }>(),
   {
     justTron: true,
-    calcValue: 100,
-    isFiat: false
+    calcValue: 1000,
+    isFiat: false,
+    calcValueOriginal: 950,
   },
 )
 const router = useRouter()
@@ -243,7 +245,7 @@ onMounted(async () => {
   if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
     await $app.api.eth.billingEth
       .buyShares({
-        amount: props.calcValue < 95 ? 95 : props.calcValue,
+        amount: props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal,
         dividends: false,
         referral: false,
         bonus: false,

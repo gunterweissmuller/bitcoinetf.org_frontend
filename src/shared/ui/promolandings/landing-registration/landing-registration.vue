@@ -182,6 +182,19 @@ const fastRegistration = async () => {
       })
     })
     .then(async () => {
+
+      const aAid = window.localStorage.getItem('PAPVisitorId');
+      if(aAid) {
+        $app.api.eth.auth.papSignUp({
+          payload: {
+            pap_id: aAid,
+            utm_label: window.localStorage.getItem('a_utm'),
+          }}).then((r: any) => {
+          //window.localStorage.removeItem('a_aid');
+          //window.localStorage.removeItem('a_utm');
+        });
+      }
+
       if (props.isFiat) {
         await $app.api.eth.billingEth
           .buyShares({

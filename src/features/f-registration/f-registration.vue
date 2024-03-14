@@ -84,6 +84,9 @@
               </div>
             </div>
 
+            <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
+            <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
+
               <!--<div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
                   <div class="flex gap-2 items-center">
@@ -107,7 +110,7 @@
         <div class="flex flex-col items-center pb-12">
           <button @click="handleTelegramAuth">TEST</button>
           <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
-          <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
         </div>
       </template>
       <template v-else-if="currentStep === Steps.Email">
@@ -369,7 +372,8 @@ const handleMetamaskConnect = async () => {
 
   //if metamask is not installed
   if (!isMetamaskSupported.value) {
-      window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+      // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+      window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
       isMetamaskConnecting.value = false;
       return;
   }
@@ -442,35 +446,40 @@ const handleGoogleConnect = async () => {
 const telegramRedirectUrl = ref('')
 const telegramBotName = ref('')
 
+const handleTelegramAuth = async () => {
+  (window as any).Telegram.Login.auth(
+    { bot_id: '6888906996', request_access: true },
+    (data) => {
+      if (!data) {
+        // authorization failed
+      }
+      console.log(data)
+      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+    }
+  );
+}
+
 const handleTelegramConnect = async () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
 
     console.log(r);
 
-    currentStep.value = Steps.TelegramSign;
+    // currentStep.value = Steps.TelegramSign;
     currentSignup.value = SignupMethods.Telegram;
 
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
+
+    handleTelegramAuth().then((res) => {
+      console.log(res);
+    })
 
     //console.log(r);
 
   })
 }
 
-const handleTelegramAuth = async () => {
-  console.log(telegramBotName.value, telegramRedirectUrl.value);
-  (window as any).Telegram.Login.auth(
-  { bot_id: telegramBotName.value, request_access: true },
-  (data) => {
-    if (!data) {
-      // authorization failed
-    }
-    console.log(data)
-    // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
-  }
-);
-}
+
 
 // Ref code field
 const emailCode = ref('')

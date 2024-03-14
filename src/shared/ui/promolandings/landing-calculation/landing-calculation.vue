@@ -95,6 +95,8 @@ const props = withDefaults(
   },
 )
 
+const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
+
 onMounted(()=>{
   initializeTronClock()
 })
@@ -148,7 +150,7 @@ const calcAmountWithDiscount = ref(950);
 watch(
   () => calcAmount.value,
   (newValue) => {
-    const tempValue = Math.ceil(newValue-(newValue/100)*5);
+    const tempValue = $app.filters.rounded(newValue-(newValue/100)*discountPercent);
 
     if(isNaN(tempValue)) {
       calcAmountWithDiscount.value = 0;

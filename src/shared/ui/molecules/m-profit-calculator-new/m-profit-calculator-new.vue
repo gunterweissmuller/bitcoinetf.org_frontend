@@ -36,14 +36,18 @@
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
               <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" loading="lazy"/>
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
+<<<<<<< HEAD
               <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
+=======
+              <!-- <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/> -->
+>>>>>>> dc385ad73a3d276224ad77a335578c65d6b1ba3c
             </div>
           </div>
-          <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <!-- <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
-          </div>
+          </div> -->
         </div>
 
         <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
@@ -62,13 +66,13 @@
           <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 1) }}</p>
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
@@ -103,7 +107,7 @@
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ dayliDivsDisplay }}</p> <!--{{ $app.filters.rounded(dayliDivs, 1) }}-->
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
@@ -111,7 +115,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs  * 31, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ monthlyDivsDisplay  }}</p>
               </div>
             </div>
             <p class="landing-calculation__journey__invest--card-rating landing-calculation__journey--text-normal relative flex items-center mx-auto">
@@ -161,16 +165,18 @@ import { vOnClickOutside } from '@vueuse/components'
 
 const { width } = useWindowSize()
 
-console.log("width", width.value  )
-
 const props = withDefaults(
   defineProps<{
     openSignup: any
+    openPurchase: any
     isInputDisbled: boolean
+    isUserAuth: boolean
   }>(),
   {
     openSignup: () => {},
-    isInputDisbled: false
+    openPurchase: () => {},
+    isInputDisbled: false,
+    isUserAuth: false,
   },
 )
 
@@ -192,7 +198,11 @@ const inputMaxWidth = ref(defaultInputWith.value);
 const investmentAmount = ref(2500);
 const investmentAmountWithDiscount = ref(2375);
 
+
+
+
 onMounted(()=>{
+
   if(localStorage.getItem('investmentAmount')) {
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
@@ -202,7 +212,6 @@ onMounted(()=>{
 })
 
 function validate(event) {
-  console.log(event);
   if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
 
   // var theEvent = event || window.event;
@@ -236,8 +245,8 @@ watch(
       investmentAmount.value = 500000;
     }
 
-    if (+newValue < 0) {
-      investmentAmount.value = 0;
+    if (+newValue <= 0) {
+      investmentAmount.value = 1;
     }
     if(isNaN(newValue)) {
       investmentAmount.value = 2500;
@@ -292,7 +301,27 @@ watch(
 
 
 const dayliDivs = computed(() => {
-  return (guaranteedPayout.value / 365).toFixed(2)
+  return guaranteedPayout.value / 365
+  // return Math.trunc( (guaranteedPayout.value / 365) * 100 ) / 100;
+})
+const dayliDivsDisplay = computed(() => {
+  const tempVal = guaranteedPayout.value / 365;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();;
+
+  if(tempVal.toString().split(".")[1].length > 2) {
+    resValue = resValue + "+";
+  }
+  return resValue;
+})
+
+const monthlyDivsDisplay = computed(() => {
+  const tempVal = guaranteedPayout.value / 12;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
+
+  if(tempVal.toString().split(".")[1]?.length > 2) {
+    resValue = resValue + "+";
+  }
+  return resValue;
 })
 
 const apyValueComputed = computed(() => {
@@ -303,14 +332,17 @@ const guaranteedPayout = computed(() => {
   return investmentAmount.value * (apyValueComputed.value / 100)
 })
 
-const currencies = ref([
-  {
-    value: 'USDT',
-    icon: "/img/icons/colorful/usdt.svg",
-    background: "/img/usdtbg2.png",
-    stars: 5,
 
-  },
+// {
+//     value: 'USDT',
+//     icon: "/img/icons/colorful/usdt.svg",
+//     background: "/img/usdtbg2.png",
+//     stars: 5,
+
+//   },
+
+
+const currencies = ref([
   {
     value: 'Bitcoin',
     icon: "/img/icons/colorful/bitcoin.svg",
@@ -321,6 +353,20 @@ const currencies = ref([
 const selectedCurrency = ref(currencies.value[0]);
 const showDropdown = ref(false);
 
+onMounted(()=>{
+  localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
+  if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
+    selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
+  }
+});
+
+watch(
+  () => selectedCurrency.value,
+  (newValue) => {
+    localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
+  }
+)
+
 const toggleCurrencyDropdown = () => {
   showDropdown.value = !showDropdown.value;
 };
@@ -330,22 +376,12 @@ const selectCurrency = (currency : any) => {
   toggleCurrencyDropdown();
 }
 
-const handleContinue = () =>{
-  const element = document.querySelector(".landing-calculation__signup");
-  let headerOffset
-  if (window.innerWidth < 768) {
-    headerOffset = 145;
+const handleContinue = () => {
+  if(props.isUserAuth) {
+    props.openPurchase();
   } else {
-    headerOffset = 155;
+    props.openSignup();
   }
-  const elementPosition = element.offsetTop;
-  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: "smooth",
-  });
-  props.openSignup();
 }
 </script>
 

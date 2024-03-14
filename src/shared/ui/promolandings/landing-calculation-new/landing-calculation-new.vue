@@ -27,28 +27,33 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
     <!-- SIGNUP LAYOUT -->
-    <div class="landing-calculation__signup">
-      <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
-      <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
-      <div class="landing-calculation__signup-buttons">
-        <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
-          <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
-        </div>
+    <div  class="landing-calculation__signup">
 
-        <div @click="() => handleMetamaskConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
-          <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
-        </div>
+      <div v-if="!isUserAuth">
+        <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
+        <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
+        <div class="landing-calculation__signup-buttons">
+          <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
+            <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
+          </div>
 
-        <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
-          <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          <div @click="() => handleMetamaskConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
+            <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
+
+          <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
+            <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
         </div>
+        <div class="landing-calculation__signup-line"></div>
       </div>
-      <div class="landing-calculation__signup-line"></div>
+
+      
       <template v-if="signupStep === SignupSteps.TelegramButton">
         <h3 class="f-registration__title">Sign up with Telegram</h3>
         <h5 class="f-registration__subtitle">
@@ -61,9 +66,9 @@
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
-          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
-          <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
-          <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <vue-tel-input :disabled="dataDisabled || isMainInputDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
 
           <a-input-with-button
             bgColor="tetherspecial"
@@ -124,7 +129,7 @@
 
       <div class="w-buy-shares-payment-short-new"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -192,11 +197,15 @@ const props = withDefaults(
   },
 )
 
+const isUserAuth = computed(()=>{
+  return $app.store.auth?.refreshToken ? true : false;
+});
 
-  const isMetamaskSupported = ref(false);
-  const address = ref("");
-  const metamaskError = ref("");
-  const computedAddress = computed(() => address.value.substring(0, 8) + '...');
+
+const isMetamaskSupported = ref(false);
+const address = ref("");
+const metamaskError = ref("");
+const computedAddress = computed(() => address.value.substring(0, 8) + '...');
 
 
 const token = ref('')
@@ -220,10 +229,23 @@ onMounted(()=>{
   initializeTronClock()
 })
 
+// watch(
+//   () => (window as any).ethereum,
+//   () => {
+//     isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+//     console.log("NEWWW", isMetamaskSupported.value);
+//   }
+// )
+
+const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
+
+console.log("Percent", discountPercent);
+
 const isMetamaskConnecting = ref(false);
-const metamaskSignatureMessage = ref('')
-const metamaskSignature = ref('')
-const metamaskWalletAddress = ref('')
+const metamaskSignatureMessage = ref('');
+const metamaskSignature = ref('');
+const metamaskWalletAddress = ref('');
+const isReload = ref(false);
 
 const handleMetamaskConnect = async () => {
   // if metamask button is already clicked
@@ -232,7 +254,16 @@ const handleMetamaskConnect = async () => {
 
   //if metamask is not installed
   if (!isMetamaskSupported.value) {
-    window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+
+    if(isReload.value) {
+      isReload.value = false;
+      location.reload();
+    } else {
+      isReload.value = true;
+    }
+
+    // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
+    window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
     isMetamaskConnecting.value = false;
     return;
   }
@@ -268,14 +299,16 @@ const handleMetamaskConnect = async () => {
 }
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
-const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*5
-const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : Math.ceil(defaultBuyAmount));
+const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*discountPercent
+const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : $app.filters.rounded(defaultBuyAmount));
+const buyAmountOriginal = ref($app.store.user.investAmount);
 // tether special discount 5%
 
 watch(
   () => $app.store.user.investAmount,
   (newValue) => {
-    const tempValue = Math.ceil(newValue-(newValue/100)*5);
+    buyAmountOriginal.value = newValue;
+    const tempValue = $app.filters.rounded(newValue-(newValue/100)*discountPercent);
 
     if(isNaN(tempValue)) {
       buyAmount.value = 0;
@@ -400,11 +433,6 @@ const signupToggle = (method: any) => {
   }
 }
 
-const investScrolltoSignup = () => {
-  signupStep.value = SignupSteps.Signup;
-  signupMethod.value = SignupMethods.Email;
-}
-
 const scrollToSignup = () => {
   const element = document.querySelector(".landing-calculation__signup");
   let headerOffset
@@ -424,6 +452,32 @@ const scrollToSignup = () => {
   },1)
 }
 
+const investBuySignup = () => {
+  signupStep.value = SignupSteps.Signup;
+  signupMethod.value = SignupMethods.Email;
+  scrollToSignup();
+}
+
+const investBuy = async () => {
+  signupStep.value = SignupSteps.Default;
+  signupMethod.value = SignupMethods.None;
+  purchaseStep.value = PurchaseSteps.Purchase;
+  scrollToPurchase();
+
+  await $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  })
+
+  await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+    $app.store.user.blockchainUserWallet = resp?.data.uid
+  })
+
+  console.log($app.store.user?.info?.account?.uuid)
+
+}
+
+
+
 const scrollToPurchase = () => {
   // const element = document.querySelector(".w-buy-shares-payment");
   const element = document.querySelector(".w-buy-shares-payment-short-new");
@@ -435,8 +489,6 @@ const scrollToPurchase = () => {
   }
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-
-  console.log(offsetPosition, elementPosition);
 
   setTimeout(()=>{
     window.scrollTo({
@@ -539,6 +591,7 @@ const codeSended = ref(false);
 const timerStarted = ref(false);
 const codeSendText = ref('Get Confirmation Code');
 const codeSendedText = ref('Resend');
+const isMainInputDisabled = ref(false);
 
 
 
@@ -557,6 +610,8 @@ const sendCode = async () => {
   if(timerStarted.value) {
     return;
   }
+
+  isMainInputDisabled.value = true;
   
   const timer = (sec: number) => {
     if(sec <= 0) {
@@ -597,6 +652,7 @@ const sendCode = async () => {
       })
       .catch((e) => {
         //isSubmitEmailForm.value = false;
+        isMainInputDisabled.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -623,6 +679,7 @@ const sendCode = async () => {
       }
     })
     .catch((e) => {
+      isMainInputDisabled.value = false;
       console.error("ERROR", e);
       if (e?.errors?.error?.message) {
         if (e.errors.error.code === 'ETF:011002') {
@@ -668,6 +725,7 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
+          console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -689,6 +747,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
+        
 
 
         if (props.isFiat) {
@@ -711,7 +770,6 @@ const signupAndBuy = async () => {
         }
       })
       .catch((e) => {
-        isSignupAndBuy.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -755,7 +813,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-
+        console.log("UUID123", $app.store.user?.info?.account?.uuid)
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -843,12 +901,14 @@ const signupAndBuyGoogle = () => {
       // lastName.value = '';
       // email.value = '';
       dataDisabled.value = true;
-      purchaseStep.value = PurchaseSteps.Purchase;
+      isOpenModal.value = true;
       scrollToPurchase();
     })
     .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
+            purchaseStep.value = PurchaseSteps.Purchase;
+
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -868,8 +928,8 @@ const signupAndBuyGoogle = () => {
         })
     })
     .catch((e) => {
-      isSignupAndBuyGoogle.value = false;
       console.error(e);
+      isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
             backendError.value = e.errors.error.message
         } else {
