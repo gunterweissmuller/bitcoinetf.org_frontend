@@ -3,7 +3,7 @@
     <div class="w-trades__head">
       <div class="w-trades__head-title">Latest trades</div>
       <nuxt-link v-if="!isPage && renderedTrades.length && !hideView" :to="fullPageNuxtLink" class="w-trades__head-info"
-        >View all
+        >View All
       </nuxt-link>
     </div>
     <div v-if="renderedTrades.length && !isExpand" class="w-trades__content" :style="{height: `${renderedTrades?.length * 94}px`}">

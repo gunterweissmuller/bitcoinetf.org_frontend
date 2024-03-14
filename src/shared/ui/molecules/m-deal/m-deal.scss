@@ -24,16 +24,22 @@
   &__trade {
     width: 100%;
     display: flex;
+    align-items: center;
+  }
+
+  &__right {
+    width: 100%;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
 
   &__type {
     border-radius: 50%;
-    width: torem(18);
-    height: torem(18);
-    min-width: torem(18);
-    margin-right: torem(4);
+    width: torem(26);
+    height: torem(26);
+    min-width: torem(26);
+    margin-right: torem(8);
   }
 
   &__transfer {
@@ -122,16 +128,21 @@
     }
 
     &-deal {
-      color: var(--accent-primary);
+      color: var(--text-tertiary);
       font-family: Dm, sans-serif;
       font-size: torem(12);
       font-weight: 700;
       line-height: torem(18);
-      margin-bottom: torem(4);
       width: 100%;
       display: flex;
       &-right{
         margin-left: auto;
+      }
+      &-date {
+        font-family: Caption, Dm, sans-serif;
+        font-weight: 700;
+        font-size: torem(12);
+        line-height: torem(16);
       }
       &-images{
         margin-left: 8px;
@@ -148,6 +159,7 @@
         }
       }
     }
+
 
     &-result {
       color: var(--accent-success);
