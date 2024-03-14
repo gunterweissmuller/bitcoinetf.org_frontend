@@ -1,12 +1,13 @@
 <template>
   <div class="w-portfolio page-max-width--small">
+    <w-chart-fund title="Total Assets Under Management (AUM)" is-main is-total-assets />
     <w-chart-portfolio
       ref="chartPortfolioRef"
       v-if="assets?.length"
       :assets="assets"
       :btc-value="$app.store.user.btcValue"
     />
-    <e-assets
+    <!-- <e-assets
       v-if="assets?.length"
       :assets="assets"
       :key="assetsKey"
@@ -16,16 +17,18 @@
       @focus-in-asset="onMouseEnterAsset"
       @focus-out-asset="onMouseLeaveAsset"
     />
-    <w-activity />
+    <w-activity /> -->
     <w-news />
 
+    <!-- FIX NEXT-ROUTE-NAME!!!!!!! -->
     <w-onboarding :steps="renderedSteps" next-route-name="personal-fund" />
   </div>
 </template>
 
 <script setup lang="ts">
-import EAssets from '~/src/entities/e-assets/e-assets.vue'
-import WActivity from '~/src/widgets/w-activity/w-activity.vue'
+// import EAssets from '~/src/entities/e-assets/e-assets.vue'
+// import WActivity from '~/src/widgets/w-activity/w-activity.vue'
+import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';
 import WNews from '~/src/widgets/w-news/w-news.vue'
 import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.vue'
 import { useNuxtApp } from '#app'

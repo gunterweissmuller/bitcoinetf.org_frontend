@@ -47,7 +47,7 @@ const hasNextPage = ref(true)
 const centrifuge = ref(null)
 
 const fullPageNuxtLink = computed(() => {
-  const nuxtLinkObject = { name: 'personal-fund-portfolio-latest-activity', query: {} }
+  const nuxtLinkObject = { name: 'personal-analytics-portfolio-latest-activity', query: {} }
   if (route.name === 'personal-asset-id') {
     nuxtLinkObject.query.asset_uuid = route.params.id
   }

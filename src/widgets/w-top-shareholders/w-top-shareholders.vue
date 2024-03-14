@@ -2,9 +2,10 @@
   <div :class="['w-shareholders', { 'page-max-width--small': isPage }]">
     <div class="w-shareholders__head">
       <div class="w-shareholders__head-title">Top 100 Shareholders</div>
+      <!-- FIX :to name on features/fund_remake -->
       <nuxt-link
         v-if="!isPage && shareholders?.length"
-        :to="{ name: 'personal-fund-shareholders-top-shareholders' }"
+        :to="{ name: 'personal-analytics-fund-top-shareholders' }"
         class="w-shareholders__head-info"
         >View all
       </nuxt-link>

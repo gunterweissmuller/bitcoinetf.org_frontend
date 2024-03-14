@@ -1,18 +1,20 @@
 <template>
   <div class="w-fund page-max-width--small">
-    <w-chart-fund title="Total Assets Under Management (AUM)" is-main is-total-assets />
-    <w-shareholders-stats />
+    <w-chart-fund title="Shareholder Growth" is-main is-total-assets />
+    <!-- <w-shareholders-stats /> -->
+
+    <!-- new component diffirent chart -->
     <w-top-shareholders />
     <w-purchases />
-    <w-news />
+    <!-- <w-news /> -->
 
     <w-onboarding :steps="renderedSteps" :next-route-name="lastPayment ? 'personal-earnings' : 'personal-wallet'" />
   </div>
 </template>
 
 <script setup lang="ts">
-import WShareholdersStats from '~/src/widgets/w-shareholders-stats/w-shareholders-stats.vue'
-import WNews from '~/src/widgets/w-news/w-news.vue'
+// import WNews from '~/src/widgets/w-news/w-news.vue'
+// import WShareholdersStats from '~/src/widgets/w-shareholders-stats/w-shareholders-stats.vue'
 import WTopShareholders from '~/src/widgets/w-top-shareholders/w-top-shareholders.vue'
 import WPurchases from '~/src/widgets/w-purchases/w-purchases.vue'
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue'
