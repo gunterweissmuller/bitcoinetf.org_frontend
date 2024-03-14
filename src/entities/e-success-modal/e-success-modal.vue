@@ -2,7 +2,7 @@
       <m-modal v-if="!props.isBtc" modalSmall @close="close" v-model="isOpenModal">
         <article class="e-success-wrapper flex flex-col font-bold max-w-[343px] ">
             <div class="e-success--certificate">
-                <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-usdt.svg" />
+                <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-usdt.svg" loading="lazy" />
                 <div class="e-success--certificate-text">
                     <div class="e-success--certificate-text-name e-success--text-normal">John Adams</div>
                     <div class="e-success--certificate-text-amount e-success--text-normal">1,000</div>
@@ -44,14 +44,14 @@
             <button class="e-success-button e-success--text-inverse e-success--text-normal" tabindex="0">
             Open My Dashboard
             </button>
-        </article>    
+        </article>
       </m-modal>
 
       <!-- BITCOIN -->
       <m-modal v-else-if="props.isBtc" modalSmall @close="close" v-model="isOpenModal">
         <article class="e-success-wrapper flex flex-col font-bold max-w-[343px] ">
             <div class="e-success--certificate">
-                <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-btc.svg" />
+                <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-btc.svg" loading="lazy" />
                 <div class="e-success--certificate-text">
                     <div class="e-success--certificate-text-name e-success--text-normal">John Adams</div>
                     <div class="e-success--certificate-text-amount e-success--text-normal">1,000</div>
@@ -93,17 +93,17 @@
             <button class="e-success-button e-success--text-inverse e-success--text-normal" tabindex="0">
             Open My Dashboard
             </button>
-        </article>    
+        </article>
       </m-modal>
   </template>
-  
+
   <script setup lang="ts">
   import { useNuxtApp, useRouter, useRoute } from '#app'
   import { computed, ref } from 'vue'
   import { BrowserProvider, parseUnits } from "ethers";
   import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
   import { Log } from 'ethers';
-  
+
   const props = withDefaults(
     defineProps<{
         modelValue: boolean,
@@ -114,7 +114,7 @@
         isBtc: false,
     },
   )
-  
+
   const { $app } = useNuxtApp()
   const router = useRouter()
   const route = useRoute()
@@ -136,9 +136,8 @@
 
     console.log(isOpenModal.value)
   }
-  
+
   </script>
-  
+
   <style lang="scss" src="./e-success-modal.scss" />
-  
-  
+

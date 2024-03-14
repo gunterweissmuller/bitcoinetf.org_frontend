@@ -1,8 +1,8 @@
 <template>
   <div class="landing-calculation__journey" :class="[{'landing-calculation__journey-btc': selectedCurrency.value === 'Bitcoin'}]">
 
-    <NuxtImg class="landing-calculation__journey-bg1" src="/img/tetherspecial/bg-img1.png" />
-    <NuxtImg class="landing-calculation__journey-bg2" src="/img/tetherspecial/bg-img2.png"/>
+    <NuxtImg class="landing-calculation__journey-bg1" src="/img/tetherspecial/bg-img1.png" loading="lazy" />
+    <NuxtImg class="landing-calculation__journey-bg2" src="/img/tetherspecial/bg-img2.png" loading="lazy" />
 
     <div class="landing-calculation__journey-title">Start your bitcoin etf journey 🚀</div>
     <div class="landing-calculation__journey__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
@@ -34,9 +34,9 @@
         <div class="relative">
           <div class="landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
-              <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" />
+              <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" loading="lazy"/>
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
+              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
             </div>
           </div>
           <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
@@ -83,7 +83,7 @@
               Safety Rating
               <span class="landing-calculation__journey__invest--card-rating-stars">
                 <span class="inline-flex" v-for="item in new Array(5)">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy"/>
                 </span>
               </span>
               5/5
@@ -118,19 +118,19 @@
               Safety Rating
               <span class="landing-calculation__journey__invest--card-rating-stars">
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" loading="lazy" />
                 </span>
               </span>
               4.5/5

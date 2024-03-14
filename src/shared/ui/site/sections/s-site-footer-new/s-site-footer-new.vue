@@ -6,7 +6,7 @@
           <h2 class="s-site-footer__title title-first title-site-h1">DON’T BUY CRYPTO,
             <h2 class="s-site-footer__title title-site-h1 title-sub">
               <p class="s-site-footer__title_sub_earn">EARN</p>
-              <NuxtImg src="/img/icons/colorful/bitcoin.svg" width="60" height="60" class="aspect-square w-[60px]" />
+              <NuxtImg src="/img/icons/colorful/bitcoin.svg" width="60" height="60" class="aspect-square w-[60px]" loading="lazy"/>
               <p class="s-site-footer__title_sub_bitcoin">BITCOIN</p>
             </h2>
           </h2>
