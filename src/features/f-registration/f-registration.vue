@@ -107,7 +107,7 @@
         <div class="flex flex-col items-center pb-12">
           <button @click="handleTelegramAuth">TEST</button>
           <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
-          <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
         </div>
       </template>
       <template v-else-if="currentStep === Steps.Email">
@@ -462,7 +462,7 @@ const handleTelegramConnect = async () => {
 const handleTelegramAuth = async () => {
   console.log(telegramBotName.value, telegramRedirectUrl.value);
   (window as any).Telegram.Login.auth(
-  { bot_id: '6841084234', request_access: true },
+  { bot_id: 6276265631, request_access: true },
   (data) => {
     if (!data) {
       // authorization failed
