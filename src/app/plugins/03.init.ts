@@ -88,5 +88,5 @@ export default defineNuxtPlugin(async ({ $app }: any) => {
     ]
   }
 
-  await Promise.allSettled(allSettledArray)
+  Promise.allSettled(allSettledArray)
 })
