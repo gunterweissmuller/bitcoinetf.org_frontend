@@ -36,11 +36,7 @@
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
               <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" loading="lazy"/>
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-<<<<<<< HEAD
-              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
-=======
               <!-- <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/> -->
->>>>>>> dc385ad73a3d276224ad77a335578c65d6b1ba3c
             </div>
           </div>
           <!-- <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
