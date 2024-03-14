@@ -311,9 +311,8 @@ const dayliDivsDisplay = computed(() => {
 })
 
 const monthlyDivsDisplay = computed(() => {
-  console.log(dayliDivs.value)
-  const tempVal = dayliDivs.value * 31;
-  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();;
+  const tempVal = guaranteedPayout.value / 12;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
 
   if(tempVal.toString().split(".")[1]?.length > 2) {
     resValue = resValue + "+";
