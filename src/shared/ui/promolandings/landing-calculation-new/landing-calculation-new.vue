@@ -27,28 +27,33 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
     <!-- SIGNUP LAYOUT -->
-    <div class="landing-calculation__signup">
-      <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
-      <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
-      <div class="landing-calculation__signup-buttons">
-        <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
-          <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
-        </div>
+    <div  class="landing-calculation__signup">
 
-        <div @click="() => handleMetamaskConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
-          <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
-        </div>
+      <div v-if="!isUserAuth">
+        <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
+        <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
+        <div class="landing-calculation__signup-buttons">
+          <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
+            <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
+          </div>
 
-        <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
-          <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          <div @click="() => handleMetamaskConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
+            <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
+
+          <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
+            <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
         </div>
+        <div class="landing-calculation__signup-line"></div>
       </div>
-      <div class="landing-calculation__signup-line"></div>
+
+      
       <template v-if="signupStep === SignupSteps.TelegramButton">
         <h3 class="f-registration__title">Sign up with Telegram</h3>
         <h5 class="f-registration__subtitle">
@@ -192,11 +197,15 @@ const props = withDefaults(
   },
 )
 
+const isUserAuth = computed(()=>{
+  return $app.store.auth?.refreshToken ? true : false;
+});
 
-  const isMetamaskSupported = ref(false);
-  const address = ref("");
-  const metamaskError = ref("");
-  const computedAddress = computed(() => address.value.substring(0, 8) + '...');
+
+const isMetamaskSupported = ref(false);
+const address = ref("");
+const metamaskError = ref("");
+const computedAddress = computed(() => address.value.substring(0, 8) + '...');
 
 
 const token = ref('')
@@ -424,11 +433,6 @@ const signupToggle = (method: any) => {
   }
 }
 
-const investScrolltoSignup = () => {
-  signupStep.value = SignupSteps.Signup;
-  signupMethod.value = SignupMethods.Email;
-}
-
 const scrollToSignup = () => {
   const element = document.querySelector(".landing-calculation__signup");
   let headerOffset
@@ -447,6 +451,32 @@ const scrollToSignup = () => {
     });
   },1)
 }
+
+const investBuySignup = () => {
+  signupStep.value = SignupSteps.Signup;
+  signupMethod.value = SignupMethods.Email;
+  scrollToSignup();
+}
+
+const investBuy = async () => {
+  signupStep.value = SignupSteps.Default;
+  signupMethod.value = SignupMethods.None;
+  purchaseStep.value = PurchaseSteps.Purchase;
+  scrollToPurchase();
+
+  await $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  })
+
+  await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+    $app.store.user.blockchainUserWallet = resp?.data.uid
+  })
+
+  console.log($app.store.user?.info?.account?.uuid)
+
+}
+
+
 
 const scrollToPurchase = () => {
   // const element = document.querySelector(".w-buy-shares-payment");
@@ -717,6 +747,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
+        
 
 
         if (props.isFiat) {
@@ -782,7 +813,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-
+        console.log("UUID123", $app.store.user?.info?.account?.uuid)
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");

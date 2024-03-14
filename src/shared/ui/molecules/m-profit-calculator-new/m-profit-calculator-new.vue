@@ -36,14 +36,14 @@
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
               <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" />
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
+              <!-- <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/> -->
             </div>
           </div>
-          <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <!-- <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
-          </div>
+          </div> -->
         </div>
 
         <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
@@ -161,16 +161,18 @@ import { vOnClickOutside } from '@vueuse/components'
 
 const { width } = useWindowSize()
 
-console.log("width", width.value  )
-
 const props = withDefaults(
   defineProps<{
     openSignup: any
+    openPurchase: any
     isInputDisbled: boolean
+    isUserAuth: boolean
   }>(),
   {
     openSignup: () => {},
-    isInputDisbled: false
+    openPurchase: () => {},
+    isInputDisbled: false,
+    isUserAuth: false,
   },
 )
 
@@ -178,7 +180,7 @@ const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-let apyValue = ref(14)
+let apyValue = ref(42)
 const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
@@ -192,7 +194,11 @@ const inputMaxWidth = ref(defaultInputWith.value);
 const investmentAmount = ref(2500);
 const investmentAmountWithDiscount = ref(2375);
 
+
+
+
 onMounted(()=>{
+
   if(localStorage.getItem('investmentAmount')) {
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
@@ -202,7 +208,6 @@ onMounted(()=>{
 })
 
 function validate(event) {
-  console.log(event);
   if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
 
   // var theEvent = event || window.event;
@@ -347,22 +352,12 @@ const selectCurrency = (currency : any) => {
   toggleCurrencyDropdown();
 }
 
-const handleContinue = () =>{
-  const element = document.querySelector(".landing-calculation__signup");
-  let headerOffset
-  if (window.innerWidth < 768) {
-    headerOffset = 145;
+const handleContinue = () => {
+  if(props.isUserAuth) {
+    props.openPurchase();
   } else {
-    headerOffset = 155;
+    props.openSignup();
   }
-  const elementPosition = element.offsetTop;
-  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: "smooth",
-  });
-  props.openSignup();
 }
 </script>
 
