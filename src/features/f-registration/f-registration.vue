@@ -462,7 +462,7 @@ const handleTelegramConnect = async () => {
 const handleTelegramAuth = async () => {
   console.log(telegramBotName.value, telegramRedirectUrl.value);
   (window as any).Telegram.Login.auth(
-  { bot_id: 6276265631, request_access: true },
+  { bot_id: '6888906996', request_access: true },
   (data) => {
     if (!data) {
       // authorization failed
