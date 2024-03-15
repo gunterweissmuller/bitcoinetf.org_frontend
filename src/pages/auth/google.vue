@@ -30,7 +30,7 @@
         
         if(localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') !== undefined && ( localStorage.getItem('googleRedirect')?.search('/tetherspecialnew') !== -1 || localStorage.getItem('googleRedirect')?.search('/tetherspecial') !== -1)) {
           localStorage.removeItem('googleRedirect');
-          router.push("/tetherspecialnew");
+          router.push("/tetherspecial");
         } else if(data.data.data.email) {
             router.push("/personal/registration");
         } else {
