@@ -304,8 +304,8 @@ const handleMetamaskConnect = async () => {
 }
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
-const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*discountPercent
-const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : $app.filters.rounded(defaultBuyAmount));
+const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*discountPercent;
+const buyAmount = ref(isNaN(defaultBuyAmount) ? 100 : defaultBuyAmount);
 const buyAmountOriginal = ref($app.store.user.investAmount);
 // tether special discount 5%
 
@@ -313,10 +313,10 @@ watch(
   () => $app.store.user.investAmount,
   (newValue) => {
     buyAmountOriginal.value = newValue;
-    const tempValue = $app.filters.rounded(newValue-(newValue/100)*discountPercent);
+    const tempValue = newValue-(newValue/100)*discountPercent;
 
     if(isNaN(tempValue)) {
-      buyAmount.value = 0;
+      buyAmount.value = 100;
     } else {
       buyAmount.value = tempValue;
     }
@@ -465,6 +465,9 @@ const investBuySignup = () => {
 }
 
 const investBuy = async () => {
+
+  if(buyAmountOriginal.value < 100) return
+
   signupStep.value = SignupSteps.Default;
   signupMethod.value = SignupMethods.None;
   purchaseStep.value = PurchaseSteps.Purchase;
@@ -776,6 +779,7 @@ const sendCode = async () => {
       console.error("ERROR", e);
       if (e?.errors?.error?.message) {
         if (e.errors.error.code === 'ETF:011002') {
+          //email is already in use
           router.push('/personal/login')
         }
       }
@@ -809,7 +813,7 @@ const signupAndBuy = async () => {
         // TODO falling user/me
         $app.store.auth.setTokens(jwtResponse.data)
         confirmResponse.value = jwtResponse.data
-        isOpenModal.value = true;
+        // isOpenModal.value = true;
         dataDisabled.value = true;
       })
       .then(async () => {
@@ -879,7 +883,7 @@ const signupAndBuy = async () => {
         // TODO falling user/me
         $app.store.auth.setTokens(jwtResponse.data);
         confirmResponse.value = jwtResponse.data;
-        isOpenModal.value = true;
+        // isOpenModal.value = true;
         dataDisabled.value = true;
       })
       .then(async () => {
@@ -918,7 +922,7 @@ const signupAndBuy = async () => {
         // TODO falling user/me
         $app.store.auth.setTokens(jwtResponse.data)
         confirmResponse.value = jwtResponse.data
-        isOpenModal.value = true;
+        // isOpenModal.value = true;
         dataDisabled.value = true;
       })
       .then(async () => {
@@ -1033,7 +1037,7 @@ const signupAndBuyGoogle = () => {
       // lastName.value = '';
       // email.value = '';
       dataDisabled.value = true;
-      isOpenModal.value = true;
+      // isOpenModal.value = true;
       scrollToPurchase();
     })
     .then(async () => {

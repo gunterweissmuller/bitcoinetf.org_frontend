@@ -197,7 +197,7 @@ const currencies = ref([
     background: "/img/bitcoinbg.png",
     stars: 4.5,
     totalProfit: "100%+",
-    apy: 33,
+    apy: 33.333333333333333333333333333333,
     apy3: 100
 
   }, ]);
@@ -326,7 +326,7 @@ const dayliDivs = computed(() => {
 })
 const dayliDivsDisplay = computed(() => {
   const tempVal = guaranteedPayout.value / 365;
-  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
 
   if(tempVal.toString().split(".")[1]?.length > 2) {
     resValue = resValue + "+";
@@ -345,8 +345,8 @@ const monthlyDivsDisplay = computed(() => {
 })
 
 const apyValueComputed = computed(() => {
-  // return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? apyValue.value + 5 : apyValue.value
-  return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? (apyValue3.value/3) + 5 : (apyValue3.value/3)
+  return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? apyValue.value + 5 : apyValue.value
+  // return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? (apyValue3.value/3) + 5 : (apyValue3.value/3)
 })
 
 const guaranteedPayout = computed(() => {

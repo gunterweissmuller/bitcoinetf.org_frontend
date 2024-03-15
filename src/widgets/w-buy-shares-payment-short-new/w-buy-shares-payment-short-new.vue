@@ -50,7 +50,7 @@
             <a-input
               bgColor="tetherspecial"
               label="Amount"
-              :model-value="`${calcValue < 95 ? 95 : $app.filters.rounded(calcValue)} USDT`"
+              :model-value="`${$app.filters.rounded(calcValue)} USDT`"
               disabled
               :text-icon="amountCopied"
               text-icon-text="Copied!"
@@ -245,7 +245,7 @@ onMounted(async () => {
   if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
     await $app.api.eth.billingEth
       .buyShares({
-        amount: props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal,
+        amount: props.calcValueOriginal, // props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal
         dividends: false,
         referral: false,
         bonus: false,
