@@ -415,6 +415,18 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+
+    console.log(r);
+
+    // currentStep.value = Steps.TelegramSign;
+    currentSignup.value = SignupMethods.Telegram;
+
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+
+    })
+
   if($app.store.authGoogle.response?.email) {
     currentStep.value = Steps.Email;
     currentSignup.value = SignupMethods.Google;
