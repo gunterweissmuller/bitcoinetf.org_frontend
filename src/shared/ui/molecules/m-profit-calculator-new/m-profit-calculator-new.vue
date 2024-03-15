@@ -1,5 +1,5 @@
 <template>
-  <div class="landing-calculation__journey" :class="[{'landing-calculation__journey-btc': selectedCurrency.value === 'Bitcoin'}]">
+  <div class="landing-calculation__journey" :class="[{'landing-calculation__journey-btc': selectedCurrency.value === 'BTC'}]">
 
     <NuxtImg class="landing-calculation__journey-bg1" src="/img/tetherspecial/bg-img1.png" loading="lazy" />
     <NuxtImg class="landing-calculation__journey-bg2" src="/img/tetherspecial/bg-img2.png" loading="lazy" />
@@ -39,7 +39,7 @@
               <!-- <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/> -->
             </div>
           </div>
-          <!-- <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <!-- <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
@@ -56,12 +56,12 @@
 
       <article class="landing-calculation__journey__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
 
-        <div :class="['landing-calculation__journey__invest--card-inner', {'landing-calculation__journey__invest--card-inner-flip': selectedCurrency.value === 'Bitcoin'}]">
+        <div :class="['landing-calculation__journey__invest--card-inner', {'landing-calculation__journey__invest--card-inner-flip': selectedCurrency.value === 'BTC'}]">
 
           <!-- FRONT -->
           <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
-            <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
+            <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Guaranteed Payout </p>
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
@@ -72,7 +72,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1) }}%</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p> <!--$app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1)-->
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
@@ -94,7 +94,7 @@
 
           <!-- BACK -->
 
-          <div v-if="selectedCurrency.value === 'Bitcoin'" class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
+          <div v-if="selectedCurrency.value === 'BTC'" class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
@@ -107,7 +107,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1) }}%</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p> <!-- $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1)-->
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
@@ -141,7 +141,7 @@
         </div>
 
       </article>
-      <button @click="handleContinue" tabindex="0" :class="[{'landing-calculation__journey__button-btc': selectedCurrency.value === 'Bitcoin'}]" class="landing-calculation__journey__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Buy Bitcoin ETFs </button>
+      <button @click="handleContinue" tabindex="0" :class="[{'landing-calculation__journey__button-btc': selectedCurrency.value === 'BTC'}]" class="landing-calculation__journey__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Buy Bitcoin ETFs </button>
     </div>
 
     </div>
@@ -180,7 +180,28 @@ const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-let apyValue = ref(14)
+// {
+//     value: 'USDT',
+//     icon: "/img/icons/colorful/usdt.svg",
+//     background: "/img/usdtbg2.png",
+//     stars: 5,
+//     totalProfit: "42%",
+//     apy: 14
+//   },
+
+const currencies = ref([
+  {
+    value: 'BTC',
+    icon: "/img/icons/colorful/bitcoin.svg",
+    background: "/img/bitcoinbg.png",
+    stars: 4.5,
+    totalProfit: "100%+",
+    apy: 33
+
+  }, ]);
+const selectedCurrency = ref(currencies.value[0]);
+
+let apyValue = ref(selectedCurrency.value.apy);
 const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
@@ -304,7 +325,7 @@ const dayliDivsDisplay = computed(() => {
   const tempVal = guaranteedPayout.value / 365;
   let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();;
 
-  if(tempVal.toString().split(".")[1].length > 2) {
+  if(tempVal.toString().split(".")[1]?.length > 2) {
     resValue = resValue + "+";
   }
   return resValue;
@@ -329,24 +350,7 @@ const guaranteedPayout = computed(() => {
 })
 
 
-// {
-//     value: 'USDT',
-//     icon: "/img/icons/colorful/usdt.svg",
-//     background: "/img/usdtbg2.png",
-//     stars: 5,
 
-//   },
-
-
-const currencies = ref([
-  {
-    value: 'Bitcoin',
-    icon: "/img/icons/colorful/bitcoin.svg",
-    background: "/img/bitcoinbg.png",
-    stars: 4.5,
-
-  }, ]);
-const selectedCurrency = ref(currencies.value[0]);
 const showDropdown = ref(false);
 
 onMounted(()=>{

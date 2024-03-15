@@ -245,8 +245,8 @@ const buyButtonText = computed(() => {
   }
 
 
-  return pickerValue.value < 100 ? 'Minimum 100 Shares' : `$${$app.filters.rounded(sum - (sum/100)*discountPercent)} BUY`
-  // return pickerValue.value < 100 ? 'Minimum 100 Shares' : `$${$app.filters.rounded(sum)} BUY`
+  // return pickerValue.value < 100 ? 'Minimum 100 Shares' : `$${$app.filters.rounded(sum - (sum/100)*discountPercent)} BUY`
+  return pickerValue.value < 100 ? 'Minimum 100 Shares' : `$${$app.filters.rounded(sum)} BUY`
 })
 
 const referralAmount = computed(() => {
