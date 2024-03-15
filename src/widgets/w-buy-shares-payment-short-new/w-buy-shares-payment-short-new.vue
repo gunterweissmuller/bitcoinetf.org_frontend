@@ -262,7 +262,7 @@ onMounted(async () => {
 
   if ($app.store.persiste.latestTronCheckDate) {
     initializeClock()
-    timerStarted.value = true
+    // timerStarted.value = true
   }
   initializeTronClock()
   startTronTimer();
@@ -326,7 +326,9 @@ function initializeClock() {
 const tronButtonCheckPayment = ref('I have paid')
 const timerStarted = ref(false)
 const startTronTimer = async () =>{
+  console.log("TIMER1234", timerStarted);
   if (!timerStarted.value) {
+    console.log("TIMER123");
     await $app.api.eth.billingEth.startCheckingTronPayment({account_uuid:$app.store.user.info.account.uuid})
     initializeClock()
     timerStarted.value = true
