@@ -393,7 +393,36 @@
           line-height: torem(20);
         }
       }
+
+      &-input {
+        background: var(--surfaces-surface-2);
+
+        &-title {
+          color: var(--text-tertiary);
+          font-size: 10px;
+          font-weight: 700;
+        }
+
+        &-text {
+          color: var(--text-primary);
+          font-size: 16px;
+          font-weight: 400;
+        }
+      }
+    }
+
+    &-pay {
+      &-item {
+        background: var(--surfaces-surface-1);
+        color: var(--text-primary);
+        border-radius: var(--spacing-s);
+        border: 1px solid var(--surfaces-border-1);
+        font-size: 16px;
+        font-weight: 400;
+        margin-top: var(--spacing-m-1);
+      }
+
+      
     }
   }
-
 }

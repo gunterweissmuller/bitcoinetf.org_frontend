@@ -153,8 +153,8 @@
                 <div class="f-registration__purchase-line"></div>
                 <template v-if="currentPayStep === StepsPay.PayWith">
                   <div v-for="pay in payWith">
-                    <div @click="currentPayStep = StepsPay.Process" class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
-                      <div class="flex flex-col justify-center p-5 w-full bg-white">
+                    <div @click="currentPayStep = StepsPay.Process" class="f-registration__purchase-pay-item flex flex-col justify-center cursor-pointer">
+                      <div class="flex flex-col justify-center p-5 w-full ">
                         <div class="flex gap-1">
                           <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" loading="lazy"/>
                           <p class="flex-auto font-semibold">{{ pay.title }}</p>
@@ -170,11 +170,11 @@
                     <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
                       <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" loading="lazy" />
                     </div>
-                    <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
+                    <article class="f-registration__purchase--process-input flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg">
                       <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" loading="lazy" />
                       <div class="flex flex-col flex-1 pr-9">
-                        <p class="f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
-                        <p class="f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
+                        <p class="f-registration__purchase--process-input-title f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
+                        <p class="f-registration__purchase--process-input-text f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
                       </div>
                     </article>
 
