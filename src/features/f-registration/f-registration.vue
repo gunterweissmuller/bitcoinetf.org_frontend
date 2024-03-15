@@ -466,7 +466,39 @@ const handleTelegramAuth = async () => {
       if (!data) {
         // authorization failed
       } else {
-        window.location.href = telegramRedirectUrl.value;
+
+        console.log(data);
+
+        // $app.api.eth.auth.telegramGetAuthType({
+        //   telegram_data: JSON.stringify(tgData),
+        // }).then((r: any) => {
+        //   if(r.data.auth_type === 'registration') {
+        //     $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+        //     // router.push("/personal/registration");
+        //   } else {
+        //     $app.api.eth.auth.
+        //       loginTelegram({
+        //         telegram_data: JSON.stringify(tgData),
+        //       })
+        //         .then((jwtResponse: any) => {
+        //           $app.store.auth.setTokens(jwtResponse.data)
+        //         })
+        //         .then(async () => {
+        //           await $app.api.eth.auth.getUser().then((resp) => {
+        //             $app.store.user.info = resp?.data
+        //           });
+
+        //           await router.push('/personal/analytics/performance')
+        //         });
+        //   }
+        // })
+
+        // currentStep.value = Steps.Email;
+        // currentSignup.value = SignupMethods.Telegram;
+        // firstName.value = $app.store.authTelegram.response.first_name;
+        // lastName.value = $app.store.authTelegram.response.last_name;
+        // email.value = $app.store.authTelegram.response.email;
+
       }
       
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
