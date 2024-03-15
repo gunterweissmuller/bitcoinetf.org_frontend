@@ -534,8 +534,18 @@ const isSubmitEmailForm = ref(false);
 
 const onSubmitEmailForm = async () => {
 
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
+
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+
   if(isSubmitEmailForm.value) return;
   isSubmitEmailForm.value = true;
+
+  const tempPhone = phone.value.slice(countryCode.value.length+1);
 
   backendError.value = ''
   const initPayload = {
@@ -543,8 +553,8 @@ const onSubmitEmailForm = async () => {
     first_name: $app.filters.trimSpaceIntoString(firstName.value),
     last_name: $app.filters.trimSpaceIntoString(lastName.value),
     email: $app.filters.trimSpaceIntoString(email.value),
-    phone_number: phone.value,
-    phone_number_code: '1',
+    phone_number: tempPhone.value,
+    phone_number_code: countryCode.value,
   }
 
   if(currentSignup.value === SignupMethods.Metamask) {
@@ -616,6 +626,8 @@ const onSubmitEmailForm = async () => {
         last_name: lastName.value,
         email: email.value,
         ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone.value,
+        phone_number_code: countryCode.value,
       }).then((r: any) => {
         console.log('ww');
         isSubmitEmailForm.value = false;
