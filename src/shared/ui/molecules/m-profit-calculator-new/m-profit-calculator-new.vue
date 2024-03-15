@@ -186,7 +186,8 @@ const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 //     background: "/img/usdtbg2.png",
 //     stars: 5,
 //     totalProfit: "42%",
-//     apy: 14
+//     apy: 14,
+//     apy3: 42,
 //   },
 
 const currencies = ref([
@@ -196,12 +197,14 @@ const currencies = ref([
     background: "/img/bitcoinbg.png",
     stars: 4.5,
     totalProfit: "100%+",
-    apy: 33
+    apy: 33,
+    apy3: 100
 
   }, ]);
 const selectedCurrency = ref(currencies.value[0]);
 
 let apyValue = ref(selectedCurrency.value.apy);
+let apyValue3 = ref(selectedCurrency.value.apy3);
 const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
@@ -342,7 +345,8 @@ const monthlyDivsDisplay = computed(() => {
 })
 
 const apyValueComputed = computed(() => {
-  return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? apyValue.value + 5 : apyValue.value
+  // return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? apyValue.value + 5 : apyValue.value
+  return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? (apyValue3.value/3) + 5 : (apyValue3.value/3)
 })
 
 const guaranteedPayout = computed(() => {
