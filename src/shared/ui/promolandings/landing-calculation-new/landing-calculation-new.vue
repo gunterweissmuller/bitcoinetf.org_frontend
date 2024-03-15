@@ -49,6 +49,10 @@
           <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
             <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
+
+          <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
+            <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
@@ -411,6 +415,7 @@ enum SignupMethods {
   Email = "Email",
   Metamask = "Metamask",
   Google = "Google",
+  Telegram = "Telegram",
 }
 
 const signupStep = ref(SignupSteps.Default);
@@ -562,18 +567,92 @@ onMounted(() => {
 
 });
 
-  const telegramRedirectUrl = ref('')
-  const telegramBotName = ref('')
-  const currentStep = ref('')
+const telegramRedirectUrl = ref('')
+const telegramBotName = ref('')
+const currentStep = ref('')
+const isTelegramConnection = ref(false);
+
+
+const handleTelegramAuth = async () => {
+(window as any).Telegram.Login.auth(
+  { bot_id: '6888906996', request_access: true },
+  (tgData: any) => {
+    console.log(tgData);
+    if (!tgData) {
+      // authorization failed
+      isTelegramConnection.value = true;
+    } else {
+
+      console.log(tgData);
+
+      $app.api.eth.auth.telegramGetAuthType({
+        telegram_data: JSON.stringify(tgData),
+      }).then((r: any) => {
+        if(r.data.auth_type === 'registration') {
+          $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+
+          //registration
+          signupStep.value = SignupSteps.Signup;
+          signupMethod.value = SignupMethods.Telegram;
+          firstName.value = $app.store.authTelegram.response.first_name;
+          lastName.value = $app.store.authTelegram.response.last_name;
+          email.value = $app.store.authTelegram.response.email;
+
+          // currentStep.value = Steps.Email;
+          // currentSignup.value = SignupMethods.Telegram;
+          // firstName.value = $app.store.authTelegram.response.first_name;
+          // lastName.value = $app.store.authTelegram.response.last_name;
+          // email.value = $app.store.authTelegram.response.email;
+          // router.push("/personal/registration");
+        } else {
+          $app.api.eth.auth.
+            loginTelegram({
+              telegram_data: JSON.stringify(tgData),
+            })
+              .then((jwtResponse: any) => {
+                $app.store.auth.setTokens(jwtResponse.data)
+                confirmResponse.value = jwtResponse.data;
+              })
+              .then(async () => {
+                await $app.api.eth.auth.getUser().then((resp) => {
+                  $app.store.user.info = resp?.data
+                  //purchase
+                  purchaseStep.value = PurchaseSteps.Purchase;
+                });
+
+                // await router.push('/personal/analytics/performance')
+              });
+        }
+      }).catch((err) => {
+        console.error(err);
+        isTelegramConnection.value = true;
+      })
+
+      
+
+    }
+    
+    // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+  }
+);
+}
+
 
 const handleTelegramConnect = async () => {
+
+  if(isTelegramConnection.value) return;
+  isTelegramConnection.value = true;
+
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
 
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
 
+    handleTelegramAuth().then((res) => {
+      console.log(res);
+      // signupStep.value = SignupSteps.TelegramButton;
+    })
 
-    signupStep.value = SignupSteps.TelegramButton;
 
     //console.log(r);
 
@@ -584,6 +663,7 @@ const handleGoogleConnect = async () => {
   localStorage.setItem('googleRedirect', router.currentRoute.value.fullPath)
   window.location.href = googleUrl.value;
 }
+
 
 
 const sendCodeLoading = ref(false)
@@ -659,24 +739,36 @@ const sendCode = async () => {
           backendError.value = 'Something went wrong'
         }
       })
+  } else if(signupMethod.value === SignupMethods.Telegram) {
+
+    $app.api.eth.auth
+      .initTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+        console.log('ww');
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
+    }).catch((e) => {
+      isSubmitEmailForm.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+
   } else {
 
   await $app.api.eth.auth
     .init(initPayload).then(()=>{
       sendCodeLoading.value = false
       codeSended.value = true
-
-      const aAid = window.localStorage.getItem('PAPVisitorId');
-      if(aAid) {
-        $app.api.eth.auth.papSignUp({
-          payload: {
-            pap_id: aAid,
-            utm_label: window.localStorage.getItem('a_utm'),
-          }}).then((r: any) => {
-          //window.localStorage.removeItem('a_aid');
-          //window.localStorage.removeItem('a_utm');
-        });
-      }
     })
     .catch((e) => {
       isMainInputDisabled.value = false;
@@ -696,10 +788,7 @@ const closeModal = () =>{
 }
 
 const confirmResponse = ref(null)
-
 const isSignupAndBuy = ref(false);
-
-
 
 const signupAndBuy = async () => {
 
@@ -770,6 +859,48 @@ const signupAndBuy = async () => {
         }
       })
       .catch((e) => {
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else if (signupMethod.value === SignupMethods.Telegram) {
+
+    backendError.value = ''
+    await $app.api.eth.auth.
+      confirmTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data);
+        confirmResponse.value = jwtResponse.data;
+        isOpenModal.value = true;
+        dataDisabled.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data;
+          purchaseStep.value = PurchaseSteps.Purchase;
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
