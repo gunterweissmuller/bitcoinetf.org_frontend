@@ -435,13 +435,13 @@ onMounted(() => {
     email.value =$app.store.authGoogle.response.email;
   }
 
-  if($app.store.authTelegram.response?.id) {
-    currentStep.value = Steps.Email;
-    currentSignup.value = SignupMethods.Telegram;
-    firstName.value = $app.store.authTelegram.response.first_name;
-    lastName.value = $app.store.authTelegram.response.last_name;
-    email.value = $app.store.authTelegram.response.email;
-  }
+  // if($app.store.authTelegram.response?.id) {
+  //   currentStep.value = Steps.Email;
+  //   currentSignup.value = SignupMethods.Telegram;
+  //   firstName.value = $app.store.authTelegram.response.first_name;
+  //   lastName.value = $app.store.authTelegram.response.last_name;
+  //   email.value = $app.store.authTelegram.response.email;
+  // }
 });
 
 const handleGoogleDisconnect = () => {
