@@ -27,28 +27,38 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openSignup="investScrolltoSignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
 
 
 
     <!-- SIGNUP LAYOUT -->
-    <div class="landing-calculation__signup">
-      <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
-      <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
-      <div class="landing-calculation__signup-buttons">
-        <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
-          <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
-        </div>
+    <div  class="landing-calculation__signup">
 
-        <div @click="() => handleMetamaskConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
-          <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
-        </div>
+      <div v-if="!isUserAuth">
+        <div class="landing-calculation__signup-title landing-calculation--text-normal">Select Preferred Method of Authentication.</div>
+        <div class="landing-calculation__signup-subtitle landing-calculation--text-normal">If you already have an account, you can <nuxt-link class="landing-calculation__signup-subtitle-link" to="/personal/login">log in here</nuxt-link>.</div>
+        <div class="landing-calculation__signup-buttons">
+          <div @click="() => signupToggle(SignupMethods.Email)" class="landing-calculation__signup-buttons-item" :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Email}]">
+            <nuxt-img src="/img/icons/colorful/mail-shiny.svg" class="landing-calculation__signup-buttons-item-img" ></nuxt-img>
+          </div>
 
-        <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
-          <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          <div @click="() => handleMetamaskConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Metamask}]">
+            <nuxt-img src="/img/icons/colorful/metamask.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
+
+          <div @click="() => handleGoogleConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Google}]">
+            <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
+
+          <!-- <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
+            <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component> -->
         </div>
+        <div class="landing-calculation__signup-line"></div>
       </div>
-      <div class="landing-calculation__signup-line"></div>
+
+      
       <template v-if="signupStep === SignupSteps.TelegramButton">
         <h3 class="f-registration__title">Sign up with Telegram</h3>
         <h5 class="f-registration__subtitle">
@@ -89,7 +99,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmount < 95" @click="signupAndBuy" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + buyAmountOriginal + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -118,7 +128,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmount < 95" @click="signupAndBuyGoogle" :text=" '$' + buyAmount + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + buyAmountOriginal + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -192,11 +202,15 @@ const props = withDefaults(
   },
 )
 
+const isUserAuth = computed(()=>{
+  return $app.store.auth?.refreshToken ? true : false;
+});
 
-  const isMetamaskSupported = ref(false);
-  const address = ref("");
-  const metamaskError = ref("");
-  const computedAddress = computed(() => address.value.substring(0, 8) + '...');
+
+const isMetamaskSupported = ref(false);
+const address = ref("");
+const metamaskError = ref("");
+const computedAddress = computed(() => address.value.substring(0, 8) + '...');
 
 
 const token = ref('')
@@ -291,7 +305,7 @@ const handleMetamaskConnect = async () => {
 
 // const buyAmount = ref(localStorage.getItem('investmentAmount') == null || localStorage.getItem('investmentAmount') == undefined || isNaN(Number(localStorage.getItem('investmentAmount'))) ? 2500 : Number(localStorage.getItem('investmentAmount')));
 const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*discountPercent
-const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : Math.ceil(defaultBuyAmount));
+const buyAmount = ref(isNaN(defaultBuyAmount) ? 0 : $app.filters.rounded(defaultBuyAmount));
 const buyAmountOriginal = ref($app.store.user.investAmount);
 // tether special discount 5%
 
@@ -299,7 +313,7 @@ watch(
   () => $app.store.user.investAmount,
   (newValue) => {
     buyAmountOriginal.value = newValue;
-    const tempValue = Math.ceil(newValue-(newValue/100)*discountPercent);
+    const tempValue = $app.filters.rounded(newValue-(newValue/100)*discountPercent);
 
     if(isNaN(tempValue)) {
       buyAmount.value = 0;
@@ -402,6 +416,7 @@ enum SignupMethods {
   Email = "Email",
   Metamask = "Metamask",
   Google = "Google",
+  Telegram = "Telegram",
 }
 
 const signupStep = ref(SignupSteps.Default);
@@ -424,11 +439,6 @@ const signupToggle = (method: any) => {
   }
 }
 
-const investScrolltoSignup = () => {
-  signupStep.value = SignupSteps.Signup;
-  signupMethod.value = SignupMethods.Email;
-}
-
 const scrollToSignup = () => {
   const element = document.querySelector(".landing-calculation__signup");
   let headerOffset
@@ -447,6 +457,32 @@ const scrollToSignup = () => {
     });
   },1)
 }
+
+const investBuySignup = () => {
+  signupStep.value = SignupSteps.Signup;
+  signupMethod.value = SignupMethods.Email;
+  scrollToSignup();
+}
+
+const investBuy = async () => {
+  signupStep.value = SignupSteps.Default;
+  signupMethod.value = SignupMethods.None;
+  purchaseStep.value = PurchaseSteps.Purchase;
+  scrollToPurchase();
+
+  await $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  })
+
+  await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+    $app.store.user.blockchainUserWallet = resp?.data.uid
+  })
+
+  console.log($app.store.user?.info?.account?.uuid)
+
+}
+
+
 
 const scrollToPurchase = () => {
   // const element = document.querySelector(".w-buy-shares-payment");
@@ -532,18 +568,92 @@ onMounted(() => {
 
 });
 
-  const telegramRedirectUrl = ref('')
-  const telegramBotName = ref('')
-  const currentStep = ref('')
+const telegramRedirectUrl = ref('')
+const telegramBotName = ref('')
+const currentStep = ref('')
+const isTelegramConnection = ref(false);
+
+
+const handleTelegramAuth = async () => {
+(window as any).Telegram.Login.auth(
+  { bot_id: '6888906996', request_access: true },
+  (tgData: any) => {
+    console.log(tgData);
+    if (!tgData) {
+      // authorization failed
+      isTelegramConnection.value = true;
+    } else {
+
+      console.log(tgData);
+
+      $app.api.eth.auth.telegramGetAuthType({
+        telegram_data: JSON.stringify(tgData),
+      }).then((r: any) => {
+        if(r.data.auth_type === 'registration') {
+          $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+
+          //registration
+          signupStep.value = SignupSteps.Signup;
+          signupMethod.value = SignupMethods.Telegram;
+          firstName.value = $app.store.authTelegram.response.first_name;
+          lastName.value = $app.store.authTelegram.response.last_name;
+          email.value = $app.store.authTelegram.response.email;
+
+          // currentStep.value = Steps.Email;
+          // currentSignup.value = SignupMethods.Telegram;
+          // firstName.value = $app.store.authTelegram.response.first_name;
+          // lastName.value = $app.store.authTelegram.response.last_name;
+          // email.value = $app.store.authTelegram.response.email;
+          // router.push("/personal/registration");
+        } else {
+          $app.api.eth.auth.
+            loginTelegram({
+              telegram_data: JSON.stringify(tgData),
+            })
+              .then((jwtResponse: any) => {
+                $app.store.auth.setTokens(jwtResponse.data)
+                confirmResponse.value = jwtResponse.data;
+              })
+              .then(async () => {
+                await $app.api.eth.auth.getUser().then((resp) => {
+                  $app.store.user.info = resp?.data
+                  //purchase
+                  purchaseStep.value = PurchaseSteps.Purchase;
+                });
+
+                // await router.push('/personal/analytics/performance')
+              });
+        }
+      }).catch((err) => {
+        console.error(err);
+        isTelegramConnection.value = true;
+      })
+
+      
+
+    }
+    
+    // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+  }
+);
+}
+
 
 const handleTelegramConnect = async () => {
+
+  if(isTelegramConnection.value) return;
+  isTelegramConnection.value = true;
+
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
 
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
 
+    handleTelegramAuth().then((res) => {
+      console.log(res);
+      // signupStep.value = SignupSteps.TelegramButton;
+    })
 
-    signupStep.value = SignupSteps.TelegramButton;
 
     //console.log(r);
 
@@ -554,6 +664,7 @@ const handleGoogleConnect = async () => {
   localStorage.setItem('googleRedirect', router.currentRoute.value.fullPath)
   window.location.href = googleUrl.value;
 }
+
 
 
 const sendCodeLoading = ref(false)
@@ -629,24 +740,36 @@ const sendCode = async () => {
           backendError.value = 'Something went wrong'
         }
       })
+  } else if(signupMethod.value === SignupMethods.Telegram) {
+
+    $app.api.eth.auth
+      .initTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+        console.log('ww');
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
+    }).catch((e) => {
+      isSubmitEmailForm.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+
   } else {
 
   await $app.api.eth.auth
     .init(initPayload).then(()=>{
       sendCodeLoading.value = false
       codeSended.value = true
-
-      const aAid = window.localStorage.getItem('PAPVisitorId');
-      if(aAid) {
-        $app.api.eth.auth.papSignUp({
-          payload: {
-            pap_id: aAid,
-            utm_label: window.localStorage.getItem('a_utm'),
-          }}).then((r: any) => {
-          //window.localStorage.removeItem('a_aid');
-          //window.localStorage.removeItem('a_utm');
-        });
-      }
     })
     .catch((e) => {
       isMainInputDisabled.value = false;
@@ -666,10 +789,7 @@ const closeModal = () =>{
 }
 
 const confirmResponse = ref(null)
-
 const isSignupAndBuy = ref(false);
-
-
 
 const signupAndBuy = async () => {
 
@@ -717,6 +837,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
+        
 
 
         if (props.isFiat) {
@@ -739,6 +860,48 @@ const signupAndBuy = async () => {
         }
       })
       .catch((e) => {
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else if (signupMethod.value === SignupMethods.Telegram) {
+
+    backendError.value = ''
+    await $app.api.eth.auth.
+      confirmTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram.response),
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data);
+        confirmResponse.value = jwtResponse.data;
+        isOpenModal.value = true;
+        dataDisabled.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data;
+          purchaseStep.value = PurchaseSteps.Purchase;
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -782,7 +945,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-
+        console.log("UUID123", $app.store.user?.info?.account?.uuid)
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");

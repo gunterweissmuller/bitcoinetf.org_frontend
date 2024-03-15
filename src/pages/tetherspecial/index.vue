@@ -5,10 +5,12 @@
 </template>
 
   <script setup>
-  import {definePageMeta} from "#imports";
-  import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue";
-  import LandingPromo from "~/src/shared/ui/promolandings/landing-promo-new/landing-promo-new.vue";
-  import LandingCalculation from "~/src/shared/ui/promolandings/landing-calculation-new/landing-calculation-new.vue";
+    import { defineAsyncComponent } from 'vue';
+
+    import {definePageMeta} from "#imports";
+  const SSiteFooter = defineAsyncComponent(() => import("~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue"));
+  const LandingPromo = defineAsyncComponent(() => import("~/src/shared/ui/promolandings/landing-promo-new/landing-promo-new.vue"));
+  const LandingCalculation = defineAsyncComponent(() => import("~/src/shared/ui/promolandings/landing-calculation-new/landing-calculation-new.vue"));
 
 definePageMeta({
   layout: 'site-dark',

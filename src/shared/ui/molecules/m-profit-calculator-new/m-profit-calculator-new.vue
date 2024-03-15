@@ -1,8 +1,8 @@
 <template>
-  <div class="landing-calculation__journey" :class="[{'landing-calculation__journey-btc': selectedCurrency.value === 'Bitcoin'}]">
+  <div class="landing-calculation__journey" :class="[{'landing-calculation__journey-btc': selectedCurrency.value === 'BTC'}]">
 
-    <NuxtImg class="landing-calculation__journey-bg1" src="/img/tetherspecial/bg-img1.png" />
-    <NuxtImg class="landing-calculation__journey-bg2" src="/img/tetherspecial/bg-img2.png"/>
+    <NuxtImg class="landing-calculation__journey-bg1" src="/img/tetherspecial/bg-img1.png" loading="lazy" />
+    <NuxtImg class="landing-calculation__journey-bg2" src="/img/tetherspecial/bg-img2.png" loading="lazy" />
 
     <div class="landing-calculation__journey-title">Start your bitcoin etf journey 🚀</div>
     <div class="landing-calculation__journey__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
@@ -34,16 +34,16 @@
         <div class="relative">
           <div class="landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
-              <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" />
+              <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" loading="lazy"/>
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
+              <!-- <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/> -->
             </div>
           </div>
-          <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'Bitcoin', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <!-- <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
-          </div>
+          </div> -->
         </div>
 
         <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
@@ -56,23 +56,23 @@
 
       <article class="landing-calculation__journey__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
 
-        <div :class="['landing-calculation__journey__invest--card-inner', {'landing-calculation__journey__invest--card-inner-flip': selectedCurrency.value === 'Bitcoin'}]">
+        <div :class="['landing-calculation__journey__invest--card-inner', {'landing-calculation__journey__invest--card-inner-flip': selectedCurrency.value === 'BTC'}]">
 
           <!-- FRONT -->
           <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
-            <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
+            <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Guaranteed Payout </p>
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 1) }}</p>
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1) }}%</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p> <!--$app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1)-->
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
@@ -83,7 +83,7 @@
               Safety Rating
               <span class="landing-calculation__journey__invest--card-rating-stars">
                 <span class="inline-flex" v-for="item in new Array(5)">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy"/>
                 </span>
               </span>
               5/5
@@ -94,7 +94,7 @@
 
           <!-- BACK -->
 
-          <div v-if="selectedCurrency.value === 'Bitcoin'" class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
+          <div v-if="selectedCurrency.value === 'BTC'" class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
@@ -103,34 +103,34 @@
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">${{ dayliDivsDisplay }}</p> <!--{{ $app.filters.rounded(dayliDivs, 1) }}-->
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1) }}%</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p> <!-- $app.filters.rounded((((investmentAmount + guaranteedPayout * 3) - investmentAmount) / investmentAmount) * 100, 1)-->
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs  * 31, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ monthlyDivsDisplay  }}</p>
               </div>
             </div>
             <p class="landing-calculation__journey__invest--card-rating landing-calculation__journey--text-normal relative flex items-center mx-auto">
               Safety Rating
               <span class="landing-calculation__journey__invest--card-rating-stars">
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                 </span>
                 <span class="inline-flex">
-                  <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" />
+                  <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" loading="lazy" />
                 </span>
               </span>
               4.5/5
@@ -141,7 +141,7 @@
         </div>
 
       </article>
-      <button @click="handleContinue" tabindex="0" :class="[{'landing-calculation__journey__button-btc': selectedCurrency.value === 'Bitcoin'}]" class="landing-calculation__journey__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Buy Bitcoin ETFs </button>
+      <button @click="handleContinue" tabindex="0" :class="[{'landing-calculation__journey__button-btc': selectedCurrency.value === 'BTC'}]" class="landing-calculation__journey__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Buy Bitcoin ETFs </button>
     </div>
 
     </div>
@@ -161,16 +161,18 @@ import { vOnClickOutside } from '@vueuse/components'
 
 const { width } = useWindowSize()
 
-console.log("width", width.value  )
-
 const props = withDefaults(
   defineProps<{
     openSignup: any
+    openPurchase: any
     isInputDisbled: boolean
+    isUserAuth: boolean
   }>(),
   {
     openSignup: () => {},
-    isInputDisbled: false
+    openPurchase: () => {},
+    isInputDisbled: false,
+    isUserAuth: false,
   },
 )
 
@@ -178,7 +180,31 @@ const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-let apyValue = ref(14)
+// {
+//     value: 'USDT',
+//     icon: "/img/icons/colorful/usdt.svg",
+//     background: "/img/usdtbg2.png",
+//     stars: 5,
+//     totalProfit: "42%",
+//     apy: 14,
+//     apy3: 42,
+//   },
+
+const currencies = ref([
+  {
+    value: 'BTC',
+    icon: "/img/icons/colorful/bitcoin.svg",
+    background: "/img/bitcoinbg.png",
+    stars: 4.5,
+    totalProfit: "100%+",
+    apy: 33,
+    apy3: 100
+
+  }, ]);
+const selectedCurrency = ref(currencies.value[0]);
+
+let apyValue = ref(selectedCurrency.value.apy);
+let apyValue3 = ref(selectedCurrency.value.apy3);
 const pickerValue = ref(2500)
 const refCode = ref('')
 const refCodeValid = ref(false)
@@ -192,7 +218,11 @@ const inputMaxWidth = ref(defaultInputWith.value);
 const investmentAmount = ref(2500);
 const investmentAmountWithDiscount = ref(2375);
 
+
+
+
 onMounted(()=>{
+
   if(localStorage.getItem('investmentAmount')) {
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
@@ -202,7 +232,6 @@ onMounted(()=>{
 })
 
 function validate(event) {
-  console.log(event);
   if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
 
   // var theEvent = event || window.event;
@@ -292,36 +321,44 @@ watch(
 
 
 const dayliDivs = computed(() => {
-  return (guaranteedPayout.value / 365).toFixed(2)
+  return guaranteedPayout.value / 365
+  // return Math.trunc( (guaranteedPayout.value / 365) * 100 ) / 100;
+})
+const dayliDivsDisplay = computed(() => {
+  const tempVal = guaranteedPayout.value / 365;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();;
+
+  if(tempVal.toString().split(".")[1]?.length > 2) {
+    resValue = resValue + "+";
+  }
+  return resValue;
+})
+
+const monthlyDivsDisplay = computed(() => {
+  const tempVal = guaranteedPayout.value / 12;
+  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
+
+  if(tempVal.toString().split(".")[1]?.length > 2) {
+    resValue = resValue + "+";
+  }
+  return resValue;
 })
 
 const apyValueComputed = computed(() => {
-  return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? apyValue.value + 5 : apyValue.value
+  // return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? apyValue.value + 5 : apyValue.value
+  return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? (apyValue3.value/3) + 5 : (apyValue3.value/3)
 })
 
 const guaranteedPayout = computed(() => {
   return investmentAmount.value * (apyValueComputed.value / 100)
 })
 
-const currencies = ref([
-  {
-    value: 'USDT',
-    icon: "/img/icons/colorful/usdt.svg",
-    background: "/img/usdtbg2.png",
-    stars: 5,
 
-  },
-  {
-    value: 'Bitcoin',
-    icon: "/img/icons/colorful/bitcoin.svg",
-    background: "/img/bitcoinbg.png",
-    stars: 4.5,
 
-  }, ]);
-const selectedCurrency = ref(currencies.value[0]);
 const showDropdown = ref(false);
 
 onMounted(()=>{
+  localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
   if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
     selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
   }
@@ -343,22 +380,12 @@ const selectCurrency = (currency : any) => {
   toggleCurrencyDropdown();
 }
 
-const handleContinue = () =>{
-  const element = document.querySelector(".landing-calculation__signup");
-  let headerOffset
-  if (window.innerWidth < 768) {
-    headerOffset = 145;
+const handleContinue = () => {
+  if(props.isUserAuth) {
+    props.openPurchase();
   } else {
-    headerOffset = 155;
+    props.openSignup();
   }
-  const elementPosition = element.offsetTop;
-  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: "smooth",
-  });
-  props.openSignup();
 }
 </script>
 

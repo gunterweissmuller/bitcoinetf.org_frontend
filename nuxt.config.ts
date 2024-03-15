@@ -230,7 +230,6 @@ export default defineNuxtConfig({
           file: '~/src/pages/personal/purchaseb.vue',
         },
       ]
-
       routes.push(...extendedRoutes)
     },
   },
@@ -240,7 +239,10 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-
+  router: {
+    // https://router.vuejs.org/api/interfaces/routeroptions.html
+    options: {}
+  },
   devtools: {
     timeline: {
       enabled: true,

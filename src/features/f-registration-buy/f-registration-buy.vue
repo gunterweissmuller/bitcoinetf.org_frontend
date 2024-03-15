@@ -9,9 +9,9 @@
             <div class='f-registration__purchase-back' @click='router.back()'>
                 <a-icon class='' width='24' :name='Icon.MonoChevronLeft' />
             </div>
-            
+
             <h1 class="">Complete your purchase</h1>
-            
+
             <div class="f-registration__purchase-steps-desktop">
               <div @click="() => {openPurchase(purchaseStepsArr[0])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': confirmShow}]">1. Confirm</div>
               <div @click="() => {openPurchase(purchaseStepsArr[1])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': signShow}]">2. Sign</div>
@@ -25,10 +25,10 @@
               <header class="f-registration__purchase--drop-down-title flex gap-2 whitespace-nowrap cursor-pointer" @click="() => {togglePurchase(purchaseStepsArr[0])}">
                 <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2.5 h-6 text-center aspect-square rounded-full" aria-hidden="true">1</div>
                 <h1 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Confirm</h1>
-                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" />
+                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" loading="lazy" />
               </header>
 
-              
+
 
               <div v-if="confirmShow">
                 <div class="f-registration__purchase-line"></div>
@@ -48,14 +48,14 @@
                   </div>
 
                   <div class="f-registration__purchase--confirm-item-full">
-                    <a-input-with-button 
+                    <a-input-with-button
                       label="Referral code"
                       v-model="refCode"
                       buttonText="Apply"
                     />
                   </div>
 
-                 
+
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Investment Currency</p>
@@ -73,8 +73,8 @@
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
-                    <p class="f-registration__purchase--step-title f-registration--text-normal">Buy Back Guarantee (Per Share) 
-                      
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Buy Back Guarantee (Per Share)
+
                       <m-popper class="f-registration__purchase--step-title-popper" hover :title="purchasePopperText.title" :text="purchasePopperText.text">
                         <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
                       </m-popper>
@@ -110,9 +110,9 @@
                   <div class="f-registration__purchase--confirm-item-btn">
                     <button @click="() => {openPurchase(purchaseStepsArr[1])}" class="f-registration__purchase--step-btn f-registration__button-continue f-registration--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">Continue</button>
                   </div>
-                  
+
                 </div>
-                
+
               </div>
             </section>
 
@@ -120,7 +120,7 @@
               <header @click="() => {togglePurchase(purchaseStepsArr[1])}" class="f-registration__purchase--drop-down-title flex gap-2">
                 <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">2</div>
                 <h2 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Sign</h2>
-                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': signShow}]" alt="Down arrow icon" />
+                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': signShow}]" alt="Down arrow icon" loading="lazy" />
               </header>
 
               <div v-if="signShow">
@@ -146,7 +146,7 @@
               <header @click="() => {togglePurchase(purchaseStepsArr[2])}" class="f-registration__purchase--drop-down-title flex gap-2">
                 <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">3</div>
                 <h2 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Pay</h2>
-                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" />
+                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" loading="lazy" />
               </header>
 
               <div v-if="payShow">
@@ -156,9 +156,9 @@
                     <div @click="currentPayStep = StepsPay.Process" class="flex flex-col justify-center mt-4 text-base bg-gray-100 rounded-lg border border-solid border-gray-200 text-zinc-800 cursor-pointer">
                       <div class="flex flex-col justify-center p-5 w-full bg-white">
                         <div class="flex gap-1">
-                          <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" />
+                          <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" loading="lazy"/>
                           <p class="flex-auto font-semibold">{{ pay.title }}</p>
-                          <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" />
+                          <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" loading="lazy" />
                         </div>
                       </div>
                     </div>
@@ -168,10 +168,10 @@
                 <template v-if="currentPayStep === StepsPay.Process">
                   <div class="f-registration__purchase--process flex flex-col">
                     <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
-                      <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" />
+                      <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" loading="lazy" />
                     </div>
                     <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
-                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" />
+                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" loading="lazy" />
                       <div class="flex flex-col flex-1 pr-9">
                         <p class="f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
                         <p class="f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
@@ -228,7 +228,7 @@
                       <nuxt-link to="/personal/support" target="_blank">
                         <span  class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</span>
                       </nuxt-link>
-                    
+
                     </footer>
                   </div>
                 </template>
@@ -545,7 +545,7 @@ const payWith = ref([
     icon: "/img/icons/colorful/metamask.svg",
     title: "Pay with Metamask"
   },
-  
+
 ]);
 
 // Ref code field
@@ -867,7 +867,7 @@ const copyToClipboardAmount = () => {
   amountCopied.value = true;
 }
 
-//change purchase steps 
+//change purchase steps
 
 enum PurchaseSteps {
   Confirm = 'Confirm',

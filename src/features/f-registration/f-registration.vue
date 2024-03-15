@@ -40,7 +40,7 @@
                   class="flex justify-center items-center px-16 py-5 mt-8 max-w-full text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/mono/mail-light.svg" width="18" height="14"
-                          class="aspect-square w-[18px]" />
+                          class="aspect-square w-[18px]" loading="lazy" />
                       <div class="grow">Sign up with Email</div>
                   </div>
               </div>
@@ -51,7 +51,7 @@
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
+                          class="aspect-square w-[18px]" loading="lazy" />
                       <div v-if="isMetamaskSupported" class="grow">Sign up with Metamask</div>
                       <div v-else class="grow">Install Metamask Extension</div>
                   </div>
@@ -69,20 +69,23 @@
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
-                          class="aspect-square w-[18px]" />
+                          class="aspect-square w-[18px]" loading="lazy" />
                       <div class="grow">Sign up with Google</div>
                   </div>
               </div>
 
 
-            <div @click="handleTelegramConnect"
+            <!-- <div @click="handleTelegramConnect"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
                 <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
-                         class="aspect-square w-[18px]" />
+                         class="aspect-square w-[18px]" loading="lazy" />
                 <div class="grow">Sign up with Telegram</div>
               </div>
-            </div>
+            </div> -->
+
+            <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
+            <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
 
               <!--<div
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
@@ -412,6 +415,15 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+
+    console.log(r);
+
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+
+    })
+
   if($app.store.authGoogle.response?.email) {
     currentStep.value = Steps.Email;
     currentSignup.value = SignupMethods.Google;
@@ -420,13 +432,13 @@ onMounted(() => {
     email.value =$app.store.authGoogle.response.email;
   }
 
-  if($app.store.authTelegram.response?.id) {
-    currentStep.value = Steps.Email;
-    currentSignup.value = SignupMethods.Telegram;
-    firstName.value = $app.store.authTelegram.response.first_name;
-    lastName.value = $app.store.authTelegram.response.last_name;
-    email.value = $app.store.authTelegram.response.email;
-  }
+  // if($app.store.authTelegram.response?.id) {
+  //   currentStep.value = Steps.Email;
+  //   currentSignup.value = SignupMethods.Telegram;
+  //   firstName.value = $app.store.authTelegram.response.first_name;
+  //   lastName.value = $app.store.authTelegram.response.last_name;
+  //   email.value = $app.store.authTelegram.response.email;
+  // }
 });
 
 const handleGoogleDisconnect = () => {
@@ -443,35 +455,69 @@ const handleGoogleConnect = async () => {
 const telegramRedirectUrl = ref('')
 const telegramBotName = ref('')
 
+const handleTelegramAuth = async () => {
+  (window as any).Telegram.Login.auth(
+    { bot_id: '6888906996', request_access: true },
+    (tgData: any) => {
+      console.log(tgData);
+      if (!tgData) {
+        // authorization failed
+      } else {
+
+        console.log(tgData);
+
+        $app.api.eth.auth.telegramGetAuthType({
+          telegram_data: JSON.stringify(tgData),
+        }).then((r: any) => {
+          if(r.data.auth_type === 'registration') {
+            $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+
+            currentStep.value = Steps.Email;
+            currentSignup.value = SignupMethods.Telegram;
+            firstName.value = $app.store.authTelegram.response.first_name;
+            lastName.value = $app.store.authTelegram.response.last_name;
+            email.value = $app.store.authTelegram.response.email;
+            // router.push("/personal/registration");
+          } else {
+            $app.api.eth.auth.
+              loginTelegram({
+                telegram_data: JSON.stringify(tgData),
+              })
+                .then((jwtResponse: any) => {
+                  $app.store.auth.setTokens(jwtResponse.data)
+                })
+                .then(async () => {
+                  await $app.api.eth.auth.getUser().then((resp) => {
+                    $app.store.user.info = resp?.data
+                  });
+
+                  await router.push('/personal/analytics/performance')
+                });
+          }
+        })
+
+        
+
+      }
+      
+      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+    }
+  );
+}
+
 const handleTelegramConnect = async () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-
     console.log(r);
-
-    currentStep.value = Steps.TelegramSign;
-    currentSignup.value = SignupMethods.Telegram;
-
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
 
-    //console.log(r);
-
+    handleTelegramAuth().then((res) => {
+      console.log(res);
+    })
   })
 }
 
-const handleTelegramAuth = async () => {
-  console.log(telegramBotName.value, telegramRedirectUrl.value);
-  (window as any).Telegram.Login.auth(
-  { bot_id: telegramBotName.value, request_access: true },
-  (data) => {
-    if (!data) {
-      // authorization failed
-    }
-    console.log(data)
-    // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
-  }
-);
-}
+
 
 // Ref code field
 const emailCode = ref('')
@@ -485,8 +531,18 @@ const isSubmitEmailForm = ref(false);
 
 const onSubmitEmailForm = async () => {
 
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
+
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+
   if(isSubmitEmailForm.value) return;
   isSubmitEmailForm.value = true;
+
+  const tempPhone = phone.value.slice(countryCode.value.length+1);
 
   backendError.value = ''
   const initPayload = {
@@ -494,8 +550,8 @@ const onSubmitEmailForm = async () => {
     first_name: $app.filters.trimSpaceIntoString(firstName.value),
     last_name: $app.filters.trimSpaceIntoString(lastName.value),
     email: $app.filters.trimSpaceIntoString(email.value),
-    phone_number: phone.value,
-    phone_number_code: '1',
+    phone_number: tempPhone,
+    phone_number_code: countryCode.value,
   }
 
   if(currentSignup.value === SignupMethods.Metamask) {
@@ -567,6 +623,8 @@ const onSubmitEmailForm = async () => {
         last_name: lastName.value,
         email: email.value,
         ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
       }).then((r: any) => {
         console.log('ww');
         isSubmitEmailForm.value = false;

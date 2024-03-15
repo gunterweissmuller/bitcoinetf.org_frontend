@@ -15,7 +15,7 @@
         <div @click="choiceToEmail"
           class="flex justify-center items-center px-16 py-5  max-w-full text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
-            <NuxtImg src="/img/icons/mono/mail-light.svg" width="18" height="14" class="aspect-square w-[18px]" />
+            <NuxtImg src="/img/icons/mono/mail-light.svg" width="18" height="14" class="aspect-square w-[18px]" loading="lazy" />
             <div class="grow">Log in with Email</div>
           </div>
         </div>
@@ -24,7 +24,7 @@
           @click="handleMetamaskConnect"
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
-            <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18" class="aspect-square w-[18px]" />
+            <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
             <div class="grow">Log in with Metamask</div>
           </div>
         </div>
@@ -33,10 +33,20 @@
           @click="handleGoogleConnect"
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
-            <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18" class="aspect-square w-[18px]" />
+            <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
             <div class="grow">Log in with Google</div>
           </div>
         </div>
+
+        <!-- <div
+          @click="handleTelegramConnect"
+          class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
+          <div class="flex gap-2 items-center">
+            <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
+            <div class="grow">Log in with Telegram</div>
+          </div>
+        </div> -->
+        <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
 
         <!--<div
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
@@ -239,6 +249,66 @@ onMounted(() => {
 const handleGoogleConnect = () => {
   currentLogin.value = SignupMethods.Google;
   window.location.href = googleUrl.value;
+}
+
+//telegram
+
+const telegramRedirectUrl = ref('')
+const telegramBotName = ref('')
+
+const handleTelegramAuth = async () => {
+  (window as any).Telegram.Login.auth(
+    { bot_id: '6888906996', request_access: true },
+    (tgData: any) => {
+      console.log(tgData);
+      if (!tgData) {
+        // authorization failed
+      } else {
+        console.log(tgData);
+
+        $app.api.eth.auth.telegramGetAuthType({
+          telegram_data: JSON.stringify(tgData),
+        }).then((r: any) => {
+          if(r.data.auth_type === 'registration') {
+            $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+            router.push("/personal/registration");
+          } else {
+            $app.api.eth.auth.
+              loginTelegram({
+                telegram_data: JSON.stringify(tgData),
+              })
+                .then((jwtResponse: any) => {
+                  $app.store.auth.setTokens(jwtResponse.data)
+                })
+                .then(async () => {
+                  await $app.api.eth.auth.getUser().then((resp) => {
+                    $app.store.user.info = resp?.data
+                  });
+
+                  await router.push('/personal/analytics/performance')
+                });
+          }
+        })
+
+        
+
+      }
+      
+      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+    }
+  );
+}
+
+const handleTelegramConnect = () => {
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+    console.log(r);
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+
+    handleTelegramAuth().then((res) => {
+      console.log(res);
+    })
+  })
 }
 
 const metamaskSignatureMessage = ref('')

@@ -227,6 +227,8 @@ const getWallets = async () => {
 
 const refCode = ref('')
 const termsAgree = ref(false)
+const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
+
 const buyButtonText = computed(() => {
   if (!termsAgree.value) return 'Agree to the Terms'
   let sum = pickerValue.value
@@ -242,6 +244,8 @@ const buyButtonText = computed(() => {
     sum -= wallets.value?.referral?.usd_amount
   }
 
+
+  // return pickerValue.value < 100 ? 'Minimum 100 Shares' : `$${$app.filters.rounded(sum - (sum/100)*discountPercent)} BUY`
   return pickerValue.value < 100 ? 'Minimum 100 Shares' : `$${$app.filters.rounded(sum)} BUY`
 })
 
