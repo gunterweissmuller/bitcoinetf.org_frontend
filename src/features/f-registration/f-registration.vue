@@ -419,9 +419,6 @@ onMounted(() => {
 
     console.log(r);
 
-    // currentStep.value = Steps.TelegramSign;
-    currentSignup.value = SignupMethods.Telegram;
-
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
 
