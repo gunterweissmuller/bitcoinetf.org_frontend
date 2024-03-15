@@ -553,7 +553,7 @@ const onSubmitEmailForm = async () => {
     first_name: $app.filters.trimSpaceIntoString(firstName.value),
     last_name: $app.filters.trimSpaceIntoString(lastName.value),
     email: $app.filters.trimSpaceIntoString(email.value),
-    phone_number: tempPhone.value,
+    phone_number: tempPhone,
     phone_number_code: countryCode.value,
   }
 
@@ -626,7 +626,7 @@ const onSubmitEmailForm = async () => {
         last_name: lastName.value,
         email: email.value,
         ref_code: $app.store.auth.refCode,
-        phone_number: tempPhone.value,
+        phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
         console.log('ww');
