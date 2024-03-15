@@ -416,7 +416,7 @@
 
 .vue-tel-input {
   margin-top: var(--spacing-m-1);
-  border-radius: 8px;
+  border-radius: var(--spacing-s) !important;
   // background: var(--surfaces-surface-2);
   background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
   border: 1px solid transparent !important;
