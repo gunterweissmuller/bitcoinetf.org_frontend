@@ -44,6 +44,9 @@
         />
       </div>
       <div v-if='isVisibleInfo' id='marquee'>
+        <div class="w-header__live">
+          <a-live />
+        </div>
         <m-slider
           class="w-header__info"
           id="w-header__info-slider"
@@ -83,6 +86,7 @@
 
 <script setup lang='ts'>
 import { useRoute } from 'vue-router'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import EHeaderLinks from '~/src/entities/e-header-links/e-header-links.vue'
 import EBreadcrumbs from '~/src/entities/e-breadcrumbs/e-breadcrumbs.vue'
 import useMediaDevice from '~/composables/useMediaDevice'

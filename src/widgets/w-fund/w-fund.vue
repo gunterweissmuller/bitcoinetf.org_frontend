@@ -31,7 +31,9 @@ const components = {
   },
 }
 
-const activeComponent = computed(() => components[route.name])
+const activeComponent = computed(() => components[route.name]);
+
+// BUG: если пользователь не авторизирован, при router before открывается auth page и после авторизации кидает на старые страницы (analytics)
 </script>
 
 <style src="./w-fund.scss" lang="scss" />

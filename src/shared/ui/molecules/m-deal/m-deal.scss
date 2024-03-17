@@ -105,7 +105,7 @@
     &-date {
       color: var(--text-tertiary);
       font-size: torem(12);
-      font-weight: 500;
+      font-weight: 700;
       line-height: torem(16);
     }
 
@@ -220,6 +220,13 @@
       font-weight: 700;
       line-height: torem(16);
       color: var(--text-secondary);
+
+      &-percent {
+        font-weight: 700;
+        font-size: torem(12);
+        line-height: torem(16);
+        color: var(--text-secondary);
+      }
     }
   }
 
@@ -233,13 +240,19 @@
     }
 
     &-shareholder {
-      min-width: torem(24);
-      min-height: torem(24);
-      margin-right: torem(4)
+      min-width: torem(32);
+      min-height: torem(32);
+      margin-right: torem(16)
     }
   }
 
   &__info-deal-images {
     display: flex;
   }
+}
+
+.m-deal__transfer .m-deal__type {
+  width: torem(18);
+  height: torem(18);
+  min-width: torem(18);
 }

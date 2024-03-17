@@ -49,12 +49,12 @@ const fullBalanceFund = computed(() => {
 })
 
 const bgMap = {
-  bst: 'rgba(218, 86, 126)',
-  bft: 'rgba(84, 120, 212)',
-  bot: 'rgba(199, 93, 208)',
-  usdt: 'rgba(27, 162, 122)',
-  baa: 'rgba(237, 205, 92)',
-  brf: 'rgba(233, 156, 85)',
+  bst: 'rgba(252, 43, 94)',
+  bft: 'rgba(14, 133, 237)',
+  bot: 'rgba(117, 64, 239)',
+  usdt: 'rgba(29, 202, 140)',
+  baa: 'rgba(239, 186, 50)',
+  brf: 'rgba(255, 141, 7)',
   vault: 'rgba(92, 206, 214)',
 }
 
@@ -65,17 +65,14 @@ const textCenter = {
     const xCoor = chart.getDatasetMeta(0).data[0]?.x
     const yCoor = chart.getDatasetMeta(0).data[0]?.y
     ctx.save()
-    ctx.font = 'bold 10px Dm, sans-serif'
-    ctx.fillStyle = '#888ca0'
     ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText('Real-time Portfolio Value', xCoor, yCoor - 20)
+    // ctx.fillText('Real-time Portfolio Value', xCoor, yCoor - 20)
 
-    ctx.font = 'bold 14px Dm, sans-serif'
+    ctx.font = 'bold 16px Dm, sans-serif'
     ctx.fillStyle = $app.store.user.theme === 'dark' ? '#F1F2F4' : '#22242b'
     ctx.fillText('$' + $app.filters.rounded(fullBalanceFund.value, 2), xCoor, yCoor + 0)
 
-    ctx.font = 'bold 10px Dm, sans-serif'
+    ctx.font = 'bold 12px Dm, sans-serif'
     ctx.fillStyle = '#888ca0'
 
     const value = localStorage.getItem('display-currency') || 'btc'
@@ -96,6 +93,9 @@ const colorBgSvg = computed(() => {
 const options = ref({
   responsive: true,
   maintainAspectRatio: false,
+  borderWidth: 0,
+  cutout: 80,
+  hoverOffset: -20,
   animation: {
     duration: 0,
   },
@@ -103,18 +103,18 @@ const options = ref({
     legend: {
       display: false,
     },
-    labels: {
-      render: 'image',
-      images: [
-        { src: '/img/portfolio/baa.svg', width: 56, height: 56 },
-        { src: '/img/portfolio/fba.svg', width: 56, height: 56 },
-        { src: '/img/portfolio/boa.svg', width: 56, height: 56 },
-        { src: '/img/portfolio/brf.svg', width: 56, height: 56 },
-        { src: '/img/portfolio/sba.svg', width: 56, height: 56 },
-        { src: '/img/portfolio/usdt.svg', width: 56, height: 56 },
-        { src: '/img/portfolio/vault.svg', width: 56, height: 56 },
-      ],
-    },
+    // labels: {
+    //   render: 'image',
+    //   images: [
+    //     { src: '/img/portfolio/baa.svg', width: 16, height: 16 },
+    //     { src: '/img/portfolio/fba.svg', width: 16, height: 16 },
+    //     { src: '/img/portfolio/boa.svg', width: 16, height: 16 },
+    //     { src: '/img/portfolio/brf.svg', width: 16, height: 16 },
+    //     { src: '/img/portfolio/sba.svg', width: 16, height: 16 },
+    //     { src: '/img/portfolio/usdt.svg', width: 16, height: 16 },
+    //     { src: '/img/portfolio/vault.svg', width: 16, height: 16 },
+    //   ],
+    // },
     tooltip: {
       callbacks: {
         label: function(context) {
@@ -134,7 +134,7 @@ const config = ref({
       {
         data: [],
         backgroundColor: [],
-        hoverOffset: 4,
+        // hoverOffset: -10,
       },
     ],
   },

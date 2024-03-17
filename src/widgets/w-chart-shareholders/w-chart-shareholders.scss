@@ -1,0 +1,97 @@
+.w-chart-shareholders {
+  padding: var(--spacing-m-1);
+  margin-bottom: var(--spacing-m-2);
+  box-shadow: var(--b-shadow-1);
+  border: torem(1) solid var(--surfaces-surface-glass-border);
+  border-radius: var(--spacing-s);
+  background: var(--surfaces-surface-glass);
+
+  @include breakpoint($break-desktop-1440) {
+    padding: var(--spacing-m-2);
+  }
+
+  &__title {
+    position: relative;
+
+    width: 100%;
+
+    margin-bottom: torem(40);
+
+    &--name {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+
+      width: 100%;
+      text-align: center;
+
+      font-family: Dm, sans-serif;
+      font-weight: 500;
+      font-size: torem(14);
+      line-height: torem(18);
+      color: var(--text-tertiary);
+    }
+  }
+
+  &__strategies {
+    width: 100%;
+
+    &--names {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: torem(8);
+    }
+
+    &--name {
+      display: flex;
+      align-items: center;
+      gap: torem(8);
+    }
+
+    &--text {
+      font-family: Dm, sans-serif;
+      font-weight: 500;
+      font-size: torem(14);
+      line-height: torem(18);
+      color: var(--text-primary);
+    }
+  }
+
+  &__percentbar {
+    width: 100%;
+
+    &--bar {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+
+      width: 100%;
+      height: torem(8);
+
+      // background: white;
+      border-radius: torem(10);
+
+      margin-bottom: torem(8);
+    }
+
+    &--line {
+      height: 100%;
+    }
+
+    &--percentes {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &--percent {
+      font-family: Dm, sans-serif;
+      font-weight: 500;
+      font-size: torem(12);
+      line-height: torem(16);
+    }
+  }
+}

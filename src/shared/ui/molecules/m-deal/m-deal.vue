@@ -65,7 +65,7 @@
                   <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
                     Sell: {{ (deal?.initial_amount / btcValue).toFixed(4) }} BTC @
 
-                  {{ $app.filters.rounded(btcValue, 2) }} (${{ $app.filters.rounded(deal.initial_amount, 2) }})
+                    {{ $app.filters.rounded(btcValue, 2) }} (${{ $app.filters.rounded(deal.initial_amount, 2) }})
                   </span>
                 </template>
 
@@ -89,7 +89,7 @@
             <div :class="['m-deal__type', `bg--${deal.to_asset.symbol.toLowerCase()}`]"></div>
             <span>{{ deal.to_asset.name }}</span>
           </div>
-          <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('DD MMMM YYYY') }}</div>
+          <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('DD:MM:YY hh:mm') }}</div>
         </div>
         <div class="m-deal__info">
           <div class="m-deal__info-inflow-result">+ ${{ $app.filters.rounded(deal.amount, 2) }}</div>
@@ -109,7 +109,7 @@
               <span>{{ deal.to_asset.symbol }}</span>
             </div>
           </div>
-          <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('DD MMMM YYYY') }}</div>
+          <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('DD:MM:YY hh:mm') }}</div>
         </div>
         <div class="m-deal__info">
           <div class="m-deal__info-transfer-result">${{ $app.filters.rounded(deal.amount, 2) }}</div>
@@ -123,19 +123,24 @@
           <a-avatar size="24px" class="m-deal__type m-deal__avatar-purchase" photo-src="/img/avatar-robot.png" :robot-data="deal.account.uuid"/>
           <span>{{ deal.account.username }}</span>
         </div>
-        <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('DD MMMM YYYY') }}</div>
+        <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}</div>
       </div>
       <div class="m-deal__info">
         <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.amount, 0) }} Shares</div>
+        <div class="m-deal__info-purchase-percent">
+          13% of the circulation
+        </div>
       </div>
     </template>
+    <!-- rename percent -->
     <template v-else-if="type === 'shareholder'">
       <div class="m-deal__name m-deal__name-shareholder">
+        <a-avatar size="32px" class="m-deal__type m-deal__avatar-shareholder" photo-src="/img/avatar.png"  :robot-data="deal.account.uuid"/>
         <div class="m-deal__name-content">
           <div class="m-deal__name-title">
-            <a-avatar size="24px" class="m-deal__type m-deal__avatar-shareholder" photo-src="/img/avatar.png"  :robot-data="deal.account.uuid"/><span>{{
-              deal.account.username
-            }}</span>
+            <span>
+              {{ deal.account.username }}
+            </span>
           </div>
           <div class="m-deal__info-purchase">${{ $app.filters.rounded(deal.total_dividends, 2) }} earned</div>
         </div>
@@ -144,7 +149,6 @@
         <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.total_payments, 0) }} Shares</div>
         <div class="m-deal__info-purchase">{{ $app.filters.rounded((deal.total_payments / fundTotalUsd * 100), 6) }}%</div>
       </div>
-      <!--      </div>-->
     </template>
   </div>
 </template>

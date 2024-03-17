@@ -54,10 +54,10 @@
 
   &__chart {
     position: relative;
-    height: torem(311);
+    height: torem(194);
 
     @include breakpoint($break-desktop-1024) {
-      height: torem(400);
+      height: torem(194);
     }
   }
 

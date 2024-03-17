@@ -1,6 +1,10 @@
 <template>
   <div class="w-fund page-max-width--small">
     <w-chart-fund title="Shareholder Growth" is-main is-total-assets />
+    <w-chart-shareholders
+      title="Investment Strategies"
+      :strategies="strategies"
+    />
     <!-- <w-shareholders-stats /> -->
 
     <!-- new component diffirent chart -->
@@ -19,6 +23,8 @@ import WTopShareholders from '~/src/widgets/w-top-shareholders/w-top-shareholder
 import WPurchases from '~/src/widgets/w-purchases/w-purchases.vue'
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
+import WChartShareholders from '~/src/widgets/w-chart-shareholders/w-chart-shareholders.vue'
+import { Icon } from '~/src/shared/constants/icons'
 
 // Onboarding
 const { width } = useWindowSize()
@@ -28,6 +34,21 @@ const { $app } = useNuxtApp()
 const lastPayment = computed(() => {
   return $app.store.user.lastPayment
 })
+
+const strategies = [
+  {
+    name: 'Tether',
+    percent: 67,
+    icon: Icon.ColorfulBitcoin,
+    color: 'tomato'
+  },
+  {
+    name: 'Bitcoin',
+    percent: 33,
+    icon: Icon.ColorfulBitcoin,
+    color: 'lightblue'
+  },
+]
 
 const steps = computed(() => {
   return [

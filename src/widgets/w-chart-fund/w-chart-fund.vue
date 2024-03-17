@@ -17,34 +17,52 @@
         </div>
       </div>
     </template>
+
     <div id="fund-chart" :class="['w-chart-fund', { 'w-chart-fund--is-main': isMain }]">
-      <div v-if="title" class="w-chart-fund__caption">{{ title }}</div>
+      <div v-if="title" class="w-chart-fund__caption">
+        <a-live class='w-chart-fund__caption-live' />
+        <span class="w-chart-fund__caption-text">
+          {{ title }}
+        </span>
+        <a-icon
+          width='18'
+          height='18'
+          class='w-chart-fund__caption-icon'
+          :name='Icon.MonoInfo'
+        />
+      </div>
+
       <div class="w-chart-fund__head">
         <div class="w-chart-fund__titles">
           <div class="w-chart-fund__titles-title" v-if="totalAmountUsdComp">
             ${{$app.filters.rounded(totalAmountUsdComp, 0)}}
           </div>
-          <div class="w-chart-fund__titles-subtitle">
+
+          <!-- <div class="w-chart-fund__titles-subtitle">
             {{ $app.filters.rounded(totalAmountUsdComp, 0) }} Shares Issued
-          </div>
+          </div> -->
         </div>
+
         <div :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
-            <div
-              :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': difference < 0 }]"
-            >
-              {{ amountUsdDifference > 0 ? '+' : '' }} ${{ $app.filters.rounded(amountUsdDifference, 2) }} ({{
-                $app.filters.rounded(difference, 2)
-              }}%)
-            </div>
-          <div class="w-chart-fund__info-text">
-            {{ currentTab.title === 'ALL Live' ? 'Since launch in Jan 2023' : currentTab.info }}
+          <div
+            :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': difference < 0 }]"
+          >
+            {{ amountUsdDifference > 0 ? '+' : '' }} ${{ $app.filters.rounded(amountUsdDifference, 2) }} ({{
+              $app.filters.rounded(difference, 2)
+            }}%)
           </div>
+
+          <!-- <div class="w-chart-fund__info-text">
+            {{ currentTab.title === 'ALL Live' ? 'Since launch in Jan 2023' : currentTab.info }}
+          </div> -->
         </div>
       </div>
+
       <div :class="['w-chart-fund__chart', { 'w-chart-fund__chart--no-indent': isTopTabs }]">
         <canvas :id="CHART_ID"></canvas>
       </div>
-      <template v-if="!isTopTabs">
+
+      <!-- <template v-if="!isTopTabs">
         <div class="w-chart-fund__tabs">
           <div
             v-for="(tab, idx) in tabs"
@@ -60,7 +78,7 @@
             {{ tab.title }}
           </div>
         </div>
-      </template>
+      </template> -->
     </div>
   </div>
 </template>
@@ -68,6 +86,9 @@
 <script setup lang="ts">
 import Chart from 'chart.js/auto'
 import {useNuxtApp} from '#app'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import { Icon } from '~/src/shared/constants/icons'
 
 const MOUNTH = {
   0: 'Jan',
@@ -198,8 +219,8 @@ const config = {
     datasets: [
       {
         data: [],
-        backgroundColor: 'rgba(49, 237, 33, 0.3)',
-        borderColor: '#12DF00',
+        backgroundColor: 'rgba(77, 148, 255, 0.3)',
+        borderColor: '#4D94FF',
         tension: 0.4,
         fill: true,
       },
