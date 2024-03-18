@@ -68,21 +68,21 @@
                 <div class="e-invest__invest--card e-invest__invest--card-front e-invest__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
                   <NuxtImg src="/img/icons/colorful/usdt.svg" class="e-invest__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <p class="e-invest__invest--card-title e-invest--text-normal relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> $3,457,938.00 </p>
+                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                   <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
                   <div class="relative shrink-0 my-2 h-px bg-white bg-opacity-10"></div>
                   <div class="flex relative gap-0">
                     <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
-                      <p class="e-invest__invest--card-stats-value font-bold text-white">$0.95</p>
+                      <p class="e-invest__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 1) }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">42%</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">$28.76</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">$ {{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
                     </div>
                   </div>
                   <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
@@ -103,21 +103,21 @@
                   <NuxtImg src="/img/icons/colorful/bitcoin.svg" class="e-invest__invest--card-icon w-6 aspect-square cursor-pointer" alt="BTC logo" loading="lazy" />
 
                   <p class="e-invest__invest--card-title e-invest--text-normal relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> $5,000.00 </p>
+                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                   <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount </p>
                   <div class="relative shrink-0 my-2 h-px bg-white bg-opacity-10"></div>
                   <div class="flex relative gap-0">
                     <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
-                      <p class="e-invest__invest--card-stats-value font-bold text-white">$1.90</p>
+                      <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">100%+</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">$57.52</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
                     </div>
                   </div>
                   <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
@@ -305,6 +305,8 @@
   const route = useRoute()
   const { width } = useWindowSize()
 
+  
+
   // Invest Step
 
   const inputMaxWidth = ref(50);
@@ -393,6 +395,9 @@
       icon: "/img/icons/colorful/usdt.svg",
       background: "/img/usdtbg2.png",
       stars: 5,
+      totalProfit: "42%",
+      apy: 14,
+      apy3: 42
 
     },
     {
@@ -400,9 +405,43 @@
       icon: "/img/icons/colorful/bitcoin.svg",
       background: "/img/bitcoinbg.png",
       stars: 4.5,
+      totalProfit: "100%+",
+      apy: 33.333333333333333333333333333333,
+      apy3: 100
 
     }, ]);
   const selectedCurrency = ref(currencies.value[0]);
+
+  const apyValue = ref(selectedCurrency.value.apy);
+  const dayliDivs = computed(() => {
+    return guaranteedPayout.value / 365
+  })
+
+  const dayliDivsDisplay = computed(() => {
+    const tempVal = guaranteedPayout.value / 365;
+    let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
+
+    if(tempVal.toString().split(".")[1]?.length > 2) {
+      resValue = resValue + "+";
+    }
+    return resValue;
+  })
+
+  const monthlyDivsDisplay = computed(() => {
+    const tempVal = guaranteedPayout.value / 12;
+    let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
+
+    if(tempVal.toString().split(".")[1]?.length > 2) {
+      resValue = resValue + "+";
+    }
+    return resValue;
+  })
+
+  const guaranteedPayout = computed(() => {
+    return investmentAmount.value * (selectedCurrency.value.apy / 100)
+  })
+
+
   const showDropdown = ref(false);
 
   const toggleCurrencyDropdown = () => {
@@ -421,6 +460,8 @@
 
   const handleContinue = () => {
     closeModal();
+    $app.store.purchase.amount = investmentAmount;
+    $app.store.purchase.type = selectedCurrency.value.value;
     router.push('/personal/purchase');
   }
 
