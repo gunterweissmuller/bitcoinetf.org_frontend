@@ -5,10 +5,7 @@
         class="w-aside__button-buy mt-2"
         text="Buy Bitcoin ETF Shares2"
         @click="() => {
-            
-            $app.store.user.setInvestModalReinvest({reinvest: false});
             $app.store.user.setIsInvestModalShow({show: true});
-            console.log('test',  $app.store.user.isInvestModalShow)
         }"
     />
 
@@ -19,7 +16,6 @@
         text="Buy Bitcoin ETF Shares reinvest"
         @click="() => {
             $app.store.user.setInvestModalReinvest({reinvest: true});
-            $app.store.user.setIsInvestModalShow({show: true});
         }"
     />
 </template>
