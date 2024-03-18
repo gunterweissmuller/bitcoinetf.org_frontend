@@ -1,122 +1,87 @@
 <template>
-  <div class="w-buy-shares-payment-new w-buy-shares-payment-new--landing">
-    <div class="w-buy-shares-payment-new__wrap">
-      <div class="w-buy-shares-payment-new__tron" v-if="!isFiat">
-        <div class="w-buy-shares-payment-new__tron-wrapper">
-          
-          <div class="w-buy-shares-payment-new__accordion-qr">
-            <qrcode-vue :value="$app.store.user.info?.account?.tron_wallet" level="L" render-as="svg" foreground="#000" background="#fff"/>
-          </div>
-          <div class="w-buy-shares-payment-new__tron-subtitle">
-            Your order will automatically close in:
-          </div>
-          <div class="w-buy-shares-payment-new__tron-timer">
-            <vue-countdown :transform="transformSlotProps" @end="onCountdownEnd" :time="30 * 60 * 1000" v-slot="{ days, hours, minutes, seconds }">
-              {{ minutes }} : {{ seconds }}
-            </vue-countdown>
-          </div>
-        </div>
 
-        <div class="w-buy-shares-payment-new__tron-discount">
-          {{ $app.store.user.statistic?.trc_bonus?.percent }}% Discount Applied!
-        </div>
-
-        <a-input
-          bgColor="tetherspecial"
-          class="w-buy-shares-payment-new__accordion-stable-method"
-          label="Deposit method"
-          model-value="Tether USDT (Tron, TRC-20)"
-          :icon="Icon.ColorfulTron"
-          position-icon="left"
-          disabled
-          @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
-        />
-
-        <div class="w-buy-shares-payment-new__double-input">
-          <div class="w-buy-shares-payment-new__accordion-stable-address">
-            <a-input
-              bgColor="tetherspecial"
-              label="Deposit address on Tron chain:"
-              :model-value="$app.store.user?.info?.account.tron_wallet"
-              disabled
-              :icon="Icon.ColorfulCopy"
-              position-icon="right"
-              :text-icon="addressCopied"
-              text-icon-text="Copied!"
-              @on-input-click="copyToClipboard(true)"
-            />
-          </div>
-          <div class="w-buy-shares-payment-new__accordion-stable-amount">
-            <a-input
-              bgColor="tetherspecial"
-              label="Amount"
-              :model-value="`${$app.filters.rounded(calcValue)} USDT`"
-              disabled
-              :text-icon="amountCopied"
-              text-icon-text="Copied!"
-              :icon="Icon.ColorfulCopy"
-              position-icon="right"
-              @on-input-click="copyToClipboard(false)"
-            />
-          </div>
-        </div>
-        
-        <div class="w-buy-shares-payment-new__tron-info">
-          Deposit your funds and stay on this screen. Your Bitcoin ETF shares will arrive shortly.
-        </div>
-        <!-- <a-button :text="tronButtonCheckPayment"  isFullWidth @click="startTronTimer" :disabled="timerStarted"/> -->
-      </div>
-      <template v-if="isFiat">
-        <div class="w-buy-shares-payment-new__legacy" v-if="!merchant001Link && country === 'RU' ">
-          <div class="w-buy-shares-payment-new__accordion-title">Due to international and Russian regulations, there's a <span>2.5% foreign exchange commission and 2.5% card fee.</span> <nuxt-link to="/tetherspecial">Use USDT</nuxt-link> instead, and get a
-            {{ $app.store.user.statistic?.trc_bonus?.percent }}% bonus.
-          </div>
-          <a-icon class="a-button__loading a-button__loading-methods a-button__icon" :name="Icon.MonoNavigationLoader" v-if="AVAILABLE_VARIANTS.length < 1"/>
-
-          <div :class="['w-buy-shares-payment-new__variant-bank', `w-buy-shares-payment-new__variant-bank--${country}`]" v-else>
-            <div
-              v-for="item in AVAILABLE_VARIANTS"
-              :class="[
-              'w-buy-shares-payment-new__variant-bank__item',
-              { 'w-buy-shares-payment-new__variant-bank__item--active': selectedLegacyMethod === item.value },
-            ]"
-              @click="selectVariantBank(item.value)"
-            >
-              <a-icon class="w-buy-shares-payment-new__variant-bank__item-icon" :name="item.icon" />
-              <div class="w-buy-shares-payment-new__variant-bank__item-text">{{ item.text }}</div>
-            </div>
-          </div>
-          <div class="w-buy-shares-payment-new__legacy-agreeBlock">
-            <a-checkbox
-              v-model="exchangeCommissionAgreed"
-              id="exchange_Commission_Agreed"
-              :label="`<p>I agree to a <span>2.5% foreign exchange commission and 2.5% bank card fee</span> as per international and Russian regulations. I also understand that by not using USDT, <span>I forgo the special ${$app.store.user.statistic?.trc_bonus?.percent}% bonus exclusive to USDT payments.</span></p>`"
-              @label-click="exchangeCommissionAgreedClick"
-              single
-            />
-            <a-checkbox
-              v-model="p2pLimitAgreed"
-              id="p2p_Limit_Agreed"
-              label="<p>I understand the <span>$1,000 limit</span> per transaction for legacy payment methods and agree to the terms and conditions of the third-party P2P service processing the payment.</p>"
-              @label-click="p2pLimitAgreedClick"
-              single
-            />
-          </div>
-          <a-button text="Continue" class="w-buy-shares-payment-new__legacy-button" is-full-width @click="createTransation" :loading="createButtonLoading" :disabled="!createButtonAccess"/>
-        </div>
-        <div class="w-buy-shares-payment-new__merchant" v-if="merchant001Link">
-          <img src="/img/waitmerchant.png" alt="">
-          <span>Please wait</span>
-          <span>We will redirect you automatically to the payment gateway.</span>
-          <nuxt-link :to="merchant001Link" target="_blank">
-            <a-button text="Proceed to pay" is-full-width/>
-          </nuxt-link>
-        </div>
-      </template>
-
+  <div class="f-registration__purchase--process flex flex-col">
+    <div class="w-buy-shares-payment-short-purchase__accordion-qr mt-4">
+      <qrcode-vue :value="$app.store.user.info?.account?.tron_wallet" level="L" render-as="svg" foreground="#000" background="#fff"/>
     </div>
+    <!-- <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
+      <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" loading="lazy" />
+    </div> -->
+
+    <a-input
+      class="w-buy-shares-payment__accordion-stable-method f-registration__purchase--process-input  mt-6"
+      label="Deposit method"
+      model-value="Tether USDT (Tron, TRC-20)"
+      :icon="Icon.ColorfulTron"
+      position-icon="left"
+      disabled
+      @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
+    />
+
+    <!-- <article class="f-registration__purchase--process-input flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg">
+      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" loading="lazy" />
+      <div class="flex flex-col flex-1 pr-9">
+        <p class="f-registration__purchase--process-input-title f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
+        <p class="f-registration__purchase--process-input-text f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
+      </div>
+    </article> -->
+
+    
+
+    <a-input
+      class="flex gap-4 justify-between mt-6 rounded-lg"
+      label="Deposit address on Tron chain:"
+      :model-value="$app.store.user?.info?.account.tron_wallet"
+      :disabled="true"
+      :text-icon="addressCopied"
+      text-icon-text="Copied!"
+      :icon="Icon.ColorfulCopy"
+      position-icon="right"
+      @on-input-click="() => copyToClipboardAddress()"
+      isBoldInput
+      isTextInputSmall
+    />
+    <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
+      <div class="flex flex-col flex-1 pr-2.5">
+        <p class="text-xs font-bold text-gray-400">Deposit address on Tron chain:</p>
+        <p class="text-xs font-medium text-zinc-800">TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi</p>
+      </div>
+      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
+    </article> -->
+
+    <a-input
+      class="flex gap-4 justify-between mt-6 rounded-lg"
+      label="Amount"
+      :model-value="$app.filters.rounded(calcValue)"
+      :disabled="true"
+      :text-icon="amountCopied"
+      text-icon-text="Copied!"
+      :icon="Icon.ColorfulCopy"
+      position-icon="right"
+      @on-input-click="() => copyToClipboardAmount()"
+      isBoldInput
+    />
+    <!-- <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
+      <div class="flex flex-col flex-1">
+        <p class="text-xs font-bold text-gray-400">Amount</p>
+        <p class="text-base text-zinc-800">1,002.93 USDT</p>
+      </div>
+      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
+    </article> -->
+    <button @click="currentPayStep = StepsPay.Loading" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
+      I Have Paid
+    </button>
+    <button @click="() => router.push('/personal/analytics')" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
+      Cancel Order
+    </button>
+    <footer class="text-center py-6">
+      <nuxt-link to="/personal/support" target="_blank">
+        <span  class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</span>
+      </nuxt-link>
+
+    </footer>
   </div>
-  <e-buy-shares-success-modal :values="infoPayment" v-model="isOpenSuccessModal" />
+
 </template>
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
@@ -151,8 +116,8 @@ const route = useRoute()
 const { $app } = useNuxtApp()
 
 const onCountdownEnd = () => {
-  window.history.pushState({}, document.title, window.location.pathname);
-  location.reload();
+  // window.history.pushState({}, document.title, window.location.pathname);
+  // location.reload();
 }
 
 const addressCopied = ref(false)
@@ -448,4 +413,4 @@ const transformSlotProps = (props) => {
 }
 
 </script>
-<style src="./w-buy-shares-payment-short-new.scss" lang="scss" />
+<style src="./w-buy-shares-payment-short-purchase.scss" lang="scss" />

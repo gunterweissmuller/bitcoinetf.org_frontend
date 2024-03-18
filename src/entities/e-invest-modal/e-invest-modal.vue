@@ -462,6 +462,7 @@
     closeModal();
     $app.store.purchase.amount = investmentAmount;
     $app.store.purchase.type = selectedCurrency.value.value;
+    $app.store.purchase.totalPayout = (investmentAmount.value + guaranteedPayout.value * 3).toFixed(2);
     router.push('/personal/purchase');
   }
 

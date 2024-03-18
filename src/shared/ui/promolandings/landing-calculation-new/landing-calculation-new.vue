@@ -132,9 +132,9 @@
         </div>
       </template>
 
-      <div class="w-buy-shares-payment-short-new"></div>
+      <div class="w-buy-shares-payment-short-tether"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-tether v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -171,7 +171,7 @@
 import {useNuxtApp, useRouter, useRoute} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
-import WBuySharesPaymentShortNew from "~/src/widgets/w-buy-shares-payment-short-new/w-buy-shares-payment-short-new.vue";
+import WBuySharesPaymentShortTether from "~/src/widgets/w-buy-shares-payment-short-tether/w-buy-shares-payment-short-tether.vue";
 import {Icon} from "~/src/shared/constants/icons";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 import VueWriter from 'vue-writer'
@@ -489,7 +489,7 @@ const investBuy = async () => {
 
 const scrollToPurchase = () => {
   // const element = document.querySelector(".w-buy-shares-payment");
-  const element = document.querySelector(".w-buy-shares-payment-short-new");
+  const element = document.querySelector(".w-buy-shares-payment-short-tether");
   let headerOffset
   if (window.innerWidth < 768) {
     headerOffset = 145;

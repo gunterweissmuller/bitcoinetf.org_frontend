@@ -36,14 +36,14 @@
                 <div class="f-registration__purchase--confirm-wrapper">
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Amount of Shares You’re Buying</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal"> {{  '10,000'}} </p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal"> {{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Total Investment Amount</p>
                     <div class="flex gap-2 justify-between">
-                      <p class="f-registration__purchase--step-text-sale f-registration--text-normal"> US${{ '10,000'}} </p>
-                      <p class="f-registration__purchase--step-text f-registration--text-normal flex-auto">US${{ '10,500'}} <span class="f-registration__purchase--step-title">(-$500 off)</span></p>
+                      <p class="f-registration__purchase--step-text-sale f-registration--text-normal"> US${{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
+                      <p class="f-registration__purchase--step-text f-registration--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amount+discountAmount, 2) }} <span class="f-registration__purchase--step-title">(-${{ $app.filters.rounded(discountAmount, 2)  }} off)</span></p>
                     </div>
                   </div>
 
@@ -55,11 +55,9 @@
                     />
                   </div>
 
-
-
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Investment Currency</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">Tether (USDT)</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal"> {{ $app.store.purchase.type === 'USDT' ? 'Tether (USDT)' : 'Bitcoin (BTC)'}} </p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
@@ -104,7 +102,7 @@
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Total Guaranteed Payout</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$14,700</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">US${{ $app.store.purchase.totalPayout }}</p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item-btn">
@@ -153,7 +151,7 @@
                 <div class="f-registration__purchase-line"></div>
                 <template v-if="currentPayStep === StepsPay.PayWith">
                   <div v-for="pay in payWith">
-                    <div @click="currentPayStep = StepsPay.Process" class="f-registration__purchase-pay-item flex flex-col justify-center cursor-pointer">
+                    <div @click="pay.onClick ? pay.onClick() : () => currentPayStep = StepsPay.Process" class="f-registration__purchase-pay-item flex flex-col justify-center cursor-pointer">
                       <div class="flex flex-col justify-center p-5 w-full ">
                         <div class="flex gap-1">
                           <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" loading="lazy"/>
@@ -166,71 +164,7 @@
                 </template>
 
                 <template v-if="currentPayStep === StepsPay.Process">
-                  <div class="f-registration__purchase--process flex flex-col">
-                    <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
-                      <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" loading="lazy" />
-                    </div>
-                    <article class="f-registration__purchase--process-input flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg">
-                      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" loading="lazy" />
-                      <div class="flex flex-col flex-1 pr-9">
-                        <p class="f-registration__purchase--process-input-title f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
-                        <p class="f-registration__purchase--process-input-text f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
-                      </div>
-                    </article>
-
-                    <a-input
-                      class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100 "
-                      label="Deposit address on Tron chain:"
-                      :model-value="'TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi'"
-                      :disabled="true"
-                      :text-icon="addressCopied"
-                      text-icon-text="Copied!"
-                      :icon="Icon.ColorfulCopy"
-                      position-icon="right"
-                      @on-input-click="() => copyToClipboardAddress()"
-                      isBoldInput
-                      isTextInputSmall
-                    />
-                    <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
-                      <div class="flex flex-col flex-1 pr-2.5">
-                        <p class="text-xs font-bold text-gray-400">Deposit address on Tron chain:</p>
-                        <p class="text-xs font-medium text-zinc-800">TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi</p>
-                      </div>
-                      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-                    </article> -->
-
-                    <a-input
-                      class="flex gap-4 justify-between mt-6 rounded-lg bg-neutral-100"
-                      label="Amount"
-                      :model-value="'1,002.93 USDT'"
-                      :disabled="true"
-                      :text-icon="amountCopied"
-                      text-icon-text="Copied!"
-                      :icon="Icon.ColorfulCopy"
-                      position-icon="right"
-                      @on-input-click="() => copyToClipboardAmount()"
-                      isBoldInput
-                    />
-                    <!-- <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
-                      <div class="flex flex-col flex-1">
-                        <p class="text-xs font-bold text-gray-400">Amount</p>
-                        <p class="text-base text-zinc-800">1,002.93 USDT</p>
-                      </div>
-                      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-                    </article> -->
-                    <button @click="currentPayStep = StepsPay.Loading" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
-                      I Have Paid
-                    </button>
-                    <button @click="currentPayStep = StepsPay.PayWith" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
-                      Cancel Order
-                    </button>
-                    <footer class="text-center py-6">
-                      <nuxt-link to="/personal/support" target="_blank">
-                        <span  class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</span>
-                      </nuxt-link>
-
-                    </footer>
-                  </div>
+                  <w-buy-shares-payment-short-purchase :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="false"/>
                 </template>
 
                 <template v-if="currentPayStep === StepsPay.Loading">
@@ -277,6 +211,7 @@ import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { useClipboard } from '@vueuse/core'
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
 import eSuccessModal from '~/src/entities/e-success-modal/e-success-modal.vue'
+import WBuySharesPaymentShortPurchase from "~/src/widgets/w-buy-shares-payment-short-purchase/w-buy-shares-payment-short-purchase.vue"; 
 
 const emit = defineEmits([ 'update'])
 
@@ -296,9 +231,12 @@ const enum StepsPay {
 
 const confirmResponse = ref(null)
 
-const currentSignup = ref(SignupMethods.Email);
 const currentStep = ref(Steps.Purchase);
 const backendError = ref('')
+
+// confirm
+
+const discountAmount = ref(($app.store.purchase.amount/100)*$app.store.user.statistic?.trc_bonus?.percent); //5
 
 const isOpenModal = ref(false)
 const accordionRef = ref(null)
@@ -319,6 +257,7 @@ watch(
 )
 
 // Terms step
+
 const registrationAgreedUS = ref(false)
 const registrationAgreedTerms = ref(false)
 
@@ -326,204 +265,24 @@ const termsContinueDisabled = computed<boolean>(() => {
   return !registrationAgreedUS.value || !registrationAgreedTerms.value
 })
 
-const termsContinue = () => {
-  currentStep.value = Steps.Choice
+
+const openTrc = async () => {
+  // await $app.api.eth.auth.getUser().then((resp) => {
+  //   $app.store.user.info = resp?.data
+  // });
+
+  // await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+  //   $app.store.user.blockchainUserWallet = resp?.data.uid
+  // });
+
+  currentPayStep.value = StepsPay.Process;
 }
-
-// Email Field
-const firstName = ref('')
-const lastName = ref('')
-const email = ref('')
-const emailErrorText = ref('')
-const isEmailValid = ref(false)
-
-const phone = ref('');
-const phoneErrorText = ref('');
-const isPhoneValid = ref(false);
-
-function emailFieldBlurHandler() {
-  if (isEmailValid.value) {
-      emailErrorText.value = ''
-      return
-  }
-
-  if (email.value) {
-      emailErrorText.value = 'Invalid email address'
-      return
-  }
-
-  emailErrorText.value = 'Required'
-}
-
-function phoneFieldBlurHandler() {
-  if (isPhoneValid.value) {
-      phoneErrorText.value = ''
-      return
-  }
-
-  if (phone.value) {
-      phoneErrorText.value = 'Invalid phone'
-      return
-  }
-
-  phoneErrorText.value = 'Required'
-}
-
-// Choice step
-
-const choiceToEmail = () => {
-  currentStep.value = Steps.Email;
-  currentSignup.value = SignupMethods.Email;
-}
-
-const isMetamaskSupported = ref(false);
-const address = ref("");
-const metamaskError = ref("");
-const computedAddress = computed(() => address.value.substring(0, 8) + '...');
-
-onMounted(() => {
-  isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
-
-  (window as any).ethereum.on("chainChanged", (chainId: string) => {
-      if (chainId !== "0x1") {
-          metamaskError.value = "This network is not supported. Please change the network to Ethereum."
-      } else if (chainId === "0x1") {
-          metamaskError.value = "";
-      }
-  });
-})
-
-const handleDisconnect = () => {
-  (window as any).ethereum.request({
-      method: "wallet_revokePermissions",
-      params: [
-          {
-              eth_accounts: {},
-          },
-      ],
-  });
-  address.value = "";
-}
-
-const isMetamaskConnecting = ref(false);
-
-const handleMetamaskConnect = async () => {
-  // if metamask button is already clicked
-  if(isMetamaskConnecting.value) return;
-  isMetamaskConnecting.value = true;
-
-  //if metamask is not installed
-  if (!isMetamaskSupported.value) {
-      // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
-      window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
-      isMetamaskConnecting.value = false;
-      return;
-  }
-
-  currentSignup.value = SignupMethods.Metamask;
-
-  try {
-    const accounts: string[] = await (window as any).ethereum.request({ method: "eth_requestAccounts" });
-    const chainId: string = await (window as any).ethereum.request({"method": "eth_chainId","params": []});
-    const responseSwitchChain: any = await(window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] });
-    const responseBackend: any = await axios.get("https://api.stage.techetf.org/v1/auth/provider/metamask/message");
-
-    metamaskSignatureMessage.value = responseBackend.data.message;
-    address.value = accounts[0];
-    const provider = new BrowserProvider((window as any).ethereum);
-    const signer = await provider.getSigner();
-    metamaskWalletAddress.value = signer.address;
-
-    const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
-
-    console.log("SIGNED MSG", signedMsg);
-    metamaskSignature.value = signedMsg;
-    isMetamaskConnecting.value = false;
-    currentStep.value = Steps.Email;
-
-  } catch (e) {
-    console.error(e);
-    isMetamaskConnecting.value = false;
-  }
-
-}
-
-const googleData : any = ref();
-const googleUrl = ref("");
-
-
-onMounted(() => {
-  axios.get("https://api.stage.techetf.org/v1/auth/provider/google-auth/redirect-url").then((url: any) => {
-    googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
-  });
-
-  if($app.store.authGoogle.response?.email) {
-    currentStep.value = Steps.Email;
-    currentSignup.value = SignupMethods.Google;
-    firstName.value = $app.store.authGoogle.response.first_name;
-    lastName.value = $app.store.authGoogle.response.last_name;
-    email.value =$app.store.authGoogle.response.email;
-  }
-});
-
-const handleGoogleDisconnect = () => {
-    googleData.value = null;
-
-    googleLogout();
-}
-
-const handleGoogleConnect = async () => {
-    currentSignup.value = SignupMethods.Google;
-    window.location.href = googleUrl.value;
-}
-
-const choices = ref([
-  {
-    title: 'Sign up with Email',
-    icon: "/img/icons/mono/mail-light.svg",
-    hadnleClick: choiceToEmail,
-  },
-  {
-    title: 'Sign up with Metamask',
-    icon: "/img/icons/colorful/metamask.svg",
-    hadnleClick: handleMetamaskConnect,
-  },
-  {
-    title: 'Sign up with Google',
-    icon: "/img/icons/colorful/google.svg",
-    hadnleClick: handleGoogleConnect,
-  },
-  {
-    title: 'Sign up with Apple',
-    icon: "/img/icons/mono/apple.svg",
-    hadnleClick: () => {},
-  },
-  {
-    title: 'Sign up with Facebook',
-    icon: "/img/icons/colorful/facebook-circle.svg",
-    hadnleClick: () => {},
-  },
-  {
-    title: 'Sign up with WalletConnect',
-    icon: "/img/icons/colorful/walletConnect.svg",
-    hadnleClick: () => {},
-  },
-  {
-    title: 'Sign up with WhatsApp',
-    icon: "/img/icons/colorful/whatsApp.svg",
-    hadnleClick: handleGoogleConnect,
-  },
-  {
-    title: 'Sign up with Telegram',
-    icon: "/img/icons/colorful/telegram2.svg",
-    hadnleClick: handleGoogleConnect,
-  }
-]);
 
 const payWith = ref([
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
-    title: "Pay with USDT (TRC20)"
+    title: "Pay with USDT (TRC20)",
+    onClick: openTrc,
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -549,107 +308,8 @@ const payWith = ref([
 ]);
 
 // Ref code field
-const emailCode = ref('')
-const pincodeErrorText = ref('')
+
 const refCode = ref('')
-const metamaskSignatureMessage = ref('')
-const metamaskSignature = ref('')
-const metamaskWalletAddress = ref('')
-
-const isSubmitEmailForm = ref(false);
-
-const onSubmitEmailForm = async () => {
-
-  if(isSubmitEmailForm.value) return;
-  isSubmitEmailForm.value = true;
-
-  backendError.value = ''
-  const initPayload = {
-    method: currentSignup.value,
-    first_name: $app.filters.trimSpaceIntoString(firstName.value),
-    last_name: $app.filters.trimSpaceIntoString(lastName.value),
-    email: $app.filters.trimSpaceIntoString(email.value)
-  }
-
-  if(currentSignup.value === SignupMethods.Metamask) {
-    initPayload.message = metamaskSignatureMessage.value
-    initPayload.signature = metamaskSignature.value
-    initPayload.wallet_address = metamaskWalletAddress.value
-  }
-
-  if (refCode.value ) {
-      initPayload.ref_code = refCode.value
-  }
-
-  console.log(currentSignup.value, initPayload.ref_code);
-
-  if (currentSignup.value === SignupMethods.Google) {
-
-    if ($app.store.auth.refCode !== "") {
-        initPayload.ref_code = $app.store.auth.refCode
-        $app.store.auth.setRefCode("");
-    }
-
-    $app.api.eth.auth
-      .initGoogle(initPayload)
-      .then((tokens: any) => {
-        $app.store.auth.setTokens(tokens.data)
-        $app.store.authGoogle.setResponse({}, SignupMethods.Google);
-        confirmResponse.value = tokens.data
-        isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Bonus
-      })
-      .then(async () => {
-            await $app.api.eth.auth.getUser().then((resp) => {
-                $app.store.user.info = resp?.data
-            })
-        })
-      .catch((e) => {
-        console.error(e);
-        isSubmitEmailForm.value = false;
-          if (e?.errors?.error?.message) {
-              backendError.value = e.errors.error.message
-          } else {
-              backendError.value = 'Something went wrong'
-          }
-      })
-
-    return;
-  }
-
-  if (currentSignup.value === SignupMethods.Metamask) {
-    await $app.api.eth.auth
-      .initMetamask(initPayload)
-      .then(() => {
-        isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Code;
-      })
-      .catch((e) => {
-        isSubmitEmailForm.value = false;
-        if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
-        } else {
-          backendError.value = 'Something went wrong'
-        }
-      })
-  } else {
-
-    await $app.api.eth.auth
-      .init(initPayload)
-      .then(() => {
-        isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Code
-      })
-      .catch((e) => {
-        isSubmitEmailForm.value = false;
-        if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
-        } else {
-          backendError.value = 'Something went wrong'
-        }
-      })
-  }
-}
 
 const timer = ref<NodeJS.Timer | null>(null)
 const timerStarted = ref<boolean>(false)
@@ -669,179 +329,6 @@ const startTimer = () => {
   }, 1000 / 25)
 }
 
-const emailButtonDisabled = computed<boolean>(() => {
-  return !isEmailValid.value || !firstName.value || !lastName.value || !Boolean(token.value) //!registrationAgreed.value
-})
-
-// Code Step
-
-const isCodeCorrect = ref(false)
-
-const pincodeTrigger = ref(false)
-const onCodeInput = async (codePayload) => {
-  backendError.value = ''
-
-  if (codePayload.isCompleted) {
-      pincodeTrigger.value = true
-      await $app.api.eth.auth
-          .check({ email: $app.filters.trimSpaceIntoString(email.value), code: $app.filters.trimSpaceIntoString(emailCode.value) })
-          .then((checkResponse) => {
-              // currentStep.value = Steps.Password
-              isCodeCorrect.value = true
-          })
-          .catch((e) => {
-              pincodeTrigger.value = false
-
-              if (e?.errors?.error?.message) {
-                  backendError.value = e.errors.error.message
-              } else {
-                  backendError.value = 'Something went wrong'
-              }
-          })
-  }
-}
-
-const isCodeContinueProcess = ref(false);
-
-const codeContinue = async () => {
-
-  if(isCodeContinueProcess.value) return;
-  isCodeContinueProcess.value = true;
-
-  if(currentSignup.value === SignupMethods.Metamask) {
-    backendError.value = ''
-      await $app.api.eth.auth.
-        confirmMetamask({
-        email: $app.filters.trimSpaceIntoString(email.value),
-        code: $app.filters.trimSpaceIntoString(emailCode.value),
-        fast: true,
-      })
-        .then((jwtResponse: any) => {
-          // TODO falling user/me
-          $app.store.auth.setTokens(jwtResponse.data)
-          confirmResponse.value = jwtResponse.data
-          currentStep.value = Steps.Bonus
-        })
-        .then(async () => {
-          await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data
-          })
-        })
-        .catch((e) => {
-          isCodeContinueProcess.value = false;
-          if (e?.errors?.error?.message) {
-            backendError.value = e.errors.error.message
-          } else {
-            backendError.value = 'Something went wrong'
-          }
-        })
-  } else {
-    currentStep.value = Steps.Password
-  }
-  isCodeContinueProcess.value = false;
-}
-
-const resendCodeClick = async () => {
-  if (timerStarted.value) {
-      return
-  }
-
-  backendError.value = ''
-
-  startTimer()
-
-  await $app.api.eth.auth
-      .resend({ email: email.value })
-      .then(() => {
-          // currentStep.value = Steps.Password
-      })
-      .catch((e) => {
-          if (e?.errors?.error?.message) {
-              backendError.value = e.errors.error.message
-          } else {
-              backendError.value = 'Something went wrong'
-          }
-      })
-}
-
-// Password Step
-
-
-const password = ref('')
-const passwordErrorText = ref('')
-const isPasswordValid = ref(false)
-const isPasswordType = ref(true)
-
-const passwordIconClickHandler = () => {
-  isPasswordType.value = !isPasswordType.value;
-}
-
-
-function passwordFieldBlurHandler() {
-  if (isPasswordValid.value) {
-      passwordErrorText.value = ''
-      return
-  }
-
-  if (password.value) {
-      passwordErrorText.value = 'Must include a mix of upper case, lower case, numeric and special character.'
-      return
-  }
-
-  passwordErrorText.value = 'Required'
-}
-
-const isSubmitPasswordForm = ref(false);
-
-const onSubmitPasswordForm = async () => {
-
-  if(isSubmitPasswordForm.value) return;
-  isSubmitPasswordForm.value = true;
-
-  backendError.value = ''
-  await $app.api.eth.auth
-      .confirm({
-          email: $app.filters.trimSpaceIntoString(email.value),
-          code: $app.filters.trimSpaceIntoString(emailCode.value),
-          password: $app.filters.trimSpaceIntoString(password.value),
-      })
-      .then((jwtResponse: any) => {
-          // TODO falling user/me
-          $app.store.auth.setTokens(jwtResponse.data)
-          confirmResponse.value = jwtResponse.data
-          isSubmitPasswordForm.value = false;
-          currentStep.value = Steps.Bonus
-      })
-      .then(async () => {
-          await $app.api.eth.auth.getUser().then((resp) => {
-              $app.store.user.info = resp?.data
-          })
-      })
-      .catch((e) => {
-        console.error(e);
-        isSubmitPasswordForm.value = false;
-          if (e?.errors?.error?.message) {
-              backendError.value = e.errors.error.message
-          } else {
-              backendError.value = 'Something went wrong'
-          }
-      })
-}
-
-// Bonus Step
-const getBonus = () => {
-  router.push('/personal/analytics')
-}
-
-onMounted(() => {
-  if (route.query.referral) {
-      $app.store.auth.setRefCode({ref_code: route.query.referral});
-      refCode.value = route.query.referral
-      accordionRef.value?.open()
-  }
-})
-
-
 // Purchase Step
 
 const confirmShow = ref(true);
@@ -850,10 +337,24 @@ const payShow = ref(false);
 
 const currentPayStep = ref(StepsPay.PayWith);
 
+const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
+const defaultBuyAmount = $app.store.purchase.amount - ($app.store.purchase.amount/100)*discountPercent;
+// const buyAmount = ref(isNaN(defaultBuyAmount) ? 100 : defaultBuyAmount);
+const buyAmount = computed(() => {
+  return $app.store.purchase.amount - ($app.store.purchase.amount/100)*discountPercent
+});
+const buyAmountOriginal = computed(() => {
+  return $app.store.purchase.amount
+});
+
+
+
 const copiedAddressValue = ref('TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi');
 const addressCopied = ref(false);
 const copiedAmountValue = ref('1,002.93 USDT');
 const amountCopied = ref(false);
+
+
 
 const { copy } = useClipboard({ copiedAddressValue });
 
@@ -913,8 +414,6 @@ const updateModalVisible = (isVisible: boolean) => {
   succesModalVisible.value = isVisible
   emit('update', isVisible)
 }
-
-
 
 </script>
 
