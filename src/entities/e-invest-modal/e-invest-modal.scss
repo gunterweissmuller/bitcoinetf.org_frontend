@@ -178,6 +178,38 @@
           font-size: torem(20);
           font-weight: 500;
         }
+
+        &-dropdown {
+          border-radius: var(--spacing-s);
+          // background: rgba(255, 255, 255, 0.10);
+          backdrop-filter: blur(32px);
+
+          &-btc {
+            // background: #FC8B07;
+            background: var(--surfaces-selection);
+          }
+
+          &-usdt {
+            // background: #1A9F78;
+            background: var(--surfaces-selection);
+          }
+
+          &-item {
+            color: var(--Text-Inverse-Primary, #FFF);
+            font-size: torem(14);
+            font-weight: 500;
+            font-family: Jakarta, sans-serif;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.15);
+              border-radius: var(--spacing-s);
+            }
+
+            // @include breakpoint($break-tablet-minus) {
+            //   color: var(--button-secondary)
+            // }
+          }
+        }
   
       }
       

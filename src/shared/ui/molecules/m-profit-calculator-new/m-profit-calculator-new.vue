@@ -13,7 +13,7 @@
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
-          :disabled="props.isInputDisbled"
+            :disabled="props.isInputDisbled"
             :style="'max-width: '+inputMaxWidth+'px'"
             :value="investmentAmount"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -222,13 +222,10 @@ const investmentAmountWithDiscount = ref(2375);
 
 
 onMounted(()=>{
-
   if(localStorage.getItem('investmentAmount')) {
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
-
-
 })
 
 function validate(event) {
