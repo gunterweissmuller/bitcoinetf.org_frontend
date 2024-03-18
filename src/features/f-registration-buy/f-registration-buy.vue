@@ -25,7 +25,7 @@
               <header class="f-registration__purchase--drop-down-title flex gap-2 whitespace-nowrap cursor-pointer" @click="() => {togglePurchase(purchaseStepsArr[0])}">
                 <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2.5 h-6 text-center aspect-square rounded-full" aria-hidden="true">1</div>
                 <h1 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Confirm</h1>
-                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" loading="lazy" />
+                <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" loading="lazy" />
               </header>
 
 
@@ -120,7 +120,7 @@
               <header @click="() => {togglePurchase(purchaseStepsArr[1])}" class="f-registration__purchase--drop-down-title flex gap-2">
                 <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">2</div>
                 <h2 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Sign</h2>
-                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': signShow}]" alt="Down arrow icon" loading="lazy" />
+                <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': signShow}]" alt="Down arrow icon" loading="lazy" />
               </header>
 
               <div v-if="signShow">
@@ -146,7 +146,7 @@
               <header @click="() => {togglePurchase(purchaseStepsArr[2])}" class="f-registration__purchase--drop-down-title flex gap-2">
                 <div class="f-registration__purchase--drop-down-title-number f-registration--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">3</div>
                 <h2 class="f-registration__purchase--drop-down-title-text f-registration--text-normal flex-auto">Pay</h2>
-                <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" loading="lazy" />
+                <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" loading="lazy" />
               </header>
 
               <div v-if="payShow">
@@ -221,7 +221,7 @@
                     <button @click="currentPayStep = StepsPay.Loading" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
                       I Have Paid
                     </button>
-                    <button @click="currentPayStep = StepsPay.PayWith" class="block w-full justify-center items-center px-16 py-5 mt-2 text-base font-bold text-blue-600 whitespace-nowrap bg-sky-100 rounded-lg" tabindex="0">
+                    <button @click="currentPayStep = StepsPay.PayWith" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
                       Cancel Order
                     </button>
                     <footer class="text-center py-6">
@@ -235,7 +235,7 @@
 
                 <template v-if="currentPayStep === StepsPay.Loading">
                   <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
-                    <p class="mt-4 text-base text-black">Processing payment, please wait</p>
+                    <p class="f-registration__purchase--processing-text mt-4">Processing payment, please wait</p>
 
                     <button @click="() => {isBtcModal = false; succesModalVisible = true}" style="color: var(--text-secondary)">Open success USDT</button>
                     <button @click="() => {isBtcModal = true; succesModalVisible = true}" style="color: var(--text-secondary)">Open success BTC</button>
