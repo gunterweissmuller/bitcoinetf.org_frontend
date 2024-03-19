@@ -2,17 +2,17 @@
 
   <div class="f-registration__purchase--process flex flex-col">
     <div class="w-buy-shares-payment-short-purchase__accordion-qr mt-4">
-      <qrcode-vue :value="$app.store.user.info?.account?.tron_wallet" level="L" render-as="svg" foreground="#000" background="#fff"/>
+      <qrcode-vue :value="computedAddr" level="L" render-as="svg" foreground="#000" background="#fff"/>
     </div>
     <!-- <div class="flex justify-center items-center self-center px-11 mt-4 w-full bg-white rounded-xl max-w-[261px]">
       <NuxtImg src="/img/qr-code-test.svg" alt="Payment QR Code" class="w-full aspect-[1.01]" loading="lazy" />
     </div> -->
 
-    <a-input
-      class="w-buy-shares-payment__accordion-stable-method f-registration__purchase--process-input  mt-6"
+    <a-input-img
+      class="w-buy-shares-payment__accordion-stable-method f-registration__purchase--process-input rounded-lg mt-6"
       label="Deposit method"
-      model-value="Tether USDT (Tron, TRC-20)"
-      :icon="Icon.ColorfulTron"
+      :model-value="computedText"
+      :img="computedIcon"
       position-icon="left"
       disabled
       @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
@@ -27,11 +27,10 @@
     </article> -->
 
     
-
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Deposit address on Tron chain:"
-      :model-value="$app.store.user?.info?.account.tron_wallet"
+      :model-value="computedAddr"
       :disabled="true"
       :text-icon="addressCopied"
       text-icon-text="Copied!"
@@ -52,7 +51,7 @@
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Amount"
-      :model-value="$app.filters.rounded(calcValue)"
+      :model-value="$app.filters.rounded(calcValue) + ' USDT'"
       :disabled="true"
       :text-icon="amountCopied"
       text-icon-text="Copied!"
@@ -68,7 +67,7 @@
       </div>
       <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
     </article> -->
-    <button @click="currentPayStep = StepsPay.Loading" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
+    <button @click="startTronTimer" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
       I Have Paid
     </button>
     <button @click="() => router.push('/personal/analytics')" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
@@ -89,6 +88,7 @@ import { Icon } from '~/src/shared/constants/icons'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
+import AInputImg from '~/src/shared/ui/atoms/a-input-img/a-input-img.vue'
 import { useNuxtApp, useRouter, useRoute } from '#app'
 import { ref,onMounted, onUnmounted, watch } from 'vue'
 import QrcodeVue from 'qrcode.vue'
@@ -96,6 +96,7 @@ import EBuySharesSuccessModal from "~/src/entities/e-buy-shares-success-modal/e-
 import {Centrifuge} from "centrifuge";
 import ACheckbox from "~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue";
 import VueCountdown from '@chenfengyuan/vue-countdown';
+import { PayTypes } from '~/src/shared/constants/payWith'
 
 const props = withDefaults(
   defineProps<{
@@ -103,12 +104,14 @@ const props = withDefaults(
     calcValue: number
     isFiat: boolean
     calcValueOriginal: number
+    payType: PayTypes
   }>(),
   {
     justTron: true,
     calcValue: 1000,
     isFiat: false,
     calcValueOriginal: 950,
+    payType: PayTypes.Tron,
   },
 )
 const router = useRouter()
@@ -120,8 +123,18 @@ const onCountdownEnd = () => {
   // location.reload();
 }
 
-const addressCopied = ref(false)
-const amountCopied = ref(false)
+const computedAddr = computed(()=>{
+  return props.payType == PayTypes.Tron ? $app.store.user.info?.account?.tron_wallet : props.payType == PayTypes.Ethereum ? $app.store.user.wallets.ethereum.address : $app.store.user.info?.account?.tron_wallet;
+});
+
+const computedText = computed(()=>{
+  return props.payType == PayTypes.Tron ? "Tether USDT (Tron, TRC-20)" : props.payType == PayTypes.Ethereum ? "Tether USDT (Ethereum, ERC-20)" : "Tether USDT (Tron, TRC-20)";
+});
+
+const computedIcon = computed(()=>{
+  return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg' : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg' : '/img/icons/colorful/usdt-trc20.svg';
+});
+
 const BANK_VARIANTS = [
   {
     text: 'SBP',
@@ -162,24 +175,6 @@ const AVAILABLE_VARIANTS = computed(()=>{
   })
 })
 
-const copiedValue = ref('')
-const { copy } = useClipboard({ copiedValue })
-
-const copyToClipboard = (address = false) => {
-  if (address) {
-    copy($app.store.user.info.account.tron_wallet)
-    addressCopied.value = true
-    setTimeout(() => {
-      addressCopied.value = false
-    }, 1000)
-  } else {
-    copy(props.calcValue)
-    amountCopied.value = true
-    setTimeout(() => {
-      amountCopied.value = false
-    }, 1000)
-  }
-}
 
 
 const country = ref('RU')
@@ -230,7 +225,6 @@ onMounted(async () => {
     // timerStarted.value = true
   }
   initializeTronClock()
-  startTronTimer();
 })
 
 watch(
@@ -410,6 +404,25 @@ const transformSlotProps = (props) => {
     formattedProps[key] = value < 10 ? `0${value}` : String(value);
   });
   return formattedProps;
+}
+
+// copy
+
+const copiedAddressValue = ref($app.store.user?.info?.account.tron_wallet);
+const addressCopied = ref(false);
+const copiedAmountValue = ref(props.calcValue.toFixed(2));
+const amountCopied = ref(false);
+
+const { copy } = useClipboard({ copiedAddressValue });
+
+const copyToClipboardAddress = () => {
+  copy(copiedAddressValue.value);
+  addressCopied.value = true;
+}
+
+const copyToClipboardAmount = () => {
+  copy(copiedAmountValue.value);
+  amountCopied.value = true;
 }
 
 </script>

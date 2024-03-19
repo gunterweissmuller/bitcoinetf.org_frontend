@@ -35,6 +35,7 @@ export const user = defineStore('user', {
     // isInvestModalReinvest: false,
     isInvestModalShow: {show: false, reinvest: false},
     investAmount: 2500,
+    wallets: '',
   }),
 
   actions: {

@@ -15,7 +15,7 @@
             <div class="f-registration__purchase-steps-desktop">
               <div @click="() => {openPurchase(purchaseStepsArr[0])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': confirmShow}]">1. Confirm</div>
               <div @click="() => {openPurchase(purchaseStepsArr[1])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': signShow}]">2. Sign</div>
-              <div @click="() => {openPurchase(purchaseStepsArr[2])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
+              <div @click="() => {openPurchase(purchaseStepsArr[2], getWallets)}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
             </div>
 
           </header>
@@ -135,7 +135,7 @@
                 </div>
                 <a-button variant="secondary" class="f-registration__button f-registration__button-back" @click="() => {openPurchase(purchaseStepsArr[0])}"
                     text="Back"></a-button>
-                <a-button class="f-registration__button f-registration__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2])}"
+                <a-button class="f-registration__button f-registration__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2], getWallets)}"
                     text="Continue"></a-button>
               </div>
             </section>
@@ -151,7 +151,7 @@
                 <div class="f-registration__purchase-line"></div>
                 <template v-if="currentPayStep === StepsPay.PayWith">
                   <div v-for="pay in payWith">
-                    <div @click="pay.onClick ? pay.onClick() : () => currentPayStep = StepsPay.Process" class="f-registration__purchase-pay-item flex flex-col justify-center cursor-pointer">
+                    <div v-if="pay.show" @click="pay.onClick ? pay.onClick() : () => currentPayStep = StepsPay.Process" class="f-registration__purchase-pay-item flex flex-col justify-center cursor-pointer">
                       <div class="flex flex-col justify-center p-5 w-full ">
                         <div class="flex gap-1">
                           <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" loading="lazy"/>
@@ -163,11 +163,17 @@
                   </div>
                 </template>
 
-                <template v-if="currentPayStep === StepsPay.Process">
-                  <w-buy-shares-payment-short-purchase :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="false"/>
+                <template v-if="currentPayStep === StepsPay.Loading">
+                  <div class="f-registration__purchase-loading">
+                    Loading...
+                  </div>
                 </template>
 
-                <template v-if="currentPayStep === StepsPay.Loading">
+                <template v-if="currentPayStep === StepsPay.Process">
+                  <w-buy-shares-payment-short-purchase :payType="currentPayType" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="false"/>
+                </template>
+
+                <template v-if="currentPayStep === StepsPay.Paid">
                   <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
                     <p class="f-registration__purchase--processing-text mt-4">Processing payment, please wait</p>
 
@@ -212,6 +218,8 @@ import { useClipboard } from '@vueuse/core'
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
 import eSuccessModal from '~/src/entities/e-success-modal/e-success-modal.vue'
 import WBuySharesPaymentShortPurchase from "~/src/widgets/w-buy-shares-payment-short-purchase/w-buy-shares-payment-short-purchase.vue"; 
+import { hostname } from '~/src/app/adapters/ethAdapter'
+import { PayTypes } from '~/src/shared/constants/payWith'
 
 const emit = defineEmits([ 'update'])
 
@@ -226,6 +234,7 @@ const enum Steps {
 const enum StepsPay {
   PayWith = 'PayWith',
   Process = 'Process',
+  Paid = 'Paid',
   Loading = 'Loading',
 }
 
@@ -265,44 +274,72 @@ const termsContinueDisabled = computed<boolean>(() => {
   return !registrationAgreedUS.value || !registrationAgreedTerms.value
 })
 
+const currentPayType = ref(PayTypes.Tron);
 
 const openTrc = async () => {
-  // await $app.api.eth.auth.getUser().then((resp) => {
-  //   $app.store.user.info = resp?.data
-  // });
+  currentPayStep.value = StepsPay.Loading;
+  currentPayType.value = PayTypes.Tron;
 
-  // await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
-  //   $app.store.user.blockchainUserWallet = resp?.data.uid
-  // });
+  await $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  });
 
+  await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+    $app.store.user.blockchainUserWallet = resp?.data.uid;
+    currentPayStep.value = StepsPay.Process;
+  });
+  
+  if(!$app.store.user?.info?.account?.tron_wallet) {
+    $app.store.user.info.account.tron_wallet = $app.store.user.wallets.tron;
+  }
+
+}
+
+const openEth = async () => {
+  currentPayStep.value = StepsPay.Loading;
+  currentPayType.value = PayTypes.Ethereum;
   currentPayStep.value = StepsPay.Process;
 }
+
+const showTron = computed(() => {
+  return $app.store.user.wallets.tron;
+});
+const showEth = computed(() => {
+  return $app.store.user.wallets.tron;
+});
 
 const payWith = ref([
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
     title: "Pay with USDT (TRC20)",
     onClick: openTrc,
+    show: showTron,
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
-    title: "Pay with USDT (BEP-20)"
+    title: "Pay with USDT (BEP-20)",
+    show: false,
+  },
+  {
+    icon: "/img/icons/colorful/usdt-erc20.svg",
+    title: "Pay with USDT (ERC-20)",
+    onClick: openEth,
+    show: showEth,
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
-    title: "Pay with USDT (ERC-20)"
-  },
-  {
-    icon: "/img/icons/colorful/usdt-trc20.svg",
-    title: "Pay with USDT (Liquid)"
+    title: "Pay with USDT (Liquid)",
+    show: false,
   },
   {
     icon: "/img/icons/colorful/metamask.svg",
-    title: "Pay with WalletConnect"
+    title: "Pay with WalletConnect",
+    show: false,
   },
   {
     icon: "/img/icons/colorful/metamask.svg",
-    title: "Pay with Metamask"
+    title: "Pay with Metamask",
+    show: false,
   },
 
 ]);
@@ -349,24 +386,11 @@ const buyAmountOriginal = computed(() => {
 
 
 
-const copiedAddressValue = ref('TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi');
-const addressCopied = ref(false);
-const copiedAmountValue = ref('1,002.93 USDT');
-const amountCopied = ref(false);
 
 
 
-const { copy } = useClipboard({ copiedAddressValue });
 
-const copyToClipboardAddress = () => {
-  copy(copiedAddressValue.value);
-  addressCopied.value = true;
-}
 
-const copyToClipboardAmount = () => {
-  copy(copiedAmountValue.value);
-  amountCopied.value = true;
-}
 
 //change purchase steps
 
@@ -383,12 +407,33 @@ const purchasePopperText = {
 
 const purchaseStepsArr = [{name: PurchaseSteps.Confirm, value: confirmShow},{name: PurchaseSteps.Sign, value: signShow},{name: PurchaseSteps.Pay, value: payShow}];
 
-const openPurchase = (target: any) => {
+const getWallets = async () => {
+  currentPayStep.value = StepsPay.Loading;
+
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/payment-methods`, { 
+    method: 'GET', 
+    headers: new Headers({
+      'Authorization': 'Bearer ' + $app.store.auth.accessToken,
+      'Content-Type': 'application/json'
+    }), 
+  });
+
+  const wallets = await response.json();
+  $app.store.user.wallets = wallets.data;
+
+  currentPayStep.value = StepsPay.PayWith;
+}
+
+const openPurchase = (target: any, callback?: any) => {
   confirmShow.value = false;
   signShow.value = false;
   payShow.value = false;
 
   target.value.value = true;
+
+  if(callback) {
+    callback();
+  }
 }
 
 const togglePurchase = (target: any) => {

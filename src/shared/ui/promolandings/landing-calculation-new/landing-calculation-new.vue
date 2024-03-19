@@ -949,7 +949,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-        console.log("UUID123", $app.store.user?.info?.account?.uuid)
+        console.log("UUID123",  $app.store.user?.info, $app.store.user?.info?.account?.uuid, $app.store.user?.info?.account.tron_wallet)
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");

@@ -388,6 +388,24 @@ export default class AuthApiModule {
     }
   }
 
+  async getWallets() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: '/v3/public/billing/shares/buy/apollopayment/payment-methods',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting information about wallets',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async getUser() {
     try {
       return await this.adapter.requestJsonAsync({
