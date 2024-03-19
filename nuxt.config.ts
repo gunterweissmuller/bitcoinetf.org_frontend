@@ -224,11 +224,6 @@ export default defineNuxtConfig({
           path: '/personal/wallet/bonus',
           file: '~/src/widgets/w-wallet/w-wallet.vue',
         },
-        {
-          name: 'personal-purchaseb',
-          path: '/personal/purchaseb',
-          file: '~/src/pages/personal/purchaseb.vue',
-        },
       ]
       routes.push(...extendedRoutes)
     },

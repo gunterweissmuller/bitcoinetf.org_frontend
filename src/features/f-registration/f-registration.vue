@@ -84,7 +84,6 @@
               </div>
             </div> -->
 
-            <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
             <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
 
               <!--<div
@@ -456,6 +455,7 @@ const telegramRedirectUrl = ref('')
 const telegramBotName = ref('')
 
 const handleTelegramAuth = async () => {
+
   (window as any).Telegram.Login.auth(
     { bot_id: '6888906996', request_access: true },
     (tgData: any) => {

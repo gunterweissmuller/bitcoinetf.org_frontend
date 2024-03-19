@@ -15,6 +15,15 @@
             text="Buy Bitcoin ETF Shares"
             @click="$router.push({ name: 'personal-buy-shares' })"
           />
+          <!-- <a-button
+            :icon="Icon.MonoPlus"
+            size="small"
+            class="w-aside__button-buy"
+            text="Buy Bitcoin ETF Shares2"
+            @click="() => {
+              $app.store.user.setIsInvestModalShow({show: true});
+            }"
+          /> -->
           
         </div>
         <div class="w-aside__links">

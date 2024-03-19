@@ -1,6 +1,6 @@
 <template>
     <div class="e-invest w-full">
-      <m-modal v-if="!$app.store.user.isInvestModalReinvest" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow">
+      <m-modal v-if="orderType == 'init_btc'" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show">
 
         <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
@@ -9,7 +9,19 @@
 
               <div class="e-invest__invest-input e-invest__invest--text-primary ml-4 grow flex justify-center font-semibold">
                 <span class="e-invest__invest--text-input e-invest--text-normal flex items-center">$</span>
-                <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent" placeholder="2,500"/>
+                <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
+                <input
+                  :disabled="false"
+                  :style="'max-width: '+inputMaxWidth+'px'"
+                  :value="investmentAmount"
+                  class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
+                  placeholder="2,500"
+                  type="text"
+                  @keypress="validate"
+                  :min="1"
+                  :max="10000000"
+                  @input="onPickerValueInput"
+                />
               </div>
 
             </header>
@@ -24,12 +36,18 @@
                   <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 cursor-pointer">
                     <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                     <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
-                    <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
+                    <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
                   </div>
                 </div>
-                <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
+                <!-- <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
                   <ul class="text-sm font-medium text-gray-700">
-                    <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
+                    <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
+                  </ul>
+                </div> -->
+
+                <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'e-invest__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'e-invest__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="e-invest__invest-select-dropdown w-full absolute mt-1 z-10">
+                  <ul class=" text-sm font-medium">
+                    <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
                   </ul>
                 </div>
               </div>
@@ -44,27 +62,27 @@
 
             <article class="e-invest__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
 
-              <div :class="['e-invest__invest--card-inner', {'e-invest__invest--card-inner-flip': selectedCurrency.value === 'Bitcoin'}]">
+              <div :class="['e-invest__invest--card-inner', {'e-invest__invest--card-inner-flip': selectedCurrency.value === 'BTC'}]">
 
                 <!-- FRONT -->
                 <div class="e-invest__invest--card e-invest__invest--card-front e-invest__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
                   <NuxtImg src="/img/icons/colorful/usdt.svg" class="e-invest__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <p class="e-invest__invest--card-title e-invest--text-normal relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> $3,457,938.00 </p>
+                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                   <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
                   <div class="relative shrink-0 my-2 h-px bg-white bg-opacity-10"></div>
                   <div class="flex relative gap-0">
                     <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
-                      <p class="e-invest__invest--card-stats-value font-bold text-white">$0.95</p>
+                      <p class="e-invest__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 1) }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">42%</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">$28.76</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">$ {{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
                     </div>
                   </div>
                   <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
@@ -81,25 +99,25 @@
                 </div>
 
                 <!-- BACK -->
-                <div class="e-invest__invest--card-back e-invest__invest--card e-invest__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
+                <div  class="e-invest__invest--card-back e-invest__invest--card e-invest__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg"> <!-- v-if="selectedCurrency.value === 'BTC'"-->
                   <NuxtImg src="/img/icons/colorful/bitcoin.svg" class="e-invest__invest--card-icon w-6 aspect-square cursor-pointer" alt="BTC logo" loading="lazy" />
 
                   <p class="e-invest__invest--card-title e-invest--text-normal relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> $5,000.00 </p>
+                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                   <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount </p>
                   <div class="relative shrink-0 my-2 h-px bg-white bg-opacity-10"></div>
                   <div class="flex relative gap-0">
                     <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
-                      <p class="e-invest__invest--card-stats-value font-bold text-white">$1.90</p>
+                      <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">100%+</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">$57.52</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
                     </div>
                   </div>
                   <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
@@ -135,7 +153,7 @@
       </m-modal>
 
       <!-- REINVEST -->
-      <m-modal v-else-if="$app.store.user.isInvestModalReinvest" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow">
+      <m-modal v-else-if="orderType !== 'init_btc'" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow">
         <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
               <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />
@@ -146,7 +164,19 @@
 
               <div class="e-invest__invest-input e-invest__invest--text-primary mr-4 grow flex justify-center font-semibold">
                 <span class="e-invest__invest--text-input e-invest--text-normal flex items-center">$</span>
-                <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModifiedReinvest" class="e-invest__invest--text-input e-invest--text-normal max-w-[60px] flex-1 bg-transparent" placeholder="2,500"/>
+                <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModifiedReinvest" class="e-invest__invest--text-input e-invest--text-normal max-w-[60px] flex-1 bg-transparent" placeholder="2,500"/> -->
+                <input
+                  :disabled="false"
+                  :style="'max-width: '+inputMaxWidth+'px'"
+                  :value="investmentAmount"
+                  class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
+                  placeholder="2,500"
+                  type="text"
+                  @keypress="validate"
+                  :min="1"
+                  :max="10000000"
+                  @input="onPickerValueInput"
+                />
               </div>
 
               <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" />
@@ -161,7 +191,7 @@
                   <div  class="relative flex items-center justify-center gap-2 ">
                     <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square " alt="USDT logo" loading="lazy" />
                     <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
-                    <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square ', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
+                    <!-- <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square ', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/> -->
                   </div>
                 </div>
                 <!-- <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
@@ -181,27 +211,27 @@
 
             <article class="e-invest__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
 
-              <div :class="['e-invest__invest--card-inner', {'e-invest__invest--card-inner-flip': selectedCurrency.value === 'Bitcoin'}]">
+              <div :class="['e-invest__invest--card-inner', {'e-invest__invest--card-inner-flip': selectedCurrency.value === 'BTC'}]">
 
                 <!-- FRONT -->
                 <div class="e-invest__invest--card e-invest__invest--card-front e-invest__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
                   <NuxtImg src="/img/icons/colorful/usdt.svg" class="e-invest__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <p class="e-invest__invest--card-title e-invest--text-normal relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> $3,457,938.00 </p>
+                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                   <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
                   <div class="relative shrink-0 my-2 h-px bg-white bg-opacity-10"></div>
                   <div class="flex relative gap-0">
                     <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
-                      <p class="e-invest__invest--card-stats-value font-bold text-white">$0.95</p>
+                      <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">42%</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">$28.76</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
                     </div>
                   </div>
                   <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
@@ -222,21 +252,21 @@
                   <NuxtImg src="/img/icons/colorful/bitcoin.svg" class="e-invest__invest--card-icon w-6 aspect-square cursor-pointer" alt="BTC logo" loading="lazy" />
 
                   <p class="e-invest__invest--card-title e-invest--text-normal relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
-                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> $5,000.00 </p>
+                  <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                   <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount </p>
                   <div class="relative shrink-0 my-2 h-px bg-white bg-opacity-10"></div>
                   <div class="flex relative gap-0">
                     <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
-                      <p class="e-invest__invest--card-stats-value font-bold text-white">$1.90</p>
+                      <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">100%+</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">{{ selectedCurrency.totalProfit }}</p>
                     </div>
                     <div class="e-invest--text-normal flex flex-col flex-1">
                       <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                      <p class="e-invest__invest--card-stats-value font-black text-white">$57.52</p>
+                      <p class="e-invest__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
                     </div>
                   </div>
                   <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
@@ -279,28 +309,80 @@
   import { BrowserProvider, parseUnits } from "ethers";
   import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue';
   import VueWriter from 'vue-writer'
+  import { useWindowSize } from '@vueuse/core'
 
 
   const { $app } = useNuxtApp()
   const router = useRouter()
   const route = useRoute()
+  const { width } = useWindowSize()
+
+  const orderType = ref($app.store.user?.info?.account?.order_type ? $app.store.user?.info?.account?.order_type : 'init_btc');
+  console.log('orderType',orderType.value)
 
   // Invest Step
 
-  const inputMaxWidth = ref(60);
-  const investmentAmount = ref('2,500');
-  const investmentAmountModified = computed<string>({
-    get: () => investmentAmount.value,
-    set: (newValue) => {
-      const originalNumber = newValue.split(",").join("");
-      if(originalNumber.length <= 4) {
-        inputMaxWidth.value = 60;
-      } else if(originalNumber.length > 4 && originalNumber.length < 7) {
-        inputMaxWidth.value =  60+((originalNumber.length - 4)*20);
+  const inputMaxWidth = ref(50);
+  const defaultInputWith = ref(width.value < 768 ? 50 : 50);
+  const defaultInputPlus = ref(width.value < 768 ? 10 : 10);
+  const investmentAmount : any = ref(2500);
+  
+  function validate(event) {
+    if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
+  }
+
+  const onPickerValueInput = (event) => {
+    const replacedStringValue = event.target.value.replace(/,/g, '').replaceAll('$', '')
+    investmentAmount.value = Number(replacedStringValue)
+    let originalNumber = investmentAmount.value;
+    investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
+    investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
+  }
+
+  watch(
+    () => investmentAmount.value,
+    (newValue) => {
+      if (+newValue > 500000) {
+        investmentAmount.value = 500000;
       }
-      investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  },
-  });
+      if (+newValue <= 0) {
+        investmentAmount.value = 1;
+      }
+      if(isNaN(newValue)) {
+        investmentAmount.value = 2500;
+      }
+
+      localStorage.setItem('investmentAmount', String(investmentAmount.value));
+      $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+
+      if(String(newValue).length <= 4) {
+        inputMaxWidth.value = defaultInputWith.value;
+      } else if(String(newValue).length > 4 && String(newValue).length < 7) {
+        inputMaxWidth.value =  defaultInputWith.value+((String(newValue).length - 4)*defaultInputPlus.value);
+      }
+
+    },
+  )
+
+  watch(
+    () => width.value,
+    (newValue) => {
+      if(width.value < 768) {
+        defaultInputWith.value = 50;
+        defaultInputPlus.value = 10;
+      } else {
+        defaultInputWith.value = 50;
+        defaultInputPlus.value = 10;
+      }
+
+      if(String(investmentAmount.value).length <= 4) {
+        inputMaxWidth.value = defaultInputWith.value;
+      } else if(String(investmentAmount.value).length > 4 && String(investmentAmount.value).length < 7) {
+        inputMaxWidth.value =  defaultInputWith.value+((String(investmentAmount.value).length - 4)*defaultInputPlus.value);
+      }
+    },
+  )
 
   // reinvest
 
@@ -326,16 +408,53 @@
       icon: "/img/icons/colorful/usdt.svg",
       background: "/img/usdtbg2.png",
       stars: 5,
+      totalProfit: "42%",
+      apy: 14,
+      apy3: 42
 
     },
     {
-      value: 'Bitcoin',
+      value: 'BTC',
       icon: "/img/icons/colorful/bitcoin.svg",
       background: "/img/bitcoinbg.png",
       stars: 4.5,
+      totalProfit: "100%+",
+      apy: 33.333333333333333333333333333333,
+      apy3: 100
 
     }, ]);
-  const selectedCurrency = ref(currencies.value[0]);
+  const selectedCurrency = ref( orderType == 'BTC' ? currencies.value[1] : currencies.value[0]);
+
+  const apyValue = ref(selectedCurrency.value.apy);
+  const dayliDivs = computed(() => {
+    return guaranteedPayout.value / 365
+  })
+
+  const dayliDivsDisplay = computed(() => {
+    const tempVal = guaranteedPayout.value / 365;
+    let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
+
+    if(tempVal.toString().split(".")[1]?.length > 2) {
+      resValue = resValue + "+";
+    }
+    return resValue;
+  })
+
+  const monthlyDivsDisplay = computed(() => {
+    const tempVal = guaranteedPayout.value / 12;
+    let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
+
+    if(tempVal.toString().split(".")[1]?.length > 2) {
+      resValue = resValue + "+";
+    }
+    return resValue;
+  })
+
+  const guaranteedPayout = computed(() => {
+    return investmentAmount.value * (selectedCurrency.value.apy / 100)
+  })
+
+
   const showDropdown = ref(false);
 
   const toggleCurrencyDropdown = () => {
@@ -354,6 +473,9 @@
 
   const handleContinue = () => {
     closeModal();
+    $app.store.purchase.amount = investmentAmount;
+    $app.store.purchase.type = selectedCurrency.value.value;
+    $app.store.purchase.totalPayout = (investmentAmount.value + guaranteedPayout.value * 3).toFixed(2);
     router.push('/personal/purchase');
   }
 

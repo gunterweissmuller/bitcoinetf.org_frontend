@@ -31,17 +31,19 @@ export const user = defineStore('user', {
     news: [],
     latestTrade:'',
 
-    isInvestModalShow: false,
-    isInvestModalReinvest: false,
+    // isInvestModalShow: false,
+    // isInvestModalReinvest: false,
+    isInvestModalShow: {show: false, reinvest: false},
     investAmount: 2500,
+    wallets: '',
   }),
 
   actions: {
     setIsInvestModalShow(payload: { show: boolean }) {
-      this.isInvestModalShow = payload.show;
+      this.isInvestModalShow = {show: payload.show, reinvest: false};
     },
     setInvestModalReinvest(payload: { reinvest: boolean }) {
-      this.isInvestModalReinvest = payload.reinvest;
+      this.isInvestModalShow = {show: payload.reinvest, reinvest: true};
     },
     setTheme(payload: {theme: string}) {
       this.theme = payload.theme;

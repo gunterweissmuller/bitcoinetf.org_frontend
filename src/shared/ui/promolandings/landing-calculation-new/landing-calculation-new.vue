@@ -52,22 +52,12 @@
 
           <!-- <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
-          </div>
-          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component> -->
+          </div> -->
+          
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
 
-      
-      <template v-if="signupStep === SignupSteps.TelegramButton">
-        <h3 class="f-registration__title">Sign up with Telegram</h3>
-        <h5 class="f-registration__subtitle">
-        </h5>
-
-        <div class="flex flex-col items-center pb-12">
-          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
-        </div>
-      </template>
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
@@ -99,7 +89,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + buyAmountOriginal + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -128,13 +118,13 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + buyAmountOriginal + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
-      <div class="w-buy-shares-payment-short-new"></div>
+      <div class="w-buy-shares-payment-short-tether"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-new v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-tether v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -171,7 +161,7 @@
 import {useNuxtApp, useRouter, useRoute} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
-import WBuySharesPaymentShortNew from "~/src/widgets/w-buy-shares-payment-short-new/w-buy-shares-payment-short-new.vue";
+import WBuySharesPaymentShortTether from "~/src/widgets/w-buy-shares-payment-short-tether/w-buy-shares-payment-short-tether.vue";
 import {Icon} from "~/src/shared/constants/icons";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 import VueWriter from 'vue-writer'
@@ -458,6 +448,27 @@ const scrollToSignup = () => {
   },1)
 }
 
+const scrollToSignupFields = () => {
+  const element = document.querySelector(".landing-calculation__signup-main");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  setTimeout(()=>{
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  },1)
+}
+
+
+
 const investBuySignup = () => {
   signupStep.value = SignupSteps.Signup;
   signupMethod.value = SignupMethods.Email;
@@ -489,7 +500,7 @@ const investBuy = async () => {
 
 const scrollToPurchase = () => {
   // const element = document.querySelector(".w-buy-shares-payment");
-  const element = document.querySelector(".w-buy-shares-payment-short-new");
+  const element = document.querySelector(".w-buy-shares-payment-short-tether");
   let headerOffset
   if (window.innerWidth < 768) {
     headerOffset = 145;
@@ -602,6 +613,8 @@ const handleTelegramAuth = async () => {
           lastName.value = $app.store.authTelegram.response.last_name;
           email.value = $app.store.authTelegram.response.email;
 
+          scrollToSignupFields();
+
           // currentStep.value = Steps.Email;
           // currentSignup.value = SignupMethods.Telegram;
           // firstName.value = $app.store.authTelegram.response.first_name;
@@ -622,6 +635,7 @@ const handleTelegramAuth = async () => {
                   $app.store.user.info = resp?.data
                   //purchase
                   purchaseStep.value = PurchaseSteps.Purchase;
+                  scrollToPurchase();
                 });
 
                 // await router.push('/personal/analytics/performance')
@@ -653,7 +667,8 @@ const handleTelegramConnect = async () => {
     telegramBotName.value = r.data.data.bot_name;
 
     handleTelegramAuth().then((res) => {
-      console.log(res);
+      console.log("scrolltg",res);
+      
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
@@ -949,7 +964,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-        console.log("UUID123", $app.store.user?.info?.account?.uuid)
+        console.log("UUID123",  $app.store.user?.info, $app.store.user?.info?.account?.uuid, $app.store.user?.info?.account.tron_wallet)
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
