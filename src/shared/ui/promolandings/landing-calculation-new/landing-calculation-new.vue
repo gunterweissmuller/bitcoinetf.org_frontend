@@ -623,6 +623,8 @@ const handleTelegramAuth = async () => {
           lastName.value = $app.store.authTelegram.response.last_name;
           email.value = $app.store.authTelegram.response.email;
 
+          scrollToSignupFields();
+
           // currentStep.value = Steps.Email;
           // currentSignup.value = SignupMethods.Telegram;
           // firstName.value = $app.store.authTelegram.response.first_name;
@@ -643,6 +645,7 @@ const handleTelegramAuth = async () => {
                   $app.store.user.info = resp?.data
                   //purchase
                   purchaseStep.value = PurchaseSteps.Purchase;
+                  scrollToPurchase();
                 });
 
                 // await router.push('/personal/analytics/performance')
@@ -675,7 +678,7 @@ const handleTelegramConnect = async () => {
 
     handleTelegramAuth().then((res) => {
       console.log("scrolltg",res);
-      scrollToSignupFields();
+      
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
