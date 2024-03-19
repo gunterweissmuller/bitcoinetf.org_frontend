@@ -262,8 +262,7 @@ const onPickerValueInput = (event) => {
 watch(
   () => investmentAmountDisplay.value,
   (newValue) => {
-    console.log(newValue);
-    let tempOriginal = newValue.split(",").join("");
+    let tempOriginal = Number(newValue.split(",").join("")); //Number
 
     if(Number(tempOriginal) > 500000) {
       investmentAmount.value = 500000;
@@ -281,13 +280,12 @@ watch(
 watch(
   () => investmentAmount.value,
   (newValue) => {
-    console.log(newValue)
     if (+newValue > 500000) {
       investmentAmount.value = 500000;
     }
 
     if (+newValue <= 0) {
-      investmentAmount.value = 1;
+      investmentAmount.value = 0;
     }
     if(isNaN(newValue)) {
       investmentAmount.value = 2500;
