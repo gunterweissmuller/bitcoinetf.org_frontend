@@ -50,24 +50,14 @@
             <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
-          <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
+          <!-- <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
-          </div>
+          </div> -->
           
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
 
-      
-      <template v-if="signupStep === SignupSteps.TelegramButton">
-        <h3 class="f-registration__title">Sign up with Telegram</h3>
-        <h5 class="f-registration__subtitle">
-        </h5>
-
-        <div class="flex flex-col items-center pb-12">
-          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
-        </div>
-      </template>
       <template v-else-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
