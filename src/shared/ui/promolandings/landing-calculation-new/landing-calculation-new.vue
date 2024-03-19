@@ -458,6 +458,27 @@ const scrollToSignup = () => {
   },1)
 }
 
+const scrollToSignupFields = () => {
+  const element = document.querySelector(".landing-calculation__signup-main");
+  let headerOffset
+  if (window.innerWidth < 768) {
+    headerOffset = 145;
+  } else {
+    headerOffset = 155;
+  }
+  const elementPosition = element.offsetTop;
+  const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+  setTimeout(()=>{
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  },1)
+}
+
+
+
 const investBuySignup = () => {
   signupStep.value = SignupSteps.Signup;
   signupMethod.value = SignupMethods.Email;
@@ -653,8 +674,8 @@ const handleTelegramConnect = async () => {
     telegramBotName.value = r.data.data.bot_name;
 
     handleTelegramAuth().then((res) => {
-      console.log(res);
-      scrollToSignup();
+      console.log("scrolltg",res);
+      scrollToSignupFields();
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
