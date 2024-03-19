@@ -654,6 +654,7 @@ const handleTelegramConnect = async () => {
 
     handleTelegramAuth().then((res) => {
       console.log(res);
+      scrollToSignup();
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
