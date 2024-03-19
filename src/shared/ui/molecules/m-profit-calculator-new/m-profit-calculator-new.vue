@@ -15,15 +15,15 @@
           <input
             :disabled="props.isInputDisbled"
             :style="'max-width: '+inputMaxWidth+'px'"
-            :value="investmentAmount"
+            v-model="investmentAmountDisplay"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
             placeholder="2,500"
             type="text"
-            @keypress="validate"
+            
             :min="1"
             :max="10000000"
-            @input="onPickerValueInput"
-          />
+            
+          /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
         </div>
 
       </header>
@@ -210,11 +210,11 @@ const refCode = ref('')
 const refCodeValid = ref(false)
 const typeAPY = ref('Guaranteed')
 
-const defaultInputWith = ref(width.value < 768 ? 40 : 100);
-const defaultInputPlus = ref(width.value < 768 ? 10 : 20);
+const defaultInputWith = ref(width.value < 768 ? 45 : 110);
+const defaultInputPlus = ref(width.value < 768 ? 10 : 23);
 const inputMaxWidth = ref(defaultInputWith.value);
 
-// const investmentAmount = ref('2,500');
+const investmentAmountDisplay = ref('2,500');
 const investmentAmount = ref(2500);
 const investmentAmountWithDiscount = ref(2375);
 
@@ -224,6 +224,7 @@ const investmentAmountWithDiscount = ref(2375);
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
     investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+    investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
 })
@@ -243,21 +244,44 @@ function validate(event) {
 
 const onPickerValueInput = (event) => {
   const replacedStringValue = event.target.value.replace(/,/g, '').replaceAll('$', '')
-  investmentAmount.value = Number(replacedStringValue)
+  investmentAmount.value = Number(replacedStringValue);
+  investmentAmountDisplay.value = replacedStringValue;
+  // investmentAmount.value = replacedStringValue
 
 
-  let originalNumber = investmentAmount.value;
+  // let originalNumber = investmentAmount.value;
 
-  investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
+  // $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
 
-  investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
+  // // investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
+  // investmentAmount.value = investmentAmount.value.split(",").join("");
 }
+
+watch(
+  () => investmentAmountDisplay.value,
+  (newValue) => {
+    console.log(newValue);
+    let tempOriginal = newValue.split(",").join("");
+
+    if(Number(tempOriginal) > 500000) {
+      investmentAmount.value = 500000;
+      investmentAmountDisplay.value = '500,000';
+    } else {
+      investmentAmount.value = Number(tempOriginal);
+      const replacedStringValue = tempOriginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      investmentAmountDisplay.value = replacedStringValue;
+    }
+
+    
+  }
+)
 
 watch(
   () => investmentAmount.value,
   (newValue) => {
+    console.log(newValue)
     if (+newValue > 500000) {
       investmentAmount.value = 500000;
     }
@@ -303,8 +327,8 @@ watch(
       defaultInputWith.value = 40;
       defaultInputPlus.value = 10;
     } else {
-      defaultInputWith.value = 100;
-      defaultInputPlus.value = 20;
+      defaultInputWith.value = 110;
+      defaultInputPlus.value = 23;
     }
 
     if(String(investmentAmount.value).length <= 4) {
