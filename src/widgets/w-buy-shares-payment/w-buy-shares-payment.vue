@@ -309,7 +309,7 @@ const allPaymentsTypesMerchant = ref([])
 
 onMounted(async () => {
   amountInputValue.value = $app.store.user?.buyShares?.real_amount
-  addressInputValue.value = $app.store.user?.buyShares?.wallet_address
+  addressInputValue.value = $app.store.user?.buyShares?.tron_wallet
   transationByUUID.value = await $app.api.eth.billingEth
     .getTransactionByUuid(route.query.replenishment)
   merchant001Link.value = transationByUUID.value?.data?.redirect_uri
