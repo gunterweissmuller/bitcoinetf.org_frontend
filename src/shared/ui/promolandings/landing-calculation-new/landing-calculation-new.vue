@@ -50,9 +50,9 @@
             <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
-          <!-- <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
+          <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
-          </div> -->
+          </div>
           
         </div>
         <div class="landing-calculation__signup-line"></div>
@@ -584,13 +584,14 @@ onMounted(() => {
 
 const telegramRedirectUrl = ref('')
 const telegramBotName = ref('')
+const telegramBotId = ref('')
 const currentStep = ref('')
 const isTelegramConnection = ref(false);
 
 
 const handleTelegramAuth = async () => {
 (window as any).Telegram.Login.auth(
-  { bot_id: '6888906996', request_access: true },
+  { bot_id: telegramBotId.value, request_access: true },
   (tgData: any) => {
     console.log(tgData);
     if (!tgData) {
@@ -665,6 +666,7 @@ const handleTelegramConnect = async () => {
 
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
+    telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
       console.log("scrolltg",res);
