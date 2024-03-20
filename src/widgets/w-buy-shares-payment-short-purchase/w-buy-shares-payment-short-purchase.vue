@@ -142,7 +142,7 @@ const computedText = computed(()=>{
 const computedIcon = computed(()=>{
   return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg' 
   : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg' 
-  : props.payType == PayTypes.Polygon ? '/img/icons/colorful/usdt-erc20.svg' 
+  : props.payType == PayTypes.Polygon ? '/img/icons/colorful/usdt-matic.svg' 
   : '/img/icons/colorful/usdt-trc20.svg';
 });
 

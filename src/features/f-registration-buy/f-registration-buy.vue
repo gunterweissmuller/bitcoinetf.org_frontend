@@ -523,7 +523,7 @@ const payWith = ref([
     show: showEth,
   },
   {
-    icon: "/img/icons/colorful/usdt-erc20.svg",
+    icon: "/img/icons/colorful/usdt-matic.svg",
     title: "Pay with USDT (MATIC)",
     onClick: openPolygon,
     show: showPolygon,
