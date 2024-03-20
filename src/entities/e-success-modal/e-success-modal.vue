@@ -1,5 +1,5 @@
 <template>
-      <m-modal v-if="!props.isBtc" modalSmall @close="close" v-model="isOpenModal">
+      <m-modal v-if="!$app.store.user.succesModal.isBtc" modalSmall @close="close" v-model="$app.store.user.succesModal.show">
         <article class="e-success-wrapper flex flex-col font-bold max-w-[343px] ">
             <div class="e-success--certificate">
                 <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-usdt.svg" loading="lazy" />
@@ -48,7 +48,7 @@
       </m-modal>
 
       <!-- BITCOIN -->
-      <m-modal v-else-if="props.isBtc" modalSmall @close="close" v-model="isOpenModal">
+      <m-modal v-else-if="$app.store.user.succesModal.isBtc" modalSmall @close="close" v-model="$app.store.user.succesModal.show">
         <article class="e-success-wrapper flex flex-col font-bold max-w-[343px] ">
             <div class="e-success--certificate">
                 <NuxtImg class="e-success--certificate-img" src="/img/purchase/certificate-btc.svg" loading="lazy" />
@@ -106,12 +106,8 @@
 
   const props = withDefaults(
     defineProps<{
-        modelValue: boolean,
-        isBtc: boolean,
     }>(),
     {
-        modelValue: false,
-        isBtc: false,
     },
   )
 
@@ -119,22 +115,9 @@
   const router = useRouter()
   const route = useRoute()
 
-  const emit = defineEmits(['update:modelValue', 'close', 'accept'])
-
-  const isOpenModal = computed({
-    get() {
-        return props.modelValue
-    },
-    set(value) {
-        emit('update:modelValue', value)
-    },
-  })
 
   const close = () => {
-    emit('close')
-    isOpenModal.value = false;
-
-    console.log(isOpenModal.value)
+    $app.store.user.succesModal.show = false;
   }
 
   </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="f-registration w-full">
 
-      <e-success-modal :isBtc="isBtcModal" :model-value="succesModalVisible" @update:modelValue="updateModalVisible"></e-success-modal>
+      <e-success-modal></e-success-modal>
 
       <template v-if="currentStep === Steps.Purchase">
         <main class="f-registration__purchase flex flex-col mx-auto w-full">
@@ -51,8 +51,16 @@
                     <a-input-with-button
                       label="Referral code"
                       v-model="refCode"
-                      buttonText="Apply"
+                      :buttonText="refCodeBtnText"
+                      :buttonClick="() => {refCodeApply()}"
+                      :error-text="refCodeMessage"
                     />
+                    <!-- <div
+                      v-if="refCodeMessage"
+                      :class="['w-buy-shares__ref-message', { 'f-registration__purchase__ref-message--error': refCodeError }]"
+                    >
+                      {{ refCodeMessage }}
+                    </div> -->
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
@@ -62,7 +70,7 @@
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Interest Type</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">Fixed in USD</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">Fixed in USDT, Paid in {{ $app.store.purchase.type === 'USDT' ? 'USDT' : 'BTC' }}</p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
@@ -80,33 +88,44 @@
                     <p class="f-registration__purchase--step-text f-registration--text-normal">US$1</p>
                   </div>
 
-                  <div class="f-registration__purchase--confirm-item">
-                    <p class="f-registration__purchase--step-title f-registration--text-normal">Total Projected Interest</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">100%+</p>
-                  </div>
-
-                  <div class="f-registration__purchase--confirm-item">
+                  
+                  <div v-if="$app.store.purchase.type === 'USDT'" class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Total Guaranteed Interest</p>
                     <p class="f-registration__purchase--step-text f-registration--text-normal">42%</p>
                   </div>
 
+                  <div v-if="$app.store.purchase.type === 'BTC'" class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Total Projected Interest</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">100%+</p>
+                  </div>
+
+                  
+
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Dividends Schedule</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">Daily in USDT</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">Daily in {{ $app.store.purchase.type === 'USDT' ? 'USDT' : 'Bitcoin' }}</p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Dividends Withdrawal</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">Automatic with $100 min. threshold</p>
+                    
+                    <p v-if="$app.store.purchase.type === 'USDT'" class="f-registration__purchase--step-text f-registration--text-normal">Automatic daily withdrawals to a wallet of your choice (must support Polygon chain)</p>
+                    <p v-if="$app.store.purchase.type === 'BTC'" class="f-registration__purchase--step-text f-registration--text-normal">Automatic daily withdrawals to a Bitcoin Lightning wallet of your choice.</p>
+                    <!-- <p class="f-registration__purchase--step-text f-registration--text-normal">Automatic with $100 min. threshold</p> -->
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Total Guaranteed Payout</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">US${{ $app.store.purchase.totalPayout }}</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">${{ $app.store.purchase.totalPayout }}</p>
+                  </div>
+
+                  <div class="f-registration__purchase--confirm-item">
+                    <p class="f-registration__purchase--step-title f-registration--text-normal">Term</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">1095 Days</p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item-btn">
-                    <button @click="() => {openPurchase(purchaseStepsArr[1])}" class="f-registration__purchase--step-btn f-registration__button-continue f-registration--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">Continue</button>
+                    <button :disabled="confirmDisabled" @click="() => {openPurchase(purchaseStepsArr[1])}" class="f-registration__purchase--step-btn f-registration__button-continue f-registration--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">Continue</button>
                   </div>
 
                 </div>
@@ -170,15 +189,12 @@
                 </template>
 
                 <template v-if="currentPayStep === StepsPay.Process">
-                  <w-buy-shares-payment-short-purchase :payType="currentPayType" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="false"/>
+                  <w-buy-shares-payment-short-purchase :refCode="refCode" :payType="currentPayType" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="false"/>
                 </template>
 
                 <template v-if="currentPayStep === StepsPay.Paid">
                   <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
                     <p class="f-registration__purchase--processing-text mt-4">Processing payment, please wait</p>
-
-                    <button @click="() => {isBtcModal = false; succesModalVisible = true}" style="color: var(--text-secondary)">Open success USDT</button>
-                    <button @click="() => {isBtcModal = true; succesModalVisible = true}" style="color: var(--text-secondary)">Open success BTC</button>
 
                     <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
                       Having trouble? Contact Support
@@ -348,6 +364,44 @@ const payWith = ref([
 
 const refCode = ref('')
 
+const refCodeMessage = ref('');
+const refCodeError = ref(false);
+const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
+const refCodeBtnText = ref('Apply');
+
+const refCodeApply = async () => {
+  if ($app.store.user.info.referrals.used_code === null) {
+    await $app.api.eth.referral
+      .checkReferralCode(refCode.value)
+      .then(() => {
+        refCodeError.value = false
+        refCodeBtnText.value = 'Referral code applied'
+        refApply.value = true
+        $app.store.user.info.referrals.used_code = refCode.value
+      })
+      .catch((e) => {
+        refCodeError.value = true
+        if (e?.errors?.error?.message) {
+          refCodeMessage.value = e.errors.error.message
+        } else {
+          refCodeMessage.value = 'Something went wrong'
+        }
+      })
+  } else {
+    await $app.api.eth.referral
+      .checkValidationCode(refCode.value)
+  }
+}
+
+watch(refCode, (value) => {
+  refCodeMessage.value = ''
+ 
+})
+
+onMounted(async () => {
+  refCode.value = $app.store.user?.info?.referrals?.used_code || ''
+})
+
 const timer = ref<NodeJS.Timer | null>(null)
 const timerStarted = ref<boolean>(false)
 const timeLeft = ref<number>(0)
@@ -384,14 +438,6 @@ const buyAmountOriginal = computed(() => {
   return $app.store.purchase.amount
 });
 
-
-
-
-
-
-
-
-
 //change purchase steps
 
 enum PurchaseSteps {
@@ -424,12 +470,35 @@ const getWallets = async () => {
   currentPayStep.value = StepsPay.PayWith;
 }
 
+const confirmDisabled = computed(() => {
+  return buyAmountOriginal.value < 100;
+})
+
 const openPurchase = (target: any, callback?: any) => {
   confirmShow.value = false;
   signShow.value = false;
   payShow.value = false;
 
-  target.value.value = true;
+  if(target.name === PurchaseSteps.Sign) {
+
+    if(!confirmDisabled.value) {
+      target.value.value = true;
+    } else {
+      confirmShow.value = true;
+    }
+
+  } else if (target.name === PurchaseSteps.Pay) {
+
+    if(!termsContinueDisabled.value) {
+      target.value.value = true;
+    } else {
+      signShow.value = true;
+    }
+
+  } else {
+    target.value.value = true;
+  }
+
 
   if(callback) {
     callback();
@@ -452,13 +521,6 @@ const togglePurchase = (target: any) => {
 
 // Success modal
 
-const succesModalVisible = ref(false);
-const isBtcModal = ref(false);
-
-const updateModalVisible = (isVisible: boolean) => {
-  succesModalVisible.value = isVisible
-  emit('update', isVisible)
-}
 
 </script>
 

@@ -67,10 +67,10 @@
       </div>
       <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
     </article> -->
-    <button @click="startTronTimer" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
-      I Have Paid
+    <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
+      {{ tronButtonCheckPayment }}
     </button>
-    <button @click="() => router.push('/personal/analytics')" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
+    <button @click="cancelOrder" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
       Cancel Order
     </button>
     <footer class="text-center py-6">
@@ -105,6 +105,7 @@ const props = withDefaults(
     isFiat: boolean
     calcValueOriginal: number
     payType: PayTypes
+    refCode: any
   }>(),
   {
     justTron: true,
@@ -112,6 +113,7 @@ const props = withDefaults(
     isFiat: false,
     calcValueOriginal: 950,
     payType: PayTypes.Tron,
+    refCode: ''
   },
 )
 const router = useRouter()
@@ -207,8 +209,9 @@ onMounted(async () => {
       .buyShares({
         amount: props.calcValueOriginal, // props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal
         dividends: false,
-        referral: false,
+        referral: props.refCode && props.refCode !== '' ? true : false,
         bonus: false,
+        refCode: props.refCode
       })
       .then(({ data }) => {
         if (data) {
@@ -261,6 +264,7 @@ function getTimeRemaining() {
   };
 }
 
+let timeintervalPaid = null;
 function initializeClock() {
   function updateClock() {
     const t = getTimeRemaining();
@@ -271,20 +275,22 @@ function initializeClock() {
 
     if (t.total <= 0) {
       // router.push({name: 'personal-buy-shares'})
-      if (timeinterval) {
-        clearInterval(timeinterval);
+      if (timeintervalPaid) {
+        clearInterval(timeintervalPaid);
         tronButtonCheckPayment.value = 'Check payment status'
         timerStarted.value = false
         $app.store.persiste.latestTronCheckDate = null
       }
     }
   }
-  const timeinterval = setInterval(updateClock, 1000);
+  timeintervalPaid = setInterval(updateClock, 1000);
   updateClock();
 }
 const tronButtonCheckPayment = ref('I have paid')
 const timerStarted = ref(false)
 const startTronTimer = async () =>{
+  // $app.store.user.setSuccessModalUsdt({show: true});
+
   if (!timerStarted.value) {
     await $app.api.eth.billingEth.startCheckingTronPayment({account_uuid:$app.store.user.info.account.uuid})
     initializeClock()
@@ -338,8 +344,9 @@ function getTimeTron() {
 const tronTimerDays = ref(0)
 const tronTimerHours = ref(0)
 const tronTimerMinutes = ref(0)
+let timeinterval = null
 function initializeTronClock() {
-  let timeinterval = null
+  
   function updateClockTron() {
     const t = getTimeTron();
 
@@ -423,6 +430,15 @@ const copyToClipboardAddress = () => {
 const copyToClipboardAmount = () => {
   copy(copiedAmountValue.value);
   amountCopied.value = true;
+}
+
+const cancelOrder = () => {
+  tronButtonCheckPayment.value = 'I have paid';
+  clearInterval(timeinterval);
+  clearInterval(timeintervalPaid);
+  timerStarted.value = false;
+
+  router.push('/personal/analytics');
 }
 
 </script>

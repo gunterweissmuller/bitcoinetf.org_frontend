@@ -445,5 +445,9 @@
     &-loading {
       color: var(--text-inverse-primary)
     }
+
+    &__ref-message--error {
+      color: var(--accent-danger)
+    }
   }
 }
