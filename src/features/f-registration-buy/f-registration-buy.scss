@@ -449,5 +449,28 @@
     &__ref-message--error {
       color: var(--accent-danger)
     }
+
+    &__switch {
+      border-radius: torem(6);
+      padding: var(--spacing-s);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+      &:not(:last-child) {
+        margin-bottom: var(--spacing-m-1);
+      }
+  
+     
+  
+      &-text {
+        display: flex;
+        align-items: center;
+  
+        &-icon {
+          margin-right: var(--spacing-xs);
+        }
+      }
+    }
   }
 }

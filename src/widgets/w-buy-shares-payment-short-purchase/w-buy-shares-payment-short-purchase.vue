@@ -47,7 +47,6 @@
       </div>
       <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
     </article> -->
-
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Amount"
@@ -97,23 +96,24 @@ import {Centrifuge} from "centrifuge";
 import ACheckbox from "~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue";
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import { PayTypes } from '~/src/shared/constants/payWith'
+import { hostname } from '~/src/app/adapters/ethAdapter'
 
 const props = withDefaults(
   defineProps<{
     justTron: boolean
     calcValue: number
     isFiat: boolean
-    calcValueOriginal: number
     payType: PayTypes
     refCode: any
+    switches: any
   }>(),
   {
     justTron: true,
     calcValue: 1000,
     isFiat: false,
-    calcValueOriginal: 950,
     payType: PayTypes.Tron,
-    refCode: ''
+    refCode: '',
+    switches: {}
   },
 )
 const router = useRouter()
@@ -205,22 +205,47 @@ onMounted(async () => {
     await initPayment()
   }
   if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
-    await $app.api.eth.billingEth
-      .buyShares({
-        amount: props.calcValueOriginal, // props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal
-        dividends: false,
-        referral: props.refCode && props.refCode !== '' ? true : false,
-        bonus: false,
-        refCode: props.refCode
+    
+    const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, { 
+      method: 'POST', 
+      headers: new Headers({
+        'Authorization': 'Bearer ' + $app.store.auth.accessToken,
+        'Content-Type': 'application/json'
+      }), 
+      body: JSON.stringify({
+        dividends: props.switches?.dividends ? true : false,
+        referral: props.switches?.referral ? true : false, 
+        bonus: false, amount: props.calcValue, 
+        order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'
       })
-      .then(({ data }) => {
-        if (data) {
-          router.replace({
-            query: { replenishment: data.uuid }
-          })
-          $app.store.user.buyShares = data
-        }
+    });
+
+    const res = await response.json();
+    console.log("BUYINIT", res);
+
+    if (res) {
+      router.replace({
+        query: { replenishment: res.uuid }
       })
+      $app.store.user.buyShares = res
+    }
+    
+    // await $app.api.eth.billingEth
+    //   .buyShares({
+    //     amount: props.calcValue, 
+    //     dividends: false,
+    //     referral: props.refCode && props.refCode !== '' ? true : false,
+    //     bonus: false,
+    //     refCode: props.refCode
+    //   })
+    //   .then(({ data }) => {
+    //     if (data) {
+    //       router.replace({
+    //         query: { replenishment: data.uuid }
+    //       })
+    //       $app.store.user.buyShares = data
+    //     }
+    //   })
   }
 
   if ($app.store.persiste.latestTronCheckDate) {
@@ -392,6 +417,7 @@ onMounted(async () => {
 
   sub
     .on('publication', async function (ctx) {
+      console.log("PUB",ctx, ctx.data.message?.data?.status)
       if (ctx.data.message?.data?.status === 'success') {
         infoPayment.value = ctx.data.message?.data
       }

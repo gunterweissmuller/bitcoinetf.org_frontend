@@ -15,7 +15,7 @@
             <div class="f-registration__purchase-steps-desktop">
               <div @click="() => {openPurchase(purchaseStepsArr[0])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': confirmShow}]">1. Confirm</div>
               <div @click="() => {openPurchase(purchaseStepsArr[1])}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': signShow}]">2. Sign</div>
-              <div @click="() => {openPurchase(purchaseStepsArr[2], getWallets)}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
+              <div @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}" :class="['f-registration__purchase-steps-desktop-step', {'f-registration__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
             </div>
 
           </header>
@@ -41,10 +41,16 @@
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Total Investment Amount</p>
-                    <div class="flex gap-2 justify-between">
-                      <p class="f-registration__purchase--step-text-sale f-registration--text-normal"> US${{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
-                      <p class="f-registration__purchase--step-text f-registration--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amount+discountAmount, 2) }} <span class="f-registration__purchase--step-title">(-${{ $app.filters.rounded(discountAmount, 2)  }} off)</span></p>
+                    
+                    <div v-if="discountAmount <= 0" class="flex gap-2 justify-between">
+                      <p class="f-registration__purchase--step-text f-registration--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amount, 2) }} </p>
                     </div>
+
+                    <div v-if="discountAmount > 0" class="flex gap-2 justify-between">
+                      <p class="f-registration__purchase--step-text-sale f-registration--text-normal"> US${{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
+                      <p class="f-registration__purchase--step-text f-registration--text-normal flex-auto">US${{ $app.filters.rounded(originalWithDiscount, 2) }} <span class="f-registration__purchase--step-title">(-${{ $app.filters.rounded(discountAmount, 2)  }} off)</span></p>
+                    </div>
+
                   </div>
 
                   <div class="f-registration__purchase--confirm-item-full">
@@ -54,18 +60,44 @@
                       :buttonText="refCodeBtnText"
                       :buttonClick="() => {refCodeApply()}"
                       :error-text="refCodeMessage"
+                      :disabled="refApply"
                     />
                     <!-- <div
                       v-if="refCodeMessage"
-                      :class="['w-buy-shares__ref-message', { 'f-registration__purchase__ref-message--error': refCodeError }]"
+                      :class="['f-registration__purchase__ref-message', { 'f-registration__purchase__ref-message--error': refCodeError }]"
                     >
                       {{ refCodeMessage }}
                     </div> -->
                   </div>
 
+                  <div class="f-registration__purchase--confirm-item-full">
+                    <div :class="['f-registration__purchase__switch', { 'f-registration__purchase__switch--active': switches.referral }]">
+                      <div class="f-registration__purchase__switch-text">
+                        Apply referral
+                      </div>
+                      <div class="f-registration__purchase__switch-button">
+                        <a-switch
+                          :disabled="!wallets?.referral?.usd_amount || wallets?.referral?.usd_amount < 1"
+                          v-model="switches.referral"
+                          :label="referralAmount"
+                          label-position="left"
+                        ></a-switch>
+                      </div>
+                    </div>
+
+                    <div :class="['f-registration__purchase__switch', { 'f-registration__purchase__switch--active': switches.dividends }]">
+                      <div class="f-registration__purchase__switch-text">
+                        Apply dividends
+                      </div>
+                      <div class="f-registration__purchase__switch-button">
+                        <a-switch v-model="switches.dividends" :label="dividendsAmount" label-position="left" :disabled="!wallets?.dividends?.usd_amount || wallets?.dividends?.usd_amount < 1"></a-switch>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Investment Currency</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal"> {{ $app.store.purchase.type === 'USDT' ? 'Tether (USDT)' : 'Bitcoin (BTC)'}} </p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal"> {{ $app.store.purchase.type === 'USDT' ? 'Tether (USDT)' : 'Tether (USDT)'}} </p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
@@ -103,7 +135,7 @@
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Dividends Schedule</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">Daily in {{ $app.store.purchase.type === 'USDT' ? 'USDT' : 'Bitcoin' }}</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">Daily in {{ $app.store.purchase.type === 'USDT' ? 'Tether USDT (Polygon)' : 'Bitcoin' }}</p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
@@ -154,7 +186,7 @@
                 </div>
                 <a-button variant="secondary" class="f-registration__button f-registration__button-back" @click="() => {openPurchase(purchaseStepsArr[0])}"
                     text="Back"></a-button>
-                <a-button class="f-registration__button f-registration__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2], getWallets)}"
+                <a-button class="f-registration__button f-registration__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}"
                     text="Continue"></a-button>
               </div>
             </section>
@@ -189,7 +221,7 @@
                 </template>
 
                 <template v-if="currentPayStep === StepsPay.Process">
-                  <w-buy-shares-payment-short-purchase :refCode="refCode" :payType="currentPayType" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="false"/>
+                  <w-buy-shares-payment-short-purchase :switches="switches" :refCode="refCode" :payType="currentPayType"  :calc-value="$app.store.purchase.amountUS" :is-fiat="false"/> <!--buyAmount-->
                 </template>
 
                 <template v-if="currentPayStep === StepsPay.Paid">
@@ -236,6 +268,7 @@ import eSuccessModal from '~/src/entities/e-success-modal/e-success-modal.vue'
 import WBuySharesPaymentShortPurchase from "~/src/widgets/w-buy-shares-payment-short-purchase/w-buy-shares-payment-short-purchase.vue"; 
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { PayTypes } from '~/src/shared/constants/payWith'
+import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
 
 const emit = defineEmits([ 'update'])
 
@@ -261,7 +294,7 @@ const backendError = ref('')
 
 // confirm
 
-const discountAmount = ref(($app.store.purchase.amount/100)*$app.store.user.statistic?.trc_bonus?.percent); //5
+// const discountAmount = ref(($app.store.purchase.amount/100)*$app.store.user.statistic?.trc_bonus?.percent); //5
 
 const isOpenModal = ref(false)
 const accordionRef = ref(null)
@@ -278,6 +311,144 @@ watch(
       if (step === Steps.Bonus) {
           isOpenModal.value = true
       }
+  },
+)
+
+// Ref code field
+
+const refCode = ref('')
+
+const refCodeMessage = ref('');
+const refCodeError = ref(false);
+const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
+const refCodeBtnText = ref('Apply');
+const wallets = ref(null)
+
+const getWallets = async () => {
+  await $app.api.eth.billingEth
+    .getWallets()
+    .then((response: any) => {
+      console.log(response)
+      wallets.value = response.data
+    })
+    .catch(() => {
+      // Todo: notify something went wrond
+    })
+}
+
+const refCodeApply = async () => {
+
+  if(refApply) return
+
+  if ($app.store.user.info.referrals.used_code === null) {
+    await $app.api.eth.referral
+      .checkReferralCode(refCode.value)
+      .then(() => {
+        refCodeError.value = false
+        refCodeBtnText.value = 'Referral code applied'
+        refApply.value = true
+        $app.store.user.info.referrals.used_code = refCode.value
+      })
+      .catch((e) => {
+        refCodeError.value = true
+        if (e?.errors?.error?.message) {
+          refCodeMessage.value = e.errors.error.message
+        } else {
+          refCodeMessage.value = 'Something went wrong'
+        }
+      })
+  } else {
+    await $app.api.eth.referral
+      .checkValidationCode(refCode.value)
+  }
+}
+
+watch(refCode, (value) => {
+  refCodeMessage.value = ''
+ 
+})
+
+
+
+// discount
+
+const switches = reactive({
+  referral: false,
+  dividends: false,
+})
+
+const referralAmount = computed(() => {
+  return `$${$app.filters.rounded(wallets.value?.referral?.usd_amount, 2) || 0}`
+})
+const dividendsAmount = computed(() => {
+  return `$${$app.filters.rounded(wallets.value?.dividends?.usd_amount, 2) || 0}`
+})
+
+const discountAmount = ref(0);
+const originalAmount = ref($app.store.purchase.amount);
+const originalWithDiscount = ref($app.store.purchase.amount);
+
+onMounted(async () => {
+  $app.store.purchase.amountUS = originalWithDiscount.value;
+  console.log(originalWithDiscount.value, $app.store.purchase.amountUS);
+
+  refCode.value = $app.store.user?.info?.referrals?.used_code || '';
+  await getWallets()
+  if(refCode.value !== '') {
+    refCodeBtnText.value = 'Referral code applied';
+    refApply.value = true
+  }
+
+  if ($app.store.user.routeFrom === 'personal-dividends') {
+
+    if (wallets.value?.dividends?.usd_amount) {
+      switches.dividends = true
+    }
+
+    if (wallets.value?.referral?.usd_amount) {
+      switches.referral = true
+    }
+  }
+})
+
+watch(
+  () => originalWithDiscount.value,
+  () => {
+    $app.store.purchase.amountUS = originalWithDiscount.value;
+  }
+)
+
+
+watch(
+  () => switches.dividends,
+  (value) => {
+    if (value) {
+      discountAmount.value += wallets.value?.dividends?.usd_amount;
+      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+    } else {
+      discountAmount.value -= wallets.value?.dividends?.usd_amount;
+      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+    }
+  },
+)
+
+watch(
+  () => $app.store.purchase.amount,
+  () => {
+    originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+  }
+)
+
+watch(
+  () => switches.referral,
+  (value) => {
+    if (value) {
+      discountAmount.value += wallets.value?.referral?.usd_amount;
+      $app.store.purchase.amount = $app.store.purchase.amount - discountAmount.value;
+    } else {
+      discountAmount.value -= wallets.value?.referral?.usd_amount;
+      $app.store.purchase.amount = $app.store.purchase.amount - discountAmount.value;
+    }
   },
 )
 
@@ -360,47 +531,7 @@ const payWith = ref([
 
 ]);
 
-// Ref code field
 
-const refCode = ref('')
-
-const refCodeMessage = ref('');
-const refCodeError = ref(false);
-const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
-const refCodeBtnText = ref('Apply');
-
-const refCodeApply = async () => {
-  if ($app.store.user.info.referrals.used_code === null) {
-    await $app.api.eth.referral
-      .checkReferralCode(refCode.value)
-      .then(() => {
-        refCodeError.value = false
-        refCodeBtnText.value = 'Referral code applied'
-        refApply.value = true
-        $app.store.user.info.referrals.used_code = refCode.value
-      })
-      .catch((e) => {
-        refCodeError.value = true
-        if (e?.errors?.error?.message) {
-          refCodeMessage.value = e.errors.error.message
-        } else {
-          refCodeMessage.value = 'Something went wrong'
-        }
-      })
-  } else {
-    await $app.api.eth.referral
-      .checkValidationCode(refCode.value)
-  }
-}
-
-watch(refCode, (value) => {
-  refCodeMessage.value = ''
- 
-})
-
-onMounted(async () => {
-  refCode.value = $app.store.user?.info?.referrals?.used_code || ''
-})
 
 const timer = ref<NodeJS.Timer | null>(null)
 const timerStarted = ref<boolean>(false)
@@ -429,7 +560,7 @@ const payShow = ref(false);
 const currentPayStep = ref(StepsPay.PayWith);
 
 const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
-const defaultBuyAmount = $app.store.purchase.amount - ($app.store.purchase.amount/100)*discountPercent;
+// const defaultBuyAmount = $app.store.purchase.amount - ($app.store.purchase.amount/100)*discountPercent;
 // const buyAmount = ref(isNaN(defaultBuyAmount) ? 100 : defaultBuyAmount);
 const buyAmount = computed(() => {
   return $app.store.purchase.amount - ($app.store.purchase.amount/100)*discountPercent
@@ -453,7 +584,7 @@ const purchasePopperText = {
 
 const purchaseStepsArr = [{name: PurchaseSteps.Confirm, value: confirmShow},{name: PurchaseSteps.Sign, value: signShow},{name: PurchaseSteps.Pay, value: payShow}];
 
-const getWallets = async () => {
+const getPayWallets = async () => {
   currentPayStep.value = StepsPay.Loading;
 
   const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/payment-methods`, { 
@@ -471,7 +602,8 @@ const getWallets = async () => {
 }
 
 const confirmDisabled = computed(() => {
-  return buyAmountOriginal.value < 100;
+  // return buyAmountOriginal.value < 100;
+  return false;
 })
 
 const openPurchase = (target: any, callback?: any) => {
