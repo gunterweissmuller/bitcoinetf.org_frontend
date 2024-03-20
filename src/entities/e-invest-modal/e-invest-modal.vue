@@ -318,6 +318,14 @@
   const { width } = useWindowSize()
 
   const orderType = ref($app.store.user?.info?.account?.order_type ? $app.store.user?.info?.account?.order_type : 'init_btc');
+  console.log("ordertype", ordertype)
+  watch(
+    () => $app.store.user.info,
+    () => {
+      orderType.value = $app.store.user?.info?.account?.order_type;
+    }
+  )
+  
   console.log('orderType',orderType.value)
 
   // Invest Step
