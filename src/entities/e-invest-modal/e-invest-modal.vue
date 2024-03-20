@@ -1,6 +1,6 @@
 <template>
     <div class="e-invest w-full">
-      <m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
+      <!--orderType == 'init_btc'--><m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
 
         <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
@@ -13,14 +13,12 @@
                 <input
                   :disabled="false"
                   :style="'max-width: '+inputMaxWidth+'px'"
-                  :value="investmentAmount"
+                  v-model="investmentAmountDisplay"
                   class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
                   placeholder="2,500"
                   type="text"
-                  @keypress="validate"
                   :min="1"
                   :max="10000000"
-                  @input="onPickerValueInput"
                 />
               </div>
 
@@ -153,7 +151,7 @@
       </m-modal>
 
       <!-- REINVEST -->
-      <m-modal v-if="orderType == 'usdt' || orderType == 'btc'" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!---->
+      <!--orderType == 'usdt' || orderType == 'btc'--><m-modal modalBig v-if="orderType == 'usdt' || orderType == 'btc'"  bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!---->
         <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
               <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />
@@ -297,7 +295,7 @@
 
 
             </article>
-            <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
+            <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch whitespace-nowrap "> Continue </button>
           </div>
       </m-modal>
     </div>
@@ -310,6 +308,7 @@
   import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue';
   import VueWriter from 'vue-writer'
   import { useWindowSize } from '@vueuse/core'
+  import { vOnClickOutside } from '@vueuse/components'
 
 
   const { $app } = useNuxtApp()
@@ -330,10 +329,19 @@
 
   // Invest Step
 
-  const inputMaxWidth = ref(50);
-  const defaultInputWith = ref(width.value < 768 ? 50 : 50);
-  const defaultInputPlus = ref(width.value < 768 ? 10 : 10);
+  const inputMaxWidth = ref(width.value < 768 ? 55 : 65);
+  const defaultInputWith = ref(width.value < 768 ? 55 : 65);
+  const defaultInputPlus = ref(width.value < 768 ? 10 : 15);
+  const investmentAmountDisplay = ref('2,500');
   const investmentAmount : any = ref(2500);
+
+  onMounted(()=>{
+    if(localStorage.getItem('investmentAmount')) {
+      investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+      investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
+      // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+    }
+  })
   
   function validate(event) {
     if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
@@ -347,6 +355,22 @@
     $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
     investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
   }
+
+  watch(
+    () => investmentAmountDisplay.value,
+    (newValue) => {
+      let tempOriginal = Number(newValue.split(",").join("")); //Number
+
+      if(Number(tempOriginal) > 500000) {
+        investmentAmount.value = 500000;
+        investmentAmountDisplay.value = '500,000';
+      } else {
+        investmentAmount.value = Number(tempOriginal);
+        const replacedStringValue = tempOriginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        investmentAmountDisplay.value = replacedStringValue;
+      }
+    }
+  )
 
   watch(
     () => investmentAmount.value,
@@ -377,11 +401,11 @@
     () => width.value,
     (newValue) => {
       if(width.value < 768) {
-        defaultInputWith.value = 50;
+        defaultInputWith.value = 55;
         defaultInputPlus.value = 10;
       } else {
-        defaultInputWith.value = 50;
-        defaultInputPlus.value = 10;
+        defaultInputWith.value = 65;
+        defaultInputPlus.value = 15;
       }
 
       if(String(investmentAmount.value).length <= 4) {
