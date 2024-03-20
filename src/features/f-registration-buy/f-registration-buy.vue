@@ -489,7 +489,7 @@ const openEth = async () => {
 }
 
 const showTron = computed(() => {
-  return $app.store.user.wallets.tron;
+  return $app.store.user.wallets.tron || $app.store.user.info.account.tron_wallet;
 });
 const showEth = computed(() => {
   return $app.store.user.wallets.tron;
