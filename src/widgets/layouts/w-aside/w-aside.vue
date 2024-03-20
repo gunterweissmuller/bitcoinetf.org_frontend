@@ -8,21 +8,19 @@
           </nuxt-link>
         </div>
         <div v-if="!isPage && isShowBuyButton" class="w-aside__button">
-          <a-button
+          <!-- <a-button
             :icon="Icon.MonoPlus"
             size="small"
             class="w-aside__button-buy"
             text="Buy Bitcoin ETF Shares"
             @click="$router.push({ name: 'personal-buy-shares' })"
-          />
+          /> -->
           <a-button
             :icon="Icon.MonoPlus"
             size="small"
             class="w-aside__button-buy"
-            text="Buy Bitcoin ETF Shares2"
-            @click="() => {
-              $app.store.user.setIsInvestModalShow({show: true});
-            }"
+            text="Buy Bitcoin ETF Shares"
+            @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"
           />
           
         </div>

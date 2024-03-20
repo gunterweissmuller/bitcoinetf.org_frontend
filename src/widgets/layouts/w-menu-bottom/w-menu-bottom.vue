@@ -10,9 +10,9 @@
           close-btn
           type="colorful"
           @close="closePopper"
-          @click="$router.push({ name: 'personal-buy-shares' })"
+          @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"
           style="cursor: pointer"
-        >
+        > <!--@click="$router.push({ name: 'personal-buy-shares' })"-->
           <nuxt-link :to="{ name: item.link }" class="w-menu-bottom__item" @click="emit('click-link')">
             <a-icon
               :class="['w-menu-bottom__item-img', { 'w-menu-bottom__item-img--active': activeLinkClass(item.link) }]"
