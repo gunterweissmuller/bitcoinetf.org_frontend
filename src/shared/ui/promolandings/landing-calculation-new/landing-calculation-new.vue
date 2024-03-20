@@ -58,7 +58,7 @@
         <div class="landing-calculation__signup-line"></div>
       </div>
 
-      <template v-else-if="signupStep === SignupSteps.Signup">
+      <template v-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
