@@ -57,14 +57,6 @@
                   </div>
               </div>
 
-              <!-- <div v-if="address !== ''">
-                  MM Connected : {{ computedAddress }}
-                  <button @click="handleDisconnect">Disconnect</button>
-                  <br />
-                  {{ metamaskError }}
-              </div> -->
-
-
               <div @click="handleGoogleConnect"
                   class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
@@ -75,14 +67,14 @@
               </div>
 
 
-            <!-- <div @click="handleTelegramConnect"
+            <div @click="handleTelegramConnect"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
                 <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
                          class="aspect-square w-[18px]" loading="lazy" />
                 <div class="grow">Sign up with Telegram</div>
               </div>
-            </div> -->
+            </div>
 
             <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
 
@@ -98,20 +90,7 @@
 
 
       </template>
-      <template v-else-if="currentStep === Steps.TelegramSign">
-        <div class='f-registration__back' @click='handleEmailBack'>
-          <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
-        </div>
-        <h3 class="f-registration__title">Sign up with Telegram</h3>
-        <h5 class="f-registration__subtitle">
-        </h5>
-
-        <div class="flex flex-col items-center pb-12">
-          <button @click="handleTelegramAuth">TEST</button>
-          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22"></component>
-          <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
-        </div>
-      </template>
+      
       <template v-else-if="currentStep === Steps.Email">
           <div class='f-registration__back' @click='handleEmailBack'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
@@ -408,20 +387,14 @@ const handleMetamaskConnect = async () => {
 const googleData : any = ref();
 const googleUrl = ref("");
 
+const telegramRedirectUrl = ref('');
+const telegramBotName = ref('');
+const telegramBotId = ref('');
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
-
-  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-
-    console.log(r);
-
-    telegramRedirectUrl.value = r.data.data.redirect_url;
-    telegramBotName.value = r.data.data.bot_name;
-
-    })
 
   if($app.store.authGoogle.response?.email) {
     currentStep.value = Steps.Email;
@@ -451,13 +424,12 @@ const handleGoogleConnect = async () => {
     window.location.href = googleUrl.value;
 }
 
-const telegramRedirectUrl = ref('')
-const telegramBotName = ref('')
+
 
 const handleTelegramAuth = async () => {
 
   (window as any).Telegram.Login.auth(
-    { bot_id: '6888906996', request_access: true },
+    { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       console.log(tgData);
       if (!tgData) {
@@ -510,6 +482,7 @@ const handleTelegramConnect = async () => {
     console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
+    telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
       console.log(res);

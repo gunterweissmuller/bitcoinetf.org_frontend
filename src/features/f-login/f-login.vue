@@ -38,14 +38,14 @@
           </div>
         </div>
 
-        <!-- <div
+        <div
           @click="handleTelegramConnect"
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
             <div class="grow">Log in with Telegram</div>
           </div>
-        </div> -->
+        </div>
 
         <!--<div
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
@@ -254,10 +254,11 @@ const handleGoogleConnect = () => {
 
 const telegramRedirectUrl = ref('')
 const telegramBotName = ref('')
+const telegramBotId = ref('')
 
 const handleTelegramAuth = async () => {
   (window as any).Telegram.Login.auth(
-    { bot_id: '6888906996', request_access: true },
+    { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       console.log(tgData);
       if (!tgData) {
@@ -303,6 +304,7 @@ const handleTelegramConnect = () => {
     console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
+    telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
       console.log(res);
