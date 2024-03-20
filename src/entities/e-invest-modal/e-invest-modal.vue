@@ -1,6 +1,6 @@
 <template>
     <div class="e-invest w-full">
-      <m-modal v-if="orderType == 'init_btc'" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show">
+      <m-modal v-if="false"  bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
 
         <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
@@ -153,7 +153,7 @@
       </m-modal>
 
       <!-- REINVEST -->
-      <m-modal v-else-if="orderType !== 'init_btc'" bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow">
+      <m-modal  bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!--v-else-if="orderType !== 'init_btc' || orderType == 'usdt'"-->
         <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
             <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
               <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />

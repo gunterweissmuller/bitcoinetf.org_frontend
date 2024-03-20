@@ -488,11 +488,20 @@ const openEth = async () => {
   currentPayStep.value = StepsPay.Process;
 }
 
+const openPolygon = async () => {
+  currentPayStep.value = StepsPay.Loading;
+  currentPayType.value = PayTypes.Polygon;
+  currentPayStep.value = StepsPay.Process;
+}
+
 const showTron = computed(() => {
   return $app.store.user.wallets.tron || $app.store.user.info.account.tron_wallet;
 });
 const showEth = computed(() => {
   return $app.store.user.wallets.tron;
+});
+const showPolygon = computed(() => {
+  return $app.store.user.wallets.polygon;
 });
 
 const payWith = ref([
@@ -512,6 +521,12 @@ const payWith = ref([
     title: "Pay with USDT (ERC-20)",
     onClick: openEth,
     show: showEth,
+  },
+  {
+    icon: "/img/icons/colorful/usdt-erc20.svg",
+    title: "Pay with USDT (MATIC)",
+    onClick: openPolygon,
+    show: showPolygon,
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",

@@ -126,15 +126,24 @@ const onCountdownEnd = () => {
 }
 
 const computedAddr = computed(()=>{
-  return props.payType == PayTypes.Tron ? $app.store.user.info?.account?.tron_wallet : props.payType == PayTypes.Ethereum ? $app.store.user.wallets.ethereum.address : $app.store.user.info?.account?.tron_wallet;
+  return props.payType == PayTypes.Tron ? $app.store.user.info?.account?.tron_wallet 
+        : props.payType == PayTypes.Ethereum ? $app.store.user.wallets.ethereum.address 
+        : props.payType == PayTypes.Polygon ? $app.store.user.wallets.polygon.address 
+        : $app.store.user.info?.account?.tron_wallet;
 });
 
 const computedText = computed(()=>{
-  return props.payType == PayTypes.Tron ? "Tether USDT (Tron, TRC-20)" : props.payType == PayTypes.Ethereum ? "Tether USDT (Ethereum, ERC-20)" : "Tether USDT (Tron, TRC-20)";
+  return props.payType == PayTypes.Tron ? "Tether USDT (Tron, TRC-20)" 
+  : props.payType == PayTypes.Ethereum ? "Tether USDT (Ethereum, ERC-20)" 
+  : props.payType == PayTypes.Polygon ? "Tether USDT (Polygon, MATIC)" 
+  : "Tether USDT (Tron, TRC-20)";
 });
 
 const computedIcon = computed(()=>{
-  return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg' : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg' : '/img/icons/colorful/usdt-trc20.svg';
+  return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg' 
+  : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg' 
+  : props.payType == PayTypes.Polygon ? '/img/icons/colorful/usdt-erc20.svg' 
+  : '/img/icons/colorful/usdt-trc20.svg';
 });
 
 const BANK_VARIANTS = [
@@ -395,6 +404,9 @@ const isOpenSuccessModal = ref(false)
 watch(infoPayment, (value) => {
   if (value) {
     isOpenSuccessModal.value = true
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    });
   }
 })
 const accountUuid = computed(() => {
