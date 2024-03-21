@@ -375,7 +375,8 @@
 
   &--disabled,
   :disabled {
-    color: var(--text-secondary);
+    color: var(--text-inverse-secondary);
+    // color: var(--text-primary);
     cursor: default;
     pointer-events: none;
 

@@ -1,4 +1,4 @@
-.f-registration {
+.f-registration-buy {
   padding: 0 0 var(--spacing-m-3);
   flex-grow: 1;
   display: flex;
@@ -205,13 +205,14 @@
 
     &-head {
       padding: var(--spacing-m-3) 0 0 0;
-      margin-bottom: var(--spacing-m-2);
+      margin-bottom: 38px;
       gap: var(--spacing-m-3);
       // align-items: flex-start;
 
 
       @include breakpoint($break-desktop-1024-minus) {
         padding: var(--spacing-m-1);
+        margin-bottom: var(--spacing-m-2);
         text-align: center;
         justify-content: center;
         background: var(--surfaces-surface-glass-2);

@@ -64,7 +64,7 @@
 
                 <!-- FRONT -->
                 <div class="e-invest__invest--card e-invest__invest--card-front e-invest__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
-                  <NuxtImg src="/img/icons/colorful/usdt.svg" class="e-invest__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
+                  <NuxtImg src="/img/icons/colorful/usdt.svg" class="e-invest__invest--card-icon aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <p class="e-invest__invest--card-title e-invest--text-normal relative font-semibold text-white text-opacity-80"> In Total Projected Payout </p>
                   <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2)  }} </p>
                   <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
@@ -507,7 +507,7 @@
 
   const handleContinue = () => {
 
-    // if(investmentAmount.value < 100) return;
+    if(investmentAmount.value < 100) return;
 
     closeModal();
     $app.store.purchase.amount = investmentAmount;

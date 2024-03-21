@@ -1,6 +1,6 @@
 <template>
 
-  <div class="f-registration__purchase--process flex flex-col">
+  <div class="w-buy-shares-payment-short-purchase__purchase--process flex flex-col">
     <div class="w-buy-shares-payment-short-purchase__accordion-qr mt-4">
       <qrcode-vue :value="computedAddr" level="L" render-as="svg" foreground="#000" background="#fff"/>
     </div>
@@ -9,7 +9,7 @@
     </div> -->
 
     <a-input-img
-      class="w-buy-shares-payment__accordion-stable-method f-registration__purchase--process-input rounded-lg mt-6"
+      class="w-buy-shares-payment__accordion-stable-method w-buy-shares-payment-short-purchase__purchase--process-input rounded-lg mt-6"
       label="Deposit method"
       :model-value="computedText"
       :img="computedIcon"
@@ -18,11 +18,11 @@
       @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
     />
 
-    <!-- <article class="f-registration__purchase--process-input flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg">
+    <!-- <article class="w-buy-shares-payment-short-purchase__purchase--process-input flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg">
       <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" loading="lazy" />
       <div class="flex flex-col flex-1 pr-9">
-        <p class="f-registration__purchase--process-input-title f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
-        <p class="f-registration__purchase--process-input-text f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
+        <p class="w-buy-shares-payment-short-purchase__purchase--process-input-title w-buy-shares-payment-short-purchase__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
+        <p class="w-buy-shares-payment-short-purchase__purchase--process-input-text w-buy-shares-payment-short-purchase__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
       </div>
     </article> -->
 
@@ -69,7 +69,7 @@
     <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
       {{ tronButtonCheckPayment }}
     </button>
-    <button @click="cancelOrder" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
+    <button @click="cancelOrder" class="w-buy-shares-payment-short-purchase__purchase--process-button-cancel block w-full justify-center items-center py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
       Cancel Order
     </button>
     <footer class="text-center py-6">
