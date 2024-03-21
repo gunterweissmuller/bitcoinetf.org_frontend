@@ -438,7 +438,11 @@ const handleGoogleConnect = async () => {
 
 const handleTelegramAuth = async () => {
 
-  (window as any).Telegram.Login.auth(
+  await (window as any).Telegram.Login.init({"bot_id":telegramBotId.value,"request_access":"write"});
+  
+  await (window as any).Telegram.Login.open(location.href || false);
+
+  await (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       console.log(tgData);
