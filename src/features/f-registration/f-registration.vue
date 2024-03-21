@@ -434,7 +434,6 @@ const handleGoogleConnect = async () => {
 }
 
 onMounted(() => {
-  //test
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
     console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
@@ -442,11 +441,14 @@ onMounted(() => {
     telegramBotId.value = r.data.data.bot_id;
 
     console.log(telegramBotId.value);
-    (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+    // (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
   })
 })
 
 const handleTelegramAuth = async () => {
+  console.log(1)
+  await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+  console.log(2)
   await (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
