@@ -50,7 +50,7 @@
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Amount"
-      :model-value="$app.filters.rounded(calcValue) + ' USDT'"
+      :model-value="$app.filters.roundedFixed(calcValue, 2) + ' USDT'"
       :disabled="true"
       :text-icon="amountCopied"
       text-icon-text="Copied!"
@@ -453,9 +453,9 @@ const transformSlotProps = (props) => {
 
 // copy
 
-const copiedAddressValue = ref($app.store.user?.info?.account.tron_wallet);
+const copiedAddressValue = ref(computedAddr.value);
 const addressCopied = ref(false);
-const copiedAmountValue = ref(props.calcValue.toFixed(2));
+const copiedAmountValue = ref($app.filters.roundedFixed(props.calcValue, 2));
 const amountCopied = ref(false);
 
 const { copy } = useClipboard({ copiedAddressValue });
