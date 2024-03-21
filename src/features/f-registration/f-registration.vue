@@ -446,9 +446,9 @@ onMounted(() => {
 })
 
 const handleTelegramAuth = async () => {
-  console.log(1)
+  console.log(1);
   await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
-  console.log(2)
+  console.log(2);
   await (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
