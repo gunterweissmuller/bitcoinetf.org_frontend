@@ -442,7 +442,7 @@ const handleGoogleConnect = async () => {
 
 
 const handleTelegramAuth = async () => {
-  return await (window as any).Telegram.Login.init('widget_login', 547043436, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+  return await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
 
   await (window as any).Telegram.Login.init({"bot_id":telegramBotId.value,"request_access":"write"});
   
@@ -499,7 +499,7 @@ const handleTelegramAuth = async () => {
 
 const testTG = async () => {
   await (window as any).Telegram.Login.auth(
-    { bot_id: 547043436, request_access: true },
+    { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       console.log(tgData);
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
