@@ -67,7 +67,7 @@
               </div>
 
 
-            <div @click="handleTelegramConnect"
+            <div id="widget_login" @click="handleTelegramConnect"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
                 <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
@@ -76,7 +76,7 @@
               </div>
             </div>
 
-            <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="testTG"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div>
+            <!-- <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="testTG"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div> -->
 
             <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
 
@@ -401,15 +401,7 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
-  //test
-  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
-    telegramRedirectUrl.value = r.data.data.redirect_url;
-    telegramBotName.value = r.data.data.bot_name;
-    telegramBotId.value = r.data.data.bot_id;
-
-    
-  })
+  
 
   if($app.store.authGoogle.response?.email) {
     currentStep.value = Steps.Email;
@@ -439,15 +431,19 @@ const handleGoogleConnect = async () => {
     window.location.href = googleUrl.value;
 }
 
+onMounted(() => {
+  //test
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+    console.log(r);
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+    telegramBotId.value = r.data.data.bot_id;
 
+    (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+  })
+})
 
 const handleTelegramAuth = async () => {
-  return await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
-
-  await (window as any).Telegram.Login.init({"bot_id":telegramBotId.value,"request_access":"write"});
-  
-  await (window as any).Telegram.Login.open(location.href || false);
-
   await (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
