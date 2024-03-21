@@ -61,6 +61,7 @@
                       :buttonClick="() => {refCodeApply()}"
                       :error-text="refCodeMessage"
                       :disabled="refApply"
+                      :button-click-enable="Boolean(refCode)"
                     />
                     <!-- <div
                       v-if="refCodeMessage"
@@ -107,7 +108,7 @@
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Price per Share</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$1</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$1.00</p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
@@ -117,7 +118,7 @@
                         <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
                       </m-popper>
                     </p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$1</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">US$1.00</p>
                   </div>
 
                   
@@ -148,7 +149,7 @@
 
                   <div class="f-registration__purchase--confirm-item">
                     <p class="f-registration__purchase--step-title f-registration--text-normal">Total Guaranteed Payout</p>
-                    <p class="f-registration__purchase--step-text f-registration--text-normal">${{ $app.store.purchase.totalPayout }}</p>
+                    <p class="f-registration__purchase--step-text f-registration--text-normal">${{ $app.filters.rounded($app.store.purchase.totalPayout, 2)  }}</p>
                   </div>
 
                   <div class="f-registration__purchase--confirm-item">
@@ -337,10 +338,12 @@ const getWallets = async () => {
 }
 
 const refCodeApply = async () => {
+  console.log(refApply.value);
+  if(refApply.value) return
 
-  if(refApply) return
+  console.log($app.store.user?.info?.referrals?.used_code)
 
-  if ($app.store.user.info.referrals.used_code === null) {
+  if ($app.store.user?.info?.referrals?.used_code === null ) { //|| $app.store.user?.info?.referrals?.used_code === undefined
     await $app.api.eth.referral
       .checkReferralCode(refCode.value)
       .then(() => {
@@ -350,6 +353,7 @@ const refCodeApply = async () => {
         $app.store.user.info.referrals.used_code = refCode.value
       })
       .catch((e) => {
+        console.log(e)
         refCodeError.value = true
         if (e?.errors?.error?.message) {
           refCodeMessage.value = e.errors.error.message
@@ -390,7 +394,7 @@ const originalWithDiscount = ref($app.store.purchase.amount);
 
 onMounted(async () => {
   $app.store.purchase.amountUS = originalWithDiscount.value;
-  console.log(originalWithDiscount.value, $app.store.purchase.amountUS);
+  console.log(originalWithDiscount.value, $app.store.purchase.amountUS, $app.store.user?.info?.referrals?.used_code, $app.store.user?.info);
 
   refCode.value = $app.store.user?.info?.referrals?.used_code || '';
   await getWallets()

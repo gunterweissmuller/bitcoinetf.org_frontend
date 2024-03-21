@@ -66,10 +66,10 @@
       </div>
       <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
     </article> -->
-    <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
+    <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
       {{ tronButtonCheckPayment }}
     </button>
-    <button @click="cancelOrder" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
+    <button @click="cancelOrder" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
       Cancel Order
     </button>
     <footer class="text-center py-6">
@@ -320,7 +320,7 @@ function initializeClock() {
   timeintervalPaid = setInterval(updateClock, 1000);
   updateClock();
 }
-const tronButtonCheckPayment = ref('I have paid')
+const tronButtonCheckPayment = ref('I have paid');
 const timerStarted = ref(false)
 const startTronTimer = async () =>{
   // $app.store.user.setSuccessModalUsdt({show: true});
