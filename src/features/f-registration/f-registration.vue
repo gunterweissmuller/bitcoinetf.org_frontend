@@ -76,6 +76,10 @@
               </div>
             </div>
 
+            <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="testTG"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div>
+
+            <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
+
             <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
 
               <!--<div
@@ -226,6 +230,7 @@ const enum Steps {
   Bonus = 'Bonus',
   TelegramSign = 'TelegramSign'
 }
+
 
 const phone = ref(null);
 const countryCode = ref(null);
@@ -437,6 +442,7 @@ const handleGoogleConnect = async () => {
 
 
 const handleTelegramAuth = async () => {
+  return await (window as any).Telegram.Login.init('widget_login', 547043436, {"origin":"https:\/\/core.telegram.org"}, false, "en");
 
   await (window as any).Telegram.Login.init({"bot_id":telegramBotId.value,"request_access":"write"});
   
@@ -486,6 +492,16 @@ const handleTelegramAuth = async () => {
 
       }
       
+      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+    }
+  );
+}
+
+const testTG = async () => {
+  await (window as any).Telegram.Login.auth(
+    { bot_id: 547043436, request_access: true },
+    (tgData: any) => {
+      console.log(tgData);
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
     }
   );
