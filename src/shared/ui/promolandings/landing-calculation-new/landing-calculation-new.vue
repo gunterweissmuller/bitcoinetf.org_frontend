@@ -50,7 +50,7 @@
             <nuxt-img src="/img/icons/colorful/google.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
-          <div @click="() => handleTelegramConnect()" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
+          <div @click="handleTelegramConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
           
@@ -590,75 +590,80 @@ const isTelegramConnection = ref(false);
 
 
 const handleTelegramAuth = async () => {
-(window as any).Telegram.Login.auth(
-  { bot_id: telegramBotId.value, request_access: true },
-  (tgData: any) => {
-    console.log(tgData);
-    if (!tgData) {
-      // authorization failed
-      isTelegramConnection.value = true;
-    } else {
-
-      console.log(tgData);
-
-      $app.api.eth.auth.telegramGetAuthType({
-        telegram_data: JSON.stringify(tgData),
-      }).then((r: any) => {
-        if(r.data.auth_type === 'registration') {
-          $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
-
-          //registration
-          signupStep.value = SignupSteps.Signup;
-          signupMethod.value = SignupMethods.Telegram;
-          firstName.value = $app.store.authTelegram.response.first_name;
-          lastName.value = $app.store.authTelegram.response.last_name;
-          email.value = $app.store.authTelegram.response.email;
-
-          scrollToSignupFields();
-
-          // currentStep.value = Steps.Email;
-          // currentSignup.value = SignupMethods.Telegram;
-          // firstName.value = $app.store.authTelegram.response.first_name;
-          // lastName.value = $app.store.authTelegram.response.last_name;
-          // email.value = $app.store.authTelegram.response.email;
-          // router.push("/personal/registration");
+  try {
+    (window as any).Telegram.Login.auth(
+      { bot_id: telegramBotId.value, request_access: true },
+      (tgData: any) => {
+        console.log(tgData);
+        if (!tgData) {
+          // authorization failed
+          isTelegramConnection.value = true;
         } else {
-          $app.api.eth.auth.
-            loginTelegram({
-              telegram_data: JSON.stringify(tgData),
-            })
-              .then((jwtResponse: any) => {
-                $app.store.auth.setTokens(jwtResponse.data)
-                confirmResponse.value = jwtResponse.data;
-              })
-              .then(async () => {
-                await $app.api.eth.auth.getUser().then((resp) => {
-                  $app.store.user.info = resp?.data
-                  //purchase
-                  purchaseStep.value = PurchaseSteps.Purchase;
-                  scrollToPurchase();
-                });
 
-                // await router.push('/personal/analytics/performance')
-              });
+          console.log(tgData);
+
+          $app.api.eth.auth.telegramGetAuthType({
+            telegram_data: JSON.stringify(tgData),
+          }).then((r: any) => {
+            if(r.data.auth_type === 'registration') {
+              $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+
+              //registration
+              signupStep.value = SignupSteps.Signup;
+              signupMethod.value = SignupMethods.Telegram;
+              firstName.value = $app.store.authTelegram.response.first_name;
+              lastName.value = $app.store.authTelegram.response.last_name;
+              email.value = $app.store.authTelegram.response.email;
+
+              scrollToSignupFields();
+
+              // currentStep.value = Steps.Email;
+              // currentSignup.value = SignupMethods.Telegram;
+              // firstName.value = $app.store.authTelegram.response.first_name;
+              // lastName.value = $app.store.authTelegram.response.last_name;
+              // email.value = $app.store.authTelegram.response.email;
+              // router.push("/personal/registration");
+            } else {
+              $app.api.eth.auth.
+                loginTelegram({
+                  telegram_data: JSON.stringify(tgData),
+                })
+                  .then((jwtResponse: any) => {
+                    $app.store.auth.setTokens(jwtResponse.data)
+                    confirmResponse.value = jwtResponse.data;
+                  })
+                  .then(async () => {
+                    await $app.api.eth.auth.getUser().then((resp) => {
+                      $app.store.user.info = resp?.data
+                      //purchase
+                      purchaseStep.value = PurchaseSteps.Purchase;
+                      scrollToPurchase();
+                    });
+
+                    // await router.push('/personal/analytics/performance')
+                  });
+            }
+          }).catch((err) => {
+            console.error(err);
+            isTelegramConnection.value = true;
+          })
+
+          
+
         }
-      }).catch((err) => {
-        console.error(err);
-        isTelegramConnection.value = true;
-      })
-
-      
-
-    }
-    
-    // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+        
+        // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+      }
+    )
+  } catch (e) {
+    console.log(e)
   }
-);
+
+  
 }
 
 
 const handleTelegramConnect = async () => {
-
   if(isTelegramConnection.value) return;
   isTelegramConnection.value = true;
 
