@@ -68,8 +68,8 @@
 
             
             <div class="tgme_widget_login medium nouserpic" id="widget_login">
-            <div class="btn tgme_widget_login_button" @click="handleTelegramConnect"
-                 class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
+            <div @click="handleTelegramConnect"
+                 class="btn tgme_widget_login_button flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
                 <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
                          class="aspect-square w-[18px]" loading="lazy" />
