@@ -299,6 +299,16 @@ const handleTelegramAuth = async () => {
   );
 }
 
+onMounted(() => {
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+    console.log(r);
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+    telegramBotId.value = r.data.data.bot_id;
+
+  })
+})
+
 const testTG = async () => {
 
   let data = null;
