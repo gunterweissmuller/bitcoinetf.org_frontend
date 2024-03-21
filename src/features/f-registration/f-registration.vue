@@ -78,7 +78,7 @@
               </div>
             </div>
 
-            <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="handleTelegramConnect"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div>
+            <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="testTG"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div>
 
             <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
 
@@ -440,8 +440,6 @@ onMounted(() => {
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
 
-    console.log(telegramBotId.value);
-    // (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
   })
 })
 
@@ -496,7 +494,19 @@ const handleTelegramAuth = async () => {
 }
 
 const testTG = async () => {
+
+  let data = null;
   await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+
+  await (window as any).Telegram.Login.auth(
+    { bot_id: telegramBotId.value, request_access: true },
+    (tgData: any) => {
+      data = tgData;
+      console.log(tgData);
+      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+    }
+  );
+  return data;
 }
 
 const handleTelegramConnect = async () => {
