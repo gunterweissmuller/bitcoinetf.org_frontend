@@ -125,6 +125,8 @@ export default defineNuxtConfig({
       ETH_API: process.env.NUXT_PUBLIC_ETH_API,
       EXPLORER_API: process.env.NUXT_PUBLIC_EXPLORER_API,
       ICON_API: process.env.NUXT_PUBLIC_ICON_API,
+      DOMAIN: process.env.DOMAIN,
+      APP_DOMAIN: process.env.APP_DOMAIN,
     },
   },
   css: ['@/src/app/styles/proxy-global.scss'],
