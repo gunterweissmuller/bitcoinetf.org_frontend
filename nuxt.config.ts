@@ -132,6 +132,9 @@ export default defineNuxtConfig({
   },
   css: ['@/src/app/styles/proxy-global.scss'],
   vite: {
+    build: {
+      minify: false,
+    },
     css: {
       preprocessorOptions: {
         scss: {
