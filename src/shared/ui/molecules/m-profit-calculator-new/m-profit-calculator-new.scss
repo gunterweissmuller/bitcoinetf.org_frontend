@@ -377,13 +377,26 @@
           transform: translateY(-50%);
           z-index: 10;
 
+          
+
           &-dropdown {
             width: 343px;
             border-radius: var(--Spacing-S, 8px);
-            left: calc(130% - 343px);
+            // left: 0;
+            right: 0;
             background: #E9A14A;
             padding: var(--spacing-s);
             // backdrop-filter: blur(32px);
+
+            // height: 295px;
+            // overflow-y: scroll;
+
+            @include breakpoint($break-tablet-minus) {
+              width: 200px;
+              right: 0;
+              height: 295px;
+              overflow-y: scroll;
+            }
 
             &-item {
               text-align-last: left;
@@ -401,6 +414,10 @@
 
           &-arrow-wrapper {
             width: 32px;
+
+            @include breakpoint($break-tablet-minus) {
+              width: 20px;
+            }
           }
 
           // &-check {

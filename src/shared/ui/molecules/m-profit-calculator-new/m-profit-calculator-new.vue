@@ -351,7 +351,7 @@ watch(
   () => width.value,
   (newValue) => {
     if(width.value < 768) {
-      defaultInputWith.value = 40;
+      defaultInputWith.value = 45;
       defaultInputPlus.value = 10;
     } else {
       defaultInputWith.value = 110;
