@@ -17,16 +17,6 @@
       disabled
       @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
     />
-
-    <!-- <article class="w-buy-shares-payment-short-purchase__purchase--process-input flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg">
-      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" loading="lazy" />
-      <div class="flex flex-col flex-1 pr-9">
-        <p class="w-buy-shares-payment-short-purchase__purchase--process-input-title w-buy-shares-payment-short-purchase__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
-        <p class="w-buy-shares-payment-short-purchase__purchase--process-input-text w-buy-shares-payment-short-purchase__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
-      </div>
-    </article> -->
-
-    
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Deposit address on Tron chain:"
@@ -40,13 +30,6 @@
       isBoldInput
       isTextInputSmall
     />
-    <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
-      <div class="flex flex-col flex-1 pr-2.5">
-        <p class="text-xs font-bold text-gray-400">Deposit address on Tron chain:</p>
-        <p class="text-xs font-medium text-zinc-800">TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi</p>
-      </div>
-      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-    </article> -->
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Amount"
@@ -59,17 +42,11 @@
       @on-input-click="() => copyToClipboardAmount()"
       isBoldInput
     />
-    <!-- <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
-      <div class="flex flex-col flex-1">
-        <p class="text-xs font-bold text-gray-400">Amount</p>
-        <p class="text-base text-zinc-800">1,002.93 USDT</p>
-      </div>
-      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-    </article> -->
-    <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
+    
+    <!-- <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
       {{ tronButtonCheckPayment }}
-    </button>
-    <button @click="cancelOrder" class="w-buy-shares-payment-short-purchase__purchase--process-button-cancel block w-full justify-center items-center py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
+    </button> -->
+    <button @click="cancelOrder" class="w-buy-shares-payment-short-purchase__purchase--process-button-cancel block w-full justify-center items-center py-5 mt-4 whitespace-nowrap rounded-lg" tabindex="0">
       Cancel Order
     </button>
     <footer class="text-center py-6">
@@ -258,10 +235,12 @@ onMounted(async () => {
   }
 
   if ($app.store.persiste.latestTronCheckDate) {
-    initializeClock()
+    initializeClock();
     // timerStarted.value = true
   }
-  initializeTronClock()
+  initializeTronClock();
+
+  startTronTimer();
 })
 
 watch(

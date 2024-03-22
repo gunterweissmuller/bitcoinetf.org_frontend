@@ -352,10 +352,10 @@ const refCodeApply = async () => {
     await $app.api.eth.referral
       .checkReferralCode(refCode.value)
       .then(() => {
-        refCodeError.value = false
-        refCodeBtnText.value = 'Referral code applied'
-        refApply.value = true
-        $app.store.user.info.referrals.used_code = refCode.value
+        refCodeError.value = false;
+        refCodeBtnText.value = 'Applied!';
+        refApply.value = true;
+        $app.store.user.info.referrals.used_code = refCode.value;
       })
       .catch((e) => {
         console.log(e)
