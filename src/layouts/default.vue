@@ -5,10 +5,10 @@
       { 'l-main--indent': isVisibleInfo },
       { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
-      { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares' },
+      { 'l-main--purchase': route.name === 'personal-purchase'  }, 
     ]"
-  >
-    <w-header v-if="route.name !== 'personal-buy-shares'" :list-info="listInfo" />
+  ><!--|| route.name === 'personal-buy-shares'-->
+    <w-header :list-info="listInfo" /> <!--v-if="route.name !== 'personal-buy-shares'"-->
     <template v-if="route.name !== 'personal-kyc'">
       <w-aside v-if="isDesktop || isLaptop"  />
     </template>
