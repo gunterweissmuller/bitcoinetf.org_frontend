@@ -1,13 +1,19 @@
 <template>
-  <s-site-blogs :title="detailSectionInfo?.data?.title" :description="detailSectionInfo?.data?.description"
-                :newsList="blogNews" :sectionSlug="detailSectionInfo?.data?.slug" />
+  <s-site-blogs
+    :title="detailSectionInfo?.data?.title"
+    :description="detailSectionInfo?.data?.description"
+    :sectionSlug="detailSectionInfo?.data?.slug"
+    :newsList="blogPosts"
+    :totalItems="blogPagination.pages"
+    :page="blogPagination.page"
+    @update:current-page="handlePagination"
+  />
 </template>
 
 <script setup lang="ts">
 import { useNuxtApp } from '#app'
 import { useRoute } from 'vue-router'
 import { BLOG_NEWS_UUID } from '~/src/shared/constants/global'
-
 
 const { $app } = useNuxtApp()
 const route = useRoute()
@@ -22,27 +28,70 @@ const { data: detailSectionInfo } = await useLazyAsyncData('detailSectionInfo', 
 useSeoMeta({
   title: () => detailSectionInfo.value?.data?.meta_title,
   description: () => detailSectionInfo.value?.data?.meta_description,
-})
+});
 
-const blogNews = ref([])
-const blogNewsPage = ref(1)
-
-const getBlogNewsRequest = async (uuid, page = 1) => {
-  return await useNuxtApp().$app.api.eth.news.getListNewsArticles({uuid, page}).then(resp => resp)
+interface Post {
+  slug: string;
+  title: string;
+  excerpt: string;
+  feature_image: string;
+  created_at: string;
 }
 
-const getBlogNews = async (uuid = BLOG_NEWS_UUID, page = 1) => {
-  const response = await getBlogNewsRequest(BLOG_NEWS_UUID, page)
-  blogNews.value = [...blogNews.value, ...response.data.data]
+interface Pagination {
+  page: number;
+  limit: 'all' | number;
+  pages: number;
+  total: number;
+  next: null | number;
+  prev: null | number;
+}
 
-  if (response.data.total > blogNews.value.length) {
-    blogNewsPage.value += 1
+interface Meta {
+  pagination: Pagination;
+}
 
-    await getBlogNews(uuid, blogNewsPage.value)
+interface Blog {
+  posts: Post[];
+  meta: Meta;
+}
+
+const blogPosts = ref<Post[]>([]);
+const blogPagination = ref<Pagination>({
+  page: 1,
+  limit: 11,
+  pages: 1,
+  total: 1,
+  next: null,
+  prev: null
+});
+
+const blogConfig = (page : number) => {
+  return {
+    limit: 11,
+    fields: 'slug,title,excerpt,feature_image,created_at',
+    page: page
   }
 }
 
+const getBlogNews = async (page : number = blogPagination.value.page) => {
+  return await useNuxtApp()
+    .$app.api.eth.news.getGhostBlogs( blogConfig(page) )
+    .then(({ data } : { data: Blog }) => {
+      blogPosts.value = data.posts;
+      blogPagination.value = data.meta.pagination;
+
+    });
+}
+
+const handlePagination = async (page : number) => {
+  await getBlogNews(page);
+  console.log(page);
+
+  window.scrollTo(0,0);
+}
+
 onBeforeMount(async () => {
-  await getBlogNews()
+  await getBlogNews();
 })
 </script>

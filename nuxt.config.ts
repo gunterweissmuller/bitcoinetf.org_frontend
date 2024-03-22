@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       meta: [
         {
           name: 'viewport',
-          content: 'width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover, maximum-scale=1',
+          content: 'width=device-width, height=device-height, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover, maximum-scale=1',
         },
         {
           name: 'msapplication-TileColor',

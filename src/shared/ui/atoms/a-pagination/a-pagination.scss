@@ -3,40 +3,40 @@
   align-items: center;
   justify-content: center;
 
-  .arrow-next {
-    display: block;
-    transform: rotate(180deg);
-  }
-
-  &__button {
-    display: flex;
-    background: none;
-    border: none;
-    width: 30px;
-    line-height: 1;
-    cursor: pointer;
-  }
+  gap: torem(6);
 
   &__item {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 32px;
+
+    min-width: torem(32);
     max-width: fit-content;
-    min-height: 32px;
+    min-height: torem(32);
+
+    background: var(--surfaces-surface-2);
+    border-radius: var(--spacing-xs);
+
+    font-family: Dm, sans-serif;
+    font-weight: 700;
     font-size: torem(16);
-    background: none;
+    line-height: torem(20);
     color: var(--accent-primary);
+
     cursor: pointer;
-    margin-right: 6px;
 
     &.disabledPage {
+      background: none;
+
       color: var(--text-secondary);
     }
   }
 
   &__selected {
+    background: none;
+
     color: var(--text-secondary);
+
     pointer-events: none;
   }
 }

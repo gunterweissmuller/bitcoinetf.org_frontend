@@ -28,12 +28,8 @@
       padding: torem(6, 24);
     }
 
-    &-date {
-      background: #0066FF1A;
-    }
-
-    &-read {
-      background: linear-gradient(90deg, rgba(207, 223, 255, 0.2) 0%, rgba(234, 217, 255, 0.1) 33.33%, rgba(194, 255, 233, 0.1) 66.67%, rgba(169, 194, 255, 0.2) 100%);
+    &-read, &-date {
+      background: rgba(#2E2F38, .5);
     }
   }
 
@@ -69,9 +65,11 @@
     }
 
     h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
       font-size: torem(32);
       line-height: torem(41);
-      font-weight: 600;
+      color: var(--text-primary);
+
       margin-top: torem(102);
       margin-bottom: torem(24);
 
@@ -132,10 +130,11 @@
     p, li {
       font-size: torem(16);
       line-height: torem(20);
+      color: var(--text-secondary);
     }
 
     p {
-      margin: torem(20) 0;
+      margin: torem(24) 0;
     }
 
     a {
