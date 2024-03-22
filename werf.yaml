@@ -63,7 +63,7 @@ shell:
     - export NUXT_PUBLIC_ETH_API={{- $globals.NuxtEthApi }}
     - export NUXT_PUBLIC_EXPLORER_API={{- $globals.NuxtExplorerApi }}
     - export NUXT_PUBLIC_ICON_API={{- $globals.NuxtIconsApi }}
-    - export DOMAIN="{{ .Env.DOMAIN }}"
-    - export APP_DOMAIN="{{ .Env.APP_DOMAIN }}"
+  - export DOMAIN="{{ $appUrl }}"
+  - export APP_DOMAIN="{{ $app0Url }}"
     - pnpm build
 ---
