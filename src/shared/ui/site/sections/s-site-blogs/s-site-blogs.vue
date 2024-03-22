@@ -6,7 +6,7 @@
       <div class="s-site-blogs__items">
         <m-site-blog v-for="(blog, id) in newsList" :key="id" :index="id" :blog="blog" :sectionSlug="sectionSlug"/>
       </div>
-      <a-pagination :totalItems="totalItems" :current-page="1" :click-callback="paginationHandler" />
+      <a-pagination :totalItems="totalItems" :current-page="page" :click-callback="paginationHandler" />
     </div>
   </section>
 </template>
@@ -21,13 +21,15 @@ withDefaults(
     newsList: any;
     sectionSlug: any;
     totalItems: number;
+    page: number;
   }>(),
   {
     title: '',
     description: '',
     newsList: '',
     sectionSlug:'',
-    totalItems: 1
+    totalItems: 1,
+    page: 1
   },
 );
 

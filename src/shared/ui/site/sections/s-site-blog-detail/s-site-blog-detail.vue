@@ -11,7 +11,7 @@
         <div class="s-site-blog-detail__info-item s-site-blog-detail__info-read">{{ blog?.reading_time }} min read</div>
       </div>
       <div class="s-site-blog-detail__img">
-        <img :src="blog.feature_image" :alt="blog.title">
+        <NuxtImg v-if="blog.feature_image" loading="lazy" :src="blog.feature_image" :alt="blog.title" />
       </div>
       <div v-html="blog.html" class="s-site-blog-detail__content"></div>
     </div>

@@ -89,6 +89,10 @@
 
       cursor: pointer;
     }
+
+    &--mb {
+      margin-bottom: torem(48) !important;
+    }
   }
 
   &--submain {

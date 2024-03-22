@@ -2,14 +2,16 @@
   <nuxt-link
     :to="`/${sectionSlug}/${props.blog.slug}`"
     class="m-site-blog"
+    prefetch
     :class="{
       'm-site-blog--main': props.index === 0,
       'm-site-blog--submain': props.index <= 2,
-      'm-site-blog--wide': isWide(props.index)
+      'm-site-blog--wide': isWide(props.index),
+      'm-site-blog--mb': isMarginBottom(props.index)
     }"
   >
     <div class="m-site-blog__img">
-      <img :src="props.blog.feature_image" alt="">
+      <NuxtImg v-if="props.blog.feature_image" loading="lazy" :src="props.blog.feature_image" :alt="blog.title" />
     </div>
     <div class="m-site-blog__info">
       <div v-if="props.blog.created_at" class="m-site-blog__info-date">{{ $app.filters.dayjs(props.blog.created_at).format('MMMM D') }}</div>
@@ -46,6 +48,10 @@ const isWide = (index: number) => {
   }
   return ((index - 2) % 5) % 4 === 0 || ((index - 2) % 5) % 5 === 0;
 };
+
+const isMarginBottom = (index: number) => {
+  return [0, 2, 3, 4, 5, 6, 7].includes(index);
+}
 </script>
 
 <style src="./m-site-blog.scss" lang="scss" />

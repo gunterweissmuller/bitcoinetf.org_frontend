@@ -128,7 +128,7 @@ const visibleItems = computed(() => {
 })
 
 const pageIndex = computed(() => {
-  return currentPageIndex
+  return currentPageIndex.value;
 })
 
 const onPageClickHandler = (page: number) => {

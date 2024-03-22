@@ -5,6 +5,7 @@
     :sectionSlug="detailSectionInfo?.data?.slug"
     :newsList="blogPosts"
     :totalItems="blogPagination.pages"
+    :page="blogPagination.page"
     @update:current-page="handlePagination"
   />
 </template>
