@@ -16,7 +16,10 @@ export default defineNuxtRouteMiddleware((to) => {
     /*if(window.location.hostname === config.public.APP_DOMAIN && to.path === '/') {
       const newUrl = `http://${config.public.DOMAIN}${to.path}`
       window.location.href = newUrl;
-    } else*/ if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name)) {
+    } else*/
+    console.log('DOMAIN', config.public.DOMAIN)
+    console.log('APP_DOMAIN', config.public.APP_DOMAIN)
+    if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name)) {
       const newUrl = `http://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
       console.log(newUrl)
       window.location.href = newUrl;
