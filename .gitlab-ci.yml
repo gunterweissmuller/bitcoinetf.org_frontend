@@ -144,6 +144,7 @@ destroy:dev:
     export ENV_FULL_NAME="staging"
     export APP_NAMESPACE="stage-${CI_PROJECT_PATH_SLUG}"
     export APP_URL="${STAGE_DOMAIN}${PRODUCTION_PATH}"
+    export APP0_URL="${APP_STAGE_DOMAIN}${PRODUCTION_PATH}"
     export WERF_REPO="${REGISTRY_NAME_STAGE}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
     export REPOSITORY_NAME="${REPOSITORY_NAME_STAGE}"
     export SECRET_VALUES_FILE="secret-values-stage.yaml"
