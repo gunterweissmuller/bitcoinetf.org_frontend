@@ -72,8 +72,10 @@ onMounted(() => {
   document.body.dataset.theme = localStorage.getItem('theme') || 'dark'
   $app.store.user.theme = localStorage.getItem('theme') || 'dark'
 
-  PostAffTracker.setAccountId('bitcoinetf.postaffiliatepro.com');
+
   try {
+    PostAffTracker.setAccountId('bitcoinetf.postaffiliatepro.com');
+
     PostAffTracker.track();
   } catch (err) { }
 
