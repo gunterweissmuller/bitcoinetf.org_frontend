@@ -6,7 +6,7 @@
       <div class="s-site-blogs__items">
         <m-site-blog v-for="(blog, id) in newsList" :key="id" :index="id" :blog="blog" :sectionSlug="sectionSlug"/>
       </div>
-<!--      <a-pagination totalItems="30" />-->
+      <a-pagination :totalItems="totalItems" :current-page="1" :click-callback="paginationHandler" />
     </div>
   </section>
 </template>
@@ -16,18 +16,26 @@ import MSiteBlog from '~/src/shared/ui/site/molecules/m-site-blog/m-site-blog.vu
 import APagination from '~/src/shared/ui/atoms/a-pagination/a-pagination.vue';
 withDefaults(
   defineProps<{
-    title: any
-    description: any
-    newsList: any
-    sectionSlug: any
+    title: any;
+    description: any;
+    newsList: any;
+    sectionSlug: any;
+    totalItems: number;
   }>(),
   {
     title: '',
     description: '',
     newsList: '',
-    sectionSlug:''
+    sectionSlug:'',
+    totalItems: 1
   },
-)
+);
+
+const emit = defineEmits(['update:current-page']);
+
+const paginationHandler = (page : number) => {
+  emit('update:current-page', page);
+}
 
 </script>
 

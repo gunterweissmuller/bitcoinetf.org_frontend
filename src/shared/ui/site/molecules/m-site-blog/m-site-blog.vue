@@ -1,13 +1,21 @@
 <template>
-  <nuxt-link :to="`/${sectionSlug}/${blog.slug}`" class="m-site-blog">
+  <nuxt-link
+    :to="`/${sectionSlug}/${props.blog.slug}`"
+    class="m-site-blog"
+    :class="{
+      'm-site-blog--main': props.index === 0,
+      'm-site-blog--submain': props.index <= 2,
+      'm-site-blog--wide': isWide(props.index)
+    }"
+  >
     <div class="m-site-blog__img">
-      <img :src="blog.preview_file" alt="">
+      <img :src="props.blog.feature_image" alt="">
     </div>
     <div class="m-site-blog__info">
-      <div v-if="blog.created_at" class="m-site-blog__info-date">{{ $app.filters.dayjs(blog.created_at).format('MMMM D') }}</div>
-      <div v-if="blog.category" class="m-site-blog__info-category">{{ blog.category }}</div>
-      <div class="m-site-blog__info-title">{{ blog.title }}</div>
-      <div class="m-site-blog__info-description">{{ blog.description }}</div>
+      <div v-if="props.blog.created_at" class="m-site-blog__info-date">{{ $app.filters.dayjs(props.blog.created_at).format('MMMM D') }}</div>
+      <div v-if="props.blog.category" class="m-site-blog__info-category">{{ props.blog.category }}</div>
+      <div class="m-site-blog__info-title">{{ props.blog.title }}</div>
+      <div class="m-site-blog__info-description">{{ props.blog.excerpt }}</div>
       <div class="m-site-blog__info-more">Read more</div>
     </div>
   </nuxt-link>
@@ -16,7 +24,7 @@
 <script setup lang="ts">
 import {useNuxtApp} from "#app";
 const {$app} = useNuxtApp()
-defineProps({
+const props = defineProps({
   sectionSlug:{
     type: String,
     default: '/blog'
@@ -31,6 +39,13 @@ defineProps({
     default: 0,
   },
 });
+
+const isWide = (index: number) => {
+  if (index <= 2) {
+    return false;
+  }
+  return ((index - 2) % 5) % 4 === 0 || ((index - 2) % 5) % 5 === 0;
+};
 </script>
 
 <style src="./m-site-blog.scss" lang="scss" />

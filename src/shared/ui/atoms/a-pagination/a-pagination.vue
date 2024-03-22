@@ -16,8 +16,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-const emit = defineEmits(['next', 'prev', 'change-current-page'])
-
 const props = defineProps({
   perPage: {
     type: [Number, String],
@@ -39,9 +37,15 @@ const props = defineProps({
     required: false,
     default: '…',
   },
+
+  clickCallback: {
+    type: Function,
+    required: true
+  }
 })
 
-const currentPageIndex = ref(Number(props.currentPage))
+const currentPageIndex = ref(Number(props.currentPage));
+
 const maxPageElements = 6
 
 const buttonClasses = computed(() => {
@@ -127,19 +131,10 @@ const pageIndex = computed(() => {
   return currentPageIndex
 })
 
-const onNextPageClick = () => {
-  currentPageIndex.value += 1
-  emit('next', currentPageIndex.value)
-}
-
-const onPrevPageClick = () => {
-  currentPageIndex.value -= 1
-  emit('prev', currentPageIndex.value)
-}
-
 const onPageClickHandler = (page: number) => {
-  currentPageIndex.value = page
-  emit('change-current-page', page)
+  currentPageIndex.value = page;
+
+  props.clickCallback(page);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
