@@ -59,5 +59,7 @@ shell:
     - export NUXT_PUBLIC_ETH_API={{- $globals.NuxtEthApi }}
     - export NUXT_PUBLIC_EXPLORER_API={{- $globals.NuxtExplorerApi }}
     - export NUXT_PUBLIC_ICON_API={{- $globals.NuxtIconsApi }}
+    - export DOMAIN="https://{{ .Values.global.ci_url }}{{- if and (ne .Values.global.ci_path "") (ne .Values.global.ci_path "/") }}/{{ .Values.global.ci_path | trimAll "/" }}{{- else }}/{{- end }}"
+    - export APP_DOMAIN="https://{{ .Values.global.app_url }}{{- if and (ne .Values.global.ci_path "") (ne .Values.global.ci_path "/") }}/{{ .Values.global.ci_path | trimAll "/" }}{{- else }}/{{- end }}"
     - pnpm build
 ---
