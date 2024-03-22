@@ -2,6 +2,10 @@
 {{ $_ := env "ENV_FULL_NAME"  | trunc 49 | trimSuffix "-" | set . "EnvName" }}
 {{- $values := .Files.Get ".helm/values.yaml" | fromYaml -}}
 {{- $globals := ternary $values.global.prod $values.global.stage (eq .EnvName "production") -}}
+{{- $appUrl := env "APP_URL" | trimSuffix "/" | trimPrefix "https://" | trunc 49 | trimSuffix "-" -}}
+{{- $app0Url := env "APP0_URL" | trimSuffix "/" | trimPrefix "https://" | trunc 49 | trimSuffix "-" -}}
+{{- $_ := set . "DOMAIN" $appUrl -}}
+{{- $_ := set . "APP_DOMAIN" $app0Url -}}
 
 ---
 configVersion: 1
@@ -59,7 +63,7 @@ shell:
     - export NUXT_PUBLIC_ETH_API={{- $globals.NuxtEthApi }}
     - export NUXT_PUBLIC_EXPLORER_API={{- $globals.NuxtExplorerApi }}
     - export NUXT_PUBLIC_ICON_API={{- $globals.NuxtIconsApi }}
-    - export DOMAIN="{{ trimSuffix "/" (trimPrefix "https://" .Env.APP_URL) }}"
-    - export APP_DOMAIN="{{ trimSuffix "/" (trimPrefix "https://" .Env.APP0_URL) }}"
+    - export DOMAIN="{{ .Env.DOMAIN }}"
+    - export APP_DOMAIN="{{ .Env.APP_DOMAIN }}"
     - pnpm build
 ---
