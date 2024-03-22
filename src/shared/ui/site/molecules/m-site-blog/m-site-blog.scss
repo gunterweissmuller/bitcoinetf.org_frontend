@@ -3,6 +3,10 @@
 
   cursor: pointer;
 
+  &--mb {
+    margin-bottom: torem(48) !important;
+  }
+
   &__img {
     width: 100%;
     background: var(--text-tertiary);
@@ -88,10 +92,6 @@
       color: var(--accent-primary);
 
       cursor: pointer;
-    }
-
-    &--mb {
-      margin-bottom: torem(48) !important;
     }
   }
 
