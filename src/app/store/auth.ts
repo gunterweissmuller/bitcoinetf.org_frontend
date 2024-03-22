@@ -39,7 +39,7 @@ export const auth = defineStore('auth', {
     },
 
     async refresh() {
-      if (this.refreshToken) {
+      /*if (this.refreshToken) {
         const PREFIX = '/v1/'
         const REFRESH_URL = 'auth/token/refresh'
 
@@ -70,7 +70,7 @@ export const auth = defineStore('auth', {
           // eslint-disable-next-line prefer-promise-reject-errors
           return Promise.reject()
         }
-      }
+      }*/
     },
 
     async reInitData() {
@@ -161,7 +161,7 @@ export const auth = defineStore('auth', {
     setRefCode(payload: {ref_code: string }) {
       this.refCode = payload.ref_code;
     }
-   
+
   },
 
   getters: {
