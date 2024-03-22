@@ -19,7 +19,7 @@
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
             placeholder="2,500"
             type="text"
-            
+            @keypress="validate"
             :min="1"
             :max="10000000"
             
@@ -247,8 +247,13 @@ const investmentAmountWithDiscount = ref(2375);
 
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
-    investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
-    investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
+
+    const temp = Number(localStorage.getItem('investmentAmount'));
+  
+    console.log(isNaN(temp), temp);
+
+    investmentAmount.value = isNaN(temp) ? 2500 : temp;
+    investmentAmountDisplay.value = String(investmentAmount.value) ;
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
 })
