@@ -23,7 +23,7 @@
         </transition-group>
       </div>
       <div v-if="personalBonus.length && hasNextPage" class="w-bonus__more">
-        <div @click="loadMoreReferrals" class="w-bonus__more-text">Load more</div>
+        <div @click="loadMoreBonus" class="w-bonus__more-text">Load more</div>
       </div>
 
       <div v-if="!personalBonus.length" class="w-bonus__empty">
