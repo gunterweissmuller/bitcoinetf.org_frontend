@@ -21,9 +21,20 @@ spec:
   tls:
   - hosts:
     - {{ .Values.global.ci_url }}
+    - {{ .Values.global.app_url }}
     secretName: tls-secret-{{ .Values.global.app_name }}
   rules:
   - host: {{ .Values.global.ci_url }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: {{ .Values.global.app_name }}
+            port:
+              name: http
+  - host: {{ .Values.global.app_url }}
     http:
       paths:
       - pathType: Prefix

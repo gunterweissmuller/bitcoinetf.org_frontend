@@ -159,6 +159,15 @@ destroy:dev:
     export WERF_REPO="${REGISTRY_NAME_PROD}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
     export REPOSITORY_NAME="${REPOSITORY_NAME_PROD}"
     export SECRET_VALUES_FILE="secret-values-prod.yaml"
+  elif [ "${CI_COMMIT_REF_SLUG}" = "staging-frontend-test" ]; then
+    export ENV_NAME="stage"
+    export ENV_FULL_NAME="staging"
+    export APP_NAMESPACE="${CI_COMMIT_REF_SLUG}"
+    export APP_URL="${STAGE_TEST_DOMAIN}${PRODUCTION_PATH}"
+    export APP_URL0="${APP_STAGE_TEST_DOMAIN}${PRODUCTION_PATH}"
+    export WERF_REPO="${REGISTRY_NAME_STAGE}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
+    export REPOSITORY_NAME="${REPOSITORY_NAME_STAGE}"
+    export SECRET_VALUES_FILE="secret-values-stage.yaml"
   else
     echo "Unknown environment: ${CI_COMMIT_REF_SLUG}"
     exit 1
@@ -205,6 +214,7 @@ destroy:dev:
       --release ${APP_NAMESPACE} \
       --set "global.env=${ENV_NAME}" \
       --set "global.ci_url=$(echo ${APP_URL} | cut -d / -f 3)" \
+      --set "global.app_url=$(echo ${APP0_URL} | cut -d / -f 3)" \
       --set "global.ci_path=${PRODUCTION_PATH}" \
       --set "global.env_name=${ENV_NAME}" \
       --set "global.env_full_name=${ENV_FULL_NAME}"
