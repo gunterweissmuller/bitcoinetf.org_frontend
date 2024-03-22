@@ -450,7 +450,21 @@ const copyToClipboardAmount = () => {
   amountCopied.value = true;
 }
 
-const cancelOrder = () => {
+const cancelOrder = async () => {
+
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/cancel-order`, { 
+    method: 'POST', 
+    headers: new Headers({
+      'Authorization': 'Bearer ' + $app.store.auth.accessToken,
+      'Content-Type': 'application/json'
+    }), 
+    body: JSON.stringify({
+      replenishment_uuid: $app.store.user.buyShares.data.uuid
+    })
+  });
+
+    const res = await response.json();
+
   tronButtonCheckPayment.value = 'I have paid';
   clearInterval(timeinterval);
   clearInterval(timeintervalPaid);
