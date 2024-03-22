@@ -6,14 +6,14 @@
 
     <div class="landing-calculation__journey-title">Start your bitcoin etf journey 🚀</div>
     <div class="landing-calculation__journey__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-      <header class="mx-auto landing-calculation__journey__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
+      <header class="mx-auto landing-calculation__journey__invest--text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
         <VueWriter :typeSpeed="60" class="landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" />
 
         <div class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary ml-4 grow flex justify-center font-semibold">
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
-            :disabled="props.isInputDisbled"
+            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM'"
             :style="'max-width: '+inputMaxWidth+'px'"
             v-model="investmentAmountDisplay"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -24,6 +24,30 @@
             :max="10000000"
             
           /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
+
+          <div class="relative">
+            <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
+              <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center gap-4 cursor-pointer">
+                <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
+              </div>
+            </div>
+            <div v-on-click-outside="outSideClick"  v-if="showAmountDropdown"  class="landing-calculation__journey__invest-select-amount-dropdown landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+              <ul class=" text-sm font-medium">
+                <li v-for="amount in amounts" :key="amount.amount" @click="selectAmount(amount.amount)" :class="[{'landing-calculation__journey__invest-select-amount-dropdown-item-active': amount.amount === currentAmount},'landing-calculation__journey__invest-select-amount-dropdown-item landing-calculation__journey__invest-select-dropdown-item cursor-pointer']">
+                  {{amount.amount}}
+                  <a-icon
+                    class="landing-calculation__journey__invest-select-amount-check"
+                    v-if="amount.amount === currentAmount"
+                    :name="Icon.MonoActionCheckMark"
+                    width="18"
+                    height="18"
+                  />
+                  
+                </li>
+              </ul>
+            </div>
+          </div>
+          
         </div>
 
       </header>
@@ -397,6 +421,77 @@ const toggleCurrencyDropdown = () => {
 const selectCurrency = (currency : any) => {
   selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
   toggleCurrencyDropdown();
+}
+
+// amount dropdown
+
+const currentAmount = ref('CUSTOM');
+
+const amounts = ref([
+  {
+    amount: '100',
+  }, 
+  {
+    amount: '250',
+  }, 
+  {
+    amount: '500',
+  }, 
+  {
+    amount: '1,000',
+  }, 
+  {
+    amount: '2,500',
+  }, 
+  {
+    amount: '5,000',
+  }, 
+  {
+    amount: '10,000',
+  }, 
+  {
+    amount: '15,000',
+  }, 
+  {
+    amount: '25,000',
+  }, 
+  {
+    amount: '50,000',
+  }, 
+  {
+    amount: '75,000',
+  }, 
+  {
+    amount: '100,000',
+  }, 
+  {
+    amount: 'CUSTOM',
+  }, 
+]);
+
+const showAmountDropdown = ref(false);
+
+const outSideClick =  (ev) => {
+  if(ev.target.className.search('landing-calculation__journey__invest-select-amount') == -1) {
+    showAmountDropdown.value = false;
+  }
+}
+
+
+const toggleAmountDropdown = () => {
+  showAmountDropdown.value = !showAmountDropdown.value;
+};
+
+const selectAmount = (amount : any) => {
+  if(amount === 'CUSTOM') {
+    currentAmount.value = amounts.value.find((el) => el.amount === amount)?.amount ?? amounts.value[0].amount;
+  } else {
+    const temp = amounts.value.find((el) => el.amount === amount)?.amount ?? amounts.value[0].amount;
+    investmentAmountDisplay.value = temp;
+    currentAmount.value = temp;
+  }
+
+  toggleAmountDropdown();
 }
 
 const handleContinue = () => {

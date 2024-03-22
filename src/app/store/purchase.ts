@@ -12,9 +12,8 @@ interface purchaseState {
 
 export const purchase = defineStore('purchase', {
   state: () => ({
-    amount: 100,
-    amountUS: 100,
-    test: 100,
+    amount: 2500,
+    amountUS: 2500,
     type: 'USDT',
     totalPayout: 142,
   } as purchaseState),

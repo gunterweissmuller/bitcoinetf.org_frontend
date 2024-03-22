@@ -510,11 +510,11 @@
     // if(investmentAmount.value < 100) return;
 
     closeModal();
-    $app.store.purchase.amount = investmentAmount;
+    $app.store.purchase.amount = investmentAmount.value;
     // $app.store.purchase.amountUS = investmentAmount;
     $app.store.purchase.type = selectedCurrency.value.value;
     $app.store.purchase.totalPayout = investmentAmount.value + guaranteedPayout.value * 3;
-    router.push('/personal/purchase');
+    router.push('/personal/buy-shares');
   }
 
   </script>
