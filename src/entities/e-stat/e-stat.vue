@@ -5,24 +5,6 @@
         <a-icon width="32" :name="Icon.ColorfulBitcoin" />
 
         <a-live />
-
-        <!-- <button
-          v-if="toggleTitle"
-          class="e-stat-default__head-toggle"
-          @mousedown="$emit('toggle-mouse-down')"
-          @mouseup="$emit('toggle-mouse-up')"
-          @touchstart="$emit('toggle-mouse-down')"
-          @touchend="$emit('toggle-mouse-up')"
-          @click="$emit('toggle-value')"
-        >
-          {{ toggleTitle }}
-        </button> -->
-
-        <!-- <div v-if="popper" class="e-stat-default__head-popper">
-          <m-popper hover :title="popper.title" :text="popper.text">
-            <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
-          </m-popper>
-        </div> -->
       </div>
 
       <div class="e-stat-default__wrap">
@@ -33,20 +15,9 @@
           <span :class="['e-stat-default__title-text', `e-stat-default__title-text--${titleColor}`]">
             {{ title }}
           </span>
-
-          <!-- <span v-if="difference" class="e-stat-default__title-difference">
-            {{ difference }}
-          </span> -->
         </div>
-
-        <!-- <div v-if="subtitle" v-html="subtitle" class="e-stat-default__subtitle"></div>
-
-        <div v-if="date" class="e-stat-default__date">
-          {{ date }}
-        </div> -->
       </div>
 
-      <!-- <div class="e-stat-default__info">{{ info }}</div> -->
     </template>
     <template v-else>
       <nuxt-link :to="{ name: titleLink }" v-if="listType === 'files'" class="e-stat-list__title">

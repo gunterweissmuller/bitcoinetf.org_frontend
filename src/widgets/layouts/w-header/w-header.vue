@@ -77,11 +77,42 @@
       </div>
 
       <e-analytics-tabs :tab-bars='tabs' />
+
+      <m-slider
+        id="assets"
+        slides-per-view="auto"
+        :space-between="16"
+        v-if="route.name === 'personal-assets-symbol'"
+      >
+        <template #slides>
+
+          <swiper-slide
+            class="w-header__slide"
+            v-for="(asset, id) in navAssets"
+            :key="id"
+          >
+            <nuxt-link
+              class="w-header__slide-link"
+              :class="{ active: activeAsset(asset.symbol) }"
+              :to="{ name: 'personal-assets-symbol', params: { symbol: asset.symbol.toLowerCase() } }"
+            >
+              <div class="w-header__slide-content">
+                <div :class="['w-header__type-symbol', `bg--${asset.symbol.toLowerCase()}`]"></div>
+                <span class="w-header__type-name">
+                  {{ asset.symbol }}
+                </span>
+              </div>
+            </nuxt-link>
+          </swiper-slide>
+
+        </template>
+      </m-slider>
     </div>
   </header>
   <e-page-info-modal v-if='routeNames?.[route?.name]?.info' v-model='isOpenModal'>
     <component :is='routeNames[route.name].info' />
   </e-page-info-modal>
+
 </template>
 
 <script setup lang='ts'>
@@ -111,7 +142,7 @@ import { SwiperSlide } from 'swiper/vue'
 
 const { $app } = useNuxtApp()
 
-const route = useRoute()
+const route = useRoute();
 
 const { isLaptop, isDesktop, isMobile, isTablet } = useMediaDevice()
 
@@ -152,6 +183,20 @@ const infoList = [
 ]
 
 const routeNames = computed(() => ({
+  'personal-assets': {
+    title: 'Assets',
+    titleCrumb: 'Assets',
+    breadcrumbs: false,
+    urlToBack: 'personal-portfolio',
+    info: EPageInfoAnalytics,
+  },
+  'personal-assets-symbol': {
+    title: 'Assets',
+    titleCrumb: 'Assets',
+    breadcrumbs: false,
+    urlToBack: 'personal-portfolio',
+    info: EPageInfoAnalytics,
+  },
   'personal-more': {
     title: 'More',
     titleCrumb: 'More',
@@ -313,6 +358,10 @@ const walletLinks = {
     { text: 'Bonus', name: 'personal-bonus' },
   ],
 }
+const assetsLinks = {
+  title: 'Assets',
+  links: [],
+}
 
 const linksList = {
   'personal-fund': fundLinks,
@@ -323,6 +372,7 @@ const linksList = {
   'personal-dividends': walletLinks,
   'personal-referrals': walletLinks,
   'personal-bonus': walletLinks,
+  'personal-assets': assetsLinks,
 }
 
 const isVisibleInfo = computed(() => {
@@ -330,7 +380,10 @@ const isVisibleInfo = computed(() => {
     route.name === 'personal-fund' ||
     route.name === 'personal-protection' ||
     route.name === 'personal-shareholders' ||
-    route.name === 'personal-portfolio'
+    route.name === 'personal-portfolio' ||
+    route.name === 'personal-assets' ||
+    route.name === 'personal-assets-symbol'
+
   )
 })
 
@@ -338,7 +391,7 @@ const isVisibleLinks = computed<boolean>(
   () =>
     !routeNames.value?.[route?.name]?.breadcrumbs &&
     linksList?.[route?.name]?.links &&
-    (isLaptop.value || isDesktop.value),
+    (isLaptop.value || isDesktop.value)
 )
 
 const isVisibleBreadcrumbs = computed<boolean>(
@@ -371,8 +424,19 @@ const closePopper = () => {
 }
 
 const assets = computed(() => {
-  return $app.store.assets.items
-})
+  return $app.store.assets.items;
+});
+
+const navAssets = computed(() => {
+  return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT');
+});
+
+const activeAsset = (symbol : string) : boolean => {
+  if (route.name === 'personal-assets-symbol') {
+    return route.params.symbol === symbol.toLowerCase()
+  }
+  return false;
+};
 
 const totalSum = computed(() => {
   if (!assets.value?.length) return 0
@@ -512,7 +576,7 @@ const getDividendsByYear = async () => {
 }
 
 const tabs = computed(() => {
-  if (route.path.includes('fund') || route.path.includes('asset')) {
+  if (route.path.includes('fund')) {
     return [
       { text: 'Portfolio', name: 'personal-portfolio' },
       { text: 'Protection', name: 'personal-protection' },

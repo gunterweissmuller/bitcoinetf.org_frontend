@@ -52,7 +52,6 @@
 <script lang='ts' setup>
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
-import { Icon } from '~/src/shared/constants/icons';
 
 interface Strategy {
   name: string;

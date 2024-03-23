@@ -6,6 +6,7 @@
       { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
       { 'l-main--purchase': route.name === 'personal-purchase' },
+      { 'l-main--assets': route.name === 'personal-assets-symbol' },
     ]"
   >
     <w-header :list-info="listInfo" />

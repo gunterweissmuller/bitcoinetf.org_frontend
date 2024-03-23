@@ -200,6 +200,7 @@ const options = {
       },
     },
     y: {
+      display: false,
       border: {
         display: false,
       },
@@ -236,14 +237,14 @@ const changeChartData = (tab, requestType = 'monthly') => {
     CHART_INSTANCE.data.datasets[0].data = tab.map((item) => Number(item.amount))
     CHART_INSTANCE.data.labels = tab.map((item) => {
     if (props.isTotalAssets) {
-      return item.label
+      return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY')
     } else {
       if (requestType === 'daily') {
         return $app.filters.dayjs(item?.created_at)?.format('D.MM')
       } else if (requestType === 'year') {
         return $app.filters.dayjs(item?.created_at)?.format('YYYY')
       } else {
-        return $app.filters.dayjs(item?.created_at)?.format('MM.YY')
+        return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY')
       }
     }
     })

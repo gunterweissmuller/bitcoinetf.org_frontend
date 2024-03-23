@@ -6,6 +6,7 @@
       v-if="assets?.length"
       :assets="assets"
       :btc-value="$app.store.user.btcValue"
+      title="AUM Allocation"
     />
     <!-- <e-assets
       v-if="assets?.length"

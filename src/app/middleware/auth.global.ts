@@ -1,7 +1,10 @@
 import {useNuxtApp} from '#app'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const {$app} = useNuxtApp()
+  const {$app} = useNuxtApp();
+  const assets = () => {
+    return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT')
+  };
   const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-purchaseb']
   const includedRouteMask = to.path.includes('personal')
 
@@ -22,7 +25,10 @@ export default defineNuxtRouteMiddleware((to) => {
 
   if (includedRouteMask && $app.store.auth.isUserAuthenticated) {
     if (to.name === 'personal-fund') {
-      return navigateTo({name: 'personal-protection'})
+      return navigateTo({name: 'personal-portfolio'})
+    }
+    if (to.name === 'personal-assets') {
+      return navigateTo({name: 'personal-assets-symbol', params: { symbol: assets()[0]?.symbol.toLowerCase() }})
     }
     if (to.name === 'personal-wallet') {
       return navigateTo({name: 'personal-dividends'})

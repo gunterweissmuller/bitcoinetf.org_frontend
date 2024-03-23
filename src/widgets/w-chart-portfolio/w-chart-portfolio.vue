@@ -1,36 +1,56 @@
 <template>
   <div id="portfolio-chart" class="w-chart-portfolio">
-    <div v-if="props.assets.length" class="w-chart-portfolio__types">
-      <div
-        v-for="(item, idx) in props.assets"
-        :key="idx"
-        class="w-chart-portfolio__type"
-        @mouseenter="triggerTooltip(item.symbol)"
-        @mouseleave="hideTooltip"
-      >
-        <div :class="['w-chart-portfolio__type-symbol', `bg--${item.symbol.toLowerCase()}`]"></div>
-        <div class="w-chart-portfolio__type-text">{{ item.symbol }}</div>
-      </div>
+    <div v-if="title" class="w-chart-fund__caption">
+      <a-live class='w-chart-fund__caption-live' />
+      <span class="w-chart-fund__caption-text">
+        {{ title }}
+      </span>
+      <a-icon
+        width='18'
+        height='18'
+        class='w-chart-fund__caption-icon'
+        :name='Icon.MonoInfo'
+      />
     </div>
     <div class="w-chart-portfolio__chart">
       <canvas :id="CHART_ID" />
-      <!--      <div class="w-chart-portfolio__info">-->
-      <!--        <div class="w-chart-portfolio__info-title">TOTAL AUM</div>-->
-      <!--        <div class="w-chart-portfolio__info-usd">${{ $app.filters.rounded(totalSum, 2) }}</div>-->
-      <!--        <div class="w-chart-portfolio__info-btc">-->
-      <!--          {{ $app.filters.convertValue($app.filters.rounded(resultSumBtc, 5)) }}-->
-      <!--        </div>-->
-      <!--      </div>-->
     </div>
+    <m-slider
+        id="portfolio"
+        :navigation="false"
+        :modules="[]"
+        slides-per-view="auto"
+        :space-between="8"
+      >
+        <template #slides>
+          <swiper-slide class="w-chart-portfolio__slide" v-for="(asset, id) in props.assets" :key="id">
+            <nuxt-link class="w-chart-portfolio__slide-link">
+              <div :class="['w-chart-portfolio__type-symbol', `bg--${asset.symbol.toLowerCase()}`]"></div>
+              <div class="w-chart-portfolio__type-desc">
+                <span class="w-chart-portfolio__type-name">
+                  {{ asset.name }}
+                </span>
+                <span class="w-chart-portfolio__type-price">
+                  ${{ $app.filters.rounded(asset.full_balance, 2) }}
+                </span>
+              </div>
+            </nuxt-link>
+          </swiper-slide>
+        </template>
+      </m-slider>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IAsset } from '~/src/shared/types/global'
-import { useNuxtApp } from '#app'
-import { Chart, registerables } from 'chart.js'
-import { getChartLabelPlugin } from 'chart.js-plugin-labels-dv'
-import { Icon } from '~/src/shared/constants/icons'
+import { IAsset } from '~/src/shared/types/global';
+import { useNuxtApp } from '#app';
+import { Chart, registerables } from 'chart.js';
+import { getChartLabelPlugin } from 'chart.js-plugin-labels-dv';
+import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
+import { SwiperSlide } from 'swiper/vue';
+import { Icon } from '~/src/shared/constants/icons';
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 
 Chart.register(...registerables, getChartLabelPlugin())
 
@@ -42,6 +62,7 @@ let CHART_INSTANCE = null
 const props = defineProps<{
   btcValue: any
   assets: IAsset[]
+  title: string
 }>()
 
 const fullBalanceFund = computed(() => {

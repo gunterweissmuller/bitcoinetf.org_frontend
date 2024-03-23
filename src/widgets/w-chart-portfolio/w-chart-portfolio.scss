@@ -56,6 +56,8 @@
     position: relative;
     height: torem(194);
 
+    margin: torem(24) 0;
+
     @include breakpoint($break-desktop-1024) {
       height: torem(194);
     }
@@ -94,6 +96,49 @@
       font-size: torem(10);
       font-weight: 700;
       line-height: normal;
+    }
+  }
+
+  &__slide {
+    width: auto;
+
+    padding: var(--spacing-s) var(--spacing-m-1);
+    border-radius: var(--spacing-s);
+
+    background: var(--surfaces-selection);
+
+    &-link {
+      display: flex;
+      align-items: center;
+      gap: torem(8);
+    }
+  }
+
+  &__type {
+    &-symbol {
+      width: torem(24);
+      height: torem(24);
+    }
+
+    &-desc {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-name {
+      font-family: Dm, sans-serif;
+      font-weight: 700;
+      font-size: torem(14);
+      line-height: torem(18);
+      color: var(--accent-primary);
+    }
+
+    &-price {
+      font-family: Caption, sans-serif;
+      font-weight: 700;
+      font-size: torem(12);
+      line-height: torem(15);
+      color: var(--text-tertiary);
     }
   }
 }
