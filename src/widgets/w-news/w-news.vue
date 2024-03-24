@@ -102,8 +102,6 @@ const getBlogNews = async (page : number = blogPagination.value.page) => {
     .then(({ data } : { data: Blog }) => {
       blogPosts.value = data.posts;
       blogPagination.value = data.meta.pagination;
-      console.log(data.posts);
-
     });
 }
 
