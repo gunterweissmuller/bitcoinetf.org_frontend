@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div v-if="isShowFullScreen" :class="['m-modal-mask', { 'm-modal-fullscreen': fullScreen, 'm-modal-kyc': kyc, 'm-modal-small': modalSmall}]">
       <div :class="['m-modal-wrapper', { 'm-modal-wrapper-basic': bgBasic }]">
-        <div ref="modalRef" :class="['m-modal-container', { 'm-modal-container-basic': bgBasic } , $attrs.class]">
+        <div ref="modalRef" :class="['m-modal-container', { 'm-modal-container-big': modalBig }, { 'm-modal-container-basic': bgBasic } , $attrs.class]">
           <slot />
         </div>
       </div>
@@ -39,8 +39,9 @@
       maxWidth?: number | undefined
       maxHeight?: number | undefined
       kyc?: boolean
-      bgBasic?: boolean,
-      modalSmall: boolean,
+      bgBasic?: boolean
+      modalSmall: boolean
+      modalBig: boolean
     }>(),
     {
       modelValue: false,
@@ -50,6 +51,7 @@
       kyc: false,
       bgBasic: false,
       modalSmall: false,
+      modalBig: false,
     },
   )
 

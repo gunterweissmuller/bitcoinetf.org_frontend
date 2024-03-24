@@ -1,4 +1,4 @@
-.f-registration {
+.f-registration-buy {
   padding: 0 0 var(--spacing-m-3);
   flex-grow: 1;
   display: flex;
@@ -205,17 +205,24 @@
 
     &-head {
       padding: var(--spacing-m-3) 0 0 0;
-      margin-bottom: var(--spacing-m-2);
+      margin-bottom: 38px;
       gap: var(--spacing-m-3);
       // align-items: flex-start;
 
+
       @include breakpoint($break-desktop-1024-minus) {
         padding: var(--spacing-m-1);
+        margin-bottom: var(--spacing-m-2);
         text-align: center;
         justify-content: center;
+        background: var(--surfaces-surface-glass-2);
         box-shadow: 0rem 0rem torem(6) 0rem rgba(0, 0, 0, 0.06);
         backdrop-filter: blur(32.5px);
         border-radius: 0rem 0rem torem(16) torem(16);
+
+        width: 100vw;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
 
@@ -224,6 +231,10 @@
 
       border: torem(1) solid var(--surfaces-border-1);
       border-radius: var(--spacing-s);
+
+      @include breakpoint($break-tablet-minus) {
+        border-radius: var(--spacing-m-1);
+      }
     
       &-desktop {
         display: flex;
@@ -278,7 +289,30 @@
         border-radius: 0;
       }
 
+      &-confirm {
+        border-top-left-radius: var(--spacing-s);
+        border-top-right-radius: var(--spacing-s);
+
+        @include breakpoint($break-tablet-minus) {
+          border-top-left-radius: var(--spacing-m-1);
+          border-top-right-radius: var(--spacing-m-1);
+        }
+      }
+
+      &-pay {
+        border-bottom-left-radius: var(--spacing-s);
+        border-bottom-right-radius: var(--spacing-s);
+
+        @include breakpoint($break-tablet-minus) {
+          border-bottom-left-radius: var(--spacing-m-1);
+          border-bottom-right-radius: var(--spacing-m-1);
+        }
+      }
+
       &-title {
+
+        gap: var(--spacing-m-1);
+
         &-text {
           color: var(--text-primary);
           font-size: torem(16);
@@ -443,7 +477,35 @@
     }
 
     &-loading {
-      color: var(--text-inverse-primary)
+      color: var(--text-primary)
+    }
+
+    &__ref-message--error {
+      color: var(--accent-danger)
+    }
+
+    &__switch {
+      border-radius: torem(6);
+      padding: var(--spacing-s);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+      &:not(:last-child) {
+        margin-bottom: var(--spacing-m-1);
+      }
+  
+     
+  
+      &-text {
+        display: flex;
+        align-items: center;
+        color: var(--text-primary);
+  
+        &-icon {
+          margin-right: var(--spacing-xs);
+        }
+      }
     }
   }
 }

@@ -76,7 +76,7 @@
               
             </div>
             
-            <button @click="handleButtonClick" class="a-input-with-button__input-button">{{ buttonText }}</button>
+            <button :disabled="!buttonClickEnable" @click="handleButtonClick" class="a-input-with-button__input-button">{{ buttonText }}</button>
             
             <template v-if="icon">
               <span
@@ -231,14 +231,9 @@ const onInputClick = () => {
   emit('on-input-click')
 }
 
-const isButtonClicked = ref(false);
 
 const handleButtonClick = () => {
-
-  if(props.buttonClickEnable) {
-    isButtonClicked.value = true;
     props.buttonClick();
-  }
 
 }
 

@@ -67,7 +67,9 @@
               </div>
 
 
-            <div @click="handleTelegramConnect"
+              <!-- <button @click="testTG">test</button> -->
+            
+            <div @click="testTG"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
                 <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
@@ -75,6 +77,10 @@
                 <div class="grow">Sign up with Telegram</div>
               </div>
             </div>
+
+            <!-- <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="testTG"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div> -->
+
+            <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
 
             <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
 
@@ -226,6 +232,7 @@ const enum Steps {
   Bonus = 'Bonus',
   TelegramSign = 'TelegramSign'
 }
+
 
 const phone = ref(null);
 const countryCode = ref(null);
@@ -396,6 +403,8 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
+  
+
   if($app.store.authGoogle.response?.email) {
     currentStep.value = Steps.Email;
     currentSignup.value = SignupMethods.Google;
@@ -424,11 +433,18 @@ const handleGoogleConnect = async () => {
     window.location.href = googleUrl.value;
 }
 
+onMounted(() => {
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+    console.log(r);
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+    telegramBotId.value = r.data.data.bot_id;
 
+  })
+})
 
 const handleTelegramAuth = async () => {
-
-  (window as any).Telegram.Login.auth(
+  await (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       console.log(tgData);
@@ -475,6 +491,59 @@ const handleTelegramAuth = async () => {
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
     }
   );
+}
+
+const testTG = async () => {
+
+  let data = null;
+  await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+
+  await (window as any).Telegram.Login.auth(
+    { bot_id: telegramBotId.value, request_access: true },
+    (tgData: any) => {
+      data = tgData;
+      console.log(tgData);
+
+      if (!tgData) {
+        // authorization failed
+      } else {
+        console.log(tgData);
+
+        $app.api.eth.auth.telegramGetAuthType({
+          telegram_data: JSON.stringify(tgData),
+        }).then((r: any) => {
+          if(r.data.auth_type === 'registration') {
+            $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+
+            currentStep.value = Steps.Email;
+            currentSignup.value = SignupMethods.Telegram;
+            firstName.value = $app.store.authTelegram.response.first_name;
+            lastName.value = $app.store.authTelegram.response.last_name;
+            email.value = $app.store.authTelegram.response.email;
+            // router.push("/personal/registration");
+          } else {
+            $app.api.eth.auth.
+              loginTelegram({
+                telegram_data: JSON.stringify(tgData),
+              })
+                .then((jwtResponse: any) => {
+                  $app.store.auth.setTokens(jwtResponse.data)
+                })
+                .then(async () => {
+                  await $app.api.eth.auth.getUser().then((resp) => {
+                    $app.store.user.info = resp?.data
+                  });
+
+                  await router.push('/personal/analytics/performance')
+                });
+          }
+        })
+      }
+
+      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+    }
+  );
+  return data;
 }
 
 const handleTelegramConnect = async () => {

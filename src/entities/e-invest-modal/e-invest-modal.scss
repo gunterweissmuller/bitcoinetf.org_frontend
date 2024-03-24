@@ -26,13 +26,21 @@
   
       &--text {
         &-main {
-          font-size: torem(24);
+          font-size: torem(32);
           font-weight: 500;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(24);
+          }
         }
   
         &-input {
-          font-size: torem(20);
+          font-size: torem(24);
           font-weight: 500;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(20);
+          }
           
         }
   
@@ -103,6 +111,11 @@
           position: absolute;
           right: var(--spacing-m-1);
           top: var(--spacing-m-1);
+
+          box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.16);
+          border-radius: 50%;
+          width: 32px;
+          height: 32px;
         }
   
 
@@ -145,6 +158,8 @@
   
           &-stars {
             margin: 0rem var(--spacing-s);
+            display: flex;
+            gap: var(--spacing-xs);
           }
         }
   
@@ -158,7 +173,7 @@
   
       &-input {
         line-height: torem(36);
-        padding: var(--spacing-xs) var(--spacing-m-1);
+        padding: var(--spacing-s) var(--spacing-m-1);
         background: var(--surfaces-selection);
         border-radius: var(--spacing-xs);
   
@@ -168,15 +183,19 @@
       }
   
       &-select {
-        padding: var(--spacing-xs) var(--spacing-m-1);
+        padding: var(--spacing-s) var(--spacing-m-1);
         gap: var(--spacing-s);
         border-radius: var(--spacing-xs);
         background: var(--surfaces-selection);
   
         &-text {
           color: var(--text-primary);
-          font-size: torem(20);
+          font-size: torem(24);
           font-weight: 500;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(20);
+          }
         }
 
         &-dropdown {
@@ -217,6 +236,14 @@
   
     &__button {
       margin-top: var(--spacing-m-3);
+      padding: var(--spacing-m-1) var(--spacing-l-2);
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-inverse-primary);
+      border-radius: var(--spacing-s);
+      background: var(--button-primary);
 
       @include breakpoint($break-tablet-minus) {
         margin-top: var(--spacing-m-2);

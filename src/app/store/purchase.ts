@@ -4,13 +4,16 @@ import { SignupMethods } from '~/src/shared/constants/signupMethods';
 
 interface purchaseState {
     amount: number,
+    amountUS: number,
+    test: number,
     type: 'USDT' | 'BTC',
     totalPayout: number,
 }
 
 export const purchase = defineStore('purchase', {
   state: () => ({
-    amount: 100,
+    amount: 2500,
+    amountUS: 2500,
     type: 'USDT',
     totalPayout: 142,
   } as purchaseState),

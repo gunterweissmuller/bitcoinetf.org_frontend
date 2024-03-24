@@ -1,6 +1,6 @@
 <template>
 
-  <div class="f-registration__purchase--process flex flex-col">
+  <div class="w-buy-shares-payment-short-purchase__purchase--process flex flex-col">
     <div class="w-buy-shares-payment-short-purchase__accordion-qr mt-4">
       <qrcode-vue :value="computedAddr" level="L" render-as="svg" foreground="#000" background="#fff"/>
     </div>
@@ -9,7 +9,7 @@
     </div> -->
 
     <a-input-img
-      class="w-buy-shares-payment__accordion-stable-method f-registration__purchase--process-input rounded-lg mt-6"
+      class="w-buy-shares-payment__accordion-stable-method w-buy-shares-payment-short-purchase__purchase--process-input rounded-lg mt-6"
       label="Deposit method"
       :model-value="computedText"
       :img="computedIcon"
@@ -17,16 +17,6 @@
       disabled
       @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
     />
-
-    <!-- <article class="f-registration__purchase--process-input flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg">
-      <NuxtImg src="/img/icons/colorful/usdt-trc20.svg" alt="USDT TRC20 option" class="my-auto w-6 aspect-square" loading="lazy" />
-      <div class="flex flex-col flex-1 pr-9">
-        <p class="f-registration__purchase--process-input-title f-registration__purchase--process-field-title text-xs font-bold text-gray-400">Deposit Method:</p>
-        <p class="f-registration__purchase--process-input-text f-registration__purchase--process-field-text whitespace-nowrap text-zinc-800 font-normal">Tether USDT (Tron, TRC-20)</p>
-      </div>
-    </article> -->
-
-    
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Deposit address on Tron chain:"
@@ -40,18 +30,10 @@
       isBoldInput
       isTextInputSmall
     />
-    <!-- <article class="flex gap-4 justify-between px-4 py-3.5 mt-6 rounded-lg bg-neutral-100">
-      <div class="flex flex-col flex-1 pr-2.5">
-        <p class="text-xs font-bold text-gray-400">Deposit address on Tron chain:</p>
-        <p class="text-xs font-medium text-zinc-800">TBia4uHnb3oSSZm5isP284cA7Np1v15Vhi</p>
-      </div>
-      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-    </article> -->
-
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Amount"
-      :model-value="$app.filters.rounded(calcValue) + ' USDT'"
+      :model-value="$app.filters.roundedFixed(calcValue, 2) + ' USDT'"
       :disabled="true"
       :text-icon="amountCopied"
       text-icon-text="Copied!"
@@ -60,17 +42,11 @@
       @on-input-click="() => copyToClipboardAmount()"
       isBoldInput
     />
-    <!-- <article class="flex gap-4 justify-between px-4 py-3 mt-6 rounded-lg bg-neutral-100">
-      <div class="flex flex-col flex-1">
-        <p class="text-xs font-bold text-gray-400">Amount</p>
-        <p class="text-base text-zinc-800">1,002.93 USDT</p>
-      </div>
-      <NuxtImg src="/img/icons/colorful/copy.svg" alt="Copy Address Icon" class="my-auto w-6 aspect-square" />
-    </article> -->
-    <button @click="startTronTimer" class="block	w-full justify-center items-center px-16 py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
-      I Have Paid
-    </button>
-    <button @click="() => router.push('/personal/analytics')" class="f-registration__purchase--process-button-cancel block w-full justify-center items-center px-16 py-5 mt-2 whitespace-nowrap rounded-lg" tabindex="0">
+    
+    <!-- <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
+      {{ tronButtonCheckPayment }}
+    </button> -->
+    <button @click="cancelOrder" class="w-buy-shares-payment-short-purchase__purchase--process-button-cancel block w-full justify-center items-center py-5 mt-4 whitespace-nowrap rounded-lg" tabindex="0">
       Cancel Order
     </button>
     <footer class="text-center py-6">
@@ -97,21 +73,24 @@ import {Centrifuge} from "centrifuge";
 import ACheckbox from "~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue";
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import { PayTypes } from '~/src/shared/constants/payWith'
+import { hostname } from '~/src/app/adapters/ethAdapter'
 
 const props = withDefaults(
   defineProps<{
     justTron: boolean
     calcValue: number
     isFiat: boolean
-    calcValueOriginal: number
     payType: PayTypes
+    refCode: any
+    switches: any
   }>(),
   {
     justTron: true,
     calcValue: 1000,
     isFiat: false,
-    calcValueOriginal: 950,
     payType: PayTypes.Tron,
+    refCode: '',
+    switches: {}
   },
 )
 const router = useRouter()
@@ -124,15 +103,24 @@ const onCountdownEnd = () => {
 }
 
 const computedAddr = computed(()=>{
-  return props.payType == PayTypes.Tron ? $app.store.user.info?.account?.tron_wallet : props.payType == PayTypes.Ethereum ? $app.store.user.wallets.ethereum.address : $app.store.user.info?.account?.tron_wallet;
+  return props.payType == PayTypes.Tron ? $app.store.user.info?.account?.tron_wallet 
+        : props.payType == PayTypes.Ethereum ? $app.store.user.wallets.ethereum.address 
+        : props.payType == PayTypes.Polygon ? $app.store.user.wallets.polygon.address 
+        : $app.store.user.info?.account?.tron_wallet;
 });
 
 const computedText = computed(()=>{
-  return props.payType == PayTypes.Tron ? "Tether USDT (Tron, TRC-20)" : props.payType == PayTypes.Ethereum ? "Tether USDT (Ethereum, ERC-20)" : "Tether USDT (Tron, TRC-20)";
+  return props.payType == PayTypes.Tron ? "Tether USDT (Tron, TRC-20)" 
+  : props.payType == PayTypes.Ethereum ? "Tether USDT (Ethereum, ERC-20)" 
+  : props.payType == PayTypes.Polygon ? "Tether USDT (Polygon, MATIC)" 
+  : "Tether USDT (Tron, TRC-20)";
 });
 
 const computedIcon = computed(()=>{
-  return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg' : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg' : '/img/icons/colorful/usdt-trc20.svg';
+  return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg' 
+  : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg' 
+  : props.payType == PayTypes.Polygon ? '/img/icons/colorful/usdt-matic.svg' 
+  : '/img/icons/colorful/usdt-trc20.svg';
 });
 
 const BANK_VARIANTS = [
@@ -203,28 +191,57 @@ onMounted(async () => {
     await initPayment()
   }
   if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
-    await $app.api.eth.billingEth
-      .buyShares({
-        amount: props.calcValueOriginal, // props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal
-        dividends: false,
-        referral: false,
+    
+    const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, { 
+      method: 'POST', 
+      headers: new Headers({
+        'Authorization': 'Bearer ' + $app.store.auth.accessToken,
+        'Content-Type': 'application/json'
+      }), 
+      body: JSON.stringify({
+        dividends: props.switches?.dividends ? true : false,
+        referral: props.switches?.referral ? true : false, 
         bonus: false,
+        amount: props.calcValue, 
+        order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'
       })
-      .then(({ data }) => {
-        if (data) {
-          router.replace({
-            query: { replenishment: data.uuid }
-          })
-          $app.store.user.buyShares = data
-        }
+    });
+
+    const res = await response.json();
+    console.log("BUYINIT", res);
+
+    if (res) {
+      router.replace({
+        query: { replenishment: res.uuid }
       })
+      $app.store.user.buyShares = res
+    }
+    
+    // await $app.api.eth.billingEth
+    //   .buyShares({
+    //     amount: props.calcValue, 
+    //     dividends: false,
+    //     referral: props.refCode && props.refCode !== '' ? true : false,
+    //     bonus: false,
+    //     refCode: props.refCode
+    //   })
+    //   .then(({ data }) => {
+    //     if (data) {
+    //       router.replace({
+    //         query: { replenishment: data.uuid }
+    //       })
+    //       $app.store.user.buyShares = data
+    //     }
+    //   })
   }
 
   if ($app.store.persiste.latestTronCheckDate) {
-    initializeClock()
+    initializeClock();
     // timerStarted.value = true
   }
-  initializeTronClock()
+  initializeTronClock();
+
+  startTronTimer();
 })
 
 watch(
@@ -261,6 +278,7 @@ function getTimeRemaining() {
   };
 }
 
+let timeintervalPaid = null;
 function initializeClock() {
   function updateClock() {
     const t = getTimeRemaining();
@@ -271,20 +289,22 @@ function initializeClock() {
 
     if (t.total <= 0) {
       // router.push({name: 'personal-buy-shares'})
-      if (timeinterval) {
-        clearInterval(timeinterval);
+      if (timeintervalPaid) {
+        clearInterval(timeintervalPaid);
         tronButtonCheckPayment.value = 'Check payment status'
         timerStarted.value = false
         $app.store.persiste.latestTronCheckDate = null
       }
     }
   }
-  const timeinterval = setInterval(updateClock, 1000);
+  timeintervalPaid = setInterval(updateClock, 1000);
   updateClock();
 }
-const tronButtonCheckPayment = ref('I have paid')
+const tronButtonCheckPayment = ref('I have paid');
 const timerStarted = ref(false)
 const startTronTimer = async () =>{
+  // $app.store.user.setSuccessModalUsdt({show: true});
+
   if (!timerStarted.value) {
     await $app.api.eth.billingEth.startCheckingTronPayment({account_uuid:$app.store.user.info.account.uuid})
     initializeClock()
@@ -338,8 +358,9 @@ function getTimeTron() {
 const tronTimerDays = ref(0)
 const tronTimerHours = ref(0)
 const tronTimerMinutes = ref(0)
+let timeinterval = null
 function initializeTronClock() {
-  let timeinterval = null
+  
   function updateClockTron() {
     const t = getTimeTron();
 
@@ -363,6 +384,9 @@ const isOpenSuccessModal = ref(false)
 watch(infoPayment, (value) => {
   if (value) {
     isOpenSuccessModal.value = true
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    });
   }
 })
 const accountUuid = computed(() => {
@@ -385,6 +409,7 @@ onMounted(async () => {
 
   sub
     .on('publication', async function (ctx) {
+      console.log("PUB",ctx, ctx.data.message?.data?.status)
       if (ctx.data.message?.data?.status === 'success') {
         infoPayment.value = ctx.data.message?.data
       }
@@ -408,9 +433,9 @@ const transformSlotProps = (props) => {
 
 // copy
 
-const copiedAddressValue = ref($app.store.user?.info?.account.tron_wallet);
+const copiedAddressValue = ref(computedAddr.value);
 const addressCopied = ref(false);
-const copiedAmountValue = ref(props.calcValue.toFixed(2));
+const copiedAmountValue = ref($app.filters.roundedFixed(props.calcValue, 2));
 const amountCopied = ref(false);
 
 const { copy } = useClipboard({ copiedAddressValue });
@@ -423,6 +448,29 @@ const copyToClipboardAddress = () => {
 const copyToClipboardAmount = () => {
   copy(copiedAmountValue.value);
   amountCopied.value = true;
+}
+
+const cancelOrder = async () => {
+
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/cancel-order`, { 
+    method: 'POST', 
+    headers: new Headers({
+      'Authorization': 'Bearer ' + $app.store.auth.accessToken,
+      'Content-Type': 'application/json'
+    }), 
+    body: JSON.stringify({
+      replenishment_uuid: $app.store.user.buyShares.data.uuid
+    })
+  });
+
+    const res = await response.json();
+
+  tronButtonCheckPayment.value = 'I have paid';
+  clearInterval(timeinterval);
+  clearInterval(timeintervalPaid);
+  timerStarted.value = false;
+
+  router.push('/personal/analytics');
 }
 
 </script>

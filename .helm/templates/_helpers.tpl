@@ -64,4 +64,8 @@ Create chart name and version as used by the chart label.
   value: "{{ $globals.NuxtExplorerApi }}"
 - name: NUXT_PUBLIC_ICON_API
   value: "{{ $globals.NuxtIconsApi }}"
+- name: DOMAIN
+  value: "{{ .Values.global.ci_url | trimPrefix "https://" | trimSuffix "/" }}{{ if and (.Values.global.ci_path) (ne .Values.global.ci_path "") (ne .Values.global.ci_path "/") }}/{{ .Values.global.ci_path | trimAll "/" }}{{ end }}"
+- name: APP_DOMAIN
+  value: "{{ .Values.global.app_url | trimPrefix "https://" | trimSuffix "/" }}{{ if and (.Values.global.ci_path) (ne .Values.global.ci_path "") (ne .Values.global.ci_path "/") }}/{{ .Values.global.ci_path | trimAll "/" }}{{ end }}"
 {{- end -}}

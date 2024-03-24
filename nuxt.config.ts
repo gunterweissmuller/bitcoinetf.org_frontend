@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       meta: [
         {
           name: 'viewport',
-          content: 'width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover, maximum-scale=1',
+          content: 'width=device-width, height=device-height, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover, maximum-scale=1',
         },
         {
           name: 'msapplication-TileColor',
@@ -125,6 +125,8 @@ export default defineNuxtConfig({
       ETH_API: process.env.NUXT_PUBLIC_ETH_API,
       EXPLORER_API: process.env.NUXT_PUBLIC_EXPLORER_API,
       ICON_API: process.env.NUXT_PUBLIC_ICON_API,
+      DOMAIN: process.env.DOMAIN,
+      APP_DOMAIN: process.env.APP_DOMAIN,
     },
   },
   css: ['@/src/app/styles/proxy-global.scss'],

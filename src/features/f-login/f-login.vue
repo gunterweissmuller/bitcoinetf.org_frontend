@@ -39,7 +39,7 @@
         </div>
 
         <div
-          @click="handleTelegramConnect"
+          @click="testTG"
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
           <div class="flex gap-2 items-center">
             <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
@@ -297,6 +297,66 @@ const handleTelegramAuth = async () => {
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
     }
   );
+}
+
+onMounted(() => {
+  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+    console.log(r);
+    telegramRedirectUrl.value = r.data.data.redirect_url;
+    telegramBotName.value = r.data.data.bot_name;
+    telegramBotId.value = r.data.data.bot_id;
+
+  })
+})
+
+const testTG = async () => {
+
+  let data = null;
+  await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+
+  await (window as any).Telegram.Login.auth(
+    { bot_id: telegramBotId.value, request_access: true },
+    (tgData: any) => {
+      data = tgData;
+      console.log(tgData);
+
+      if (!tgData) {
+          // authorization failed
+        } else {
+          console.log(tgData);
+
+          $app.api.eth.auth.telegramGetAuthType({
+            telegram_data: JSON.stringify(tgData),
+          }).then((r: any) => {
+            if(r.data.auth_type === 'registration') {
+              $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+              router.push("/personal/registration");
+            } else {
+              $app.api.eth.auth.
+                loginTelegram({
+                  telegram_data: JSON.stringify(tgData),
+                })
+                  .then((jwtResponse: any) => {
+                    $app.store.auth.setTokens(jwtResponse.data)
+                  })
+                  .then(async () => {
+                    await $app.api.eth.auth.getUser().then((resp) => {
+                      $app.store.user.info = resp?.data
+                    });
+
+                    await router.push('/personal/analytics/performance')
+                  });
+            }
+          })
+
+          
+
+        }
+
+      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+    }
+  );
+  return data;
 }
 
 const handleTelegramConnect = () => {

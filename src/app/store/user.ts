@@ -36,9 +36,16 @@ export const user = defineStore('user', {
     isInvestModalShow: {show: false, reinvest: false},
     investAmount: 2500,
     wallets: '',
+    succesModal: {show: false, isBtc: false},
   }),
 
   actions: {
+    setSuccessModalUsdt(payload: { show: boolean }) {
+      this.succesModal = {show: payload.show, isBtc: false};
+    },
+    setSuccessModalBtc(payload: { show: boolean }) {
+      this.succesModal = {show: payload.show, isBtc: true};
+    },
     setIsInvestModalShow(payload: { show: boolean }) {
       this.isInvestModalShow = {show: payload.show, reinvest: false};
     },
