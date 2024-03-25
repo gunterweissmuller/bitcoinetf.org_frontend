@@ -29,6 +29,9 @@ cleanup:
       imagesPerReference:
         last: 2
 ---
+image: nginx
+from: nginx:stable-alpine
+---
 image: app
 from: node:current-alpine
 docker:
