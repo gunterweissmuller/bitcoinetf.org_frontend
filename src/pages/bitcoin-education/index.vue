@@ -57,6 +57,7 @@ const news = computed(() => {
       created_at: item.created_at,
       excerpt: item.description,
       slug: item.slug,
+      tags: item.tags
     }
   })
 });
