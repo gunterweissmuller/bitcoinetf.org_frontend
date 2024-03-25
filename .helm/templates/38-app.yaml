@@ -21,6 +21,24 @@ spec:
         ksync: {{ .Values.global.app_name }}
     spec:
       containers:
+        - name: nginx
+          image: {{ .Values.werf.image.nginx }}
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: {{ .Values.global.app_name }}-nginx-config-volume-1
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: {{ .Values.global.app_name }}-nginx-config-volume-2
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            - name: {{ .Values.global.app_name }}-nginx-mimetypes
+              mountPath: /etc/nginx/mime.types
+              subPath: mime.types
+            - name: {{ .Values.global.app_name }}-nginx-logs
+              mountPath: /etc/nginx/logs.conf
+              subPath: logs.conf
         - name: {{ .Values.global.app_name }}
           image: {{ .Values.werf.image.app }}
           env:
