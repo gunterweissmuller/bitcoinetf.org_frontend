@@ -13,7 +13,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: 'true'
     {{- if or (eq .Values.global.env_name "stage") (eq .Values.global.env_name "dev") }}
     nginx.ingress.kubernetes.io/auth-realm: Authentication Required
-    nginx.ingress.kubernetes.io/auth-secret: basic-auth-new
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
     nginx.ingress.kubernetes.io/auth-type: basic
     {{- end }}
 spec:
