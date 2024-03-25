@@ -1,8 +1,7 @@
-{{- $globals := ternary .Values.global.prod .Values.global.dev (eq .Values.global.env_name "prod") -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.global.app_name }}-nginx-config-1
+  name: nginx-config-1
 data:
   nginx.conf: |
     user  nginx;
@@ -53,7 +52,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.global.app_name }}-nginx-config-2
+  name: nginx-config-2
 data:
   default: |
 
