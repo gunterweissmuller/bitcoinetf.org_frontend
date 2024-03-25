@@ -21,24 +21,6 @@ spec:
         ksync: {{ .Values.global.app_name }}
     spec:
       containers:
-        - name: nginx
-          image: {{ .Values.werf.image.nginx }}
-          ports:
-            - name: http
-              containerPort: 80
-          volumeMounts:
-            - name: nginx-config-volume-1
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
-            - name: nginx-config-volume-2
-              mountPath: /etc/nginx/conf.d/default.conf
-              subPath: default.conf
-            - name: nginx-mimetypes
-              mountPath: /etc/nginx/mime.types
-              subPath: mime.types
-            - name: nginx-logs
-              mountPath: /etc/nginx/logs.conf
-              subPath: logs.conf
         - name: {{ .Values.global.app_name }}
           image: {{ .Values.werf.image.app }}
           env:
@@ -66,31 +48,6 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "500m"
-      volumes:
-        - name: nginx-config-volume-1
-          configMap:
-            name: nginx-config-1
-            items:
-              - key: nginx.conf
-                path: nginx.conf
-        - name: nginx-config-volume-2
-          configMap:
-            name: nginx-config-2
-            items:
-              - key: default
-                path: default.conf
-        - name: nginx-mimetypes
-          configMap:
-            name: nginx-mimetypes
-            items:
-              - key: mime.types
-                path: mime.types
-        - name: nginx-logs
-          configMap:
-            name: nginx-logs
-            items:
-              - key: logs.conf
-                path: logs.conf
       imagePullSecrets:
         - name: docker-registry
 ---
@@ -100,7 +57,7 @@ metadata:
   name: {{ .Values.global.app_name }}
 spec:
   ports:
-    - port: 80
+    - port: 3000
       name: http
   selector:
     app: {{ .Values.global.app_name }}
