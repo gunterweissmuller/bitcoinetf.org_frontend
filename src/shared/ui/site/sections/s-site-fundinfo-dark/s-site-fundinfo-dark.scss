@@ -160,6 +160,7 @@
     box-shadow: 0 0 torem(6) 0 #0000000f;
     display: flex;
     align-items: center;
+    overflow-x: hidden;
 
     .swiper-wrapper {
       -webkit-transition-timing-function: linear !important;
