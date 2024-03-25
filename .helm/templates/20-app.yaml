@@ -39,7 +39,7 @@ spec:
             - name: nginx-logs
               mountPath: /etc/nginx/logs.conf
               subPath: logs.conf
-        - name: nuxt
+        - name: {{ .Values.global.app_name }}
           image: {{ .Values.werf.image.app }}
           env:
 {{ include "apps-env-var-values" . | indent 12 }}
