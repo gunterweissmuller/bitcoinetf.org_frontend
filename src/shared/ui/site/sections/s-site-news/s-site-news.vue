@@ -17,10 +17,10 @@ const props = defineProps<{
 }>()
 const newsData = computed(() => props.data.map((element) => {
   return {
-    img: element.preview_file,
+    img: element.feature_image,
     title: element.title,
     date: useNuxtApp().$app.filters.dayjs(element.created_at).format('MMMM D'),
-    text: element.description,
+    text: element.excerpt,
     slug: element.slug
   }
 }))

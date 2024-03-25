@@ -60,33 +60,11 @@ interface Post {
   created_at: string;
 }
 
-interface Pagination {
-  page: number;
-  limit: 'all' | number;
-  pages: number;
-  total: number;
-  next: null | number;
-  prev: null | number;
-}
-
-interface Meta {
-  pagination: Pagination;
-}
-
 interface Blog {
   posts: Post[];
-  meta: Meta;
 }
 
 const blogPosts = ref<Post[]>([]);
-const blogPagination = ref<Pagination>({
-  page: 1,
-  limit: 11,
-  pages: 1,
-  total: 1,
-  next: null,
-  prev: null
-});
 
 const blogConfig = (page : number) => {
   return {
@@ -96,12 +74,11 @@ const blogConfig = (page : number) => {
   }
 }
 
-const getBlogNews = async (page : number = blogPagination.value.page) => {
+const getBlogNews = async (page : number = 1) => {
   return await useNuxtApp()
     .$app.api.eth.news.getGhostBlogs( blogConfig(page) )
     .then(({ data } : { data: Blog }) => {
       blogPosts.value = data.posts;
-      blogPagination.value = data.meta.pagination;
     });
 }
 
