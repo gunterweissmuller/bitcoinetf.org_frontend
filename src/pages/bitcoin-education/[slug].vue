@@ -1,5 +1,5 @@
 <template>
-  <s-site-blog-detail :backTo="'bitcoin-education'" :blog="getArticleInfo?.data" />
+  <s-site-blog-detail :backTo="'bitcoin-education'" :blog="blogNews" />
 </template>
 
 <script setup lang="ts">
@@ -14,6 +14,20 @@ const routeRulesForAPi = route.path.slice(1).split('/')
 const { data: getArticleInfo } = await useAsyncData('getArticleInfo', () => {
   return $app.api.eth.news.getNewsArticles({ section_slug: routeRulesForAPi[0], article_slug: routeRulesForAPi[1] })
 })
+
+const blogNews = computed(() => {
+  const post = getArticleInfo.value?.data;
+
+  return {
+    feature_image: post.preview_file?.path,
+    title: post.title,
+    created_at: post.created_at,
+    html: post.content,
+    slug: post.slug,
+    reading_time: post.reading_time
+  }
+});
+
 definePageMeta({
   layout: 'site-texts',
 })
