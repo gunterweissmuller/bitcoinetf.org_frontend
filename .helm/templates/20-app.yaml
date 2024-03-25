@@ -66,6 +66,31 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "500m"
+      volumes:
+        - name: nginx-config-volume-1
+          configMap:
+            name: nginx-config-1
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: {{ .Values.global.app_name }}-nginx-config-volume-2
+          configMap:
+            name: nginx-config-2
+            items:
+              - key: default
+                path: default.conf
+        - name: {{ .Values.global.app_name }}-nginx-mimetypes
+          configMap:
+            name: nginx-mimetypes
+            items:
+              - key: mime.types
+                path: mime.types
+        - name: {{ .Values.global.app_name }}-nginx-logs
+          configMap:
+            name: nginx-logs
+            items:
+              - key: logs.conf
+                path: logs.conf
       imagePullSecrets:
         - name: docker-registry
 ---
@@ -75,7 +100,7 @@ metadata:
   name: {{ .Values.global.app_name }}
 spec:
   ports:
-    - port: 3000
+    - port: 80
       name: http
   selector:
     app: {{ .Values.global.app_name }}
