@@ -49,18 +49,14 @@ const getBlogNews = async (uuid = BITCOIN_EDUCATION_NEWS_UUID, page = 1) => {
 
 }
 
-const news = computed(() => {
-  return blogNews.value.map(item => {
-    return {
-      feature_image: item.preview_file,
-      title: item.title,
-      created_at: item.created_at,
-      excerpt: item.description,
-      slug: item.slug,
-      tags: item.tags
-    }
-  })
-});
+const news = computed(() => blogNews.value.map(item => ({
+  feature_image: item.preview_file,
+  title: item.title,
+  created_at: item.created_at,
+  excerpt: item.description,
+  slug: item.slug,
+  tags: item.tags
+})));
 
 onBeforeMount(async () => {
   await getBlogNews()
