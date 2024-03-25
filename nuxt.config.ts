@@ -176,6 +176,10 @@ export default defineNuxtConfig({
   nitro: {
     moduleSideEffects: ['reflect-metadata'],
   },
+  routeRules: {
+    '/img/**': { headers: { 'cache-control': `public,max-age=31536000,s-maxage=31536000` } },
+    '/_nuxt/**': { headers: { 'cache-control': `public,max-age=31536000,s-maxage=31536000` } },
+  },
   typescript: {
     tsConfig: {
       compilerOptions: {
@@ -184,6 +188,17 @@ export default defineNuxtConfig({
     },
   },
   hooks: {
+    // prevent some prefetch behaviour
+    'build:manifest': (manifest) => {
+      for (const key in manifest) {
+        manifest[key].dynamicImports = []
+
+        const file = manifest[key]
+        if (file.assets) {
+          file.assets = file.assets.filter((assetName) => !/.+\.(gif|jpe?g|png|svg)$/.test(assetName))
+        }
+      }
+    },
     'pages:extend'(routes) {
       const extendedRoutes = [
         {

@@ -55,7 +55,7 @@ export default class NewsApiModule {
       key: '84de17e44b86b69afd70a116fe',
     }
     try {
-      return await axios.get(`https://news.bitcoinetf.org/ghost/api/content/posts/slug/${slug}`, {
+      return await axios.get(`https://news.bitcoinetf.org/ghost/api/content/posts/slug/${slug.trim()}`, {
         params: Object.assign(init_params, params),
         auth: {
           username: 'guest',

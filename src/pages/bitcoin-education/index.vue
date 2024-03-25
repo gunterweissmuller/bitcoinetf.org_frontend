@@ -3,7 +3,7 @@
     :categories="getListNewsTags"
     :title="detailSectionInfo?.data?.title"
     :description="detailSectionInfo?.data?.description"
-    :newsList="blogNews"
+    :newsList="news"
     :sectionSlug="detailSectionInfo?.data?.slug"
   />
 </template>
@@ -45,7 +45,18 @@ const getBlogNews = async (uuid = BITCOIN_EDUCATION_NEWS_UUID, page = 1) => {
 
     await getBlogNews(uuid, blogNewsPage.value)
   }
+  console.log(blogNews.value);
+
 }
+
+const news = computed(() => blogNews.value.map(item => ({
+  feature_image: item.preview_file,
+  title: item.title,
+  created_at: item.created_at,
+  excerpt: item.description,
+  slug: item.slug,
+  tags: item.tags
+})));
 
 onBeforeMount(async () => {
   await getBlogNews()
