@@ -22,7 +22,7 @@
             text="Buy Bitcoin ETF Shares"
             @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"
           /> -->
-          
+
         </div>
         <div class="w-aside__links">
           <ul class="w-aside__list">
@@ -76,16 +76,18 @@
           </nuxt-link>
         </div>
 
-        <div class="w-aside__avatar">
-          <a-avatar size="64px" photo-src="/img/avatar.png" :robot-data="$app.store.user?.info?.account?.uuid" class="w-aside__avatar-pic" />
-          <div v-if="$app.store.user?.info?.profile?.full_name" class="w-aside__avatar-title">
-            {{ $app.store.user?.info?.profile?.full_name }}
+        <div class="w-aside__profile">
+          <div class="w-aside__avatar">
+            <a-avatar size="64px" photo-src="/img/avatar.png" :robot-data="$app.store.user?.info?.account?.uuid" class="w-aside__avatar-pic" />
+            <div v-if="$app.store.user?.info?.profile?.full_name" class="w-aside__avatar-title">
+              {{ $app.store.user?.info?.profile?.full_name }}
+            </div>
+            <div class="w-aside__avatar-subtitle">@{{ $app.store.user?.info?.account?.username }}</div>
+
           </div>
-          <div class="w-aside__avatar-subtitle">@{{ $app.store.user?.info?.account?.username }}</div>
 
+          <f-refer-friends class="w-aside__refer" :modal="false" @click="isOpenModalRefer = true" />
         </div>
-
-        <f-refer-friends class="w-aside__refer" :modal="false" @click="isOpenModalRefer = true" />
 
         <div class="w-aside__poster">
           <div class="w-aside__poster-title">Earn $20 by inviting your friends! 💸</div>
