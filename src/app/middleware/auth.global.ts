@@ -12,7 +12,14 @@ export default defineNuxtRouteMiddleware((to) => {
       refresh_token: urlParams.get('refreshToken'),
       websocket_token: urlParams.get('websocketToken')
     });
+    window.location.search = '';
   }
+
+  if(urlParams.get('logout')) {
+    $app.store.auth.logout()
+    window.location.search = '';
+  }
+
 
   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
     return navigateTo({name: 'personal-login'})
