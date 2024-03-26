@@ -1,5 +1,5 @@
 <template>
-  <div class="w-certificate" :class="`w-certificate--${props.type}`">
+  <div v-show="props.type !== 'init_btc'" class="w-certificate" :class="`w-certificate--${props.type}`">
     <span class="w-certificate__name">
       {{ props.username }}
     </span>
@@ -25,7 +25,7 @@ const props = defineProps({
   type: {
     type: String as PropType<'btc' | 'usdt' | 'init_btc'>,
     required: true,
-    default: 'btc'
+    default: 'init_btc'
   },
   username: {
     type: String,
