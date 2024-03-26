@@ -14,7 +14,7 @@
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
             :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM'"
-            :style="'max-width: '+inputMaxWidth+'px'"
+            :style="['max-width: '+inputMaxWidth+'px', currentAmount !== 'CUSTOM' ? 'pointer-events: none' : '' ]"
             v-model="investmentAmountDisplay"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
             placeholder="2,500"
@@ -34,7 +34,7 @@
             <div v-on-click-outside="outSideClick"  v-if="showAmountDropdown"  class="landing-calculation__journey__invest-select-amount-dropdown landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
               <ul class=" text-sm font-medium">
                 <li v-for="amount in amounts" :key="amount.amount" @click="selectAmount(amount.amount)" :class="[{'landing-calculation__journey__invest-select-amount-dropdown-item-active': amount.amount === currentAmount},'landing-calculation__journey__invest-select-amount-dropdown-item landing-calculation__journey__invest-select-dropdown-item cursor-pointer']">
-                  {{amount.amount}}
+                  {{ amount.amount !== 'CUSTOM' ? '$' : ''}} {{amount.amount}}
                   <a-icon
                     class="landing-calculation__journey__invest-select-amount-check"
                     v-if="amount.amount === currentAmount"
