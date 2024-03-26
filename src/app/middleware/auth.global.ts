@@ -1,23 +1,26 @@
-import {useNuxtApp} from '#app'
+import {useNuxtApp, useRouter} from '#app'
 
 export default defineNuxtRouteMiddleware((to) => {
   const {$app} = useNuxtApp()
+  const router = useRouter()
   const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
   const includedRouteMask = to.path.includes('personal')
-
+  console.log(to);
   const urlParams = new URLSearchParams(window.location.search);
-  if(urlParams.get('accessToken')) {
+  if(to.query.accessToken) {
     $app.store.auth.setTokens({
       access_token: urlParams.get('accessToken'),
       refresh_token: urlParams.get('refreshToken'),
       websocket_token: urlParams.get('websocketToken')
     });
-    window.location.search = '';
+    router.replace({ path: to.path, query: {} })
+    //router.replace({ query: {} })
+    //window.location.search = '';
   }
 
-  if(urlParams.get('logout')) {
+  if(to.query.logout) {
     $app.store.auth.logout()
-    window.location.search = '';
+    router.replace({ path: to.path, query: {} })
   }
 
 
