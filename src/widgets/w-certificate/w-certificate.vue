@@ -4,7 +4,7 @@
       {{ props.username }}
     </span>
     <span class="w-certificate__count">
-      1,000
+      {{ formatter.format(props.shares) }}
     </span>
     <span class="w-certificate__title">
       Bitcoin ETF Shares
@@ -32,12 +32,19 @@ const props = defineProps({
     required: true,
     default: 'User Name'
   },
+  shares: {
+    type: Number,
+    required: true,
+    default: 1000
+  },
   time: {
     type: Number,
     required: true,
     default: 1
   }
 });
+
+const formatter = new Intl.NumberFormat('en-US');
 
 const currency = computed<string>(() => props.type === 'usdt' ? 'USDT' : 'Bitcoin');
 </script>

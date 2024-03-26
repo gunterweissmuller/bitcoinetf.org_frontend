@@ -89,7 +89,12 @@
 
           </div>
 
-          <w-certificate :type="$app.store.user?.info?.account?.order_type" time="1094" :username="$app.store.user?.info?.profile?.full_name" />
+          <w-certificate
+            :type="$app.store.user?.info?.account?.order_type"
+            :username="$app.store.user?.info?.profile?.full_name"
+            shares="1000"
+            time="1094"
+          />
         </div>
 
         <div class="w-aside__poster">
@@ -177,7 +182,7 @@ import WCertificate from '~/src/widgets/w-certificate/w-certificate.vue';
 const { $app } = useNuxtApp()
 
 const isUserAuthenticated = computed(() => {
-  console.log($app.store.user?.info?.account?.order_type);
+  // console.log($app.store.user?.info?.account?.order_type);
 
   return $app.store.auth.isUserAuthenticated
 })
