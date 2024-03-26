@@ -173,6 +173,11 @@ export const auth = defineStore('auth', {
 
   getters: {
     isUserAuthenticated: (state) => !!state.accessToken,
+    getTokens: (state) => ({
+      accessToken: state.accessToken,
+      refreshToken: state.refreshToken,
+      websocketToken: state.websocketToken,
+    }),
   },
 
   persist: {
