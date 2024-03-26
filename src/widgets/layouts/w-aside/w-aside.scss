@@ -60,6 +60,7 @@
   &__profile {
     display: none;
     flex-direction: column;
+    align-items: center;
     gap: var(--spacing-m-2);
 
     padding: var(--spacing-m-2) var(--spacing-m-1);
@@ -373,10 +374,20 @@
       &__inner {
         overflow: visible;
         height: auto;
+
+        @include breakpoint($break-desktop-1024) {
+          display: flex;
+          flex-direction: row-reverse;
+          gap: torem(24);
+        }
       }
 
       &__profile {
         display: flex;
+
+        @include breakpoint($break-desktop-1024) {
+          margin-top: 0;
+        }
       }
 
       &__logo {
