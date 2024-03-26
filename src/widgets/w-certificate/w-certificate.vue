@@ -1,5 +1,5 @@
 <template>
-  <div v-show="props.type == 'init_btc'" class="w-certificate" :class="`w-certificate--${props.type}`">
+  <div v-show="props.type === 'init_btc'" class="w-certificate" :class="`w-certificate--${props.type}`">
     <span class="w-certificate__name">
       {{ props.username }}
     </span>
