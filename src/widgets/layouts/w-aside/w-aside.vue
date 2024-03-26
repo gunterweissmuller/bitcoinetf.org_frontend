@@ -89,8 +89,7 @@
 
           </div>
 
-          <!-- <f-refer-friends class="w-aside__refer" :modal="false" @click="isOpenModalRefer = true" /> -->
-          <w-certificate :type="$app.store.user?.info?.account?.order_type" time="" username="" />
+          <w-certificate :type="$app.store.user?.info?.account?.order_type" time="1094" :username="$app.store.user?.info?.profile?.full_name" />
         </div>
 
         <div class="w-aside__poster">

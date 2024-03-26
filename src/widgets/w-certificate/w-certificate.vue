@@ -1,7 +1,7 @@
 <template>
   <div class="w-certificate" :class="`w-certificate--${props.type}`">
     <span class="w-certificate__name">
-      {{ username }}
+      {{ props.username }}
     </span>
     <span class="w-certificate__count">
       1,000
@@ -20,9 +20,6 @@
 
 <script lang='ts' setup>
 import { computed, PropType } from 'vue';
-import { useNuxtApp } from '#app';
-
-const { $app } = useNuxtApp();
 
 const props = defineProps({
   type: {
@@ -43,8 +40,6 @@ const props = defineProps({
 });
 
 const currency = computed<string>(() => props.type === 'usdt' ? 'USDT' : 'Bitcoin');
-
-const username = computed<string>(() => $app.store.user?.info?.profile?.full_name);
 </script>
 
 <style lang='scss' src="./w-certificate.scss"></style>
