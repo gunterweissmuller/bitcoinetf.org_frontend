@@ -196,7 +196,7 @@ const actData = {
   text: 'Hurry up and sign up!',
   timer: {
     text: '2024<br /> Bitcoin Halving <br /> ETA',
-    date: 'Mon Apr 15 2024 00:00:00 GMT+0300',
+    date: 'Mon Apr 20 2024 00:00:00 GMT+0300',
   },
   info: {
     text: `
