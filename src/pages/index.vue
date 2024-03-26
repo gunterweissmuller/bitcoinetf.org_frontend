@@ -361,15 +361,34 @@ const getBlogNewsRequest = async (uuid, page = 1) => {
   return await useNuxtApp().$app.api.eth.news.getListNewsArticles({uuid, page}).then(resp => resp)
 }
 
-const getBlogNews = async (uuid = BLOG_NEWS_UUID, page = 1) => {
-  const response = await getBlogNewsRequest(BLOG_NEWS_UUID, page)
-  blogNews.value = [...blogNews.value, ...response.data.data]
+interface Post {
+  slug: string;
+  title: string;
+  excerpt: string;
+  feature_image: string;
+  created_at: string;
+}
 
-  if (response.data.total > blogNews.value.length) {
-    blogNewsPage.value += 1
+interface Blog {
+  posts: Post[];
+}
 
-    await getBlogNews(uuid, blogNewsPage.value)
+const blogPosts = ref<Post[]>([]);
+
+const blogConfig = (page : number) => {
+  return {
+    limit: 11,
+    fields: 'slug,title,excerpt,feature_image,created_at',
+    page: page
   }
+}
+
+const getBlogNews = async (page : number = 1) => {
+  return await useNuxtApp()
+    .$app.api.eth.news.getGhostBlogs( blogConfig(page) )
+    .then(({ data } : { data: Blog }) => {
+      blogNews.value = data.posts;
+    });
 }
 
 const getBlogNewsEdu = async (uuid = BITCOIN_EDUCATION_NEWS_UUID, page = 1) => {

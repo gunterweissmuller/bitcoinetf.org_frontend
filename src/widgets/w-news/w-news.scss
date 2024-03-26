@@ -56,7 +56,8 @@
   }
 
   &__info {
-    height: torem(131);
+    min-height: torem(227);
+
     position: relative;
     margin-top: torem(-20);
     z-index: 10;
@@ -81,20 +82,36 @@
     }
 
     &-title {
+      display: -webkit-box;
+
       font-family: Dm, sans-serif;
       font-size: torem(16);
       font-weight: 700;
       line-height: torem(21);
       margin-bottom: torem(16);
+
+      word-break: break-word;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
     }
 
     &-text {
+      display: -webkit-box;
+
       word-break: break-word;
       color: var(--text-secondary);
       font-family: Dm, sans-serif;
       font-size: torem(14);
       font-weight: 400;
       line-height: torem(18);
+
+      word-break: break-word;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+
+      overflow: hidden;
     }
   }
 }
