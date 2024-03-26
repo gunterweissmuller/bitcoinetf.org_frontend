@@ -7,6 +7,7 @@
             <a-icon class="w-aside__logo-icon" :name="getLogo" width="142" height="24" />
           </nuxt-link>
         </div>
+
         <div v-if="!isPage && isShowBuyButton" class="w-aside__button">
           <a-button
             :icon="Icon.MonoPlus"
@@ -24,6 +25,7 @@
           /> -->
 
         </div>
+
         <div class="w-aside__links">
           <ul class="w-aside__list">
             <li v-for="(nav, index) in routesList" :key="index" class="w-aside__item" :id="`menu-${nav.link}`">
@@ -63,6 +65,7 @@
             </li>
           </ul>
         </div>
+
         <div class="w-aside__item w-aside__item--more">
           <nuxt-link
             :class="['w-aside__link', { 'w-aside__link--active': activeLinkClass('personal-more') }]"
@@ -86,7 +89,8 @@
 
           </div>
 
-          <f-refer-friends class="w-aside__refer" :modal="false" @click="isOpenModalRefer = true" />
+          <!-- <f-refer-friends class="w-aside__refer" :modal="false" @click="isOpenModalRefer = true" /> -->
+          <w-certificate :type="$app.store.user?.info?.account?.order_type" time="" username="" />
         </div>
 
         <div class="w-aside__poster">
@@ -169,10 +173,13 @@ import MAccordion from '~/src/shared/ui/molecules/m-accordion/m-accordion.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { ref } from 'vue'
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
+import WCertificate from '~/src/widgets/w-certificate/w-certificate.vue';
 
 const { $app } = useNuxtApp()
 
 const isUserAuthenticated = computed(() => {
+  console.log($app.store.user?.info?.account?.order_type);
+
   return $app.store.auth.isUserAuthenticated
 })
 

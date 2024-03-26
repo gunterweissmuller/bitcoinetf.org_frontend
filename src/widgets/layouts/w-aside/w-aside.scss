@@ -8,7 +8,7 @@
   height: calc(var(--vh, 1vh) * 100);
   top: 0;
   left: 0;
-  padding: torem(107, 15, 96, 15);
+  padding: torem(107, 0, 96, 0);
   justify-content: flex-start;
   display: none;
 
@@ -67,7 +67,7 @@
     border-radius: var(--spacing-s);
 
     background: var(--surfaces-surface-glass-2);
-    box-sizing: 0 0 torem(6) 0 rgba(black, .06);
+    box-shadow: 0 0 torem(6) 0 rgba(black, .06);
 
     margin: var(--spacing-m-2) 0;
   }
@@ -355,7 +355,7 @@
     width: 100%;
     top: 0;
     left: 0;
-    padding: torem(0, 15, 0, 15);
+    padding: 0;
     height: 100%;
     justify-content: flex-start;
 
