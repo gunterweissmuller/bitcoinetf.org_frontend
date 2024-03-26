@@ -149,8 +149,8 @@ const infoList = [
 
 const routeNames = computed(() => ({
   'personal-more': {
-    title: 'More',
-    titleCrumb: 'More',
+    title: 'Profile',
+    titleCrumb: 'Profile',
     breadcrumbs: false,
     urlToBack: 'personal-performance',
   },
