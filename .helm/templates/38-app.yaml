@@ -21,7 +21,7 @@ spec:
         ksync: {{ .Values.global.app_name }}
     spec:
       containers:
-        - name: {{ .Values.global.app_name }}
+        - name: nuxt
           image: {{ .Values.werf.image.app }}
           env:
 {{ include "apps-env-var-values" . | indent 12 }}
@@ -67,13 +67,13 @@ spec:
             mountPath: /etc/nginx
           - name: nginx-config-volume-2
             mountPath: /etc/nginx/conf.d
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "250m"
-          limits:
-            memory: "2048Mi"
-            cpu: "750m"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "2048Mi"
+              cpu: "750m"
       volumes:
         - name: nginx-config-volume-1
           configMap:
