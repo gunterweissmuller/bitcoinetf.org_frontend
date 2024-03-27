@@ -20,13 +20,6 @@ spec:
         app: {{ .Values.global.app_name }}
         ksync: {{ .Values.global.app_name }}
     spec:
-      initContainers:
-        - name: create-nginx-cache-dir
-          image: busybox
-          command: ['sh', '-c', 'mkdir -p /var/cache/nginx/client_temp && chown -R 101:101 /var/cache/nginx']
-          volumeMounts:
-            - name: nginx-cache-volume
-              mountPath: /var/cache/nginx
       containers:
         - name: nuxt
           image: {{ .Values.werf.image.app }}
