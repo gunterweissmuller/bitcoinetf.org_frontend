@@ -74,8 +74,6 @@ spec:
               mountPath: /etc/nginx
             - name: nginx-config-volume-2
               mountPath: /etc/nginx/conf.d
-            - name: nginx-cache-volume
-              mountPath: /var/cache/nginx
           resources:
             requests:
               memory: "128Mi"
@@ -90,8 +88,6 @@ spec:
         - name: nginx-config-volume-2
           configMap:
             name: nginx-config-2
-        - name: nginx-cache-volume
-          emptyDir: {}
       imagePullSecrets:
         - name: docker-registry
 ---
