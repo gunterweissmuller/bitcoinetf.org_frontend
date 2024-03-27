@@ -197,7 +197,7 @@
               </div>
             </section>
 
-            <section :class="['f-registration-buy__purchase--drop-down f-registration-buy__purchase--drop-down-pay flex flex-col justify-center p-4 w-full font-bold whitespace-nowrap bg-white cursor-pointer', {'f-registration-buy__purchase--drop-down-desktop': payShow}]">
+            <section :class="['f-registration-buy__purchase--drop-down f-registration-buy__purchase--drop-down-pay flex flex-col justify-center p-4 w-full font-bold bg-white cursor-pointer', {'f-registration-buy__purchase--drop-down-desktop': payShow}]">
               <header @click="() => {togglePurchase(purchaseStepsArr[2])}" class="f-registration-buy__purchase--drop-down-title flex">
                 <div class="f-registration-buy__purchase--drop-down-title-number f-registration-buy--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">3</div>
                 <h2 class="f-registration-buy__purchase--drop-down-title-text f-registration-buy--text-normal flex-auto">Pay</h2>
@@ -211,11 +211,15 @@
                     <div v-if="pay.show" @click="pay.onClick ? pay.onClick() : () => currentPayStep = StepsPay.Process" class="f-registration-buy__purchase-pay-item flex flex-col justify-center cursor-pointer">
                       <div class="flex flex-col justify-center p-5 w-full ">
                         <div class="flex gap-1">
-                          <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="w-6 aspect-square" loading="lazy"/>
+                          <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-method w-6 aspect-square" loading="lazy"/>
                           <p class="flex-auto font-semibold">{{ pay.title }}</p>
-                          <NuxtImg src="/img/icons/mono/chevron-right.svg" class="my-auto aspect-square w-[18px]" alt="Right arrow icon" loading="lazy" />
+
+                          <NuxtImg v-if="pay.title === 'Pay through Moonpay'" src="/img/icons/colorful/visa2.svg" width="51" height="10" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-visa" alt="Visa" loading="lazy" />
+
+                          <NuxtImg src="/img/icons/mono/chevron-right.svg" class="f-registration-buy__purchase-pay-item-icon-arrow my-auto aspect-square w-[18px]" alt="Right arrow icon" loading="lazy" />
                         </div>
                       </div>
+                      
                     </div>
                   </div>
                 </template>
@@ -521,6 +525,11 @@ const payWith = ref([
     show: showTron,
   },
   {
+    icon: "/img/icons/colorful/moonpay.svg",
+    title: "Pay through Moonpay",
+    show: false,
+  },
+  {
     icon: "/img/icons/colorful/usdt-trc20.svg",
     title: "Pay with USDT (BEP-20)",
     show: false,
@@ -552,6 +561,7 @@ const payWith = ref([
     title: "Pay with Metamask",
     show: false,
   },
+  
 
 ]);
 
