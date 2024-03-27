@@ -13,20 +13,22 @@ export default defineNuxtRouteMiddleware((to) => {
       refresh_token: urlParams.get('refreshToken'),
       websocket_token: urlParams.get('websocketToken')
     });
-    router.replace({ path: to.path, query: {} })
+    //router.replace({ path: to.path, query: {} })
     $app.api.eth.auth.getUser().then((resp) => {
       $app.store.user.info = resp?.data
     })
     $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
       $app.store.user.blockchainUserWallet = resp?.data.uid
     })
+    return navigateTo({path: to.path}, {replace: true})
     //router.replace({ query: {} })
     //window.location.search = '';
   }
 
   if(to.query.logout) {
     $app.store.auth.logout()
-    router.replace({ path: to.path, query: {} })
+    return navigateTo({path: to.path}, {replace: true})
+    //router.replace({ path: to.path, query: {} })
   }
 
 
