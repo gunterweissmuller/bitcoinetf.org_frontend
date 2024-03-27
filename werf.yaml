@@ -29,14 +29,6 @@ cleanup:
       imagesPerReference:
         last: 2
 ---
-image: nginx
-from: nginx:stable-alpine
-git:
-  - add: /public
-    to: /var/www/html/public
-docker:
-  WORKDIR: /var/www/html
----
 image: app
 from: node:current-alpine
 docker:
