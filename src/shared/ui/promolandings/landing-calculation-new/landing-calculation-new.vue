@@ -54,6 +54,7 @@
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
           
+          <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component>
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
