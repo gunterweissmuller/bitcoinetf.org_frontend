@@ -30,17 +30,14 @@ const props = defineProps({
   username: {
     type: String,
     required: true,
-    default: 'User Name'
   },
   shares: {
     type: Number,
     required: true,
-    default: 1000
   },
   time: {
     type: Number,
     required: true,
-    default: 1
   }
 });
 

@@ -70,6 +70,8 @@
     box-shadow: 0 0 torem(6) 0 rgba(black, .06);
 
     margin: var(--spacing-m-2) 0;
+
+    height: auto;
   }
 
 
@@ -378,6 +380,7 @@
         @include breakpoint($break-desktop-1024) {
           display: flex;
           flex-direction: row-reverse;
+          align-items: flex-start;
           gap: torem(24);
         }
       }
