@@ -31,9 +31,9 @@ export default defineNuxtRouteMiddleware((to) => {
     }
 
     if(to.query.theme) {
-      localStorage.setItem('theme', value)
-      document.body.dataset.theme = value
-      $app.store.user.theme = value
+      localStorage.setItem('theme', to.query.theme)
+      document.body.dataset.theme = to.query.theme
+      $app.store.user.theme = to.query.theme
     }
     return navigateTo({path: to.path}, {replace: true})
     //router.replace({ path: to.path, query: {} })
