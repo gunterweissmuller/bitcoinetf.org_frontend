@@ -146,6 +146,7 @@
   --icon-mono--wallet-content: "\f191";
   --icon-mono--withdraw-content: "\f192";
   --icon-mono--x-content: "\f193";
+  --icon-mono--dollar-content: "\f194";
 }
 
 @font-face {
@@ -3119,6 +3120,26 @@ font-feature-settings: 'liga';
 
   .icon-mono--x-css,
   %icon-mono--x-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--dollar:before {
+  content: "\f194";
+  }
+
+  .icon-mono--dollar-css,
+  %icon-mono--dollar-css {
   font-weight: normal;
   font-style: normal;
   line-height: 1;

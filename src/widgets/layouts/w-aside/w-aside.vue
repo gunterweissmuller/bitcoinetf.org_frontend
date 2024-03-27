@@ -99,6 +99,22 @@
 
         <nav class="w-aside__wrapper">
           <ul class="w-aside__list">
+            <li class="w-aside__item w-aside__item-mobile">
+              <nuxt-link
+                class="w-aside__link"
+                :to="{ name: 'personal-referrals' }"
+                active-class="w-aside__link--active"
+                target="_self"
+                @click="onClickLink"
+              >
+              <!-- FIX ICON -->
+                <a-icon class="w-aside__link-img" :name="Icon.MonoDollar" width="24" height="24" />
+                <p class="w-aside__link-text">
+                  Referrals
+                </p>
+                <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
+              </nuxt-link>
+            </li>
             <template v-for="(nav, index) in navList">
               <li v-if="!nav?.isHidden" :key="index" class="w-aside__item w-aside__item-mobile">
                 <div v-if="nav.type === 'button'" class="w-aside__link" @click="nav.callback">
