@@ -25,7 +25,7 @@ export default defineNuxtRouteMiddleware((to) => {
       window.location.href = newUrl;
       return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
-      const newUrl = `http://${config.public.DOMAIN}${to.path}`
+      const newUrl = `http://${config.public.DOMAIN}${to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
       console.log(newUrl)
       window.location.href = newUrl;
       return navigateTo({path: '/redirect'})

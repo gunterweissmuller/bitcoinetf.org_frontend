@@ -25,8 +25,16 @@ export default defineNuxtRouteMiddleware((to) => {
     //window.location.search = '';
   }
 
-  if(to.query.logout) {
-    $app.store.auth.logout()
+  if(to.query.logout || to.query.theme) {
+    if(to.query.logout) {
+      $app.store.auth.logout()
+    }
+
+    if(to.query.theme) {
+      localStorage.setItem('theme', value)
+      document.body.dataset.theme = value
+      $app.store.user.theme = value
+    }
     return navigateTo({path: to.path}, {replace: true})
     //router.replace({ path: to.path, query: {} })
   }
