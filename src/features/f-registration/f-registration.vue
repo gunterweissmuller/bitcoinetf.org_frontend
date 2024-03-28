@@ -77,20 +77,25 @@
               </div>
             </div>
 
-            <!-- <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="testTG"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div> -->
-
             <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
 
             <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
 
-              <!--<div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
+              <div
+                  @click="handleAppleConnect"
+                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18"
-                          class="self-start aspect-square w-[18px]" />
+                          class="aspect-square w-[18px]" />
                       <div class="grow">Sign up with Apple</div>
                   </div>
-              </div>-->
+              </div>  
+
+              <div id="appleid-signin" class="signin-button" data-color="black" data-border="true" data-type="sign-in">
+              </div>
+              <component :is="'script'" type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></component>
+
+
           </div>
 
 
@@ -440,13 +445,14 @@ const handleGoogleConnect = async () => {
     window.location.href = googleUrl.value;
 }
 
+// telegram
+
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
     console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
-
   })
 })
 
@@ -566,6 +572,21 @@ const handleTelegramConnect = async () => {
   })
 }
 
+// apple
+
+const handleAppleConnect = async () => {
+
+  $app.api.eth.auth
+    .getAppleRedirect()
+    .then((res) => {
+      console.log(res)
+      window.open(res.url, "hello", "width=600,height=600");
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+}
 
 
 // Ref code field
