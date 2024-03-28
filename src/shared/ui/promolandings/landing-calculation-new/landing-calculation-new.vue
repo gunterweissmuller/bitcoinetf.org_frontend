@@ -236,8 +236,6 @@ onMounted(()=>{
 
 const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
 
-console.log("Percent", discountPercent);
-
 const isMetamaskConnecting = ref(false);
 const metamaskSignatureMessage = ref('');
 const metamaskSignature = ref('');
@@ -281,7 +279,6 @@ const handleMetamaskConnect = async () => {
 
     const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
 
-    console.log("SIGNED MSG", signedMsg);
     metamaskSignature.value = signedMsg;
     isMetamaskConnecting.value = false;
     //currentStep.value = Steps.Email;
@@ -494,8 +491,6 @@ const investBuy = async () => {
     $app.store.user.blockchainUserWallet = resp?.data.uid
   })
 
-  console.log($app.store.user?.info?.account?.uuid)
-
 }
 
 
@@ -571,8 +566,6 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
-  console.log($app.store.authGoogle);
-
   if($app.store.authGoogle.response?.email) {
     signupStep.value = SignupSteps.Google;
     signupMethod.value = SignupMethods.Google;
@@ -610,8 +603,6 @@ const handleTelegramAuth = async () => {
           // authorization failed
           isTelegramConnection.value = true;
         } else {
-
-          console.log(tgData);
 
           $app.api.eth.auth.telegramGetAuthType({
             telegram_data: JSON.stringify(tgData),
@@ -675,7 +666,6 @@ const handleTelegramAuth = async () => {
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
@@ -698,8 +688,6 @@ const testTG = async () => {
         // authorization failed
         isTelegramConnection.value = true;
       } else {
-
-        console.log(tgData);
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -769,7 +757,6 @@ const handleTelegramConnect = async () => {
 
     handleTelegramAuth().then((res) => {
       console.log("scrolltg",res);
-
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
@@ -871,7 +858,6 @@ const sendCode = async () => {
         phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
-        console.log('ww');
         isSubmitEmailForm.value = false;
         currentStep.value = Steps.Code;
     }).catch((e) => {
@@ -935,7 +921,6 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
-          console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -957,8 +942,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-
-
+        scrollToPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1006,6 +990,7 @@ const signupAndBuy = async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
           purchaseStep.value = PurchaseSteps.Purchase;
+          scrollToPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1065,7 +1050,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-        console.log("UUID123",  $app.store.user?.info, $app.store.user?.info?.account?.uuid, $app.store.user?.info?.account.tron_wallet)
+        scrollToPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1140,8 +1125,6 @@ const signupAndBuyGoogle = () => {
       $app.store.auth.setRefCode("");
   }
 
-  console.log(initPayload);
-
   $app.api.eth.auth
     .initGoogle(initPayload)
     .then((tokens: any) => {
@@ -1160,6 +1143,7 @@ const signupAndBuyGoogle = () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
             purchaseStep.value = PurchaseSteps.Purchase;
+            scrollToPurchase();
 
         })
 
