@@ -101,6 +101,7 @@
       font-weight: 500;
       font-size: torem(14);
       line-height: torem(18);
+      color: var(--text-secondary);
     }
   }
 
@@ -241,6 +242,10 @@
 
     }
 
+    &--logout .w-aside__link-text {
+      color: var(--text-tertiary);
+    }
+
     &-mobile {
       @include breakpoint($break-desktop-1024) {
         display: none;
@@ -325,6 +330,10 @@
       @include breakpoint($break-desktop-1024) {
         display: none;
       }
+    }
+
+    &-switch {
+      margin-left: auto;
     }
 
 
@@ -442,13 +451,6 @@
         &-mobile {
           @include breakpoint($break-desktop-1024) {
             display: block;
-          }
-        }
-
-
-        &--logout {
-          @include breakpoint($break-desktop-1024) {
-            display: none;
           }
         }
 

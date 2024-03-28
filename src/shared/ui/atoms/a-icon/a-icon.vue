@@ -53,7 +53,6 @@ const iconStyles = computed<Record<string, boolean | string>>(() => {
 const iconClasses = computed<string[]>(() => ['a-icons-com', `a-icons-com-${props.name}`])
 
 try {
-  console.log(props.name);
   src.value = files[props.name]
 } catch (e) {
   console.error(e)

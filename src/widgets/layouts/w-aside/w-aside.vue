@@ -74,10 +74,12 @@
         <div class="w-aside__profile">
           <div class="w-aside__avatar">
             <a-avatar size="64px" photo-src="/img/avatar.png" :robot-data="$app.store.user?.info?.account?.uuid" class="w-aside__avatar-pic" />
-            <div v-if="$app.store.user?.info?.profile?.full_name" class="w-aside__avatar-title">
+            <div class="w-aside__avatar-title">
+              @{{ $app.store.user?.info?.account?.username }}
+            </div>
+            <div v-if="$app.store.user?.info?.profile?.full_name" class="w-aside__avatar-subtitle">
               {{ $app.store.user?.info?.profile?.full_name }}
             </div>
-            <div class="w-aside__avatar-subtitle">@{{ $app.store.user?.info?.account?.username }}</div>
 
           </div>
 
@@ -114,6 +116,21 @@
                 </p>
                 <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
               </nuxt-link>
+            </li>
+            <li class="w-aside__item w-aside__item-mobile">
+              <div
+                class="w-aside__link"
+              >
+                <a-icon class="w-aside__link-img" :name="Icon.MonoTheme" width="24" height="24" />
+                <p class="w-aside__link-text">
+                  Dark Theme
+                </p>
+                <div class="w-aside__link-switch">
+                  <a-switch
+                    v-model.modelValue="themeValue"
+                  />
+                </div>
+              </div>
             </li>
             <template v-for="(nav, index) in navList">
               <li v-if="!nav?.isHidden" :key="index" class="w-aside__item w-aside__item-mobile">
@@ -186,6 +203,7 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { ref } from 'vue'
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import WCertificate from '~/src/widgets/w-certificate/w-certificate.vue';
+import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
 
 const { $app } = useNuxtApp()
 
@@ -342,28 +360,13 @@ const navList = ref([
     link: '/personal/more/change-pass',
   },
   {
-    title: 'Theme',
-    icon: Icon.MonoTheme,
-    link: '/personal/more/theme',
-  },
-  {
     title: 'Apply for credit card',
     icon: Icon.MonoCreditCard,
     type: 'button',
     callback: openModalCredit,
   },
-  {
-    title: 'Bitcoin education',
-    icon: Icon.MonoLearn,
-    link: '/bitcoin-education',
-    newTab: isUserAuthenticated.value,
-  },
-  {
-    title: 'Blog',
-    icon: Icon.MonoBlog,
-    link: '/blog',
-    newTab: isUserAuthenticated.value,
-  },
+  // statement
+  // terms & conditions
   {
     title: 'Purchase agreement',
     isHidden: isHiddenTerms.value,
@@ -376,6 +379,21 @@ const navList = ref([
     icon: Icon.MonoSupport,
     link: '/personal/support',
   },
+  {
+    title: 'Bitcoin education',
+    // fix icon to link
+    icon: Icon.MonoLearn,
+    link: '/bitcoin-education',
+    newTab: isUserAuthenticated.value,
+  },
+  {
+    title: 'News',
+    // fix icon to link
+    icon: Icon.MonoBlog,
+    link: '/blog',
+    newTab: isUserAuthenticated.value,
+  },
+
 ])
 
 const asideRef = ref(null)
@@ -407,6 +425,16 @@ const activeLinkClass = (link: string): boolean => {
       return false
   }
 }
+
+const themeValue = ref<boolean>($app.store.user.theme === 'dark');
+
+watch(() => themeValue.value, (value) => {
+  const theme = value ? 'dark' : 'light';
+
+  localStorage.setItem('theme', theme);
+  document.body.dataset.theme = theme;
+  $app.store.user.theme = theme;
+});
 </script>
 
 <style src="./w-aside.scss" lang="scss" />
