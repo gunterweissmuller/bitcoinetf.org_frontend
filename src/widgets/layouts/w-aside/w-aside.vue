@@ -365,11 +365,16 @@ const navList = ref([
     type: 'button',
     callback: openModalCredit,
   },
-  // statement
+  {
+    title: 'Statement',
+    icon: Icon.MonoFile,
+    link: '/personal/earnings/statements',
+  },
   // terms & conditions
   {
     title: 'Purchase agreement',
     isHidden: isHiddenTerms.value,
+    // fix icon
     icon: Icon.MonoTerms,
     type: 'button',
     callback: openTermsModal,
