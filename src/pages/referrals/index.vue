@@ -84,10 +84,10 @@ const mainData = {
 
 const marqueeData = {
   low_cards: [
-    '/img/site-dark/s-site-marquee/1.svg',
-    '/img/site-dark/s-site-marquee/2.svg',
-    '/img/site-dark/s-site-marquee/3.svg',
-    '/img/site-dark/s-site-marquee/4.svg',
+    { img: '/img/site-dark/s-site-marquee/1.svg', link: '' },
+    { img: '/img/site-dark/s-site-marquee/2.svg', link: '' },
+    { img: '/img/site-dark/s-site-marquee/3.svg', link: '' },
+    { img: '/img/site-dark/s-site-marquee/4.svg', link: '' },
   ],
 }
 
@@ -100,11 +100,11 @@ const idData = {
   img: '/img/site-dark/s-site-referrals-id/1.png',
   message: 'Earnings are a few clicks away',
   info: {
-    title: 'Bonus +5% APY',
+    title: '5% Discount, 5% Reward!',
     text: `
-      <p>Refer a friend today and grant them an exceptional start with a +5% bonus APY on their guaranteed minimum for the first 6 months of investment in our ETF shares.</p>
-      <p>Plus, you'll earn a 5% reward on all deposits they make. </p>
-      <p>Seize this dual benefit opportunity – your investment journey is brighter together! </p>
+      <p>Refer a friend today and grant them an exceptional start with a 5% discount  on their purchase.</p>
+      <p>Plus, you'll earn a 5% reward on all deposits they make.</p>
+      <p>Seize this dual benefit opportunity – your investment journey is brighter together!</p>
     `,
   },
   slides: [
