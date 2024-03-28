@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useNuxtApp } from '#app'
 import { SignupMethods } from '~/src/shared/constants/signupMethods';
+import { useRuntimeConfig } from 'nuxt/app';
 
 interface authState {
   accessToken: string,
@@ -27,6 +28,7 @@ export const auth = defineStore('auth', {
     },
 
     logout() {
+      const config = useRuntimeConfig()
       this.accessToken = ''
       this.refreshToken = ''
       this.websocketToken = ''
@@ -35,7 +37,12 @@ export const auth = defineStore('auth', {
       useNuxtApp().$app.store.user.lastPayment = null
       useNuxtApp().$app.store.persiste.latestTronCheckDate = null
 
-      navigateTo({ name: 'personal-login' })
+      if(window.location.hostname === config.public.APP_DOMAIN) {
+        const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`
+        window.location.href = newUrl;
+      }
+
+      //navigateTo({ name: 'personal-login' })
     },
 
     async refresh() {
@@ -166,6 +173,11 @@ export const auth = defineStore('auth', {
 
   getters: {
     isUserAuthenticated: (state) => !!state.accessToken,
+    getTokens: (state) => ({
+      accessToken: state.accessToken,
+      refreshToken: state.refreshToken,
+      websocketToken: state.websocketToken,
+    }),
   },
 
   persist: {

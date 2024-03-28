@@ -53,7 +53,7 @@
           <div @click="testTG" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
-          
+
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
@@ -136,8 +136,10 @@
             <a-icon :name="Icon.ColorfulUsdttron" class="langing-calculation__processWith--tron"/>
           </nuxt-link>
           <nuxt-link to="/weloverussia" v-if="!isFiatLanding">
-            <a-icon :name="Icon.ColorfulVisawhite"/>
-            <a-icon :name="Icon.ColorfulMastercard"/>
+            <NuxtImg src="/img/icons/colorful/visawhite.svg" class="w-[64px]" />
+            <NuxtImg src="/img/icons/colorful/mastercard.svg" class="w-[64px]" />
+            <!--<a-icon :name="Icon.ColorfulVisawhite"/>
+            <a-icon :name="Icon.ColorfulMastercard"/>-->
           </nuxt-link>
         </div>
       </template>
@@ -234,8 +236,6 @@ onMounted(()=>{
 
 const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
 
-console.log("Percent", discountPercent);
-
 const isMetamaskConnecting = ref(false);
 const metamaskSignatureMessage = ref('');
 const metamaskSignature = ref('');
@@ -279,7 +279,6 @@ const handleMetamaskConnect = async () => {
 
     const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
 
-    console.log("SIGNED MSG", signedMsg);
     metamaskSignature.value = signedMsg;
     isMetamaskConnecting.value = false;
     //currentStep.value = Steps.Email;
@@ -492,8 +491,6 @@ const investBuy = async () => {
     $app.store.user.blockchainUserWallet = resp?.data.uid
   })
 
-  console.log($app.store.user?.info?.account?.uuid)
-
 }
 
 
@@ -510,6 +507,7 @@ const scrollToPurchase = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
+  console.log(offsetPosition);
   setTimeout(()=>{
     window.scrollTo({
       top: offsetPosition,
@@ -568,8 +566,6 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
-  console.log($app.store.authGoogle);
-
   if($app.store.authGoogle.response?.email) {
     signupStep.value = SignupSteps.Google;
     signupMethod.value = SignupMethods.Google;
@@ -578,6 +574,14 @@ onMounted(() => {
     email.value = $app.store.authGoogle.response.email;
 
     scrollToSignup()
+  } else if($app.store.authGoogle.response?.access_token) {
+    $app.store.auth.setTokens($app.store.authGoogle.response)
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+      //purchase
+      purchaseStep.value = PurchaseSteps.Purchase;
+      scrollToPurchase();
+    });
   }
 
 });
@@ -599,8 +603,6 @@ const handleTelegramAuth = async () => {
           // authorization failed
           isTelegramConnection.value = true;
         } else {
-
-          console.log(tgData);
 
           $app.api.eth.auth.telegramGetAuthType({
             telegram_data: JSON.stringify(tgData),
@@ -648,10 +650,10 @@ const handleTelegramAuth = async () => {
             isTelegramConnection.value = true;
           })
 
-          
+
 
         }
-        
+
         // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
       }
     )
@@ -659,12 +661,11 @@ const handleTelegramAuth = async () => {
     console.log(e)
   }
 
-  
+
 }
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
@@ -687,8 +688,6 @@ const testTG = async () => {
         // authorization failed
         isTelegramConnection.value = true;
       } else {
-
-        console.log(tgData);
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -736,7 +735,7 @@ const testTG = async () => {
           isTelegramConnection.value = true;
         })
 
-        
+
 
       }
 
@@ -758,7 +757,6 @@ const handleTelegramConnect = async () => {
 
     handleTelegramAuth().then((res) => {
       console.log("scrolltg",res);
-      
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
@@ -801,7 +799,7 @@ const sendCode = async () => {
   }
 
   isMainInputDisabled.value = true;
-  
+
   const timer = (sec: number) => {
     if(sec <= 0) {
       codeSendText.value = 'Get Confirmation Code';
@@ -860,7 +858,6 @@ const sendCode = async () => {
         phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
-        console.log('ww');
         isSubmitEmailForm.value = false;
         currentStep.value = Steps.Code;
     }).catch((e) => {
@@ -924,7 +921,6 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
-          console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -946,8 +942,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-        
-
+        scrollToPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -995,6 +990,7 @@ const signupAndBuy = async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
           purchaseStep.value = PurchaseSteps.Purchase;
+          scrollToPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1054,7 +1050,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-        console.log("UUID123",  $app.store.user?.info, $app.store.user?.info?.account?.uuid, $app.store.user?.info?.account.tron_wallet)
+        scrollToPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1129,8 +1125,6 @@ const signupAndBuyGoogle = () => {
       $app.store.auth.setRefCode("");
   }
 
-  console.log(initPayload);
-
   $app.api.eth.auth
     .initGoogle(initPayload)
     .then((tokens: any) => {
@@ -1149,6 +1143,7 @@ const signupAndBuyGoogle = () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
             purchaseStep.value = PurchaseSteps.Purchase;
+            scrollToPurchase();
 
         })
 

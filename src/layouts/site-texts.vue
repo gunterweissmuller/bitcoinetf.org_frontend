@@ -13,6 +13,13 @@ import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-foot
 </script>
 
 <style lang="scss">
+
+section {
+  color: var(--text-inverse-primary);
+  background: #01040F;
+  overflow: hidden;
+}
+
 .l-site {
   max-width: torem(1062);
   margin: 0 auto;

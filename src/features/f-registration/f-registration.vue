@@ -52,8 +52,7 @@
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18"
                           class="aspect-square w-[18px]" loading="lazy" />
-                      <div v-if="isMetamaskSupported" class="grow">Sign up with Metamask</div>
-                      <div v-else class="grow">Install Metamask Extension</div>
+                      <div class="grow">Sign up with Metamask</div>
                   </div>
               </div>
 
@@ -68,7 +67,7 @@
 
 
               <!-- <button @click="testTG">test</button> -->
-            
+
             <div @click="testTG"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
@@ -96,7 +95,7 @@
 
 
       </template>
-      
+
       <template v-else-if="currentStep === Steps.Email">
           <div class='f-registration__back' @click='handleEmailBack'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
@@ -349,6 +348,7 @@ const handleDisconnect = () => {
 }
 
 const isMetamaskConnecting = ref(false);
+const isReload = ref(false);
 
 const handleMetamaskConnect = async () => {
   // if metamask button is already clicked
@@ -357,6 +357,13 @@ const handleMetamaskConnect = async () => {
 
   //if metamask is not installed
   if (!isMetamaskSupported.value) {
+      if(isReload.value) {
+        isReload.value = false;
+        location.reload();
+      } else {
+        isReload.value = true;
+      }
+
       // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
       window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
       isMetamaskConnecting.value = false;
@@ -403,7 +410,7 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
-  
+
 
   if($app.store.authGoogle.response?.email) {
     currentStep.value = Steps.Email;
@@ -484,10 +491,10 @@ const handleTelegramAuth = async () => {
           }
         })
 
-        
+
 
       }
-      
+
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
     }
   );
