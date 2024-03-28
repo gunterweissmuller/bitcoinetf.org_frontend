@@ -73,7 +73,14 @@
 
         <div class="w-aside__profile">
           <div class="w-aside__avatar">
-            <a-avatar size="64px" photo-src="/img/avatar.png" :robot-data="$app.store.user?.info?.account?.uuid" class="w-aside__avatar-pic" />
+            <div class="w-aside__avatar-logo">
+              <a-icon
+                class="w-aside__avatar-type"
+                :name="userType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin"
+                width="24" height="24"
+              />
+              <a-avatar size="64px" photo-src="/img/avatar.png" :robot-data="$app.store.user?.info?.account?.uuid" class="w-aside__avatar-pic" />
+            </div>
             <div class="w-aside__avatar-title">
               @{{ $app.store.user?.info?.account?.username }}
             </div>
@@ -84,7 +91,7 @@
           </div>
 
           <w-certificate
-            :type="$app.store.user?.info?.account?.order_type"
+            :type="userType"
             :username="$app.store.user?.info?.profile?.full_name"
             shares="1000"
             time="1094"
@@ -215,6 +222,8 @@ withDefaults(
     isPage: false,
   },
 )
+
+const userType = computed<'btc' | 'usdt' | 'init_btc'>(() => $app.store.user?.info?.account?.order_type);
 
 const isUserAuthenticated = computed(() => {
   return $app.store.auth.isUserAuthenticated

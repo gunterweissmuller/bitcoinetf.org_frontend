@@ -84,6 +84,16 @@
       display: none;
     }
 
+    &-logo {
+      position: relative;
+    }
+
+    &-type {
+      position: absolute;
+      top: torem(-6);
+      right: torem(-6);
+    }
+
     &-pic {
       width: torem(64);
       height: torem(64);
