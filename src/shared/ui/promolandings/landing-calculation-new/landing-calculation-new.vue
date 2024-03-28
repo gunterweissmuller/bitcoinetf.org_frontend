@@ -53,7 +53,7 @@
           <div @click="testTG" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
-          
+
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
@@ -136,8 +136,10 @@
             <a-icon :name="Icon.ColorfulUsdttron" class="langing-calculation__processWith--tron"/>
           </nuxt-link>
           <nuxt-link to="/weloverussia" v-if="!isFiatLanding">
-            <a-icon :name="Icon.ColorfulVisawhite"/>
-            <a-icon :name="Icon.ColorfulMastercard"/>
+            <NuxtImg src="/img/icons/colorful/visawhite.svg" class="w-[64px]" />
+            <NuxtImg src="/img/icons/colorful/mastercard.svg" class="w-[64px]" />
+            <!--<a-icon :name="Icon.ColorfulVisawhite"/>
+            <a-icon :name="Icon.ColorfulMastercard"/>-->
           </nuxt-link>
         </div>
       </template>
@@ -510,6 +512,7 @@ const scrollToPurchase = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
+  console.log(offsetPosition);
   setTimeout(()=>{
     window.scrollTo({
       top: offsetPosition,
@@ -578,6 +581,14 @@ onMounted(() => {
     email.value = $app.store.authGoogle.response.email;
 
     scrollToSignup()
+  } else if($app.store.authGoogle.response?.access_token) {
+    $app.store.auth.setTokens($app.store.authGoogle.response)
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+      //purchase
+      purchaseStep.value = PurchaseSteps.Purchase;
+      scrollToPurchase();
+    });
   }
 
 });
@@ -648,10 +659,10 @@ const handleTelegramAuth = async () => {
             isTelegramConnection.value = true;
           })
 
-          
+
 
         }
-        
+
         // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
       }
     )
@@ -659,7 +670,7 @@ const handleTelegramAuth = async () => {
     console.log(e)
   }
 
-  
+
 }
 
 onMounted(() => {
@@ -736,7 +747,7 @@ const testTG = async () => {
           isTelegramConnection.value = true;
         })
 
-        
+
 
       }
 
@@ -758,7 +769,7 @@ const handleTelegramConnect = async () => {
 
     handleTelegramAuth().then((res) => {
       console.log("scrolltg",res);
-      
+
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
@@ -801,7 +812,7 @@ const sendCode = async () => {
   }
 
   isMainInputDisabled.value = true;
-  
+
   const timer = (sec: number) => {
     if(sec <= 0) {
       codeSendText.value = 'Get Confirmation Code';
@@ -946,7 +957,7 @@ const signupAndBuy = async () => {
       })
       .then(async () => {
         purchaseStep.value = PurchaseSteps.Purchase;
-        
+
 
 
         if (props.isFiat) {
