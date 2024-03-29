@@ -503,12 +503,73 @@ export default class AuthApiModule {
   async getAppleAuthType(payload: { apple_token: string }) {
     try {
       return await this.adapter.requestJsonAsync({
-        parameterValue: `auth/provider/apple/redirect-url`,
+        parameterValue: `auth/provider/apple/get-auth-type`,
         request: {
           method: HTTPMethod.GET,
         },
         data: payload,
         operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initApple(payload: any) {
+
+    try {
+        return await this.adapter.requestJsonAsync({
+          parameterValue: "auth/provider/apple/init",
+          request: {
+            method: HTTPMethod.POST,
+          },
+          data: payload,
+          operationDescription: 'User email registration',
+          withoutPublic: true,
+        });
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async confirmApple(payload: { apple_token: string, email: string; code: string; }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/apple/confirm',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginApple(payload: { apple_token: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/apple/login',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
         withoutPublic: true,
       })
     } catch (e) {
