@@ -20,14 +20,16 @@ export default defineNuxtRouteMiddleware((to) => {
     console.log('DOMAIN', config.public.DOMAIN)
     console.log('APP_DOMAIN', config.public.APP_DOMAIN)
     if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name) && to.path !== '/redirect') {
-      const newUrl = `http://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
+      const newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
       console.log(newUrl)
       window.location.href = newUrl;
+      return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
-      const newUrl = `http://${config.public.DOMAIN}${to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
+      const newUrl = `https://${config.public.DOMAIN}${to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
       console.log(newUrl)
       window.location.href = newUrl;
+      return abortNavigation()
       //return navigateTo({path: '/redirect'})
     }
   }
