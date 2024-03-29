@@ -1,5 +1,14 @@
 <template>
 Loading...
+
+<div class="AppleIDSignInOnSuccess">
+    
+</div>
+
+<div class="AppleIDSignInOnFailure">
+    
+</div>
+
 </template>
 
 <script setup lang="ts">
@@ -20,6 +29,19 @@ onMounted(()=>{
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
+
+    // Listen for authorization success.
+document.addEventListener('AppleIDSignInOnSuccess', (event) => {
+    // Handle successful response.
+    console.log(event.detail.data);
+});
+
+
+// Listen for authorization failures.
+document.addEventListener('AppleIDSignInOnFailure', (event) => {
+     // Handle error.
+     console.log(event.detail.error);
+});
     
 })
 
