@@ -480,4 +480,43 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  async getAppleRedirect() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/apple/redirect-url`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getAppleAuthType(payload: { apple_token: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/apple/redirect-url`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
 }
