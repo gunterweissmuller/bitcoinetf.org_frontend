@@ -574,16 +574,16 @@ const handleTelegramConnect = async () => {
 
 // apple
 
-onMounted(()=>{
+onMounted(() => {
       // Listen for authorization success.
-      document.addEventListener('AppleIDSignInOnSuccess', (event) => {
+      window.document.addEventListener('AppleIDSignInOnSuccess', (event) => {
           // Handle successful response.
           console.log("test123",event.detail.data);
       });
 
 
       // Listen for authorization failures.
-      document.addEventListener('AppleIDSignInOnFailure', (event) => {
+      window.document.addEventListener('AppleIDSignInOnFailure', (event) => {
           // Handle error.
           console.log(event.detail.error);
       });
