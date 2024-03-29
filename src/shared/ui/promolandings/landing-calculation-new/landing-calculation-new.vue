@@ -77,7 +77,7 @@
             :buttonText="codeSendText"
             :buttonClick="() => {sendCode()}"
             validation-reg-exp-key="email"
-            :disabled="dataDisabled"
+            :disabled="dataDisabled || isEmailDisabled"
             required
             :error-text="emailErrorText"
             @blur="emailFieldBlurHandler"
@@ -527,6 +527,7 @@ const firstName = ref('')
 const lastName = ref('')
 const phone = ref(null);
 const countryCode = ref(null);
+const isEmailDisabled = ref(false);
 
 const dataDisabled = ref(false);
 
@@ -837,6 +838,16 @@ try {
           // firstName.value = $app.store.authTelegram.response.first_name;
           // lastName.value = $app.store.authTelegram.response.last_name;
           // email.value = $app.store.authTelegram.response.email;
+
+          if(data?.user?.email) {
+            email.value = data?.user?.email;
+            isEmailDisabled.value = true;
+          }
+
+          if(data?.user?.name) {
+            firstName.value = data?.user?.name?.firstName ? data?.user?.name?.lastName : '';
+            lastName.value = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
+          }
 
           scrollToSignupFields();
 
