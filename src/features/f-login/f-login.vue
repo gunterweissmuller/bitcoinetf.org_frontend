@@ -47,6 +47,16 @@
           </div>
         </div>
 
+        <div
+            @click="handleAppleConnect"
+            class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
+            <div class="flex gap-2 items-center">
+                <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18"
+                    class="aspect-square w-[18px]" />
+                <div class="grow">Log in with Apple</div>
+            </div>
+        </div>  
+
         <!--<div
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
           <div class="flex gap-2 items-center">
@@ -371,6 +381,100 @@ const handleTelegramConnect = () => {
     })
   })
 }
+
+
+//apple 
+
+onMounted(() => {
+
+$app.api.eth.auth
+  .getAppleRedirect()
+  .then(async (res) => {
+    console.log(res);
+
+    function getJsonFromUrl(url) {
+      if(!url) url = location.search;
+      var query = url.substr(1).split("?")[1];
+      var result = {};
+      query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+      return result;
+    }
+
+    const parsedUrl = getJsonFromUrl(res.url);
+
+    console.log(parsedUrl, window.AppleID);
+
+    (window as any).AppleID.auth.init({
+        clientId : parsedUrl.client_id,
+        scope : parsedUrl.scope,
+        redirectURI : parsedUrl.redirect_uri,
+        usePopup : true
+    });
+
+  })
+  .catch((e) => {
+    // Todo: notify something went wrond
+    console.error(e)
+  })
+})
+
+const handleAppleConnect = async () => {
+
+try {
+    const data = await (window as any).AppleID.auth.signIn()
+    // Handle successful response.
+    console.log("test123", data);
+
+    $app.store.authTemp.response = data.authorization.id_token;
+
+    console.log($app.store.authTemp.response, $app.api.eth.auth)
+
+    
+    $app.api.eth.auth
+    .getAppleAuthType({apple_token: data.authorization.id_token})
+    .then(async (res) => {
+      console.log(res);
+
+      if(res.data.auth_type === 'registration') {
+          router.push("/personal/registration");
+        } else {
+
+          //todo login apple request
+
+          $app.api.eth.auth.
+            loginApple({
+              apple_token: $app.store.authTemp.response,
+            })
+              .then((jwtResponse: any) => {
+                $app.store.auth.setTokens(jwtResponse.data)
+              })
+              .then(async () => {
+                await $app.api.eth.auth.getUser().then((resp) => {
+                  $app.store.user.info = resp?.data
+                });
+
+                await router.push('/personal/analytics/performance')
+              });
+        }
+
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+
+
+} catch ( error ) {
+    // Handle error.
+    console.error(error);
+}
+
+}
+
+//metamask
 
 const metamaskSignatureMessage = ref('')
 const metamaskSignature = ref('')
