@@ -90,7 +90,7 @@ export default class BillingEthApiModule {
   async getMoonpayWallet() {
     try {
       return await this.adapter.requestJsonAsync({
-        // host: 'api-test.stage.techetf.org',
+        host: 'api-test.stage.techetf.org',
         apiVersion: 'v3',
         parameterValue: 'billing/shares/payment/payment-methods',
         request: {
