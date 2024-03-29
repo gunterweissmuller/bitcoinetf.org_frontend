@@ -93,7 +93,7 @@
 
               <div id="appleid-signin" class="signin-button" data-color="black" data-border="true" data-type="sign-in">
               </div>
-              <component :is="'script'" type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></component>
+              
 
 
           </div>
@@ -575,6 +575,41 @@ const handleTelegramConnect = async () => {
 // apple
 
 onMounted(() => {
+
+  $app.api.eth.auth
+    .getAppleRedirect()
+    .then(async (res) => {
+      console.log(res);
+
+      function getJsonFromUrl(url) {
+        if(!url) url = location.search;
+        var query = url.substr(1).split("?")[1];
+        var result = {};
+        query.split("&").forEach(function(part) {
+          var item = part.split("=");
+          result[item[0]] = decodeURIComponent(item[1]);
+        });
+        return result;
+      }
+
+      const parsedUrl = getJsonFromUrl(res.url);
+
+      console.log(parsedUrl, window.AppleID);
+
+      (window as any).AppleID.auth.init({
+          clientId : parsedUrl.client_id,
+          scope : parsedUrl.scope,
+          redirectURI : parsedUrl.redirect_uri,
+          usePopup : true
+      });
+
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+
+
       // Listen for authorization success.
       window.document.addEventListener('AppleIDSignInOnSuccess', (event) => {
           // Handle successful response.
@@ -591,11 +626,44 @@ onMounted(() => {
 
 const handleAppleConnect = async () => {
 
+  try {
+      const data = await (window as any).AppleID.auth.signIn()
+      // Handle successful response.
+      console.log("test123", data);
+
+  } catch ( error ) {
+      // Handle error.
+      console.log("test1234");
+  }
+
+  return;
+
   $app.api.eth.auth
     .getAppleRedirect()
-    .then((res) => {
+    .then(async (res) => {
       console.log(res)
-      window.open(res.url, "hello", "width=600,height=600");
+      // window.open(res.url, "hello", "width=600,height=600");
+
+
+      // (window as any).AppleID.auth.init({
+      //     clientId : '[CLIENT_ID]',
+      //     scope : '[SCOPES]',
+      //     redirectURI : '[REDIRECT_URI]',
+      //     state : '[STATE]',
+      //     nonce : '[NONCE]',
+      //     usePopup : true
+      // });
+
+      try {
+          const data = await (window as any).AppleID.auth.signIn()
+          // Handle successful response.
+          console.log("test123", data);
+
+      } catch ( error ) {
+          // Handle error.
+          console.log("test1234");
+      }
+
     })
     .catch((e) => {
       // Todo: notify something went wrond
