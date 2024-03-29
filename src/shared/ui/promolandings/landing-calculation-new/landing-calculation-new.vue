@@ -53,6 +53,10 @@
           <div @click="testTG" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
+
+          <div @click="handleAppleConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Apple}]">
+            <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
           
         </div>
         <div class="landing-calculation__signup-line"></div>
@@ -404,6 +408,7 @@ enum SignupMethods {
   Metamask = "Metamask",
   Google = "Google",
   Telegram = "Telegram",
+  Apple = "Apple"
 }
 
 const signupStep = ref(SignupSteps.Default);
@@ -760,6 +765,104 @@ const handleGoogleConnect = async () => {
   window.location.href = googleUrl.value;
 }
 
+// apple
+
+onMounted(() => {
+
+$app.api.eth.auth
+  .getAppleRedirect()
+  .then(async (res) => {
+    console.log(res);
+
+    function getJsonFromUrl(url) {
+      if(!url) url = location.search;
+      var query = url.substr(1).split("?")[1];
+      var result = {};
+      query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+      return result;
+    }
+
+    const parsedUrl = getJsonFromUrl(res.url);
+
+    console.log(parsedUrl, window.AppleID);
+
+    (window as any).AppleID.auth.init({
+        clientId : parsedUrl.client_id,
+        scope : parsedUrl.scope,
+        redirectURI : parsedUrl.redirect_uri,
+        usePopup : true
+    });
+
+  })
+  .catch((e) => {
+    // Todo: notify something went wrond
+    console.error(e)
+  })
+})
+
+const handleAppleConnect = async () => {
+
+try {
+    const data = await (window as any).AppleID.auth.signIn()
+    // Handle successful response.
+    console.log("test123", data);
+
+    $app.store.authTemp.response = data.authorization.id_token;
+
+    console.log($app.store.authTemp.response, $app.api.eth.auth)
+
+    
+    $app.api.eth.auth
+    .getAppleAuthType({apple_token: data.authorization.id_token})
+    .then(async (res) => {
+      console.log(res);
+
+      if(res.data.auth_type === 'registration') {
+          signupStep.value = SignupSteps.Signup;
+          signupMethod.value = SignupMethods.Apple;
+          // firstName.value = $app.store.authTelegram.response.first_name;
+          // lastName.value = $app.store.authTelegram.response.last_name;
+          // email.value = $app.store.authTelegram.response.email;
+
+          scrollToSignupFields();
+
+          //todo autofill email?
+        } else {
+          $app.api.eth.auth.
+            loginApple({
+              apple_token: $app.store.authTemp.response,
+            })
+              .then((jwtResponse: any) => {
+                $app.store.auth.setTokens(jwtResponse.data);
+                confirmResponse.value = jwtResponse.data;
+              })
+              .then(async () => {
+                await $app.api.eth.auth.getUser().then((resp) => {
+                  $app.store.user.info = resp?.data;
+                  purchaseStep.value = PurchaseSteps.Purchase;
+                  scrollToPurchase();
+                });
+
+              });
+        }
+
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+
+
+} catch ( error ) {
+    // Handle error.
+    console.error(error);
+}
+
+}
+
 
 
 const sendCodeLoading = ref(false)
@@ -858,6 +961,26 @@ const sendCode = async () => {
       }
     })
 
+  } else if (signupMethod.value === SignupMethods.Apple) {
+    $app.api.eth.auth
+      .initApple({
+        apple_token: $app.store.authTemp.response,
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+    }).catch((e) => {
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+
+    return;
   } else {
 
   await $app.api.eth.auth
@@ -997,6 +1120,48 @@ const signupAndBuy = async () => {
       })
       .catch((e) => {
         isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else if (signupMethod.value === SignupMethods.Apple) {
+    backendError.value = ''
+
+    await $app.api.eth.auth.
+      confirmApple({
+        apple_token: $app.store.authTemp.response,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data);
+        confirmResponse.value = jwtResponse.data;
+        // isOpenModal.value = true;
+        dataDisabled.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data;
+          purchaseStep.value = PurchaseSteps.Purchase;
+          scrollToPurchase();
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
