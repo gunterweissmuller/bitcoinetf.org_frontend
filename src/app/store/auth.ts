@@ -38,7 +38,7 @@ export const auth = defineStore('auth', {
       useNuxtApp().$app.store.persiste.latestTronCheckDate = null
 
       if(window.location.hostname === config.public.APP_DOMAIN) {
-        const newUrl = `http://${config.public.DOMAIN}/personal/login?logout=1`
+        const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`
         window.location.href = newUrl;
       }
 
