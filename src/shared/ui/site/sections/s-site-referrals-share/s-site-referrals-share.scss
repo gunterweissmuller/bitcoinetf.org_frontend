@@ -24,6 +24,9 @@
 
   .l-site-dark {
     padding-bottom: torem(20);
+    @media (max-width: 767px) {
+      padding-bottom: torem(32);
+    }
   }
 
   &__wrapper {
