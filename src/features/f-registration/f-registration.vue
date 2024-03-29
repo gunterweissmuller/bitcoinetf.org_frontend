@@ -112,7 +112,7 @@
 
               <a-input v-model="firstName" label="First name" required class="f-registration__name" />
               <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google ? true : false" required
+              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
@@ -283,6 +283,7 @@ const lastName = ref('')
 const email = ref('')
 const emailErrorText = ref('')
 const isEmailValid = ref(false)
+const isEmailDisabled = ref(false);
 
 function emailFieldBlurHandler() {
   if (isEmailValid.value) {
@@ -614,7 +615,7 @@ const handleAppleConnect = async () => {
 
       $app.store.authTemp.response = data.authorization.id_token;
 
-      console.log($app.store.authTemp.response, $app.api.eth.auth)
+      console.log($app.store.authTemp.response, $app.api.eth.auth);
 
       
       $app.api.eth.auth
@@ -623,6 +624,17 @@ const handleAppleConnect = async () => {
         console.log(res);
 
         if(res.data.auth_type === 'registration') {
+
+            if(data?.user?.email) {
+              email.value = data?.user?.email;
+              isEmailDisabled.value = true;
+            }
+
+            if(data?.user?.name) {
+              firstName.value = data?.user?.name?.firstName ? data?.user?.name?.lastName : '';
+              lastName.value = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
+            }
+
             currentStep.value = Steps.Email;
             currentSignup.value = SignupMethods.Apple;
 
