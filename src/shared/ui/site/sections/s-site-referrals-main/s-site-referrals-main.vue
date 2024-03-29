@@ -16,7 +16,7 @@
           </div>
           <div class="s-site-referrals-main__text">{{ data.text }}</div>
           <nuxt-link to="/personal/registration">
-            <a-button :text="data.btn.text" />
+            <a-button :variant="'primary2'" :text="data.btn.text" />
           </nuxt-link>
         </div>
       </div>
