@@ -89,10 +89,30 @@ const mainData = {
 
 const marqueeData = {
   low_cards: [
-    { img: '/img/site-dark/s-site-marquee/1.svg', link: '' },
-    { img: '/img/site-dark/s-site-marquee/2.svg', link: '' },
-    { img: '/img/site-dark/s-site-marquee/3.svg', link: '' },
-    { img: '/img/site-dark/s-site-marquee/4.svg', link: '' },
+    {
+      img: '/img/site-dark/s-site-marquee/1.svg',
+      link: 'https://pr.newsmax.com/article/BitcoinETForg-Surpasses-dollar50M-in-Assets-Under-Management-in-Its-Inaugural-Year-Exclusively-Serving-Select-International-Markets?storyId=658e58f2f29dad0008f55450',
+    },
+    {
+      img: '/img/site-dark/s-site-marquee/2.svg',
+      link: 'https://www.digitaljournal.com/pr/news/globe-pr-wire/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets',
+    },
+    {
+      img: '/img/site-dark/s-site-marquee/3.svg',
+      link: 'https://www.streetinsider.com/Press+Releases/BitcoinETF.org+Surpasses+%2450M+in+Assets+Under+Management+in+Its+Inaugural+Year%2C+Exclusively+Serving+Select+International+Markets/22574048.html',
+    },
+    {
+      img: '/img/site-dark/s-site-marquee/4.png',
+      link: 'https://www.benzinga.com/content/36408488/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-se',
+    },
+    {
+      img: '/img/site-dark/s-site-marquee/5.svg',
+      link: 'https://apnews.com/press-release/marketersmedia/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets-ed41cc9cde1250d6767d3972cc0a46cd',
+    },
+    {
+      img: '/img/site-dark/s-site-marquee/6.svg',
+      link: 'https://markets.businessinsider.com/news/stocks/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets-1032931262',
+    },
   ],
 }
 
