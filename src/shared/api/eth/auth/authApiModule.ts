@@ -505,7 +505,7 @@ export default class AuthApiModule {
       return await this.adapter.requestJsonAsync({
         parameterValue: `auth/provider/apple/get-auth-type`,
         request: {
-          method: HTTPMethod.GET,
+          method: HTTPMethod.POST,
         },
         data: payload,
         operationDescription: 'Receiving a purchase',

@@ -614,6 +614,8 @@ const handleAppleConnect = async () => {
 
       $app.store.authTemp.response = data.authorization.id_token;
 
+      console.log($app.store.authTemp.response, $app.api.eth.auth)
+
       
       $app.api.eth.auth
       .getAppleAuthType({apple_token: data.authorization.id_token})
