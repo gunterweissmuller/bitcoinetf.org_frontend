@@ -23,6 +23,7 @@ export class EthAdapter extends ApiAdapter {
 
   async requestAsync<T>({
                           apiVersion,
+                          host = '',
                           parameterValue,
                           request,
                           resolvePayloadAsync,
@@ -37,7 +38,7 @@ export class EthAdapter extends ApiAdapter {
 
     this.prefix = withoutPublic ? ETH_PREFIX_WITHOUT_PUBLIC : ETH_PREFIX
 
-    let endpoint = 'https://' + hostname + `/${apiVersion}${this.prefix ? '/' + this.prefix : this.prefix}/${parameterValue}`
+    let endpoint = 'https://' + (host || hostname) + `/${apiVersion}${this.prefix ? '/' + this.prefix : this.prefix}/${parameterValue}`
 
     const mergedParams = {
       ...params,

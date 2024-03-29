@@ -1,253 +1,257 @@
 <template>
   <div class="f-registration-buy w-full">
+    <e-buy-shares-success-modal
+      v-model="isOpenSuccessPaymentModal"
+      :values="paymentAmount"
+      @close="paymentModalClose"
+    />
+    <e-success-modal></e-success-modal>
+    <f-terms-modal v-model="isOpenTermsModal" />
 
-      <e-success-modal></e-success-modal>
-      <f-terms-modal v-model="isOpenTermsModal" />
-
-      <template v-if="currentStep === Steps.Purchase">
-        <main class="f-registration-buy__purchase flex flex-col mx-auto w-full">
-          <header class="f-registration-buy__purchase-head f-registration-buy__purchase-title f-registration-buy--text-normal flex self-stretch whitespace-nowrap"> <!--  -->
-            <div class='f-registration-buy__purchase-back' @click='router.back()'>
-                <a-icon class='' width='24' :name='Icon.MonoChevronLeft' />
-            </div>
-
-            <h1 class="">Complete your purchase</h1>
-
-            <div class="f-registration-buy__purchase-steps-desktop">
-              <div @click="() => {openPurchase(purchaseStepsArr[0])}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': confirmShow}]">1. Confirm</div>
-              <div @click="() => {openPurchase(purchaseStepsArr[1])}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': signShow}]">2. Sign</div>
-              <div @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
-            </div>
-
-          </header>
-
-          <div class="f-registration-buy__purchase-steps">
-            <section :class="['f-registration-buy__purchase--drop-down f-registration-buy__purchase--drop-down-confirm flex flex-col justify-end w-full bg-white', {'f-registration-buy__purchase--drop-down-desktop': confirmShow}]">
-              <header class="f-registration-buy__purchase--drop-down-title flex whitespace-nowrap cursor-pointer" @click="() => {togglePurchase(purchaseStepsArr[0])}">
-                <div class="f-registration-buy__purchase--drop-down-title-number f-registration-buy--text-normal flex justify-center items-center px-2.5 h-6 text-center aspect-square rounded-full" aria-hidden="true">1</div>
-                <h1 class="f-registration-buy__purchase--drop-down-title-text f-registration-buy--text-normal flex-auto">Confirm</h1>
-                <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration-buy__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" loading="lazy" />
-              </header>
-
-
-
-              <div v-if="confirmShow">
-                <div class="f-registration-buy__purchase-line"></div>
-
-                <div class="f-registration-buy__purchase--confirm-wrapper">
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Amount of Shares You’re Buying</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal"> {{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Investment Amount</p>
-                    
-                    <div v-if="discountAmount <= 0" class="flex gap-2 justify-between">
-                      <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amount, 2) }} </p>
-                    </div>
-
-                    <div v-if="discountAmount > 0" class="flex gap-2 justify-between">
-                      <p class="f-registration-buy__purchase--step-text-sale f-registration-buy--text-normal"> US${{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
-                      <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded(originalWithDiscount, 2) }} <span class="f-registration-buy__purchase--step-title">(-${{ $app.filters.rounded(discountAmount, 2)  }} off)</span></p>
-                    </div>
-
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item-full">
-                    <a-input-with-button
-                      label="Referral code"
-                      v-model="refCode"
-                      :buttonText="refCodeBtnText"
-                      :buttonClick="() => {refCodeApply()}"
-                      :error-text="refCodeMessage"
-                      :disabled="refApply"
-                      :button-click-enable="Boolean(refCode)"
-                    />
-                    <!-- <div
-                      v-if="refCodeMessage"
-                      :class="['f-registration-buy__purchase__ref-message', { 'f-registration-buy__purchase__ref-message--error': refCodeError }]"
-                    >
-                      {{ refCodeMessage }}
-                    </div> -->
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item-full">
-                    <div :class="['f-registration-buy__purchase__switch', { 'f-registration-buy__purchase__switch--active': switches.referral }]">
-                      <div class="f-registration-buy__purchase__switch-text">
-                        Apply referral
-                      </div>
-                      <div class="f-registration-buy__purchase__switch-button">
-                        <a-switch
-                          :disabled="!wallets?.referral?.usd_amount || wallets?.referral?.usd_amount < 1"
-                          v-model="switches.referral"
-                          :label="referralAmount"
-                          label-position="left"
-                        ></a-switch>
-                      </div>
-                    </div>
-
-                    <div :class="['f-registration-buy__purchase__switch', { 'f-registration-buy__purchase__switch--active': switches.dividends }]">
-                      <div class="f-registration-buy__purchase__switch-text">
-                        Apply dividends
-                      </div>
-                      <div class="f-registration-buy__purchase__switch-button">
-                        <a-switch v-model="switches.dividends" :label="dividendsAmount" label-position="left" :disabled="!wallets?.dividends?.usd_amount || wallets?.dividends?.usd_amount < 1"></a-switch>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Investment Currency</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal"> {{ $app.store.purchase.type === 'USDT' ? 'Tether (USDT)' : 'Tether (USDT)'}} </p>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Interest Type</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Fixed in USDT, Paid in {{ $app.store.purchase.type === 'USDT' ? 'USDT' : 'BTC' }}</p>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Price per Share</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">US$1.00</p>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Buy Back Guarantee (Per Share)
-
-                      <m-popper class="f-registration-buy__purchase--step-title-popper" hover :title="purchasePopperText.title" :text="purchasePopperText.text">
-                        <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
-                      </m-popper>
-                    </p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">US$1.00</p>
-                  </div>
-
-                  
-                  <div v-if="$app.store.purchase.type === 'USDT'" class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Guaranteed Interest</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">42%</p>
-                  </div>
-
-                  <div v-if="$app.store.purchase.type === 'BTC'" class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Projected Interest</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">100%+</p>
-                  </div>
-
-                  
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Dividends Schedule</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Daily in {{ $app.store.purchase.type === 'USDT' ? 'Tether USDT (Polygon)' : 'Bitcoin' }}</p>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Dividends Withdrawal</p>
-                    
-                    <p v-if="$app.store.purchase.type === 'USDT'" class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Automatic daily withdrawals to a wallet of your choice (must support Polygon chain)</p>
-                    <p v-if="$app.store.purchase.type === 'BTC'" class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Automatic daily withdrawals to a Bitcoin Lightning wallet of your choice.</p>
-                    <!-- <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Automatic with $100 min. threshold</p> -->
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Guaranteed Payout</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">${{ $app.filters.rounded($app.store.purchase.totalPayout, 2)  }}</p>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item">
-                    <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Term</p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">1095 Days</p>
-                  </div>
-
-                  <div class="f-registration-buy__purchase--confirm-item-btn">
-                    <button :disabled="confirmDisabled" @click="() => {openPurchase(purchaseStepsArr[1])}" class="f-registration-buy__purchase--step-btn f-registration-buy__button-continue f-registration-buy--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">Continue</button>
-                  </div>
-
-                </div>
-
-              </div>
-            </section>
-
-            <section :class="['f-registration-buy__purchase--drop-down flex flex-col justify-center p-4 w-full font-bold whitespace-nowrap bg-white', {'f-registration-buy__purchase--drop-down-desktop': signShow}]" >
-              <header @click="() => {togglePurchase(purchaseStepsArr[1])}" class="f-registration-buy__purchase--drop-down-title flex">
-                <div class="f-registration-buy__purchase--drop-down-title-number f-registration-buy--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">2</div>
-                <h2 class="f-registration-buy__purchase--drop-down-title-text f-registration-buy--text-normal flex-auto">Sign</h2>
-                <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration-buy__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': signShow}]" alt="Down arrow icon" loading="lazy" />
-              </header>
-
-              <div v-if="signShow">
-                <div class="f-registration-buy__purchase-line"></div>
-                <div class="f-registration-buy__agree">
-                    <div class="mb-10">
-                        <a-checkbox v-model="registrationAgreedUS" id="with_email"
-                            label="<p style='white-space: break-spaces' >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>"
-                            single />
-                    </div>
-                    <a-checkbox v-model="registrationAgreedTerms" id="with_email1"
-                        label="<p style='white-space: break-spaces' >I agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal"
-                        single />
-                </div>
-
-                <div class="flex">
-                  <a-button variant="secondary" class="f-registration-buy__button f-registration-buy__button-back" @click="() => {openPurchase(purchaseStepsArr[0])}"
-                    text="Back"></a-button>
-                  <a-button class="f-registration-buy__button f-registration-buy__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}"
-                      text="Continue"></a-button>
-                </div>
-                
-              </div>
-            </section>
-
-            <section :class="['f-registration-buy__purchase--drop-down f-registration-buy__purchase--drop-down-pay flex flex-col justify-center p-4 w-full font-bold bg-white cursor-pointer', {'f-registration-buy__purchase--drop-down-desktop': payShow}]">
-              <header @click="() => {togglePurchase(purchaseStepsArr[2])}" class="f-registration-buy__purchase--drop-down-title flex">
-                <div class="f-registration-buy__purchase--drop-down-title-number f-registration-buy--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">3</div>
-                <h2 class="f-registration-buy__purchase--drop-down-title-text f-registration-buy--text-normal flex-auto">Pay</h2>
-                <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration-buy__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" loading="lazy" />
-              </header>
-
-              <div v-if="payShow">
-                <div class="f-registration-buy__purchase-line"></div>
-                <template v-if="currentPayStep === StepsPay.PayWith">
-                  <div v-for="pay in payWith">
-                    <div v-if="pay.show" @click="pay.onClick ? pay.onClick() : () => currentPayStep = StepsPay.Process" class="f-registration-buy__purchase-pay-item flex flex-col justify-center cursor-pointer">
-                      <div class="flex flex-col justify-center p-5 w-full ">
-                        <div class="flex gap-1">
-                          <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-method w-6 aspect-square" loading="lazy"/>
-                          <p class="flex-auto font-semibold">{{ pay.title }}</p>
-
-                          <NuxtImg v-if="pay.title === 'Pay through Moonpay'" src="/img/icons/colorful/visa2.svg" width="51" height="10" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-visa" alt="Visa" loading="lazy" />
-
-                          <NuxtImg src="/img/icons/mono/chevron-right.svg" class="f-registration-buy__purchase-pay-item-icon-arrow my-auto aspect-square w-[18px]" alt="Right arrow icon" loading="lazy" />
-                        </div>
-                      </div>
-                      
-                    </div>
-                  </div>
-                </template>
-
-                <template v-if="currentPayStep === StepsPay.Loading">
-                  <div class="f-registration-buy__purchase-loading">
-                    Loading...
-                  </div>
-                </template>
-
-                <template v-if="currentPayStep === StepsPay.Process">
-                  <w-buy-shares-payment-short-purchase :switches="switches" :refCode="refCode" :payType="currentPayType"  :calc-value="$app.store.purchase.amountUS" :is-fiat="false"/> <!--buyAmount-->
-                </template>
-
-                <template v-if="currentPayStep === StepsPay.Paid">
-                  <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
-                    <p class="f-registration-buy__purchase--processing-text mt-4">Processing payment, please wait</p>
-
-                    <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
-                      Having trouble? Contact Support
-                    </footer>
-                  </div>
-                </template>
-              </div>
-            </section>
+    <template v-if="currentStep === Steps.Purchase">
+      <main class="f-registration-buy__purchase flex flex-col mx-auto w-full">
+        <header class="f-registration-buy__purchase-head f-registration-buy__purchase-title f-registration-buy--text-normal flex self-stretch whitespace-nowrap"> <!--  -->
+          <div class='f-registration-buy__purchase-back' @click='router.back()'>
+            <a-icon class='' width='24' :name='Icon.MonoChevronLeft' />
           </div>
-        </main>
-      </template>
+
+          <h1 class="">Complete your purchase</h1>
+
+          <div class="f-registration-buy__purchase-steps-desktop">
+            <div @click="() => {openPurchase(purchaseStepsArr[0])}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': confirmShow}]">1. Confirm</div>
+            <div @click="() => {openPurchase(purchaseStepsArr[1])}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': signShow}]">2. Sign</div>
+            <div @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
+          </div>
+
+        </header>
+
+        <div class="f-registration-buy__purchase-steps">
+          <section :class="['f-registration-buy__purchase--drop-down f-registration-buy__purchase--drop-down-confirm flex flex-col justify-end w-full bg-white', {'f-registration-buy__purchase--drop-down-desktop': confirmShow}]">
+            <header class="f-registration-buy__purchase--drop-down-title flex whitespace-nowrap cursor-pointer" @click="() => {togglePurchase(purchaseStepsArr[0])}">
+              <div class="f-registration-buy__purchase--drop-down-title-number f-registration-buy--text-normal flex justify-center items-center px-2.5 h-6 text-center aspect-square rounded-full" aria-hidden="true">1</div>
+              <h1 class="f-registration-buy__purchase--drop-down-title-text f-registration-buy--text-normal flex-auto">Confirm</h1>
+              <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration-buy__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': confirmShow}]" alt="Down arrow icon" loading="lazy" />
+            </header>
+
+
+
+            <div v-if="confirmShow">
+              <div class="f-registration-buy__purchase-line"></div>
+
+              <div class="f-registration-buy__purchase--confirm-wrapper">
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Amount of Shares You’re Buying</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal"> {{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Investment Amount</p>
+
+                  <div v-if="discountAmount <= 0" class="flex gap-2 justify-between">
+                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amount, 2) }} </p>
+                  </div>
+
+                  <div v-if="discountAmount > 0" class="flex gap-2 justify-between">
+                    <p class="f-registration-buy__purchase--step-text-sale f-registration-buy--text-normal"> US${{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
+                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded(originalWithDiscount, 2) }} <span class="f-registration-buy__purchase--step-title">(-${{ $app.filters.rounded(discountAmount, 2)  }} off)</span></p>
+                  </div>
+
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item-full">
+                  <a-input-with-button
+                    label="Referral code"
+                    v-model="refCode"
+                    :buttonText="refCodeBtnText"
+                    :buttonClick="() => {refCodeApply()}"
+                    :error-text="refCodeMessage"
+                    :disabled="refApply"
+                    :button-click-enable="Boolean(refCode)"
+                  />
+                  <!-- <div
+                    v-if="refCodeMessage"
+                    :class="['f-registration-buy__purchase__ref-message', { 'f-registration-buy__purchase__ref-message--error': refCodeError }]"
+                  >
+                    {{ refCodeMessage }}
+                  </div> -->
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item-full">
+                  <div :class="['f-registration-buy__purchase__switch', { 'f-registration-buy__purchase__switch--active': switches.referral }]">
+                    <div class="f-registration-buy__purchase__switch-text">
+                      Apply referral
+                    </div>
+                    <div class="f-registration-buy__purchase__switch-button">
+                      <a-switch
+                        :disabled="!wallets?.referral?.usd_amount || wallets?.referral?.usd_amount < 1"
+                        v-model="switches.referral"
+                        :label="referralAmount"
+                        label-position="left"
+                      ></a-switch>
+                    </div>
+                  </div>
+
+                  <div :class="['f-registration-buy__purchase__switch', { 'f-registration-buy__purchase__switch--active': switches.dividends }]">
+                    <div class="f-registration-buy__purchase__switch-text">
+                      Apply dividends
+                    </div>
+                    <div class="f-registration-buy__purchase__switch-button">
+                      <a-switch v-model="switches.dividends" :label="dividendsAmount" label-position="left" :disabled="!wallets?.dividends?.usd_amount || wallets?.dividends?.usd_amount < 1"></a-switch>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Investment Currency</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal"> {{ $app.store.purchase.type === 'USDT' ? 'Tether (USDT)' : 'Tether (USDT)'}} </p>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Interest Type</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Fixed in USDT, Paid in {{ $app.store.purchase.type === 'USDT' ? 'USDT' : 'BTC' }}</p>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Price per Share</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">US$1.00</p>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Buy Back Guarantee (Per Share)
+
+                    <m-popper class="f-registration-buy__purchase--step-title-popper" hover :title="purchasePopperText.title" :text="purchasePopperText.text">
+                      <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
+                    </m-popper>
+                  </p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">US$1.00</p>
+                </div>
+
+
+                <div v-if="$app.store.purchase.type === 'USDT'" class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Guaranteed Interest</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">42%</p>
+                </div>
+
+                <div v-if="$app.store.purchase.type === 'BTC'" class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Projected Interest</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">100%+</p>
+                </div>
+
+
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Dividends Schedule</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Daily in {{ $app.store.purchase.type === 'USDT' ? 'Tether USDT (Polygon)' : 'Bitcoin' }}</p>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Dividends Withdrawal</p>
+
+                  <p v-if="$app.store.purchase.type === 'USDT'" class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Automatic daily withdrawals to a wallet of your choice (must support Polygon chain)</p>
+                  <p v-if="$app.store.purchase.type === 'BTC'" class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Automatic daily withdrawals to a Bitcoin Lightning wallet of your choice.</p>
+                  <!-- <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">Automatic with $100 min. threshold</p> -->
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Guaranteed Payout</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">${{ $app.filters.rounded($app.store.purchase.totalPayout, 2)  }}</p>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item">
+                  <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Term</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">1095 Days</p>
+                </div>
+
+                <div class="f-registration-buy__purchase--confirm-item-btn">
+                  <button :disabled="confirmDisabled" @click="() => {openPurchase(purchaseStepsArr[1])}" class="f-registration-buy__purchase--step-btn f-registration-buy__button-continue f-registration-buy--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">Continue</button>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+
+          <section :class="['f-registration-buy__purchase--drop-down flex flex-col justify-center p-4 w-full font-bold whitespace-nowrap bg-white', {'f-registration-buy__purchase--drop-down-desktop': signShow}]" >
+            <header @click="() => {togglePurchase(purchaseStepsArr[1])}" class="f-registration-buy__purchase--drop-down-title flex">
+              <div class="f-registration-buy__purchase--drop-down-title-number f-registration-buy--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">2</div>
+              <h2 class="f-registration-buy__purchase--drop-down-title-text f-registration-buy--text-normal flex-auto">Sign</h2>
+              <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration-buy__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': signShow}]" alt="Down arrow icon" loading="lazy" />
+            </header>
+
+            <div v-if="signShow">
+              <div class="f-registration-buy__purchase-line"></div>
+              <div class="f-registration-buy__agree">
+                <div class="mb-10">
+                  <a-checkbox v-model="registrationAgreedUS" id="with_email"
+                              label="<p style='white-space: break-spaces' >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>"
+                              single />
+                </div>
+                <a-checkbox v-model="registrationAgreedTerms" id="with_email1"
+                            label="<p style='white-space: break-spaces' >I agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal"
+                            single />
+              </div>
+
+              <div class="flex">
+                <a-button variant="secondary" class="f-registration-buy__button f-registration-buy__button-back" @click="() => {openPurchase(purchaseStepsArr[0])}"
+                          text="Back"></a-button>
+                <a-button class="f-registration-buy__button f-registration-buy__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}"
+                          text="Continue"></a-button>
+              </div>
+
+            </div>
+          </section>
+
+          <section :class="['f-registration-buy__purchase--drop-down f-registration-buy__purchase--drop-down-pay flex flex-col justify-center p-4 w-full font-bold bg-white cursor-pointer', {'f-registration-buy__purchase--drop-down-desktop': payShow}]">
+            <header @click="() => {togglePurchase(purchaseStepsArr[2])}" class="f-registration-buy__purchase--drop-down-title flex">
+              <div class="f-registration-buy__purchase--drop-down-title-number f-registration-buy--text-normal flex justify-center items-center px-2 h-6 text-center aspect-square rounded-full" aria-hidden="true">3</div>
+              <h2 class="f-registration-buy__purchase--drop-down-title-text f-registration-buy--text-normal flex-auto">Pay</h2>
+              <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'" :class="['f-registration-buy__purchase--drop-down-arrow w-6 aspect-square', {'rotate-180': payShow}]" alt="Down arrow icon" loading="lazy" />
+            </header>
+
+            <div v-if="payShow">
+              <div class="f-registration-buy__purchase-line"></div>
+              <template v-if="currentPayStep === StepsPay.PayWith">
+                <div v-for="pay in payWith">
+                  <div v-if="pay.show" @click="pay.onClick ? pay.onClick() : () => currentPayStep = StepsPay.Process" class="f-registration-buy__purchase-pay-item flex flex-col justify-center cursor-pointer">
+                    <div class="flex flex-col justify-center p-5 w-full ">
+                      <div class="flex gap-1">
+                        <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-method w-6 aspect-square" loading="lazy"/>
+                        <p class="flex-auto font-semibold">{{ pay.title }}</p>
+
+                        <NuxtImg v-if="pay.title === 'Pay through Moonpay'" src="/img/icons/colorful/visa2.svg" width="51" height="10" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-visa" alt="Visa" loading="lazy" />
+
+                        <NuxtImg src="/img/icons/mono/chevron-right.svg" class="f-registration-buy__purchase-pay-item-icon-arrow my-auto aspect-square w-[18px]" alt="Right arrow icon" loading="lazy" />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </template>
+
+              <template v-if="currentPayStep === StepsPay.Loading">
+                <div class="f-registration-buy__purchase-loading">
+                  Loading...
+                </div>
+              </template>
+
+              <template v-if="currentPayStep === StepsPay.Process">
+                <w-buy-shares-payment-short-purchase :switches="switches" :refCode="refCode" :payType="currentPayType"  :calc-value="$app.store.purchase.amountUS" :is-fiat="false"/> <!--buyAmount-->
+              </template>
+
+              <template v-if="currentPayStep === StepsPay.Paid">
+                <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
+                  <p class="f-registration-buy__purchase--processing-text mt-4">Processing payment, please wait</p>
+
+                  <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
+                    Having trouble? Contact Support
+                  </footer>
+                </div>
+              </template>
+            </div>
+          </section>
+        </div>
+      </main>
+    </template>
   </div>
 </template>
 
@@ -275,10 +279,13 @@ import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { useClipboard } from '@vueuse/core'
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
 import eSuccessModal from '~/src/entities/e-success-modal/e-success-modal.vue'
-import WBuySharesPaymentShortPurchase from "~/src/widgets/w-buy-shares-payment-short-purchase/w-buy-shares-payment-short-purchase.vue"; 
+import EBuySharesSuccessModal from "~/src/entities/e-buy-shares-success-modal/e-buy-shares-success-modal.vue";
+import WBuySharesPaymentShortPurchase from "~/src/widgets/w-buy-shares-payment-short-purchase/w-buy-shares-payment-short-purchase.vue";
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { PayTypes } from '~/src/shared/constants/payWith'
 import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
+import { useMoonpay } from '~/src/app/composables/useMoonpay';
+import { Centrifuge } from 'centrifuge';
 
 const emit = defineEmits([ 'update'])
 
@@ -296,6 +303,8 @@ const enum StepsPay {
   Paid = 'Paid',
   Loading = 'Loading',
 }
+
+const { updateSignature, show: showMoonpayWidget } = useMoonpay()
 
 const confirmResponse = ref(null)
 
@@ -317,10 +326,10 @@ function openTermsModal() {
 watch(
   () => currentStep.value,
   (step) => {
-      backendError.value = ''
-      if (step === Steps.Bonus) {
-          isOpenModal.value = true
-      }
+    backendError.value = ''
+    if (step === Steps.Bonus) {
+      isOpenModal.value = true
+    }
   },
 )
 
@@ -333,6 +342,7 @@ const refCodeError = ref(false);
 const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
 const refCodeBtnText = ref('Apply');
 const wallets = ref(null)
+const isMoonpaySelected = ref(false)
 
 const getWallets = async () => {
   await $app.api.eth.billingEth
@@ -344,6 +354,18 @@ const getWallets = async () => {
     .catch(() => {
       // Todo: notify something went wrond
     })
+}
+
+const getMoonpayWallets = async () => {
+  try {
+    const { data: { moonpay: { url: moonpayUrl } } } = await $app.api.eth.billingEth.getMoonpayWallet()
+
+    console.log(moonpayUrl)
+
+    window.open(moonpayUrl, '_blank');
+  } catch (e) {
+    console.log('error', e)
+  }
 }
 
 const refCodeApply = async () => {
@@ -378,7 +400,7 @@ const refCodeApply = async () => {
 
 watch(refCode, (value) => {
   refCodeMessage.value = ''
- 
+
 })
 
 
@@ -422,6 +444,10 @@ onMounted(async () => {
       switches.referral = true
     }
   }
+})
+
+onUnmounted(() => {
+  centrifuge.value?.disconnect()
 })
 
 watch(
@@ -488,11 +514,67 @@ const openTrc = async () => {
     $app.store.user.blockchainUserWallet = resp?.data.uid;
     currentPayStep.value = StepsPay.Process;
   });
-  
+
   if(!$app.store.user?.info?.account?.tron_wallet) {
     $app.store.user.info.account.tron_wallet = $app.store.user.wallets.tron;
   }
 
+}
+const isOpenSuccessModal = ref(false)
+const centrifuge = ref(null)
+const isOpenSuccessPaymentModal = ref(false)
+const paymentAmount = ref({ amount: 0 })
+
+const openMoonpay = async () => {
+  if (isMoonpaySelected.value) {
+    return
+  }
+
+  isMoonpaySelected.value = true
+
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
+    method: 'POST',
+    headers: new Headers({
+      'Authorization': 'Bearer ' + $app.store.auth.accessToken,
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      dividends: switches?.dividends ? true : false,
+      referral: switches?.referral ? true : false,
+      bonus: false,
+      amount: $app.store.purchase.amountUS,
+      order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'
+    })
+  });
+
+  await getMoonpayWallets()
+
+  const config = useRuntimeConfig()
+  const centrifugeURL = config.public.WS_URL
+  const centrifugeToken = config.public.WS_TOKEN
+  const accountUuid = computed(() => {
+    return $app.store.user.info?.account?.uuid
+  })
+
+  centrifuge.value = new Centrifuge(centrifugeURL, {
+    token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
+  })
+
+  centrifuge.value.connect()
+
+  const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
+
+  sub
+    .on('publication', async function (ctx) {
+      console.log("PUB",ctx, ctx.data.message?.data?.status)
+      if (ctx.data.message?.data?.status === 'success') {
+        paymentAmount.value.amount = ctx.data.message?.data?.amount
+        isOpenSuccessPaymentModal.value = true
+      }
+    })
+    .subscribe()
+
+  currentPayStep.value = StepsPay.Paid;
 }
 
 const openEth = async () => {
@@ -508,13 +590,13 @@ const openPolygon = async () => {
 }
 
 const showTron = computed(() => {
-  return $app.store.user.wallets.tron || $app.store.user.info.account.tron_wallet;
+  return ($app.store.user.wallets.tron || $app.store.user.info.account.tron_wallet) && !isMoonpaySelected.value;
 });
 const showEth = computed(() => {
-  return $app.store.user.wallets.tron;
+  return $app.store.user.wallets.tron && !isMoonpaySelected.value;
 });
 const showPolygon = computed(() => {
-  return $app.store.user.wallets.polygon;
+  return $app.store.user.wallets.polygon && !isMoonpaySelected.value;
 });
 
 const payWith = ref([
@@ -527,7 +609,8 @@ const payWith = ref([
   {
     icon: "/img/icons/colorful/moonpay.svg",
     title: "Pay through Moonpay",
-    show: false,
+    onClick: openMoonpay,
+    show: true,
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -561,7 +644,7 @@ const payWith = ref([
     title: "Pay with Metamask",
     show: false,
   },
-  
+
 
 ]);
 
@@ -577,11 +660,11 @@ const startTimer = () => {
   timerStarted.value = true
 
   timer.value = setInterval(() => {
-      timeLeft.value = parseInt((stopDate - Date.now()) / 1000)
-      if (timeLeft.value < 1) {
-          timerStarted.value = false
-          clearInterval(timer.value)
-      }
+    timeLeft.value = parseInt((stopDate - Date.now()) / 1000)
+    if (timeLeft.value < 1) {
+      timerStarted.value = false
+      clearInterval(timer.value)
+    }
   }, 1000 / 25)
 }
 
@@ -621,12 +704,12 @@ const purchaseStepsArr = [{name: PurchaseSteps.Confirm, value: confirmShow},{nam
 const getPayWallets = async () => {
   currentPayStep.value = StepsPay.Loading;
 
-  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/payment-methods`, { 
-    method: 'GET', 
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/payment-methods`, {
+    method: 'GET',
     headers: new Headers({
       'Authorization': 'Bearer ' + $app.store.auth.accessToken,
       'Content-Type': 'application/json'
-    }), 
+    }),
   });
 
   const wallets = await response.json();
@@ -676,9 +759,6 @@ const togglePurchase = (target: any) => {
   if (window.innerWidth < 1024) {
     for(let i = 0; i < purchaseStepsArr.length; i++) {
 
-      
-
-
       if(purchaseStepsArr[i].name === target.name) {
 
         if(target.name === PurchaseSteps.Sign) {
@@ -700,13 +780,17 @@ const togglePurchase = (target: any) => {
         }
 
 
-        
+
       } else {
         purchaseStepsArr[i].value.value = false;
       }
     }
   }
 
+}
+
+const paymentModalClose = () => {
+  router.replace({ query: null })
 }
 
 // Success modal

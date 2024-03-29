@@ -11,9 +11,8 @@ import type { IStorePack } from '~/src/app/store'
 import { ApiVersion } from '~/src/shared/constants/api'
 
 interface IWrapperRequestAsync {
-  apiVersion?:
-    | ApiVersion.V1
-    | ApiVersion.V2
+  host?: string
+  apiVersion?: ApiVersion.V1 | ApiVersion.V2 | ApiVersion.V3
   parameterValue?: string
   request: Omit<Partial<Request>, 'body'> & { body?: BodyInit } & {
     params?: URLSearchParams | Record<string, string>
@@ -77,7 +76,7 @@ export class ApiAdapter implements IApiHelper {
                  parameterValue = '',
                  operationDescription = '',
                  data,
-                 withoutPublic = false
+                 withoutPublic = false,
                }: IWrapperRequestAsync): Promise<string> {
     return this.requestAsync<string>({
       apiVersion,
@@ -89,7 +88,7 @@ export class ApiAdapter implements IApiHelper {
       },
       resolvePayloadAsync: (_response: Response) => _response.text(),
       operationDescription,
-      withoutPublic
+      withoutPublic,
     })
   }
 
@@ -100,7 +99,7 @@ export class ApiAdapter implements IApiHelper {
                      operationDescription,
                      data,
                      headers,
-                     withoutPublic = false
+                     withoutPublic = false,
                    }: IWrapperRequestAsync): Promise<ArrayBuffer> {
     return this.requestAsync<ArrayBuffer>({
       apiVersion,
@@ -113,20 +112,22 @@ export class ApiAdapter implements IApiHelper {
       resolvePayloadAsync: (_response: Response) => _response.blob(),
       operationDescription,
       headers,
-      withoutPublic
+      withoutPublic,
     })
   }
 
   requestJsonAsync<T>({
+                        host = '',
                         apiVersion = ApiVersion.V1,
                         parameterValue = '',
                         request,
                         operationDescription,
                         data,
                         headers,
-                        withoutPublic = false
+                        withoutPublic = false,
                       }: IWrapperRequestAsync): Promise<T> {
     return this.requestAsync<T>({
+      host,
       apiVersion,
       parameterValue,
       request: {
@@ -139,7 +140,7 @@ export class ApiAdapter implements IApiHelper {
       },
       operationDescription,
       headers,
-      withoutPublic
+      withoutPublic,
     })
   }
 
@@ -150,7 +151,7 @@ export class ApiAdapter implements IApiHelper {
                                    operationDescription,
                                    data,
                                    headers,
-                                   withoutPublic = false
+                                   withoutPublic = false,
                                  }: IWrapperRequestAsync): Promise<null> {
     return this.requestAsync<null>({
       apiVersion,
@@ -163,7 +164,7 @@ export class ApiAdapter implements IApiHelper {
       resolvePayloadAsync: (_response: Response) => Promise.resolve(null),
       operationDescription,
       headers,
-      withoutPublic
+      withoutPublic,
     })
   }
 
@@ -174,7 +175,7 @@ export class ApiAdapter implements IApiHelper {
                         operationDescription,
                         data,
                         headers,
-                        withoutPublic = false
+                        withoutPublic = false,
                       }: IWrapperRequestAsync): any {
     return this.requestAsync<T>({
       apiVersion,
@@ -206,7 +207,7 @@ export class ApiAdapter implements IApiHelper {
       apiVersion,
       parameterValue,
       request: {
-        ...{cache: 'no-cache', headers: new Headers({})},
+        ...{ cache: 'no-cache', headers: new Headers({}) },
         ...request,
         body: data,
       },
@@ -223,12 +224,13 @@ export class ApiAdapter implements IApiHelper {
                           resolvePayloadAsync,
                           operationDescription,
                           headers,
-                          withoutPublic = false
+                          withoutPublic = false,
                         }: Omit<IRequestAsync, 'data'> & { request: Pick<Request, 'cache' | 'headers'> }): Promise<T> {
     const sw = Stopwatch.start()
     const req = { ...request }
 
-    const { method, params } = request
+    const { method, params } = request;
+
     const endpoint = `${this.prefix}${parameterValue}${params ? `?${new URLSearchParams(params)}` : ''}`
     if (headers && Object.keys(headers).length) {
       Object.entries(headers).forEach(([headerKey, headerValue]) => {
