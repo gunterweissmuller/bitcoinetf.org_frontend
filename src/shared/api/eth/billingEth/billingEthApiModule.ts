@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify'
 import { HTTPMethod } from '~/src/shared/constants/httpMethods'
 import { ApiErrorFlow } from '~/src/shared/toolkit/apiErrorFlow'
 import { INVERSIFY_TYPES } from '~/src/shared/types/inversifyTypes'
+import axios from 'axios';
 
 @injectable()
 export default class BillingEthApiModule {
@@ -76,6 +77,26 @@ export default class BillingEthApiModule {
           method: HTTPMethod.GET,
         },
         operationDescription: "Getting the user's wallet",
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getMoonpayWallet() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        host: 'api-test.stage.techetf.org',
+        apiVersion: 'v3',
+        parameterValue: 'billing/shares/payment/payment-methods',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting information about moonpay',
       })
     } catch (e) {
       if (e instanceof ApiErrorFlow) {
