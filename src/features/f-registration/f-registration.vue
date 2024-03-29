@@ -91,11 +91,6 @@
                   </div>
               </div>  
 
-              <div id="appleid-signin" class="signin-button" data-color="black" data-border="true" data-type="sign-in">
-              </div>
-              
-
-
           </div>
 
 
@@ -608,20 +603,6 @@ onMounted(() => {
       // Todo: notify something went wrond
       console.error(e)
     })
-
-
-      // Listen for authorization success.
-      window.document.addEventListener('AppleIDSignInOnSuccess', (event) => {
-          // Handle successful response.
-          console.log("test123",event.detail.data);
-      });
-
-
-      // Listen for authorization failures.
-      window.document.addEventListener('AppleIDSignInOnFailure', (event) => {
-          // Handle error.
-          console.log(event.detail.error);
-      });
 })
 
 const handleAppleConnect = async () => {
@@ -631,44 +612,56 @@ const handleAppleConnect = async () => {
       // Handle successful response.
       console.log("test123", data);
 
+      $app.store.authTemp.response = data.authorization.id_token;
+
+      
+      $app.api.eth.auth
+      .getAppleAuthType({apple_token: data.authorization.id_token})
+      .then(async (res) => {
+        console.log(res);
+
+        if(res.data.auth_type === 'registration') {
+            currentStep.value = Steps.Email;
+            currentSignup.value = SignupMethods.Apple;
+
+            //todo autofill email?
+
+            // firstName.value = $app.store.authTelegram.response.first_name;
+            // lastName.value = $app.store.authTelegram.response.last_name;
+            // email.value = $app.store.authTelegram.response.email;
+            // router.push("/personal/registration");
+          } else {
+
+            //todo login apple request
+
+            $app.api.eth.auth.
+              loginApple({
+                apple_token: $app.store.authTemp.response,
+              })
+                .then((jwtResponse: any) => {
+                  $app.store.auth.setTokens(jwtResponse.data)
+                })
+                .then(async () => {
+                  await $app.api.eth.auth.getUser().then((resp) => {
+                    $app.store.user.info = resp?.data
+                  });
+
+                  await router.push('/personal/analytics/performance')
+                });
+          }
+
+      })
+      .catch((e) => {
+        // Todo: notify something went wrond
+        console.error(e)
+      })
+
+
   } catch ( error ) {
       // Handle error.
-      console.log("test1234");
+      console.error(error);
   }
 
-  return;
-
-  $app.api.eth.auth
-    .getAppleRedirect()
-    .then(async (res) => {
-      console.log(res)
-      // window.open(res.url, "hello", "width=600,height=600");
-
-
-      // (window as any).AppleID.auth.init({
-      //     clientId : '[CLIENT_ID]',
-      //     scope : '[SCOPES]',
-      //     redirectURI : '[REDIRECT_URI]',
-      //     state : '[STATE]',
-      //     nonce : '[NONCE]',
-      //     usePopup : true
-      // });
-
-      try {
-          const data = await (window as any).AppleID.auth.signIn()
-          // Handle successful response.
-          console.log("test123", data);
-
-      } catch ( error ) {
-          // Handle error.
-          console.log("test1234");
-      }
-
-    })
-    .catch((e) => {
-      // Todo: notify something went wrond
-      console.error(e)
-    })
 }
 
 
@@ -718,6 +711,34 @@ const onSubmitEmailForm = async () => {
   }
 
   console.log(currentSignup.value, initPayload.ref_code);
+
+  if(currentSignup.value === SignupMethods.Apple) {
+
+    console.log($app.store.authTemp.response);
+
+    $app.api.eth.auth
+      .initApple({
+        apple_token: $app.store.authTemp.response,
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
+    }).catch((e) => {
+      isSubmitEmailForm.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+
+    return;
+  }
 
   if (currentSignup.value === SignupMethods.Google) {
 
@@ -963,7 +984,47 @@ const codeContinue = async () => {
           backendError.value = 'Something went wrong'
         }
       })
-  } else {
+  } else if(currentSignup.value === SignupMethods.Apple) {
+    backendError.value = ''
+
+    await $app.api.eth.auth.
+      confirmApple({
+        apple_token: $app.store.authTemp.response,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        currentStep.value = Steps.Bonus
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  }else {
     currentStep.value = Steps.Password
   }
   isCodeContinueProcess.value = false;
