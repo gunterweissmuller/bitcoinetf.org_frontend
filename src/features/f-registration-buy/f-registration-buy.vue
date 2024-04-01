@@ -239,7 +239,14 @@
 
               <template v-if="currentPayStep === StepsPay.Paid">
                 <div class="flex flex-col justify-end items-center px-4 pt-4 pb-8 font-bold  ">
-                  <p class="f-registration-buy__purchase--processing-text mt-4">Processing payment, please wait</p>
+                  <a v-if="btnMoonpayActive" :href="moonpayPaymentLink" target="_blank">
+                    <button
+                      @click="btnMoonpayActive = false"
+                      class="f-registration-buy__purchase--step-btn f-registration-buy__button-continue f-registration-buy--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">
+                      Pay
+                    </button>
+                  </a>
+                  <p class="f-registration-buy__purchase--processing-text mt-4" v-if="!btnMoonpayActive">Processing payment, please wait</p>
 
                   <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
                     Having trouble? Contact Support
@@ -291,6 +298,7 @@ const emit = defineEmits([ 'update'])
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
+const { isApple, isSafari } = useDevice();
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
@@ -304,7 +312,9 @@ const enum StepsPay {
   Loading = 'Loading',
 }
 
-// const { updateSignature, show: showMoonpayWidget } = useMoonpay()
+const { init: initMoonpay, show: showMoonpay } = useMoonpay()
+const moonpayPaymentLink = ref(null)
+const btnMoonpayActive = ref(false)
 
 const confirmResponse = ref(null)
 
@@ -360,12 +370,14 @@ const getMoonpayWallets = async () => {
   try {
     const { data: { moonpay: { url: moonpayUrl } } } = await $app.api.eth.billingEth.getMoonpayWallet()
 
-    console.log(moonpayUrl)
+    if (isSafari || isApple) {
+      moonpayPaymentLink.value = moonpayUrl
+      btnMoonpayActive.value = true
+    } else {
+      window.open(moonpayUrl, '_blank')
+    }
 
-    const a = document.createElement('a')
-    a.href = moonpayUrl
-    a.setAttribute('target', '_blank')
-    a.click()
+    currentPayStep.value = StepsPay.Paid;
   } catch (e) {
     console.log('error', e)
   }
@@ -577,8 +589,6 @@ const openMoonpay = async () => {
       }
     })
     .subscribe()
-
-  currentPayStep.value = StepsPay.Paid;
 }
 
 const openEth = async () => {
