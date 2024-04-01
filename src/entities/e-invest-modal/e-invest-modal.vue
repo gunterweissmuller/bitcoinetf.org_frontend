@@ -31,10 +31,10 @@
 
             <div class="relative" v-on-click-outside="() => showDropdown = false">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
-                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 cursor-pointer">
+                <div  class="relative flex items-center justify-center gap-2 cursor-pointer"> <!--@click="toggleCurrencyDropdown"-->
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
-                  <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
+                  <!-- <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/> -->
                 </div>
               </div>
               <!-- <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
@@ -455,7 +455,7 @@ const currencies = ref([
     apy3: 100
 
   }, ]);
-const selectedCurrency = ref( orderType == 'BTC' ? currencies.value[1] : currencies.value[0]);
+const selectedCurrency = ref(currencies.value[1]); //orderType.value == 'btc' ? currencies.value[1] : currencies.value[0]
 
 const apyValue = ref(selectedCurrency.value.apy);
 const dayliDivs = computed(() => {

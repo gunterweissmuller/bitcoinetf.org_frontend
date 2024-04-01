@@ -5,7 +5,6 @@
       :values="paymentAmount"
       @close="paymentModalClose"
     />
-    <e-success-modal></e-success-modal>
     <f-terms-modal v-model="isOpenTermsModal" />
 
     <template v-if="currentStep === Steps.Purchase">
@@ -87,7 +86,7 @@
                         v-model="switches.referral"
                         :label="referralAmount"
                         label-position="left"
-                      ></a-switch>
+                      ></a-switch> <!-- -->
                     </div>
                   </div>
 
@@ -220,7 +219,7 @@
 
                         <NuxtImg v-if="pay.title === 'Pay through Moonpay'" src="/img/icons/colorful/visa2.svg" width="51" height="10" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-visa" alt="Visa" loading="lazy" />
 
-                        <NuxtImg src="/img/icons/mono/chevron-right.svg" class="f-registration-buy__purchase-pay-item-icon-arrow my-auto aspect-square w-[18px]" alt="Right arrow icon" loading="lazy" />
+                        <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-dark-right.svg' : '/img/icons/mono/chevron-right.svg'" class="f-registration-buy__purchase-pay-item-icon-arrow my-auto aspect-square w-[18px]" alt="Right arrow icon" loading="lazy" />
                       </div>
                     </div>
 
@@ -295,7 +294,8 @@ const route = useRoute()
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
-  Purchase = 'Purchase'
+  Purchase = 'Purchase',
+  Bonus = 'Bonus'
 }
 const enum StepsPay {
   PayWith = 'PayWith',
@@ -304,7 +304,7 @@ const enum StepsPay {
   Loading = 'Loading',
 }
 
-const { updateSignature, show: showMoonpayWidget } = useMoonpay()
+// const { updateSignature, show: showMoonpayWidget } = useMoonpay()
 
 const confirmResponse = ref(null)
 
@@ -423,6 +423,7 @@ const dividendsAmount = computed(() => {
 })
 
 const discountAmount = ref(0);
+const origAmount = $app.store.purchase.amount;
 const originalAmount = ref($app.store.purchase.amount);
 const originalWithDiscount = ref($app.store.purchase.amount);
 
@@ -486,10 +487,10 @@ watch(
   (value) => {
     if (value) {
       discountAmount.value += wallets.value?.referral?.usd_amount;
-      $app.store.purchase.amount = $app.store.purchase.amount - discountAmount.value;
+      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
     } else {
       discountAmount.value -= wallets.value?.referral?.usd_amount;
-      $app.store.purchase.amount = $app.store.purchase.amount - discountAmount.value;
+      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
     }
   },
 )
