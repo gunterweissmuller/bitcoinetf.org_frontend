@@ -3,10 +3,6 @@
 
   cursor: pointer;
 
-  &--mb {
-    margin-bottom: torem(48) !important;
-  }
-
   &__img {
     width: 100%;
     background: var(--text-tertiary);
@@ -20,7 +16,7 @@
       object-fit: cover;
       object-position: center;
 
-      background-color: var(--accent-primary);
+      background-color: transparent;
     }
   }
 
@@ -34,13 +30,14 @@
 
     overflow: auto;
 
-    &-date, &-category {
+    &-date,
+    &-category {
       display: inline-block;
 
       padding: torem(6, 24);
 
       border-radius: torem(4);
-      background: rgba(#0066FF, .1);
+      background: rgba(#0066ff, 0.1);
 
       font-weight: 700;
       font-size: torem(12);
@@ -49,6 +46,9 @@
       text-align: center;
 
       margin-bottom: var(--spacing-s);
+      &:not(:last-child) {
+        margin-right: torem(6);
+      }
     }
 
     &-title {
@@ -74,7 +74,7 @@
       font-weight: 400;
       font-size: torem(14);
       line-height: torem(18);
-      color: #ABAEBE;
+      color: #abaebe;
 
       word-break: break-word;
       -webkit-line-clamp: 4;
@@ -106,10 +106,7 @@
 
         padding: torem(28) torem(24);
 
-        background: #22242B;
-        border-radius: 0;
-        border-top-right-radius: var(--spacing-m-2);
-        border-bottom-right-radius: var(--spacing-m-2);
+        border-radius: var(--spacing-m-2);
 
         &-description {
           display: none;
@@ -121,9 +118,7 @@
       }
 
       & .m-site-blog__img {
-        border-radius: 0;
-        border-top-left-radius: var(--spacing-m-2);
-        border-bottom-left-radius: var(--spacing-m-2);
+        border-radius: var(--spacing-m-2);
       }
     }
   }
@@ -132,15 +127,15 @@
     @media (min-width: 992px) {
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 2fr;
+      grid-template-rows: 1fr 1fr;
 
       & .m-site-blog__info {
         position: relative;
         z-index: 1;
 
-        padding: torem(24);
+        padding: torem(24, 0);
 
-        background: #22242B;
+        // background: #22242b;
         border-radius: var(--spacing-m-2);
 
         &-description {
@@ -157,11 +152,11 @@
 
       & .m-site-blog__img {
         width: 100%;
-        height: 120%;
-
-        border-radius: 0;
-        border-top-left-radius: var(--spacing-m-2);
-        border-top-right-radius: var(--spacing-m-2);
+        min-height: torem(244);
+        // height: 120%;
+        border-radius: var(--spacing-m-2);
+        // border-top-left-radius: var(--spacing-m-2);
+        // border-top-right-radius: var(--spacing-m-2);
       }
     }
   }
