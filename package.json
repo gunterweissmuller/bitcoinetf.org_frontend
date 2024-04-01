@@ -11,6 +11,7 @@
   "devDependencies": {
     "@namics/stylelint-bem": "^9.0.0",
     "@nuxt/devtools": "^0.8.3",
+    "@nuxtjs/device": "^3.1.1",
     "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
     "@types/hammerjs": "^2.0.45",
     "@types/lodash": "^4.14.198",
