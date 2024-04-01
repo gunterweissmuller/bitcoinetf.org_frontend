@@ -1,32 +1,32 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import { loadMoonPay } from '@moonpay/moonpay-js';
 
-export const useMoonpay = async () => {
-  const { public: { MOONPAY_API_KEY } } = useRuntimeConfig()
-  const moonPay = await loadMoonPay();
+export function useMoonpay() {
+    const { public: { MOONPAY_API_KEY } } = useRuntimeConfig()
+    let moonPaySdk = null
 
-  const moonPaySdk = moonPay({
-    flow: 'buy',
-    environment: 'sandbox',
-    variant: 'overlay',
-    params: {
-      apiKey: MOONPAY_API_KEY,
-    },
-    debug: true
-  });
+    const init = async (url: string) => {
+      const moonPay = await loadMoonPay();
+      moonPaySdk = moonPay({
+        flow: 'buy',
+        environment: 'sandbox',
+        variant: 'overlay',
+        params: {
+          apiKey: MOONPAY_API_KEY,
+          url,
+        },
+        debug: true
+      });
 
-  // const urlForSignature = moonPaySdk.generateUrlForSigning();
+      console.log('moonpay', moonPaySdk)
+    }
 
-  const updateSignature = async (signature: string) => {
-    moonPaySdk.updateSignature(signature);
-  }
+    const show = () => {
+      moonPaySdk.show();
+    }
 
-  const show = () => {
-    moonPaySdk.show();
-  }
-
-  return {
-    show,
-    updateSignature
-  };
+    return {
+      init,
+      show,
+    };
 }
