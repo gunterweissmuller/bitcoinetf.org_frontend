@@ -312,7 +312,7 @@ const enum StepsPay {
   Loading = 'Loading',
 }
 
-const { init: initMoonpay, show: showMoonpay } = useMoonpay()
+// const { init: initMoonpay, show: showMoonpay } = useMoonpay()
 const moonpayPaymentLink = ref(null)
 const btnMoonpayActive = ref(false)
 
@@ -440,6 +440,7 @@ const discountAmount = ref(0);
 const origAmount = $app.store.purchase.amount;
 const originalAmount = ref($app.store.purchase.amount);
 const originalWithDiscount = ref($app.store.purchase.amountUS);
+console.log("start", originalWithDiscount, $app.store.purchase.amountUS, discountAmount)
 const totalPayout = ref($app.store.purchase.totalPayout);
 
 onMounted(async () => {
@@ -468,12 +469,10 @@ onMounted(async () => {
 onUnmounted(() => {
   centrifuge.value?.disconnect()
 })
-console.log($app.store.purchase.apy);
 watch(
   () => originalWithDiscount.value,
   () => {
     $app.store.purchase.amount = originalWithDiscount.value;
-    console.log($app.store.purchase.apy);
     totalPayout.value = originalWithDiscount.value + (originalWithDiscount.value * ( ($app.store.purchase.apy ? $app.store.purchase.apy : 33.333333333333336) / 100))*3;
   }
 )
