@@ -192,7 +192,7 @@ onMounted(async () => {
   }
   if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
     
-    const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, { 
+    const response = await fetch(`https://${hostname}/v1/public/billing/shares/buy/init`, { 
       method: 'POST', 
       headers: new Headers({
         'Authorization': 'Bearer ' + $app.store.auth.accessToken,
@@ -452,7 +452,7 @@ const copyToClipboardAmount = () => {
 
 const cancelOrder = async () => {
 
-  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/cancel-order`, { 
+  const response = await fetch(`https://${hostname}/v1/public/billing/shares/buy/apollopayment/cancel-order`, { 
     method: 'POST', 
     headers: new Headers({
       'Authorization': 'Bearer ' + $app.store.auth.accessToken,
