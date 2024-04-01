@@ -219,7 +219,7 @@ const isShowBuyButton = computed<boolean>(() => {
 
   return (
     (isDesktop.value || isLaptop.value) &&
-    route.name !== 'personal-buy-shares' &&
+    // route.name !== 'personal-buy-shares' &&
     route.name !== 'personal-buy-shares-payment'
   )
 })
