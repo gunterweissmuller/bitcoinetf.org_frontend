@@ -511,8 +511,10 @@ const handleContinue = () => {
 
   closeModal();
   $app.store.purchase.amount = investmentAmount.value;
-  // $app.store.purchase.amountUS = investmentAmount;
+  $app.store.purchase.amountUS = investmentAmount;
   $app.store.purchase.type = selectedCurrency.value.value;
+  $app.store.purchase.apy = selectedCurrency.value.apy;
+  $app.store.purchase.currentStep = 'Confirm';
   $app.store.purchase.totalPayout = investmentAmount.value + guaranteedPayout.value * 3;
   router.push('/personal/buy-shares');
 }
