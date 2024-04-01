@@ -8,6 +8,8 @@ interface purchaseState {
     test: number,
     type: 'USDT' | 'BTC',
     totalPayout: number,
+    apy: 14,
+    currentStep: 'Confirm'
 }
 
 export const purchase = defineStore('purchase', {

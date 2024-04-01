@@ -40,18 +40,18 @@
               <div class="f-registration-buy__purchase--confirm-wrapper">
                 <div class="f-registration-buy__purchase--confirm-item">
                   <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Amount of Shares You’re Buying</p>
-                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal"> {{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal"> {{ $app.filters.rounded(originalWithDiscount, 2) }} </p>
                 </div>
 
                 <div class="f-registration-buy__purchase--confirm-item">
                   <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Investment Amount</p>
 
-                  <div v-if="discountAmount <= 0" class="flex gap-2 justify-between">
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amount, 2) }} </p>
+                  <div v-if="true" class="flex gap-2 justify-between"> <!--discountAmount <= 0-->
+                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amountUS, 2) }} </p>
                   </div>
 
-                  <div v-if="discountAmount > 0" class="flex gap-2 justify-between">
-                    <p class="f-registration-buy__purchase--step-text-sale f-registration-buy--text-normal"> US${{ $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
+                  <div v-if="false" class="flex gap-2 justify-between">
+                    <p class="f-registration-buy__purchase--step-text-sale f-registration-buy--text-normal"> US${{  $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
                     <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded(originalWithDiscount, 2) }} <span class="f-registration-buy__purchase--step-title">(-${{ $app.filters.rounded(discountAmount, 2)  }} off)</span></p>
                   </div>
 
@@ -86,7 +86,7 @@
                         v-model="switches.referral"
                         :label="referralAmount"
                         label-position="left"
-                      ></a-switch> <!-- -->
+                      ></a-switch> <!--  -->
                     </div>
                   </div>
 
@@ -153,7 +153,7 @@
 
                 <div class="f-registration-buy__purchase--confirm-item">
                   <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Guaranteed Payout</p>
-                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">${{ $app.filters.rounded($app.store.purchase.totalPayout, 2)  }}</p>
+                  <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal">${{ $app.filters.rounded(totalPayout, 2)  }}</p>
                 </div>
 
                 <div class="f-registration-buy__purchase--confirm-item">
@@ -428,16 +428,19 @@ const switches = reactive({
 })
 
 const referralAmount = computed(() => {
-  return `$${$app.filters.rounded(wallets.value?.referral?.usd_amount, 2) || 0}`
+  return `$${ $app.filters.rounded(Math.floor(wallets.value?.referral?.usd_amount), 0) || 0}`;
+  // return `$${$app.filters.rounded(wallets.value?.referral?.usd_amount, 0) || 0}`
 })
 const dividendsAmount = computed(() => {
-  return `$${$app.filters.rounded(wallets.value?.dividends?.usd_amount, 2) || 0}`
+  return `$${ $app.filters.rounded(Math.floor(wallets.value?.dividends?.usd_amount), 0) || 0}`;
+  return `$${$app.filters.rounded(wallets.value?.dividends?.usd_amount, 0) || 0}`
 })
 
 const discountAmount = ref(0);
 const origAmount = $app.store.purchase.amount;
 const originalAmount = ref($app.store.purchase.amount);
-const originalWithDiscount = ref($app.store.purchase.amount);
+const originalWithDiscount = ref($app.store.purchase.amountUS);
+const totalPayout = ref($app.store.purchase.totalPayout);
 
 onMounted(async () => {
   $app.store.purchase.amountUS = originalWithDiscount.value;
@@ -465,11 +468,13 @@ onMounted(async () => {
 onUnmounted(() => {
   centrifuge.value?.disconnect()
 })
-
+console.log($app.store.purchase.apy);
 watch(
   () => originalWithDiscount.value,
   () => {
-    $app.store.purchase.amountUS = originalWithDiscount.value;
+    $app.store.purchase.amount = originalWithDiscount.value;
+    console.log($app.store.purchase.apy);
+    totalPayout.value = originalWithDiscount.value + (originalWithDiscount.value * ( ($app.store.purchase.apy ? $app.store.purchase.apy : 33.333333333333336) / 100))*3;
   }
 )
 
@@ -478,11 +483,11 @@ watch(
   () => switches.dividends,
   (value) => {
     if (value) {
-      discountAmount.value += wallets.value?.dividends?.usd_amount;
-      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+      discountAmount.value += Math.floor(wallets.value?.dividends?.usd_amount);
+      originalWithDiscount.value = $app.store.purchase.amountUS + discountAmount.value;
     } else {
-      discountAmount.value -= wallets.value?.dividends?.usd_amount;
-      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+      discountAmount.value -= Math.floor(wallets.value?.dividends?.usd_amount);
+      originalWithDiscount.value = $app.store.purchase.amountUS + discountAmount.value;
     }
   },
 )
@@ -490,7 +495,7 @@ watch(
 watch(
   () => $app.store.purchase.amount,
   () => {
-    originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+    originalWithDiscount.value = $app.store.purchase.amountUS + discountAmount.value;
   }
 )
 
@@ -498,11 +503,11 @@ watch(
   () => switches.referral,
   (value) => {
     if (value) {
-      discountAmount.value += wallets.value?.referral?.usd_amount;
-      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+      discountAmount.value += Math.floor(wallets.value?.referral?.usd_amount);
+      originalWithDiscount.value = $app.store.purchase.amountUS + discountAmount.value;
     } else {
-      discountAmount.value -= wallets.value?.referral?.usd_amount;
-      originalWithDiscount.value = $app.store.purchase.amount - discountAmount.value;
+      discountAmount.value -= Math.floor(wallets.value?.referral?.usd_amount);
+      originalWithDiscount.value = $app.store.purchase.amountUS + discountAmount.value;
     }
   },
 )
@@ -531,9 +536,10 @@ const openTrc = async () => {
     currentPayStep.value = StepsPay.Process;
   });
 
-  if(!$app.store.user?.info?.account?.tron_wallet) {
-    $app.store.user.info.account.tron_wallet = $app.store.user.wallets.tron;
-  }
+  // todo uncomment
+  // if(!$app.store.user?.info?.account?.tron_wallet) {
+  //   $app.store.user.info.account.tron_wallet = $app.store.user.wallets.tron;
+  // }
 
 }
 const isOpenSuccessModal = ref(false)
@@ -635,13 +641,15 @@ const payWith = ref([
     icon: "/img/icons/colorful/usdt-erc20.svg",
     title: "Pay with USDT (ERC-20)",
     onClick: openEth,
-    show: showEth,
+    // show: showEth,
+    show: false
   },
   {
     icon: "/img/icons/colorful/usdt-matic.svg",
     title: "Pay with USDT (MATIC)",
     onClick: openPolygon,
-    show: showPolygon,
+    // show: showPolygon,
+    show: false
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -715,6 +723,23 @@ const purchasePopperText = {
 
 const purchaseStepsArr = [{name: PurchaseSteps.Confirm, value: confirmShow},{name: PurchaseSteps.Sign, value: signShow},{name: PurchaseSteps.Pay, value: payShow}];
 
+onMounted(() => {
+  if($app.store.purchase.currentStep == 'Confirm') {
+    openPurchase(purchaseStepsArr[0])
+  }
+});
+
+watch(
+  () => $app.store.purchase.currentStep,
+  () => {
+    if($app.store.purchase.currentStep == 'Confirm') {
+      confirmShow.value = true;
+      signShow.value = false;
+      payShow.value = false;
+    }
+  }
+)
+
 const getPayWallets = async () => {
   currentPayStep.value = StepsPay.Loading;
 
@@ -741,6 +766,8 @@ const openPurchase = (target: any, callback?: any) => {
   confirmShow.value = false;
   signShow.value = false;
   payShow.value = false;
+
+  $app.store.purchase.currentStep = target.name;
 
   if(target.name === PurchaseSteps.Sign) {
 
