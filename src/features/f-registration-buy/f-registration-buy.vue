@@ -362,7 +362,10 @@ const getMoonpayWallets = async () => {
 
     console.log(moonpayUrl)
 
-    window.open(moonpayUrl, '_blank');
+    const a = document.createElement('a')
+    a.href = moonpayUrl
+    a.setAttribute('target', '_blank')
+    a.click()
   } catch (e) {
     console.log('error', e)
   }
