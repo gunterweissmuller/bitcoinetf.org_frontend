@@ -66,6 +66,7 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxt/devtools',
     '@nuxt/image',
+    '@nuxtjs/device',
     [
       '@/modules/iconica',
       {
