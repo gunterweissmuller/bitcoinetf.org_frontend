@@ -368,7 +368,7 @@ const getWallets = async () => {
 
 const getMoonpayWallets = async () => {
   try {
-    const { data: { moonpay: { url: moonpayUrl } } } = await $app.api.eth.billingEth.getMoonpayWallet()
+    const { data: { moonpay: { url: moonpayUrl } } } = await $app.api.eth.billingEth.getMoonpayWallet($app.store.user.buyShares.data.uuid)
 
     if (isSafari || isApple) {
       moonpayPaymentLink.value = moonpayUrl
