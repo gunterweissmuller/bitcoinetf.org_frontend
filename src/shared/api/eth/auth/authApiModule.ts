@@ -409,6 +409,7 @@ export default class AuthApiModule {
   async getUser() {
     try {
       return await this.adapter.requestJsonAsync({
+        host: 'api-test.stage.techetf.org',
         parameterValue: 'users/account/me',
         request: {
           method: HTTPMethod.GET,
