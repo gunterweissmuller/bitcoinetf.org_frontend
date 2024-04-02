@@ -1,10 +1,11 @@
 <template>
   <div class="w-referrals">
     <div class="w-referrals__wrap">
+
       <div class="w-referrals__amount">
         <div class="w-referrals__amount-sum">
-          <div class="w-referrals__amount-title">Total Balance</div>
-          <div class="w-referrals__amount-text">${{ $app.filters.rounded(walletReferrals.usd_amount, 2) }}</div>
+          <div class="w-referrals__amount-title">Referral Balance</div>
+          <div class="w-referrals__amount-text">${{ $app.filters.roundedFixed2(walletReferrals.usd_amount, 2) }}</div>
         </div>
         <a-button
           class="w-referrals__amount-withdraw"
@@ -15,6 +16,7 @@
           @click="openModal"
         />
       </div>
+
       <button @click="openShareModal" class="w-referrals__invite" type="button">
         <div class="w-referrals__invite-info">
           <div class="w-referrals__invite-info-title">Earn from referrals 💸</div>
@@ -22,7 +24,9 @@
         </div>
         <a-icon width="18" height="18" class="w-referrals__invite-chevron" :name="Icon.MonoChevronRight" />
       </button>
+
       <div class="w-referrals__subtitle">Transactions</div>
+
       <div v-if="personalReferrals.length" class="w-referrals__list">
         <transition-group name="fade" tag="div">
           <div v-for="item in personalReferrals" :key="item?.uuid" class="w-referrals__item">
@@ -43,9 +47,11 @@
           </div>
         </transition-group>
       </div>
+
       <div v-if="personalReferrals.length && hasNextPage" class="w-referrals__more">
         <div @click="loadMoreReferrals" class="w-referrals__more-text">Load more</div>
       </div>
+
       <div v-if="!personalReferrals.length" class="w-referrals__empty">
         <img class="w-referrals__empty-pic" src="/img/cloud.png" alt="empty" />
         <div class="w-referrals__empty-title">You don’t have any transactions yet.</div>
@@ -69,9 +75,12 @@ import EReferralShareModal from '~/src/entities/e-referral-share-modal/e-referra
 import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
+import { useNuxtApp } from '#app'
 
 const isOpenModal = ref(false)
 const isOpenShareModal = ref(false)
+
+const { $app } = useNuxtApp();
 
 const checkKyc = async () => {
   return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
@@ -93,8 +102,6 @@ const route = useRoute()
 const openShareModal = () => {
   isOpenShareModal.value = true
 }
-
-const { $app } = useNuxtApp()
 const centrifuge = ref(null)
 
 const walletReferrals = ref([])
