@@ -90,7 +90,8 @@ const goToNextStep = (isLast: boolean, next: Function) => {
 
     // finishOnboarding('finished')
 
-    if(props.isPurchase) {
+    if(props.isPurchase && props.nextRouteName == 'personal-buy-shares') {
+      finishOnboarding('finished');
       $app.store.user.setIsInvestModalShow({show: true});
     } else {
       router.push({ name: props.nextRouteName })
