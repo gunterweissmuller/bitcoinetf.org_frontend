@@ -84,9 +84,11 @@ const finishOnboarding = (status) => {
 }
 
 const goToNextStep = (isLast: boolean, next: Function) => {
+
+  console.log(isLast, props.nextRouteName)
   if (isLast && props.nextRouteName) {
 
-    finishOnboarding('finished')
+    // finishOnboarding('finished')
 
     if(props.isPurchase) {
       $app.store.user.setIsInvestModalShow({show: true});
