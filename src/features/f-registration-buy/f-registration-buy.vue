@@ -558,7 +558,7 @@ const openMoonpay = async () => {
 
   isMoonpaySelected.value = true
 
-  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
+  const response = await fetch(`https://${hostname}/v1/public/billing/shares/buy/init`, {
     method: 'POST',
     headers: new Headers({
       'Authorization': 'Bearer ' + $app.store.auth.accessToken,
