@@ -90,7 +90,6 @@ export default class BillingEthApiModule {
   async getMoonpayWallet(replenishment_uuid?: any) {
     try {
       return await this.adapter.requestJsonAsync({
-        host: 'api-test.stage.techetf.org',
         apiVersion: 'v3',
         parameterValue: `billing/shares/payment/payment-methods${ replenishment_uuid ? '?replenishment_uuid=' + replenishment_uuid : '' }`,
         request: {
