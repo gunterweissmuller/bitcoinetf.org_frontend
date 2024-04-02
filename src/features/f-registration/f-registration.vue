@@ -631,7 +631,7 @@ const handleAppleConnect = async () => {
             }
 
             if(data?.user?.name) {
-              firstName.value = data?.user?.name?.firstName ? data?.user?.name?.lastName : '';
+              firstName.value = data?.user?.name?.firstName ? data?.user?.name?.firstName : '';
               lastName.value = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
             }
 
