@@ -449,6 +449,11 @@ onMounted(async () => {
 
   refCode.value = $app.store.user?.info?.referrals?.used_code || '';
   await getWallets()
+
+  await $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  })
+
   if(refCode.value !== '') {
     refCodeBtnText.value = 'Referral code applied';
     refApply.value = true
