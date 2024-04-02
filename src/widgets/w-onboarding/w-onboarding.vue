@@ -86,11 +86,11 @@ const finishOnboarding = (status) => {
 const goToNextStep = (isLast: boolean, next: Function) => {
   if (isLast && props.nextRouteName) {
 
-    if(props.isPurchase) {
-      $app.store.user.setIsInvestModalShow({show: true});
-    } else {
+    // if(props.isPurchase) {
+    //   $app.store.user.setIsInvestModalShow({show: true});
+    // } else {
       router.push({ name: props.nextRouteName })
-    }
+    // }
 
   } else {
     next()
