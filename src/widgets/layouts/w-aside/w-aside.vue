@@ -20,7 +20,7 @@
             size="small"
             class="w-aside__button-buy"
             text="Buy Bitcoin ETF Shares"
-            @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"
+            @click="() => {$app.store.user.isInvestModalShow.show = true;}"
           />
           
         </div>

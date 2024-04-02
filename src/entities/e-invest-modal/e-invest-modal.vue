@@ -1,6 +1,6 @@
 <template>
   <div class="e-invest w-full">
-    <!--orderType == 'init_btc'--><m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
+    <!--orderType == 'init_btc'--><m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
 
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
           <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
@@ -151,7 +151,7 @@
     </m-modal>
 
     <!-- REINVEST -->
-    <!--orderType == 'usdt' || orderType == 'btc'--><m-modal modalBig v-if="orderType == 'usdt' || orderType == 'btc'"  bgBasic @close="closeModal" full-screen v-model="$app.store.user.isInvestModalShow.show"> <!---->
+    <!--orderType == 'usdt' || orderType == 'btc'--><m-modal modalBig v-if="orderType == 'usdt' || orderType == 'btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!---->
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
           <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
             <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />
@@ -316,16 +316,23 @@ const router = useRouter()
 const route = useRoute()
 const { width } = useWindowSize()
 
-const orderType = ref($app.store.user?.info?.account?.order_type ? $app.store.user?.info?.account?.order_type : 'init_btc');
-console.log("ordertype", orderType)
+const orderType = ref($app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc');
+console.log("ordertype", orderType.value)
 watch(
   () => $app.store.user.info,
   () => {
-    orderType.value = $app.store.user?.info?.account?.order_type;
+    orderType.value = $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
   }
 )
 
-console.log('orderType',orderType.value)
+const isOpen = ref($app.store.user.isInvestModalShow.show);
+
+watch(
+  () => $app.store.user.isInvestModalShow.show,
+  () => {
+    isOpen.value = $app.store.user.isInvestModalShow.show;
+  }
+)
 
 // Invest Step
 
