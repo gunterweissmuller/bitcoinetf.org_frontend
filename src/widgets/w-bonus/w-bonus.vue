@@ -36,7 +36,7 @@
     </div>
   </div>
   <e-referral-share-modal v-model="isOpenRefModal" />
-  <w-onboarding :steps="renderedSteps" next-route-name="personal-buy-shares" />
+  <w-onboarding :steps="renderedSteps" next-route-name="personal-buy-shares" :is-purchase="true" />
 </template>
 
 <script setup lang="ts">

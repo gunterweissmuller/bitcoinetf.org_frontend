@@ -57,10 +57,12 @@ const props = withDefaults(
   defineProps<{
     steps: any[]
     nextRouteName?: string
+    isPurchase?: boolean
   }>(),
   {
     steps: [],
     nextRouteName: null,
+    isPurchase: false,
   },
 )
 
@@ -83,7 +85,13 @@ const finishOnboarding = (status) => {
 
 const goToNextStep = (isLast: boolean, next: Function) => {
   if (isLast && props.nextRouteName) {
-    router.push({ name: props.nextRouteName })
+
+    if(props.isPurchase) {
+      $app.store.user.setIsInvestModalShow({show: true});
+    } else {
+      router.push({ name: props.nextRouteName })
+    }
+
   } else {
     next()
   }
@@ -141,8 +149,9 @@ const secondButtonClick = (isLast) => {
       finishOnboarding('skipped')
     }
   } else {
-    finishOnboarding('skipped')
-    router.push({ name: 'personal-buy-shares' })
+    finishOnboarding('skipped');
+    $app.store.user.setIsInvestModalShow({show: true});
+    // router.push({ name: 'personal-buy-shares' })
   }
 }
 
