@@ -573,6 +573,14 @@ const openMoonpay = async () => {
     })
   });
 
+  const res = await response.json();
+  console.log("BUYINIT", res);
+
+  if (res) {
+    $app.store.user.buyShares = res
+  }
+
+
   await getMoonpayWallets()
 
   const config = useRuntimeConfig()
