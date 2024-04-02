@@ -6,6 +6,7 @@ import { user } from '~/src/app/store/user'
 import { persiste } from '~/src/app/store/persiste'
 import { authGoogle } from '~/src/app/store/authGoogle'
 import { authTelegram } from '~/src/app/store/authTelegram'
+import { authTemp } from '~/src/app/store/authTemp'
 import { purchase } from '~/src/app/store/purchase'
 
 
@@ -18,6 +19,7 @@ export interface IStorePack {
   _persiste: any
   _authGoogle: any
   _authTelegram: any
+  _authTemp: any
   _purchase: any
   readonly name: string
   readonly auth: any
@@ -26,6 +28,7 @@ export interface IStorePack {
   readonly persiste: any
   readonly authGoogle: any
   readonly authTelegram: any
+  readonly authTemp: any
   readonly purchase: any
 }
 
@@ -39,6 +42,7 @@ export default class StorePack implements IStorePack {
   readonly _persiste
   readonly _authGoogle
   readonly _authTelegram
+  readonly _authTemp
   readonly _purchase
 
   constructor() {
@@ -49,6 +53,7 @@ export default class StorePack implements IStorePack {
     this._persiste = persiste()
     this._authGoogle = authGoogle()
     this._authTelegram = authTelegram()
+    this._authTemp = authTemp()
     this._purchase = purchase()
   }
 
@@ -82,6 +87,10 @@ export default class StorePack implements IStorePack {
 
   get authTelegram() {
     return this._authTelegram
+  }
+  
+  get authTemp() {
+    return this._authTemp
   }
 
   get purchase() {
