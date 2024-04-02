@@ -78,7 +78,7 @@
   </div>
   <f-withdrawal-modal :address="address" :method="method" v-model="isOpenModal" @accept="setMethod" />
 
-  <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" />
+  <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" :is-purchase="nextRouteName == 'personal-buy-shares'"/>
 </template>
 
 <script setup lang="ts">
