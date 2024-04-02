@@ -622,13 +622,13 @@ const openPolygon = async () => {
 }
 
 const showTron = computed(() => {
-  return ($app.store.user.wallets.tron || $app.store.user.info.account.tron_wallet) && !isMoonpaySelected.value;
+  return ($app.store.user?.wallets?.tron || $app.store.user.info?.account?.tron_wallet) && !isMoonpaySelected.value;
 });
 const showEth = computed(() => {
-  return $app.store.user.wallets.tron && !isMoonpaySelected.value;
+  return $app.store.user?.wallets?.tron && !isMoonpaySelected.value;
 });
 const showPolygon = computed(() => {
-  return $app.store.user.wallets.polygon && !isMoonpaySelected.value;
+  return $app.store.user?.wallets?.polygon && !isMoonpaySelected.value;
 });
 
 const payWith = ref([
