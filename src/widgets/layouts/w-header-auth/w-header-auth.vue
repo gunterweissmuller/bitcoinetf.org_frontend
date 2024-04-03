@@ -88,17 +88,13 @@ const LINKS = [
     link: '/blog',
   },
   {
-    text: 'Tether Special',
-    link: '/tetherspecial',
-  },
-  {
     text: 'Tutorials',
     link: '/tutorials',
   },
   {
     text: 'Buy ETF Shares',
-    link: '/personal/login'
-  }
+    link: '/personal/login',
+  },
 ]
 
 const isOpenMenu = ref(false)
