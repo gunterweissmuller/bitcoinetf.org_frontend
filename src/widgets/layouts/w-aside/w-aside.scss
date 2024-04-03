@@ -473,3 +473,17 @@
   }
 
 }
+
+
+.w-aside__link-img--referrals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: torem(24);
+  height: torem(24);
+}
+
+.w-aside__link:hover .w-aside__link-img--referrals svg path {
+  fill: #fff;
+}
