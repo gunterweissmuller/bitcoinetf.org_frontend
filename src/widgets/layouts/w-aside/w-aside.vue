@@ -93,7 +93,7 @@
           <w-certificate
             :type="userType"
             :username="$app.store.user?.info?.profile?.full_name"
-            shares="1000"
+            :shares="$app.store.user?.buyShares ?? 0"
             time="1094"
           />
         </div>
@@ -267,7 +267,7 @@ withDefaults(
   },
 )
 
-const userType = computed<'btc' | 'usdt' | 'init_btc'>(() => $app.store.user?.info?.account?.order_type);
+const userType = computed<'btc' | 'usdt' | 'init_btc'>(() => $app.store.user?.info?.account?.order_type ?? 'init_btc');
 
 const isUserAuthenticated = computed(() => {
   return $app.store.auth.isUserAuthenticated
