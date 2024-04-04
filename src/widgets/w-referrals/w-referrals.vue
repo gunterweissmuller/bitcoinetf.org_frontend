@@ -15,6 +15,10 @@
           :icon="Icon.MonoWithdraw"
           @click="openModal"
         />
+        <div class="w-referrals__amount-totalsum">
+          <a-icon width="18" height="18" class="w-referrals__amount-share" :name="Icon.MonoInfo" />
+          <a-live width="18" height="18" class="w-referrals__amount-live"/>
+        </div>
       </div>
 
       <button @click="openShareModal" class="w-referrals__invite" type="button">
@@ -68,6 +72,7 @@
 
 <script setup lang="ts">
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import FReferralsModal from '~/src/features/f-referrals-modal/f-referrals-modal.vue'
