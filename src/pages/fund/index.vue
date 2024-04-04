@@ -1,44 +1,41 @@
 <template>
-  <m-scroll-navigation
-    v-if="sections && y > sections[2]?.top"
-    :length="sections.length - 2"
-    :data="scrollInfo"
-  />
-  <s-site-fund-main :data="mainData"/>
-<!--  <s-site-marquee :data="marqueeData"/>-->
-  <s-site-fund-vision :data="visionData"/>
-  <s-site-fund-ceo :data="ceoData"/>
-  <s-site-footer/>
+  <m-scroll-navigation v-if="sections && y > sections[2]?.top" :length="sections.length - 2" :data="scrollInfo" />
+  <s-site-fund-main :data="mainData" />
+  <!--  <s-site-marquee :data="marqueeData"/>-->
+  <s-site-fund-vision :data="visionData" />
+  <s-site-fund-ceo :data="ceoData" />
+  <s-site-footer-new />
 </template>
 
 <script setup lang="ts">
-import MScrollNavigation from "~/src/shared/ui/site/molecules/m-scroll-navigation/m-scroll-navigation.vue";
-import SSiteFundMain from "~/src/shared/ui/site/sections/s-site-fund-main/s-site-fund-main.vue";
-import SSiteMarquee from "~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue";
-import SSiteFundVision from "~/src/shared/ui/site/sections/s-site-fund-vision/s-site-fund-vision.vue";
-import SSiteFundCeo from "~/src/shared/ui/site/sections/s-site-fund-ceo/s-site-fund-ceo.vue";
-import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
-import {useWindowScroll, useWindowSize} from "@vueuse/core";
+import MScrollNavigation from '~/src/shared/ui/site/molecules/m-scroll-navigation/m-scroll-navigation.vue'
+import SSiteFundMain from '~/src/shared/ui/site/sections/s-site-fund-main/s-site-fund-main.vue'
+import SSiteMarquee from '~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue'
+import SSiteFundVision from '~/src/shared/ui/site/sections/s-site-fund-vision/s-site-fund-vision.vue'
+import SSiteFundCeo from '~/src/shared/ui/site/sections/s-site-fund-ceo/s-site-fund-ceo.vue'
+import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
+import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 definePageMeta({
   layout: 'site-dark',
 })
 useSeoMeta({
   title: 'About Our Fund | BitcoinETF.org - Diversified Bitcoin Investment Solutions',
-  description:'Explore BitcoinETF.org\'s fund strategy, including AI arbitrage, futures, and spot Bitcoin auto-trading desks. Invest in a diversified portfolio that leverages market fluctuations for optimal returns.'
+  description:
+    "Explore BitcoinETF.org's fund strategy, including AI arbitrage, futures, and spot Bitcoin auto-trading desks. Invest in a diversified portfolio that leverages market fluctuations for optimal returns.",
 })
-const {y} = useWindowScroll(window);
-const {width} = useWindowSize();
+const { y } = useWindowScroll(window)
+const { width } = useWindowSize()
 
-const scrollInfo = ref({});
-const isLoaded = ref(false);
+const scrollInfo = ref({})
+const isLoaded = ref(false)
 
-const sections = ref([]);
+const sections = ref([])
 
 const getElements = () => {
-  const sectionsArray = document.querySelectorAll('section');
-  const footer = document.querySelector('footer');
-  const header = document.querySelector('header');
+  const sectionsArray = document.querySelectorAll('section')
+  const footer = document.querySelector('footer')
+  const header = document.querySelector('header')
 
   const lasElement = {
     top: footer.offsetTop - header.offsetHeight,
@@ -50,29 +47,29 @@ const getElements = () => {
     top: section.offsetTop - header.offsetHeight,
     name: index > 1 ? section.dataset.name : '',
     id: index - 1,
-  }));
+  }))
 
-  sections.value.push(lasElement);
+  sections.value.push(lasElement)
 }
 
 onUpdated(() => {
   if (!isLoaded.value) {
-    getElements();
+    getElements()
   }
-  isLoaded.value = true;
-});
+  isLoaded.value = true
+})
 
 watch(y, (newVal) => {
   sections.value.forEach((section) => {
     if (newVal > section.top) {
-      scrollInfo.value = section;
+      scrollInfo.value = section
     }
-  });
-});
+  })
+})
 
 watch(width, () => {
-  getElements();
-});
+  getElements()
+})
 
 const mainData = {
   title: 'Trust, Transparency <span>& Tangibility</span>',
@@ -82,7 +79,7 @@ const mainData = {
   btn: {
     text: 'Learn more',
   },
-};
+}
 
 const visionData = {
   name: 'Vision',
@@ -112,7 +109,7 @@ const visionData = {
       text: 'Assets Under Management',
     },
   ],
-};
+}
 
 const ceoData = {
   name: 'Our CEO',
@@ -125,7 +122,7 @@ const ceoData = {
     `,
     btn: {
       text: 'Invest with Confidence',
-    }
+    },
   },
   message: 'Management you can rely on',
   points: [
@@ -142,7 +139,7 @@ const ceoData = {
       text: 'A regular speaker at major industry events',
     },
   ],
-};
+}
 
 const marqueeData = {
   low_cards: [
@@ -151,5 +148,5 @@ const marqueeData = {
     '/img/site-dark/s-site-marquee/3.svg',
     '/img/site-dark/s-site-marquee/4.svg',
   ],
-};
+}
 </script>

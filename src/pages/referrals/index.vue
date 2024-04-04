@@ -1,41 +1,37 @@
 <template>
-  <m-scroll-navigation
-    v-if="sections && y > sections[2]?.top"
-    :length="sections.length - 2"
-    :data="scrollInfo"
-  />
-  <s-site-referrals-main :data="mainData"/>
-  <s-site-marquee :data="marqueeData"/>
-  <s-site-referrals-id :data="idData"/>
-  <s-site-referrals-share :data="shareData"/>
-  <s-site-footer/>
+  <m-scroll-navigation v-if="sections && y > sections[2]?.top" :length="sections.length - 2" :data="scrollInfo" />
+  <s-site-referrals-main :data="mainData" />
+  <s-site-marquee :data="marqueeData" />
+  <s-site-referrals-id :data="idData" />
+  <s-site-referrals-share :data="shareData" />
+  <s-site-footer-new />
 </template>
 
 <script setup lang="ts">
-import MScrollNavigation from "~/src/shared/ui/site/molecules/m-scroll-navigation/m-scroll-navigation.vue";
-import SSiteReferralsMain from "~/src/shared/ui/site/sections/s-site-referrals-main/s-site-referrals-main.vue";
-import SSiteReferralsId from "~/src/shared/ui/site/sections/s-site-referrals-id/s-site-referrals-id.vue";
-import SSiteReferralsShare from "~/src/shared/ui/site/sections/s-site-referrals-share/s-site-referrals-share.vue";
-import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
-import SSiteMarquee from "~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue";
-import {useWindowScroll, useWindowSize} from "@vueuse/core";
+import MScrollNavigation from '~/src/shared/ui/site/molecules/m-scroll-navigation/m-scroll-navigation.vue'
+import SSiteReferralsMain from '~/src/shared/ui/site/sections/s-site-referrals-main/s-site-referrals-main.vue'
+import SSiteReferralsId from '~/src/shared/ui/site/sections/s-site-referrals-id/s-site-referrals-id.vue'
+import SSiteReferralsShare from '~/src/shared/ui/site/sections/s-site-referrals-share/s-site-referrals-share.vue'
+import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
+import SSiteMarquee from '~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue'
+import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 definePageMeta({
   layout: 'site-dark',
 })
 
-const {y} = useWindowScroll(window);
-const {width} = useWindowSize();
+const { y } = useWindowScroll(window)
+const { width } = useWindowSize()
 
-const scrollInfo = ref({});
-const isLoaded = ref(false);
+const scrollInfo = ref({})
+const isLoaded = ref(false)
 
-const sections = ref([]);
+const sections = ref([])
 
 const getElements = () => {
-  const sectionsArray = document.querySelectorAll('section');
-  const footer = document.querySelector('footer');
-  const header = document.querySelector('header');
+  const sectionsArray = document.querySelectorAll('section')
+  const footer = document.querySelector('footer')
+  const header = document.querySelector('header')
 
   const lasElement = {
     top: footer.offsetTop - header.offsetHeight,
@@ -47,29 +43,29 @@ const getElements = () => {
     top: section.offsetTop - header.offsetHeight,
     name: index > 1 ? section.dataset.name : '',
     id: index - 1,
-  }));
+  }))
 
-  sections.value.push(lasElement);
+  sections.value.push(lasElement)
 }
 
 onUpdated(() => {
   if (!isLoaded.value) {
-    getElements();
+    getElements()
   }
-  isLoaded.value = true;
-});
+  isLoaded.value = true
+})
 
 watch(y, (newVal) => {
   sections.value.forEach((section) => {
     if (newVal > section.top) {
-      scrollInfo.value = section;
+      scrollInfo.value = section
     }
-  });
-});
+  })
+})
 
 watch(width, () => {
-  getElements();
-});
+  getElements()
+})
 
 const mainData = {
   title: '<span>Invest Together</span>, Prosper Together!',
@@ -84,7 +80,7 @@ const mainData = {
   btn: {
     text: 'Ready to Invest',
   },
-};
+}
 
 const marqueeData = {
   low_cards: [
@@ -93,7 +89,7 @@ const marqueeData = {
     '/img/site-dark/s-site-marquee/3.svg',
     '/img/site-dark/s-site-marquee/4.svg',
   ],
-};
+}
 
 const idData = {
   name: 'General Points',
@@ -128,7 +124,7 @@ const idData = {
       text: `As fintech evolves, so do our offerings. We’re committed to keeping our investors at the forefront of the industry`,
     },
   ],
-};
+}
 
 const shareData = {
   name: 'Share and Shine',
@@ -144,6 +140,6 @@ const shareData = {
       <p>It’s our way of fostering a community where every participant has the opportunity to thrive.</p>
       <p>So, kickstart this collaborative journey today!</p>
     `,
-  }
-};
+  },
+}
 </script>

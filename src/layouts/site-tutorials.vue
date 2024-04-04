@@ -1,18 +1,18 @@
 <template>
   <div class="site-tutorials-container">
-    <w-header-dark/>
+    <w-header-dark />
     <main class="site-tutorials">
       <div class="l-tutorials">
-        <slot/>
+        <slot />
       </div>
     </main>
   </div>
-  <s-site-footer/>
+  <s-site-footer-new />
 </template>
 
 <script setup lang="ts">
 import WHeaderDark from '~/src/widgets/layouts/w-header-dark/w-header-dark.vue'
-import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
+import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
 </script>
 
 <style lang="scss">
@@ -88,14 +88,14 @@ body #__nuxt {
   }
 
   a {
-    color: #ABAEBE !important;
+    color: #abaebe !important;
   }
 }
 
 .site-tutorials {
   position: relative;
   color: var(--text-inverse-primary);
-  background: #01040F;
+  background: #01040f;
   padding: torem(179, 0);
   overflow: auto;
 

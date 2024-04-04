@@ -1,14 +1,14 @@
 <template>
   <div class="landing-weloverussia">
-    <s-site-welcome :data="welcomeData" :isLanding="true"/>
-    <landing-calculation :isFiatLanding="true"/>
-    <s-site-footer/>
+    <s-site-welcome :data="welcomeData" :isLanding="true" />
+    <landing-calculation :isFiatLanding="true" />
+    <s-site-footer-new />
   </div>
 </template>
 
 <script setup>
-import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
-import SSiteWelcome from "~/src/shared/ui/site/sections/s-site-welcome/s-site-welcome.vue";
+import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
+import SSiteWelcome from '~/src/shared/ui/site/sections/s-site-welcome/s-site-welcome.vue'
 
 definePageMeta({
   layout: 'site-dark',
@@ -45,7 +45,7 @@ const welcomeData = {
 </script>
 
 <style lang="scss">
-.landing-weloverussia{
+.landing-weloverussia {
   padding-top: 120px;
 }
 </style>
