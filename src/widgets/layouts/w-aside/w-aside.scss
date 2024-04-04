@@ -437,7 +437,7 @@
       &__list {
         border-radius: torem(8);
         border: torem(1) solid var(--surfaces-border-1);
-        background: var(--surfaces-surface-glass-2);
+        background: var(--surfaces-surface-1);
         flex-direction: column;
         display: flex;
       }
@@ -472,4 +472,20 @@
     }
   }
 
+}
+
+
+.w-aside__link-img--referrals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: torem(24);
+  height: torem(24);
+}
+
+.w-aside__link:hover .w-aside__link-img--referrals svg path {
+  @include breakpoint($break-desktop-1024) {
+    fill: #fff;
+  }
 }
