@@ -150,11 +150,6 @@ function emailFieldBlurHandler() {
     return
   }
 
-  if (email.value) {
-    emailErrorText.value = 'Invalid email address'
-    return
-  }
-
   emailErrorText.value = 'Required'
 }
 const subscribeToChimp = async () => {

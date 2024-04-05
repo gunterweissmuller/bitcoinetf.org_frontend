@@ -20,9 +20,8 @@
                 v-model="subscribeEmail"
                 v-if="!success"
               />
-              <button class="s-site-footer__form-submit" @click="subscribeToChimp()"                 v-if="!success"
-              >
-                <img src="/img/site-dark/s-site-footer/send.svg"/>
+              <button class="s-site-footer__form-submit" @click="subscribeToChimp()" v-if="!success">
+                <img src="/img/site-dark/s-site-footer/send.svg" />
               </button>
             </div>
           </div>
@@ -31,7 +30,7 @@
       <div class="s-site-footer__info">
         <div class="s-site-footer__column">
           <div class="s-site-footer__logo">
-            <img src="/img/site-dark/s-site-footer/logo.svg" alt="logo"/>
+            <img src="/img/site-dark/s-site-footer/logo.svg" alt="logo" />
           </div>
           <div class="s-site-footer__info-text">
             The world's premier digital Bitcoin ETF, offering you a blend of security, innovation, and transparency
@@ -39,7 +38,7 @@
           <div class="s-site-footer__socials">
             <div class="s-site-footer__social" v-for="(icon, id) in SOCIAL_LINKS" :key="id">
               <a :href="icon.link" target="_blank" :style="`font-size:${icon.size}px`">
-                <a-icon :name="icon.icon"/>
+                <a-icon :name="icon.icon" />
               </a>
             </div>
           </div>
@@ -74,7 +73,7 @@
 
 <script setup lang="ts">
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import {Icon} from '~/src/shared/constants/icons'
+import { Icon } from '~/src/shared/constants/icons'
 import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 
 import { useNuxtApp } from '#app'
@@ -85,17 +84,17 @@ const menu = [
   {
     title: 'Platform',
     items: [
-      {text: 'Buy ETF Shares', href: '/personal/login'},
+      { text: 'Buy ETF Shares', href: '/personal/login' },
       // { text: 'Mastercard', href: '/' },
-      {text: 'Bitcoin Education', href: '/bitcoin-education'},
-      {text: 'Referrals', href: '/referrals'},
+      { text: 'Bitcoin Education', href: '/bitcoin-education' },
+      { text: 'Referrals', href: '/referrals' },
     ],
   },
   {
     title: 'About',
     items: [
-      {text: 'Fund', href: '/fund'},
-      {text: 'Blog', href: '/blog'},
+      { text: 'Fund', href: '/fund' },
+      { text: 'Blog', href: '/blog' },
       // { text: 'Chat', href: '/' },
       // { text: 'Bitcoin Whitepaper', href: '/' },
     ],
@@ -104,23 +103,24 @@ const menu = [
     title: 'Account',
     items: [
       // { text: 'Corporate', href: '/' },
-      {text: 'Personal', href: '/personal/earnings'},
-      {text: 'Tutorials', href: '/tutorials'},
+      { text: 'Personal', href: '/personal/earnings' },
+      { text: 'Tutorials', href: '/tutorials' },
     ],
   },
   {
     title: 'Annual Report',
-    items: [
-      {text: '2023', href: '/#'},
-    ],
+    items: [{ text: '2023', href: '/#' }],
   },
 ]
 
 const SOCIAL_LINKS = [
-  {icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org'},
-  {icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat'},
-  {icon: Icon.MonoUnknownBlack, link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl'},
-  {icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org', size: 14},
+  { icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org' },
+  { icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat' },
+  {
+    icon: Icon.MonoUnknownBlack,
+    link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl',
+  },
+  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org', size: 14 },
 ]
 
 const subscribeEmail = ref('')
@@ -133,23 +133,18 @@ function emailFieldBlurHandler() {
     return
   }
 
-  if (email.value) {
-    emailErrorText.value = 'Invalid email address'
-    return
-  }
-
   emailErrorText.value = 'Required'
 }
 const subscribeToChimp = async () => {
   try {
-    await $app.api.eth.news.mailchimpSub({email:subscribeEmail.value}).then(()=>{
+    await $app.api.eth.news.mailchimpSub({ email: subscribeEmail.value }).then(() => {
       success.value = true
     })
   } catch (e) {
-      emailErrorText.value = 'Invalid email address'
+    emailErrorText.value = 'Invalid email address'
   }
 }
 </script>
 
-<style src="./s-site-footer.scss" lang="scss"/>
+<style src="./s-site-footer.scss" lang="scss" />
 footer
