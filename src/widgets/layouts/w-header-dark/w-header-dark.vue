@@ -45,13 +45,14 @@
             v-if="!isUserAuthenticated"
             size="small"
             text="Launch app"
+            :variant="'primary2'"
             @click="$router.push({ name: 'personal-login' })"
           />
         </div>
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
         <nuxt-link to="/personal/login" v-if="!isUserAuthenticated"
-          ><a-button text="Launch app" size="small" class="a-button--custom-color"
+          ><a-button text="Launch app" size="small" :variant="'primary2'"
         /></nuxt-link>
         <a-avatar
           v-if="isUserAuthenticated"
