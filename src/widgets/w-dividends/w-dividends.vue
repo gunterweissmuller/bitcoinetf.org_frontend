@@ -124,7 +124,7 @@ const centrifuge = ref(null)
 const setMethod = async (value) => {
   let methodType
   if (value.method !== 'none') {
-    methodType = value.method === 'bitcoin_lightning' ? 'bitcoin_lightning' : 'bitcoin_on_chain'
+    methodType = value.method
   } else {
     methodType = 'none'
   }

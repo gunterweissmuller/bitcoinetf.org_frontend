@@ -59,12 +59,16 @@ const METHODS_OPTIONS = {
     text: 'Tron',
     icon: Icon.ColorfulTron,
   },
+  polygon_usdt: {
+    text: 'Tether USDT (Polygon)',
+    icon: Icon.ColorfulUsdt,
+  },
 }
 
 const methods = [
   {
-    label: 'Tether USDT (Tron, TRC-20)',
-    value: 'tron',
+    label: 'Tether USDT (Polygon)',
+    value: 'polygon_usdt',
     icon: METHODS_OPTIONS.tron.icon,
   },
 ]
@@ -136,7 +140,7 @@ const setMethod = async (value) => {
   await $app.api.info.billing
     .setWithdrawalMethod({
       address: value.address,
-      method: 'manual',
+      method: value.method,
       walletType: 'referral',
     })
     .catch((e) => {
