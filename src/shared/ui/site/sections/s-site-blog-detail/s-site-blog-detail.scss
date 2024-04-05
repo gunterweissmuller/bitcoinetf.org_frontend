@@ -32,13 +32,7 @@
       background: rgba(#2e2f38, 0.5);
     }
     &-read.gray {
-      background: linear-gradient(
-        90deg,
-        rgba(207, 223, 255, 0.2) 0%,
-        rgba(234, 217, 255, 0.1) 33.33%,
-        rgba(194, 255, 233, 0.1) 66.67%,
-        rgba(169, 194, 255, 0.2) 100%
-      );
+      background-color: var(--surfaces-surface-2);
     }
   }
 
