@@ -129,9 +129,3 @@ watch(
 </script>
 
 <style src="./w-header-dark.scss" lang="scss"></style>
-
-<style lang="scss" scoped>
-.a-button--custom-color {
-  background-color: #0066ff;
-}
-</style>
