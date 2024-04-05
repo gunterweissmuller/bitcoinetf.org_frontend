@@ -81,19 +81,22 @@
     &:after {
       position: absolute;
       top: torem(100);
-      right: torem(75);
+      right: torem(35);
       bottom: 0;
       z-index: 1;
       content: '';
       width: torem(460);
-      height: torem(80);
+      height: torem(200);
       border-radius: torem(460);
       transform: rotate(140deg);
-      background: rgba(1, 4, 15, 0.7);
+      background: rgba(1, 4, 15, 0.75);
       filter: blur(40px);
       @media (max-width: 767px) {
         top: torem(0);
-        right: torem(-100);
+        right: torem(-150);
+        height: torem(100);
+        filter: blur(10px);
+        background: rgba(1, 4, 15, 0.7);
       }
     }
   }

@@ -134,6 +134,7 @@
 
     &-text {
       margin-bottom: torem(20);
+
       @media (max-width: 991px) {
         margin-bottom: torem(32);
       }
@@ -232,7 +233,7 @@
       font-family: Jakarta, sans-serif;
       font-size: torem(16);
       line-height: 140%;
-      color: #62646a;
+      color: #01040f;
 
       @media (max-width: 767px) {
         font-size: torem(14);
