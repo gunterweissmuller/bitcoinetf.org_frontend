@@ -169,4 +169,3 @@ const subscribeToChimp = async () => {
 </script>
 
 <style src="./s-site-footer-new.scss" lang="scss" />
-footer
