@@ -10,14 +10,16 @@
         <a-button
           class="w-referrals__amount-withdraw"
           variant="secondary"
-          text="Withdraw"
+          text="Add Withdrawal Method"
           :disabled="!walletReferrals?.usd_amount"
-          :icon="Icon.MonoWithdraw"
+          :icon="Icon.MonoPlus"
           @click="openModal"
         />
         <div class="w-referrals__amount-totalsum">
-          <a-icon width="18" height="18" class="w-referrals__amount-share" :name="Icon.MonoInfo" />
-          <a-live width="18" height="18" class="w-referrals__amount-live"/>
+          <div class="w-referrals__amount-share">
+            <a-icon width="32" height="32" :name="Icon.MonoInfo" />
+          </div>
+          <a-live class="w-referrals__amount-live"/>
         </div>
       </div>
 

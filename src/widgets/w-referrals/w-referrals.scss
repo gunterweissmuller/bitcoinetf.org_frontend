@@ -1,14 +1,18 @@
 .w-referrals {
   &__amount {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-row-gap: torem(24);
+    grid-column-gap: torem(8);
     margin-bottom: var(--spacing-m-1);
 
     @include breakpoint($break-desktop-1024) {
       flex-direction: row;
       justify-content: space-between;
+    }
+
+    &-sum {
+      grid-column: span 2;
     }
 
     &-title {
@@ -34,7 +38,6 @@
 
       @include breakpoint($break-desktop-1024) {
         margin: 0 0 var(--spacing-m-2) 0;
-
       }
 
       &__wrap {
@@ -126,14 +129,39 @@
     }
 
     &-withdraw {
-      margin-top: var(--spacing-s);
-      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      height: auto;
+      min-height: 1px;
+      aspect-ratio: 1/1;
+
+      padding: 0;
+
+      text-align: center;
+
+      .a-icon {
+        width: torem(21);
+        height: torem(21);
+      }
 
       @include breakpoint($break-desktop-1024) {
         margin-top: 0;
         max-width: torem(198);
       }
 
+    }
+
+    &-totalsum {
+      min-height: 1px;
+      aspect-ratio: 1/1;
+      background: #fff;
+    }
+
+    &-share {
+      border-radius: 100%;
+      background: var(--surfaces-surface-2);
     }
   }
 
