@@ -40,14 +40,6 @@
         </div>
       </div>
 
-      <!-- <button @click="openShareModal" class="w-referrals__invite" type="button">
-        <div class="w-referrals__invite-info">
-          <div class="w-referrals__invite-info-title">Earn from referrals 💸</div>
-          <div class="w-referrals__invite-info-text">Invite your friends and family to earn referral rewards!</div>
-        </div>
-        <a-icon width="18" height="18" class="w-referrals__invite-chevron" :name="Icon.MonoChevronRight" />
-      </button> -->
-
       <div class="w-referrals__subtitle">Transactions</div>
 
       <div v-if="personalReferrals.length" class="w-referrals__list">
@@ -82,6 +74,43 @@
         <div class="w-referrals__empty-text">
           Start inviting your friends to earn referral bonuses!
         </div>
+      </div>
+
+      <div class="w-referrals__share">
+
+      </div>
+
+      <div class="w-referrals__instructions">
+        <div class="w-referrals__instructions-heading">
+          Invite your friends
+        </div>
+
+        <ul class="w-referrals__instructions-list">
+          <li class="w-referrals__instructions-item">
+            <span class="w-referrals__instructions-number">
+              1
+            </span>
+            <p class="w-referrals__instructions-text">
+              You share your referral link with friends in any way you like.
+            </p>
+          </li>
+          <li class="w-referrals__instructions-item">
+            <span class="w-referrals__instructions-number">
+              2
+            </span>
+            <p class="w-referrals__instructions-text">
+              Friends purchase ETF Shares with your referral code.
+            </p>
+          </li>
+          <li class="w-referrals__instructions-item">
+            <span class="w-referrals__instructions-number">
+              3
+            </span>
+            <p class="w-referrals__instructions-text">
+              You get 5% of what they buy, always. They get better rates too!
+            </p>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
