@@ -10,7 +10,7 @@
         {{ currentOption.name }}
       </span>
       <span v-else class="a-dropdown__value-name">
-        {{ props.empty || 'Empty' }}
+        {{ props.empty }}
       </span>
     </div>
     <ul v-show="props.options.length && dropdownState" class="a-dropdown__list" ref="dropdown">
@@ -34,47 +34,67 @@
 import { OnClickOutside } from '@vueuse/core';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons';
-
-interface Option {
-  name: string,
-  value: any
-}
+import { ADropdownOption } from '~/src/shared/types/global';
 
 const props = defineProps({
+  // Список вариантов выбора
   options: {
-    type: Array as PropType<Option[]>,
+    type: Array as PropType<ADropdownOption[]>,
     required: false,
     default: []
   },
+  // передается value нужного нам option
+  // получить выбранный option можно через v-model
+  // если у options такого value нет, то current
+  // обновляется на последний элемент options
   current: {
-    type: [Number, Boolean] as PropType<number | false>,
-    required: false,
-    default: false
+    type: null as PropType<any>,
+    required: true,
+    default: null
   },
+  // если options пустой, то какую строку показать
   empty: {
-    type: [String, Boolean] as PropType<string | false>,
+    type: String,
     required: false,
-    default: false
+    default: 'Empty'
   }
 });
 
+// update:current - обновляет значение, которое передается в пропс через v-model
+// get-current-option - возвращает выбранный Option
 const emit = defineEmits(['update:current', 'get-current-option']);
 
-
-const currentOption = computed<Option>(() => {
-  return props.options.find((option) => option.value === props.current) ?? (props.options.length ? props.options[props.option.length - 1] : {});
-});
 
 const dropdownState = ref<boolean>(false);
 
 const dropdown = ref(null);
 onClickOutside(dropdown, () => dropdownState.value = false);
 
+
+const current = ref<any>(props.current ?? props.options[props.options.length - 1].value);
+
+const currentOption = computed<Option>(() => {
+  const option = props.options.find((option) => option.value === current.value);
+
+  if (option) {
+    return option;
+  }
+
+  emit('update:current', props.options[props.options.length - 1].value);
+  return props.options[props.options.length - 1];
+});
+
 const changeOption = (value : number) => {
-  emit('update:current', value);
+  current.value = value;
+  emit('update:current', current.value);
   emit('get-current-option', currentOption.value);
   dropdownState.value = false;
 }
+
+watch(() => props.current, () => {
+  current.value = props.current;
+  changeOption(current.value);
+});
 </script>
 
 <style lang='scss' src="./a-dropdown.scss"></style>

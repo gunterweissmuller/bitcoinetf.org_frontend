@@ -34,7 +34,8 @@
 
           <a-dropdown
             :options="totalSumOptions"
-            v-model:current="totalSumCurrentValue"
+            :current="5"
+            @get-current-option="(option : ADropdownOption) => totalSumCurrentOption = option"
           />
         </div>
       </div>
@@ -101,6 +102,7 @@ import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import { useNuxtApp } from '#app'
+import { ADropdownOption } from '~/src/shared/types/global';
 
 const isOpenModal = ref(false)
 const isOpenShareModal = ref(false)
@@ -124,7 +126,6 @@ const openModal = async () => {
 
 const route = useRoute();
 
-const totalSumCurrentValue = ref<number>(5);
 const totalSumOptions = [
   {
     name: '24h',
@@ -151,9 +152,7 @@ const totalSumOptions = [
     value: 5
   },
 ];
-const totalSumCurrentOption = computed(() => {
-  return totalSumOptions.find((option) => option.value === totalSumCurrentValue.value) ?? false;
-});
+const totalSumCurrentOption = ref<ADropdownOption | null>(null);
 
 const openShareModal = () => {
   isOpenShareModal.value = true
@@ -168,8 +167,7 @@ const transactionsKey = ref(0)
 
 const method = ref('')
 const address = ref('')
-const setMethodError = ref('')
-
+const setMethodError = ref('');
 const setMethod = () => {
   setTimeout(async ()=>{
     await getWalletReferrals()
