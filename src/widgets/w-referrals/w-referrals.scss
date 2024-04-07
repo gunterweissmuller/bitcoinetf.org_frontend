@@ -142,26 +142,68 @@
       text-align: center;
 
       .a-icon {
-        width: torem(21);
-        height: torem(21);
+        font-size: torem(27);
+        margin: 0;
+        margin-bottom: torem(21);
       }
 
-      @include breakpoint($break-desktop-1024) {
-        margin-top: 0;
-        max-width: torem(198);
+      .a-button__label {
+        font-size: torem(14);
+        line-height: torem(18);
       }
 
     }
 
     &-totalsum {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+
       min-height: 1px;
       aspect-ratio: 1/1;
-      background: #fff;
+
+      padding: torem(16);
+
+      background: var(--surfaces-surface-glass);
+      border-radius: var(--spacing-s);
+    }
+
+    &-caption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      width: 100%;
     }
 
     &-share {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: torem(32);
+      height: torem(32);
       border-radius: 100%;
       background: var(--surfaces-surface-2);
+    }
+
+    &-name {
+      font-family: Dm, sans-serif;
+      font-weight: 700;
+      font-size: torem(10);
+      line-height: torem(13);
+      color: var(--text-tertiary);
+      // bc on media 350px text is wrapped
+      white-space: nowrap;
+    }
+
+    &-price {
+      font-family: Dm, sans-serif;
+      font-weight: 700;
+      font-size: torem(16);
+      line-height: torem(21);
+      color: var(--text-primary);
     }
   }
 

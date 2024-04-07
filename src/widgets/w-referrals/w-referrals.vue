@@ -16,20 +16,36 @@
           @click="openModal"
         />
         <div class="w-referrals__amount-totalsum">
-          <div class="w-referrals__amount-share">
-            <a-icon width="32" height="32" :name="Icon.MonoInfo" />
+          <div class="w-referrals__amount-caption">
+            <div class="w-referrals__amount-share">
+              <a-icon width="14" height="14" :name="Icon.MonoInfo" />
+            </div>
+            <a-live class="w-referrals__amount-live"/>
           </div>
-          <a-live class="w-referrals__amount-live"/>
+
+          <div>
+            <div class="w-referrals__amount-name">
+              TOTAL REFERRALS EARNED
+            </div>
+            <div class="w-referrals__amount-price">
+              $0
+            </div>
+          </div>
+
+          <a-dropdown
+            :options="totalSumOptions"
+            v-model:current="totalSumCurrentValue"
+          />
         </div>
       </div>
 
-      <button @click="openShareModal" class="w-referrals__invite" type="button">
+      <!-- <button @click="openShareModal" class="w-referrals__invite" type="button">
         <div class="w-referrals__invite-info">
           <div class="w-referrals__invite-info-title">Earn from referrals 💸</div>
           <div class="w-referrals__invite-info-text">Invite your friends and family to earn referral rewards!</div>
         </div>
         <a-icon width="18" height="18" class="w-referrals__invite-chevron" :name="Icon.MonoChevronRight" />
-      </button>
+      </button> -->
 
       <div class="w-referrals__subtitle">Transactions</div>
 
@@ -59,10 +75,11 @@
       </div>
 
       <div v-if="!personalReferrals.length" class="w-referrals__empty">
-        <img class="w-referrals__empty-pic" src="/img/cloud.png" alt="empty" />
+        <img v-if="$app.store.user.theme === 'light'" class="w-referrals__empty-pic" src="/img/cloud.png" alt="empty" />
+        <img v-else class="w-referrals__empty-pic" src="/img/cloud-dark.png" alt="empty" />
         <div class="w-referrals__empty-title">You don’t have any transactions yet.</div>
         <div class="w-referrals__empty-text">
-          Invite your friends using your <span @click="openShareModal">Referral code.</span>
+          Start inviting your friends to earn referral bonuses!
         </div>
       </div>
     </div>
@@ -75,6 +92,7 @@
 <script setup lang="ts">
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import FReferralsModal from '~/src/features/f-referrals-modal/f-referrals-modal.vue'
@@ -104,7 +122,38 @@ const openModal = async () => {
   }
 }
 
-const route = useRoute()
+const route = useRoute();
+
+const totalSumCurrentValue = ref<number>(5);
+const totalSumOptions = [
+  {
+    name: '24h',
+    value: 0
+  },
+  {
+    name: '7d',
+    value: 1
+  },
+  {
+    name: '1m',
+    value: 2
+  },
+  {
+    name: '6m',
+    value: 3
+  },
+  {
+    name: '1y',
+    value: 4
+  },
+  {
+    name: 'All time',
+    value: 5
+  },
+];
+const totalSumCurrentOption = computed(() => {
+  return totalSumOptions.find((option) => option.value === totalSumCurrentValue.value) ?? false;
+});
 
 const openShareModal = () => {
   isOpenShareModal.value = true
