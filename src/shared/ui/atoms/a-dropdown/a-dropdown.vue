@@ -1,9 +1,9 @@
 <template>
-  <div class="a-dropdown">
+  <div class="a-dropdown" ref="dropdown">
     <div
       class="a-dropdown__value"
       :class="{ empty: !props.options.length }"
-      @click="dropdownState = !dropdownState"
+      @click="dropdownState = !dropdownState;"
     >
       <a-icon width="14" height="14" :name="Icon.MonoChevronBottom" />
       <span v-if="props.options.length" class="a-dropdown__value-name">
@@ -13,7 +13,7 @@
         {{ props.empty }}
       </span>
     </div>
-    <ul v-show="props.options.length && dropdownState" class="a-dropdown__list" ref="dropdown">
+    <ul v-show="props.options.length && dropdownState" class="a-dropdown__list">
       <li
         class="a-dropdown__item"
         :class="{ current: option.value === currentOption.value }"
