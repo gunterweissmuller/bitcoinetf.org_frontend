@@ -117,7 +117,7 @@ const METHODS_OPTIONS = {
   },
   polygon_usdt: {
     text: 'Polygon USDT',
-    icon: Icon.ColorfulUsdt,
+    icon: Icon.ColorfulUsdtPolygon,
   },
 }
 

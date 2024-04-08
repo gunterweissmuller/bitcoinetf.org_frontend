@@ -61,7 +61,7 @@ const METHODS_OPTIONS = {
   },
   polygon_usdt: {
     text: 'Tether USDT (Polygon)',
-    icon: Icon.ColorfulUsdt,
+    icon: Icon.ColorfulUsdtPolygon,
   },
 }
 
