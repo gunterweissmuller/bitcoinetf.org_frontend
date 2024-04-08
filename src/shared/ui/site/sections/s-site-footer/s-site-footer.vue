@@ -73,7 +73,7 @@
           </div>
         </div>
       </div>
-      <div class="s-site-footer__phrase">BITCOIN ETF</div>
+      <div class="s-site-footer__phrase"><NuxtImg src="/img/footer-name.svg" /></div>
     </div>
     <div class="l-site-dark s-site-footer-container">
       <div class="s-site-footer__bottom">

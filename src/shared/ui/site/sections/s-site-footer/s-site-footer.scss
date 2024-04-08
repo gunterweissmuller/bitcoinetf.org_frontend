@@ -10,28 +10,26 @@
     border-radius: torem(24);
     background: #074dff;
     margin: 0 auto;
-    padding: torem(0, 40);
     overflow: hidden;
 
     @media (max-width: 767px) {
       border-radius: 0;
-      padding: torem(0, 16);
     }
 
     &:before {
       position: absolute;
       left: 50%;
-      bottom: torem(-200);
+      bottom: torem(-280);
       z-index: 1;
       transform: translateX(-50%);
       content: '';
-      width: torem(1260);
+      width: 95%;
       height: torem(360);
       border-radius: 1260px;
       background: #48bdff;
       filter: blur(90px);
       @media screen and (max-width: 767px) {
-        width: torem(332);
+        width: 80%;
         height: torem(260);
         bottom: torem(-132);
       }
@@ -40,10 +38,10 @@
 
   &__top {
     border-bottom: torem(1) solid #ffffff33;
-    padding: torem(80, 0);
+    padding: torem(80, 40);
 
     @media (max-width: 767px) {
-      padding: torem(96, 0, 40);
+      padding: torem(96, 16, 40);
     }
 
     &-wrapper {
@@ -57,7 +55,8 @@
 
     &-send {
       display: flex;
-      gap: torem(40);
+      align-items: center;
+      gap: torem(32);
 
       @media (max-width: 767px) {
         flex-direction: column;
@@ -66,18 +65,16 @@
   }
 
   &__title_sub_earn {
-    margin-right: torem(28);
+    margin-right: torem(14);
   }
 
   &__title_sub_bitcoin {
-    margin-left: torem(16);
+    margin-left: torem(14);
   }
 
   &__title {
     position: relative;
     font-family: Jakarta, sans-serif;
-    //font-size: torem(64);
-    //font-weight: 800;
     max-width: unset !important;
     overflow: hidden;
 
@@ -87,16 +84,23 @@
     }
 
     &.title-sub {
-      margin-top: torem(18) !important;
-      margin-bottom: 0 !important;
+      margin-top: torem(0) !important;
+      margin-bottom: 0;
       display: flex;
+      @media screen and (max-width: 767px) {
+        justify-content: center;
+        img {
+          width: 40px;
+          height: auto;
+        }
+      }
       &:after {
         display: none !important;
       }
     }
 
     &.title-first {
-      margin-bottom: torem(42) !important;
+      margin-bottom: torem(16);
       &:after {
         position: absolute;
         top: 0;
@@ -117,6 +121,10 @@
 
   &__form-submit {
     background: #fff;
+    @media (max-width: 767px) {
+      width: torem(56);
+      height: auto;
+    }
   }
 
   &__text,
@@ -132,7 +140,7 @@
     font-family: Jakarta, sans-serif;
     font-size: torem(16);
     line-height: torem(22);
-
+    max-width: torem(291);
     @media (max-width: 767px) {
       text-align: center;
     }
@@ -141,6 +149,7 @@
   &__form {
     position: relative;
     font-family: Jakarta, sans-serif;
+
     .a-input__error-text {
       color: #ff5e5e;
     }
@@ -150,6 +159,12 @@
         background: none;
         border: torem(1) solid #ffffff33;
         min-height: torem(72);
+        @media screen and (max-width: 767px) {
+          min-height: torem(64);
+        }
+        .a-input__input-text {
+          font-family: Jakarta, sans-serif !important;
+        }
       }
     }
     .a-input__input-title--small {
@@ -198,16 +213,17 @@
     position: relative;
     z-index: 3;
     display: flex;
-    padding-top: torem(80);
-    margin-bottom: torem(17);
+    padding: torem(80, 40, 0);
+    margin-bottom: torem(70);
 
+    justify-content: space-between;
     @media (max-width: 1199px) {
       flex-direction: column;
     }
 
     @media (max-width: 767px) {
       margin-bottom: torem(83);
-      padding-top: torem(40);
+      padding: torem(40, 16, 0);
     }
 
     &-text {
@@ -247,10 +263,7 @@
   &__menu {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    max-width: torem(696);
-    gap: torem(20);
-    margin-left: auto;
+    gap: torem(16);
 
     @media (max-width: 1199px) {
       margin-top: torem(56);
@@ -266,7 +279,7 @@
       font-family: Jakarta, sans-serif;
       font-size: torem(16);
       color: #ffffff80;
-      margin-bottom: torem(20);
+      margin-bottom: torem(13);
     }
 
     &-link {
@@ -288,66 +301,33 @@
     }
 
     &-container {
+      width: torem(162);
       @media (max-width: 767px) {
         width: calc(50% - 12px);
       }
-      // &:last-child {
-      //   .s-site-footer {
-      //     &__menu {
-      //       &-column {
-      //         flex: 1 1 auto;
-
-      //         display: flex;
-      //         flex-wrap: wrap;
-      //         max-width: torem(130);
-      //         gap: torem(0);
-
-      //         .s-site-footer {
-      //           &__menu {
-      //             &-link {
-      //               width: calc(50% - 8px);
-      //               margin-right: torem(8);
-      //               margin-bottom: torem(4);
-
-      //               @media (max-width: 767px) {
-      //                 width: 100%;
-      //               }
-      //             }
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
     }
+    &-column {
+      display: flex;
+      flex-direction: column;
+      gap: torem(13);
 
+      @media (max-width: 767px) {
+        gap: torem(8);
+      }
+    }
     &-link {
       display: block;
       font-family: Jakarta, sans-serif;
       font-size: torem(16);
       font-style: normal;
-      margin-bottom: torem(16);
     }
   }
 
   &__phrase {
     position: relative;
     z-index: 2;
-    font-family: Jakarta, sans-serif;
-    font-size: torem(240);
-    line-height: 0.8;
-    font-weight: 800;
-    white-space: nowrap;
-    color: #074dff;
-    transform: translateX(torem(-60));
-    @media (max-width: 1440px) {
-      font-size: 16vw;
-      text-align: center;
-      transform: translateX(torem(-16));
-    }
-    @media screen and (max-width: 767px) {
-      font-size: torem(64);
-      transform: translateX(torem(-24));
+    img {
+      width: 100%;
     }
   }
 
