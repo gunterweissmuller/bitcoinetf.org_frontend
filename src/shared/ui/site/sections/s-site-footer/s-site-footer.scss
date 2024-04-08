@@ -30,6 +30,11 @@
       border-radius: 1260px;
       background: #48bdff;
       filter: blur(90px);
+      @media screen and (max-width: 767px) {
+        width: torem(332);
+        height: torem(260);
+        bottom: torem(-132);
+      }
     }
   }
 
@@ -329,17 +334,20 @@
     position: relative;
     z-index: 2;
     font-family: Jakarta, sans-serif;
-    font-size: torem(230);
+    font-size: torem(240);
     line-height: 0.8;
     font-weight: 800;
     white-space: nowrap;
     color: #074dff;
-    transform: translateX(torem(-40));
-
+    transform: translateX(torem(-60));
     @media (max-width: 1440px) {
       font-size: 16vw;
       text-align: center;
       transform: translateX(torem(-16));
+    }
+    @media screen and (max-width: 767px) {
+      font-size: torem(64);
+      transform: translateX(torem(-24));
     }
   }
 
