@@ -537,9 +537,21 @@ const getWalletDividends = async () => {
     })
 }
 
+const getLastPayment = async () => {
+  $app.api.eth.billingEth
+  .getLastPayment()
+  .then((response: any) => {
+    $app.store.user.lastPayment = response.data
+  })
+  .catch(() => {
+    // Todo: notify something went wrond
+  })
+}
+
 onMounted(async () => {
   await getWalletDividends()
   await getDividendsByYear()
+  await getLastPayment()
   await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
     btcUsdt.value = resp?.data?._value?.lastPrice
   })
