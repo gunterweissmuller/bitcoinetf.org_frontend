@@ -36,6 +36,18 @@ import {isEmpty} from "lodash";
 
 const lastPayment = computed(() => {
   return $app.store.user.lastPayment
+});
+
+onMounted(() => {
+  $app.api.eth.billingEth
+  .getLastPayment()
+  .then((response: any) => {
+    console.log('response', response);
+    $app.store.user.lastPayment = response.data
+  })
+  .catch(() => {
+    // Todo: notify something went wrond
+  })
 })
 
 const paymentStatistic = computed(() => {
