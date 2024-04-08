@@ -31,7 +31,7 @@
 </template>
 
 <script lang='ts' setup>
-import { OnClickOutside } from '@vueuse/core';
+import { onClickOutside } from '@vueuse/core';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons';
 import { ADropdownOption } from '~/src/shared/types/global';
@@ -48,7 +48,7 @@ const props = defineProps({
   // если у options такого value нет, то current
   // обновляется на последний элемент options
   current: {
-    type: null as PropType<any>,
+    type: null as unknown as PropType<any>,
     required: true,
     default: null
   },
@@ -73,7 +73,7 @@ onClickOutside(dropdown, () => dropdownState.value = false);
 
 const current = ref<any>(props.current ?? props.options[props.options.length - 1].value);
 
-const currentOption = computed<Option>(() => {
+const currentOption = computed<ADropdownOption>(() => {
   const option = props.options.find((option) => option.value === current.value);
 
   if (option) {
