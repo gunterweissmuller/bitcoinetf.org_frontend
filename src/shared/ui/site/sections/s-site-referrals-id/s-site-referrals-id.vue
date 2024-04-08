@@ -8,14 +8,14 @@
         <div class="s-site-referrals-id__left">
           <h1 v-html="data.title" class="s-site-referrals-id__title title-site-h1" />
           <nuxt-link :to="isUserAuthenticated ? '/personal/wallet/referrals' : '/personal/registration'">
-            <a-button :variant="'primary2'" :text="data.btn.text" />
+            <a-button :variant="'primary'" :text="data.btn.text" />
           </nuxt-link>
         </div>
         <div class="s-site-referrals-id__info">
           <div class="s-site-referrals-id__info-title">{{ data.info.title }}</div>
           <div v-html="data.info.text" class="s-site-referrals-id__info-text" />
           <nuxt-link :to="isUserAuthenticated ? '/personal/wallet/referrals' : '/personal/registration'">
-            <a-button :variant="'primary2'" :text="data.btn.text" />
+            <a-button :variant="'primary'" :text="data.btn.text" />
           </nuxt-link>
         </div>
       </div>

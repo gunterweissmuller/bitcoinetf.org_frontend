@@ -5,7 +5,7 @@
         <div class="s-site-referrals-share__left">
           <h1 v-html="data.title" class="s-site-referrals-share__title title-site-h1" />
           <nuxt-link to="/personal/registration">
-            <a-button :variant="'primary2'" :text="data.btn.text" />
+            <a-button :variant="'primary'" :text="data.btn.text" />
           </nuxt-link>
         </div>
         <div class="s-site-referrals-share__img">
@@ -15,7 +15,7 @@
           <div class="s-site-referrals-share__info-title">{{ data.info.title }}</div>
           <div v-html="data.info.text" class="s-site-referrals-share__info-text" />
           <nuxt-link to="/personal/registration">
-            <a-button :variant="'primary2'" :text="data.btn.text" />
+            <a-button :variant="'primary'" :text="data.btn.text" />
           </nuxt-link>
         </div>
       </div>
