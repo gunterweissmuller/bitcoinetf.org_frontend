@@ -8,6 +8,7 @@
         <template v-for="(blog, id) in newsList" :key="id">
           <m-site-blog
             v-if="activeTab === 'All' || blog.tags.includes(activeTab)"
+            :index="3"
             :blog="blog"
             :sectionSlug="sectionSlug"
           />
