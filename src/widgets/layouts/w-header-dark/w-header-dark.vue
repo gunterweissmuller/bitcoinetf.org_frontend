@@ -102,6 +102,10 @@ const LINKS = [
     link: '/blog',
   },
   {
+    text: 'Tether Special',
+    link: '/tetherspecial',
+  },
+  {
     text: 'Tutorials',
     link: '/tutorials',
   },
