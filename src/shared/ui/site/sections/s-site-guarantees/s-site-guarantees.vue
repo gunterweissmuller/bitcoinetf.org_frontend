@@ -137,7 +137,7 @@
               <NuxtImg src="/img/main-guarantees-table-title-4.png" width="188" />
             </div>
           </div>
-          <div class="s-site-guarantees__table-body">
+          <div class="s-site-guarantees__table-body first-table-body">
             <div class="s-site-guarantees__table-row first-row">
               <div class="s-site-guarantees__table-row-item">Original investment loss</div>
               <div class="s-site-guarantees__table-row-item">

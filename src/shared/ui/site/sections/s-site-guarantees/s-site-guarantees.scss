@@ -144,6 +144,15 @@
       top: 0;
       z-index: 2;
     }
+
+    &.first-row {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    &.sixth-row {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
   }
   &__table-row-item {
     display: flex;
@@ -177,7 +186,7 @@
 .third-row,
 .fifth-row {
   :first-child {
-    background-color: #366fff;
+    /*background-color: #366fff;*/
   }
 }
 
@@ -185,6 +194,6 @@
 .fourth-row,
 .sixth-row {
   :first-child {
-    background-color: #205fff;
+    /*background-color: #205fff;*/
   }
 }
