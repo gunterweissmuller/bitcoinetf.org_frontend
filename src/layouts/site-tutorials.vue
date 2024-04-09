@@ -7,12 +7,12 @@
       </div>
     </main>
   </div>
-  <s-site-footer-new />
+  <s-site-footer />
 </template>
 
 <script setup lang="ts">
 import WHeaderDark from '~/src/widgets/layouts/w-header-dark/w-header-dark.vue'
-import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
+import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
 </script>
 
 <style lang="scss">

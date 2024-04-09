@@ -4,7 +4,7 @@
   <s-site-marquee :data="marqueeData" />
   <s-site-referrals-id :data="idData" />
   <s-site-referrals-share :data="shareData" />
-  <s-site-footer-new />
+  <s-site-footer />
 </template>
 
 <script setup lang="ts">
@@ -12,7 +12,7 @@ import MScrollNavigation from '~/src/shared/ui/site/molecules/m-scroll-navigatio
 import SSiteReferralsMain from '~/src/shared/ui/site/sections/s-site-referrals-main/s-site-referrals-main.vue'
 import SSiteReferralsId from '~/src/shared/ui/site/sections/s-site-referrals-id/s-site-referrals-id.vue'
 import SSiteReferralsShare from '~/src/shared/ui/site/sections/s-site-referrals-share/s-site-referrals-share.vue'
-import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
+import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
 import SSiteMarquee from '~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
 

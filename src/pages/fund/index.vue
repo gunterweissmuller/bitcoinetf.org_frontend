@@ -4,7 +4,7 @@
   <!--  <s-site-marquee :data="marqueeData"/>-->
   <s-site-fund-vision :data="visionData" />
   <s-site-fund-ceo :data="ceoData" />
-  <s-site-footer-new />
+  <s-site-footer />
 </template>
 
 <script setup lang="ts">
@@ -13,7 +13,7 @@ import SSiteFundMain from '~/src/shared/ui/site/sections/s-site-fund-main/s-site
 import SSiteMarquee from '~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue'
 import SSiteFundVision from '~/src/shared/ui/site/sections/s-site-fund-vision/s-site-fund-vision.vue'
 import SSiteFundCeo from '~/src/shared/ui/site/sections/s-site-fund-ceo/s-site-fund-ceo.vue'
-import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
+import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 definePageMeta({

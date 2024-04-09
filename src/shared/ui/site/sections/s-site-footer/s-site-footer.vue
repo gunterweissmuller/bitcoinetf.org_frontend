@@ -3,7 +3,21 @@
     <div class="s-site-footer__content">
       <div class="s-site-footer__top">
         <div class="s-site-footer__top-wrapper">
-          <h2 class="s-site-footer__title title-site-h1">DON’T BUY BITCOIN, EARN IT</h2>
+          <h2 class="s-site-footer__title title-first title-site-h1">
+            DON’T BUY CRYPTO,
+            <h2 class="s-site-footer__title title-site-h1 title-sub">
+              <p class="s-site-footer__title_sub_earn">EARN</p>
+              <NuxtImg
+                src="/img/icons/colorful/bitcoin.svg"
+                width="60"
+                height="60"
+                class="aspect-square w-[60px]"
+                loading="lazy"
+              />
+              <p class="s-site-footer__title_sub_bitcoin">BITCOIN</p>
+            </h2>
+          </h2>
+
           <div class="s-site-footer__top-send">
             <div class="s-site-footer__text">
               Sign up to our newsletter and receive our new research, portfolio news and content direct to your inbox.
@@ -85,7 +99,7 @@ const menu = [
     title: 'Platform',
     items: [
       { text: 'Buy ETF Shares', href: '/personal/login' },
-      // { text: 'Mastercard', href: '/' },
+      { text: 'Mastercard', href: '/#' }, //
       { text: 'Bitcoin Education', href: '/bitcoin-education' },
       { text: 'Referrals', href: '/referrals' },
     ],
@@ -94,22 +108,25 @@ const menu = [
     title: 'About',
     items: [
       { text: 'Fund', href: '/fund' },
-      { text: 'Blog', href: '/blog' },
-      // { text: 'Chat', href: '/' },
-      // { text: 'Bitcoin Whitepaper', href: '/' },
+      { text: 'New', href: '/blog' },
+      { text: 'Bitcoin Whitepaper', href: '/#' }, //
+      { text: 'PR Package', href: '/#' }, //
     ],
   },
   {
     title: 'Account',
     items: [
-      // { text: 'Corporate', href: '/' },
-      { text: 'Personal', href: '/personal/earnings' },
+      { text: 'Sign Up', href: '/personal/registration' },
+      { text: 'Offers', href: '/offers' },
       { text: 'Tutorials', href: '/tutorials' },
     ],
   },
   {
     title: 'Annual Report',
-    items: [{ text: '2023', href: '/#' }],
+    items: [
+      { text: '2023', href: '/#' }, //
+      { text: '2024', href: '/#' }, //
+    ],
   },
 ]
 
@@ -147,4 +164,3 @@ const subscribeToChimp = async () => {
 </script>
 
 <style src="./s-site-footer.scss" lang="scss" />
-footer

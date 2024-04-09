@@ -13,7 +13,7 @@
   <s-site-earnings :data="earningsData" />
   <s-site-transparency :data="transparencyData" />
   <s-site-news :data="blogNews" v-if="blogNews?.length" />
-  <s-site-footer-new />
+  <s-site-footer />
 </template>
 
 <script setup lang="ts">
@@ -29,7 +29,7 @@ import SSiteFund from '~/src/shared/ui/site/sections/s-site-fund/s-site-fund.vue
 import SSiteProtection from '~/src/shared/ui/site/sections/s-site-protection/s-site-protection.vue'
 import SSiteEarnings from '~/src/shared/ui/site/sections/s-site-earnings/s-site-earnings.vue'
 import SSiteTransparency from '~/src/shared/ui/site/sections/s-site-transparency/s-site-transparency.vue'
-import SSiteFooterNew from '~/src/shared/ui/site/sections/s-site-footer-new/s-site-footer-new.vue'
+import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
 import SSiteFundinfoDark from '~/src/shared/ui/site/sections/s-site-fundinfo-dark/s-site-fundinfo-dark.vue'
 import SSiteBitcoinEducation from '~/src/shared/ui/site/sections/s-site-bitcoin-education/s-site-bitcoin-education.vue'
 import SSiteNews from '~/src/shared/ui/site/sections/s-site-news/s-site-news.vue'
