@@ -17,12 +17,11 @@
   }
 
   @include breakpoint($break-desktop-1024) {
-    padding: torem(32) torem(80);
+    padding: torem(32, 60);
     & + main {
       padding-top: 124px;
     }
   }
-
 
   &__wrap {
     display: flex;
@@ -89,9 +88,7 @@
         transform: translate(-50%, 0%) rotate(-45deg);
       }
     }
-
   }
-
 
   &__box {
     z-index: 100;
@@ -125,7 +122,6 @@
       justify-content: space-between;
       width: auto;
     }
-
   }
 
   &__links {
@@ -159,7 +155,6 @@
         margin-right: var(--spacing-m-3);
       }
     }
-
   }
 
   &__controls {
@@ -188,7 +183,6 @@
           display: none;
         }
       }
-
     }
 
     @include breakpoint($break-tablet) {
@@ -208,6 +202,5 @@
         display: none;
       }
     }
-
   }
 }
