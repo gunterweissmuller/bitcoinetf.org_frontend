@@ -1,28 +1,8 @@
 <template>
   <div class="w-performance page-max-width--small">
-    <!-- <w-chart-protection
-      ref="chartProtectionRef"
-      v-if="assets?.length"
-      :assets="assets"
-    /> -->
-    <!-- <e-assets
-      v-if="assets?.length"
-      :assets="assets"
-      :key="assetsKey"
-      :btc-value="$app.store.user.btcValue"
-      apy-needed
-      right-top-title="Dividends Paid"
-      right-top-subtitle="APY (Moving average)"
-      @mouse-enter-asset="onMouseEnterAsset"
-      @mouse-leave-asset="onMouseLeaveAsset"
-      @focus-in-asset="onMouseEnterAsset"
-      @focus-out-asset="onMouseLeaveAsset"
-    /> -->
     <w-shareholders-stats />
     <w-trades />
     <w-activity />
-    <!-- <w-news /> -->
-
     <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" />
   </div>
 </template>

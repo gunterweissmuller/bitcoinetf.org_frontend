@@ -2,7 +2,10 @@
   <div class="e-stat">
     <template v-if="type === 'default'">
       <div :class="['e-stat-default__head', { 'e-stat-default__head--fixed': fixedHeader }]">
-        <a-icon width="32" :name="Icon.ColorfulBitcoin" />
+        <a-icon v-if="props.iconType === 'full'" width="32" :name="props.icon" />
+        <div v-else class="e-stat__icon">
+          <a-icon width="14" :name="props.icon" />
+        </div>
 
         <a-live />
 
@@ -113,6 +116,8 @@ const props = withDefaults(
     list?: any
     popper?: any
     fixedHeader?: boolean
+    icon: string
+    iconType: 'full' | 'small'
   }>(),
   {
     titleColor: 'primary',
@@ -125,6 +130,9 @@ const props = withDefaults(
     list: [],
     popper: undefined,
     fixedHeader: false,
+    icon: Icon.ColorfulBitcoin,
+    iconType: 'full',
+    subtitle: ''
   },
 )
 

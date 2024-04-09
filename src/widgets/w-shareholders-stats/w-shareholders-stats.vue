@@ -1,35 +1,50 @@
 <template>
   <div class="w-fund-stats">
     <e-stat
+      info="AVERAGE ETF SIZE"
       :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
-      :subtitle="`${$app.filters.convertValue(globalStatistic?.average_size_btc)}`"
-      :popper="averageEtfSizePopper"
-      info="Average ETF Size"
+      :icon="Icon.MonoMoney"
+      iconType="small"
     />
     <e-stat
-      :title="`${$app.filters.rounded(globalStatistic?.shareholders_count)}`"
-      :popper="shareholdersPopper"
-      :difference="shareholders_today_count ? `${$app.filters.rounded(globalStatistic?.shareholders_today_count)}` : ''"
-      info="Shareholders"
+      info="DIVIDENTS PAID"
+      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :icon="Icon.MonoEarnings"
+      iconType="small"
+    />
+    <e-stat
+      info="BTC IN RESERVE FUND"
+      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :icon="Icon.ColorfulBitcoin"
+      iconType="full"
+    />
+    <e-stat
+      info="USDT PROTECTION VAULT"
+      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :icon="Icon.ColorfulUsdt"
+      iconType="full"
+    />
+    <e-stat
+      info="AUM"
+      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :icon="Icon.MonoAnalytics"
+      iconType="small"
+    />
+    <e-stat
+      info="Corp. Paid-In Share Capital"
+      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :icon="Icon.MonoMoney"
+      iconType="small"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import EStat from '~/src/entities/e-stat/e-stat.vue'
-import { useNuxtApp } from '#app'
+import EStat from '~/src/entities/e-stat/e-stat.vue';
+import { Icon } from '~/src/shared/constants/icons';
+import { useNuxtApp } from '#app';
+
 const { $app } = useNuxtApp()
-
-const averageEtfSizePopper = {
-  title: 'Average ETF Size',
-  text: "Welcome to a quick insight! Here, you'll see the average number of shares typically owned by a BitcoinETF.org shareholder. This gives you a perspective on the average stake of our investors in the fund. Gauge where you stand in comparison!",
-}
-
-const shareholdersPopper = {
-  title: 'Total Shareholders',
-  text: "Curious about our community size? This popup reveals the total number of investors who've entrusted their finances with BitcoinETF.org. Join our growing family and be a part of an informed, forward-thinking investor community!",
-}
-
 const globalStatistic = computed(() => {
   return $app.store.user.statistic
 })

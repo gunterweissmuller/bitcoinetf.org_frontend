@@ -11,6 +11,22 @@
   border-radius: torem(8);
   //height: 100%;
 
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: torem(32);
+    height: torem(32);
+
+    border-radius: 100%;
+    background: var(--surfaces-surface-2);
+
+    .a-icon {
+      color: var(--text-tertiary);
+    }
+  }
+
   &-default {
 
     &__head {
@@ -84,7 +100,6 @@
         font-weight: 700;
         font-size: torem(10);
         line-height: torem(13);
-        text-transform: uppercase;
         color: var(--text-tertiary);
       }
 
