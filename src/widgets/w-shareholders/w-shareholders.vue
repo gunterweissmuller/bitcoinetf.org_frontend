@@ -39,14 +39,14 @@ const strategies = [
   {
     name: 'Tether',
     percent: 67,
-    icon: Icon.ColorfulBitcoin,
-    color: 'tomato'
+    icon: Icon.ColorfulUsdt,
+    color: '#1BA27A'
   },
   {
     name: 'Bitcoin',
     percent: 33,
     icon: Icon.ColorfulBitcoin,
-    color: 'lightblue'
+    color: '#FF8D07'
   },
 ]
 
