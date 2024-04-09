@@ -132,6 +132,7 @@ const props = withDefaults(
     variantNavigationButton: 'default',
   },
 )
+
 const swiperRef = ref<HTMLElement | null>(null)
 
 const clickableButtonsArea = ref<string>('')

@@ -33,8 +33,6 @@
           </div>
 
           <a-dropdown
-            :options="totalSumOptions"
-            :current="5"
             @get-current-option="(option : ADropdownOption) => totalSumCurrentOption = option"
           />
         </div>
@@ -77,7 +75,54 @@
       </div>
 
       <div class="w-referrals__share">
+        <div class="w-referrals__share-heading">
+          Share Your Referral Link
+        </div>
 
+        <div class="w-referrals__share-socials">
+          <button
+            class="w-referrals__share-social"
+            :class="{ current: shareCurrentNetwork === network.network }"
+            v-for="network in shareNetworks"
+            :key="network.network"
+            @click="shareCurrentNetwork = network.network"
+          >
+            <a-icon class="w-referrals__share-icon" width="20" height="20" :name="network.icon" />
+          </button>
+        </div>
+
+        <m-slider
+          class="w-referrals__promo"
+          id="w-referrals__promo-slider"
+          :modules="[Pagination, Navigation]"
+          loop
+          :space-between="10"
+          slides-per-view="auto"
+          :mousewheel="false"
+          :looped-slides="1"
+          centeredSlides
+          :navigation="true"
+          :pagination="true"
+          @slide-change="console.log"
+        >
+          <template #slides>
+            <swiper-slide class='w-referrals__promo-item'>
+              <nuxt-img class="w-referrals__promo-img" loading="lazy" src="/img/referrals/promo1.png" alt="promo" />
+            </swiper-slide>
+            <swiper-slide class='w-referrals__promo-item'>
+              <nuxt-img class="w-referrals__promo-img" loading="lazy" src="/img/referrals/promo2.png" alt="promo" />
+            </swiper-slide>
+            <swiper-slide class='w-referrals__promo-item'>
+              <nuxt-img class="w-referrals__promo-img" loading="lazy" src="/img/referrals/promo3.png" alt="promo" />
+            </swiper-slide>
+          </template>
+        </m-slider>
+
+        <div class="w-referrals__comment">
+          <div class="w-referrals__comment-caption"></div>
+          <div class="w-referrals__comment-text"></div>
+          <div class="w-referrals__comment-tags"></div>
+        </div>
       </div>
 
       <div class="w-referrals__instructions">
@@ -112,6 +157,36 @@
           </li>
         </ul>
       </div>
+
+      <ul class="w-referrals__stats">
+        <li class="w-referrals__stat">
+          <div class="w-referrals__stat-heading">
+            Total referrals earned
+          </div>
+          <div class="w-referrals__stat-value">
+            $547
+          </div>
+          <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
+        </li>
+        <li class="w-referrals__stat">
+          <div class="w-referrals__stat-heading">
+            Total referrals earned
+          </div>
+          <div class="w-referrals__stat-value">
+            148
+          </div>
+          <img src="/img/referrals/invited.png" class="w-referrals__stat-img" />
+        </li>
+        <li class="w-referrals__stat">
+          <div class="w-referrals__stat-heading">
+            Total referrals earned
+          </div>
+          <div class="w-referrals__stat-value">
+            58
+          </div>
+          <img src="/img/referrals/accepted.png" class="w-referrals__stat-img" />
+        </li>
+      </ul>
     </div>
   </div>
   <e-referral-share-modal v-model="isOpenShareModal" />
@@ -120,18 +195,21 @@
 </template>
 
 <script setup lang="ts">
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
-import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue'
-import { Icon } from '~/src/shared/constants/icons'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
-import FReferralsModal from '~/src/features/f-referrals-modal/f-referrals-modal.vue'
-import EReferralShareModal from '~/src/entities/e-referral-share-modal/e-referral-share-modal.vue'
-import { Centrifuge } from 'centrifuge'
-import { onUnmounted } from 'vue'
-import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
-import { useNuxtApp } from '#app'
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
+import { Icon } from '~/src/shared/constants/icons';
+import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue';
+import FReferralsModal from '~/src/features/f-referrals-modal/f-referrals-modal.vue';
+import EReferralShareModal from '~/src/entities/e-referral-share-modal/e-referral-share-modal.vue';
+import { Centrifuge } from 'centrifuge';
+import { onUnmounted } from 'vue';
+import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue';
+import { useNuxtApp } from '#app';
 import { ADropdownOption } from '~/src/shared/types/global';
+import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
+import { SwiperSlide } from 'swiper/vue';
+import { Pagination, Navigation } from 'swiper'
 
 const isOpenModal = ref(false)
 const isOpenShareModal = ref(false)
@@ -155,33 +233,53 @@ const openModal = async () => {
 
 const route = useRoute();
 
-const totalSumOptions = [
+
+const totalSumCurrentOption = ref<ADropdownOption | null>(null);
+
+
+const shareCurrentNetwork = ref<string>('twitter');
+
+const shareNetworks = [
   {
-    name: '24h',
-    value: 0
+    network: 'twitter',
+    name: 'X',
+    icon: Icon.MonoX
   },
   {
-    name: '7d',
-    value: 1
+    network: 'telegram',
+    name: 'Telegram',
+    icon: Icon.MonoTelegram
   },
   {
-    name: '1m',
-    value: 2
+    network: 'facebook',
+    name: 'Facebook',
+    icon: Icon.MonoFacebook
   },
   {
-    name: '6m',
-    value: 3
+    network: 'vk',
+    name: 'VK',
+    icon: Icon.MonoVk
   },
   {
-    name: '1y',
-    value: 4
+    network: 'email',
+    name: 'Email',
+    icon: Icon.MonoMailLight
   },
   {
-    name: 'All time',
-    value: 5
+    network: 'sms',
+    name: 'SMS',
+    icon: Icon.MonoMessage
   },
 ];
-const totalSumCurrentOption = ref<ADropdownOption | null>(null);
+
+const shareData = {
+  url: 'https://bitcoinetf.org/',
+  title: 'Sign up with my link buy Bitcoin ETFs and start earning daily dividends today: choose to earn USDT or BTC!',
+  description: '',
+  quote: '',
+  
+};
+
 
 const openShareModal = () => {
   isOpenShareModal.value = true

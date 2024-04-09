@@ -41,7 +41,32 @@ const props = defineProps({
   options: {
     type: Array as PropType<ADropdownOption[]>,
     required: false,
-    default: []
+    default: [
+      {
+        name: '24h',
+        value: 0
+      },
+      {
+        name: '7d',
+        value: 1
+      },
+      {
+        name: '1m',
+        value: 2
+      },
+      {
+        name: '6m',
+        value: 3
+      },
+      {
+        name: '1y',
+        value: 4
+      },
+      {
+        name: 'All time',
+        value: 5
+      },
+    ]
   },
   // передается value нужного нам option
   // получить выбранный option можно через v-model
