@@ -49,6 +49,7 @@
     "chart.js-plugin-labels-dv": "5.0.1-beta",
     "dayjs": "^1.11.9",
     "ethers": "^6.11.1",
+    "gsap": "^3.12.5",
     "hammerjs": "^2.0.8",
     "inversify": "^6.0.1",
     "libphonenumber-js": "^1.10.44",

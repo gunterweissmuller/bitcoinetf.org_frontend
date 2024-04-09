@@ -6,6 +6,7 @@
         Choose how you want to withdraw. Please note that by setting up a withdrawal method you will lose your ability
         to reinvest earnings.
       </div>
+      <!--        v-if="orderType === 'init_btc'"-->
       <m-select
         class="f-withdrawal-modal__methods"
         :left-input-icon="METHODS_OPTIONS?.[selectedMethod]?.icon"
@@ -20,8 +21,8 @@
         class="f-withdrawal-modal__method-text"
         >Learn about Lightning
       </nuxt-link>
-      <nuxt-link v-else to="/bitcoin-education" class="f-withdrawal-modal__method-text"
-        >Learn about self-custody
+      <nuxt-link v-else to="/bitcoin-education" class="f-withdrawal-modal__method-text">
+        Learn about self-custody
       </nuxt-link>
       <a-input
         v-if="selectedMethodType"
@@ -75,9 +76,6 @@ import { validate } from 'bitcoin-address-validation';
 import { useNuxtApp } from '#app'
 const { $app } = useNuxtApp()
 
-
-
-
 const MAX_HEIGHT = 555
 
 const props = withDefaults(
@@ -95,11 +93,18 @@ const props = withDefaults(
 
 const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
-const selectedMethod = ref(props.method)
+const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc')
+const selectedMethod = ref(orderType.value === 'usdt' ? 'polygon_usdt' : props.method)
 const selectedAddress = ref(props.address)
 const copiedLink = ref(false)
 
 const isEmailValid = ref(false)
+
+const orderTypeMethods = {
+  init_btc: ['bitcoin_on_chain', 'bitcoin_lightning', 'polygon_usdt'],
+  btc: ['bitcoin_on_chain', 'bitcoin_lightning'],
+  usdt: ['polygon_usdt']
+}
 
 const METHODS_OPTIONS = {
   bitcoin_on_chain: {
@@ -110,6 +115,10 @@ const METHODS_OPTIONS = {
     text: 'Lightning',
     icon: Icon.ColorfulBtcLightning,
   },
+  polygon_usdt: {
+    text: 'Polygon USDT',
+    icon: Icon.ColorfulUsdtPolygon,
+  },
 }
 
 const inputLabel = computed(() => {
@@ -117,10 +126,14 @@ const inputLabel = computed(() => {
 })
 
 const selectedMethodType = computed(() => {
-  return selectedMethod.value === 'bitcoin_on_chain' || selectedMethod.value === 'bitcoin_lightning'
+  return selectedMethod.value === 'bitcoin_on_chain' || selectedMethod.value === 'bitcoin_lightning' || selectedMethod.value === 'polygon_usdt'
 })
 
 const selectedMethodRegexp = computed(() => {
+  if (selectedMethod.value === 'polygon_usdt') {
+    return ''
+  }
+
   return selectedMethod.value === 'bitcoin_on_chain' ? '' : 'email'
 })
 
@@ -129,6 +142,8 @@ const buttonDisabled = computed(() => {
     return !validBlockChain.value
   } else if (selectedMethod.value === 'bitcoin_lightning') {
     return !isEmailValid.value
+  } else if (selectedMethod.value === 'polygon_usdt') {
+    return false
   }
 
   return true
@@ -151,7 +166,12 @@ const methods = [
     value: 'bitcoin_lightning',
     icon: METHODS_OPTIONS.bitcoin_lightning.icon,
   },
-]
+  {
+    label: 'Tether USDT (Polygon)',
+    value: 'polygon_usdt',
+    icon: METHODS_OPTIONS.polygon_usdt.icon,
+  },
+].filter(({ value }) => orderTypeMethods[orderType.value]?.includes(value))
 
 const isOpenModal = computed({
   get() {
@@ -186,6 +206,12 @@ watch(
     selectedAddress.value = value
   },
 )
+
+watch(() => orderType, (value) => {
+  if (value === 'usdt') {
+    selectedMethod.value = 'polygon_usdt'
+  }
+})
 const validBlockChain = ref(false)
 watch(()=> selectedAddress.value, (value) => {
   if (selectedMethod.value === 'bitcoin_on_chain') {
@@ -208,7 +234,8 @@ const close = () => {
   isOpenModal.value = false
   emit('close')
 }
-onUnmounted(()=>{
+
+onUnmounted(() => {
   document.body.classList.remove('no-scroll')
 })
 

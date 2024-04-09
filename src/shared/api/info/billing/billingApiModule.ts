@@ -15,8 +15,11 @@ export default class BillingEthApiModule {
   }
 
   async setWithdrawalMethod({ walletType, method, address = null }) {
+    const config = useRuntimeConfig()
+
     try {
       return await this.adapter.requestJsonAsync({
+        host: config.public.ETH_API,
         parameterValue: `billing/withdrawal/method`,
         request: {
           method: HTTPMethod.POST,
