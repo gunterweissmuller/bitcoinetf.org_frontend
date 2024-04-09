@@ -1,6 +1,6 @@
 <template>
-  <section class="s-site-marquee">
-    <div class="l-site-dark">
+  <section :class="[{'s-site-marquee-bg': props.isBackground}]" class="s-site-marquee">
+
       <div class="s-site-marquee__wrapper">
         <m-slider
           id="s-site-marquee-slider"
@@ -30,7 +30,7 @@
 
         </m-slider>
       </div>
-    </div>
+
   </section>
 </template>
 
@@ -40,11 +40,18 @@ import { Autoplay } from 'swiper'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 
-
-const props = defineProps<{
-  data: any
-  files: any
-}>()
+const props = withDefaults(
+  defineProps<{
+    data: any
+    files: any
+    isBackground: boolean
+  }>(),
+  {
+    data: [],
+    files: [],
+    isBackground: true
+  },
+)
 
 
 const marqueList = computed(() => {
