@@ -97,8 +97,8 @@ const LINKS = [
   },
   {
     text: 'Buy ETF Shares',
-    link: '/personal/login'
-  }
+    link: '/personal/login',
+  },
 ]
 
 const isOpenMenu = ref(false)

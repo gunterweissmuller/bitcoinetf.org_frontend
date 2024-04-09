@@ -3,7 +3,21 @@
     <div class="s-site-footer__content">
       <div class="s-site-footer__top">
         <div class="s-site-footer__top-wrapper">
-          <h2 class="s-site-footer__title title-site-h1">DON’T BUY BITCOIN, EARN IT</h2>
+          <h2 class="s-site-footer__title title-first title-site-h1">
+            DON’T BUY CRYPTO,
+            <h2 class="s-site-footer__title title-site-h1 title-sub">
+              <p class="s-site-footer__title_sub_earn">EARN</p>
+              <NuxtImg
+                src="/img/icons/colorful/bitcoin.svg"
+                width="60"
+                height="60"
+                class="aspect-square w-[60px]"
+                loading="lazy"
+              />
+              <p class="s-site-footer__title_sub_bitcoin">BITCOIN</p>
+            </h2>
+          </h2>
+
           <div class="s-site-footer__top-send">
             <div class="s-site-footer__text">
               Sign up to our newsletter and receive our new research, portfolio news and content direct to your inbox.
@@ -20,9 +34,8 @@
                 v-model="subscribeEmail"
                 v-if="!success"
               />
-              <button class="s-site-footer__form-submit" @click="subscribeToChimp()"                 v-if="!success"
-              >
-                <img src="/img/site-dark/s-site-footer/send.svg"/>
+              <button class="s-site-footer__form-submit" @click="subscribeToChimp()" v-if="!success">
+                <img src="/img/site-dark/s-site-footer/send.svg" />
               </button>
             </div>
           </div>
@@ -31,7 +44,7 @@
       <div class="s-site-footer__info">
         <div class="s-site-footer__column">
           <div class="s-site-footer__logo">
-            <img src="/img/site-dark/s-site-footer/logo.svg" alt="logo"/>
+            <img src="/img/site-dark/s-site-footer/logo.svg" alt="logo" />
           </div>
           <div class="s-site-footer__info-text">
             The world's premier digital Bitcoin ETF, offering you a blend of security, innovation, and transparency
@@ -39,7 +52,7 @@
           <div class="s-site-footer__socials">
             <div class="s-site-footer__social" v-for="(icon, id) in SOCIAL_LINKS" :key="id">
               <a :href="icon.link" target="_blank" :style="`font-size:${icon.size}px`">
-                <a-icon :name="icon.icon"/>
+                <a-icon :name="icon.icon" />
               </a>
             </div>
           </div>
@@ -60,7 +73,7 @@
           </div>
         </div>
       </div>
-      <div class="s-site-footer__phrase">BITCOIN ETF</div>
+      <div class="s-site-footer__phrase"><NuxtImg src="/img/footer-name.svg" /></div>
     </div>
     <div class="l-site-dark s-site-footer-container">
       <div class="s-site-footer__bottom">
@@ -74,7 +87,7 @@
 
 <script setup lang="ts">
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import {Icon} from '~/src/shared/constants/icons'
+import { Icon } from '~/src/shared/constants/icons'
 import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 
 import { useNuxtApp } from '#app'
@@ -85,42 +98,46 @@ const menu = [
   {
     title: 'Platform',
     items: [
-      {text: 'Buy ETF Shares', href: '/personal/login'},
-      // { text: 'Mastercard', href: '/' },
-      {text: 'Bitcoin Education', href: '/bitcoin-education'},
-      {text: 'Referrals', href: '/referrals'},
+      { text: 'Buy ETF Shares', href: '/personal/login' },
+      { text: 'Mastercard', href: '/#' }, //
+      { text: 'Bitcoin Education', href: '/bitcoin-education' },
+      { text: 'Referrals', href: '/referrals' },
     ],
   },
   {
     title: 'About',
     items: [
-      {text: 'Fund', href: '/fund'},
-      {text: 'Blog', href: '/blog'},
-      // { text: 'Chat', href: '/' },
-      // { text: 'Bitcoin Whitepaper', href: '/' },
+      { text: 'Fund', href: '/fund' },
+      { text: 'New', href: '/blog' },
+      { text: 'Bitcoin Whitepaper', href: '/#' }, //
+      { text: 'PR Package', href: '/#' }, //
     ],
   },
   {
     title: 'Account',
     items: [
-      // { text: 'Corporate', href: '/' },
-      {text: 'Personal', href: '/personal/earnings'},
-      {text: 'Tutorials', href: '/tutorials'},
+      { text: 'Sign Up', href: '/personal/registration' },
+      { text: 'Offers', href: '/offers' },
+      { text: 'Tutorials', href: '/tutorials' },
     ],
   },
   {
     title: 'Annual Report',
     items: [
-      {text: '2023', href: '/#'},
+      { text: '2023', href: '/#' }, //
+      { text: '2024', href: '/#' }, //
     ],
   },
 ]
 
 const SOCIAL_LINKS = [
-  {icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org'},
-  {icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat'},
-  {icon: Icon.MonoUnknownBlack, link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl'},
-  {icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org', size: 14},
+  { icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org' },
+  { icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat' },
+  {
+    icon: Icon.MonoUnknownBlack,
+    link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl',
+  },
+  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org', size: 14 },
 ]
 
 const subscribeEmail = ref('')
@@ -133,23 +150,17 @@ function emailFieldBlurHandler() {
     return
   }
 
-  if (email.value) {
-    emailErrorText.value = 'Invalid email address'
-    return
-  }
-
   emailErrorText.value = 'Required'
 }
 const subscribeToChimp = async () => {
   try {
-    await $app.api.eth.news.mailchimpSub({email:subscribeEmail.value}).then(()=>{
+    await $app.api.eth.news.mailchimpSub({ email: subscribeEmail.value }).then(() => {
       success.value = true
     })
   } catch (e) {
-      emailErrorText.value = 'Invalid email address'
+    emailErrorText.value = 'Invalid email address'
   }
 }
 </script>
 
-<style src="./s-site-footer.scss" lang="scss"/>
-footer
+<style src="./s-site-footer.scss" lang="scss" />
