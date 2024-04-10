@@ -1,5 +1,5 @@
 <template>
-  <s-site-blog-detail :backTo="'bitcoin-education'" :blog="blogNews" />
+  <s-site-blog-detail :backTo="'bitcoin-education'" :blog="blogNews" grayColor />
 </template>
 
 <script setup lang="ts">
@@ -16,7 +16,7 @@ const { data: getArticleInfo } = await useAsyncData('getArticleInfo', () => {
 })
 
 const blogNews = computed(() => {
-  const post = getArticleInfo.value?.data;
+  const post = getArticleInfo.value?.data
 
   return {
     feature_image: post.preview_file?.path,
@@ -24,9 +24,9 @@ const blogNews = computed(() => {
     created_at: post.created_at,
     html: post.content,
     slug: post.slug,
-    reading_time: post.reading_time
+    reading_time: post.reading_time,
   }
-});
+})
 
 definePageMeta({
   layout: 'site-texts',

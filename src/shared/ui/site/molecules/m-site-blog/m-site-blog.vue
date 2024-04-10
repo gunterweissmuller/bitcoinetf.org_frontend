@@ -7,15 +7,19 @@
       'm-site-blog--main': props.index === 0,
       'm-site-blog--submain': props.index <= 2,
       'm-site-blog--wide': isWide(props.index),
-      'm-site-blog--mb': isMarginBottom(props.index)
+      'm-site-blog--mb': isMarginBottom(props.index),
     }"
   >
     <div class="m-site-blog__img">
       <NuxtImg v-if="props.blog.feature_image" loading="lazy" :src="props.blog.feature_image" :alt="blog.title" />
     </div>
     <div class="m-site-blog__info">
-      <div v-if="props.blog.created_at" class="m-site-blog__info-date">{{ $app.filters.dayjs(props.blog.created_at).format('MMMM D') }}</div>
-      <div v-if="props.blog.category" class="m-site-blog__info-category">{{ props.blog.category }}</div>
+      <div v-if="props.blog.created_at" class="m-site-blog__info-date">
+        {{ $app.filters.dayjs(props.blog.created_at).format('MMMM D') }}
+      </div>
+      <div class="m-site-blog__info-category" v-for="category in props.blog?.category" :key="category">
+        {{ category }}
+      </div>
       <div class="m-site-blog__info-title">{{ props.blog.title }}</div>
       <div class="m-site-blog__info-description">{{ props.blog.excerpt }}</div>
       <div class="m-site-blog__info-more">Read more</div>
@@ -24,15 +28,15 @@
 </template>
 
 <script setup lang="ts">
-import {useNuxtApp} from "#app";
-const {$app} = useNuxtApp()
+import { useNuxtApp } from '#app'
+const { $app } = useNuxtApp()
 const props = defineProps({
-  sectionSlug:{
+  sectionSlug: {
     type: String,
-    default: '/blog'
+    default: '/blog',
   },
   blog: {
-    type: [String , Object],
+    type: [String, Object],
     default: '',
   },
 
@@ -40,17 +44,17 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-});
+})
 
 const isWide = (index: number) => {
   if (index <= 2) {
-    return false;
+    return false
   }
-  return ((index - 2) % 5) % 4 === 0 || ((index - 2) % 5) % 5 === 0;
-};
+  return ((index - 2) % 5) % 4 === 0 || ((index - 2) % 5) % 5 === 0
+}
 
 const isMarginBottom = (index: number) => {
-  return [0, 2, 3, 4, 5, 6, 7].includes(index);
+  return [0, 2, 3, 4, 5, 6, 7].includes(index)
 }
 </script>
 

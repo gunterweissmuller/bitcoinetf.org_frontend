@@ -5,14 +5,18 @@
     :description="detailSectionInfo?.data?.description"
     :newsList="news"
     :sectionSlug="detailSectionInfo?.data?.slug"
+    :current-page
+    :news-length
+    :disabled-pagination="isLoading"
+    @change-page="changePage"
   />
 </template>
 
 <script setup lang="ts">
 import SSiteBlogsEducation from '~/src/shared/ui/site/sections/s-site-blogs-education/s-site-blogs-education'
 import { useNuxtApp } from '#app'
-import { useRoute } from 'vue-router'
-import { BITCOIN_EDUCATION_NEWS_UUID, BLOG_NEWS_UUID } from '~/src/shared/constants/global'
+
+import { BITCOIN_EDUCATION_NEWS_UUID } from '~/src/shared/constants/global'
 
 const { $app } = useNuxtApp()
 
@@ -29,49 +33,69 @@ useSeoMeta({
   description: () => detailSectionInfo.value?.data?.meta_description,
 })
 
+const isLoading = ref(false)
 const blogNews = ref([])
-const blogNewsPage = ref(1)
+const currentPage = ref<number>(1)
+const newsLength = ref<number>(0)
 
-const getBlogNewsRequest = async (uuid, page = 1) => {
-  return await useNuxtApp().$app.api.eth.news.getListNewsArticles({uuid, page}).then(resp => resp)
+const NEWS_PER_PAGE = 8
+
+const getBlogNewsRequest = async (uuid, page = 1, per_page = 15) => {
+  return await useNuxtApp()
+    .$app.api.eth.news.getListNewsArticles({ uuid, page, per_page })
+    .then((resp) => resp)
 }
 
-const getBlogNews = async (uuid = BITCOIN_EDUCATION_NEWS_UUID, page = 1) => {
-  const response = await getBlogNewsRequest(BITCOIN_EDUCATION_NEWS_UUID, page)
-  blogNews.value = [...blogNews.value, ...response.data.data]
-
-  if (response.data.total > blogNews.value.length) {
-    blogNewsPage.value += 1
-
-    await getBlogNews(uuid, blogNewsPage.value)
+const getBlogNews = async (page = 1) => {
+  try {
+    isLoading.value = true
+    const { data: response } = await getBlogNewsRequest(BITCOIN_EDUCATION_NEWS_UUID, page, NEWS_PER_PAGE)
+    blogNews.value = response.data
+    newsLength.value = response?.total
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isLoading.value = false
   }
-  console.log(blogNews.value);
-
 }
 
-const news = computed(() => blogNews.value.map(item => ({
-  feature_image: item.preview_file,
-  title: item.title,
-  created_at: item.created_at,
-  excerpt: item.description,
-  slug: item.slug,
-  tags: item.tags
-})));
+async function changePage(page) {
+  if (isLoading.value) return
+
+  currentPage.value = page
+  await getBlogNews(page)
+  currentPage.value = 1
+
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }, 0)
+}
+
+const news = computed(() =>
+  blogNews.value.map((item) => ({
+    feature_image: item.preview_file,
+    title: item.title,
+    excerpt: item.description,
+    slug: item.slug,
+    tags: item.tags,
+    category: item.tags,
+  })),
+)
 
 onBeforeMount(async () => {
   await getBlogNews()
 })
 
 const { data: getListNewsTags } = await useLazyAsyncData('getListNewsTags', async () => {
-
   const result = await $app.api.eth.news.getListNewsTags().then((resp) => {
     return resp?.data?.data || []
   })
 
-
-  let clearNewsTagsList = result.map((item) => item.title)
+  const clearNewsTagsList = result.map((item) => item.title)
 
   return ['All', ...clearNewsTagsList]
 })
-
 </script>
