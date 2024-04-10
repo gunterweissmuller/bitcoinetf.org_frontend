@@ -32,8 +32,12 @@
     height: 100%;
     box-shadow: var(--b-shadow-1);
     border: torem(1) solid var(--surfaces-surface-glass-border);
-    background: var(--surfaces-selection);
+    background: var(--surfaces-surface-glass);
     border-radius: var(--spacing-s);
+
+    .m-deal {
+      border-bottom: none !important;
+    }
   }
 
   &__more {

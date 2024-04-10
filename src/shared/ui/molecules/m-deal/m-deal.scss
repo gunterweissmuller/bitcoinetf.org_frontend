@@ -1,10 +1,13 @@
 .m-deal {
-  min-height: torem(94);
+  min-height: torem(70);
   padding: torem(16);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--surfaces-surface-1);
+
+  &:not(:last-child) {
+    border-bottom: 2px solid #F1F2F4;
+  }
 
   &__fade-enter-active,
   &__fade-leave-active {
@@ -14,11 +17,6 @@
   &__fade-enter-from,
   &__fade-leave-to {
     opacity: 0;
-  }
-
-
-  &:not(:last-child) {
-    border-bottom: torem(1) solid var(--color-border-1);
   }
 
   &__trade {
@@ -255,4 +253,10 @@
   width: torem(18);
   height: torem(18);
   min-width: torem(18);
+}
+
+body[data-theme='dark'] {
+  .m-deal:not(:last-child) {
+    border-bottom: 2px solid #1B1A1F;
+  }
 }

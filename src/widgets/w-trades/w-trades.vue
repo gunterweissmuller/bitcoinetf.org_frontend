@@ -6,7 +6,7 @@
         >View All
       </nuxt-link>
     </div>
-    <div v-if="renderedTrades.length && !isExpand" class="w-trades__content" :style="{height: `${renderedTrades?.length * 94}px`}">
+    <div v-if="renderedTrades.length && !isExpand" class="w-trades__content">
       <transition-group name="fade" tag="div">
         <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" />
       </transition-group>
