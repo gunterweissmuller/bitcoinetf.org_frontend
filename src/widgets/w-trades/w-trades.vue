@@ -8,7 +8,7 @@
     </div>
     <div v-if="renderedTrades.length && !isExpand" :class="[{'w-trades__content-main' : props.isMain}, {'w-trades__content' : !props.isMain}]" :style=" width > 1010 ? {height: `${(renderedTrades?.length / props.gridTemplate) * 94}px`} : {}">
       <transition-group name="fade" tag="div" :class="[{'w-trades__content-main-wrapper' : props.isMain}]" :style=" width > 1010 ? {'display': 'grid', 'grid-template-columns': 'repeat( '+ props.gridTemplate +', 1fr)', 'max-height': 94 * (props.perPage/props.gridTemplate) +'px'} : {'display': 'flex', 'flex-direction': 'column'}">
-        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade"/>
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :isMain="props.isMain"/>
       </transition-group>
     </div>
 

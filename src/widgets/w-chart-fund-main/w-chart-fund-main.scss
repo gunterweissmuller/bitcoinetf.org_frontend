@@ -34,7 +34,8 @@
         font-size: torem(16);
         line-height: torem(20);
         font-weight: 700;
-        color: var(--text-primary);
+        // color: var(--text-primary);
+        color: var(--Text-Primary, #F1F2F4);
         text-align: center;
       }
   
@@ -61,7 +62,8 @@
         font-size: torem(16);
         font-weight: 500;
         line-height: torem(20);
-        color: var(--text-secondary);
+        // color: var(--text-secondary);
+        color: var(--Text-Secondary, #ABAEBE);
   
         margin-bottom: var(--spacing-xs);
       }
