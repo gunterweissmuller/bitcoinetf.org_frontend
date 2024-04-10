@@ -1,0 +1,266 @@
+.s-site-fund-main-info-dark {
+    padding: torem(60, 0, 95);
+  
+    @media (max-width: 767px) {
+      padding: torem(96, 0, 32);
+    }
+  
+    &__title {
+      position: relative;
+      max-width: torem(725);
+      margin-left: auto;
+      overflow: hidden;
+      // margin-bottom: torem(55);
+  
+      @media (max-width: 991px) {
+        margin-bottom: torem(32);
+      }
+  
+      @media (max-width: 767px) {
+        text-align: center;
+        margin: 0 auto torem(32);
+      }
+  
+      &:after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        content: '';
+        width: torem(603);
+        height: torem(100);
+        border-radius: torem(603);
+        transform: rotate(-7deg);
+        // background: rgba(1, 4, 15, 0.70);
+        background: rgba(1, 4, 15, 0.50);
+        filter: blur(40px);
+      }
+    }
+  
+    .caption {
+      font-size: torem(16);
+      line-height: torem(20);
+      font-weight: 600;
+      margin-bottom: torem(16);
+    }
+  
+    &__items {
+      display: flex;
+      justify-content: space-between;
+      gap: torem(24);
+      margin-bottom: var(--spacing-m-2);
+  
+      @media (max-width: 991px) {
+        // display: none;
+        margin-bottom: var(--spacing-l-2);
+      }
+    }
+  
+    &__item {
+      width: 100%;
+      text-align: center;
+      // margin-bottom: torem(30);
+      background: linear-gradient(0deg, rgba(34, 36, 43, 0.5), rgba(34, 36, 43, 0.5)), linear-gradient(0deg, rgba(63, 66, 78, 0.08), rgba(63, 66, 78, 0.08));
+      border-radius: torem(16);
+      border: torem(1) solid #3F424E14;
+      padding: torem(30, 24);
+  
+      &-title {
+        font-family: Jakarta, sans-serif;
+        font-size: torem(36);
+        line-height: torem(54);
+        font-weight: 700;
+        margin-bottom: torem(8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        svg {
+          max-width: 30px;
+        }
+      }
+  
+      &-subtitle {
+        font-family: DM, sans-serif;
+        font-size: torem(20);
+        line-height: torem(26);
+        color: #ABAEBE;
+        margin-bottom: torem(8);
+      }
+    }
+  
+    &__charts {
+      display: flex;
+      // display: grid;
+      // grid-template-columns: 1fr 1fr;
+      // gap: var(10%);
+      // margin-bottom: torem(26.5);
+  
+      @media (max-width: 991px) {
+        gap: 0;
+        margin-bottom: 0;
+        // grid-template-columns: 1fr;
+      }
+  
+      @media (max-width: 1099px) {
+        flex-direction: column;
+        // align-items: center;
+        align-items: start;
+      }
+  
+      @include breakpoint($break-tablet-minus) {
+        grid-template-columns: 1fr;
+      }
+    }
+  
+    &__chart {
+      width: 49%;
+  
+      &-gap {
+        margin-right: 2%;
+      }
+  
+      @media (max-width: 1099px) {
+        width: 100%;
+        margin-bottom: 32px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+  
+      .w-trades .m-deal:not(:last-child) {
+        border-bottom: none;
+      }
+  
+      .w-chart-performance-fund, .w-chart-fund-main, .e-assets, .w-trades__content {
+        color: var(--text-inverse-primary);
+        background: linear-gradient(0deg, rgba(34, 36, 43, 0.5), rgba(34, 36, 43, 0.5)), linear-gradient(0deg, rgba(63, 66, 78, 0.08), rgba(63, 66, 78, 0.08));
+      }
+  
+      .w-trades__content .m-deal {
+        background: none !important;
+      }
+  
+      .w-trades__content .m-deal__info-deal {
+        color: #fff;
+      }
+  
+      .w-chart-performance-fund, .w-chart-fund-main {
+        margin-bottom: torem(24);
+      }
+  
+      .w-chart-fund-main__chart {
+        height: torem(248);
+      }
+  
+      .w-chart-performance-fund__chart {
+        height: torem(295);
+      }
+  
+      .m-asset__name, .m-asset__info-apy, .m-asset__info-earning {
+        color: var(--text-inverse-primary) !important;
+      }
+  
+      .w-chart-fund-main, .w-chart-performance-fund {
+        // min-height: torem(379);
+        min-height: torem(368);
+      }
+    }
+  
+    &__bottom {
+      font-family: DM, sans-serif;
+      padding: var(--spacing-m-3) 0;
+      margin: 0 0 0 var(--spacing-s);
+      border-radius: torem(16);
+      // border: torem(1) solid var(--surfaces-surface-glass-border);
+      box-shadow: 0 0 torem(6) 0 #0000000f;
+      display: flex;
+      align-items: center;
+  
+      overflow-x: hidden;
+  
+      &-wrapper {
+        display: flex;
+        align-items: center;
+  
+        @include breakpoint($break-tablet-minus) {
+          margin-bottom: var(--spacing-l-2);
+        }
+      }
+  
+      .swiper-wrapper {
+        -webkit-transition-timing-function: linear !important;
+        transition-timing-function: linear !important;
+        position: relative;
+      }
+  
+      @media (max-width: 767px) {
+        border-radius: torem(16);
+        // border: torem(1) solid rgba(1, 4, 15, 0.05);
+        // background: linear-gradient(0deg, rgba(1, 4, 15, 0.05), rgba(1, 4, 15, 0.05)), linear-gradient(0deg, rgba(40, 41, 49, 0.71), rgba(40, 41, 49, 0.71));
+        padding: torem(8, 0);
+      }
+  
+      &-elem {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        margin-right: torem(16);
+        padding: torem(4px 8px);
+        background: #2E2F3880;
+        border-radius: torem(6);
+  
+        &-title {
+          font-weight: 700;
+          color: var(--text-tertiary);
+          font-size: torem(10);
+          line-height: torem(13);
+        }
+  
+        &-text {
+          font-family: Dm, sans-serif;
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: torem(14);
+          line-height: torem(18);
+          color: var(--accent-primary);
+        }
+      }
+  
+      &-item {
+        display: flex;
+        align-items: center;
+        margin-right: var(--spacing-m-1);
+      }
+  
+      &-symbol {
+        font-size: torem(14);
+        font-weight: 600;
+        margin-right: var(--spacing-s);
+      }
+  
+      &-lastPrice {
+        font-size: torem(14);
+        opacity: 0.6;
+        margin-right: var(--spacing-s);
+      }
+  
+      &-change {
+        font-size: torem(10);
+        font-weight: 600;
+        padding: torem(4, 8);
+        border-radius: torem(16);
+  
+        &.high {
+          color: var(--accent-success);
+          background: #D8FCCC;
+        }
+  
+        &.low {
+          color: var(--accent-danger);
+          background: #EC02020F;
+        }
+      }
+    }
+  }
+  

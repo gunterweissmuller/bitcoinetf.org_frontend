@@ -3,12 +3,12 @@
     <div class="w-trades__head">
       <div class="w-trades__head-title">Latest trades</div>
       <nuxt-link v-if="!isPage && renderedTrades.length && !hideView" :to="fullPageNuxtLink" class="w-trades__head-info"
-        >View all
+        >View All
       </nuxt-link>
     </div>
-    <div v-if="renderedTrades.length && !isExpand" class="w-trades__content" :style="{height: `${renderedTrades?.length * 94}px`}">
-      <transition-group name="fade" tag="div">
-        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" />
+    <div v-if="renderedTrades.length && !isExpand" :class="[{'w-trades__content-main' : props.isMain}, {'w-trades__content' : !props.isMain}]" :style=" width > 1010 ? {height: `${(renderedTrades?.length / props.gridTemplate) * 94}px`} : {}">
+      <transition-group name="fade" tag="div" :class="[{'w-trades__content-main-wrapper' : props.isMain}]" :style=" width > 1010 ? {'display': 'grid', 'grid-template-columns': 'repeat( '+ props.gridTemplate +', 1fr)', 'max-height': 94 * (props.perPage/props.gridTemplate) +'px'} : {'display': 'flex', 'flex-direction': 'column'}">
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade"/>
       </transition-group>
     </div>
 
@@ -43,6 +43,9 @@ import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
+import { useWindowSize } from '@vueuse/core'
+
+const { width } = useWindowSize()
 
 const route = useRoute()
 const { $app } = useNuxtApp()
@@ -53,10 +56,14 @@ const props = withDefaults(
     isExpand?: boolean
     perPage?: number
     hideView?: boolean
+    gridTemplate?: number
+    isMain?: boolean
   }>(),
   {
     isPage: false,
     perPage: 4,
+    gridTemplate: 1,
+    isMain: false
   },
 )
 
@@ -69,6 +76,7 @@ const expandMore = ref(2)
 const centrifuge = ref(null)
 
 const fullPageNuxtLink = computed(() => {
+  // FIX name on features/fund_remake
   const nuxtLinkObject = { name: 'personal-analytics-performance-latest-trades', query: {} }
   if (route.name === 'personal-asset-id') {
     nuxtLinkObject.query.asset_uuid = route.params.id
@@ -109,7 +117,7 @@ const getTrades = async (assetId?: string) => {
 }
 
 const renderedTrades = computed(() => {
-  return props.isPage ? trades.value : trades.value.slice(0, 4)
+  return props.isPage ? trades.value : trades.value.slice(0, props.perPage)
 })
 const config = useRuntimeConfig()
 const centrifugeURL = config.public.WS_URL
@@ -153,8 +161,9 @@ onUnmounted(() => {
   position: relative;
 }
 
-.fade-enter-active,
-.fade-leave-active {
+// .fade-leave-active,
+.fade-enter-active
+ {
   transition:
     opacity 0.8s,
     bottom 0.8s,
@@ -169,15 +178,19 @@ onUnmounted(() => {
   transform: translateX(0px);
 }
 
-.fade-enter-from,
-.fade-leave-to {
+// .fade-leave-to,
+.fade-enter-from
+ {
   opacity: 0;
 }
 
 .fade-leave-to {
-  width: 100%;
   position: absolute;
+  right: 1000px;
   bottom: 0;
-  transform: translateY(100px);
+  display: none;
+
+  
+  // transform: translateX(200px);
 }
 </style>

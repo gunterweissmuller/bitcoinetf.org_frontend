@@ -23,12 +23,17 @@
 
     @media (max-width: 600px) {
       width: torem(448);
-      transform: translateX(torem(-80));
+      transform: translateX(torem(-95));
       margin-top: torem(-40);
 
       img {
         max-width: 100%;
       }
+    }
+
+    @media (max-width: 374px) {
+      width: torem(400);
+      transform: translateX(torem(-50));
     }
 
     &:after {
