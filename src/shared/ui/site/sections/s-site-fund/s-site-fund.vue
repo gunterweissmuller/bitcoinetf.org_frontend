@@ -15,10 +15,10 @@
           <swiper-slide class="s-site-fund__slide" v-for="(asset, id) in assets" :key="id">
             <div class="s-site-fund__top">
               <div class="s-site-fund__top-title">{{ asset.name }}</div>
-              <div class="s-site-fund__apy" v-if="asset.symbol !== 'BRF'">
+              <!-- <div class="s-site-fund__apy" v-if="asset.symbol !== 'BRF'">
                 <div class="s-site-fund__apy-percents">{{ $app.filters.rounded(asset?.apy, 2) }}%</div>
                 <div class="s-site-fund__apy-text">APY</div>
-              </div>
+              </div> -->
             </div>
             <div class="s-site-fund__content">
               <div class="s-site-fund__ticker">
@@ -45,6 +45,14 @@
               <div class="s-site-fund__about-title">About asset</div>
               <div v-if="asset.description" v-html="asset.description" class="s-site-fund__about-text"/>
             </div>
+            
+            <div :class="[{'s-site-fund__drag-hide': !isDrag}]" v-if="id === 0" class="s-site-fund__drag">
+              <div class="s-site-fund__drag-wrapper">
+                <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-fund__drag-arrow" alt="arrow" />
+                drag 
+                <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-fund__drag-arrow s-site-fund__drag-arrow-reverse" alt="arrow" />
+              </div>
+            </div>
           </swiper-slide>
         </template>
       </m-slider>
@@ -67,7 +75,31 @@ defineProps<{
 const {$app} = useNuxtApp()
 
 const assets = computed(() => {
-  return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT')
+  return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT' && item?.symbol !== 'BRF' )
+});
+
+const isDrag = ref(true);
+
+const handleScroll = (event) => {
+  const element = document.querySelector(".s-site-fund");
+  const elementPosition = element.offsetTop - (element.offsetHeight * 0.35);
+  const toTop = window.pageYOffset ? window.pageYOffset : document.body.scrollTop;
+
+  // console.log(toTop, elementPosition);
+
+  if(toTop >= elementPosition) {
+    setTimeout(() => {
+      isDrag.value = false;
+    },5000);
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll',handleScroll);
 })
 
 </script>
