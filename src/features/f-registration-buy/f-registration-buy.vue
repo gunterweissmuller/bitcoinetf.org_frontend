@@ -352,6 +352,7 @@ const refCodeError = ref(false);
 const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
 const refCodeBtnText = ref('Apply');
 const wallets = ref(null)
+const paymentWallets = ref(null)
 const isMoonpaySelected = ref(false)
 
 const getWallets = async () => {
@@ -622,13 +623,15 @@ const openPolygon = async () => {
 }
 
 const showTron = computed(() => {
-  return ($app.store.user?.wallets?.tron || $app.store.user.info?.account?.tron_wallet) && !isMoonpaySelected.value;
+  return (paymentWallets.value?.tron || $app.store.user.info?.account?.tron_wallet) && !isMoonpaySelected.value;
 });
+
 const showEth = computed(() => {
-  return $app.store.user?.wallets?.tron && !isMoonpaySelected.value;
+  return paymentWallets.value?.tron && !isMoonpaySelected.value;
 });
+
 const showPolygon = computed(() => {
-  return $app.store.user?.wallets?.polygon && !isMoonpaySelected.value;
+  return paymentWallets.value?.polygon && !isMoonpaySelected.value;
 });
 
 const payWith = ref([
@@ -755,7 +758,7 @@ watch(
 const getPayWallets = async () => {
   currentPayStep.value = StepsPay.Loading;
 
-  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/payment-methods`, {
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/payment/payment-methods`, {
     method: 'GET',
     headers: new Headers({
       'Authorization': 'Bearer ' + $app.store.auth.accessToken,
@@ -763,8 +766,9 @@ const getPayWallets = async () => {
     }),
   });
 
-  const wallets = await response.json();
-  $app.store.user.wallets = wallets.data;
+  const {data: { apollo: wallets }} = await response.json();
+
+  paymentWallets.value = wallets;
 
   currentPayStep.value = StepsPay.PayWith;
 }
