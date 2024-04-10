@@ -5,23 +5,17 @@
         <div class="s-site-referrals-share__left">
           <h1 v-html="data.title" class="s-site-referrals-share__title title-site-h1" />
           <nuxt-link to="/personal/registration">
-            <a-button :text="data.btn.text" />
+            <a-button :variant="'primary'" :text="data.btn.text" />
           </nuxt-link>
-          <div class="s-site-referrals-share__message">
-            <div class="s-site-referrals-share__message-text">{{ data.message }}</div>
-            <div class="s-site-referrals-share__message-arrow">
-              <img src="/img/site-dark/s-site-referrals-share/arrow.svg" alt="">
-            </div>
-          </div>
         </div>
         <div class="s-site-referrals-share__img">
-          <img :src="data.img" alt="">
+          <img :src="data.img" alt="" />
         </div>
         <div class="s-site-referrals-share__info">
           <div class="s-site-referrals-share__info-title">{{ data.info.title }}</div>
           <div v-html="data.info.text" class="s-site-referrals-share__info-text" />
           <nuxt-link to="/personal/registration">
-            <a-button :text="data.btn.text" />
+            <a-button :variant="'primary'" :text="data.btn.text" />
           </nuxt-link>
         </div>
       </div>
