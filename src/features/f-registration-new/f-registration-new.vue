@@ -2,8 +2,8 @@
 
   <div class="f-registration-new">
 
-    <div class="f-registration-new__bg">
-      <nuxt-img src="/img/signup/login_bg.png"></nuxt-img>
+    <div class="f-registration-new__bg" :class="{'f-registration-new__bg-dark':$app.store.user.theme === 'dark'}">
+      <nuxt-img src="/img/signup/login_bg_new.png"></nuxt-img>
     </div>
 
     <div class="f-registration-new-content f-registration-new-content-left">
