@@ -84,7 +84,9 @@ const isVisibleInfo = computed(() => {
     route.name === 'personal-fund' ||
     route.name === 'personal-protection' ||
     route.name === 'personal-shareholders' ||
-    route.name === 'personal-portfolio'
+    route.name === 'personal-portfolio' ||
+    route.name === 'personal-assets' ||
+    route.name === 'personal-assets-symbol'
   )
 })
 
