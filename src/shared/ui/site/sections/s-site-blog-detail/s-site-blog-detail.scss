@@ -4,7 +4,6 @@
   //background: linear-gradient(90deg, rgba(158, 178, 205, 0.1) 0%, rgba(156, 168, 155, 0.1) 33.33%, rgba(173, 153, 177, 0.1) 66.67%, rgba(164, 168, 201, 0.1) 100%),
   //linear-gradient(0deg, #FFFFFF, #FFFFFF);
 
-
   @media (max-width: 767px) {
     padding: torem(184, 0);
   }
@@ -28,8 +27,12 @@
       padding: torem(6, 24);
     }
 
-    &-read, &-date {
-      background: rgba(#2E2F38, .5);
+    &-read,
+    &-date {
+      background: rgba(#2e2f38, 0.5);
+    }
+    &-read.gray {
+      background-color: var(--surfaces-surface-2);
     }
   }
 
@@ -64,7 +67,12 @@
       margin-top: torem(24);
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       font-weight: 700;
       font-size: torem(32);
       line-height: torem(41);
@@ -77,10 +85,10 @@
         margin-top: torem(24);
       }
     }
-    h2{
+    h2 {
       margin-top: torem(48);
     }
-    hr{
+    hr {
       margin: torem(49) auto;
       height: torem(6);
       width: torem(6);
@@ -90,7 +98,7 @@
       box-shadow: none;
       position: relative;
       overflow: initial;
-      &:before{
+      &:before {
         content: '';
         height: torem(6);
         width: torem(6);
@@ -101,7 +109,7 @@
         position: absolute;
         left: torem(-24);
       }
-      &:after{
+      &:after {
         content: '';
         height: torem(6);
         width: torem(6);
@@ -111,7 +119,6 @@
         display: block;
         position: absolute;
         right: torem(-24);
-
       }
     }
 
@@ -123,11 +130,13 @@
       list-style: disc;
     }
 
-    ol, ul {
+    ol,
+    ul {
       padding-left: torem(24);
     }
 
-    p, li {
+    p,
+    li {
       font-size: torem(16);
       line-height: torem(20);
       color: var(--text-secondary);
@@ -139,7 +148,7 @@
 
     a {
       text-decoration: underline;
-      color: #F1F2F4;
+      color: #f1f2f4;
     }
 
     img {
