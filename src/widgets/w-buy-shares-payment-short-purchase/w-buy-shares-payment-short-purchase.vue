@@ -241,7 +241,7 @@ onMounted(async () => {
   }
   initializeTronClock();
 
-  startTronTimer();
+  // startTronTimer();
 })
 
 watch(
