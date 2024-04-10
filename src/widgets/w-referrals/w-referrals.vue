@@ -82,10 +82,10 @@
         <div class="w-referrals__share-socials">
           <button
             class="w-referrals__share-social"
-            :class="{ current: shareCurrentNetwork === network.network }"
-            v-for="network in shareNetworks"
-            :key="network.network"
-            @click="shareCurrentNetwork = network.network"
+            :class="{ current: shareCurrentName === network.name }"
+            v-for="network in shareSocials"
+            :key="network.name"
+            @click="shareCurrentName = network.name"
           >
             <a-icon class="w-referrals__share-icon" width="20" height="20" :name="network.icon" />
           </button>
@@ -107,22 +107,29 @@
         >
           <template #slides>
             <swiper-slide class='w-referrals__promo-item'>
-              <nuxt-img class="w-referrals__promo-img" loading="lazy" src="/img/referrals/promo1.png" alt="promo" />
+              <img class="w-referrals__promo-img" src="/img/referrals/promo1.png" alt="promo" />
             </swiper-slide>
             <swiper-slide class='w-referrals__promo-item'>
-              <nuxt-img class="w-referrals__promo-img" loading="lazy" src="/img/referrals/promo2.png" alt="promo" />
+              <img class="w-referrals__promo-img" src="/img/referrals/promo2.png" alt="promo" />
             </swiper-slide>
             <swiper-slide class='w-referrals__promo-item'>
-              <nuxt-img class="w-referrals__promo-img" loading="lazy" src="/img/referrals/promo3.png" alt="promo" />
+              <img class="w-referrals__promo-img" src="/img/referrals/promo3.png" alt="promo" />
             </swiper-slide>
           </template>
         </m-slider>
 
         <div class="w-referrals__comment">
-          <div class="w-referrals__comment-caption"></div>
-          <div class="w-referrals__comment-text"></div>
-          <div class="w-referrals__comment-tags"></div>
+          <div class="w-referrals__comment-caption">
+            COMMENT
+          </div>
+          <div class="w-referrals__comment-text">
+            {{ shareData.text }}
+          </div>
         </div>
+
+        <button class="w-referrals__share-button" @click="share">
+          Share on {{ shareCurrentSocial.name }}
+        </button>
       </div>
 
       <div class="w-referrals__instructions">
@@ -209,7 +216,7 @@ import { useNuxtApp } from '#app';
 import { ADropdownOption } from '~/src/shared/types/global';
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
 import { SwiperSlide } from 'swiper/vue';
-import { Pagination, Navigation } from 'swiper'
+import { Pagination, Navigation } from 'swiper';
 
 const isOpenModal = ref(false)
 const isOpenShareModal = ref(false)
@@ -237,49 +244,50 @@ const route = useRoute();
 const totalSumCurrentOption = ref<ADropdownOption | null>(null);
 
 
-const shareCurrentNetwork = ref<string>('twitter');
-
-const shareNetworks = [
+const shareData = {
+  text: 'Sign up with my link buy Bitcoin ETFs and start earning daily dividends today: choose to earn USDT or BTC!',
+  hashtags: '#BitcoinETF #Bitcoin #ETF #Tether',
+  url: 'bitcoinetf.org'
+};
+const shareSocials = [
   {
-    network: 'twitter',
+    network: `https://twitter.com/intent/tweet?text=${shareData.text}&url=${shareData.url}`,
     name: 'X',
     icon: Icon.MonoX
   },
   {
-    network: 'telegram',
+    network: `https://t.me/share/url?url=${shareData.url}&text=${shareData.text}`,
     name: 'Telegram',
     icon: Icon.MonoTelegram
   },
   {
-    network: 'facebook',
+    network: `https://www.facebook.com/sharer/sharer.php?u=${shareData.url}&title=${shareData.text}`,
     name: 'Facebook',
     icon: Icon.MonoFacebook
   },
   {
-    network: 'vk',
+    network: `https://vk.com/share.php?url=${shareData.url}&title=${shareData.text}&noparse=true`,
     name: 'VK',
     icon: Icon.MonoVk
   },
   {
-    network: 'email',
+    network: `mailto:?subject=BitcoinETF&body=${shareData.url}%0D%0A${shareData.text}`,
     name: 'Email',
     icon: Icon.MonoMailLight
   },
   {
-    network: 'sms',
+    network: `sms:?body=${shareData.text}%0D%0A${shareData.url}`,
     name: 'SMS',
     icon: Icon.MonoMessage
   },
 ];
 
-const shareData = {
-  url: 'https://bitcoinetf.org/',
-  title: 'Sign up with my link buy Bitcoin ETFs and start earning daily dividends today: choose to earn USDT or BTC!',
-  description: '',
-  quote: '',
-  
-};
+const shareCurrentName= ref<string>(shareSocials[0].name);
+const shareCurrentSocial = computed(() => shareSocials.find((social) => social.name === shareCurrentName.value) ?? shareSocials[0]);
 
+const share = () => {
+  window.open(shareCurrentSocial.value.network, '_blank');
+}
 
 const openShareModal = () => {
   isOpenShareModal.value = true
