@@ -203,25 +203,21 @@ const routeNames = computed(() => ({
     title: 'Shareholders',
     titleCrumb: 'Shareholders',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-protection': {
     title: 'Fund',
     titleCrumb: 'Protection',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-portfolio': {
     title: 'Fund',
     titleCrumb: 'Portfolio',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-shareholders': {
     title: 'Fund',
     titleCrumb: 'Shareholders',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-wallet': {
     title: 'Wallet',
