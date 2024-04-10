@@ -314,6 +314,7 @@ export default class BillingEthApiModule {
   async buyShares(payload) {
     try {
       return await this.adapter.requestJsonAsync({
+        apiVersion: 'v3',
         parameterValue: `billing/shares/buy/init`,
         request: {
           method: HTTPMethod.POST,
