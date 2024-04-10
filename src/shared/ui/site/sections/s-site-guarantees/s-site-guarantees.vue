@@ -12,7 +12,7 @@
     </div>
 
     <div class="s-site-guarantees__main-section">
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: -160px; top: -7px">
+      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 0; top: -7px">
         <m-guarantees-card
           :label="'Protection 1'"
           title="BTC Reserve Fund"
@@ -22,7 +22,7 @@
           textButton="Verify on Blockchain"
         />
       </div>
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; right: -160px; top: 133px">
+      <div class="s-site-guarantees__card-wrapper" style="position: absolute; right: 0; top: 18% z-index: 3">
         <m-guarantees-card
           label="Protection 2"
           title="USDT Protection Vault"
@@ -33,7 +33,7 @@
         />
       </div>
 
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 294px; bottom: -18px; z-index: 2">
+      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 36%; bottom: -18px; z-index: 2">
         <m-guarantees-card
           capital="$50,000,000 Paid Up Capital"
           label="Protection 3"
@@ -55,57 +55,76 @@
       ></div>
     </div>
     <div class="s-site-guarantees__slide_cards" style="margin-top: -80px; padding-left: 16px">
-      <m-slider
-        class="s-site-main__items"
-        :modules="[]"
-        :navigation="false"
-        slides-per-view="auto"
-        :space-between="8"
-      >
+      <m-slider class="s-site-main__items" :modules="[]" :navigation="false" slides-per-view="auto" :space-between="8">
         <template #slides>
           <swiper-slide class="s-site-main__item">
-            <div
-              class="s-site-main__item-value"
-              style="display: flex; align-items: center;"
-            >
+            <div class="s-site-main__item-value" style="display: flex; align-items: center">
               <div>
                 <p style="font-size: 20px; text-align: left">BTC Reserve Fund</p>
                 <p style="font-size: 32px; text-align: left">{{ $app.filters.rounded(fundTotalBtc, 2) }} BTC</p>
                 <p class="guarantees-card__current_balance" style="font-size: 20px; text-align: left">
-                  Current Balance <span><NuxtImg class="s-site-main__title_icon aspect-square w-[14px]" src="/img/icons/colorful/live-data.svg" width="14" height="14" loading="lazy"/> LIVE DATA</span>
+                  Current Balance
+                  <span
+                    ><NuxtImg
+                      class="s-site-main__title_icon aspect-square w-[14px]"
+                      src="/img/icons/colorful/live-data.svg"
+                      width="14"
+                      height="14"
+                      loading="lazy"
+                    />
+                    LIVE DATA</span
+                  >
                 </p>
-                <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px">The reserve fund serves as a safety net, absorbing losses and maintaining liquidity during times of market turmoil. By diversifying our holdings into Bitcoin, we can weather unexpected events and continue delivering steady returns to our investors.</p>
-                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">Verify on Blockchain</button>
+                <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px">
+                  The reserve fund serves as a safety net, absorbing losses and maintaining liquidity during times of
+                  market turmoil. By diversifying our holdings into Bitcoin, we can weather unexpected events and
+                  continue delivering steady returns to our investors.
+                </p>
+                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">
+                  Verify on Blockchain
+                </button>
               </div>
             </div>
           </swiper-slide>
           <swiper-slide class="s-site-main__item">
-            <div
-              class="s-site-main__item-value"
-              style="display: flex; align-items: center;"
-            >
+            <div class="s-site-main__item-value" style="display: flex; align-items: center">
               <div>
                 <p style="font-size: 20px; text-align: left">USDT Protection Vault</p>
                 <p style="font-size: 32px; text-align: left">${{ $app.filters.rounded(fundTotalUsd, 0) }}</p>
                 <p class="guarantees-card__current_balance" style="font-size: 20px; text-align: left">
-                  Current Balance <span><NuxtImg class="s-site-main__title_icon aspect-square w-[14px]" src="/img/icons/colorful/live-data.svg" width="14" height="14" loading="lazy"/> LIVE DATA</span>
+                  Current Balance
+                  <span
+                    ><NuxtImg
+                      class="s-site-main__title_icon aspect-square w-[14px]"
+                      src="/img/icons/colorful/live-data.svg"
+                      width="14"
+                      height="14"
+                      loading="lazy"
+                    />
+                    LIVE DATA</span
+                  >
                 </p>
-                <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px">Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility.</p>
-                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">Verify on Blockchain</button>
+                <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px">
+                  Every time our bot makes a profit from these hedging operations the profit is deposited into the
+                  Protection Vault in the form of stablecoins. This ensures that the value of these funds remains
+                  stable, regardless of the Bitcoin price volatility.
+                </p>
+                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">
+                  Verify on Blockchain
+                </button>
               </div>
             </div>
           </swiper-slide>
           <swiper-slide class="s-site-main__item">
-            <div
-              class="s-site-main__item-value"
-              style="display: flex; align-items: center;"
-            >
+            <div class="s-site-main__item-value" style="display: flex; align-items: center">
               <div>
                 <p style="font-size: 20px; text-align: left">$50,000,000 Paid Up Capital</p>
                 <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px">
                   The funds holding company in Hong Kong will use its paid up capital to satisfy guarantees if needed.
                 </p>
-                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">Verify Official Record</button>
+                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">
+                  Verify Official Record
+                </button>
               </div>
             </div>
           </swiper-slide>
@@ -137,7 +156,7 @@
               <NuxtImg src="/img/main-guarantees-table-title-4.png" width="188" />
             </div>
           </div>
-          <div class="s-site-guarantees__table-body first-table-body">
+          <div class="s-site-guarantees__table-body">
             <div class="s-site-guarantees__table-row first-row">
               <div class="s-site-guarantees__table-row-item">Original investment loss</div>
               <div class="s-site-guarantees__table-row-item">
