@@ -559,7 +559,7 @@ const openMoonpay = async () => {
 
   isMoonpaySelected.value = true
 
-  const response = await fetch(`https://${hostname}/v1/public/billing/shares/buy/init`, {
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
     method: 'POST',
     headers: new Headers({
       'Authorization': 'Bearer ' + $app.store.auth.accessToken,
@@ -645,7 +645,7 @@ const payWith = ref([
     icon: "/img/icons/colorful/moonpay.svg",
     title: "Pay through Moonpay",
     onClick: openMoonpay,
-    show: true,
+    show: false,
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -656,15 +656,13 @@ const payWith = ref([
     icon: "/img/icons/colorful/usdt-erc20.svg",
     title: "Pay with USDT (ERC-20)",
     onClick: openEth,
-    // show: showEth,
-    show: false
+    show: showEth,
   },
   {
     icon: "/img/icons/colorful/usdt-matic.svg",
     title: "Pay with USDT (MATIC)",
     onClick: openPolygon,
-    // show: showPolygon,
-    show: false
+    show: showPolygon,
   },
   {
     icon: "/img/icons/colorful/usdt-trc20.svg",
