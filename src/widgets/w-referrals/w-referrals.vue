@@ -240,7 +240,6 @@ const openModal = async () => {
 
 const route = useRoute();
 
-
 const totalSumCurrentOption = ref<ADropdownOption | null>(null);
 
 
