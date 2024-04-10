@@ -22,7 +22,7 @@
             @keypress="validate"
             :min="1"
             :max="10000000"
-            
+
           /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
 
           <div class="relative">
@@ -42,12 +42,12 @@
                     width="18"
                     height="18"
                   />
-                  
+
                 </li>
               </ul>
             </div>
           </div>
-          
+
         </div>
 
       </header>
@@ -176,14 +176,16 @@ import AButton from "~/src/shared/ui/atoms/a-button/a-button.vue";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 import AInput from "~/src/shared/ui/atoms/a-input/a-input.vue";
 import {computed, ref, watch} from "vue";
-import {useNuxtApp} from "#app";
+import {useNuxtApp, useRouter} from "#app";
 import VueWriter from 'vue-writer'
 import InputNumber from 'primevue/inputnumber';
 import { useWindowSize } from '@vueuse/core'
 import { vOnClickOutside } from '@vueuse/components'
-
+import { useRoute } from 'vue-router'
 
 const { width } = useWindowSize()
+const route = useRoute()
+const router = useRouter()
 
 const props = withDefaults(
   defineProps<{
@@ -249,7 +251,7 @@ onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
 
     const temp = Number(localStorage.getItem('investmentAmount'));
-  
+
     console.log(isNaN(temp), temp);
 
     investmentAmount.value = isNaN(temp) ? 2500 : temp;
@@ -302,7 +304,7 @@ watch(
       investmentAmountDisplay.value = replacedStringValue;
     }
 
-    
+
   }
 )
 
@@ -435,43 +437,43 @@ const currentAmount = ref('CUSTOM');
 const amounts = ref([
   {
     amount: '100',
-  }, 
+  },
   {
     amount: '250',
-  }, 
+  },
   {
     amount: '500',
-  }, 
+  },
   {
     amount: '1,000',
-  }, 
+  },
   {
     amount: '2,500',
-  }, 
+  },
   {
     amount: '5,000',
-  }, 
+  },
   {
     amount: '10,000',
-  }, 
+  },
   {
     amount: '15,000',
-  }, 
+  },
   {
     amount: '25,000',
-  }, 
+  },
   {
     amount: '50,000',
-  }, 
+  },
   {
     amount: '75,000',
-  }, 
+  },
   {
     amount: '100,000',
-  }, 
+  },
   {
     amount: 'CUSTOM',
-  }, 
+  },
 ]);
 
 const showAmountDropdown = ref(false);
@@ -500,10 +502,14 @@ const selectAmount = (amount : any) => {
 }
 
 const handleContinue = () => {
-  if(props.isUserAuth) {
-    props.openPurchase();
+  if(route.path === '/') {
+    router.push("/personal/registration");
   } else {
-    props.openSignup();
+    if (props.isUserAuth) {
+      props.openPurchase();
+    } else {
+      props.openSignup();
+    }
   }
 }
 </script>

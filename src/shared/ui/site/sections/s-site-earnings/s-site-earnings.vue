@@ -10,12 +10,6 @@
           <div class="s-site-earnings__img">
             <img :src="data.img_2"/>
           </div>
-          <div class="s-site-earnings__message">
-            <div class="s-site-earnings__message-text">{{ data.message }}</div>
-            <div class="s-site-earnings__message-icon">
-              <img src="/img/site-dark/s-site-earnings/arrow.svg"/>
-            </div>
-          </div>
         </div>
         <div class="s-site-earnings__info">
           <div v-html="data.info.text" class="s-site-earnings__info-text"/>
