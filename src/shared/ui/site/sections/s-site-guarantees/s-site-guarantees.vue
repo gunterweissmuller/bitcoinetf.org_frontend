@@ -12,7 +12,7 @@
     </div>
 
     <div class="s-site-guarantees__main-section">
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: -160px; top: -7px">
+      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 0; top: -7px">
         <m-guarantees-card
           :label="'Protection 1'"
           title="BTC Reserve Fund"
@@ -22,7 +22,7 @@
           textButton="Verify on Blockchain"
         />
       </div>
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; right: -160px; top: 133px">
+      <div class="s-site-guarantees__card-wrapper" style="position: absolute; right: 0; top: 18% z-index: 3">
         <m-guarantees-card
           label="Protection 2"
           title="USDT Protection Vault"
@@ -33,7 +33,7 @@
         />
       </div>
 
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 294px; bottom: -18px; z-index: 2">
+      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 36%; bottom: -18px; z-index: 2">
         <m-guarantees-card
           capital="$50,000,000 Paid Up Capital"
           label="Protection 3"
