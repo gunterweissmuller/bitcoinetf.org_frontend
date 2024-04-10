@@ -7,8 +7,12 @@
       </nuxt-link>
       <h1 class="s-site-blog-detail__title site-title-h3">{{ blog.title }}</h1>
       <div class="s-site-blog-detail__info">
-        <div class="s-site-blog-detail__info-item s-site-blog-detail__info-date">{{ $app.filters.dayjs(blog?.created_at).format('MMMM D') }}</div>
-        <div class="s-site-blog-detail__info-item s-site-blog-detail__info-read">{{ blog?.reading_time }} min read</div>
+        <div class="s-site-blog-detail__info-item s-site-blog-detail__info-date">
+          {{ $app.filters.dayjs(blog?.created_at).format('MMMM D') }}
+        </div>
+        <div class="s-site-blog-detail__info-item s-site-blog-detail__info-read" :class="{ gray: grayColor }">
+          {{ blog?.reading_time }} min read
+        </div>
       </div>
       <div class="s-site-blog-detail__img">
         <NuxtImg v-if="blog.feature_image" loading="lazy" :src="blog.feature_image" :alt="blog.title" />
@@ -21,19 +25,23 @@
 <script setup lang="ts">
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
-import {useNuxtApp} from "#app";
+import { useNuxtApp } from '#app'
 
-const { $app } = useNuxtApp();
+const { $app } = useNuxtApp()
 defineProps({
   blog: {
     type: Object,
-    required: true
+    required: true,
   },
   backTo: {
     type: String,
     default: '',
   },
-});
+  grayColor: {
+    type: Boolean,
+    default: false,
+  },
+})
 </script>
 
 <style src="./s-site-blog-detail.scss" lang="scss" />
