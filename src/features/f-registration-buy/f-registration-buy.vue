@@ -352,7 +352,6 @@ const refCodeError = ref(false);
 const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
 const refCodeBtnText = ref('Apply');
 const wallets = ref(null)
-const paymentWallets = ref(null)
 const isMoonpaySelected = ref(false)
 
 const getWallets = async () => {
@@ -623,15 +622,15 @@ const openPolygon = async () => {
 }
 
 const showTron = computed(() => {
-  return (paymentWallets.value?.tron || $app.store.user.info?.account?.tron_wallet) && !isMoonpaySelected.value;
+  return ($app.store.user?.wallets?.tron || $app.store.user.info?.account?.tron_wallet) && !isMoonpaySelected.value;
 });
 
 const showEth = computed(() => {
-  return paymentWallets.value?.tron && !isMoonpaySelected.value;
+  return $app.store.user?.wallets?.ethereum && !isMoonpaySelected.value;
 });
 
 const showPolygon = computed(() => {
-  return paymentWallets.value?.polygon && !isMoonpaySelected.value;
+  return $app.store.user?.wallets?.polygon && !isMoonpaySelected.value;
 });
 
 const payWith = ref([
@@ -766,7 +765,7 @@ const getPayWallets = async () => {
 
   const {data: { apollo: wallets }} = await response.json();
 
-  paymentWallets.value = wallets;
+  $app.store.user.wallets = wallets
 
   currentPayStep.value = StepsPay.PayWith;
 }
