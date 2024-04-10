@@ -317,7 +317,6 @@ const route = useRoute()
 const { width } = useWindowSize()
 
 const orderType = ref($app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc');
-console.log("ordertype", orderType.value)
 watch(
   () => $app.store.user.info,
   () => {
@@ -326,16 +325,7 @@ watch(
 )
 
 const isOpen = ref($app.store.user.isInvestModalShow.show);
-
-watch(
-  () => $app.store.user.isInvestModalShow.show,
-  () => {
-    isOpen.value = $app.store.user.isInvestModalShow.show;
-  }
-)
-
 // Invest Step
-
 const inputMaxWidth = ref(width.value < 768 ? 55 : 65);
 const defaultInputWith = ref(width.value < 768 ? 55 : 65);
 const defaultInputPlus = ref(width.value < 768 ? 10 : 15);
@@ -493,13 +483,18 @@ const guaranteedPayout = computed(() => {
   return investmentAmount.value * (selectedCurrency.value.apy / 100)
 })
 
+watch(
+  () => $app.store.user.isInvestModalShow.show,
+  () => {
+    isOpen.value = $app.store.user.isInvestModalShow.show;
+    selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+  }
+)
 
 const showDropdown = ref(false);
 
 const toggleCurrencyDropdown = () => {
-  console.log("click", showDropdown.value)
   showDropdown.value = !showDropdown.value;
-  console.log("click", showDropdown.value)
 };
 
 const selectCurrency = (currency : any) => {
