@@ -24,7 +24,7 @@
       >
         <template #slides>
           <swiper-slide class="w-chart-portfolio__slide" v-for="(asset, id) in props.assets" :key="id">
-            <nuxt-link class="w-chart-portfolio__slide-link">
+            <nuxt-link class="w-chart-portfolio__slide-link" :to="{ name: 'personal-assets-symbol', params: { symbol: asset.symbol.toLowerCase() } }">
               <div :class="['w-chart-portfolio__type-symbol', `bg--${asset.symbol.toLowerCase()}`]"></div>
               <div class="w-chart-portfolio__type-desc">
                 <span class="w-chart-portfolio__type-name">
