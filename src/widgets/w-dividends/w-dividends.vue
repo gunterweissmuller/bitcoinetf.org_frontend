@@ -24,7 +24,7 @@
           <div class="w-dividends__amount-method-box">
             <div class="w-dividends__amount-method__method">
               <div class="w-dividends__amount-method__method-head">Withdrawal method</div>
-              <div class="w-dividends__amount-method__sum-head">{{ method === 'bitcoin_on_chain' ? 'On-chain' : 'Lightning'}}</div>
+              <div class="w-dividends__amount-method__sum-head">{{ selectedWithdrawalMethod }}</div>
             </div>
             <div class="w-dividends__amount-method__sum">
               <div class="w-dividends__amount-method__method-text">{{ address }}</div>
@@ -120,11 +120,16 @@ const address = ref('')
 const setMethodError = ref('')
 
 const centrifuge = ref(null)
-
+const withdrawalMethods = {
+  bitcoin_on_chain: 'On-chain',
+  bitcoin_lightning: 'Lightning',
+  polygon_usdt: 'Tether USDT (Polygon)',
+}
+const selectedWithdrawalMethod = computed(() => withdrawalMethods[method])
 const setMethod = async (value) => {
   let methodType
   if (value.method !== 'none') {
-    methodType = value.method === 'bitcoin_lightning' ? 'bitcoin_lightning' : 'bitcoin_on_chain'
+    methodType = value.method
   } else {
     methodType = 'none'
   }
@@ -147,11 +152,19 @@ const setMethod = async (value) => {
 }
 
 const typeWorkMethod = computed(() => {
-  return method.value === 'bitcoin_lightning' ? 'Automatic' : 'Manual'
+  return (method.value === 'bitcoin_lightning' || method.value === 'polygon_usdt') ? 'Automatic' : 'Manual'
 })
 
 const typeMethodIcon = computed(() => {
-  return method.value === 'bitcoin_lightning' ? Icon.ColorfulBtcLightning : Icon.ColorfulBitcoin
+  if (method.value === 'bitcoin_lightning') {
+    return Icon.ColorfulBtcLightning
+  }
+
+  if (method.value === 'polygon_usdt') {
+    return Icon.ColorfulUsdtPolygon
+  }
+
+  return Icon.ColorfulBitcoin
 })
 
 const selectedAddressShort = computed(() => {
@@ -176,7 +189,7 @@ const getWalletDividends = async () => {
 }
 
 const selectedMethod = computed(() => {
-  return method.value === 'bitcoin_on_chain' || method.value === 'bitcoin_lightning'
+  return method.value === 'bitcoin_on_chain' || method.value === 'bitcoin_lightning' || method.value === 'polygon_usdt'
 })
 
 const getDividendsDesc = (item) => {
@@ -190,6 +203,9 @@ const getDividendsDesc = (item) => {
     }
     case 'bitcoin_on_chain': {
       return 'Bitcoin Withdrawal'
+    }
+    case 'polygon_usdt': {
+      return 'Tether USDT (Polygon) Withdrawal'
     }
     default:
       return 'Dividends'

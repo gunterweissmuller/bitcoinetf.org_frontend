@@ -118,10 +118,18 @@ const typeWorkMethod = computed(() => {
 })
 
 const typeMethodIcon = computed(() => {
+  if (method.value === 'polygon_usdt') {
+    return Icon.ColorfulUsdt
+  }
+
   return method.value === 'tron' ? Icon.ColorfulTron : Icon.ColorfulUsdant
 })
 
 const typeMethodText = computed(() => {
+  if (method.value === 'polygon_usdt') {
+    return 'Polygon'
+  }
+
   return method.value === 'tron' ? 'Tron' : 'USDANT'
 })
 
@@ -138,7 +146,7 @@ const getWalletReferrals = async () => {
       walletReferrals.value = response.data
       $app.store.user.walletReferral = response.data
       address.value = response.data?.withdrawal_address || ''
-      method.value = 'tron'
+      method.value = 'polygon_usdt'
     })
     .catch(() => {
       // Todo: notify something went wrond
