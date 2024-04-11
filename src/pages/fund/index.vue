@@ -1,6 +1,6 @@
 <template>
   <m-scroll-navigation
-    v-if="sections && y > sections[2]?.top"
+    v-if="sections && y > sections[1]?.top"
     :length="sections.length - 1"
     :data="scrollInfo"
   />
