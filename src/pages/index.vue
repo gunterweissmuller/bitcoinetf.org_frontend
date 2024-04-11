@@ -1,5 +1,5 @@
 <template>
-  <m-scroll-navigation v-if="sections && y > sections[2]?.top" :length="sections.length - 2" :data="scrollInfo" />
+  <m-scroll-navigation v-if="sections && y > sections[0]?.top" :length="sections.length + 1" :data="scrollInfo" />
   <s-site-main :data="mainData" />
   <s-site-marquee :data="marqueeData" />
   <s-site-how-it-work />
@@ -14,7 +14,7 @@
   <!--<s-site-fundinfo-dark/>-->
   <!--<s-site-fund/>-->
   <!--<s-site-protection :data="protectionData"/>-->
-  <s-site-bitcoin-education :data="blogNewsEdu" v-if="blogNewsEdu?.length" :is-education="true" />
+  <s-site-bitcoin-education :data="blogNewsEdu" :is-education="true" />
   <s-site-earnings :data="earningsData" />
   <s-site-transparency :data="transparencyData" />
   <s-site-news :data="blogNews" v-if="blogNews?.length" />
@@ -60,7 +60,6 @@ useSeoMeta({
 })
 
 const { y } = useWindowScroll(window)
-const { width } = useWindowSize()
 
 const isLoaded = ref(false)
 
@@ -68,22 +67,27 @@ const scrollInfo = ref({})
 
 const sections = ref([])
 
+const START_TO_SHOW_SECTION_ID = 2
+const IGNORE_SECTIONS_ID = [0]
+
 const getElements = () => {
   const sectionsArray = document.querySelectorAll('section')
   const footer = document.querySelector('footer')
   const header = document.querySelector('header')
 
-  const lasElement = {
-    top: footer.offsetTop - header.offsetHeight,
-    name: 'Final',
-    id: sectionsArray.length - 1,
-  }
+  sections.value = Object.values(sectionsArray)
+    .filter((section, index) => !IGNORE_SECTIONS_ID.includes(index))
+    .map((section, index) => ({
+      top: section.offsetTop - header.offsetHeight,
+      name: section.dataset.name || '',
+      id: index + START_TO_SHOW_SECTION_ID,
+    }))
 
-  sections.value = Object.values(sectionsArray).map((section, index) => ({
-    top: section.offsetTop - header.offsetHeight,
-    name: index > 1 ? section.dataset.name : '',
-    id: index - 1,
-  }))
+  const lasElement = {
+    top: footer.offsetTop - header.offsetHeight - window.innerHeight / 5,
+    name: 'Final',
+    id: sections.value.length + START_TO_SHOW_SECTION_ID,
+  }
 
   sections.value.push(lasElement)
 }
@@ -95,16 +99,19 @@ onUpdated(() => {
   isLoaded.value = true
 })
 
+const timerId = ref(null)
+
 watch(y, (newVal) => {
+  clearTimeout(timerId.value)
+  timerId.value = setTimeout(() => {
+    getElements()
+  }, 1000)
+
   sections.value.forEach((section) => {
     if (newVal > section.top) {
       scrollInfo.value = section
     }
   })
-})
-
-watch(width, () => {
-  getElements()
 })
 
 const mainData = {
