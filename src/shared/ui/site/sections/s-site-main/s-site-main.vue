@@ -26,7 +26,7 @@
         </p>
         <div class="s-site-main__title_buttons_wrap">
           <button @click="scrollToSection" class="s-site-main__learn_more_button">Learn more</button>
-          <button @click="$router.push('/personal/registration')" class="s-site-main__launch_app_button">
+          <button @click="clickLaunch" class="s-site-main__launch_app_button">
             <NuxtImg
               class="s-site-main__title_icon aspect-square w-[18px]"
               src="/img/icons/colorful/external-link.svg"
@@ -106,6 +106,10 @@ const scrollToSection = () => {
     top: offsetPosition,
     behavior: 'smooth',
   })
+}
+
+function clickLaunch() {
+  window.open('/personal/registration', '_blank').focus();
 }
 
 onMounted(async () => {
