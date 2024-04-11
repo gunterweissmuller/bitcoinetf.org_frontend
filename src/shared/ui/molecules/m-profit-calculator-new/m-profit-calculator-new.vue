@@ -260,6 +260,8 @@ onMounted(()=>{
     investmentAmountDisplay.value = String(investmentAmount.value) ;
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
+
+  $app.store.purchase.type = selectedCurrency.value.value;
 })
 
 function validate(event) {
