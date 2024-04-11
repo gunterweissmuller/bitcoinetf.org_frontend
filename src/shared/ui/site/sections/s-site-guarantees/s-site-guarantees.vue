@@ -250,16 +250,15 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div :class="[{'s-site-guarantees__drag-hide': !isDrag}]" class="s-site-guarantees__drag">
-        <div class="s-site-guarantees__drag-wrapper">
-          <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow" alt="arrow" />
-          drag 
-          <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow s-site-guarantees__drag-arrow-reverse" alt="arrow" />
+        <div :class="[{'s-site-guarantees__drag-hide': !isDrag}]" class="s-site-guarantees__drag">
+          <div class="s-site-guarantees__drag-wrapper">
+            <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow" alt="arrow" />
+            drag 
+            <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow s-site-guarantees__drag-arrow-reverse" alt="arrow" />
+          </div>
         </div>
       </div>
-
     </div>
   </section>
 </template>
@@ -295,7 +294,7 @@ const handleScroll = (event) => {
     setTimeout(() => {
       isDrag.value = false;
     },5000);
-  }
+  } 
 }
 
 onMounted(() => {

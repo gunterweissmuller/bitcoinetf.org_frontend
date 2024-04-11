@@ -1,6 +1,6 @@
 <template>
   <m-scroll-navigation
-    v-if="sections && y > sections[2]?.top"
+    v-if="sections && y > sections[1]?.top"
     :length="sections.length - 1"
     :data="scrollInfo"
   />
@@ -53,7 +53,7 @@ const getElements = () => {
   sections.value = Object.values(sectionsArray).map((section, index) => ({
     top: section.offsetTop - header.offsetHeight,
     name: index > 0 ? section.dataset.name : '',
-    id: index - 1,
+    id: index,
   }));
 
   sections.value.push(lasElement);
