@@ -23,18 +23,18 @@
           <span style="color: #4d94ff">daily dividends</span>, accruing <br />
           in either
           <NuxtImg
-            class="s-site-main__title_icon aspect-square w-[18px]"
+            class="s-site-main__title_icon aspect-square w-[24px]"
             src="/img/icons/colorful/bitcoin.svg"
-            width="18"
-            height="18"
+            width="24"
+            height="24"
             loading="lazy"
           />
           BTC or
           <NuxtImg
-            class="s-site-main__title_icon aspect-square w-[18px]"
+            class="s-site-main__title_icon aspect-square w-[24px]"
             src="/img/icons/colorful/usdt.svg"
-            width="18"
-            height="18"
+            width="24"
+            height="24"
             loading="lazy"
           />
           USDT.
