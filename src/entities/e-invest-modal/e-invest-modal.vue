@@ -509,7 +509,7 @@ const closeModal = () => {
 
 const handleContinue = () => {
 
-  // if(investmentAmount.value < 100) return;
+  if(investmentAmount.value < 100) return;
 
   closeModal();
   $app.store.purchase.amount = investmentAmount.value;
