@@ -9,7 +9,7 @@
       <div class="f-login-new-content f-login-new-content-left">
         <div class="f-login-new-content__logo">
           <nuxt-link to="/" class="w-header-dark__logo">
-            <a-icon class="w-aside__logo-icon" :name="Icon.ColorfulBtcDarkLogo" width="210" height="32"/>
+            <a-icon class="w-aside__logo-icon" :name="Icon.ColorfulBtcDarkLogo" width="140" height="24"/>
           </nuxt-link>
         </div>
         <div class="f-login-new-content__title">
@@ -49,10 +49,10 @@
     
                         <div v-for="method in methods" @click="method.onClick" class="f-login-new__button">
                         <div class="f-login-new__button-left">
-                            <NuxtImg :src="method.img" width="18" height="14" class="f-login-new__button-img-method" loading="lazy" />
+                            <NuxtImg :src="method.img" width="24" height="24" class="f-login-new__button-img-method" loading="lazy" />
                             {{method.name}}
                         </div>
-                        <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-dark-right.svg' : '/img/icons/mono/chevron-right.svg'" width="18" height="18" class="f-login-new__button-img-arrow" loading="lazy" />
+                        <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-grey-right.svg' : '/img/icons/mono/chevron-grey-right.svg'" width="6" height="11" class="f-login-new__button-img-arrow" loading="lazy" />
                         </div>
     
                     <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
@@ -600,7 +600,7 @@
     },
     {
       name: 'Telegram',
-      img: '/img/icons/colorful/telegram2.svg',
+      img: '/img/icons/colorful/telegram3.svg',
       onClick: testTG
     },
     {

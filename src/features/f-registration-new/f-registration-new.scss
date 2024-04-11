@@ -28,10 +28,10 @@
   }
 
   &-content {
-    width: 50%;
     position: relative;
 
     &-left {
+      width: 53%;
       padding-left: 64px;
       padding-top: 164px;
       text-align: left;
@@ -90,6 +90,7 @@
     }
 
     &-right {
+      width: 47%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -142,8 +143,8 @@
     }
 
     &-img-arrow {
-      width: 18px;
-      height: 18px;
+      width: 6px;
+      height: 11px;
     }
   }
 
@@ -248,14 +249,16 @@
       }
     
       &__agree {
-        padding: var(--spacing-m-1);
+        // padding: var(--spacing-m-1);
+        padding: torem(20);
         border-radius: var(--spacing-s);
         // border: 1px solid var(--surfaces-border-1);
         margin-bottom: var(--spacing-m-3);
         // background: var(--surfaces-surface-2);
 
         border: 1px solid var(--surfaces-border-1);
-        background: var(--surfaces-border-1);
+        // background: var(--surfaces-border-1);
+        background: var(--surfaces-surface-1);
       }
     
       &__button {
