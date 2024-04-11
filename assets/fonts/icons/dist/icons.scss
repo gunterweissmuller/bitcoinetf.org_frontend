@@ -146,7 +146,7 @@
   --icon-mono--wallet-content: "\f191";
   --icon-mono--withdraw-content: "\f192";
   --icon-mono--x-content: "\f193";
-  --icon-mono--money-content: "\f195";
+  --icon-mono--money-content: "\f194";
 }
 
 @font-face {
@@ -3135,7 +3135,7 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--money:before {
-  content: "\f195";
+  content: "\f194";
   }
 
   .icon-mono--money-css,
