@@ -413,7 +413,6 @@ const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
 onMounted(async () => {
-
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
   })

@@ -19,7 +19,7 @@
           <div class="f-registration-buy__purchase-steps-desktop">
             <div @click="() => {openPurchase(purchaseStepsArr[0])}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': confirmShow}]">1. Confirm</div>
             <div @click="() => {openPurchase(purchaseStepsArr[1])}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': signShow}]">2. Sign</div>
-            <div @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
+            <div @click="() => {openPurchase(purchaseStepsArr[2], loadPayWallets)}" :class="['f-registration-buy__purchase-steps-desktop-step', {'f-registration-buy__purchase-steps-desktop-step-active': payShow}]">3. Pay</div>
           </div>
 
         </header>
@@ -193,7 +193,7 @@
               <div class="flex">
                 <a-button variant="secondary" class="f-registration-buy__button f-registration-buy__button-back" @click="() => {openPurchase(purchaseStepsArr[0])}"
                           text="Back"></a-button>
-                <a-button class="f-registration-buy__button f-registration-buy__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2], getPayWallets)}"
+                <a-button class="f-registration-buy__button f-registration-buy__button-continue" :disabled="termsContinueDisabled" @click="() => {openPurchase(purchaseStepsArr[2], loadPayWallets)}"
                           text="Continue"></a-button>
               </div>
 
@@ -211,7 +211,7 @@
               <div class="f-registration-buy__purchase-line"></div>
               <template v-if="currentPayStep === StepsPay.PayWith">
                 <div v-for="pay in payWith">
-                  <div v-if="pay.show" @click="pay.onClick ? pay.onClick() : () => currentPayStep = StepsPay.Process" class="f-registration-buy__purchase-pay-item flex flex-col justify-center cursor-pointer">
+                  <div v-if="pay.show" @click="pay.onClick ? handlePayMethod(pay.onClick) : () => currentPayStep = StepsPay.Process" class="f-registration-buy__purchase-pay-item flex flex-col justify-center cursor-pointer">
                     <div class="flex flex-col justify-center p-5 w-full ">
                       <div class="flex gap-1">
                         <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-method w-6 aspect-square" loading="lazy"/>
@@ -292,12 +292,21 @@ import { PayTypes } from '~/src/shared/constants/payWith'
 import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
 import { useMoonpay } from '~/src/app/composables/useMoonpay';
 import { Centrifuge } from 'centrifuge';
+import { usePayment } from '~/src/app/composables/usePayment';
 
 const emit = defineEmits([ 'update'])
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
+const {
+  payWith,
+  switches,
+  getPayWallets,
+  currentPayType,
+  openMoonpayHandler,
+  getMoonpayPaymentUrl,
+} = usePayment($app)
 const { isApple, isSafari } = useDevice();
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
@@ -352,7 +361,6 @@ const refCodeError = ref(false);
 const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
 const refCodeBtnText = ref('Apply');
 const wallets = ref(null)
-const isMoonpaySelected = ref(false)
 
 const getWallets = async () => {
   await $app.api.eth.billingEth
@@ -368,7 +376,7 @@ const getWallets = async () => {
 
 const getMoonpayWallets = async () => {
   try {
-    const { data: { moonpay: { url: moonpayUrl } } } = await $app.api.eth.billingEth.getMoonpayWallet($app.store.user.buyShares.data.uuid)
+    const moonpayUrl = await getMoonpayPaymentUrl()
 
     if (isSafari || isApple) {
       moonpayPaymentLink.value = moonpayUrl
@@ -415,17 +423,9 @@ const refCodeApply = async () => {
 
 watch(refCode, (value) => {
   refCodeMessage.value = ''
-
 })
-
-
 
 // discount
-
-const switches = reactive({
-  referral: false,
-  dividends: false,
-})
 
 const referralAmount = computed(() => {
   return `$${ $app.filters.rounded(Math.floor(wallets.value?.referral?.usd_amount), 0) || 0}`;
@@ -471,9 +471,6 @@ onMounted(async () => {
   }
 })
 
-onUnmounted(() => {
-  centrifuge.value?.disconnect()
-})
 watch(
   () => originalWithDiscount.value,
   () => {
@@ -525,8 +522,6 @@ const termsContinueDisabled = computed<boolean>(() => {
   return !registrationAgreedUS.value || !registrationAgreedTerms.value
 })
 
-const currentPayType = ref(PayTypes.Tron);
-
 const openTrc = async () => {
   currentPayStep.value = StepsPay.Loading;
   currentPayType.value = PayTypes.Tron;
@@ -552,61 +547,10 @@ const isOpenSuccessPaymentModal = ref(false)
 const paymentAmount = ref({ amount: 0 })
 
 const openMoonpay = async () => {
-  if (isMoonpaySelected.value) {
-    return
-  }
-
-  isMoonpaySelected.value = true
-
-  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
-    method: 'POST',
-    headers: new Headers({
-      'Authorization': 'Bearer ' + $app.store.auth.accessToken,
-      'Content-Type': 'application/json'
-    }),
-    body: JSON.stringify({
-      dividends: switches?.dividends ? true : false,
-      referral: switches?.referral ? true : false,
-      bonus: false,
-      amount: $app.store.purchase.amountUS,
-      order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'
-    })
-  });
-
-  const res = await response.json();
-  console.log("BUYINIT", res);
-
-  if (res) {
-    $app.store.user.buyShares = res
-  }
-
-
-  await getMoonpayWallets()
-
-  const config = useRuntimeConfig()
-  const centrifugeURL = config.public.WS_URL
-  const centrifugeToken = config.public.WS_TOKEN
-  const accountUuid = computed(() => {
-    return $app.store.user.info?.account?.uuid
+  return await openMoonpayHandler(getMoonpayWallets(), (ctx) => {
+    paymentAmount.value.amount = ctx.data.message?.data?.amount
+    isOpenSuccessPaymentModal.value = true
   })
-
-  centrifuge.value = new Centrifuge(centrifugeURL, {
-    token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
-  })
-
-  centrifuge.value.connect()
-
-  const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
-
-  sub
-    .on('publication', async function (ctx) {
-      console.log("PUB",ctx, ctx.data.message?.data?.status)
-      if (ctx.data.message?.data?.status === 'success') {
-        paymentAmount.value.amount = ctx.data.message?.data?.amount
-        isOpenSuccessPaymentModal.value = true
-      }
-    })
-    .subscribe()
 }
 
 const openEth = async () => {
@@ -621,68 +565,16 @@ const openPolygon = async () => {
   currentPayStep.value = StepsPay.Process;
 }
 
-const showTron = computed(() => {
-  return ($app.store.user?.wallets?.tron || $app.store.user.info?.account?.tron_wallet) && !isMoonpaySelected.value;
-});
+const handlePayMethod = (functionName) => {
+  const handlers = {
+    openMoonpay,
+    openEth,
+    openPolygon,
+    openTrc,
+  }
 
-const showEth = computed(() => {
-  return $app.store.user?.wallets?.ethereum && !isMoonpaySelected.value;
-});
-
-const showPolygon = computed(() => {
-  return $app.store.user?.wallets?.polygon && !isMoonpaySelected.value;
-});
-
-const payWith = ref([
-  {
-    icon: "/img/icons/colorful/usdt-trc20.svg",
-    title: "Pay with USDT (TRC20)",
-    onClick: openTrc,
-    show: showTron,
-  },
-  {
-    icon: "/img/icons/colorful/moonpay.svg",
-    title: "Pay through Moonpay",
-    onClick: openMoonpay,
-    show: false,
-  },
-  {
-    icon: "/img/icons/colorful/usdt-trc20.svg",
-    title: "Pay with USDT (BEP-20)",
-    show: false,
-  },
-  {
-    icon: "/img/icons/colorful/usdt-erc20.svg",
-    title: "Pay with USDT (ERC-20)",
-    onClick: openEth,
-    show: showEth,
-  },
-  {
-    icon: "/img/icons/colorful/usdt-matic.svg",
-    title: "Pay with USDT (MATIC)",
-    onClick: openPolygon,
-    show: showPolygon,
-  },
-  {
-    icon: "/img/icons/colorful/usdt-trc20.svg",
-    title: "Pay with USDT (Liquid)",
-    show: false,
-  },
-  {
-    icon: "/img/icons/colorful/metamask.svg",
-    title: "Pay with WalletConnect",
-    show: false,
-  },
-  {
-    icon: "/img/icons/colorful/metamask.svg",
-    title: "Pay with Metamask",
-    show: false,
-  },
-
-
-]);
-
-
+  handlers[functionName]()
+}
 
 const timer = ref<NodeJS.Timer | null>(null)
 const timerStarted = ref<boolean>(false)
@@ -752,20 +644,10 @@ watch(
   }
 )
 
-const getPayWallets = async () => {
+const loadPayWallets = async () => {
   currentPayStep.value = StepsPay.Loading;
 
-  const response = await fetch(`https://${hostname}/v3/public/billing/shares/payment/payment-methods`, {
-    method: 'GET',
-    headers: new Headers({
-      'Authorization': 'Bearer ' + $app.store.auth.accessToken,
-      'Content-Type': 'application/json'
-    }),
-  });
-
-  const {data: { apollo: wallets }} = await response.json();
-
-  $app.store.user.wallets = wallets
+  await getPayWallets()
 
   currentPayStep.value = StepsPay.PayWith;
 }
@@ -846,10 +728,6 @@ const togglePurchase = (target: any) => {
 const paymentModalClose = () => {
   router.replace({ query: null })
 }
-
-// Success modal
-
-
 </script>
 
 <style lang="scss" src="./f-registration-buy.scss" />

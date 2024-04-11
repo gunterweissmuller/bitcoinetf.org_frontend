@@ -56,6 +56,7 @@
             <a-icon :name="Icon.MonoChevronRight" />
           </div>
           <landing-registration :calc-value-discount="calcAmountWithDiscount" :calc-value="calcAmount" v-if="!isUserAuthenticated" :refCode="refCode" :is-fiat="isFiatLanding"/>
+
           <w-buy-shares-payment-short v-if="isUserAuthenticated" :calc-value-discount="calcAmountWithDiscount" :calc-value="calcAmount" :is-fiat="isFiatLanding"/>
           <div class="langing-calculation__chat" v-if="width > 767">
             <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
