@@ -1,16 +1,22 @@
 <template>
   <section class="s-site-how-work" :data-name="'How it work'">
     <div class="s-site-how-work__wrapper-title">
-      <h2 class="s-site-how-work__title title-site-h1">
-        Passive Income <br/>for Smart Investors
-      </h2>
-      <p class="s-site-how-work__title_info for-desktop">Bitcoin ETFs are issued, after which the fund's AI <br/> dynamically allocates new funds among portfolio assets.</p>
-      <p class="s-site-how-work__title_info for-mobile">Bitcoin ETFs are issued, after which the <br/> fund's AI dynamically allocates new funds <br/> among portfolio assets.</p>
+      <h2 class="s-site-how-work__title title-site-h1">Passive Income <br />for Smart Investors</h2>
+      <p class="s-site-how-work__title_info for-desktop">
+        Bitcoin ETFs are issued, after which the fund's AI <br />
+        dynamically allocates new funds among portfolio assets.
+      </p>
+      <p class="s-site-how-work__title_info for-mobile">
+        Bitcoin ETFs are issued, after which the <br />
+        fund's AI dynamically allocates new funds <br />
+        among portfolio assets.
+      </p>
 
       <a-animation-passive-income />
+      <div class="s-site-how-work__linear-gradient"></div>
     </div>
     <div class="s-site-how-work__desc" style="padding-left: 60px; padding-right: 60px">
-      <div style="background: rgba(255, 255, 255, 0.10); height: 1px;"/>
+      <div style="background: rgba(255, 255, 255, 0.1); height: 1px" />
       <div style="padding-top: 32px; padding-bottom: 32px">
         <p style="font-size: 24px; text-align: center">
           <span style="color: #4d94ff">Purchase ETFs for $1 each</span> and begin earning

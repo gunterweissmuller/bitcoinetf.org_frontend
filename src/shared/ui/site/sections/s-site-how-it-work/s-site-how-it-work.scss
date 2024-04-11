@@ -1,7 +1,11 @@
 .s-site-how-work {
   padding-top: torem(120);
-
+  @media (max-width: 767px) {
+    padding-top: torem(100);
+    padding: torem(100, 20, 0);
+  }
   &__wrapper-title {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,18 +15,33 @@
       max-width: 100%;
     }
   }
-
+  &__linear-gradient {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 100%;
+    height: torem(286);
+    background: linear-gradient(180deg, rgba(1, 4, 15, 0) 0%, #01040f 50%, #01040f 100%);
+    @media screen and (max-width: 767px) {
+      bottom: 0;
+      height: torem(136);
+    }
+  }
   &__title {
     max-width: 872px;
     text-align: center;
-    background: var(--Webstie-Headline-Fade, linear-gradient(98deg, #FFF 0%, #F8F8F9 25%, rgba(241, 242, 244, 0.60) 50%, #F8F9FA 75%, #FFF 100%));
+    background: var(
+      --Webstie-Headline-Fade,
+      linear-gradient(98deg, #fff 0%, #f8f8f9 25%, rgba(241, 242, 244, 0.6) 50%, #f8f9fa 75%, #fff 100%)
+    );
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   &__title_info {
-    color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.80));
+    color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.8));
     margin-top: var(--spacing-m-3);
     text-align: center;
     width: torem(648);
@@ -36,6 +55,7 @@
     @media (max-width: 767px) {
       max-width: 100%;
       font-size: 16px;
+      margin: torem(24, 0);
     }
 
     &.for-desktop {

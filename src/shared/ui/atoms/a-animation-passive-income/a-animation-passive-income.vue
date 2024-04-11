@@ -681,7 +681,7 @@
         <clipPath id="clip15_83_3870">
           <rect width="32" height="32" fill="white" transform="translate(486.5 405.82)" />
         </clipPath>
-        <clipPath id="clip16_83_3870">
+        <clipPath>
           <rect width="669" height="306" fill="white" transform="translate(0 438)" />
         </clipPath>
         <clipPath id="clip17_83_3870">
@@ -804,9 +804,13 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   svg {
     width: 100%;
     height: 100%;
+    @media screen and (max-width: 767px) {
+      max-height: 681px;
+    }
   }
 }
 .text {

@@ -3,7 +3,7 @@
   <s-site-main :data="mainData" />
   <s-site-marquee :data="marqueeData" />
   <s-site-how-it-work />
-  <section style="padding-top: 120px" class="s-site-main-calculate" :data-name="'Buy Bitcoin ETF Shares'">
+  <section style="border-radius: 24px" class="s-site-main-calculate" :data-name="'Buy Bitcoin ETF Shares'">
     <landing-calculation />
   </section>
   <s-site-guarantees />
