@@ -1,5 +1,5 @@
 <template>
-  <section class="s-site-bitcoin-education" data-name="Bitcoin Education" >
+  <section class="s-site-bitcoin-education" data-name="Blog" >
     <div class="l-site-dark">
       <h2 class="s-site-bitcoin-education__title title-site-h1">BITCOIN EDUCATION</h2>
       <m-news id="bitcoin-education" :news="newsData" :is-education="isEducation"/>
