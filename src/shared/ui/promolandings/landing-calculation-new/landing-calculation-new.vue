@@ -57,7 +57,7 @@
           <div @click="handleAppleConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Apple}]">
             <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
-          
+
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
@@ -128,7 +128,12 @@
 
       <div class="w-buy-shares-payment-short-tether"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-tether v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-tether
+          v-if="isUserAuthenticated"
+          :calc-value-original="buyAmountOriginal"
+          :calc-value="buyAmount"
+          :is-fiat="isFiatLanding"
+        />
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -163,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+import { computed, ref } from 'vue'
 import {useNuxtApp, useRouter, useRoute} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
@@ -826,7 +831,7 @@ try {
 
     console.log($app.store.authTemp.response, $app.api.eth.auth)
 
-    
+
     $app.api.eth.auth
     .getAppleAuthType({apple_token: data.authorization.id_token})
     .then(async (res) => {

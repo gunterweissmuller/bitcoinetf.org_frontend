@@ -87,7 +87,7 @@ export default class BillingEthApiModule {
     }
   }
 
-  async getMoonpayWallet(replenishment_uuid?: any) {
+  async getPaymentWallets(replenishment_uuid?: any) {
     try {
       return await this.adapter.requestJsonAsync({
         apiVersion: 'v3',
@@ -95,7 +95,7 @@ export default class BillingEthApiModule {
         request: {
           method: HTTPMethod.GET,
         },
-        operationDescription: 'Getting information about moonpay',
+        operationDescription: 'Getting information about apollo and moonpay payment wallets',
       })
     } catch (e) {
       if (e instanceof ApiErrorFlow) {

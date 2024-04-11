@@ -60,14 +60,14 @@
             <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
               <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" loading="lazy"/>
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-              <!-- <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/> -->
+              <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
             </div>
           </div>
-          <!-- <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
+          <div v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
             <ul class=" text-sm font-medium">
               <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
             </ul>
-          </div> -->
+          </div>
         </div>
 
         <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
@@ -118,7 +118,8 @@
 
           <!-- BACK -->
 
-          <div v-if="selectedCurrency.value === 'BTC'" class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
+          <!--v-if="selectedCurrency.value === 'BTC'"-->
+          <div  class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
             <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
@@ -206,17 +207,18 @@ const { $app } = useNuxtApp()
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-// {
-//     value: 'USDT',
-//     icon: "/img/icons/colorful/usdt.svg",
-//     background: "/img/usdtbg2.png",
-//     stars: 5,
-//     totalProfit: "42%",
-//     apy: 14,
-//     apy3: 42,
-//   },
+
 
 const currencies = ref([
+  {
+    value: 'USDT',
+    icon: "/img/icons/colorful/usdt.svg",
+    background: "/img/usdtbg2.png",
+    stars: 5,
+    totalProfit: "42%",
+    apy: 14,
+    apy3: 42,
+  },
   {
     value: 'BTC',
     icon: "/img/icons/colorful/bitcoin.svg",
@@ -258,6 +260,8 @@ onMounted(()=>{
     investmentAmountDisplay.value = String(investmentAmount.value) ;
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   }
+
+  $app.store.purchase.type = selectedCurrency.value.value;
 })
 
 function validate(event) {
@@ -427,6 +431,7 @@ const toggleCurrencyDropdown = () => {
 
 const selectCurrency = (currency : any) => {
   selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
+  $app.store.purchase.type = selectedCurrency.value.value;
   toggleCurrencyDropdown();
 }
 
