@@ -200,7 +200,9 @@
                 <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> Yes
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> Worldwide 🌏
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />
+                Worldwide
+                <NuxtImg src="/img/world.png" width="16" height="16" loading="lazy" />
               </div>
             </div>
             <div class="s-site-guarantees__table-row fourth-row">
