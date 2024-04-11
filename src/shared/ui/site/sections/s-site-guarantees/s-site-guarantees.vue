@@ -251,6 +251,15 @@
           </div>
         </div>
       </div>
+
+      <div :class="[{'s-site-guarantees__drag-hide': !isDrag}]" class="s-site-guarantees__drag">
+        <div class="s-site-guarantees__drag-wrapper">
+          <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow" alt="arrow" />
+          drag 
+          <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow s-site-guarantees__drag-arrow-reverse" alt="arrow" />
+        </div>
+      </div>
+
     </div>
   </section>
 </template>
@@ -269,6 +278,32 @@ const fundTotalBtc = computed(() => {
 
 const fundTotalUsd = computed(() => {
   return $app.store.user.fundTotalUsd
+})
+
+//drag 
+
+const isDrag = ref(true);
+
+const handleScroll = (event) => {
+  const element = document.querySelector(".s-site-guarantees__table-wrapper");
+  const elementPosition = element.offsetTop - (element.offsetHeight * 0.35);
+  const toTop = window.pageYOffset ? window.pageYOffset : document.body.scrollTop;
+
+  // console.log(toTop, elementPosition);
+
+  if(toTop >= elementPosition) {
+    setTimeout(() => {
+      isDrag.value = false;
+    },5000);
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll',handleScroll);
 })
 </script>
 <style src="./s-site-guarantees.scss" lang="scss" />

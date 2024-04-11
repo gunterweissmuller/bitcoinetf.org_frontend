@@ -73,6 +73,8 @@
     padding: torem(60, 40);
     border-radius: torem(24);
     margin: torem(60, 20, 0);
+    position: relative;
+
     @media screen and (max-width: 767px) {
       padding: torem(16);
       margin: 0;
@@ -178,6 +180,49 @@
     display: none;
     @media screen and (max-width: 767px) {
       display: block;
+    }
+  }
+
+  &__drag {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(1, 4, 15, 0.10);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    transition: 1s;
+    opacity: 1;
+    
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    transform: translateY(-50%);
+    z-index: 2;
+
+    color: #ffffff;
+    font-family: Jakarta, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 120%; /* 16.8px */
+    
+    &-hide {
+      opacity: 0;
+    }
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    &-arrow {
+      width: 20px;
+      height: 20px;
+
+      &-reverse {
+        transform: scaleX(-1);
+      }
     }
   }
 }
