@@ -105,7 +105,7 @@ watch(y, (newVal) => {
   clearTimeout(timerId.value)
   timerId.value = setTimeout(() => {
     getElements()
-  }, 1000)
+  }, 0)
 
   sections.value.forEach((section) => {
     if (newVal > section.top) {
