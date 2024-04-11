@@ -429,6 +429,7 @@ const toggleCurrencyDropdown = () => {
 
 const selectCurrency = (currency : any) => {
   selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
+  $app.store.purchase.type = selectedCurrency.value.value;
   toggleCurrencyDropdown();
 }
 
