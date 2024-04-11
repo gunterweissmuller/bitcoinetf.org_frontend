@@ -73,6 +73,14 @@
           height: auto;
         }
 
+        &-reinvest {
+          font-size: torem(30) !important;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(23) !important; 
+          }
+        }
+
         &-main {
           font-size: torem(44);
           font-weight: 600;
@@ -380,9 +388,24 @@
             border-radius: var(--Spacing-S, 8px);
             // left: 0;
             right: 0;
-            background: #E9A14A;
             padding: var(--spacing-s);
             // backdrop-filter: blur(32px);
+
+            @include breakpoint($break-tablet-minus) {
+              &-reinvest {
+                right: -90px !important;
+              }
+            }
+
+            
+
+            &-btc {
+              background: #E9A14A;
+            }
+
+            &-usdt {
+              background: #57AE94;
+            }
 
             // height: 295px;
             // overflow-y: scroll;
@@ -440,6 +463,18 @@
         color: var(--btcoin-500, #FF8D07);
       }
     }
+
+    &-reinvest-wrapper {
+      display: flex;
+      margin: auto;
+
+      &-active {
+        align-items: center;
+        justify-content: center;
+        margin-top: var(--spacing-s);
+      }
+    }
+
   }
 
 }

@@ -324,6 +324,12 @@ watch(
   }
 )
 
+onMounted(() => {
+  $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  });
+})
+
 const isOpen = ref($app.store.user.isInvestModalShow.show);
 // Invest Step
 const inputMaxWidth = ref(width.value < 768 ? 55 : 65);
