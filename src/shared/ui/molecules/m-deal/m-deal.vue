@@ -59,19 +59,19 @@
               <div v-if="deal.type === 'close'" class="m-deal__info-deal-right m-deal__info-result">
                 <div v-if="deal.asset.symbol === 'BAA' && (Number(deal.result_amount) > 0)">
                   <!-- {{ deal.result_amount ? '+' : '' }} -->
-                  {{ deal.result_amount ? 'P' : 'L' }}: ${{ $app.filters.rounded(deal.result_amount, 2) }}
+                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
                 </div>
                 <div v-if="deal.asset.symbol === 'BFT' && (Number(deal.result_amount) > 0)">
-                  {{ deal.result_amount ? 'P' : 'L' }}: ${{ $app.filters.rounded(deal.result_amount, 2) }}
+                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
                 </div>
                 <div v-if="deal.asset.symbol === 'BOT' && (Number(deal.result_amount) > 0)">
-                  {{ deal.result_amount ? 'P' : 'L' }}: ${{ $app.filters.rounded(deal.result_amount, 2) }}
+                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
                 </div>
                 <div v-if="deal.asset.symbol === 'BST' && (Number(deal.result_amount) > 0)">
-                  {{ deal.result_amount ? 'P' : 'L' }}: ${{ $app.filters.rounded(deal.result_amount, 2) }}
+                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
                 </div>
                 <div v-if="deal.asset.symbol === 'USDT' && (Number(deal.result_amount) > 0)">
-                  {{ deal.result_amount ? 'P' : 'L' }}: ${{ $app.filters.rounded(deal.result_amount, 2) }}
+                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
                 </div>
               </div>
             </div>
