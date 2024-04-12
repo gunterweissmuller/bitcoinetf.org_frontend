@@ -9,8 +9,8 @@
       :btc-value="$app.store.user.btcValue"
       title="AUM Allocation"
     />
-    <w-top-shareholders />
-    <w-purchases />
+    <w-trades />
+    <w-activity />
     <w-news />
   </div>
 </template>
@@ -19,8 +19,8 @@
 import WTickerAssets from '~/src/widgets/w-ticker-assets/w-ticker-assets.vue';
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';
 import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.vue';
-import WTopShareholders from '~/src/widgets/w-top-shareholders/w-top-shareholders.vue';
-import WPurchases from '~/src/widgets/w-purchases/w-purchases.vue';
+import WTrades from '~/src/widgets/w-trades/w-trades.vue';
+import WActivity from '~/src/widgets/w-activity/w-activity.vue';
 import WNews from '~/src/widgets/w-news/w-news.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
