@@ -6,7 +6,7 @@
 
     <div class="landing-calculation__journey-title">Start your bitcoin etf journey 🚀</div>
     <div class="landing-calculation__journey__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-      <header class="mx-auto landing-calculation__journey__invest--text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
+      <header class="mx-auto landing-calculation__journey__invest--text flex items-center font-medium text-center whitespace-nowrap">
         <VueWriter :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary grow" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'I want to invest additional' : 'I want to invest']" :iterations="1" />
 
         <div v-if="orderType !== 'btc' && orderType !== 'usdt'" class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary ml-4 grow flex justify-center font-semibold">
@@ -27,7 +27,7 @@
 
           <div class="relative">
             <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
-              <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center gap-4 cursor-pointer">
+              <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center cursor-pointer">
                 <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
               </div>
             </div>
@@ -72,7 +72,7 @@
 
           <div class="relative">
             <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
-              <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center gap-4 cursor-pointer">
+              <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center cursor-pointer">
                 <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
               </div>
             </div>
@@ -98,12 +98,12 @@
         <VueWriter :start="1100" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="mx-auto landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing font-medium text-center" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'and increase my' : 'and receive my daily']" :iterations="1" />
       </p>
 
-      <div class="mx-auto landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing flex items-center gap-2 font-medium text-center whitespace-nowrap">
+      <div class="mx-auto landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
         <VueWriter :start="2300" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="grow" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'daily dividends in' : 'dividends in']" :iterations="1" />
 
-        <div class="relative">
+        <div class="ml-2 relative">
           <div class="landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
-            <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-4 cursor-pointer">
+            <div @click="toggleCurrencyDropdown" class="landing-calculation__journey__invest-select-wrapper">
               <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" loading="lazy"/>
               <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
               <NuxtImg v-if="orderType !== 'btc' && orderType !== 'usdt'" src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
@@ -115,12 +115,6 @@
             </ul>
           </div>
         </div>
-
-        <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
-          <NuxtImg src="/img/icons/colorful/usdt.svg" class="self-start w-6 aspect-square" alt="USDT logo" />
-          <span>USDT</span>
-          <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="my-auto aspect-square w-[18px]" alt="Down arrow icon" />
-        </div> -->
 
       </div>
 

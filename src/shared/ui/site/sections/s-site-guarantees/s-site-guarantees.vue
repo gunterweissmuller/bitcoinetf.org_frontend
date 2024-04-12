@@ -160,94 +160,94 @@
             <div class="s-site-guarantees__table-row first-row">
               <div class="s-site-guarantees__table-row-item">Original investment loss</div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> Mid to High Risk
+                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> <spa>Mid to High Risk</spa>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> High Risk
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>High Risk</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> Mid Risk
+                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> <span>Mid Risk</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> No Risk (Triple
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>No Risk (Triple</span>
                 Protection)
               </div>
             </div>
             <div class="s-site-guarantees__table-row second-row">
               <div class="s-site-guarantees__table-row-item">Dividends</div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> 0%
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>0%</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> 0%
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>0%</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> 0%
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>0%</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> 14-100%+ dividends
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>14-100%+ dividends</span>
               </div>
             </div>
             <div class="s-site-guarantees__table-row third-row">
               <div class="s-site-guarantees__table-row-item">Accessible for non-U.S market</div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> Limited
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>Limited</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> Limited
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>Limited</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> Yes
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />  <span>Yes</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
                 <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />
-                Worldwide
+                 <span>Worldwide</span>
                 <NuxtImg src="/img/world.png" width="16" height="16" loading="lazy" />
               </div>
             </div>
             <div class="s-site-guarantees__table-row fourth-row">
               <div class="s-site-guarantees__table-row-item">Legal No-Risk Guarantee</div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> No
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>No</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> No
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>No</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> No
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>No</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />Yes
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
               </div>
             </div>
             <div class="s-site-guarantees__table-row fifth-row">
               <div class="s-site-guarantees__table-row-item">Smart-Contract Guarantee</div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> No
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> No
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> No
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />Yes
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
               </div>
             </div>
             <div class="s-site-guarantees__table-row sixth-row">
               <div class="s-site-guarantees__table-row-item">Blockchain Transparency</div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />No
+                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />Yes
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />Yes
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />Yes
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
               </div>
             </div>
           </div>

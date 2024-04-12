@@ -34,7 +34,7 @@
               height="18"
               loading="lazy"
             />
-            Launch App
+            <span>Launch App</span>
           </button>
         </div>
       </div>

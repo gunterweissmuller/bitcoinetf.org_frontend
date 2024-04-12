@@ -159,7 +159,19 @@
         &-stars {
           margin: 0rem var(--spacing-s);
           display: flex;
-          gap: var(--spacing-xs);
+
+          span {
+            margin-left: var(--spacing-xs);
+
+            &:first-child {
+              margin-left: 0;
+            }
+          }
+
+          img {
+            width: 18px;
+            height: 18px;
+          }
         }
       }
 
@@ -191,9 +203,25 @@
 
     &-select {
       padding: var(--spacing-s) var(--spacing-m-1);
-      gap: var(--spacing-s);
       border-radius: var(--spacing-xs);
       background: var(--surfaces-selection);
+
+      &-value {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        & > * {
+          margin-left: var(--spacing-s);
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+
+      }
 
       &-text {
         color: var(--text-primary);

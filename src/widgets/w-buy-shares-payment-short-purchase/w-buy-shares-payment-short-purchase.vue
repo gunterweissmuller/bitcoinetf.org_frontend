@@ -18,7 +18,7 @@
       @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
     />
     <a-input
-      class="flex gap-4 justify-between mt-6 rounded-lg"
+      class="flex justify-between mt-6 rounded-lg"
       label="Deposit address on Tron chain:"
       :model-value="computedAddr"
       :disabled="true"
@@ -31,7 +31,7 @@
       isTextInputSmall
     />
     <a-input
-      class="flex gap-4 justify-between mt-6 rounded-lg"
+      class="flex justify-between mt-6 rounded-lg"
       label="Amount"
       :model-value="$app.filters.roundedFixed(calcValue, 2) + ' USDT'"
       :disabled="true"

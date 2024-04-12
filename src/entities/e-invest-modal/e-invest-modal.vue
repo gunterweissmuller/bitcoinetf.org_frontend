@@ -3,7 +3,7 @@
     <!--orderType == 'init_btc'--><m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
 
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
+          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> 
             <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" />
             <!-- <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest</h1> -->
 
@@ -25,13 +25,13 @@
           </header>
           <VueWriter :start="1100" :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center" :array="['and receive my daily']" :iterations="1" />
           <!-- <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center">and receive my daily</p> -->
-          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center gap-2 font-medium text-center whitespace-nowrap">
+          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
             <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" />
             <!-- <span class="grow">dividends in</span> -->
 
-            <div class="relative" v-on-click-outside="() => showDropdown = false">
+            <div class="ml-2 relative" v-on-click-outside="() => showDropdown = false">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
-                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 cursor-pointer"> <!--@click="toggleCurrencyDropdown"-->
+                <div @click="toggleCurrencyDropdown" class="e-invest__invest-select-value"> <!--@click="toggleCurrencyDropdown"-->
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
                   <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
@@ -50,12 +50,6 @@
               </div>
             </div>
 
-            <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
-              <NuxtImg src="/img/icons/colorful/usdt.svg" class="self-start w-6 aspect-square" alt="USDT logo" />
-              <span>USDT</span>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="my-auto aspect-square w-[18px]" alt="Down arrow icon" />
-            </div> -->
-
           </div>
 
           <article class="e-invest__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
@@ -69,7 +63,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2)  }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 2) }}</p>
@@ -104,7 +98,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 2) }}</p>
@@ -153,7 +147,7 @@
     <!-- REINVEST -->
     <!--orderType == 'usdt' || orderType == 'btc'--><m-modal modalBig v-if="orderType == 'usdt' || orderType == 'btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!---->
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
+          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap">
             <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />
             <!-- <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1> -->
 
@@ -180,13 +174,13 @@
             <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" />
             <!-- and increase my -->
           </p>
-          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center gap-2 font-medium text-center whitespace-nowrap">
+          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
             <VueWriter :start="2800" :typeSpeed="60" class="grow" :array="['daily dividends in']" :iterations="1" />
             <!-- <span class="grow">daily dividends in</span> -->
 
-            <div class="relative opacity-50">
+            <div class="ml-2 relative opacity-50">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
-                <div  class="relative flex items-center justify-center gap-2 ">
+                <div  class="e-invest__invest-select-value">
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square " alt="USDT logo" loading="lazy" />
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
                   <!-- <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square ', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/> -->
@@ -198,12 +192,6 @@
                 </ul>
               </div> -->
             </div>
-
-            <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
-              <NuxtImg src="/img/icons/colorful/usdt.svg" class="self-start w-6 aspect-square" alt="USDT logo" />
-              <span>USDT</span>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="my-auto aspect-square w-[18px]" alt="Down arrow icon" />
-            </div> -->
 
           </div>
 
@@ -218,7 +206,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>
@@ -253,7 +241,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>

@@ -294,7 +294,14 @@
     &-days {
       display: flex;
       justify-content: center;
-      gap: torem(4);
+      
+      & > * {
+        margin-left: torem(4);
+    
+        &:first-child {
+          margin-left: 0;
+        }
+      }
     }
 
     &-day {
