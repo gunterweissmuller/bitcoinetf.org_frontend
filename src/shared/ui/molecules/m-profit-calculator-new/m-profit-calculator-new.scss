@@ -127,12 +127,11 @@
 
         border-radius: var(--spacing-m-2);
         background: rgba(255, 255, 255, 0.10);
-        backdrop-filter: blur(32px);
+        // backdrop-filter: blur(32px);
 
-        // background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--tether-500, #1BA27A);
-        position: relative;
+        // position: relative;
         padding: var(--spacing-m-3) var(--spacing-m-2);
-        z-index: 1;
+        // z-index: 1;
         
         &-wrapper {
           margin-top: var(--spacing-m-3);
@@ -153,37 +152,43 @@
           height: 100%;
           position: relative;
           transition: transform 0.8s;
+          -webkit-transform-style: preserve-3d;
           transform-style: preserve-3d;
 
           &-flip {
             transform: rotateY(180deg);
+            transition: transform 700ms 400ms ease-out; 
             // transform: rotateY(0deg);
           }
         }
 
-        &-front {
-          -webkit-transform:rotateY(0deg);
-          transform: rotateY(0deg) ;
-          -webkit-transform: rotateY(0deg) ;
-          -moz-transform: rotateY(0deg);
-        }
+        // &-front {
+        //   -webkit-transform:rotateY(0deg);
+        //   transform: rotateY(0deg) ;
+        //   -webkit-transform: rotateY(0deg) ;
+        //   -moz-transform: rotateY(0deg);
+        // }
 
         &-front, &-back {
           position: absolute;
           width: 100%;
           height: 100%;
+          // -moz-backface-visibility: hidden;
+          // -o-backface-visibility: hidden;
+          // -ms-backface-visibility: hidden;
+          // -webkit-backface-visibility: hidden !important;  /* Safari */
+          // backface-visibility: hidden;
+
+          -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+          -webkit-backface-visibility: hidden;
           -moz-backface-visibility: hidden;
           -o-backface-visibility: hidden;
-          -ms-backface-visibility: hidden;
-          -webkit-backface-visibility: hidden !important;  /* Safari */
           backface-visibility: hidden;
-
-          color: white;
-          -webkit-perspective: 0;
         }
 
         &-back {
-          transform: rotateY(180deg);
+          transform: rotateY(180deg) ;
           // transform: rotateY(0deg);
           background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--btcoin-500, #FF8D07);
 
