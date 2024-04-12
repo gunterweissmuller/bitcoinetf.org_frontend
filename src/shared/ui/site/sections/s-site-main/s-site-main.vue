@@ -67,7 +67,7 @@ import MProfitCalculator from '~/src/shared/ui/molecules/m-profit-calculator/m-p
 
 defineProps<{
   data: any
-  files: any
+  files?: any
 }>()
 
 const { $app } = useNuxtApp()
@@ -109,7 +109,7 @@ const scrollToSection = () => {
 }
 
 function clickLaunch() {
-  window.open('/personal/registration', '_blank').focus();
+  window.open('/personal/registration', '_blank').focus()
 }
 
 onMounted(async () => {

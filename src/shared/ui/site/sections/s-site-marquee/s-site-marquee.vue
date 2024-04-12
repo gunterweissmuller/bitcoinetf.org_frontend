@@ -21,7 +21,7 @@
         disableOnInteraction
       >
         <template #slides>
-          <swiper-slide class="s-site-marquee__item" v-for="(item, id) in marqueList" :key="id">
+          <swiper-slide class="s-site-marquee__item" v-for="(item, id) in marqueeList" :key="id">
             <a :href="item.link" target="_blank">
               <img :src="item.img" />
             </a>
@@ -33,26 +33,31 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { Autoplay } from 'swiper'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 
-const props = withDefaults(
-  defineProps<{
-    data: any
-    files: any
-    isBackground: boolean
-  }>(),
-  {
-    data: [],
-    files: [],
-    isBackground: true,
-  },
-)
+interface Props {
+  data: MarqueeItem[] | any
+  files?: any
+  isBackground?: boolean
+}
 
-const marqueList = computed(() => {
-  return [...props.data.low_cards, ...props.data.low_cards, ...props.data.low_cards]
+interface MarqueeItem {
+  link: string
+  img: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  data: [],
+  files: [],
+  isBackground: true,
+})
+
+const marqueeList = ref<MarqueeItem[]>([])
+
+onMounted(() => {
+  marqueeList.value = [...props.data.low_cards, ...props.data.low_cards, ...props.data.low_cards]
 })
 </script>
 
