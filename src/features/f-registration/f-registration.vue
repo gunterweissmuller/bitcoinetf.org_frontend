@@ -1,7 +1,7 @@
 <template>
   <div class="f-registration w-full">
       <template v-if="currentStep === Steps.Terms">
-          <div class='f-registration__back' @click='$router.back()'>
+          <div class='f-registration__back' @click='$router.push("/")'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
           <h3 class="f-registration__title">Sign up</h3>
@@ -89,7 +89,7 @@
                           class="aspect-square w-[18px]" />
                       <div class="grow">Sign up with Apple</div>
                   </div>
-              </div>  
+              </div>
 
           </div>
 
@@ -617,7 +617,7 @@ const handleAppleConnect = async () => {
 
       console.log($app.store.authTemp.response, $app.api.eth.auth);
 
-      
+
       $app.api.eth.auth
       .getAppleAuthType({apple_token: data.authorization.id_token})
       .then(async (res) => {

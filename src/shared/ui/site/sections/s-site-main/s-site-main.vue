@@ -102,10 +102,12 @@ const scrollToSection = () => {
   const elementPosition = element.offsetTop
   const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: 'smooth',
-  })
+  setTimeout(() => {
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    })
+  }, 100)
 }
 
 function clickLaunch() {
