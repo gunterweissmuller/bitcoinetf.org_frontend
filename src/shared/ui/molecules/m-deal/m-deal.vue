@@ -63,9 +63,7 @@
                     {{ $app.filters.dayjs(deal.created_at).format('DD:MM:YY hh:mm') }}
                   </span>
                   <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
-                    Sell: {{ (deal?.initial_amount / btcValue).toFixed(4) }} BTC @
-
-                    {{ $app.filters.rounded(btcValue, 2) }} (${{ $app.filters.rounded(deal.initial_amount, 2) }})
+                    Exit Price: ${{ $app.filters.rounded(deal.initial_amount, 2) }}
                   </span>
                 </template>
 
@@ -127,9 +125,6 @@
       </div>
       <div class="m-deal__info">
         <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.amount, 0) }} Shares</div>
-        <div class="m-deal__info-purchase-percent">
-          13% of the circulation
-        </div>
       </div>
     </template>
     <!-- rename percent -->
@@ -147,7 +142,7 @@
       </div>
       <div class="m-deal__info">
         <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.total_payments, 0) }} Shares</div>
-        <div class="m-deal__info-purchase">{{ $app.filters.rounded((deal.total_payments / fundTotalUsd * 100), 6) }}%</div>
+        <div class="m-deal__info-purchase">{{ $app.filters.rounded((deal.total_payments / fundTotalUsd * 100), 2) }}% of circulation</div>
       </div>
     </template>
   </div>
