@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 import { useNuxtApp } from '#app'
-import { computed, ref } from 'vue'
+import { computed, ref, nextTick } from 'vue'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import MProfitCalculator from '~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue'
@@ -102,12 +102,12 @@ const scrollToSection = () => {
   const elementPosition = element.offsetTop
   const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
-  setTimeout(() => {
+  nextTick(() => {
     window.scrollTo({
       top: offsetPosition,
       behavior: 'smooth',
     })
-  }, 100)
+  })
 }
 
 function clickLaunch() {
