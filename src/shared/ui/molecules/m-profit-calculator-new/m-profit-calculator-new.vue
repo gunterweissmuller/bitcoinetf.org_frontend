@@ -566,8 +566,9 @@ const selectAmount = (amount : any) => {
 const handleContinue = () => {
   if(route.path === '/') {
     router.push("/personal/registration");
-    localStorage.setItem("investmentAmount", String(investmentAmount.value));
-    localStorage.setItem("investType", selectedCurrency.value.value);
+    $app.store.purchase.type = selectedCurrency.value.value;
+    $app.store.purchase.amount = investmentAmount.value;
+    $app.store.purchase.amountUS = investmentAmount.value;
   } else {
     if (props.isUserAuth) {
       props.openPurchase();

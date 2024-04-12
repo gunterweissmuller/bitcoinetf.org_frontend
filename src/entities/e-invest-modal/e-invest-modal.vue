@@ -342,10 +342,14 @@ const investmentAmountDisplay = ref('2,500');
 const investmentAmount : any = ref(2500);
 
 onMounted(()=>{
-  if(localStorage.getItem('investmentAmount')) {
-    investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
-    investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
-    // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // if(localStorage.getItem('investmentAmount')) {
+  //   investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+  //   investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
+  //   // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // }
+  if($app.store?.purchase?.amountUS) {
+    investmentAmount.value = Number($app.store.purchase.amountUS);
+    investmentAmountDisplay.value = $app.store.purchase.amountUS || '2,500';
   }
 })
 
@@ -469,8 +473,12 @@ const dayliDivs = computed(() => {
 });
 
 onMounted(() => {
-  if(localStorage.getItem("investType")) {
-    selectCurrency({value: localStorage.getItem("investType")});
+  // if(localStorage.getItem("investType")) {
+  //   selectCurrency({value: localStorage.getItem("investType")});
+  // }
+
+  if($app.store.purchase.type) {
+    selectCurrency({value: $app.store.purchase.type.toLowerCase()});
   }
 })
 
