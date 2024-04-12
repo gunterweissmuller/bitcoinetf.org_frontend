@@ -73,6 +73,14 @@
           height: auto;
         }
 
+        &-reinvest {
+          font-size: torem(30) !important;
+
+          @include breakpoint($break-tablet-minus) {
+            font-size: torem(23) !important; 
+          }
+        }
+
         &-main {
           font-size: torem(44);
           font-weight: 600;
@@ -148,39 +156,35 @@
           transform-style: preserve-3d;
 
           &-flip {
-            // transform: rotateY(180deg);
-            transform: rotateY(0deg);
+            transform: rotateY(180deg);
+            // transform: rotateY(0deg);
           }
         }
 
         &-front {
-          // -webkit-transform:rotateY(0deg);
-          // transform: rotateY(0deg) ;
-          // -webkit-transform: rotateY(0deg) ;
-          // -moz-transform: rotateY(0deg);
+          -webkit-transform:rotateY(0deg);
+          transform: rotateY(0deg) ;
+          -webkit-transform: rotateY(0deg) ;
+          -moz-transform: rotateY(0deg);
         }
 
         &-front, &-back {
           position: absolute;
           width: 100%;
           height: 100%;
-          // -moz-backface-visibility: hidden;
-          // -o-backface-visibility: hidden;
-          // -ms-backface-visibility: hidden;
-          // -webkit-backface-visibility: hidden !important;  /* Safari */
-          // backface-visibility: hidden;
+          -moz-backface-visibility: hidden;
+          -o-backface-visibility: hidden;
+          -ms-backface-visibility: hidden;
+          -webkit-backface-visibility: hidden !important;  /* Safari */
+          backface-visibility: hidden;
 
           color: white;
           -webkit-perspective: 0;
-          -webkit-backface-visibility: hidden;
-          -webkit-transform: translate3d(0,0,0);
-          visibility:visible;
-          backface-visibility: hidden;
         }
 
         &-back {
-          // transform: rotateY(180deg);
-          transform: rotateY(0deg);
+          transform: rotateY(180deg);
+          // transform: rotateY(0deg);
           background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--btcoin-500, #FF8D07);
 
           // transform: rotateY(180deg) translateZ(1px);
@@ -384,9 +388,24 @@
             border-radius: var(--Spacing-S, 8px);
             // left: 0;
             right: 0;
-            background: #E9A14A;
             padding: var(--spacing-s);
             // backdrop-filter: blur(32px);
+
+            @include breakpoint($break-tablet-minus) {
+              &-reinvest {
+                right: -90px !important;
+              }
+            }
+
+            
+
+            &-btc {
+              background: #E9A14A;
+            }
+
+            &-usdt {
+              background: #57AE94;
+            }
 
             // height: 295px;
             // overflow-y: scroll;
@@ -444,6 +463,18 @@
         color: var(--btcoin-500, #FF8D07);
       }
     }
+
+    &-reinvest-wrapper {
+      display: flex;
+      margin: auto;
+
+      &-active {
+        align-items: center;
+        justify-content: center;
+        margin-top: var(--spacing-s);
+      }
+    }
+
   }
 
 }

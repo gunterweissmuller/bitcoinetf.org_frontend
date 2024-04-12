@@ -31,17 +31,17 @@
 
             <div class="relative" v-on-click-outside="() => showDropdown = false">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
-                <div  class="relative flex items-center justify-center gap-2 cursor-pointer"> <!--@click="toggleCurrencyDropdown"-->
+                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 cursor-pointer"> <!--@click="toggleCurrencyDropdown"-->
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
-                  <!-- <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/> -->
+                  <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
                 </div>
               </div>
-              <!-- <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
+              <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
                 <ul class="text-sm font-medium text-gray-700">
                   <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
-              </div> -->
+              </div>
 
               <div v-if="showDropdown" :class="[{'e-invest__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'e-invest__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="e-invest__invest-select-dropdown w-full absolute mt-1 z-10">
                 <ul class=" text-sm font-medium">
@@ -317,7 +317,6 @@ const route = useRoute()
 const { width } = useWindowSize()
 
 const orderType = ref($app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc');
-console.log("ordertype", orderType.value)
 watch(
   () => $app.store.user.info,
   () => {
@@ -325,17 +324,14 @@ watch(
   }
 )
 
+onMounted(() => {
+  $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  });
+})
+
 const isOpen = ref($app.store.user.isInvestModalShow.show);
-
-watch(
-  () => $app.store.user.isInvestModalShow.show,
-  () => {
-    isOpen.value = $app.store.user.isInvestModalShow.show;
-  }
-)
-
 // Invest Step
-
 const inputMaxWidth = ref(width.value < 768 ? 55 : 65);
 const defaultInputWith = ref(width.value < 768 ? 55 : 65);
 const defaultInputPlus = ref(width.value < 768 ? 10 : 15);
@@ -493,13 +489,18 @@ const guaranteedPayout = computed(() => {
   return investmentAmount.value * (selectedCurrency.value.apy / 100)
 })
 
+watch(
+  () => $app.store.user.isInvestModalShow.show,
+  () => {
+    isOpen.value = $app.store.user.isInvestModalShow.show;
+    selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+  }
+)
 
 const showDropdown = ref(false);
 
 const toggleCurrencyDropdown = () => {
-  console.log("click", showDropdown.value)
   showDropdown.value = !showDropdown.value;
-  console.log("click", showDropdown.value)
 };
 
 const selectCurrency = (currency : any) => {
@@ -514,7 +515,7 @@ const closeModal = () => {
 
 const handleContinue = () => {
 
-  // if(investmentAmount.value < 100) return;
+  if(investmentAmount.value < 100) return;
 
   closeModal();
   $app.store.purchase.amount = investmentAmount.value;
