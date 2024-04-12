@@ -328,6 +328,9 @@ onMounted(() => {
   $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
   });
+
+
+  
 })
 
 const isOpen = ref($app.store.user.isInvestModalShow.show);
@@ -463,6 +466,12 @@ const selectedCurrency = ref(currencies.value[1]); //orderType.value == 'btc' ? 
 const apyValue = ref(selectedCurrency.value.apy);
 const dayliDivs = computed(() => {
   return guaranteedPayout.value / 365
+});
+
+onMounted(() => {
+  if(localStorage.getItem("investType")) {
+    selectCurrency({value: localStorage.getItem("investType")});
+  }
 })
 
 const dayliDivsDisplay = computed(() => {
