@@ -74,98 +74,130 @@
         </div>
       </div>
 
-      <div class="w-referrals__share">
-        <div class="w-referrals__share-heading">
-          Share Your Referral Link
-        </div>
+      <ul class="w-referrals__stats w-referrals__stats--desktop">
+        <li class="w-referrals__stat">
+          <div class="w-referrals__stat-heading">
+            Total referrals earned
+          </div>
+          <div class="w-referrals__stat-value">
+            $547
+          </div>
+          <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
+        </li>
+        <li class="w-referrals__stat">
+          <div class="w-referrals__stat-heading">
+            Total referrals earned
+          </div>
+          <div class="w-referrals__stat-value">
+            148
+          </div>
+          <img src="/img/referrals/invited.png" class="w-referrals__stat-img" />
+        </li>
+        <li class="w-referrals__stat">
+          <div class="w-referrals__stat-heading">
+            Total referrals earned
+          </div>
+          <div class="w-referrals__stat-value">
+            58
+          </div>
+          <img src="/img/referrals/accepted.png" class="w-referrals__stat-img" />
+        </li>
+      </ul>
 
-        <div class="w-referrals__share-socials">
-          <button
-            class="w-referrals__share-social"
-            :class="{ current: shareCurrentName === network.name }"
-            v-for="network in shareSocials"
-            :key="network.name"
-            @click="shareCurrentName = network.name"
+      <div class="w-referrals__box">
+        <div class="w-referrals__share">
+          <div class="w-referrals__share-heading">
+            Share Your Referral Link
+          </div>
+
+          <div class="w-referrals__share-socials">
+            <button
+              class="w-referrals__share-social"
+              :class="{ current: shareCurrentName === network.name }"
+              v-for="network in shareSocials"
+              :key="network.name"
+              @click="shareCurrentName = network.name"
+            >
+              <a-icon class="w-referrals__share-icon" width="20" height="20" :name="network.icon" />
+            </button>
+          </div>
+
+          <m-slider
+            class="w-referrals__promo"
+            id="w-referrals__promo-slider"
+            :modules="[Pagination, Navigation]"
+            loop
+            :space-between="10"
+            slides-per-view="auto"
+            :mousewheel="false"
+            :looped-slides="1"
+            centeredSlides
+            :navigation="true"
+            :pagination="true"
+            @slide-change="console.log"
           >
-            <a-icon class="w-referrals__share-icon" width="20" height="20" :name="network.icon" />
+            <template #slides>
+              <swiper-slide class='w-referrals__promo-item'>
+                <img class="w-referrals__promo-img" src="/img/referrals/promo1.png" alt="promo" />
+              </swiper-slide>
+              <swiper-slide class='w-referrals__promo-item'>
+                <img class="w-referrals__promo-img" src="/img/referrals/promo2.png" alt="promo" />
+              </swiper-slide>
+              <swiper-slide class='w-referrals__promo-item'>
+                <img class="w-referrals__promo-img" src="/img/referrals/promo3.png" alt="promo" />
+              </swiper-slide>
+            </template>
+          </m-slider>
+
+          <div class="w-referrals__comment">
+            <div class="w-referrals__comment-caption">
+              COMMENT
+            </div>
+            <div class="w-referrals__comment-text">
+              {{ shareData.text }}
+            </div>
+          </div>
+
+          <button class="w-referrals__share-button" @click="share">
+            Share on {{ shareCurrentSocial.name }}
           </button>
         </div>
 
-        <m-slider
-          class="w-referrals__promo"
-          id="w-referrals__promo-slider"
-          :modules="[Pagination, Navigation]"
-          loop
-          :space-between="10"
-          slides-per-view="auto"
-          :mousewheel="false"
-          :looped-slides="1"
-          centeredSlides
-          :navigation="true"
-          :pagination="true"
-          @slide-change="console.log"
-        >
-          <template #slides>
-            <swiper-slide class='w-referrals__promo-item'>
-              <img class="w-referrals__promo-img" src="/img/referrals/promo1.png" alt="promo" />
-            </swiper-slide>
-            <swiper-slide class='w-referrals__promo-item'>
-              <img class="w-referrals__promo-img" src="/img/referrals/promo2.png" alt="promo" />
-            </swiper-slide>
-            <swiper-slide class='w-referrals__promo-item'>
-              <img class="w-referrals__promo-img" src="/img/referrals/promo3.png" alt="promo" />
-            </swiper-slide>
-          </template>
-        </m-slider>
+        <div class="w-referrals__instructions">
+          <div class="w-referrals__instructions-heading">
+            Invite your friends
+          </div>
 
-        <div class="w-referrals__comment">
-          <div class="w-referrals__comment-caption">
-            COMMENT
-          </div>
-          <div class="w-referrals__comment-text">
-            {{ shareData.text }}
-          </div>
+          <ul class="w-referrals__instructions-list">
+            <li class="w-referrals__instructions-item">
+              <span class="w-referrals__instructions-number">
+                1
+              </span>
+              <p class="w-referrals__instructions-text">
+                You share your referral link with friends in any way you like.
+              </p>
+            </li>
+            <li class="w-referrals__instructions-item">
+              <span class="w-referrals__instructions-number">
+                2
+              </span>
+              <p class="w-referrals__instructions-text">
+                Friends purchase ETF Shares with your referral code.
+              </p>
+            </li>
+            <li class="w-referrals__instructions-item">
+              <span class="w-referrals__instructions-number">
+                3
+              </span>
+              <p class="w-referrals__instructions-text">
+                You get 5% of what they buy, always. They get better rates too!
+              </p>
+            </li>
+          </ul>
         </div>
-
-        <button class="w-referrals__share-button" @click="share">
-          Share on {{ shareCurrentSocial.name }}
-        </button>
       </div>
 
-      <div class="w-referrals__instructions">
-        <div class="w-referrals__instructions-heading">
-          Invite your friends
-        </div>
-
-        <ul class="w-referrals__instructions-list">
-          <li class="w-referrals__instructions-item">
-            <span class="w-referrals__instructions-number">
-              1
-            </span>
-            <p class="w-referrals__instructions-text">
-              You share your referral link with friends in any way you like.
-            </p>
-          </li>
-          <li class="w-referrals__instructions-item">
-            <span class="w-referrals__instructions-number">
-              2
-            </span>
-            <p class="w-referrals__instructions-text">
-              Friends purchase ETF Shares with your referral code.
-            </p>
-          </li>
-          <li class="w-referrals__instructions-item">
-            <span class="w-referrals__instructions-number">
-              3
-            </span>
-            <p class="w-referrals__instructions-text">
-              You get 5% of what they buy, always. They get better rates too!
-            </p>
-          </li>
-        </ul>
-      </div>
-
-      <ul class="w-referrals__stats">
+      <ul class="w-referrals__stats w-referrals__stats--mobile">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">
             Total referrals earned

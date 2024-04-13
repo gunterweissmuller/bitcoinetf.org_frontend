@@ -1,7 +1,7 @@
 <template>
   <div class="w-wallet page-max-width--big">
     <div class="w-wallet__box">
-      <e-send-to-buy-shares :active-component="activeComponent?.id" />
+      <!-- <e-send-to-buy-shares :active-component="activeComponent?.id" /> -->
       <div class="w-wallet__box-main">
         <keep-alive>
           <component v-if="activeComponent?.component" :is="activeComponent?.component" />
