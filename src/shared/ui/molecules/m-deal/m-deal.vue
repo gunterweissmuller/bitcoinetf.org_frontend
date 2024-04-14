@@ -161,7 +161,7 @@ const dealTypes: any = {
   close: 'Close',
 }
 
-const sumDollars = ref('')
+const sumDollars = ref('');
 
 const props = withDefaults(
   defineProps<{
