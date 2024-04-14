@@ -82,7 +82,7 @@
         id="assets"
         slides-per-view="auto"
         :space-between="16"
-        v-if="route.name === 'personal-assets-symbol'"
+        v-if="route.name === 'personal-assets-symbol' || route.name === 'personal-assets'"
       >
         <template #slides>
 
