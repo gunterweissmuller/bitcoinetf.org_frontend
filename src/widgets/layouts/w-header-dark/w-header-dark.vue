@@ -33,7 +33,7 @@
           photo-src="/img/avatar.png"
           :left-label="$app.store.user?.info?.account?.username"
           :robot-data="$app.store.user?.info?.account?.uuid"
-          @click="$router.push({ name: 'personal-protection' })"
+          @click="$router.push({ name: 'personal-portfolio' })"
         />
         <div class="w-header-dark__links">
           <nuxt-link v-for="(link, idx) in LINKS" :key="idx" :href="link.link" class="w-header-dark__link">
@@ -68,7 +68,7 @@
           photo-src="/img/avatar.png"
           :left-label="$app.store.user?.info?.account?.username"
           :robot-data="$app.store.user?.info?.account?.uuid"
-          @click="$router.push({ name: 'personal-protection' })"
+          @click="$router.push({ name: 'personal-portfolio' })"
         />
       </div>
       <div :class="['w-header-dark__burger', { 'w-header-dark__burger__active': isOpenMenu }]" @click="openMenu">
