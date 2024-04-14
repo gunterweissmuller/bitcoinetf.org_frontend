@@ -148,13 +148,13 @@
 </template>
 
 <script setup lang="ts">
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import { Icon } from '~/src/shared/constants/icons'
-import { useNuxtApp } from '#app'
-import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue'
-import { computed } from 'vue'
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import { Icon } from '~/src/shared/constants/icons';
+import { useNuxtApp } from '#app';
+import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue';
+import { computed } from 'vue';
 
-const { $app } = useNuxtApp()
+const { $app } = useNuxtApp();
 
 const dealTypes: any = {
   open: 'Open',
