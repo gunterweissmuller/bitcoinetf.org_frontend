@@ -678,6 +678,12 @@
   &__promo {
     margin-bottom: torem(32);
 
+    &-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .swiper-pagination {
       display: flex;
       align-items: center;

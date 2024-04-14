@@ -28,7 +28,7 @@
           :space-between="spaceBetween"
           :slides-per-view="slidesPerView"
           :slides-per-group="slidesPerGroup"
-          :grab-cursor="true"
+          :grab-cursor="grabCursor"
           :speed="speed"
           :autoplay="autoplay"
           :pagination="isPagination"
@@ -107,6 +107,7 @@ const props = withDefaults(
     slidesLength?: number
     qaLocatorSection?: string | number
     variantNavigationButton?: 'default' | 'ghost'
+    grabCursor: boolean
   }>(),
   {
     spaceBetween: 16,
@@ -129,7 +130,8 @@ const props = withDefaults(
     activeIndex: 0,
     slidesLength: 0,
     qaLocatorSection: '',
-    variantNavigationButton: 'default',
+    variantNavigationButton: 'default',g,
+    grabCursor: true
   },
 )
 
