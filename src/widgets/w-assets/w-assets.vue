@@ -35,11 +35,9 @@ const symbol = computed<string>(() => {
 });
 
 const asset = computed(() => {
-  console.log('computed');
-
   const asset = $app.store.assets.items
-    .filter((item) => item?.symbol !== 'VAULT')
-    .find((item) => item.symbol === symbol.value.toUpperCase())
+    .filter((item: { symbol: string; }) => item?.symbol !== 'VAULT')
+    .find((item: { symbol: string; }) => item.symbol === symbol.value.toUpperCase())
 
   if (asset) {
     return asset;
@@ -49,8 +47,6 @@ const asset = computed(() => {
 
   return false;
 });
-
-console.log(asset.value)
 
 </script>
 
