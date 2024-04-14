@@ -1,5 +1,5 @@
 .w-chart-portfolio {
-  padding: var(--spacing-m-1) var(--spacing-m-2);
+  padding: var(--spacing-m-1) var(--spacing-m-2) 0 var(--spacing-m-2);
   margin-bottom: var(--spacing-m-2);
   border-radius: torem(8);
   border: torem(1) solid var(--surfaces-surface-glass-border);
@@ -140,5 +140,9 @@
       line-height: torem(15);
       color: var(--text-tertiary);
     }
+  }
+
+  .m-slider {
+    padding-bottom: torem(16);
   }
 }
