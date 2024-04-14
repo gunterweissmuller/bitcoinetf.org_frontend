@@ -8,6 +8,7 @@
       :assets="[asset]"
       :btc-value="$app.store.user.btcValue"
       title="AUM Allocation"
+      :slider="false"
     />
     <w-trades />
     <w-activity />
@@ -34,6 +35,8 @@ const symbol = computed<string>(() => {
 });
 
 const asset = computed(() => {
+  console.log('computed');
+
   const asset = $app.store.assets.items
     .filter((item) => item?.symbol !== 'VAULT')
     .find((item) => item.symbol === symbol.value.toUpperCase())

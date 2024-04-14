@@ -21,6 +21,7 @@
         :modules="[]"
         slides-per-view="auto"
         :space-between="8"
+        v-if="props.slider"
       >
         <template #slides>
           <swiper-slide class="w-chart-portfolio__slide" v-for="(asset, id) in props.assets" :key="id">
@@ -52,18 +53,32 @@ import { Icon } from '~/src/shared/constants/icons';
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 
+const props = defineProps({
+  slider: {
+    type: Boolean,
+    required: false,
+    default: true
+  },
+  btcValue: {
+    type: null as any,
+    required: true
+  },
+  assets: {
+    type: Array as PropType<IAsset[]>,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  }
+});
+
 Chart.register(...registerables, getChartLabelPlugin())
 
 const { $app } = useNuxtApp()
 
 const CHART_ID = 'chart-portfolio'
 let CHART_INSTANCE = null
-
-const props = defineProps<{
-  btcValue: any
-  assets: IAsset[]
-  title: string
-}>()
 
 const fullBalanceFund = computed(() => {
   return $app.store.assets.fullBalanceFund
