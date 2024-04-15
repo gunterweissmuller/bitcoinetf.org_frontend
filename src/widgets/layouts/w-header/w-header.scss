@@ -261,6 +261,10 @@
     transition-timing-function: linear !important;
     position: relative;
   }
+
+  .m-slider {
+    padding-left: torem(16);
+  }
 }
 
 #marquee {

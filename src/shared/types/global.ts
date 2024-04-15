@@ -4,7 +4,8 @@ export interface IAsset {
   shortTitle: string
   type: string
   earning: string
-  apy: string
+  apy: string,
+  symbol: string
 }
 
 interface IDealActivityType {
