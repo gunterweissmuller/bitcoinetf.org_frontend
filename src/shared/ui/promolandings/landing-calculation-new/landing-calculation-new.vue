@@ -93,7 +93,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -122,7 +122,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -484,14 +484,19 @@ const investBuySignup = () => {
   scrollToSignup();
 }
 
+const handleOpenPurchase = () => {
+  $app.store.purchase.amountUS = buyAmount.value;
+  purchaseStep.value = PurchaseSteps.Purchase;
+  scrollToPurchase();
+}
+
 const investBuy = async () => {
 
   if(buyAmountOriginal.value < 100) return
 
   signupStep.value = SignupSteps.Default;
   signupMethod.value = SignupMethods.None;
-  purchaseStep.value = PurchaseSteps.Purchase;
-  scrollToPurchase();
+  handleOpenPurchase();
 
   await $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
@@ -590,8 +595,7 @@ onMounted(() => {
     $app.api.eth.auth.getUser().then((resp) => {
       $app.store.user.info = resp?.data
       //purchase
-      purchaseStep.value = PurchaseSteps.Purchase;
-      scrollToPurchase();
+      handleOpenPurchase();
     });
   }
 
@@ -649,8 +653,7 @@ const handleTelegramAuth = async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
                       $app.store.user.info = resp?.data
                       //purchase
-                      purchaseStep.value = PurchaseSteps.Purchase;
-                      scrollToPurchase();
+                      handleOpenPurchase();
                     });
 
                     // await router.push('/personal/analytics/performance')
@@ -734,8 +737,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                     //purchase
-                    purchaseStep.value = PurchaseSteps.Purchase;
-                    scrollToPurchase();
+                    handleOpenPurchase();
                   });
 
                   // await router.push('/personal/analytics/performance')
@@ -869,8 +871,7 @@ try {
               .then(async () => {
                 await $app.api.eth.auth.getUser().then((resp) => {
                   $app.store.user.info = resp?.data;
-                  purchaseStep.value = PurchaseSteps.Purchase;
-                  scrollToPurchase();
+                  handleOpenPurchase();
                 });
 
               });
@@ -1080,8 +1081,7 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        scrollToPurchase();
+        handleOpenPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1128,8 +1128,7 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          purchaseStep.value = PurchaseSteps.Purchase;
-          scrollToPurchase();
+          handleOpenPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1171,8 +1170,7 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          purchaseStep.value = PurchaseSteps.Purchase;
-          scrollToPurchase();
+          handleOpenPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1230,8 +1228,7 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        scrollToPurchase();
+        handleOpenPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1323,9 +1320,7 @@ const signupAndBuyGoogle = () => {
     .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
-            purchaseStep.value = PurchaseSteps.Purchase;
-            scrollToPurchase();
-
+            handleOpenPurchase();
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
