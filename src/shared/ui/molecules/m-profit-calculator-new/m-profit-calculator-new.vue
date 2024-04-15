@@ -236,10 +236,10 @@ const router = useRouter()
 
 const props = withDefaults(
   defineProps<{
-    openSignup: any
-    openPurchase: any
-    isInputDisbled: boolean
-    isUserAuth: boolean
+    openSignup?: any
+    openPurchase?: any
+    isInputDisbled?: boolean
+    isUserAuth?: boolean
   }>(),
   {
     openSignup: () => {},

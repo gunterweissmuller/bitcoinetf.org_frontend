@@ -2,7 +2,11 @@
   <div class="w-analytics page-max-width--big">
     <!--    <e-analytics-tabs v-model:active-tab="activeTab" :tab-bars="tabsList" />-->
     <keep-alive>
-      <component v-if="activeComponent" :is="activeComponent.component" />
+      <component
+        v-if="activeComponent"
+        :is="activeComponent.component"
+        :key="`active-tab-route-${route.name}`"
+      />
     </keep-alive>
   </div>
 </template>
