@@ -154,6 +154,7 @@ export enum Icon {
   MonoWithdraw = 'mono--withdraw',
   MonoX = 'mono--x',
   MonoMoney = 'mono--money',
+  MonoExternalLink = 'mono--external-link',
 }
 export const files = {
   [Icon.ColorfulAlpha]: '/img/icons/colorful/alpha.svg',
@@ -310,4 +311,5 @@ export const files = {
   [Icon.MonoWithdraw]: '/img/icons/mono/withdraw.svg',
   [Icon.MonoX]: '/img/icons/mono/x.svg',
   [Icon.MonoMoney]: '/img/icons/mono/money.svg',
+  [Icon.MonoExternalLink]: '/img/icons/mono/external-link.svg',
 }

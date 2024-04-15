@@ -5,36 +5,42 @@
       :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
       :icon="Icon.MonoMoney"
       iconType="small"
+      bottom="none"
     />
     <e-stat
       info="DIVIDENTS PAID"
       :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
       :icon="Icon.MonoEarnings"
       iconType="small"
+      bottom="dropdown"
     />
     <e-stat
       info="BTC IN RESERVE FUND"
       :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
       :icon="Icon.ColorfulBitcoin"
       iconType="full"
+      bottom="link"
     />
     <e-stat
       info="USDT PROTECTION VAULT"
       :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
       :icon="Icon.ColorfulUsdt"
       iconType="full"
+      bottom="link"
     />
     <e-stat
       info="AUM"
       :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
       :icon="Icon.MonoAnalytics"
       iconType="small"
+      bottom="dropdown"
     />
     <e-stat
       info="Corp. Paid-In Share Capital"
       :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
       :icon="Icon.MonoMoney"
       iconType="small"
+      bottom="none"
     />
   </div>
 </template>

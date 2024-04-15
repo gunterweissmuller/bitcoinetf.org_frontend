@@ -36,20 +36,17 @@
           <span :class="['e-stat-default__title-text', `e-stat-default__title-text--${titleColor}`]">
             {{ title }}
           </span>
-
-          <!-- <span v-if="difference" class="e-stat-default__title-difference">
-            {{ difference }}
-          </span> -->
         </div>
-
-        <!-- <div v-if="subtitle" v-html="subtitle" class="e-stat-default__subtitle"></div>
-
-        <div v-if="date" class="e-stat-default__date">
-          {{ date }}
-        </div> -->
       </div>
 
-      <!-- <div class="e-stat-default__info">{{ info }}</div> -->
+      <a-dropdown v-if="props.bottom === 'dropdown'"/>
+      <button
+        class="e-stat__blockchain"
+        v-if="props.bottom === 'link'"
+      >
+        Verify on Blockchain
+      </button>
+      <div v-if="props.bottom === 'none'" style="height: 21px"></div>
     </template>
     <template v-else>
       <nuxt-link :to="{ name: titleLink }" v-if="listType === 'files'" class="e-stat-list__title">
@@ -96,6 +93,7 @@ import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { useNuxtApp } from '#app'
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
 
 const { $app } = useNuxtApp()
 
@@ -118,6 +116,7 @@ const props = withDefaults(
     fixedHeader?: boolean
     icon: string
     iconType: 'full' | 'small'
+    bottom: 'dropdown' | 'link' | 'none'
   }>(),
   {
     titleColor: 'primary',
@@ -132,7 +131,8 @@ const props = withDefaults(
     fixedHeader: false,
     icon: Icon.ColorfulBitcoin,
     iconType: 'full',
-    subtitle: ''
+    subtitle: '',
+    bottom: 'none'
   },
 )
 
