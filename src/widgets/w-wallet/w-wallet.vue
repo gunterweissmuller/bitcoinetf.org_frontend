@@ -5,7 +5,11 @@
       <e-send-to-buy-shares :active-component="activeComponent?.id" />
       <div class="w-wallet__box-main">
         <keep-alive>
-          <component v-if="activeComponent?.component" :is="activeComponent?.component" />
+          <component
+            v-if="activeComponent?.component"
+            :is="activeComponent?.component"
+            :key="`active-tab-route-${route.name}`"
+          />
         </keep-alive>
       </div>
     </div>
