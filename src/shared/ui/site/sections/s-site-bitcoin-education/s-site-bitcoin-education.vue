@@ -12,7 +12,7 @@ import MNews from '~/src/shared/ui/site/molecules/m-news/m-news.vue'
 
 const props = defineProps<{
   data: any
-  files: any
+  files?: any
   isEducation: any
 }>()
 const newsData = computed(() =>

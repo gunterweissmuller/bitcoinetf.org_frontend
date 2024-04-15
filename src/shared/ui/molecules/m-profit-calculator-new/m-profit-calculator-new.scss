@@ -1,17 +1,15 @@
 .landing-calculation {
-
   &__journey {
-  
     max-width: 1096px;
-    margin: -30px auto 0 auto;
+    margin: 0 auto;
     padding: 60px 0px 120px 0px;
     border-radius: var(--spacing-m-2);
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.27) 0%, rgba(0, 0, 0, 0.00) 100%), var(--tether-500, #1BA27A);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.27) 0%, rgba(0, 0, 0, 0) 100%), var(--tether-500, #1ba27a);
     position: relative;
     overflow: hidden;
 
     &-btc {
-      background: linear-gradient(90deg, rgba(0, 0, 0, 0.27) 0%, rgba(0, 0, 0, 0.00) 100%), var(--btcoin-500, #FF8D07);
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.27) 0%, rgba(0, 0, 0, 0) 100%), var(--btcoin-500, #ff8d07);
     }
 
     &-bg1 {
@@ -30,7 +28,7 @@
     }
 
     &-title {
-      color: #FFF;
+      color: #fff;
       text-align: center;
       font-family: Jakarta, sans-serif;
       font-size: 64px;
@@ -46,12 +44,11 @@
     }
 
     &__invest {
-      
       max-width: 647px;
       margin: 60px auto 0px auto;
       padding: var(--spacing-m-3) var(--spacing-l-2);
       border-radius: var(--spacing-m-2);
-      background: rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(32px);
 
       @include breakpoint($break-tablet-minus) {
@@ -59,7 +56,7 @@
         margin: auto;
         padding: var(--spacing-m-3) var(--spacing-m-1);
       }
-  
+
       &-center {
         margin: auto;
       }
@@ -77,7 +74,7 @@
           font-size: torem(30) !important;
 
           @include breakpoint($break-tablet-minus) {
-            font-size: torem(23) !important; 
+            font-size: torem(23) !important;
           }
         }
 
@@ -91,7 +88,7 @@
             font-size: torem(24);
           }
         }
-  
+
         &-input {
           font-size: torem(34);
           font-weight: 600;
@@ -101,42 +98,39 @@
           @include breakpoint($break-tablet-minus) {
             font-size: torem(14);
           }
-          
         }
-  
+
         &-primary {
           // color: var(--text-primary);
-          color: var(--Text-Inverse-Primary, #FFF);
+          color: var(--Text-Inverse-Primary, #fff);
         }
-  
+
         &-secondary {
-          color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.80));
+          color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.8));
         }
-  
-  
+
         &-spacing {
           margin-top: var(--spacing-s);
         }
       }
-  
+
       &-font {
         font-family: Dm, sans-serif;
       }
-  
-      &--card {
 
+      &--card {
         border-radius: var(--spacing-m-2);
-        background: rgba(255, 255, 255, 0.10);
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(32px);
 
         // background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--tether-500, #1BA27A);
         position: relative;
         padding: var(--spacing-m-3) var(--spacing-m-2);
         z-index: 1;
-        
+
         &-wrapper {
           margin-top: var(--spacing-m-3);
-          perspective: 551px;	
+          perspective: 551px;
           width: 100%;
           // height: 318px;
           height: 341px;
@@ -162,20 +156,21 @@
         }
 
         &-front {
-          -webkit-transform:rotateY(0deg);
-          transform: rotateY(0deg) ;
-          -webkit-transform: rotateY(0deg) ;
+          -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+          -webkit-transform: rotateY(0deg);
           -moz-transform: rotateY(0deg);
         }
 
-        &-front, &-back {
+        &-front,
+        &-back {
           position: absolute;
           width: 100%;
           height: 100%;
           -moz-backface-visibility: hidden;
           -o-backface-visibility: hidden;
           -ms-backface-visibility: hidden;
-          -webkit-backface-visibility: hidden !important;  /* Safari */
+          -webkit-backface-visibility: hidden !important; /* Safari */
           backface-visibility: hidden;
 
           color: white;
@@ -185,11 +180,11 @@
         &-back {
           transform: rotateY(180deg);
           // transform: rotateY(0deg);
-          background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.00) 100%), var(--btcoin-500, #FF8D07);
+          background: linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0) 100%), var(--btcoin-500, #ff8d07);
 
           // transform: rotateY(180deg) translateZ(1px);
           // -webkit-transform: rotateY(180deg) translateZ(1px);
-          // -moz-transform: rotateY(180deg) translateZ(1px); 
+          // -moz-transform: rotateY(180deg) translateZ(1px);
         }
 
         &-icon {
@@ -197,7 +192,7 @@
           right: var(--spacing-m-1);
           top: var(--spacing-m-1);
         }
-  
+
         &-title {
           font-size: torem(14);
           font-weight: 700;
@@ -206,7 +201,7 @@
             font-size: torem(14);
           }
         }
-    
+
         &-sum {
           font-size: torem(42);
           font-weight: 800;
@@ -217,9 +212,8 @@
           @include breakpoint($break-tablet-minus) {
             font-size: torem(30);
           }
-
         }
-    
+
         &-subtitle {
           font-size: torem(14);
           font-weight: 500;
@@ -236,14 +230,12 @@
           width: 100%;
           margin: var(--spacing-m-1) 0;
         }
-  
+
         &-stats {
           &-wrapper {
-
             @include breakpoint($break-tablet-minus) {
               // flex-direction: column;
             }
-            
           }
 
           &-title {
@@ -254,7 +246,7 @@
               font-size: torem(12);
             }
           }
-    
+
           &-value {
             font-size: torem(32);
             font-weight: 700;
@@ -265,20 +257,20 @@
             }
           }
         }
-  
+
         &-rating {
-          color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.80));
+          color: var(--Text-Inverse-Secondary, rgba(255, 255, 255, 0.8));
           font-size: torem(14);
           font-weight: 500;
           margin-top: var(--spacing-m-1);
-  
+
           &-stars {
             margin: 0rem var(--spacing-s);
             display: flex;
             gap: var(--spacing-xs);
           }
         }
-  
+
         &-term {
           font-size: torem(14);
           font-weight: 500;
@@ -290,27 +282,27 @@
           }
         }
       }
-  
+
       &-input {
         line-height: torem(36);
         padding: var(--spacing-s) var(--spacing-m-1);
-        background: rgba(255, 255, 255, 0.10);
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(12px);
         border-radius: var(--spacing-xs);
         z-index: 10;
-  
+
         &-text {
           line-height: torem(36);
         }
       }
-  
+
       &-select {
         padding: var(--spacing-s) var(--spacing-m-1);
         gap: var(--spacing-s);
         border-radius: var(--spacing-s);
-        background: rgba(255, 255, 255, 0.10);
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(12px);
-        
+
         @include breakpoint($break-tablet-minus) {
           padding: var(--spacing-xs) var(--spacing-s);
         }
@@ -323,7 +315,6 @@
           @include breakpoint($break-tablet-minus) {
             font-size: torem(14);
           }
-
         }
 
         &-currency {
@@ -348,15 +339,15 @@
           backdrop-filter: blur(32px);
 
           &-btc {
-            background: #E9A14A;
+            background: #e9a14a;
           }
 
           &-usdt {
-            background: #57AE94;
+            background: #57ae94;
           }
 
           &-item {
-            color: var(--Text-Inverse-Primary, #FFF);
+            color: var(--Text-Inverse-Primary, #fff);
             font-size: torem(14);
             font-weight: 500;
             font-family: Jakarta, sans-serif;
@@ -381,8 +372,6 @@
           transform: translateY(-50%);
           z-index: 10;
 
-          
-
           &-dropdown {
             width: 343px;
             border-radius: var(--Spacing-S, 8px);
@@ -397,14 +386,12 @@
               }
             }
 
-            
-
             &-btc {
-              background: #E9A14A;
+              background: #e9a14a;
             }
 
             &-usdt {
-              background: #57AE94;
+              background: #57ae94;
             }
 
             // height: 295px;
@@ -425,7 +412,7 @@
 
               &-active {
                 border-radius: var(--spacing-s);
-                background: rgba(255, 255, 255, 0.10);
+                background: rgba(255, 255, 255, 0.1);
                 backdrop-filter: blur(32px);
               }
             }
@@ -442,11 +429,8 @@
           // &-check {
           //   display: inline-block;
           // }
-
         }
-  
       }
-
     }
 
     &__button {
@@ -455,12 +439,12 @@
       background: var(--solid-white, #fff);
       padding: var(--spacing-m-1) var(--spacing-l-2);
 
-      color: var(--Tether-500, #1BA27A);
+      color: var(--Tether-500, #1ba27a);
       font-size: 18px;
       font-weight: 700;
 
       &-btc {
-        color: var(--btcoin-500, #FF8D07);
+        color: var(--btcoin-500, #ff8d07);
       }
     }
 
@@ -474,7 +458,5 @@
         margin-top: var(--spacing-s);
       }
     }
-
   }
-
 }

@@ -1,7 +1,6 @@
 .s-site-how-work {
-  padding-top: torem(120);
+  padding: torem(120, 0, 60);
   @media (max-width: 767px) {
-    padding-top: torem(100);
     padding: torem(100, 20, 0);
   }
   &__wrapper-title {

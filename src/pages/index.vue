@@ -1,5 +1,10 @@
 <template>
-  <m-scroll-navigation v-if="sections && y > sections[0]?.top" :length="sections.length + 1" :data="scrollInfo" />
+  <m-scroll-navigation
+    v-if="sections && y > sections[0]?.top"
+    :length="sections.length + 1"
+    :data="scrollInfo"
+    hidden-mobile
+  />
   <s-site-main :data="mainData" />
   <s-site-marquee :data="marqueeData" />
   <s-site-how-it-work />
