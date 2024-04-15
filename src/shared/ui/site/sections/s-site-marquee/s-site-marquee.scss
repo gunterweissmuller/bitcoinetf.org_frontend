@@ -27,16 +27,13 @@
   &__row {
     display: flex;
     align-items: center;
-    gap: torem(207);
+    gap: 14vw;
     width: max-content;
-    animation: marquee 15s linear infinite;
+    animation: marquee 45s linear infinite;
     height: torem(88);
-    @media (max-width: 899px) {
-      gap: torem(50);
-    }
   }
   &__wrapper {
-    padding: torem(0, 60);
+    padding: 0 10vw;
     position: relative;
     z-index: 2;
     display: flex;
