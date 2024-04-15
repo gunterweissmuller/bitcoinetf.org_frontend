@@ -92,7 +92,7 @@ import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 
 const { $app } = useNuxtApp()
 
-const isOpenModal = ref(false)
+const isOpenModal = ref(true)
 const transactionsKey = ref(0)
 
 const enum DIVIDENDS_TYPES {

@@ -15,6 +15,21 @@
         :options="methods"
       />
 
+      <div v-if="orderType === 'init_btc'" class="f-withdrawal-modal__warning">
+        <div class="f-withdrawal-modal__warning-icon">
+          <a-icon
+            width="22"
+            height="22"
+            :name="Icon.MonoInfo"
+          />
+        </div>
+
+        <div class="f-withdrawal-modal__warning-text">
+          After adding a withdrawal method, dividends will only be available in the selected type
+        </div>
+      </div>
+      
+
       <nuxt-link
         v-if="selectedMethod === 'bitcoin_lightning'"
         to="/bitcoin-education"
@@ -66,6 +81,7 @@
 
 <script setup lang="ts">
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { computed, ref } from 'vue'
 import { Icon } from '~/src/shared/constants/icons'
 import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
