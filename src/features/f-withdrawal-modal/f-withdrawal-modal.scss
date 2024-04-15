@@ -57,6 +57,11 @@
   }
 
   &__address {
+
+    &-margin {
+      margin-bottom: var(--spacing-m-1);
+    }
+
     &-text {
       color: var(--text-tertiary);
       font-family: Dm, sans-serif;

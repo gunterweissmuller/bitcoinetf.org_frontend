@@ -42,6 +42,7 @@
       <a-input
         v-if="selectedMethodType"
         class="f-withdrawal-modal__address"
+        :class="{'f-withdrawal-modal__address-margin': selectedMethod === 'polygon_usdt'}"
         :icon="Icon.MonoPaste"
         :text-icon="copiedLink"
         text-icon-text="Copied!"
@@ -53,7 +54,7 @@
         @icon-click-handler="acceptCopy"
         :label="inputLabel"
       />
-      <div v-if="selectedMethodType" class="f-withdrawal-modal__address-text">
+      <div v-if="selectedMethodType && selectedMethod !== 'polygon_usdt'" class="f-withdrawal-modal__address-text">
         {{ subInfo }}
       </div>
       <a-button
@@ -159,7 +160,7 @@ const buttonDisabled = computed(() => {
   } else if (selectedMethod.value === 'bitcoin_lightning') {
     return !isEmailValid.value
   } else if (selectedMethod.value === 'polygon_usdt') {
-    return false
+    return !validMatic.value //false
   }
 
   return true
@@ -228,13 +229,19 @@ watch(() => orderType, (value) => {
     selectedMethod.value = 'polygon_usdt'
   }
 })
-const validBlockChain = ref(false)
+const validBlockChain = ref(false);
+const validMatic = ref(false);
 watch(()=> selectedAddress.value, (value) => {
   if (selectedMethod.value === 'bitcoin_on_chain') {
     validBlockChain.value = validate(value)
   }
   if (selectedAddress.value.includes('mailto:')) {
     selectedAddress.value = selectedAddress.value.replace('mailto:','')
+  }
+  if(selectedMethod.value === 'polygon_usdt') {
+    validMatic.value = window?.WAValidator?.validate(selectedAddress.value, 'matic')
+
+    // console.log(window?.WAValidator?.validate(selectedAddress.value, 'matic'));
   }
 })
 
