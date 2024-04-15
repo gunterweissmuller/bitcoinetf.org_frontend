@@ -8,7 +8,13 @@
         :force-show-mode="errorInTooltip"
         :force-show="!validation.isValid"
       >
-        <label :class="['a-input__label-container', { 'a-input__label-container--tetherspecial': props?.bgColor == 'tetherspecial' }, { 'a-input__label-container--custom': custom }]">
+        <label
+          :class="[
+            'a-input__label-container',
+            { 'a-input__label-container--tetherspecial': props?.bgColor == 'tetherspecial' },
+            { 'a-input__label-container--custom': custom },
+          ]"
+        >
           <div
             v-if="custom"
             :class="[
@@ -26,11 +32,19 @@
                 'a-input__input--custom',
                 { 'a-input__input--focused': $attrs.open },
                 { 'a-input__input-icon-left': leftIcon },
-                
               ]"
             >
-              <a-icon v-if="leftIcon" width="24" height="24" :class="[`a-input__left-icon`]" :name="leftIcon" :imgTrue="imgTrue"/>
-              <div :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }]">
+              <a-icon
+                v-if="leftIcon"
+                width="24"
+                height="24"
+                :class="[`a-input__left-icon`]"
+                :name="leftIcon"
+                :imgTrue="imgTrue"
+              />
+              <div
+                :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }]"
+              >
                 {{ label }}
               </div>
               <div :class="['a-input__input-text']">{{ modelValue }}</div>
@@ -55,12 +69,17 @@
             >
               <div
                 tabindex="-1"
-                :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }, ]"
+                :class="['a-input__input-title', { 'a-input__input-title--small': isFocused || modelValue?.length }]"
               >
                 {{ label }}
               </div>
               <input
-                :class="['a-input__input-text', { 'a-input__input-text--hidden': !isFocused && !modelValue?.length }, {'a-input__input-text--bold': props?.isBoldInput}, {'a-input__input-text--small': props?.isTextInputSmall} ]"
+                :class="[
+                  'a-input__input-text',
+                  { 'a-input__input-text--hidden': !isFocused && !modelValue?.length },
+                  { 'a-input__input-text--bold': props?.isBoldInput },
+                  { 'a-input__input-text--small': props?.isTextInputSmall },
+                ]"
                 ref="inputFormRef"
                 :type="inputType"
                 :value="modelValue"
@@ -161,10 +180,10 @@ const props = withDefaults(
     textIcon?: boolean
     textIconText?: string
     maxLength?: number | null
-    imgTrue?:boolean
-    isBoldInput?:boolean
-    isTextInputSmall?:boolean
-    bgColor: 'default' | 'tetherspecial'
+    imgTrue?: boolean
+    isBoldInput?: boolean
+    isTextInputSmall?: boolean
+    bgColor?: 'default' | 'tetherspecial'
   }>(),
   {
     modelValue: '',
@@ -190,9 +209,9 @@ const props = withDefaults(
     textIcon: false,
     textIconText: '',
     maxLength: null,
-    imgTrue:false,
-    isBoldInput:false,
-    isTextInputSmall:false,
+    imgTrue: false,
+    isBoldInput: false,
+    isTextInputSmall: false,
     bgColor: 'default',
   },
 )
