@@ -16,4 +16,4 @@ yarn.lock
 .vscode
 .cache
 .pnpm-lock.yaml
-assets/fonts/icons/
+assets
