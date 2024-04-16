@@ -59,7 +59,7 @@ export default class StatisticEthApiModule {
     }
   }
 
-  async getDividendsByYear(payload) {
+  async getDividendsByYear(payload : any) {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'statistic/dividends',
@@ -140,6 +140,24 @@ export default class StatisticEthApiModule {
           params: payload,
         },
         operationDescription: 'Obtaining a list of top 100 shareholders',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getStrategies() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'statistic/shareholders/strategies',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting strategies',
       })
     } catch (e) {
       if (e instanceof ApiErrorFlow) {

@@ -79,6 +79,15 @@
 
     &--line {
       height: 100%;
+
+      &.is-null {
+        &:nth-child(1) {
+          background: var(--accent-primary) !important;
+        }
+        &:nth-child(2) {
+          background: var(--text-primary) !important;
+        }
+      }
     }
 
     &--percentes {
@@ -92,6 +101,15 @@
       font-weight: 500;
       font-size: torem(12);
       line-height: torem(16);
+
+      &.is-null {
+        &:nth-child(1) {
+          color: var(--accent-primary) !important;
+        }
+        &:nth-child(2) {
+          color: var(--text-primary) !important;
+        }
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-chart-shareholders" v-show="(props.left && props.right) || (props.strategies.length && props.strategies)">
+  <div class="w-chart-shareholders" v-show="strategiesData && strategiesData.length">
     <div class="w-chart-shareholders__title">
       <a-live />
 
@@ -15,7 +15,7 @@
           v-for="strategy in strategies"
           :key="strategy.name"
         >
-          <a-icon :name="strategy.icon" />
+          <a-icon v-show="strategy.icon" :name="strategy.icon ?? ''" />
           <div class="w-chart-shareholders__strategies--text">
             {{ strategy.name }}
           </div>
@@ -26,8 +26,9 @@
         <div class="w-chart-shareholders__percentbar--bar">
           <div
             class="w-chart-shareholders__percentbar--line"
+            :class="{ 'is-null': strategy.color === null }"
             v-for="strategy in strategies"
-            :style="{ 'width': strategy.percent + '%', 'background': strategy.color }"
+            :style="{ 'width': strategy.percent + '%', 'background': strategy.color ?? '' }"
             :key="strategy.name"
           ></div>
         </div>
@@ -36,9 +37,10 @@
 
           <div
             class="w-chart-shareholders__percentbar--percent"
+            :class="{ 'is-null': strategy.color === null }"
             v-for="strategy in strategies"
             :key="strategy.name"
-            :style="{ 'color': strategy.color }"
+            :style="{ 'color': strategy.color ?? '' }"
           >
             {{ strategy.percent }}% of Investors
           </div>
@@ -52,28 +54,58 @@
 <script lang='ts' setup>
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
-import { Icon } from '~/src/shared/constants/icons';
+import {useNuxtApp} from '#app';
+
+const { $app } = useNuxtApp();
 
 interface Strategy {
   name: string;
-  icon: string;
   percent: number;
-  color: string;
+  icon: string | null;
+  color: string | null;
 }
 
 const props = withDefaults(
   defineProps<{
-    title?: string,
-    left?: Strategy,
-    right?: Strategy,
-    strategies?: Strategy[]
+    title: string,
+    strategies: Strategy[]
   }>(),
   {
     title: 'Investment Strategies'
   },
-)
+);
 
-const strategies = computed(() => props.strategies || [ props.left, props.right ]);
+const getStrategies = async () => {
+  $app.api.eth.statisticEth.getStrategies()
+    .then((data : Strategy[] | undefined) => {
+      strategiesData.value = data ? data : [];
+    })
+    .catch(() => {
+      strategiesData.value = [];
+    });
+}
+
+const strategiesData = ref<Strategy[]>([]);
+
+const strategies = computed<Strategy[]>(() => {
+  return strategiesData.value
+    .map( (strategy : Strategy) => {
+      const newStrategy = props.strategies.find((el : Strategy) => el.name === strategy.name);
+
+      if (newStrategy) {
+        newStrategy.percent = strategy.percent;
+        return newStrategy;
+      }
+      return Object.assign(strategy, {
+        icon: null,
+        color: null
+      });
+    })
+});
+
+onMounted(() => {
+  getStrategies();
+});
 </script>
 
 <style src="./w-chart-shareholders.scss" lang='scss'></style>

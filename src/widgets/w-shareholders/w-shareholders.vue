@@ -38,13 +38,13 @@ const lastPayment = computed(() => {
 const strategies = [
   {
     name: 'Tether',
-    percent: 67,
+    percent: 0,
     icon: Icon.ColorfulUsdt,
     color: '#1BA27A'
   },
   {
     name: 'Bitcoin',
-    percent: 33,
+    percent: 0,
     icon: Icon.ColorfulBitcoin,
     color: '#FF8D07'
   },
