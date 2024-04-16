@@ -222,13 +222,13 @@ const routeNames = computed(() => ({
     title: 'Wallet',
     titleCrumb: 'Wallet',
     breadcrumbs: false,
-    info: EPageInfoWallet,
+    // info: EPageInfoWallet,
   },
   'personal-dividends': {
     title: 'Wallet',
     titleCrumb: 'Dividends',
     breadcrumbs: false,
-    info: EPageInfoWallet,
+    // info: EPageInfoWallet,
   },
   'personal-referrals': {
     title: 'Wallet',
@@ -301,11 +301,12 @@ const analyticsLinks = {
 }
 
 const walletLinks = {
-  title: 'Wallet',
+  title: 'Assets',
   links: [
     { text: 'Dividends', name: 'personal-dividends' },
-    { text: 'Referrals', name: 'personal-referrals' },
-    { text: 'Bonus', name: 'personal-bonus' },
+    { text: 'ETFs', name: 'personal-etfs' },
+    // { text: 'Referrals', name: 'personal-referrals' },
+    // { text: 'Bonus', name: 'personal-bonus' },
   ],
 }
 
@@ -318,6 +319,7 @@ const linksList = {
   'personal-dividends': walletLinks,
   'personal-referrals': walletLinks,
   'personal-bonus': walletLinks,
+  'personal-etfs': walletLinks,
 }
 
 const isVisibleInfo = computed(() => {
@@ -335,6 +337,7 @@ const isVisibleLinks = computed<boolean>(
     linksList?.[route?.name]?.links &&
     (isLaptop.value || isDesktop.value),
 )
+console.log(linksList?.[route?.name]?.links, route?.name, linksList?.[route?.name])
 
 const isVisibleBreadcrumbs = computed<boolean>(
   () => routeNames.value?.[route?.name]?.breadcrumbs && (isLaptop.value || isDesktop.value),

@@ -127,7 +127,6 @@
       <article class="landing-calculation__journey__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
 
         <div :class="['landing-calculation__journey__invest--card-inner', {'landing-calculation__journey__invest--card-inner-flip': selectedCurrency.value === 'BTC'}]">
-
           <!-- FRONT -->
           <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex  relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
@@ -277,7 +276,7 @@ const currencies = ref([
   }, ]);
 const selectedCurrency = ref(currencies.value[0]);
 
-let apyValue = ref(selectedCurrency.value.apy);
+let apyValue = computed(() => selectedCurrency.value.apy);
 let apyValue3 = ref(selectedCurrency.value.apy3);
 const pickerValue = ref(2500)
 const refCode = ref('')

@@ -1,92 +1,50 @@
 <template>
-  <div class="w-dividends">
-    <div class="w-dividends__wrap">
-      <div class="w-dividends__amount">
-        <div class="w-dividends__amount-wrap">
-          <div class="w-dividends__amount-title">Total Balance</div>
-          <div class="w-dividends__amount-sum">
-            ${{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }}
-            <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
-              >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
-            >
+  <div class="w-etfs">
+    <div class="w-etfs__wrap">
+      <div class="w-etfs__amount">
+        <div class="w-etfs__amount-wrap">
+          <div class="w-etfs__amount-title">Bitcoin ETF Shares</div>
+          <div class="w-etfs__amount-sum">
+            {{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }}
+            <!-- {{ $app.filters.rounded(divSumIn3Years,2,) }} -->
           </div>
-          <div v-if="walletDividends?.btc_amount" class="w-dividends__btc" v-html="btcAmount"></div>
+        </div>
+        <div class="w-etfs__amount-buttons">
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary">
+            <a-icon
+                width="18"
+                height="18"
+                :name="Icon.MonoPlus"
+              />
+              Buy
+          </div>
+
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary">
+            <a-icon
+                width="18"
+                height="18"
+                :name="Icon.MonoMinus"
+              />
+              Sell
+          </div>
+
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary">
+            <a-icon
+                width="18"
+                height="18"
+                :name="Icon.MonoLinkToPage"
+              />
+              Verify
+          </div>
         </div>
       </div>
 
-      <div class="w-dividends__cards">
-        <div class="w-dividends__cards-item w-dividends__cards-item-withdraw">
-          <div class="w-dividends__cards-header" @click="openModal">
-            <a-icon width="24" height="24" class="w-dividends__cards-icon-method" :name="typeMethodIcon" />
-            <a-icon width="18" height="18" class="w-dividends__cards-icon-edit"  :name="Icon.MonoActionEdit" />
-          </div>
-          <div class="w-dividends__cards-body">
-            <div class="w-dividends__cards-subtitle">
-              WITHDRAW TO:
-            </div>
-            <div class="w-dividends__cards-title-second">
-              {{ address }}
-            </div>
-          </div>
-          <div class="w-dividends__cards-footer">
-            <div class="w-dividends__cards-text">
-              Automatic withdrawal once the cash balance reaches $250.
-            </div>
-          </div>
-        </div>
-        
-        <div class="w-dividends__cards-item w-dividends__cards-item-dividends">
-          <div class="w-dividends__cards-header">
-            <div class="w-dividends__cards-icon-dollar">
-              <a-icon width="14" height="14"  :name="Icon.MonoDollar" />
-            </div>
-            <a-live />
-          </div>
-          <div class="w-dividends__cards-body">
-            <div class="w-dividends__cards-subtitle">
-              TOTAL DIVIDENDS PAID
-            </div>
-            <div class="w-dividends__cards-title">
-              ${{$app.filters.rounded($app.store.user.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2) }}
-            </div>
-          </div>
-          <div class="w-dividends__cards-footer">
-            <div class="w-dividends__cards-text">
-              All time <!--todo dropdown-->
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
-        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name=" orderType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin" />
-        <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
-        <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
-      </button>
-      
-      <div v-else class="w-dividends__amount-method" @click="openModal">
-        <div class="w-dividends__amount-method__wrap">
-          <a-icon width="24" height="24" class="w-dividends__amount-method__icon" :name="typeMethodIcon" />
-          <div class="w-dividends__amount-method-box">
-            <div class="w-dividends__amount-method__method">
-              <div class="w-dividends__amount-method__method-head">Withdrawal method</div>
-              <div class="w-dividends__amount-method__sum-head">{{ selectedWithdrawalMethod }}</div>
-            </div>
-            <div class="w-dividends__amount-method__sum">
-              <div class="w-dividends__amount-method__method-text">{{ address }}</div>
-            </div>
-          </div>
-
-          <a-icon width="18" height="18" class="w-dividends__amount-method__chevron" :name="Icon.MonoChevronRight" />
-        </div>
-      </div>
-      <div class="w-dividends__subtitle">Transactions</div>
-      <div v-if="personalDividends.length" class="w-dividends__list">
+      <div class="w-etfs__subtitle">Transactions</div>
+      <div v-if="personalDividends.length" class="w-etfs__list">
         <transition-group name="fade" tag="div">
-          <div v-for="item in personalDividends" :key="item?.uuid" class="w-dividends__item">
+          <div v-for="item in personalDividends" :key="item?.uuid" class="w-etfs__item">
             <div
-              :class="['w-dividends__item-pic', { 'w-dividends__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
+              :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
             >
               <a-icon
                 width="18"
@@ -94,18 +52,18 @@
                 :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
               />
             </div>
-            <div class="w-dividends__item_info">
-              <div class="w-dividends__item_info-title">{{ getDividendsDesc(item) }}</div>
-              <div class="w-dividends__item_info-date">
+            <div class="w-etfs__item_info">
+              <div class="w-etfs__item_info-title">{{ getDividendsDesc(item) }}</div>
+              <div class="w-etfs__item_info-date">
                 {{ $app.filters.dayjs(item?.created_at)?.format('D MMMM YY') }}
               </div>
             </div>
-            <div v-if="item.status === 'pending'" class="w-dividends__item_sums">Pending</div>
-            <div v-else class="w-dividends__item_sums">
-              <div class="w-dividends__item_info-usd">
+            <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
+            <div v-else class="w-etfs__item_sums">
+              <div class="w-etfs__item_info-usd">
                 {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 8) }}
               </div>
-              <div class="w-dividends__item_info-btc">
+              <div class="w-etfs__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
                 <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span>
               </div>
@@ -113,13 +71,13 @@
           </div>
         </transition-group>
       </div>
-      <div v-if="personalDividends.length && hasNextPage" class="w-dividends__more">
-        <div @click="loadMoreDividends" class="w-dividends__more-text">Load more</div>
+      <div v-if="personalDividends.length && hasNextPage" class="w-etfs__more">
+        <div @click="loadMoreDividends" class="w-etfs__more-text">Load more</div>
       </div>
-      <div v-if="!personalDividends.length" class="w-dividends__empty">
-        <img class="w-dividends__empty-pic" src="/img/cloud.png" alt="empty" />
-        <div class="w-dividends__empty-title">You don’t have any transactions yet.</div>
-        <div class="w-dividends__empty-text">Buy your first ETF Shares and enjoy daily dividends!</div>
+      <div v-if="!personalDividends.length" class="w-etfs__empty">
+        <img class="w-etfs__empty-pic" src="/img/cloud.png" alt="empty" />
+        <div class="w-etfs__empty-title">You don’t have any transactions yet.</div>
+        <div class="w-etfs__empty-text">Buy your first ETF Shares and enjoy daily dividends!</div>
       </div>
     </div>
   </div>
@@ -427,6 +385,6 @@ const nextRouteName = computed(() => {
 })
 </script>
 
-<style src="./w-dividends.scss" lang="scss" />
+<style src="./w-etfs.scss" lang="scss" />
 
 <style lang="scss"></style>
