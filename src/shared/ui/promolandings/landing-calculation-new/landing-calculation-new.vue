@@ -1132,7 +1132,7 @@ const signupAndBuy = async () => {
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1174,7 +1174,7 @@ const signupAndBuy = async () => {
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1324,7 +1324,7 @@ const signupAndBuyGoogle = () => {
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
