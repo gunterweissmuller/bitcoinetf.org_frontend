@@ -3,29 +3,12 @@
     <template v-if="type === 'default'">
       <div :class="['e-stat-default__head', { 'e-stat-default__head--fixed': fixedHeader }]">
         <a-icon v-if="props.iconType === 'full'" width="32" :name="props.icon" />
+
         <div v-else class="e-stat__icon">
           <a-icon width="14" :name="props.icon" />
         </div>
 
         <a-live />
-
-        <!-- <button
-          v-if="toggleTitle"
-          class="e-stat-default__head-toggle"
-          @mousedown="$emit('toggle-mouse-down')"
-          @mouseup="$emit('toggle-mouse-up')"
-          @touchstart="$emit('toggle-mouse-down')"
-          @touchend="$emit('toggle-mouse-up')"
-          @click="$emit('toggle-value')"
-        >
-          {{ toggleTitle }}
-        </button> -->
-
-        <!-- <div v-if="popper" class="e-stat-default__head-popper">
-          <m-popper hover :title="popper.title" :text="popper.text">
-            <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
-          </m-popper>
-        </div> -->
       </div>
 
       <div class="e-stat-default__wrap">
@@ -44,7 +27,10 @@
         class="e-stat__blockchain"
         v-if="props.bottom === 'link'"
       >
-        Verify on Blockchain
+        <a-icon width="14" :name="Icon.MonoExternalLink" />
+        <span class="e-stat__blockchain-title">
+          Verify on Blockchain
+        </span>
       </button>
       <div v-if="props.bottom === 'none'" style="height: 21px"></div>
     </template>
@@ -86,16 +72,10 @@
 </template>
 
 <script setup lang="ts">
-import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import { Icon } from '~/src/shared/constants/icons'
-import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
-import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
-import { useNuxtApp } from '#app'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import { Icon } from '~/src/shared/constants/icons';
 import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
-
-const { $app } = useNuxtApp()
 
 const props = withDefaults(
   defineProps<{
@@ -134,18 +114,7 @@ const props = withDefaults(
     subtitle: '',
     bottom: 'none'
   },
-)
-
-const emit = defineEmits(['update:model-value', 'toggle-value', 'toggle-mouse-down', 'toggle-mouse-up'])
-
-const selected = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emit('update:model-value', value)
-  },
-})
+);
 </script>
 
 <style src="./e-stat.scss" lang="scss" />

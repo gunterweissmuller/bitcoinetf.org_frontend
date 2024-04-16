@@ -263,10 +263,15 @@
     border-radius: torem(4);
     background: var(--surfaces-selection);
 
-    font-family: Dm, sans-serif;
-    font-weight: 700;
-    font-size: torem(10);
-    line-height: torem(13);
     color: var(--accent-primary);
+
+    &-title {
+      font-family: Dm, sans-serif;
+      font-weight: 700;
+      font-size: torem(10);
+      line-height: torem(13);
+
+      white-space: nowrap;
+    }
   }
 }
