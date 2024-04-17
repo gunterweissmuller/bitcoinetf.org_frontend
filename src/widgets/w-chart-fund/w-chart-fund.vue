@@ -213,29 +213,11 @@ const options = {
   },
 }
 
-const config = {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      {
-        data: [],
-        backgroundColor: 'rgba(77, 148, 255, 0.3)',
-        borderColor: '#4D94FF',
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-  options,
-  plugins: [],
-}
-
 const changeChartData = (tab, requestType = 'monthly') => {
 
   if (CHART_INSTANCE) {
     CHART_INSTANCE.data.datasets[0].data = tab.map((item) => Number(item.amount))
-    CHART_INSTANCE.data.labels = tab.map((item) => {
+    CHART_INSTANCE.data.labels = tab.map((item, index : number) => {
     if (props.isTotalAssets) {
       return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY')
     } else {
@@ -248,6 +230,8 @@ const changeChartData = (tab, requestType = 'monthly') => {
       }
     }
     })
+    console.log(CHART_INSTANCE.data.labels);
+
     CHART_INSTANCE.update()
   }
 }
@@ -330,7 +314,65 @@ onMounted(async () => {
     Chart.defaults.font.family = 'Caption'
     Chart.defaults.font.weight = 'bold'
     Chart.defaults.color = '#888CA0'
-    const ctx = document.getElementById(CHART_ID)
+
+    const ctx = document.getElementById(CHART_ID);
+
+    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 145);
+    gradient.addColorStop(0, 'rgba(0, 102, 255, 0.2)');
+    gradient.addColorStop(1, 'rgba(0, 102, 255, 0.1)');
+
+    const config = {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            borderColor: '#4D94FF',
+            borderWidth: 1,
+            tension: 0.4,
+            fill: true,
+            backgroundColor: gradient,
+            pointRadius: 10,
+            pointBackgroundColor: 'transparent',
+            pointBorderColor: 'transparent',
+            drawActiveElementsOnTop: true
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'center',
+            align: 'center',
+            tooltip: {
+              intersect: false,
+            },
+          },
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false, // Убираем отображение сетки по оси X
+            },
+          },
+          y: {
+            display: false, // Убираем отображение сетки и лейблов по оси Y
+          },
+        },
+        interaction: {
+          intersect: false,
+        },
+        elements: {
+          point: {
+            radius: 5,
+          },
+        },
+      },
+      plugins: [],
+    }
+
+
     CHART_INSTANCE = new Chart(ctx, config)
     await getStatistics()
   }
