@@ -132,7 +132,11 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     }
   }
 
-  const openMoonpayHandler = async (callback: CallableFunction = () => {}, callbackOnPayment, init: boolean = true) => {
+  const openMoonpayHandler = async (
+    callback: CallableFunction = async () => {},
+    callbackOnPayment: CallableFunction = () => {},
+    init: boolean = true
+  ) => {
     if (isMoonpaySelected.value) {
       return
     }
@@ -142,7 +146,6 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     if (init) {
       await initPayment()
     }
-
 
     await callback()
 
