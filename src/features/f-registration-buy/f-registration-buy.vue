@@ -547,7 +547,7 @@ const isOpenSuccessPaymentModal = ref(false)
 const paymentAmount = ref({ amount: 0 })
 
 const openMoonpay = async () => {
-  return await openMoonpayHandler(getMoonpayWallets(), (ctx) => {
+  return await openMoonpayHandler(getMoonpayWallets, (ctx) => {
     paymentAmount.value.amount = ctx.data.message?.data?.amount
     isOpenSuccessPaymentModal.value = true
   })

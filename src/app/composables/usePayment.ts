@@ -56,7 +56,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       iconType: Icon.ColorfulMoonpay,
       value: 'moonpay',
       onClick: 'openMoonpay',
-      show: false,
+      show: true,
     },
     {
       icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -132,7 +132,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     }
   }
 
-  const openMoonpay = async (callback, callbackOnPayment, init: boolean = true) => {
+  const openMoonpayHandler = async (callback: CallableFunction = () => {}, callbackOnPayment, init: boolean = true) => {
     if (isMoonpaySelected.value) {
       return
     }
@@ -180,11 +180,11 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     payWith,
     switches,
     initPayment,
-    openMoonpay,
     getPayWallets,
     paymentAddress,
     currentPayType,
     isMoonpaySelected,
+    openMoonpayHandler,
     getMoonpayPaymentUrl,
   };
 }
