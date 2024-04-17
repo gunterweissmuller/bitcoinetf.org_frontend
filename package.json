@@ -66,6 +66,7 @@
     "swiper": "^9.4.1",
     "v-onboarding": "^2.6.0",
     "vue": "3",
+    "vue-circular-count-down-timer": "^2.0.0",
     "vue-tel-input": "^8.3.1",
     "vue-turnstile": "^1.0.6",
     "vue-typed-js": "^0.1.2",

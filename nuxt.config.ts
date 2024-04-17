@@ -172,7 +172,7 @@ export default defineNuxtConfig({
             map: null,
           }
         },
-      },
+      }, 
     ],
   },
   nitro: {

@@ -12,6 +12,12 @@
           </div>
           <div v-if="walletDividends?.btc_amount" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
+
+        <div class="w-dividends__timer" :style="timerStyle">
+          <div class="w-dividends__timer-name">NEXT PAYOUT</div>
+          <div class="w-dividends__timer-time">{{ timerText }}</div>
+        </div>
+
       </div>
 
       <div class="w-dividends__cards">
@@ -424,6 +430,60 @@ const renderedSteps = computed(() => {
 
 const nextRouteName = computed(() => {
   return localStorage?.getItem('journey') ? 'personal-referrals' : 'personal-buy-shares'
+})
+
+//timer style
+
+const timerPercent = ref(0);
+const timerText = ref("");
+
+onMounted(() => {
+
+  const time = new Date();
+  const senondsDay = 24*60*60*1000; //24hr in miliseconds
+  const secondsEnd = 6*60*60*1000 + 30*60*1000; //6:30 moscow in miliseconds;
+  const secondsNow =  time.getHours()*60*60*1000 + time.getMinutes()*60*1000 + time.getSeconds()*1000;
+
+  // console.log( $app.filters.dayjs(time.getTime()).format('D MMM YY HH:mm:ss') , $app.filters.dayjs(time.getTime()-secondsNow+secondsEnd+senondsDay).format('D MMM YY HH:mm:ss')  );
+
+  // Set the date we're counting down to
+  const countDownDate = time.getTime()-secondsNow+secondsEnd+senondsDay;
+  
+
+  // Update the count down every 1 second
+  const x = setInterval(function() {
+    
+    const now = new Date().getTime();
+    // Find the distance between now and the count down date
+    const distance = countDownDate - now;
+
+    timerPercent.value = distance / (senondsDay/100);
+
+    // Time calculations for days, hours, minutes and seconds
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Display the result in the element with id="demo"
+    timerText.value = hours + ":"+ minutes + ":" + seconds;
+
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      timerText.value = "Finished";
+    }
+  }, 1000);
+
+//  setTimeout(()=>{
+//   setInterval(() => {
+//     timerPercent.value += 1;
+//   },10);
+//  }, 5000)
+})
+
+const timerStyle = computed(() => {
+  return `background: radial-gradient(#171A17 63%, transparent 64%), conic-gradient(var(--accent-primary) 0% ${timerPercent.value}%, var(--surfaces-selection) ${timerPercent.value}% 50%);`
+  return `background: radial-gradient(black 60%, transparent 61%), conic-gradient(#D53738 0% ${timerPercent.value}%, transparent ${timerPercent.value}% 100%)`;
 })
 </script>
 
