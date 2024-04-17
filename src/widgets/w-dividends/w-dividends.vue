@@ -10,11 +10,11 @@
               >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
             >
           </div>
-          <div v-if="walletDividends?.btc_amount" class="w-dividends__btc" v-html="btcAmount"></div>
+          <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
       </div>
       <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
-        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name="Icon.ColorfulBitcoin" />
+        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name="$app.store.user?.info?.account?.order_type !== 'usdt' ? Icon.ColorfulBitcoin : Icon.ColorfulUsdt" />
         <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
         <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
       </button>
@@ -58,7 +58,7 @@
               <div class="w-dividends__item_info-usd">
                 {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 8) }}
               </div>
-              <div class="w-dividends__item_info-btc">
+              <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
                 <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span>
               </div>
