@@ -82,7 +82,11 @@ let CHART_INSTANCE = null
 
 const fullBalanceFund = computed(() => {
   return $app.store.assets.fullBalanceFund
-})
+});
+
+const theme = computed<'dark' | 'light'>(() => $app.store.user.theme);
+
+const unsetColor = computed<string>(() => theme.value === 'light' ? '#F3F8FF' : '#252F4480');
 
 const bgMap = {
   bst: 'rgba(252, 43, 94)',
@@ -92,6 +96,7 @@ const bgMap = {
   baa: 'rgba(239, 186, 50)',
   brf: 'rgba(255, 141, 7)',
   vault: 'rgba(92, 206, 214)',
+  others: unsetColor.value
 }
 
 const textCenter = {

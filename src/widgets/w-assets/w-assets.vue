@@ -5,7 +5,7 @@
     <w-chart-portfolio
       ref="chartPortfolioRef"
       v-if="asset"
-      :assets="[asset]"
+      :assets="assetsChartData"
       :btc-value="$app.store.user.btcValue"
       title="AUM Allocation"
       :slider="false"
@@ -37,7 +37,7 @@ const symbol = computed<string>(() => {
 const asset = computed(() => {
   const asset = $app.store.assets.items
     .filter((item: { symbol: string; }) => item?.symbol !== 'VAULT')
-    .find((item: { symbol: string; }) => item.symbol === symbol.value.toUpperCase())
+    .find((item: { symbol: string; }) => item.symbol === symbol.value.toUpperCase());
 
   if (asset) {
     return asset;
@@ -47,6 +47,19 @@ const asset = computed(() => {
 
   return false;
 });
+
+const assetsChartData = computed<Array<Record<string, string>>>(() => {
+  // full balance
+  const unset = {
+    symbol: 'OTHERS',
+    full_balance: 0
+  }
+  $app.store.assets.items
+    .filter((el : { symbol: string }) => el.symbol !== asset.value.symbol && el.symbol !== 'VAULT')
+    .forEach((el : { full_balance: string }) => unset.full_balance += Number(el.full_balance))
+  return [asset.value, unset];
+});
+// console.log(assetsChartData.value);
 
 </script>
 

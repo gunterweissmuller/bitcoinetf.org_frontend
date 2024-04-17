@@ -230,8 +230,6 @@ const changeChartData = (tab, requestType = 'monthly') => {
       }
     }
     })
-    console.log(CHART_INSTANCE.data.labels);
-
     CHART_INSTANCE.update()
   }
 }
