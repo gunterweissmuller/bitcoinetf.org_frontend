@@ -277,7 +277,7 @@ const currencies = ref([
   }, ]);
 const selectedCurrency = ref(currencies.value[0]);
 
-let apyValue = ref(selectedCurrency.value.apy);
+let apyValue = computed(() => selectedCurrency.value.apy);
 let apyValue3 = ref(selectedCurrency.value.apy3);
 const pickerValue = ref(2500)
 const refCode = ref('')

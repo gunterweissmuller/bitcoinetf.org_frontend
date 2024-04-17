@@ -779,7 +779,7 @@ const onSubmitEmailForm = async () => {
             })
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
-          if(aAid) {
+          if(aAid && window.localStorage.getItem('a_utm')) {
             $app.api.eth.auth.papSignUp({
               payload: {
                 pap_id: aAid,
@@ -940,7 +940,7 @@ const codeContinue = async () => {
           });
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
-          if(aAid) {
+          if(aAid && window.localStorage.getItem('a_utm')) {
             $app.api.eth.auth.papSignUp({
               payload: {
                 pap_id: aAid,
@@ -979,7 +979,7 @@ const codeContinue = async () => {
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1019,7 +1019,7 @@ const codeContinue = async () => {
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1121,7 +1121,7 @@ const onSubmitPasswordForm = async () => {
           });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
