@@ -1,4 +1,5 @@
 *.log
+assets/fonts/icons
 nuxt.d.ts
 .env
 node_modules
@@ -16,4 +17,4 @@ yarn.lock
 .vscode
 .cache
 .pnpm-lock.yaml
-assets
+
