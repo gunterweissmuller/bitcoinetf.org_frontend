@@ -66,6 +66,7 @@ $header-height-desktop-fhd: 88;
 $header-notification-height-1024: 120;
 $header-notification-height-1440: 96;
 $header-notification-height-fhd: 96;
+$header-wallet-height-mobile: 139;
 
 @mixin touch-device() {
   @include breakpoint($touch-device) {
@@ -113,7 +114,7 @@ $header-notification-height-fhd: 96;
     min-height: vh(100);
     overflow: hidden;
 
-    &--purchase {
+    &--no-header {
       padding-top: 0;
     }
 

@@ -222,13 +222,19 @@ const routeNames = computed(() => ({
     title: 'Wallet',
     titleCrumb: 'Wallet',
     breadcrumbs: false,
-    // info: EPageInfoWallet,
+    info: EPageInfoWallet,
   },
   'personal-dividends': {
     title: 'Wallet',
     titleCrumb: 'Dividends',
     breadcrumbs: false,
-    // info: EPageInfoWallet,
+    info: EPageInfoWallet,
+  },
+  'personal-etfs': {
+    title: 'Wallet',
+    titleCrumb: 'ETFs',
+    breadcrumbs: false,
+    info: EPageInfoWallet,
   },
   'personal-referrals': {
     title: 'Wallet',
@@ -521,8 +527,10 @@ const tabs = computed(() => {
   if (route.path.includes('wallet')) {
     return [
       { text: 'Dividends', name: 'personal-dividends' },
-      { text: 'Referrals', name: 'personal-referrals' },
-      { text: 'Bonus', name: 'personal-bonus' },
+      { text: 'ETFs', name: 'personal-etfs' },
+      // { text: 'Dividends', name: 'personal-dividends' },
+      // { text: 'Referrals', name: 'personal-referrals' },
+      // { text: 'Bonus', name: 'personal-bonus' },
     ]
   }
 

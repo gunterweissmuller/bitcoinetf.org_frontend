@@ -248,6 +248,11 @@ export default defineNuxtConfig({
           path: '/personal/wallet/etfs',
           file: '~/src/widgets/w-etfs/w-etfs.vue',
         },
+        {
+          name: 'personal-sell-etfs',
+          path: '/personal/wallet/sell/etfs',
+          file: '~/src/widgets/w-sell-etfs/w-sell-etfs.vue',
+        },
       ]
       routes.push(...extendedRoutes)
     },

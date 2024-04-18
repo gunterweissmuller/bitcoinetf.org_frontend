@@ -1,16 +1,22 @@
 .w-dividends {
+  @include breakpoint($break-desktop-1024-minus) {
+    padding-top: torem($header-wallet-height-mobile);
+  }
+
   &__amount {
     display: flex;
-    flex-direction: column;
+    // flex-direction: column;
     align-items: center;
-    justify-content: center;
+    // justify-content: center;
     margin-bottom: var(--spacing-m-3);
 
-    @include breakpoint($break-desktop-1024) {
-      align-items: flex-start;
-      flex-direction: row;
-      justify-content: space-between;
-    }
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+
+    // @include breakpoint($break-desktop-1024) {
+      
+    // }
 
     &-title {
       color: var(--text-tertiary);
@@ -304,6 +310,11 @@
         width: torem(14);
         height: torem(14);
       }
+    }
+
+    &-dropdown {
+      // max-width: 71px;
+      width: fit-content;
     }
 
   }

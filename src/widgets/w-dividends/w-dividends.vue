@@ -57,8 +57,8 @@
             </div>
           </div>
           <div class="w-dividends__cards-footer">
-            <div class="w-dividends__cards-text">
-              All time <!--todo dropdown-->
+            <div class="w-dividends__cards-text w-dividends__cards-dropdown">
+              <m-dropdown :options="timeOptions"/>
             </div>
           </div>
         </div>
@@ -143,6 +143,7 @@ import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
+import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
 
 const { $app } = useNuxtApp()
 
@@ -482,9 +483,33 @@ onMounted(() => {
 })
 
 const timerStyle = computed(() => {
-  return `background: radial-gradient(#171A17 63%, transparent 64%), conic-gradient(var(--accent-primary) 0% ${timerPercent.value}%, var(--surfaces-selection) ${timerPercent.value}% 50%);`
+  return `background: radial-gradient(${$app.store.user.theme === 'dark' ? '#171A17' : '#ffffff'} 63%, transparent 64%), conic-gradient(var(--accent-primary) 0% ${timerPercent.value}%, var(--surfaces-selection) ${timerPercent.value}% 50%);`
   return `background: radial-gradient(black 60%, transparent 61%), conic-gradient(#D53738 0% ${timerPercent.value}%, transparent ${timerPercent.value}% 100%)`;
 })
+
+// time dropdown
+
+const timeOptions = [
+  {value : "All time"},
+  {value : "1 year"},
+  {value : "6 months"},
+  {value : "3 months"},
+  {value : "1 month"},
+  {value : "1 week"},
+  {value : "7 days"},
+  {value : "24 hours"},
+]
+
+const methods = [
+  {
+    label: 'Tether USDT (Polygon)',
+    value: 'polygon_usdt',
+    icon: Icon.ColorfulTron,
+  },
+]
+
+const timeValue = ref(methods[0]?.value);
+
 </script>
 
 <style src="./w-dividends.scss" lang="scss" />

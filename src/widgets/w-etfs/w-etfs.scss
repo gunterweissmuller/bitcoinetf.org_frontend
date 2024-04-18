@@ -1,4 +1,8 @@
 .w-etfs {
+  @include breakpoint($break-desktop-1024-minus) {
+    padding-top: torem($header-wallet-height-mobile);
+  }
+
   &__amount {
     display: flex;
     flex-direction: column;

@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="w-etfs__amount-buttons">
-          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary">
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => isShowSureModal = true">
             <a-icon
                 width="18"
                 height="18"
@@ -81,6 +81,7 @@
       </div>
     </div>
   </div>
+  <e-sell-etf-modal :show="isShowSureModal" :close="closeSureModal"  />
   <f-withdrawal-modal :address="address" :method="method" v-model="isOpenModal" @accept="setMethod" />
 
   <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" :is-purchase="nextRouteName == 'personal-buy-shares'"/>
@@ -90,6 +91,7 @@
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import FWithdrawalModal from '~/src/features/f-withdrawal-modal/f-withdrawal-modal.vue'
+import eSellEtfModal from '~/src/entities/e-sell-etf-modal/e-sell-etf-modal.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
@@ -383,6 +385,13 @@ const renderedSteps = computed(() => {
 const nextRouteName = computed(() => {
   return localStorage?.getItem('journey') ? 'personal-referrals' : 'personal-buy-shares'
 })
+
+// sure modal
+const isShowSureModal = ref(false);
+
+const closeSureModal = () => {
+  isShowSureModal.value = false;
+}
 </script>
 
 <style src="./w-etfs.scss" lang="scss" />
