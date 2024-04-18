@@ -19,32 +19,28 @@
   }
   &__item {
     cursor: pointer;
+    min-width: 22vw;
+    @media screen and (max-width: 767px) {
+      min-width: 50vw;
+    }
     img {
       width: auto;
       height: torem(24);
     }
   }
   &__row {
-    display: flex;
-    align-items: center;
-    gap: torem(207);
-    width: max-content;
-    animation: marquee 15s linear infinite;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    min-width: 100vw;
+    animation: marquee 60s linear infinite;
     height: torem(88);
-    @media (max-width: 899px) {
-      gap: torem(50);
-    }
   }
   &__wrapper {
-    padding: torem(0, 60);
+    padding: 0 10vw;
     position: relative;
     z-index: 2;
     display: flex;
     width: fit-content;
-    gap: torem(207);
-    @media (max-width: 899px) {
-      gap: torem(50);
-    }
   }
 
   a {

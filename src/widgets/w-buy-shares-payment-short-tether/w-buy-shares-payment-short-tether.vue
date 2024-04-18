@@ -43,12 +43,12 @@
         <a v-if="btnMoonpayActive" :href="moonpayPaymentLink" target="_blank">
           <button
             @click="btnMoonpayActive = false"
-            class="f-registration-buy__purchase--step-btn f-registration-buy__button-continue f-registration-buy--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">
+            class="w-buy-shares-payment-short-tether__paybtn w-full justify-center items-center whitespace-nowrap rounded-lg mb-5" tabindex="0">
             Pay
           </button>
         </a>
 
-        <div class="w-buy-shares-payment-short-tether__double-input">
+        <div class="w-buy-shares-payment-short-tether__double-input" v-if="!btnMoonpayActive">
           <div class="w-buy-shares-payment-short-tether__accordion-stable-address">
             <a-input
               bgColor="tetherspecial"
@@ -223,7 +223,7 @@ const getMoonpayWallets = async () => {
 }
 
 const openMoonpay = async () => {
-  return await openMoonpayHandler(getMoonpayWallets(), () => {}, false)
+  return await openMoonpayHandler(getMoonpayWallets, () => {}, false)
 }
 
 

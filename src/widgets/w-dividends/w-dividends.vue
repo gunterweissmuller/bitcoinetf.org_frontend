@@ -5,7 +5,7 @@
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
           <div class="w-dividends__amount-sum">
-            ${{ $app.filters.rounded($app.store.user?.info?.account?.order_type !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}
+            ${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}
             <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
               >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
             >
@@ -14,7 +14,7 @@
         </div>
       </div>
       <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
-        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name="$app.store.user?.info?.account?.order_type !== 'usdt' ? Icon.ColorfulBitcoin : Icon.ColorfulUsdt" />
+        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name=" orderType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin" />
         <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
         <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
       </button>
@@ -94,6 +94,7 @@ const { $app } = useNuxtApp()
 
 const isOpenModal = ref(false)
 const transactionsKey = ref(0)
+const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc')
 
 const enum DIVIDENDS_TYPES {
   PLUS = 'debit_to_client',
