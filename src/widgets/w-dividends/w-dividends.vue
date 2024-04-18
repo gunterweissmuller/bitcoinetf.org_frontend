@@ -5,7 +5,7 @@
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
           <div class="w-dividends__amount-sum">
-            ${{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }}
+            ${{ $app.filters.rounded($app.store.user?.info?.account?.order_type !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}
             <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
               >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
             >
