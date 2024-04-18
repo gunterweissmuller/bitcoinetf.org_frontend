@@ -53,10 +53,12 @@ const props = withDefaults(
     isExpand?: boolean
     perPage?: number
     hideView?: boolean
+    filters: Record<string, string> | null
   }>(),
   {
     isPage: false,
     perPage: 4,
+    filters: null
   },
 )
 
@@ -78,24 +80,14 @@ const fullPageNuxtLink = computed(() => {
   return nuxtLinkObject
 })
 
-const loadMoreTrades = async () => {
+const loadMoreTrades = () => {
   currentPage.value += 1
 
-  if (route.name === 'personal-asset-id') {
-    await getTrades(route.params.id)
-  } else if (route.query.asset_uuid) {
-    await getTrades(route.query.asset_uuid)
-  } else {
-    await getTrades()
-  }
+  getTrades()
 }
 
-const getTrades = async (assetId?: string) => {
-  const tradesFilters = {}
-
-  if (assetId) {
-    tradesFilters.asset_uuid = assetId
-  }
+const getTrades = async () => {
+  const tradesFilters = props.filters ?? {};
 
   const requestParams = {
     per_page: props.perPage,
@@ -117,13 +109,7 @@ const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
 onMounted(async () => {
-  if (route.name === 'personal-asset-id') {
-    await getTrades(route.params.id)
-  } else if (route.query.asset_uuid) {
-    await getTrades(route.query.asset_uuid)
-  } else {
-    await getTrades()
-  }
+  await getTrades()
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
@@ -135,7 +121,9 @@ onMounted(async () => {
   sub
     .on('publication', function (ctx) {
       $app.store.user.latestTrade = ctx.data.message?.result_amount
-     if (route.name !== 'personal-asset-id' && !route.query.asset_uuid) {
+      console.log(ctx.data.message);
+
+      if (route.name !== 'personal-assets-symbol' || ctx.data.message.asset_uuid === props.filters?.asset_uuid) {
         trades.value = [ctx.data.message, ...trades.value]
       }
     })
@@ -144,6 +132,10 @@ onMounted(async () => {
 
 onUnmounted(() => {
   centrifuge.value?.disconnect()
+})
+
+watch(() => props.filters, () => {
+  getTrades();
 })
 </script>
 

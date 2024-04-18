@@ -10,8 +10,8 @@
       title="AUM Allocation"
       :slider="false"
     />
-    <w-trades />
-    <w-activity />
+    <w-trades :filters="filters" />
+    <w-activity :filters="filters" />
     <w-news />
   </div>
 </template>
@@ -49,7 +49,6 @@ const asset = computed(() => {
 });
 
 const assetsChartData = computed<Array<Record<string, string>>>(() => {
-  // full balance
   const unset = {
     symbol: 'OTHERS',
     full_balance: 0
@@ -59,7 +58,9 @@ const assetsChartData = computed<Array<Record<string, string>>>(() => {
     .forEach((el : { full_balance: string }) => unset.full_balance += Number(el.full_balance))
   return [asset.value, unset];
 });
-// console.log(assetsChartData.value);
+
+const filters = computed(() => ({ asset_uuid: asset.value.uuid }));
+
 
 </script>
 
