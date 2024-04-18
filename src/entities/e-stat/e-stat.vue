@@ -24,7 +24,7 @@
           <span :class="['e-stat-default__title-text', `e-stat-default__title-text--${titleColor}`]">{{ title }}</span>
           <span v-if="difference" class="e-stat-default__title-difference">{{ difference }}</span>
         </div>
-        <div v-if="subtitle" v-html="subtitle" class="e-stat-default__subtitle"></div>
+        <div v-if="subtitle  && $app.store.user?.info?.account?.order_type !== 'usdt'" v-html="subtitle" class="e-stat-default__subtitle"></div>
         <div v-if="date" class="e-stat-default__date">{{ date }}</div>
       </div>
       <div class="e-stat-default__info">{{ info }}</div>
@@ -44,7 +44,7 @@
           </div>
           <div :class="['e-stat-list__item-right', {'e-stat-list__item-right--minus': item.type === 'withdrawal'}]">
             <div class="e-stat-list__usd">{{ item.usd }}</div>
-            <div class="e-stat-list__btc" v-html="item.btc"></div>
+            <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="e-stat-list__btc" v-html="item.btc"></div>
           </div>
         </div>
         <div
