@@ -9,14 +9,14 @@
     />
     <e-stat
       info="DIVIDENTS PAID"
-      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :title="`$${$app.filters.rounded($app.store.user?.dividends?.usd_amount)}`"
       :icon="Icon.MonoEarnings"
       iconType="small"
       bottom="dropdown"
     />
     <e-stat
       info="BTC IN RESERVE FUND"
-      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :title="`$${$app.filters.rounded($app.store.user?.btcValue)}`"
       :icon="Icon.ColorfulBitcoin"
       iconType="full"
       bottom="link"
@@ -30,7 +30,7 @@
     />
     <e-stat
       info="AUM"
-      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :title="`$${$app.filters.rounded(globalStatistic?.aum_usd)}`"
       :icon="Icon.MonoAnalytics"
       iconType="small"
       bottom="dropdown"
@@ -52,8 +52,13 @@ import { useNuxtApp } from '#app';
 
 const { $app } = useNuxtApp()
 const globalStatistic = computed(() => {
+  console.log($app.store.user)
+
   return $app.store.user.statistic
 })
+console.log(globalStatistic.value);
+console.log($app.store.user.dividends.usd_amount, 'div')
+
 </script>
 
 <style src="./w-shareholders-stats.scss" lang="scss" />
