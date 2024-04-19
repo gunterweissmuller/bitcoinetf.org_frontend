@@ -11,7 +11,7 @@
           ${{ $app.filters.rounded($app.store.user.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2) }}
         </div>
       </div>
-      <div class="w-chart-performance__info-text">
+      <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-chart-performance__info-text">
         <div
           class="w-chart-performance__info-text-btc"
           v-html="
