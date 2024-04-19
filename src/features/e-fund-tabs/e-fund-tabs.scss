@@ -30,7 +30,7 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: calc(100% - #{torem(16)});
+        width: calc(100%);
         height: torem(2);
         background: var(--accent-primary);
       }
