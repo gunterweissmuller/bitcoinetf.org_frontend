@@ -157,19 +157,19 @@ const mainData = {
 const marqueeData = {
   low_cards: [
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/yahoo.svg',
     },
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/bloomberg.svg',
     },
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/coindesk.svg',
     },
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/cointelegraph.svg',
     },
   ],
