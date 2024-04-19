@@ -338,38 +338,9 @@ onMounted(async () => {
           },
         ],
       },
-      options: {
-        plugins: {
-          legend: {
-            position: 'center',
-            align: 'center',
-            tooltip: {
-              intersect: false,
-            },
-          },
-        },
-        scales: {
-          x: {
-            grid: {
-              display: false, // Убираем отображение сетки по оси X
-            },
-          },
-          y: {
-            display: false, // Убираем отображение сетки и лейблов по оси Y
-          },
-        },
-        interaction: {
-          intersect: false,
-        },
-        elements: {
-          point: {
-            radius: 5,
-          },
-        },
-      },
+      options: options,
       plugins: [],
     }
-
 
     CHART_INSTANCE = new Chart(ctx, config)
     await getStatistics()
