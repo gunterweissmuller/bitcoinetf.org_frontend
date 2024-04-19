@@ -47,7 +47,7 @@
           @init="onSwiperInit"
           @resize="onSwiperResize"
           @update="onSwiperUpdate"
-          @slide-change="onSlideChange"
+          @activeIndexChange="onSlideChange"
         >
           <slot name="slides" />
         </swiper>
@@ -81,7 +81,7 @@ import 'swiper/css/free-mode'
 import 'swiper/scss/grid'
 import 'swiper/css/scrollbar'
 
-const emit = defineEmits(['reach-last-slide', 'swiper-init', 'slide-change'])
+const emit = defineEmits(['reach-last-slide', 'swiper-init', 'slide-change', 'get-real-index'])
 
 const props = withDefaults(
   defineProps<{
@@ -130,8 +130,8 @@ const props = withDefaults(
     activeIndex: 0,
     slidesLength: 0,
     qaLocatorSection: '',
-    variantNavigationButton: 'default',g,
-    grabCursor: true
+    variantNavigationButton: 'default',
+    grabCursor: true,
   },
 )
 
@@ -225,7 +225,11 @@ onMounted(() => {
 })
 
 const onSlideChange = (swiper) => {
-  emit('slide-change', swiper.activeIndex)
+  emit('slide-change', swiper)
+  getRealIndex(swiper.realIndex)
+}
+const getRealIndex = (index: number) => {
+  emit('get-real-index', index)
 }
 </script>
 
