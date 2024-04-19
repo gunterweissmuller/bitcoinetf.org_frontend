@@ -140,7 +140,7 @@
         </div>
       </div>
       <div class="m-deal__info">
-        <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.total_payments, 0) }} Shares</div>
+        <div class="m-deal__info-purchase-result m-deal__info-shareholders-result">{{ $app.filters.rounded(deal.total_payments, 0) }} Shares</div>
         <div class="m-deal__info-purchase">{{ $app.filters.rounded((deal.total_payments / fundTotalUsd * 100), 2) }}% of circulation</div>
       </div>
     </template>

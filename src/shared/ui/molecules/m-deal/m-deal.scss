@@ -256,6 +256,10 @@
   min-width: torem(18);
 }
 
+.m-deal__info-shareholders-result {
+  color: var(--text-primary);
+}
+
 body[data-theme='dark'] {
   .m-deal:not(:last-child) {
     border-bottom: 2px solid #1B1A1F;
