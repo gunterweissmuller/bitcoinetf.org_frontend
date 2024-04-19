@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="w-etfs__amount-buttons">
-          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => isShowSureModal = true">
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}">
             <a-icon
                 width="18"
                 height="18"
@@ -19,7 +19,7 @@
               Buy
           </div>
 
-          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary">
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
             <a-icon
                 width="18"
                 height="18"
@@ -28,7 +28,7 @@
               Sell
           </div>
 
-          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary">
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="handleVerify">
             <a-icon
                 width="18"
                 height="18"
@@ -266,11 +266,7 @@ const isMore200Usd = computed(() => {
   return walletDividends.value?.usd_amount > 100
 })
 
-const checkKyc = async () => {
-  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
-    return formsResponse.data[0].status === 'passed'
-  })
-}
+
 
 const withdrawalDividends = async () => {
   $app.api.eth.billingEth
@@ -392,6 +388,26 @@ const isShowSureModal = ref(false);
 const closeSureModal = () => {
   isShowSureModal.value = false;
 }
+
+// verify
+
+const checkKyc = async () => {
+  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
+    return formsResponse.data[0].status === 'passed'
+  })
+}
+
+const handleVerify = async () => {
+  const isKycFinished = await checkKyc()
+
+  if (isKycFinished) {
+    //todo ?
+    navigateTo({ name: 'personal-kyc' })
+  } else {
+    navigateTo({ name: 'personal-kyc' })
+  }
+}
+
 </script>
 
 <style src="./w-etfs.scss" lang="scss" />

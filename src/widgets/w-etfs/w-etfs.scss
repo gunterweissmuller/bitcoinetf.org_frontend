@@ -160,6 +160,11 @@
       @include breakpoint($break-desktop-1024) {
         text-align: start;
       }
+
+      @include breakpoint($break-tablet-minus) {
+        font-size: torem(24);
+        margin-bottom: var(--spacing-m-1);
+       }
     }
 
     &-plus {

@@ -293,15 +293,20 @@ const routesList = [
         link: 'personal-dividends',
       },
       {
-        title: 'Referrals',
+        title: 'ETFs',
         icon: Icon.MonoEarnings,
-        link: 'personal-referrals',
+        link: 'personal-etfs',
       },
-      {
-        title: 'Bonus',
-        icon: Icon.MonoEarnings,
-        link: 'personal-bonus',
-      },
+      // {
+      //   title: 'Referrals',
+      //   icon: Icon.MonoEarnings,
+      //   link: 'personal-referrals',
+      // },
+      // {
+      //   title: 'Bonus',
+      //   icon: Icon.MonoEarnings,
+      //   link: 'personal-bonus',
+      // },
     ],
   },
 ]

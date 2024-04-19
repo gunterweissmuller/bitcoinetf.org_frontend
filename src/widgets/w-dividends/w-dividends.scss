@@ -31,6 +31,10 @@
         text-align: start;
       }
 
+      @include breakpoint($break-tablet-minus) {
+       line-height: normal;
+      }
+
 
     }
 
@@ -162,6 +166,10 @@
       @include breakpoint($break-desktop-1024) {
         text-align: start;
       }
+
+      @include breakpoint($break-tablet-minus) {
+        font-size: torem(24);
+       }
     }
 
     &-plus {
@@ -191,6 +199,11 @@
     justify-content: center;
     flex-direction: column;
 
+    @include breakpoint($break-tablet-minus) {
+      width: 87px;
+      height: 87px;
+    }
+
     &-name {
       color: var(--text-tertiary);
       text-align: center;
@@ -199,6 +212,10 @@
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+
+      @include breakpoint($break-tablet-minus) {
+        font-size: torem(8);
+      }
     }
 
     &-time {
@@ -209,7 +226,13 @@
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+
+      @include breakpoint($break-tablet-minus) {
+        font-size: torem(12);
+      }
     }
+
+
   
   }
 
@@ -295,6 +318,7 @@
     &-icon-edit {
       width: torem(18);
       height: torem(18);
+      color: var(--accent-primary);
     }
 
     &-icon-dollar {
@@ -315,6 +339,32 @@
     &-dropdown {
       // max-width: 71px;
       width: fit-content;
+    }
+
+    &-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin: auto 0;
+      cursor: pointer;
+
+      &-img {
+        width: var(--spacing-m-3);
+        height: var(--spacing-m-3);
+        color: var(--accent-primary);
+      }
+
+      &-text {
+        margin-top: var(--spacing-m-1);
+        color: var(--accent-primary);
+        text-align: center;
+        font-family: DM,sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
     }
 
   }

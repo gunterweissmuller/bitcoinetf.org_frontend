@@ -21,7 +21,25 @@
       </div>
 
       <div class="w-dividends__cards">
-        <div class="w-dividends__cards-item w-dividends__cards-item-withdraw">
+
+        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw" @click="openModal">
+
+          <div class="w-dividends__cards-add">
+            <div class="w-dividends__cards-add-img">
+              <a-icon
+                width="32"
+                height="32"
+                :name="Icon.MonoPlus"
+              />
+            </div>
+            <div class="w-dividends__cards-add-text">
+              Add Withdrawal Method
+            </div>
+          </div>
+          
+        </div>
+
+        <div v-else class="w-dividends__cards-item w-dividends__cards-item-withdraw">
           <div class="w-dividends__cards-header" @click="openModal">
             <a-icon width="24" height="24" class="w-dividends__cards-icon-method" :name="typeMethodIcon" />
             <a-icon width="18" height="18" class="w-dividends__cards-icon-edit"  :name="Icon.MonoActionEdit" />
@@ -36,7 +54,7 @@
           </div>
           <div class="w-dividends__cards-footer">
             <div class="w-dividends__cards-text">
-              Automatic withdrawal once the cash balance reaches $250.
+              {{ subInfo }}
             </div>
           </div>
         </div>
@@ -65,7 +83,8 @@
 
       </div>
 
-      <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
+      <!-- OLD -->
+      <!-- <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
         <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name=" orderType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin" />
         <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
         <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
@@ -86,7 +105,8 @@
 
           <a-icon width="18" height="18" class="w-dividends__amount-method__chevron" :name="Icon.MonoChevronRight" />
         </div>
-      </div>
+      </div> -->
+
       <div class="w-dividends__subtitle">Transactions</div>
       <div v-if="personalDividends.length" class="w-dividends__list">
         <transition-group name="fade" tag="div">
@@ -144,6 +164,7 @@ import { onUnmounted } from 'vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
 import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
+import eNotEnoughBalanceModal from '~/src/entities/e-not-enough-balance-modal/e-not-enough-balance-modal.vue'
 
 const { $app } = useNuxtApp()
 
@@ -158,13 +179,15 @@ const enum DIVIDENDS_TYPES {
 }
 
 const openModal = async () => {
-  const isKycFinished = await checkKyc()
+  // const isKycFinished = await checkKyc()
 
-  if (isKycFinished) {
-    isOpenModal.value = true
-  } else {
-    navigateTo({ name: 'personal-kyc' })
-  }
+  // if (isKycFinished) {
+  //   isOpenModal.value = true
+  // } else {
+  //   navigateTo({ name: 'personal-kyc' })
+  // }
+
+  isOpenModal.value = true
 }
 
 const walletDividends = ref([])
@@ -209,6 +232,12 @@ const setMethod = async (value) => {
 
 const typeWorkMethod = computed(() => {
   return (method.value === 'bitcoin_lightning' || method.value === 'polygon_usdt') ? 'Automatic' : 'Manual'
+})
+
+const subInfo = computed(() => {
+  return method.value === 'bitcoin_lightning' || method.value === 'polygon_usdt'
+    ? 'Withdrawals will be made automatically daily'
+    : ' Withdrawals will be made automatically once the cash balance reaches $250.'
 })
 
 const typeMethodIcon = computed(() => {
@@ -466,7 +495,10 @@ onMounted(() => {
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     // Display the result in the element with id="demo"
-    timerText.value = hours + ":"+ minutes + ":" + seconds;
+    const displayHours = String(hours).length < 2 ? "0" + hours : hours ;
+    const displayMinutes = String(minutes).length < 2 ? "0" + minutes : minutes;
+    const displaySeconds = String(seconds).length < 2 ? "0" + seconds : seconds;
+    timerText.value = displayHours+":"+ displayMinutes+":"+displaySeconds;
 
     // If the count down is finished, write some text
     if (distance < 0) {
@@ -509,6 +541,7 @@ const methods = [
 ]
 
 const timeValue = ref(methods[0]?.value);
+
 
 </script>
 
