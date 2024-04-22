@@ -216,6 +216,7 @@ import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { document } from 'postcss'
+import { Centrifuge } from 'centrifuge'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -487,7 +488,7 @@ const handleTelegramAuth = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
@@ -542,6 +543,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
+                  connectToReplenishment()
 
                   await router.push('/personal/analytics/performance')
                 });
@@ -659,7 +661,7 @@ const handleAppleConnect = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
@@ -1155,6 +1157,46 @@ onMounted(() => {
       accordionRef.value?.open()
   }
 })
+
+
+// Payment and sockets
+const centrifuge = ref<Centrifuge>(null)
+
+const accountUuid = computed(() => {
+  return $app.store.user.info?.account?.uuid
+})
+
+const infoPayment = ref(null)
+
+const isOpenSuccessModal = ref(false)
+
+watch(infoPayment, (value) => {
+  if (value) {
+    isOpenSuccessModal.value = true
+  }
+})
+
+function connectToReplenishment() {
+  const config = useRuntimeConfig()
+  const centrifugeURL = config.public.WS_URL
+  const centrifugeToken = config.public.WS_TOKEN
+  centrifuge.value = new Centrifuge(centrifugeURL, {
+    token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken,
+  })
+
+  centrifuge.value.connect()
+
+  const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
+
+  sub
+    .on('publication', async function (ctx) {
+      if (ctx.data.message?.data?.status === 'success') {
+        infoPayment.value = ctx.data.message?.data
+      }
+    })
+    .subscribe()
+}
+
 </script>
 
 <style lang="scss" src="./f-registration.scss" />
