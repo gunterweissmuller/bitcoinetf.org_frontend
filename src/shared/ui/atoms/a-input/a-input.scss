@@ -68,20 +68,17 @@
     }
 
     &--tetherspecial {
-
       &:hover {
-
         .a-input__input-container {
           // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
           background: transparent;
         }
 
         .a-input__input {
-          background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
-          background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
+          background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
+          background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
           // border: 1px solid transparent;
         }
-
       }
 
       .a-input__input-container {
@@ -90,8 +87,8 @@
       }
 
       .a-input__input {
-        background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50)) !important;
-        background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50)) !important;
+        background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5)) !important;
+        background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5)) !important;
         border: 1px solid transparent;
       }
     }
@@ -122,7 +119,6 @@
     transform: translateY(-50%);
   }
 
-
   &__input {
     width: 100%;
     min-width: torem(100);
@@ -133,7 +129,9 @@
     border-radius: torem(8);
     caret-color: var(--text-primary);
     /* stylelint-disable-next-line */
-    transition: border-color 0.4s ease-in-out, background-color 0.4s ease-in-out;
+    transition:
+      border-color 0.4s ease-in-out,
+      background-color 0.4s ease-in-out;
     font-family: Dm, sans-serif;
     font-size: torem(16);
     font-weight: 400;
@@ -143,7 +141,6 @@
       position: relative;
       padding-left: torem(40);
     }
-
 
     &:hover {
       background: var(--surfaces-surface-2);
@@ -156,7 +153,6 @@
       .a-input__input-title--small {
         color: var(--accent-primary);
       }
-
     }
 
     &:focus {
@@ -196,9 +192,9 @@
       font-size: torem(16);
       font-weight: 400;
       line-height: torem(21);
-      transition: .15s cubic-bezier(.4, 0, .2, 1);
+      transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: none;
-
+      opacity: 0.5;
       &--bold {
         font-weight: 600;
       }
@@ -252,7 +248,7 @@
       flex-direction: column;
       justify-content: center;
       max-width: 100%;
-      background-color: var(--surfaces-surface-2)
+      background-color: var(--surfaces-surface-2);
     }
 
     &--open {
@@ -284,7 +280,6 @@
       background-clip: content-box !important;
       -webkit-text-fill-color: var(--text-primary);
       box-shadow: torem(0, 0, 0, 1000) var(--color-state-active) inset;
-
     }
 
     &:-webkit-autofill:hover,

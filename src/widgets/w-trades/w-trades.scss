@@ -14,7 +14,7 @@
   }
 
   &__head {
-    margin-bottom: torem(16);
+    margin-bottom: var(--spacing-m-1);
     display: flex;
     justify-content: space-between;
 
@@ -39,6 +39,16 @@
     box-shadow: var(--b-shadow-1);
     border: torem(1) solid var(--surfaces-surface-glass-border);
     border-radius: var(--spacing-s);
+
+    &-main {
+
+      &-wrapper {
+        gap: var(--spacing-xs);
+        border-radius: var(--spacing-m-1);
+        overflow: hidden;
+        background: #01040F;
+      }
+    }
   }
 
   &__more {

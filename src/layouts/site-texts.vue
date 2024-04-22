@@ -1,18 +1,23 @@
 <template>
-  <w-header-dark/>
+  <w-header-dark />
   <main>
-    <slot/>
+    <slot />
   </main>
-  <s-site-footer/>
-
+  <s-site-footer />
 </template>
 
 <script setup lang="ts">
 import WHeaderDark from '~/src/widgets/layouts/w-header-dark/w-header-dark.vue'
-import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
+import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
 </script>
 
 <style lang="scss">
+section {
+  color: var(--text-inverse-primary);
+  background: #01040f;
+  overflow: hidden;
+}
+
 .l-site {
   max-width: torem(1062);
   margin: 0 auto;

@@ -1,0 +1,132 @@
+.guarantees-card {
+  display: flex;
+  width: 312px;
+  padding: var(--Spacing-M2, 24px);
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(32px);
+  position: relative;
+
+  &__label {
+    position: absolute;
+    top: -16px;
+    left: 95px;
+
+    display: flex;
+    padding: 4px 16px;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+
+    color: #fff;
+
+    text-align: center;
+    /* Body 1/Bold */
+    font-family: DM, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__title {
+    color: #fff;
+    /* H6/Bold */
+    font-family: DM, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__capital {
+    color: #fff;
+
+    font-family: 'Jakarta', sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 28.8px */
+  }
+
+  &__cost {
+    color: var(--Text-Primary, #f1f2f4);
+    /* H3/Bold */
+    font-family: DM, sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+    margin-bottom: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+  }
+
+  &__current_balance {
+    color: #fff;
+
+    /* H6/Bold */
+    font-family: Dm, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+
+    & span {
+      margin-left: 10px;
+      display: flex;
+      padding: 4px var(--Spacing-S, 8px);
+
+      justify-content: center;
+      align-items: center;
+      gap: var(--Spacing-S, 8px);
+      border-radius: 4px;
+
+      background: var(--Accent-Primary, #4d94ff);
+
+      color: var(--Text-Inverse-Primary, #fff);
+      /* Caption 2/Bold */
+      font-family: Dm, sans-serif;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+  }
+
+  &__body_text {
+    margin-top: torem(16);
+    color: #fff;
+
+    font-family: 'Jakarta', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 19.2px */
+  }
+
+  &__button {
+    margin-top: torem(16);
+    display: flex;
+    padding: var(--Spacing-S, 8px) var(--Spacing-M1, 16px);
+    justify-content: center;
+    align-items: center;
+
+    border-radius: var(--Spacing-S, 8px);
+    background: var(--Button-Primary, #4d94ff);
+
+    color: var(--Text-Inverse-Primary, #fff);
+    /* Body 2/Bold */
+    font-family: Dm, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+}

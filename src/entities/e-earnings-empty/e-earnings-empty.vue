@@ -7,8 +7,8 @@
       :icon="Icon.MonoPlus"
       class="e-earnings-empty__btn"
       text="Buy Bitcoin ETF Shares"
-      @click="$router.push({ name: 'personal-buy-shares' })"
-    />
+      @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"
+    /> <!--@click="$router.push({ name: 'personal-buy-shares' })"-->
   </div>
 </template>
 

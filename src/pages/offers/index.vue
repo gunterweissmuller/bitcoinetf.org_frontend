@@ -51,6 +51,7 @@ const { data: sections } = useAsyncData('offers', async () => {
 
   &__title {
     margin-bottom: torem(32);
+    color: var(--text-primary);
 
     @media (max-width: 767px) {
       margin-bottom: torem(24);
@@ -61,11 +62,14 @@ const { data: sections } = useAsyncData('offers', async () => {
     font-size: torem(20);
     line-height: torem(26);
     margin-bottom: torem(48);
+    color: var(--text-secondary);
+    width: 80%;
 
     @media (max-width: 767px) {
       font-size: torem(16);
       line-height: torem(20);
       margin-bottom: torem(32);
+      width: 100%;
     }
   }
 

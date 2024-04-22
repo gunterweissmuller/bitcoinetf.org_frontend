@@ -1,19 +1,27 @@
 <template>
-  <m-scroll-navigation v-if="sections && y > sections[2]?.top" :length="sections.length - 2" :data="scrollInfo"/>
-  <s-site-main :data="mainData"/>
-  <s-site-marquee :data="marqueeData"/>
+  <m-scroll-navigation
+    v-if="sections && y > sections[0]?.top"
+    :length="sections.length + 1"
+    :data="scrollInfo"
+    hidden-mobile
+  />
+  <s-site-main :data="mainData" />
+  <s-site-marquee :data="marqueeData" />
+  <s-site-how-it-work />
+  <s-site-main-calculate />
+  <s-site-guarantees />
   <!-- <s-site-welcome :data="welcomeData"/> -->
-  <s-site-ultimate :data="ultimateData"/>
-  <s-site-act :data="actData"/>
-  <s-site-investor :data="investorData"/>
-  <s-site-fundinfo-dark/>
-  <s-site-fund/>
-  <s-site-protection :data="protectionData"/>
-  <s-site-bitcoin-education :data="blogNewsEdu" v-if="blogNewsEdu?.length" :is-education="true"/>
-  <s-site-earnings :data="earningsData"/>
-  <s-site-transparency :data="transparencyData"/>
-  <s-site-news :data="blogNews" v-if="blogNews?.length"/>
-  <s-site-footer/>
+  <!--<s-site-ultimate :data="ultimateData"/>-->
+  <!--<s-site-act :data="actData"/>-->
+  <!--<s-site-investor :data="investorData"/>-->
+  <!--<s-site-fundinfo-dark/>-->
+  <!--<s-site-fund/>-->
+  <!--<s-site-protection :data="protectionData"/>-->
+  <s-site-bitcoin-education :data="blogNewsEdu" :is-education="true" />
+  <s-site-earnings :data="earningsData" />
+  <s-site-transparency :data="transparencyData" />
+  <s-site-news :data="blogNews" v-if="blogNews?.length" />
+  <s-site-footer />
 </template>
 
 <script setup lang="ts">
@@ -31,25 +39,32 @@ import SSiteEarnings from '~/src/shared/ui/site/sections/s-site-earnings/s-site-
 import SSiteTransparency from '~/src/shared/ui/site/sections/s-site-transparency/s-site-transparency.vue'
 import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
 import SSiteFundinfoDark from '~/src/shared/ui/site/sections/s-site-fundinfo-dark/s-site-fundinfo-dark.vue'
-import SSiteBitcoinEducation
-  from '~/src/shared/ui/site/sections/s-site-bitcoin-education/s-site-bitcoin-education.vue'
+import SSiteBitcoinEducation from '~/src/shared/ui/site/sections/s-site-bitcoin-education/s-site-bitcoin-education.vue'
 import SSiteNews from '~/src/shared/ui/site/sections/s-site-news/s-site-news.vue'
-import {useWindowScroll} from '@vueuse/core'
-import {useWindowSize} from '@vueuse/core'
-import {useNuxtApp} from '#app'
+import SSiteHowItWork from '~/src/shared/ui/site/sections/s-site-how-it-work/s-site-how-it-work.vue'
+import SSiteGuarantees from '~/src/shared/ui/site/sections/s-site-guarantees/s-site-guarantees.vue'
+import SSiteMainCalculate from '~/src/shared/ui/site/sections/s-site-main-calculate/s-site-main-calculate.vue'
+
+import { useWindowScroll } from '@vueuse/core'
+import { useWindowSize } from '@vueuse/core'
+import { useNuxtApp } from '#app'
 import localStorage from '../app/localStorage'
+import { defineAsyncComponent } from 'vue'
+
+const LandingCalculation = defineAsyncComponent(
+  () => import('~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue'),
+)
 
 definePageMeta({
   layout: 'site-dark',
- })
+})
 useSeoMeta({
   title: 'BitcoinETF.org: Premier Digital ETF | Earn Bitcoin Dividends Daily',
-  description:'Join BitcoinETF.org, the leading digital ETF platform offering daily Bitcoin dividends, a robust reserve fund, and a sophisticated Mastercard. Calculate your potential returns, learn about our automated trading desks, and secure your financial freedom with transparent investments starting from $1,000.'
+  description:
+    'Join BitcoinETF.org, the leading digital ETF platform offering daily Bitcoin dividends, a robust reserve fund, and a sophisticated Mastercard. Calculate your potential returns, learn about our automated trading desks, and secure your financial freedom with transparent investments starting from $1,000.',
 })
 
-
-const {y} = useWindowScroll(window)
-const {width} = useWindowSize()
+const { y } = useWindowScroll(window)
 
 const isLoaded = ref(false)
 
@@ -57,22 +72,27 @@ const scrollInfo = ref({})
 
 const sections = ref([])
 
+const START_TO_SHOW_SECTION_ID = 2
+const IGNORE_SECTIONS_ID = [0]
+
 const getElements = () => {
-  const sectionsArray = document.querySelectorAll('section');
-  const footer = document.querySelector('footer');
-  const header = document.querySelector('header');
+  const sectionsArray = document.querySelectorAll('section')
+  const footer = document.querySelector('footer')
+  const header = document.querySelector('header')
+
+  sections.value = Object.values(sectionsArray)
+    .filter((section, index) => !IGNORE_SECTIONS_ID.includes(index))
+    .map((section, index) => ({
+      top: section.offsetTop - header.offsetHeight,
+      name: section.dataset.name || '',
+      id: index + START_TO_SHOW_SECTION_ID,
+    }))
 
   const lasElement = {
-    top: footer.offsetTop - header.offsetHeight,
+    top: footer.offsetTop - header.offsetHeight - window.innerHeight / 5,
     name: 'Final',
-    id: sectionsArray.length - 1,
+    id: sections.value.length + START_TO_SHOW_SECTION_ID,
   }
-
-  sections.value = Object.values(sectionsArray).map((section, index) => ({
-    top: section.offsetTop - header.offsetHeight,
-    name: index > 1 ? section.dataset.name : '',
-    id: index - 1,
-  }))
 
   sections.value.push(lasElement)
 }
@@ -84,16 +104,19 @@ onUpdated(() => {
   isLoaded.value = true
 })
 
+const timerId = ref(null)
+
 watch(y, (newVal) => {
+  clearTimeout(timerId.value)
+  timerId.value = setTimeout(() => {
+    getElements()
+  }, 0)
+
   sections.value.forEach((section) => {
     if (newVal > section.top) {
       scrollInfo.value = section
     }
   })
-})
-
-watch(width, () => {
-  getElements()
 })
 
 const mainData = {
@@ -134,28 +157,20 @@ const mainData = {
 const marqueeData = {
   low_cards: [
     {
-      link: 'https://www.digitaljournal.com/pr/news/globe-pr-wire/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets',
-      img: '/marquee/digitaljournal.svg'
+      link: '/#',
+      img: '/img/icons/colorful/yahoo.svg',
     },
     {
-      link: 'https://www.benzinga.com/content/36408488/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-se',
-      img: '/marquee/benzinga.png'
+      link: '/#',
+      img: '/img/icons/colorful/bloomberg.svg',
     },
     {
-      link: 'https://apnews.com/press-release/marketersmedia/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets-ed41cc9cde1250d6767d3972cc0a46cd',
-      img: '/marquee/ap.svg'
+      link: '/#',
+      img: '/img/icons/colorful/coindesk.svg',
     },
     {
-      link: 'https://markets.businessinsider.com/news/stocks/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets-1032931262',
-      img: '/marquee/bi.svg'
-    },
-    {
-      link: 'https://pr.newsmax.com/article/BitcoinETForg-Surpasses-dollar50M-in-Assets-Under-Management-in-Its-Inaugural-Year-Exclusively-Serving-Select-International-Markets?storyId=658e58f2f29dad0008f55450',
-      img: '/marquee/nm.svg'
-    },
-    {
-      link: 'https://www.streetinsider.com/The+Financial+Capital/BitcoinETF.org+Surpasses+%2450M+in+Assets+Under+Management+in+Its+Inaugural+Year%2C+Exclusively+Serving+Select+International+Markets/22574048.html',
-      img: '/marquee/StreetInsider.com.svg'
+      link: '/#',
+      img: '/img/icons/colorful/cointelegraph.svg',
     },
   ],
 }
@@ -358,37 +373,39 @@ const blogNewsEdu = ref([])
 const blogNewsEduPage = ref(1)
 
 const getBlogNewsRequest = async (uuid, page = 1) => {
-  return await useNuxtApp().$app.api.eth.news.getListNewsArticles({uuid, page}).then(resp => resp)
+  return await useNuxtApp()
+    .$app.api.eth.news.getListNewsArticles({ uuid, page })
+    .then((resp) => resp)
 }
 
 interface Post {
-  slug: string;
-  title: string;
-  excerpt: string;
-  feature_image: string;
-  created_at: string;
+  slug: string
+  title: string
+  excerpt: string
+  feature_image: string
+  created_at: string
 }
 
 interface Blog {
-  posts: Post[];
+  posts: Post[]
 }
 
-const blogPosts = ref<Post[]>([]);
+const blogPosts = ref<Post[]>([])
 
-const blogConfig = (page : number) => {
+const blogConfig = (page: number) => {
   return {
     limit: 11,
     fields: 'slug,title,excerpt,feature_image,created_at',
-    page: page
+    page: page,
   }
 }
 
-const getBlogNews = async (page : number = 1) => {
+const getBlogNews = async (page: number = 1) => {
   return await useNuxtApp()
-    .$app.api.eth.news.getGhostBlogs( blogConfig(page) )
-    .then(({ data } : { data: Blog }) => {
-      blogNews.value = data.posts;
-    });
+    .$app.api.eth.news.getGhostBlogs(blogConfig(page))
+    .then(({ data }: { data: Blog }) => {
+      blogNews.value = data.posts
+    })
 }
 
 const getBlogNewsEdu = async (uuid = BITCOIN_EDUCATION_NEWS_UUID, page = 1) => {

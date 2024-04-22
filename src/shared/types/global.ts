@@ -31,3 +31,5 @@ export interface IDeal {
 
 export type IWalletType = 'dividends' | 'referral'
 export type IMethod = 'none' | 'manual' | 'automatic_daily'
+
+export type OrderType = 'init_btc' | 'usdt' | 'btc'

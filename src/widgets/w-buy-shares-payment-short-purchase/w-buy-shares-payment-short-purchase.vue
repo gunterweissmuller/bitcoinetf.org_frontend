@@ -42,7 +42,7 @@
       @on-input-click="() => copyToClipboardAmount()"
       isBoldInput
     />
-    
+
     <!-- <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
       {{ tronButtonCheckPayment }}
     </button> -->
@@ -103,23 +103,23 @@ const onCountdownEnd = () => {
 }
 
 const computedAddr = computed(()=>{
-  return props.payType == PayTypes.Tron ? $app.store.user.info?.account?.tron_wallet 
-        : props.payType == PayTypes.Ethereum ? $app.store.user.wallets.ethereum.address 
-        : props.payType == PayTypes.Polygon ? $app.store.user.wallets.polygon.address 
+  return props.payType == PayTypes.Tron ? $app.store.user.info?.account?.tron_wallet
+        : props.payType == PayTypes.Ethereum ? $app.store.user.wallets.ethereum.address
+        : props.payType == PayTypes.Polygon ? $app.store.user.wallets.polygon.address
         : $app.store.user.info?.account?.tron_wallet;
 });
 
 const computedText = computed(()=>{
-  return props.payType == PayTypes.Tron ? "Tether USDT (Tron, TRC-20)" 
-  : props.payType == PayTypes.Ethereum ? "Tether USDT (Ethereum, ERC-20)" 
-  : props.payType == PayTypes.Polygon ? "Tether USDT (Polygon, MATIC)" 
+  return props.payType == PayTypes.Tron ? "Tether USDT (Tron, TRC-20)"
+  : props.payType == PayTypes.Ethereum ? "Tether USDT (Ethereum, ERC-20)"
+  : props.payType == PayTypes.Polygon ? "Tether USDT (Polygon, MATIC)"
   : "Tether USDT (Tron, TRC-20)";
 });
 
 const computedIcon = computed(()=>{
-  return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg' 
-  : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg' 
-  : props.payType == PayTypes.Polygon ? '/img/icons/colorful/usdt-matic.svg' 
+  return props.payType == PayTypes.Tron ? '/img/icons/colorful/usdt-trc20.svg'
+  : props.payType == PayTypes.Ethereum ? '/img/icons/colorful/usdt-erc20.svg'
+  : props.payType == PayTypes.Polygon ? '/img/icons/colorful/usdt-matic.svg'
   : '/img/icons/colorful/usdt-trc20.svg';
 });
 
@@ -191,18 +191,18 @@ onMounted(async () => {
     await initPayment()
   }
   if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
-    
-    const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, { 
-      method: 'POST', 
+
+    const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
+      method: 'POST',
       headers: new Headers({
         'Authorization': 'Bearer ' + $app.store.auth.accessToken,
         'Content-Type': 'application/json'
-      }), 
+      }),
       body: JSON.stringify({
         dividends: props.switches?.dividends ? true : false,
-        referral: props.switches?.referral ? true : false, 
+        referral: props.switches?.referral ? true : false,
         bonus: false,
-        amount: props.calcValue, 
+        amount: props.calcValue,
         order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'
       })
     });
@@ -216,10 +216,10 @@ onMounted(async () => {
       })
       $app.store.user.buyShares = res
     }
-    
+
     // await $app.api.eth.billingEth
     //   .buyShares({
-    //     amount: props.calcValue, 
+    //     amount: props.calcValue,
     //     dividends: false,
     //     referral: props.refCode && props.refCode !== '' ? true : false,
     //     bonus: false,
@@ -241,7 +241,7 @@ onMounted(async () => {
   }
   initializeTronClock();
 
-  startTronTimer();
+  // startTronTimer();
 })
 
 watch(
@@ -360,7 +360,7 @@ const tronTimerHours = ref(0)
 const tronTimerMinutes = ref(0)
 let timeinterval = null
 function initializeTronClock() {
-  
+
   function updateClockTron() {
     const t = getTimeTron();
 
@@ -452,12 +452,12 @@ const copyToClipboardAmount = () => {
 
 const cancelOrder = async () => {
 
-  const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/apollopayment/cancel-order`, { 
-    method: 'POST', 
+  const response = await fetch(`https://${hostname}/v3/public/billing/shares/payment/cancel-order`, { //  /v3/public/billing/shares/buy/apollopayment/cancel-order
+    method: 'POST',
     headers: new Headers({
       'Authorization': 'Bearer ' + $app.store.auth.accessToken,
       'Content-Type': 'application/json'
-    }), 
+    }),
     body: JSON.stringify({
       replenishment_uuid: $app.store.user.buyShares.data.uuid
     })

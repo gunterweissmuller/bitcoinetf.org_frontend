@@ -2,10 +2,10 @@
   <div v-if="isVisible" class="a-pagination">
     <button
       v-for="(page, index) in visibleItems"
-      :key="(page as number + index as number)"
+      :key="((page as number) + index) as number"
       class="a-pagination__item a-font_button-s"
       :class="{ 'a-pagination__selected': pageIndex === page, 'disabledPage': page === ellipsisText }"
-      :disabled="page === ellipsisText"
+      :disabled="page === ellipsisText || disabledPagination"
       @click="onPageClickHandler(page as number)"
     >
       {{ page }}
@@ -40,11 +40,15 @@ const props = defineProps({
 
   clickCallback: {
     type: Function,
-    required: true
-  }
+    required: true,
+  },
+  disabledPagination: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const currentPageIndex = ref(Number(props.currentPage));
+const currentPageIndex = ref(Number(props.currentPage))
 
 const maxPageElements = 6
 
@@ -128,13 +132,15 @@ const visibleItems = computed(() => {
 })
 
 const pageIndex = computed(() => {
-  return currentPageIndex.value;
+  return currentPageIndex.value
 })
 
 const onPageClickHandler = (page: number) => {
-  currentPageIndex.value = page;
+  if (props.disabledPagination) return
 
-  props.clickCallback(page);
+  currentPageIndex.value = page
+
+  props.clickCallback(page)
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

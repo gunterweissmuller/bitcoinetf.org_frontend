@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :disabled-amount="isSignupAndBuy"></m-profit-calculator-new>
 
 
 
@@ -53,7 +53,11 @@
           <div @click="testTG" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Telegram}]">
             <nuxt-img src="/img/icons/colorful/telegram3.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
-          
+
+          <div @click="handleAppleConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Apple}]">
+            <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
+
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
@@ -73,7 +77,7 @@
             :buttonText="codeSendText"
             :buttonClick="() => {sendCode()}"
             validation-reg-exp-key="email"
-            :disabled="dataDisabled"
+            :disabled="dataDisabled || isEmailDisabled"
             required
             :error-text="emailErrorText"
             @blur="emailFieldBlurHandler"
@@ -89,7 +93,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -118,13 +122,18 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
       <div class="w-buy-shares-payment-short-tether"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-tether v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-tether
+          v-if="isUserAuthenticated"
+          :calc-value-original="buyAmountOriginal"
+          :calc-value="buyAmount"
+          :is-fiat="isFiatLanding"
+        />
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -136,8 +145,10 @@
             <a-icon :name="Icon.ColorfulUsdttron" class="langing-calculation__processWith--tron"/>
           </nuxt-link>
           <nuxt-link to="/weloverussia" v-if="!isFiatLanding">
-            <a-icon :name="Icon.ColorfulVisawhite"/>
-            <a-icon :name="Icon.ColorfulMastercard"/>
+            <NuxtImg src="/img/icons/colorful/visawhite.svg" class="w-[64px]" />
+            <NuxtImg src="/img/icons/colorful/mastercard.svg" class="w-[64px]" />
+            <!--<a-icon :name="Icon.ColorfulVisawhite"/>
+            <a-icon :name="Icon.ColorfulMastercard"/>-->
           </nuxt-link>
         </div>
       </template>
@@ -157,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+import { computed, ref } from 'vue'
 import {useNuxtApp, useRouter, useRoute} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
@@ -234,8 +245,6 @@ onMounted(()=>{
 
 const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
 
-console.log("Percent", discountPercent);
-
 const isMetamaskConnecting = ref(false);
 const metamaskSignatureMessage = ref('');
 const metamaskSignature = ref('');
@@ -279,7 +288,6 @@ const handleMetamaskConnect = async () => {
 
     const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
 
-    console.log("SIGNED MSG", signedMsg);
     metamaskSignature.value = signedMsg;
     isMetamaskConnecting.value = false;
     //currentStep.value = Steps.Email;
@@ -407,6 +415,7 @@ enum SignupMethods {
   Metamask = "Metamask",
   Google = "Google",
   Telegram = "Telegram",
+  Apple = "Apple"
 }
 
 const signupStep = ref(SignupSteps.Default);
@@ -475,14 +484,19 @@ const investBuySignup = () => {
   scrollToSignup();
 }
 
+const handleOpenPurchase = () => {
+  $app.store.purchase.amountUS = buyAmount.value;
+  purchaseStep.value = PurchaseSteps.Purchase;
+  scrollToPurchase();
+}
+
 const investBuy = async () => {
 
   if(buyAmountOriginal.value < 100) return
 
   signupStep.value = SignupSteps.Default;
   signupMethod.value = SignupMethods.None;
-  purchaseStep.value = PurchaseSteps.Purchase;
-  scrollToPurchase();
+  handleOpenPurchase();
 
   await $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
@@ -491,8 +505,6 @@ const investBuy = async () => {
   await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
     $app.store.user.blockchainUserWallet = resp?.data.uid
   })
-
-  console.log($app.store.user?.info?.account?.uuid)
 
 }
 
@@ -510,6 +522,7 @@ const scrollToPurchase = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
+  console.log(offsetPosition);
   setTimeout(()=>{
     window.scrollTo({
       top: offsetPosition,
@@ -524,6 +537,7 @@ const firstName = ref('')
 const lastName = ref('')
 const phone = ref(null);
 const countryCode = ref(null);
+const isEmailDisabled = ref(false);
 
 const dataDisabled = ref(false);
 
@@ -568,8 +582,6 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
-  console.log($app.store.authGoogle);
-
   if($app.store.authGoogle.response?.email) {
     signupStep.value = SignupSteps.Google;
     signupMethod.value = SignupMethods.Google;
@@ -578,6 +590,13 @@ onMounted(() => {
     email.value = $app.store.authGoogle.response.email;
 
     scrollToSignup()
+  } else if($app.store.authGoogle.response?.access_token) {
+    $app.store.auth.setTokens($app.store.authGoogle.response)
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+      //purchase
+      handleOpenPurchase();
+    });
   }
 
 });
@@ -599,8 +618,6 @@ const handleTelegramAuth = async () => {
           // authorization failed
           isTelegramConnection.value = true;
         } else {
-
-          console.log(tgData);
 
           $app.api.eth.auth.telegramGetAuthType({
             telegram_data: JSON.stringify(tgData),
@@ -636,8 +653,7 @@ const handleTelegramAuth = async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
                       $app.store.user.info = resp?.data
                       //purchase
-                      purchaseStep.value = PurchaseSteps.Purchase;
-                      scrollToPurchase();
+                      handleOpenPurchase();
                     });
 
                     // await router.push('/personal/analytics/performance')
@@ -648,10 +664,10 @@ const handleTelegramAuth = async () => {
             isTelegramConnection.value = true;
           })
 
-          
+
 
         }
-        
+
         // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
       }
     )
@@ -659,12 +675,11 @@ const handleTelegramAuth = async () => {
     console.log(e)
   }
 
-  
+
 }
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
@@ -687,8 +702,6 @@ const testTG = async () => {
         // authorization failed
         isTelegramConnection.value = true;
       } else {
-
-        console.log(tgData);
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -724,8 +737,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                     //purchase
-                    purchaseStep.value = PurchaseSteps.Purchase;
-                    scrollToPurchase();
+                    handleOpenPurchase();
                   });
 
                   // await router.push('/personal/analytics/performance')
@@ -736,7 +748,7 @@ const testTG = async () => {
           isTelegramConnection.value = true;
         })
 
-        
+
 
       }
 
@@ -758,7 +770,6 @@ const handleTelegramConnect = async () => {
 
     handleTelegramAuth().then((res) => {
       console.log("scrolltg",res);
-      
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
@@ -771,6 +782,113 @@ const handleTelegramConnect = async () => {
 const handleGoogleConnect = async () => {
   localStorage.setItem('googleRedirect', router.currentRoute.value.fullPath)
   window.location.href = googleUrl.value;
+}
+
+// apple
+
+onMounted(() => {
+
+$app.api.eth.auth
+  .getAppleRedirect()
+  .then(async (res) => {
+    console.log(res);
+
+    function getJsonFromUrl(url) {
+      if(!url) url = location.search;
+      var query = url.substr(1).split("?")[1];
+      var result = {};
+      query.split("&").forEach(function(part) {
+        var item = part.split("=");
+        result[item[0]] = decodeURIComponent(item[1]);
+      });
+      return result;
+    }
+
+    const parsedUrl = getJsonFromUrl(res.url);
+
+    console.log(parsedUrl, window.AppleID);
+
+    (window as any).AppleID.auth.init({
+        clientId : parsedUrl.client_id,
+        scope : parsedUrl.scope,
+        redirectURI : parsedUrl.redirect_uri,
+        usePopup : true
+    });
+
+  })
+  .catch((e) => {
+    // Todo: notify something went wrond
+    console.error(e)
+  })
+})
+
+const handleAppleConnect = async () => {
+
+try {
+    const data = await (window as any).AppleID.auth.signIn()
+    // Handle successful response.
+    console.log("test123", data);
+
+    $app.store.authTemp.response = data.authorization.id_token;
+
+    console.log($app.store.authTemp.response, $app.api.eth.auth)
+
+
+    $app.api.eth.auth
+    .getAppleAuthType({apple_token: data.authorization.id_token})
+    .then(async (res) => {
+      console.log(res);
+
+      if(res.data.auth_type === 'registration') {
+          signupStep.value = SignupSteps.Signup;
+          signupMethod.value = SignupMethods.Apple;
+          // firstName.value = $app.store.authTelegram.response.first_name;
+          // lastName.value = $app.store.authTelegram.response.last_name;
+          // email.value = $app.store.authTelegram.response.email;
+
+          if(data?.user?.email) {
+            email.value = data?.user?.email;
+            isEmailDisabled.value = true;
+          }
+
+          if(data?.user?.name) {
+            firstName.value = data?.user?.name?.firstName ? data?.user?.name?.firstName : '';
+            lastName.value = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
+          }
+
+          scrollToSignupFields();
+
+          //todo autofill email?
+        } else {
+          $app.api.eth.auth.
+            loginApple({
+              apple_token: $app.store.authTemp.response,
+            })
+              .then((jwtResponse: any) => {
+                $app.store.auth.setTokens(jwtResponse.data);
+                confirmResponse.value = jwtResponse.data;
+              })
+              .then(async () => {
+                await $app.api.eth.auth.getUser().then((resp) => {
+                  $app.store.user.info = resp?.data;
+                  handleOpenPurchase();
+                });
+
+              });
+        }
+
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+
+
+} catch ( error ) {
+    // Handle error.
+    console.error(error);
+}
+
 }
 
 
@@ -801,7 +919,7 @@ const sendCode = async () => {
   }
 
   isMainInputDisabled.value = true;
-  
+
   const timer = (sec: number) => {
     if(sec <= 0) {
       codeSendText.value = 'Get Confirmation Code';
@@ -860,7 +978,6 @@ const sendCode = async () => {
         phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
-        console.log('ww');
         isSubmitEmailForm.value = false;
         currentStep.value = Steps.Code;
     }).catch((e) => {
@@ -872,6 +989,26 @@ const sendCode = async () => {
       }
     })
 
+  } else if (signupMethod.value === SignupMethods.Apple) {
+    $app.api.eth.auth
+      .initApple({
+        apple_token: $app.store.authTemp.response,
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+    }).catch((e) => {
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+
+    return;
   } else {
 
   await $app.api.eth.auth
@@ -924,7 +1061,6 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
-          console.log("$app.store.user.info", $app.store.user.info);
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -945,9 +1081,7 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        
-
+        handleOpenPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -994,11 +1128,11 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          purchaseStep.value = PurchaseSteps.Purchase;
+          handleOpenPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1011,6 +1145,47 @@ const signupAndBuy = async () => {
       })
       .catch((e) => {
         isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  } else if (signupMethod.value === SignupMethods.Apple) {
+    backendError.value = ''
+
+    await $app.api.eth.auth.
+      confirmApple({
+        apple_token: $app.store.authTemp.response,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data);
+        confirmResponse.value = jwtResponse.data;
+        // isOpenModal.value = true;
+        dataDisabled.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data;
+          handleOpenPurchase();
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid && window.localStorage.getItem('a_utm')) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
         if (e?.errors?.error?.message) {
           backendError.value = e.errors.error.message
         } else {
@@ -1053,8 +1228,7 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        console.log("UUID123",  $app.store.user?.info, $app.store.user?.info?.account?.uuid, $app.store.user?.info?.account.tron_wallet)
+        handleOpenPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1129,8 +1303,6 @@ const signupAndBuyGoogle = () => {
       $app.store.auth.setRefCode("");
   }
 
-  console.log(initPayload);
-
   $app.api.eth.auth
     .initGoogle(initPayload)
     .then((tokens: any) => {
@@ -1148,12 +1320,11 @@ const signupAndBuyGoogle = () => {
     .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
-            purchaseStep.value = PurchaseSteps.Purchase;
-
+            handleOpenPurchase();
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,

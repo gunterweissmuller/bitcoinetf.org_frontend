@@ -6,6 +6,7 @@
         Choose how you want to withdraw. Please note that by setting up a withdrawal method you will lose your ability
         to reinvest earnings.
       </div>
+      <!--        v-if="orderType === 'init_btc'"-->
       <m-select
         class="f-withdrawal-modal__methods"
         :left-input-icon="METHODS_OPTIONS?.[selectedMethod]?.icon"
@@ -14,18 +15,34 @@
         :options="methods"
       />
 
+      <div v-if="orderType === 'init_btc'" class="f-withdrawal-modal__warning">
+        <div class="f-withdrawal-modal__warning-icon">
+          <a-icon
+            width="22"
+            height="22"
+            :name="Icon.MonoInfo"
+          />
+        </div>
+
+        <div class="f-withdrawal-modal__warning-text">
+          After adding a withdrawal method, dividends will only be available in the selected type
+        </div>
+      </div>
+      
+
       <nuxt-link
         v-if="selectedMethod === 'bitcoin_lightning'"
         to="/bitcoin-education"
         class="f-withdrawal-modal__method-text"
         >Learn about Lightning
       </nuxt-link>
-      <nuxt-link v-else to="/bitcoin-education" class="f-withdrawal-modal__method-text"
-        >Learn about self-custody
+      <nuxt-link v-else to="/bitcoin-education" class="f-withdrawal-modal__method-text">
+        Learn about self-custody
       </nuxt-link>
       <a-input
         v-if="selectedMethodType"
         class="f-withdrawal-modal__address"
+        :class="{'f-withdrawal-modal__address-margin': selectedMethod === 'polygon_usdt'}"
         :icon="Icon.MonoPaste"
         :text-icon="copiedLink"
         text-icon-text="Copied!"
@@ -37,7 +54,7 @@
         @icon-click-handler="acceptCopy"
         :label="inputLabel"
       />
-      <div v-if="selectedMethodType" class="f-withdrawal-modal__address-text">
+      <div v-if="selectedMethodType && selectedMethod !== 'polygon_usdt'" class="f-withdrawal-modal__address-text">
         {{ subInfo }}
       </div>
       <a-button
@@ -65,6 +82,7 @@
 
 <script setup lang="ts">
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { computed, ref } from 'vue'
 import { Icon } from '~/src/shared/constants/icons'
 import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
@@ -74,9 +92,6 @@ import { useClipboard } from '@vueuse/core'
 import { validate } from 'bitcoin-address-validation';
 import { useNuxtApp } from '#app'
 const { $app } = useNuxtApp()
-
-
-
 
 const MAX_HEIGHT = 555
 
@@ -95,11 +110,18 @@ const props = withDefaults(
 
 const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
-const selectedMethod = ref(props.method)
+const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc')
+const selectedMethod = ref(orderType.value === 'usdt' ? 'polygon_usdt' : props.method)
 const selectedAddress = ref(props.address)
 const copiedLink = ref(false)
 
 const isEmailValid = ref(false)
+
+const orderTypeMethods = {
+  init_btc: ['bitcoin_on_chain', 'bitcoin_lightning', 'polygon_usdt'],
+  btc: ['bitcoin_on_chain', 'bitcoin_lightning'],
+  usdt: ['polygon_usdt']
+}
 
 const METHODS_OPTIONS = {
   bitcoin_on_chain: {
@@ -110,6 +132,10 @@ const METHODS_OPTIONS = {
     text: 'Lightning',
     icon: Icon.ColorfulBtcLightning,
   },
+  polygon_usdt: {
+    text: 'Polygon USDT',
+    icon: Icon.ColorfulUsdtPolygon,
+  },
 }
 
 const inputLabel = computed(() => {
@@ -117,10 +143,14 @@ const inputLabel = computed(() => {
 })
 
 const selectedMethodType = computed(() => {
-  return selectedMethod.value === 'bitcoin_on_chain' || selectedMethod.value === 'bitcoin_lightning'
+  return selectedMethod.value === 'bitcoin_on_chain' || selectedMethod.value === 'bitcoin_lightning' || selectedMethod.value === 'polygon_usdt'
 })
 
 const selectedMethodRegexp = computed(() => {
+  if (selectedMethod.value === 'polygon_usdt') {
+    return ''
+  }
+
   return selectedMethod.value === 'bitcoin_on_chain' ? '' : 'email'
 })
 
@@ -129,6 +159,8 @@ const buttonDisabled = computed(() => {
     return !validBlockChain.value
   } else if (selectedMethod.value === 'bitcoin_lightning') {
     return !isEmailValid.value
+  } else if (selectedMethod.value === 'polygon_usdt') {
+    return !validMatic.value //false
   }
 
   return true
@@ -151,7 +183,12 @@ const methods = [
     value: 'bitcoin_lightning',
     icon: METHODS_OPTIONS.bitcoin_lightning.icon,
   },
-]
+  {
+    label: 'Tether USDT (Polygon)',
+    value: 'polygon_usdt',
+    icon: METHODS_OPTIONS.polygon_usdt.icon,
+  },
+].filter(({ value }) => orderTypeMethods[orderType.value]?.includes(value))
 
 const isOpenModal = computed({
   get() {
@@ -186,13 +223,25 @@ watch(
     selectedAddress.value = value
   },
 )
-const validBlockChain = ref(false)
+
+watch(() => orderType, (value) => {
+  if (value === 'usdt') {
+    selectedMethod.value = 'polygon_usdt'
+  }
+})
+const validBlockChain = ref(false);
+const validMatic = ref(false);
 watch(()=> selectedAddress.value, (value) => {
   if (selectedMethod.value === 'bitcoin_on_chain') {
     validBlockChain.value = validate(value)
   }
   if (selectedAddress.value.includes('mailto:')) {
     selectedAddress.value = selectedAddress.value.replace('mailto:','')
+  }
+  if(selectedMethod.value === 'polygon_usdt') {
+    validMatic.value = window?.WAValidator?.validate(selectedAddress.value, 'matic')
+
+    // console.log(window?.WAValidator?.validate(selectedAddress.value, 'matic'));
   }
 })
 
@@ -208,7 +257,8 @@ const close = () => {
   isOpenModal.value = false
   emit('close')
 }
-onUnmounted(()=>{
+
+onUnmounted(() => {
   document.body.classList.remove('no-scroll')
 })
 

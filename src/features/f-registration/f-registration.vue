@@ -1,7 +1,7 @@
 <template>
   <div class="f-registration w-full">
       <template v-if="currentStep === Steps.Terms">
-          <div class='f-registration__back' @click='$router.back()'>
+          <div class='f-registration__back' @click='$router.push("/")'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
           <h3 class="f-registration__title">Sign up</h3>
@@ -52,8 +52,7 @@
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18"
                           class="aspect-square w-[18px]" loading="lazy" />
-                      <div v-if="isMetamaskSupported" class="grow">Sign up with Metamask</div>
-                      <div v-else class="grow">Install Metamask Extension</div>
+                      <div class="grow">Sign up with Metamask</div>
                   </div>
               </div>
 
@@ -68,7 +67,7 @@
 
 
               <!-- <button @click="testTG">test</button> -->
-            
+
             <div @click="testTG"
                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
               <div class="flex gap-2 items-center">
@@ -78,25 +77,25 @@
               </div>
             </div>
 
-            <!-- <div class="tgme_widget_login medium nouserpic" id="widget_login"><button class="btn tgme_widget_login_button" @click="testTG"><i class="tgme_widget_login_button_icon"></i>Log in with Telegram</button></div> -->
-
             <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
 
             <!-- <component :is="'script'" async src="https://telegram.org/js/telegram-widget.js?22" :data-telegram-login="telegramBotName" data-size="large" :data-auth-url="telegramRedirectUrl" data-request-access="write"></component> -->
 
-              <!--<div
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
+              <div
+                  @click="handleAppleConnect"
+                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
                   <div class="flex gap-2 items-center">
                       <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18"
-                          class="self-start aspect-square w-[18px]" />
+                          class="aspect-square w-[18px]" />
                       <div class="grow">Sign up with Apple</div>
                   </div>
-              </div>-->
+              </div>
+
           </div>
 
 
       </template>
-      
+
       <template v-else-if="currentStep === Steps.Email">
           <div class='f-registration__back' @click='handleEmailBack'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
@@ -113,7 +112,7 @@
 
               <a-input v-model="firstName" label="First name" required class="f-registration__name" />
               <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google ? true : false" required
+              <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
@@ -217,10 +216,14 @@ import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { document } from 'postcss'
+import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
+
+const {connectToReplenishment} = useConnectReplenishmentChannel($app)
+
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
@@ -284,6 +287,7 @@ const lastName = ref('')
 const email = ref('')
 const emailErrorText = ref('')
 const isEmailValid = ref(false)
+const isEmailDisabled = ref(false);
 
 function emailFieldBlurHandler() {
   if (isEmailValid.value) {
@@ -349,6 +353,7 @@ const handleDisconnect = () => {
 }
 
 const isMetamaskConnecting = ref(false);
+const isReload = ref(false);
 
 const handleMetamaskConnect = async () => {
   // if metamask button is already clicked
@@ -357,6 +362,13 @@ const handleMetamaskConnect = async () => {
 
   //if metamask is not installed
   if (!isMetamaskSupported.value) {
+      if(isReload.value) {
+        isReload.value = false;
+        location.reload();
+      } else {
+        isReload.value = true;
+      }
+
       // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
       window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
       isMetamaskConnecting.value = false;
@@ -403,7 +415,7 @@ onMounted(() => {
     googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
   });
 
-  
+
 
   if($app.store.authGoogle.response?.email) {
     currentStep.value = Steps.Email;
@@ -433,13 +445,14 @@ const handleGoogleConnect = async () => {
     window.location.href = googleUrl.value;
 }
 
+// telegram
+
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
     console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
-
   })
 })
 
@@ -478,16 +491,16 @@ const handleTelegramAuth = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
         })
 
-        
+
 
       }
-      
+
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
     }
   );
@@ -533,6 +546,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
+                  connectToReplenishment()
 
                   await router.push('/personal/analytics/performance')
                 });
@@ -559,6 +573,115 @@ const handleTelegramConnect = async () => {
   })
 }
 
+// apple
+
+onMounted(() => {
+
+  $app.api.eth.auth
+    .getAppleRedirect()
+    .then(async (res) => {
+      console.log(res);
+
+      function getJsonFromUrl(url) {
+        if(!url) url = location.search;
+        var query = url.substr(1).split("?")[1];
+        var result = {};
+        query.split("&").forEach(function(part) {
+          var item = part.split("=");
+          result[item[0]] = decodeURIComponent(item[1]);
+        });
+        return result;
+      }
+
+      const parsedUrl = getJsonFromUrl(res.url);
+
+      console.log(parsedUrl, window.AppleID);
+
+      (window as any).AppleID.auth.init({
+          clientId : parsedUrl.client_id,
+          scope : parsedUrl.scope,
+          redirectURI : parsedUrl.redirect_uri,
+          usePopup : true
+      });
+
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+})
+
+const handleAppleConnect = async () => {
+
+  try {
+      const data = await (window as any).AppleID.auth.signIn()
+      // Handle successful response.
+      console.log("test123", data);
+
+      $app.store.authTemp.response = data.authorization.id_token;
+
+      console.log($app.store.authTemp.response, $app.api.eth.auth);
+
+
+      $app.api.eth.auth
+      .getAppleAuthType({apple_token: data.authorization.id_token})
+      .then(async (res) => {
+        console.log(res);
+
+        if(res.data.auth_type === 'registration') {
+
+            if(data?.user?.email) {
+              email.value = data?.user?.email;
+              isEmailDisabled.value = true;
+            }
+
+            if(data?.user?.name) {
+              firstName.value = data?.user?.name?.firstName ? data?.user?.name?.firstName : '';
+              lastName.value = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
+            }
+
+            currentStep.value = Steps.Email;
+            currentSignup.value = SignupMethods.Apple;
+
+            //todo autofill email?
+
+            // firstName.value = $app.store.authTelegram.response.first_name;
+            // lastName.value = $app.store.authTelegram.response.last_name;
+            // email.value = $app.store.authTelegram.response.email;
+            // router.push("/personal/registration");
+          } else {
+
+            //todo login apple request
+
+            $app.api.eth.auth.
+              loginApple({
+                apple_token: $app.store.authTemp.response,
+              })
+                .then((jwtResponse: any) => {
+                  $app.store.auth.setTokens(jwtResponse.data)
+                })
+                .then(async () => {
+                  await $app.api.eth.auth.getUser().then((resp) => {
+                    $app.store.user.info = resp?.data
+                  });
+                  connectToReplenishment()
+                  await router.push('/personal/analytics/performance')
+                });
+          }
+
+      })
+      .catch((e) => {
+        // Todo: notify something went wrond
+        console.error(e)
+      })
+
+
+  } catch ( error ) {
+      // Handle error.
+      console.error(error);
+  }
+
+}
 
 
 // Ref code field
@@ -608,6 +731,34 @@ const onSubmitEmailForm = async () => {
 
   console.log(currentSignup.value, initPayload.ref_code);
 
+  if(currentSignup.value === SignupMethods.Apple) {
+
+    console.log($app.store.authTemp.response);
+
+    $app.api.eth.auth
+      .initApple({
+        apple_token: $app.store.authTemp.response,
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Code;
+    }).catch((e) => {
+      isSubmitEmailForm.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+
+    return;
+  }
+
   if (currentSignup.value === SignupMethods.Google) {
 
     if ($app.store.auth.refCode !== "") {
@@ -633,7 +784,7 @@ const onSubmitEmailForm = async () => {
             })
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
-          if(aAid) {
+          if(aAid && window.localStorage.getItem('a_utm')) {
             $app.api.eth.auth.papSignUp({
               payload: {
                 pap_id: aAid,
@@ -794,7 +945,7 @@ const codeContinue = async () => {
           });
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
-          if(aAid) {
+          if(aAid && window.localStorage.getItem('a_utm')) {
             $app.api.eth.auth.papSignUp({
               payload: {
                 pap_id: aAid,
@@ -833,7 +984,7 @@ const codeContinue = async () => {
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -852,7 +1003,47 @@ const codeContinue = async () => {
           backendError.value = 'Something went wrong'
         }
       })
-  } else {
+  } else if(currentSignup.value === SignupMethods.Apple) {
+    backendError.value = ''
+
+    await $app.api.eth.auth.
+      confirmApple({
+        apple_token: $app.store.authTemp.response,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        currentStep.value = Steps.Bonus
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid && window.localStorage.getItem('a_utm')) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+  }else {
     currentStep.value = Steps.Password
   }
   isCodeContinueProcess.value = false;
@@ -935,7 +1126,7 @@ const onSubmitPasswordForm = async () => {
           });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -969,6 +1160,8 @@ onMounted(() => {
       accordionRef.value?.open()
   }
 })
+
+
 </script>
 
 <style lang="scss" src="./f-registration.scss" />

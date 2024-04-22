@@ -9,12 +9,12 @@
       <div class="m-banner__info">
         <h2 class="m-banner__title site-title-h2">{{ title }}</h2>
         <div class="m-banner__description">{{ description }}</div>
-        <nuxt-link :to="button_link">
+        <nuxt-link :to="url || button_link">
           <a-button :text="button_text" />
         </nuxt-link>
       </div>
       <div class="m-banner__img">
-        <img :src="img" alt="">
+        <img :src="img" alt="" />
       </div>
     </div>
   </div>
@@ -58,13 +58,13 @@ defineProps({
   btn: {
     type: Object,
     default: () => {
-      return {};
+      return {}
     },
   },
-});
+})
 
-const bannerClickHandler = (url:string) =>{
-  if (url){
+const bannerClickHandler = (url: string) => {
+  if (url) {
     navigateTo(url)
   }
 }

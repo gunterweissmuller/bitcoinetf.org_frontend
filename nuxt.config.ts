@@ -66,6 +66,7 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxt/devtools',
     '@nuxt/image',
+    '@nuxtjs/device',
     [
       '@/modules/iconica',
       {
@@ -127,6 +128,7 @@ export default defineNuxtConfig({
       ICON_API: process.env.NUXT_PUBLIC_ICON_API,
       DOMAIN: process.env.DOMAIN,
       APP_DOMAIN: process.env.APP_DOMAIN,
+      MOONPAY_API_KEY: process.env.NUXT_PUBLIC_MOONPAY_API_KEY,
     },
   },
   css: ['@/src/app/styles/proxy-global.scss'],

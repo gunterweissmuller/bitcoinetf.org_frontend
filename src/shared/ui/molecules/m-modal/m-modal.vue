@@ -40,8 +40,8 @@
       maxHeight?: number | undefined
       kyc?: boolean
       bgBasic?: boolean
-      modalSmall: boolean
-      modalBig: boolean
+      modalSmall?: boolean
+      modalBig?: boolean
     }>(),
     {
       modelValue: false,

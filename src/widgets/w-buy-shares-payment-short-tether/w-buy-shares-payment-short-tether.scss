@@ -477,4 +477,13 @@
       gap: 0;
     }
   }
+
+  &__paybtn {
+    font-size: torem(16);
+    font-weight: 700;
+    border-radius: var(--spacing-s);
+    background: var(--button-primary);
+    padding: var(--spacing-m-1) var(--spacing-l-2);
+    color: var(--text-inverse-primary);
+  }
 }
