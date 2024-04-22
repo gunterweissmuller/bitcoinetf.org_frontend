@@ -216,11 +216,14 @@ import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { document } from 'postcss'
-import { Centrifuge } from 'centrifuge'
+import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
+
+const {connectToReplenishment} = useConnectReplenishmentChannel($app)
+
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
@@ -1158,44 +1161,6 @@ onMounted(() => {
   }
 })
 
-
-// Payment and sockets
-const centrifuge = ref<Centrifuge>(null)
-
-const accountUuid = computed(() => {
-  return $app.store.user.info?.account?.uuid
-})
-
-const infoPayment = ref(null)
-
-const isOpenSuccessModal = ref(false)
-
-watch(infoPayment, (value) => {
-  if (value) {
-    isOpenSuccessModal.value = true
-  }
-})
-
-function connectToReplenishment() {
-  const config = useRuntimeConfig()
-  const centrifugeURL = config.public.WS_URL
-  const centrifugeToken = config.public.WS_TOKEN
-  centrifuge.value = new Centrifuge(centrifugeURL, {
-    token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken,
-  })
-
-  centrifuge.value.connect()
-
-  const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
-
-  sub
-    .on('publication', async function (ctx) {
-      if (ctx.data.message?.data?.status === 'success') {
-        infoPayment.value = ctx.data.message?.data
-      }
-    })
-    .subscribe()
-}
 
 </script>
 
