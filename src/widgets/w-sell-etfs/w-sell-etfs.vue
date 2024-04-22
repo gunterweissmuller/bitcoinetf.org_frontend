@@ -1,19 +1,19 @@
 <template>
-    <div class="w-etfs">
+    <div class="w-sell-etfs">
         <template v-if="currentStep === Steps.Sell">
-            <div class="w-etfs__header">
+            <div class="w-sell-etfs__header">
                 Sell ETFs
                 <a-icon
-                    class="w-etfs__header-info"
+                    class="w-sell-etfs__header-info"
                     width='22'
                     height='22'
                     :name='Icon.MonoInfo'
                     @click='() => {}'
                 />
             </div>
-            <div class="w-etfs-body">
-                <div class="w-etfs__amount-shares">25,584 Shares</div>
-                <div class="w-etfs__amount-usd">For $25,584</div>
+            <div class="w-sell-etfs-body">
+                <div class="w-sell-etfs__amount-shares">25,584 Shares</div>
+                <div class="w-sell-etfs__amount-usd">For $25,584</div>
                 <a-input
                     class=""
                     label="Tether USDT (Polygon) Destination Address"
@@ -22,14 +22,14 @@
                     :icon="Icon.MonoPaste"
                     position-icon="right"
                 />
-                <a-button class="w-etfs__continue" variant="primary" @click="() => {currentStep = Steps.Confirm}" text="Continue"></a-button>
+                <a-button class="w-sell-etfs__continue" variant="primary" @click="() => {currentStep = Steps.Confirm}" text="Continue"></a-button>
             </div>
         </template>
 
         <template v-else-if="currentStep === Steps.Confirm">
-            <div class="w-etfs__header">
+            <div class="w-sell-etfs__header">
                 <a-icon
-                    class="w-etfs__header-back"
+                    class="w-sell-etfs__header-back"
                     width='22'
                     height='22'
                     :name='Icon.MonoChevronLeft'
@@ -37,32 +37,32 @@
                 />
                 Confirm your sell order
             </div>
-            <div class="w-etfs-body">
+            <div class="w-sell-etfs-body">
 
-                <div class="w-etfs__table">
-                    <div class="w-etfs__table-item">
-                        <div class="w-etfs__table-title">Amount of Shares You’re Selling</div>
-                        <div class="w-etfs__table-text">25,584</div>
+                <div class="w-sell-etfs__table">
+                    <div class="w-sell-etfs__table-item">
+                        <div class="w-sell-etfs__table-title">Amount of Shares You’re Selling</div>
+                        <div class="w-sell-etfs__table-text">25,584</div>
                     </div>
-                    <div class="w-etfs__table-item">
-                        <div class="w-etfs__table-title">For</div>
-                        <div class="w-etfs__table-text">$25,584</div>
+                    <div class="w-sell-etfs__table-item">
+                        <div class="w-sell-etfs__table-title">For</div>
+                        <div class="w-sell-etfs__table-text">$25,584</div>
                     </div>
-                    <div class="w-etfs__table-item">
-                        <div class="w-etfs__table-title">Destination Address</div>
-                        <div class="w-etfs__table-text">3FZbgi23h45y458ruer930t034t4h9kLtktZc5</div>
+                    <div class="w-sell-etfs__table-item">
+                        <div class="w-sell-etfs__table-title">Destination Address</div>
+                        <div class="w-sell-etfs__table-text">3FZbgi23h45y458ruer930t034t4h9kLtktZc5</div>
                     </div>
-                    <div class="w-etfs__table-item">
-                        <div class="w-etfs__table-title">Early Termination Fee</div>
-                        <div class="w-etfs__table-text">$394.48</div>
+                    <div class="w-sell-etfs__table-item">
+                        <div class="w-sell-etfs__table-title">Early Termination Fee</div>
+                        <div class="w-sell-etfs__table-text">$394.48</div>
                     </div>
-                    <div class="w-etfs__table-item">
-                        <div class="w-etfs__table-title">Transaction Fee</div>
-                        <div class="w-etfs__table-text">$3.38</div>
+                    <div class="w-sell-etfs__table-item">
+                        <div class="w-sell-etfs__table-title">Transaction Fee</div>
+                        <div class="w-sell-etfs__table-text">$3.38</div>
                     </div>
                 </div>
 
-                <a-button class="w-etfs__continue" variant="primary" @click="() => {isSoldModalShow = true}" text="Sell"></a-button>
+                <a-button class="w-sell-etfs__continue" variant="primary" @click="() => {isSoldModalShow = true}" text="Sell"></a-button>
             </div>
         </template>
         

@@ -1,9 +1,9 @@
-.w-etfs {
+.w-sell-etfs {
     width: 100%;
 
     &__header {
         display: flex;
-        padding: var(--spacing-m-1);
+        padding: var(--spacing-m-3) var(--spacing-m-1);
         margin-bottom: var(--spacing-m-3);
 
         color: var(--text-primary);
@@ -15,6 +15,7 @@
         line-height: normal;
 
         @include breakpoint($break-desktop-1024-minus) {
+            padding: var(--spacing-m-1);
             border-radius: 0px 0px 16px 16px;
             background: var(--surfaces-surface-glass-2);
             box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
