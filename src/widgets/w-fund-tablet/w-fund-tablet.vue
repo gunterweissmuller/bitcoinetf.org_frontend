@@ -42,14 +42,20 @@
       </div>
     </div>
 
+    <div class="w-fund-tablet__line"></div>
+
     <div class="w-fund-tablet__protection">
       <div class="w-fund-tablet__title">
         Protection
       </div>
-      <w-shareholders-stats />
-      <w-trades />
-      <w-activity />
+      <div class="w-fund-tablet__wrap">
+        <w-shareholders-stats class="w-fund-tablet__item" />
+        <w-trades class="w-fund-tablet__item" />
+        <w-activity class="w-fund-tablet__item" />
+      </div>
     </div>
+
+    <div class="w-fund-tablet__line"></div>
 
     <div class="w-fund-tablet__shareholders">
       <div class="w-fund-tablet__title">
@@ -59,12 +65,17 @@
         <w-chart-fund title="AUM Growth" is-main is-total-assets />
         <w-chart-shareholders
           title="Investment Strategies"
+          is-desktop
           :strategies="strategies"
         />
       </div>
-      <w-top-shareholders />
-      <w-purchases />
+      <div class="w-fund-tablet__wrap">
+        <w-top-shareholders class="w-fund-tablet__item" />
+        <w-purchases class="w-fund-tablet__item" />
+      </div>
     </div>
+
+    <div class="w-fund-tablet__line"></div>
 
     <w-news />
   </div>
