@@ -111,14 +111,18 @@
           <form class="f-registration__form" @submit.prevent="onSubmitEmailForm">
 
               <a-input v-model="firstName" label="First name" required class="f-registration__name" />
+              <p class="f-registration__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
               <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
+              <p class="f-registration__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
               <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
 
             <div class="f-registration__wrap_phone">
               <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+              <p class="f-registration__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
             </div>
+            
 
             <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
               <!-- <m-accordion ref="accordionRef" class="f-registration__ref" title="Referral code">
@@ -129,7 +133,7 @@
               <a-button class="f-registration__button" :disabled="emailButtonDisabled" type="submit"
                   text="Continue"></a-button>
 
-              <p class="f-registration__error" v-if="backendError">{{ backendError }}</p>
+              <p class="f-registration__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
           </form>
       </template>
       <template v-else-if="currentStep === Steps.Code">
@@ -144,7 +148,7 @@
 
           <a-pincode-input class="f-registration__opt" v-model="emailCode" :error-text="pincodeErrorText"
               :autofocus="true" :number-digits="6" name="pincode" @update:completed="onCodeInput" />
-          <p v-show="backendError" class="f-registration__error">{{ backendError }}</p>
+          <p v-show="backendError.value && backendError.field === 'default'" class="f-registration__error">{{ backendError.value }}</p>
           <p v-show="timerStarted" class="f-registration__resend-code">
               You can request the code again via {{ timeLeft }} sec.
           </p>
@@ -245,7 +249,7 @@ const confirmResponse = ref(null)
 
 const currentSignup = ref(SignupMethods.Email);
 const currentStep = ref(Steps.Terms)
-const backendError = ref('')
+const backendError = ref({value: '', field: 'default'})
 
 const isOpenModal = ref(false)
 const accordionRef = ref(null)
@@ -258,7 +262,7 @@ function openTermsModal() {
 watch(
   () => currentStep.value,
   (step) => {
-      backendError.value = ''
+      backendError.value = {value: '', field: 'default'}
       if (step === Steps.Bonus) {
           isOpenModal.value = true
       }
@@ -695,7 +699,7 @@ const onSubmitEmailForm = async () => {
   var valid = re.test(phone.value);
 
   if(!valid) {
-    backendError.value = 'Phone number is not valid';
+    backendError.value = {value: 'Phone number is not valid', field: 'phone'};
     return;
   }
 
@@ -704,7 +708,7 @@ const onSubmitEmailForm = async () => {
 
   const tempPhone = phone.value.slice(countryCode.value.length+1);
 
-  backendError.value = ''
+  backendError.value = {value: '', field: 'default'}
   const initPayload = {
     method: currentSignup.value,
     first_name: $app.filters.trimSpaceIntoString(firstName.value),
@@ -745,9 +749,18 @@ const onSubmitEmailForm = async () => {
     }).catch((e) => {
       isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
+        backendError.value = {value: e.errors.error.message, field: 'default'};
+
+        if(e?.errors?.error?.validation) {
+          if(e?.errors?.error?.validation?.first_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+          }
+          if(e?.errors?.error?.validation?.last_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+          }
+        }
       } else {
-        backendError.value = 'Something went wrong'
+        backendError.value = {value: 'Something went wrong', field: 'default'};
       }
     })
 
@@ -794,9 +807,18 @@ const onSubmitEmailForm = async () => {
         console.error(e);
         isSubmitEmailForm.value = false;
           if (e?.errors?.error?.message) {
-              backendError.value = e.errors.error.message
+            backendError.value = {value: e.errors.error.message, field: 'default'};
+
+              if(e?.errors?.error?.validation) {
+                if(e?.errors?.error?.validation?.first_name) {
+                  backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+                }
+                if(e?.errors?.error?.validation?.last_name) {
+                  backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+                }
+              }
           } else {
-              backendError.value = 'Something went wrong'
+            backendError.value = {value: 'Something went wrong', field: 'default'};
           }
       })
 
@@ -820,9 +842,18 @@ const onSubmitEmailForm = async () => {
     }).catch((e) => {
       isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
+        backendError.value = {value: e.errors.error.message, field: 'default'};
+
+        if(e?.errors?.error?.validation) {
+          if(e?.errors?.error?.validation?.first_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+          }
+          if(e?.errors?.error?.validation?.last_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+          }
+        }
       } else {
-        backendError.value = 'Something went wrong'
+        backendError.value = {value: 'Something went wrong', field: 'default'};
       }
     })
 
@@ -839,9 +870,18 @@ const onSubmitEmailForm = async () => {
       .catch((e) => {
         isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'};
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'};
         }
       })
   } else {
@@ -855,9 +895,18 @@ const onSubmitEmailForm = async () => {
       .catch((e) => {
         isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'};
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'};
         }
       })
   }
@@ -891,7 +940,7 @@ const isCodeCorrect = ref(false)
 
 const pincodeTrigger = ref(false)
 const onCodeInput = async (codePayload) => {
-  backendError.value = ''
+  backendError.value = {value: '', field: 'default'}
 
   if (codePayload.isCompleted) {
       pincodeTrigger.value = true
@@ -905,9 +954,9 @@ const onCodeInput = async (codePayload) => {
               pincodeTrigger.value = false
 
               if (e?.errors?.error?.message) {
-                  backendError.value = e.errors.error.message
+                backendError.value = {value: e.errors.error.message, field: 'default'};
               } else {
-                  backendError.value = 'Something went wrong'
+                backendError.value = {value: 'Something went wrong', field: 'default'};
               }
           })
   }
@@ -921,7 +970,7 @@ const codeContinue = async () => {
   isCodeContinueProcess.value = true;
 
   if(currentSignup.value === SignupMethods.Metamask) {
-    backendError.value = ''
+    backendError.value = {value: '', field: 'default'}
       await $app.api.eth.auth.
         confirmMetamask({
         email: $app.filters.trimSpaceIntoString(email.value),
@@ -954,13 +1003,13 @@ const codeContinue = async () => {
         .catch((e) => {
           isCodeContinueProcess.value = false;
           if (e?.errors?.error?.message) {
-            backendError.value = e.errors.error.message
+            backendError.value = {value: e.errors.error.message, field: 'default'};
           } else {
-            backendError.value = 'Something went wrong'
+            backendError.value = {value: 'Something went wrong', field: 'default'};
           }
         })
   } else if(currentSignup.value === SignupMethods.Telegram) {
-    backendError.value = ''
+    backendError.value = {value: '', field: 'default'}
     await $app.api.eth.auth.
       confirmTelegram({
         telegram_data: JSON.stringify($app.store.authTelegram.response),
@@ -993,13 +1042,13 @@ const codeContinue = async () => {
       .catch((e) => {
         isCodeContinueProcess.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'};
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'};
         }
       })
   } else if(currentSignup.value === SignupMethods.Apple) {
-    backendError.value = ''
+    backendError.value = {value: '', field: 'default'}
 
     await $app.api.eth.auth.
       confirmApple({
@@ -1033,9 +1082,9 @@ const codeContinue = async () => {
       .catch((e) => {
         isCodeContinueProcess.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'};
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'};
         }
       })
   }else {
@@ -1049,7 +1098,7 @@ const resendCodeClick = async () => {
       return
   }
 
-  backendError.value = ''
+  backendError.value = {value: '', field: 'default'}
 
   startTimer()
 
@@ -1060,9 +1109,9 @@ const resendCodeClick = async () => {
       })
       .catch((e) => {
           if (e?.errors?.error?.message) {
-              backendError.value = e.errors.error.message
+            backendError.value = {value: e.errors.error.message, field: 'default'};
           } else {
-              backendError.value = 'Something went wrong'
+            backendError.value = {value: 'Something went wrong', field: 'default'};
           }
       })
 }
@@ -1101,7 +1150,7 @@ const onSubmitPasswordForm = async () => {
   if(isSubmitPasswordForm.value) return;
   isSubmitPasswordForm.value = true;
 
-  backendError.value = ''
+  backendError.value = {value: '', field: 'default'}
   await $app.api.eth.auth
       .confirm({
           email: $app.filters.trimSpaceIntoString(email.value),
@@ -1136,9 +1185,9 @@ const onSubmitPasswordForm = async () => {
         console.error(e);
         isSubmitPasswordForm.value = false;
           if (e?.errors?.error?.message) {
-              backendError.value = e.errors.error.message
+            backendError.value = {value: e.errors.error.message, field: 'default'};
           } else {
-              backendError.value = 'Something went wrong'
+            backendError.value = {value: 'Something went wrong', field: 'default'};
           }
       })
 }
