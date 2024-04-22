@@ -1,54 +1,39 @@
 <template>
-  <section class="s-site-marquee">
-    <div class="l-site-dark">
-      <div class="s-site-marquee__wrapper">
-        <m-slider
-          id="s-site-marquee-slider"
-          :modules="[Autoplay]"
-          loop
-          :speed="5000"
-          :space-between="0"
-          slides-per-view="auto"
-          :mousewheel="false"
-          :looped-slides="0"
-          :autoplay="{
-            delay: 0,
-            disableOnInteraction: false,
-          }"
-          centeredSlides
-          :allowTouchMove="false"
-          disableOnInteraction
+  <div class="s-site-marquee">
+    <div :class="[{ 's-site-marquee-bg': isBackground }]"></div>
 
-        >
-          <template #slides>
-            <swiper-slide class="s-site-marquee__item" v-for="(item, id) in marqueList" :key="id">
-              <a :href="item.link" target="_blank">
-                <img :src="item.img" />
-              </a>
-            </swiper-slide>
-          </template>
-
-        </m-slider>
+    <div class="s-site-marquee__wrapper">
+      <div class="s-site-marquee__row" v-for="index in 12">
+        <div class="s-site-marquee__item" v-for="marquee in marqueeList" :key="marquee.link">
+          <a :href="marquee.link" target="_blank">
+            <nuxt-img :src="marquee.img" loading="lazy" />
+          </a>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Autoplay } from 'swiper'
-import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
-import { SwiperSlide } from 'swiper/vue'
+interface Props {
+  data: MarqueeItem[] | any
+  isBackground?: boolean
+}
 
+interface MarqueeItem {
+  link: string
+  img: string
+}
 
-const props = defineProps<{
-  data: any
-  files: any
-}>()
+const props = withDefaults(defineProps<Props>(), {
+  data: [],
+  isBackground: true,
+})
 
+const marqueeList = ref<MarqueeItem[]>([])
 
-const marqueList = computed(() => {
-  return [...props.data.low_cards, ...props.data.low_cards, ...props.data.low_cards]
+onMounted(() => {
+  marqueeList.value = [...props.data.low_cards]
 })
 </script>
 

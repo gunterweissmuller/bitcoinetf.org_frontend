@@ -1,7 +1,7 @@
 <template>
   <div class="f-registration w-full">
       <template v-if="currentStep === Steps.Terms">
-          <div class='f-registration__back' @click='$router.back()'>
+          <div class='f-registration__back' @click='$router.push("/")'>
               <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
           </div>
           <h3 class="f-registration__title">Sign up</h3>
@@ -89,7 +89,7 @@
                           class="aspect-square w-[18px]" />
                       <div class="grow">Sign up with Apple</div>
                   </div>
-              </div>  
+              </div>
 
           </div>
 
@@ -216,10 +216,14 @@ import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { document } from 'postcss'
+import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
+
+const {connectToReplenishment} = useConnectReplenishmentChannel($app)
+
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
@@ -487,7 +491,7 @@ const handleTelegramAuth = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
@@ -542,6 +546,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
+                  connectToReplenishment()
 
                   await router.push('/personal/analytics/performance')
                 });
@@ -617,7 +622,7 @@ const handleAppleConnect = async () => {
 
       console.log($app.store.authTemp.response, $app.api.eth.auth);
 
-      
+
       $app.api.eth.auth
       .getAppleAuthType({apple_token: data.authorization.id_token})
       .then(async (res) => {
@@ -659,7 +664,7 @@ const handleAppleConnect = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
@@ -779,7 +784,7 @@ const onSubmitEmailForm = async () => {
             })
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
-          if(aAid) {
+          if(aAid && window.localStorage.getItem('a_utm')) {
             $app.api.eth.auth.papSignUp({
               payload: {
                 pap_id: aAid,
@@ -940,7 +945,7 @@ const codeContinue = async () => {
           });
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
-          if(aAid) {
+          if(aAid && window.localStorage.getItem('a_utm')) {
             $app.api.eth.auth.papSignUp({
               payload: {
                 pap_id: aAid,
@@ -979,7 +984,7 @@ const codeContinue = async () => {
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1019,7 +1024,7 @@ const codeContinue = async () => {
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1121,7 +1126,7 @@ const onSubmitPasswordForm = async () => {
           });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1155,6 +1160,8 @@ onMounted(() => {
       accordionRef.value?.open()
   }
 })
+
+
 </script>
 
 <style lang="scss" src="./f-registration.scss" />

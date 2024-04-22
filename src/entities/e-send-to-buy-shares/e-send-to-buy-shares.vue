@@ -1,5 +1,5 @@
 <template>
-  <button v-if="$app.store.user?.[hashMap?.[activeComponent]]?.usd_amount" class="e-send-to-buy-shares" type="button" @click="$router.push({ name: 'personal-buy-shares' })">
+  <button v-if="$app.store.user?.[hashMap?.[activeComponent]]?.usd_amount" class="e-send-to-buy-shares" type="button" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}" > <!--@click="$router.push({ name: 'personal-buy-shares' })"-->
     <div class="e-send-to-buy-shares-info">
       <div class="e-send-to-buy-shares-info-title">Boost Your {{ boostText }}! 🚀</div>
       <div class="e-send-to-buy-shares-info-text">{{ btnPopperText }}</div>

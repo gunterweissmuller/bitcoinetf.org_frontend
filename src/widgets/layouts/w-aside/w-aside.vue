@@ -8,20 +8,20 @@
           </nuxt-link>
         </div>
         <div v-if="!isPage && isShowBuyButton" class="w-aside__button">
-          <a-button
-            :icon="Icon.MonoPlus"
-            size="small"
-            class="w-aside__button-buy"
-            text="Buy Bitcoin ETF Shares"
-            @click="$router.push({ name: 'personal-buy-shares' })"
-          />
           <!-- <a-button
             :icon="Icon.MonoPlus"
             size="small"
             class="w-aside__button-buy"
             text="Buy Bitcoin ETF Shares"
-            @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"
+            @click="$router.push({ name: 'personal-buy-shares' })"
           /> -->
+          <a-button
+            :icon="Icon.MonoPlus"
+            size="small"
+            class="w-aside__button-buy"
+            text="Buy Bitcoin ETF Shares"
+            @click="() => {$app.store.user.isInvestModalShow.show = true;}"
+          />
           
         </div>
         <div class="w-aside__links">
@@ -219,7 +219,7 @@ const isShowBuyButton = computed<boolean>(() => {
 
   return (
     (isDesktop.value || isLaptop.value) &&
-    route.name !== 'personal-buy-shares' &&
+    // route.name !== 'personal-buy-shares' &&
     route.name !== 'personal-buy-shares-payment'
   )
 })

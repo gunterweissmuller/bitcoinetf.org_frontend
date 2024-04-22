@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :disabled-amount="isSignupAndBuy"></m-profit-calculator-new>
 
 
 
@@ -57,7 +57,7 @@
           <div @click="handleAppleConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Apple}]">
             <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
-          
+
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
@@ -93,7 +93,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -122,13 +122,18 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
       <div class="w-buy-shares-payment-short-tether"></div>
       <template v-if="purchaseStep === PurchaseSteps.Purchase">
-        <w-buy-shares-payment-short-tether v-if="isUserAuthenticated" :calc-value-original="buyAmountOriginal" :calc-value="buyAmount" :is-fiat="isFiatLanding"/>
+        <w-buy-shares-payment-short-tether
+          v-if="isUserAuthenticated"
+          :calc-value-original="buyAmountOriginal"
+          :calc-value="buyAmount"
+          :is-fiat="isFiatLanding"
+        />
 
         <div class="langing-calculation__chat" v-if="width > 767">
           <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
@@ -163,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+import { computed, ref } from 'vue'
 import {useNuxtApp, useRouter, useRoute} from "#app";
 import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
@@ -479,14 +484,19 @@ const investBuySignup = () => {
   scrollToSignup();
 }
 
+const handleOpenPurchase = () => {
+  $app.store.purchase.amountUS = buyAmount.value;
+  purchaseStep.value = PurchaseSteps.Purchase;
+  scrollToPurchase();
+}
+
 const investBuy = async () => {
 
   if(buyAmountOriginal.value < 100) return
 
   signupStep.value = SignupSteps.Default;
   signupMethod.value = SignupMethods.None;
-  purchaseStep.value = PurchaseSteps.Purchase;
-  scrollToPurchase();
+  handleOpenPurchase();
 
   await $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
@@ -585,8 +595,7 @@ onMounted(() => {
     $app.api.eth.auth.getUser().then((resp) => {
       $app.store.user.info = resp?.data
       //purchase
-      purchaseStep.value = PurchaseSteps.Purchase;
-      scrollToPurchase();
+      handleOpenPurchase();
     });
   }
 
@@ -644,8 +653,7 @@ const handleTelegramAuth = async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
                       $app.store.user.info = resp?.data
                       //purchase
-                      purchaseStep.value = PurchaseSteps.Purchase;
-                      scrollToPurchase();
+                      handleOpenPurchase();
                     });
 
                     // await router.push('/personal/analytics/performance')
@@ -729,8 +737,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                     //purchase
-                    purchaseStep.value = PurchaseSteps.Purchase;
-                    scrollToPurchase();
+                    handleOpenPurchase();
                   });
 
                   // await router.push('/personal/analytics/performance')
@@ -826,7 +833,7 @@ try {
 
     console.log($app.store.authTemp.response, $app.api.eth.auth)
 
-    
+
     $app.api.eth.auth
     .getAppleAuthType({apple_token: data.authorization.id_token})
     .then(async (res) => {
@@ -864,8 +871,7 @@ try {
               .then(async () => {
                 await $app.api.eth.auth.getUser().then((resp) => {
                   $app.store.user.info = resp?.data;
-                  purchaseStep.value = PurchaseSteps.Purchase;
-                  scrollToPurchase();
+                  handleOpenPurchase();
                 });
 
               });
@@ -1075,8 +1081,7 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        scrollToPurchase();
+        handleOpenPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1123,12 +1128,11 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          purchaseStep.value = PurchaseSteps.Purchase;
-          scrollToPurchase();
+          handleOpenPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1166,12 +1170,11 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          purchaseStep.value = PurchaseSteps.Purchase;
-          scrollToPurchase();
+          handleOpenPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1225,8 +1228,7 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        scrollToPurchase();
+        handleOpenPurchase();
 
         if (props.isFiat) {
         //   console.log("TRUE IS FIAT");
@@ -1318,13 +1320,11 @@ const signupAndBuyGoogle = () => {
     .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
-            purchaseStep.value = PurchaseSteps.Purchase;
-            scrollToPurchase();
-
+            handleOpenPurchase();
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,

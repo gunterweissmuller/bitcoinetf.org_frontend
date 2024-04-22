@@ -1,13 +1,15 @@
 <template>
   <m-scroll-navigation
-    v-if="sections && y > sections[2]?.top"
-    :length="sections.length - 2"
+    v-if="sections && y > sections[1]?.top"
+    :length="sections.length - 1"
     :data="scrollInfo"
   />
   <s-site-fund-main :data="mainData"/>
-<!--  <s-site-marquee :data="marqueeData"/>-->
+  <s-site-marquee :data="marqueeData" :isBackground="false"/>
   <s-site-fund-vision :data="visionData"/>
   <s-site-fund-ceo :data="ceoData"/>
+  <s-site-fund-main-info-dark/>
+  <s-site-fund/>
   <s-site-footer/>
 </template>
 
@@ -17,6 +19,8 @@ import SSiteFundMain from "~/src/shared/ui/site/sections/s-site-fund-main/s-site
 import SSiteMarquee from "~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue";
 import SSiteFundVision from "~/src/shared/ui/site/sections/s-site-fund-vision/s-site-fund-vision.vue";
 import SSiteFundCeo from "~/src/shared/ui/site/sections/s-site-fund-ceo/s-site-fund-ceo.vue";
+import SSiteFundMainInfoDark from '~/src/shared/ui/site/sections/s-site-fund-main-info-dark/s-site-fund-main-info-dark.vue'
+import SSiteFund from '~/src/shared/ui/site/sections/s-site-fund/s-site-fund.vue'
 import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
 import {useWindowScroll, useWindowSize} from "@vueuse/core";
 
@@ -43,12 +47,12 @@ const getElements = () => {
   const lasElement = {
     top: footer.offsetTop - header.offsetHeight,
     name: 'Final',
-    id: sectionsArray.length - 1,
+    id: sectionsArray.length ,
   }
 
   sections.value = Object.values(sectionsArray).map((section, index) => ({
     top: section.offsetTop - header.offsetHeight,
-    name: index > 1 ? section.dataset.name : '',
+    name: index > 0 ? section.dataset.name : '',
     id: index - 1,
   }));
 
@@ -144,12 +148,42 @@ const ceoData = {
   ],
 };
 
+// const marqueeData = {
+//   low_cards: [
+//     '/img/site-dark/s-site-marquee/1.svg',
+//     '/img/site-dark/s-site-marquee/2.svg',
+//     '/img/site-dark/s-site-marquee/3.svg',
+//     '/img/site-dark/s-site-marquee/4.svg',
+//   ],
+// };
+
 const marqueeData = {
   low_cards: [
-    '/img/site-dark/s-site-marquee/1.svg',
-    '/img/site-dark/s-site-marquee/2.svg',
-    '/img/site-dark/s-site-marquee/3.svg',
-    '/img/site-dark/s-site-marquee/4.svg',
+    {
+      link: 'https://www.digitaljournal.com/pr/news/globe-pr-wire/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets',
+      img: '/marquee/digitaljournal.svg'
+    },
+    {
+      link: 'https://www.benzinga.com/content/36408488/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-se',
+      img: '/marquee/benzinga.png'
+    },
+    {
+      link: 'https://apnews.com/press-release/marketersmedia/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets-ed41cc9cde1250d6767d3972cc0a46cd',
+      img: '/marquee/ap.svg'
+    },
+    {
+      link: 'https://markets.businessinsider.com/news/stocks/bitcoinetf-org-surpasses-50m-in-assets-under-management-in-its-inaugural-year-exclusively-serving-select-international-markets-1032931262',
+      img: '/marquee/bi.svg'
+    },
+    {
+      link: 'https://pr.newsmax.com/article/BitcoinETForg-Surpasses-dollar50M-in-Assets-Under-Management-in-Its-Inaugural-Year-Exclusively-Serving-Select-International-Markets?storyId=658e58f2f29dad0008f55450',
+      img: '/marquee/nm.svg'
+    },
+    {
+      link: 'https://www.streetinsider.com/The+Financial+Capital/BitcoinETF.org+Surpasses+%2450M+in+Assets+Under+Management+in+Its+Inaugural+Year%2C+Exclusively+Serving+Select+International+Markets/22574048.html',
+      img: '/marquee/StreetInsider.com.svg'
+    },
   ],
-};
+}
+
 </script>

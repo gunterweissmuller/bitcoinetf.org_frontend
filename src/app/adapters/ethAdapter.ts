@@ -7,6 +7,7 @@ import {ADAPTERS_ERRORS_CODES} from '~/src/shared/constants/ethCodes'
 
 const ETH_PREFIX = 'public'
 const ETH_PREFIX_WITHOUT_PUBLIC = ''
+
 export const hostname = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? 'api.bitcoinetf.org' : 'api.stage.techetf.org'
 
 @injectable()
@@ -23,6 +24,7 @@ export class EthAdapter extends ApiAdapter {
 
   async requestAsync<T>({
                           apiVersion,
+                          host = '',
                           parameterValue,
                           request,
                           resolvePayloadAsync,
@@ -37,7 +39,7 @@ export class EthAdapter extends ApiAdapter {
 
     this.prefix = withoutPublic ? ETH_PREFIX_WITHOUT_PUBLIC : ETH_PREFIX
 
-    let endpoint = 'https://' + hostname + `/${apiVersion}${this.prefix ? '/' + this.prefix : this.prefix}/${parameterValue}`
+    let endpoint = 'https://' + (host || hostname) + `/${apiVersion}${this.prefix ? '/' + this.prefix : this.prefix}/${parameterValue}`
 
     const mergedParams = {
       ...params,

@@ -19,7 +19,7 @@
         </div>
         <div class="w-chart-dividends__btc">
           <div
-            v-if="wallet"
+            v-if="wallet && $app.store.user?.info?.account?.order_type !== 'usdt'"
             class="w-chart-dividends__btc-title"
             v-html="$app.filters.convertValue($app.filters.rounded(wallet.btc_amount_added, 8))"
           ></div>

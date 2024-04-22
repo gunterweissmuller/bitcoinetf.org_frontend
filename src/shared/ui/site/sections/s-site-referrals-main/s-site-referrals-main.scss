@@ -1,18 +1,21 @@
 .s-site-referrals-main {
   position: relative;
   min-height: torem(764);
-  padding: torem(164, 0, 100);
-
+  padding: torem(164, 0, 60);
   @media (max-width: 767px) {
     padding: torem(152, 0, 32);
   }
 
   &__img {
     position: absolute;
-    left: 50%;
+    left: 48%;
     bottom: 0;
-    z-index: 1;
-    transform: translateX(-50%);
+    z-index: 3;
+    transform: translateX(-42%);
+
+    @media (max-width: 1240px) {
+      z-index: 1;
+    }
 
     @media (max-width: 1099px) {
       max-width: torem(400);
@@ -55,10 +58,9 @@
   }
 
   &__wrapper {
-    display: flex;
-    align-items: flex-start;
-
     @media (max-width: 1099px) {
+      display: flex;
+      align-items: flex-start;
       flex-direction: column;
     }
   }
@@ -66,7 +68,6 @@
   &__title {
     position: relative;
     overflow: hidden;
-    margin-bottom: torem(48);
 
     @media (max-width: 991px) {
       margin-bottom: torem(200);
@@ -77,19 +78,27 @@
       margin-bottom: torem(180);
     }
 
-    //&:after {
-    //  position: absolute;
-    //  bottom: torem(50);
-    //  left: torem(122);
-    //  z-index: 1;
-    //  content: '';
-    //  width: torem(460);
-    //  height: torem(100);
-    //  border-radius: torem(460);
-    //  transform: rotate(-140deg);
-    //  background: rgba(1, 4, 15, 0.70);
-    //  filter: blur(40px);
-    //}
+    &:after {
+      position: absolute;
+      top: torem(100);
+      right: torem(35);
+      bottom: 0;
+      z-index: 1;
+      content: '';
+      width: torem(460);
+      height: torem(200);
+      border-radius: torem(460);
+      transform: rotate(140deg);
+      background: rgba(1, 4, 15, 0.75);
+      filter: blur(40px);
+      @media (max-width: 767px) {
+        top: torem(0);
+        right: torem(-150);
+        height: torem(100);
+        filter: blur(10px);
+        background: rgba(1, 4, 15, 0.7);
+      }
+    }
   }
 
   &__message {
@@ -97,7 +106,7 @@
     font-family: Jakarta, sans-serif;
     font-size: torem(16);
     line-height: torem(20);
-    color: #83F5B8;
+    color: #83f5b8;
     margin-left: torem(112);
 
     @media (max-width: 991px) {
@@ -131,9 +140,9 @@
     align-items: center;
     max-width: fit-content;
     border-radius: torem(1000);
-    border: torem(1) solid #FFFFFF1A;
+    border: torem(1) solid #ffffff1a;
     padding: torem(6);
-    margin-bottom: torem(32);
+    margin-bottom: torem(30);
 
     @media (max-width: 767px) {
       margin-bottom: torem(24);

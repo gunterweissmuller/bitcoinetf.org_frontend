@@ -7,6 +7,8 @@
     <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
     <component :is="'script'" type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></component>
     <component :is="'script'" id="pap_x2s6df8d" src="https://bitcoinetf.postaffiliatepro.com/scripts/trackjs.js"></component>
+    <component :is="'script'" type="text/javascript" src="https://cdn.jsdelivr.net/npm/multicoin-address-validator@0.5.16/dist/wallet-address-validator.min.js"></component>
+    <!-- <component :is="'script'" type="text/javascript" src="https://cdn.jsdelivr.net/npm/crypto-wallet-address-validator@0.2.1/dist/wallet-address-validator.min.js"></component> -->
   </div>
 </template>
 
