@@ -412,6 +412,11 @@
   &__error {
     color: var(--accent-danger)
   }
+  &__dropdown-isdisabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
 }
 
 .vue-tel-input {
