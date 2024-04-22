@@ -121,9 +121,12 @@ import { SiweMessage } from 'siwe'
 import { computed, ref } from 'vue'
 import { BrowserProvider, parseUnits } from "ethers";
 import { hostname } from '~/src/app/adapters/ethAdapter'
+import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
+
+const {connectToReplenishment} = useConnectReplenishmentChannel($app)
 
 const enum Steps {
   Choice = 'Choice',
@@ -194,6 +197,7 @@ const onSubmitEmailForm = () => {
       })
 
       await $app.store.auth.reInitData()
+      connectToReplenishment()
       await router.push('/personal/analytics/performance')
     })
     .catch((e) => {
@@ -250,6 +254,7 @@ onMounted(() => {
     })
 
     $app.store.auth.reInitData()
+    connectToReplenishment()
     router.push('/personal/analytics/performance')
 
   }
@@ -294,7 +299,7 @@ const handleTelegramAuth = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
@@ -353,7 +358,7 @@ const testTG = async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
                       $app.store.user.info = resp?.data
                     });
-
+                    connectToReplenishment()
                     await router.push('/personal/analytics/performance')
                   });
             }
@@ -455,7 +460,7 @@ try {
                 await $app.api.eth.auth.getUser().then((resp) => {
                   $app.store.user.info = resp?.data
                 });
-
+                connectToReplenishment()
                 await router.push('/personal/analytics/performance')
               });
         }
@@ -548,6 +553,7 @@ const handleMetamaskConnect = async () => {
                 })
 
                 $app.store.auth.reInitData()
+                connectToReplenishment()
                 router.push('/personal/analytics/performance')
               })
               .catch((e) => {
@@ -581,6 +587,7 @@ const handleMetamaskConnect = async () => {
 const onForgotPasswordClick = () => {
   router.push('/personal/reset')
 }
+
 </script>
 
 <style lang="scss" src="./f-login.scss"/>
