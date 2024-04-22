@@ -52,12 +52,8 @@ import { useNuxtApp } from '#app';
 
 const { $app } = useNuxtApp()
 const globalStatistic = computed(() => {
-  console.log($app.store.user)
-
   return $app.store.user.statistic
 })
-console.log(globalStatistic.value);
-console.log($app.store.user.dividends.usd_amount, 'div')
 
 </script>
 

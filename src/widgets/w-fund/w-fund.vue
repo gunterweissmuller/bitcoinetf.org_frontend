@@ -9,14 +9,21 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
+import useMediaDevice from '~/composables/useMediaDevice'
 
 const route = useRoute()
+const { isLaptop, isDesktop } = useMediaDevice();
 
-const protection = defineAsyncComponent(() => import('~/src/widgets/w-protection/w-protection.vue'))
-const portfolio = defineAsyncComponent(() => import('~/src/widgets/w-portfolio/w-portfolio.vue'))
-const shareholders = defineAsyncComponent(() => import('~/src/widgets/w-shareholders/w-shareholders.vue'))
+const fundTablet = defineAsyncComponent(() => import('~/src/widgets/w-fund-tablet/w-fund-tablet.vue'));
+const protection = defineAsyncComponent(() => import('~/src/widgets/w-protection/w-protection.vue'));
+const portfolio = defineAsyncComponent(() => import('~/src/widgets/w-portfolio/w-portfolio.vue'));
+const shareholders = defineAsyncComponent(() => import('~/src/widgets/w-shareholders/w-shareholders.vue'));
 
 const components = {
+  'personal-fund-tablet': {
+    id: 'fund-tablet',
+    component: fundTablet,
+  },
   'personal-portfolio': {
     id: 'portfolio',
     component: portfolio,
@@ -31,9 +38,7 @@ const components = {
   },
 }
 
-const activeComponent = computed(() => components[route.name]);
-
-// BUG: если пользователь не авторизирован, при router before открывается auth page и после авторизации кидает на старые страницы (analytics)
+const activeComponent = computed(() => isLaptop.value || isDesktop.value ? components['personal-fund-tablet'] : components[route.name]);
 </script>
 
 <style src="./w-fund.scss" lang="scss" />

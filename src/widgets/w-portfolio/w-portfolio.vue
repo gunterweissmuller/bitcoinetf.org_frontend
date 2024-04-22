@@ -7,27 +7,13 @@
       :assets="assets"
       :btc-value="$app.store.user.btcValue"
     />
-    <!-- <e-assets
-      v-if="assets?.length"
-      :assets="assets"
-      :key="assetsKey"
-      :btc-value="$app.store.user.btcValue"
-      @mouse-enter-asset="onMouseEnterAsset"
-      @mouse-leave-asset="onMouseLeaveAsset"
-      @focus-in-asset="onMouseEnterAsset"
-      @focus-out-asset="onMouseLeaveAsset"
-    />
-    <w-activity /> -->
     <w-news />
 
-    <!-- FIX NEXT-ROUTE-NAME!!!!!!! -->
-    <w-onboarding :steps="renderedSteps" next-route-name="personal-fund" />
+    <w-onboarding :steps="renderedSteps" next-route-name="personal-protection" />
   </div>
 </template>
 
 <script setup lang="ts">
-// import EAssets from '~/src/entities/e-assets/e-assets.vue'
-// import WActivity from '~/src/widgets/w-activity/w-activity.vue'
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';
 import WNews from '~/src/widgets/w-news/w-news.vue'
 import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.vue'
@@ -38,7 +24,6 @@ import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 
 const { $app } = useNuxtApp()
 
-const assetsKey = ref(1)
 const centrifuge = ref(null)
 const chartPortfolioRef = ref(null)
 

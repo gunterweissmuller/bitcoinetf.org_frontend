@@ -1,6 +1,6 @@
 <template>
   <header
-    v-if="route.name !== 'personal-kyc'"
+    v-if="route.name !== 'personal-kyc' && !(isFundPage && (isLaptop || isDesktop))"
     :class="['w-header', { 'w-header--no-indent': route.path.includes('analytics') || route.path.includes('wallet'), 'w-header--empty': route.name === 'personal-purchase' }]"
   >
     <div class='w-header__wrap'>
@@ -123,6 +123,8 @@ const props = withDefaults(
     listInfo: [],
   },
 )
+
+
 
 const btcUsdt = ref(null)
 const apyValue = ref(14)
@@ -300,6 +302,8 @@ const fundLinks = {
     { text: 'Shareholders', name: 'personal-shareholders' },
   ],
 }
+
+const isFundPage = computed<boolean>(() => fundLinks.links.find(el => el.name === route.name || 'personal-fund' === route.name))
 
 const walletLinks = {
   title: 'Wallet',
@@ -487,7 +491,6 @@ const marqueList = computed(() => [
     modifyValue: `$${$app.filters.rounded(purchases.value?.[0]?.amount, 2)}`,
   },
 ])
-
 
 const filteredMarqueList = computed(() => {
   return marqueList.value.filter((el) => el?.value)
