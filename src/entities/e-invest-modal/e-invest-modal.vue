@@ -477,9 +477,9 @@ onMounted(() => {
   //   selectCurrency({value: localStorage.getItem("investType")});
   // }
 
-  if($app.store.purchase.type) {
-    selectCurrency({value: $app.store.purchase.type.toLowerCase()});
-  }
+  // if($app.store.purchase.type) {
+  //   selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+  // }
 })
 
 const dayliDivsDisplay = computed(() => {
@@ -510,7 +510,12 @@ watch(
   () => $app.store.user.isInvestModalShow.show,
   () => {
     isOpen.value = $app.store.user.isInvestModalShow.show;
-    selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+
+    if (orderType.value !== 'init_btc') {
+      selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+    } else if($app.store.purchase.type) {
+      selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+    }
   }
 )
 
