@@ -2,7 +2,7 @@
   <section class="s-site-main">
     <div class="l-site-dark">
       <div class="s-site-main__wrapper-title">
-        <h1 class="s-site-main__title title-site-h1">WE MAKE BITCOIN ETFS ACCESSIBLE FOR ALL</h1>
+        <h1 class="s-site-main__title title-site-h1">WE MAKE BITCOIN ETFs ACCESSIBLE FOR ALL</h1>
         <p class="s-site-main__title_info">
           Buy Bitcoin ETFs that pays dividends: choose to earn
           <NuxtImg
