@@ -85,25 +85,10 @@
 
 <script setup lang="ts">
 import Chart from 'chart.js/auto'
-import {useNuxtApp} from '#app'
+import { useNuxtApp } from '#app'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons'
-
-const MOUNTH = {
-  0: 'Jan',
-  1: 'Feb',
-  2: 'Mar',
-  3: 'Apr',
-  4: 'May',
-  5: 'Jun',
-  6: 'Jul',
-  7: 'Aug',
-  8: 'Sep',
-  9: 'Oct',
-  10: 'Nov',
-  11: 'Dec',
-}
 
 const {$app} = useNuxtApp()
 
@@ -123,7 +108,8 @@ const props = withDefaults(
   },
 )
 
-const CHART_ID = 'chart-fund'
+// always unique id
+const CHART_ID : string = `${getCurrentInstance()?.uid ?? Math.floor(Math.random() * 10**10)}`;
 
 let CHART_INSTANCE: any = null
 
