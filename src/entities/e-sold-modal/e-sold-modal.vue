@@ -1,5 +1,5 @@
 <template>
-      <m-modal bgBasic @close="handleClose" full-screen v-model="props.show">
+      <m-modal bgBasic @close="handleClose" full-screen :modalMobile="true" v-model="props.show">
         <div class="e-sold-modal">
 
                 <nuxt-img class="e-sold-modal__img" src="/img/wallet/done.svg"></nuxt-img>
@@ -59,7 +59,7 @@
 
     const handleContinue = () => {
         handleClose();
-        // navigateTo({name: 'personal-sell-etfs'})
+        navigateTo({name: 'personal-etfs'});
     }
 </script>
 

@@ -25,7 +25,8 @@
 
     > div {
       &:not(:last-child) {
-        margin-right: var(--spacing-m-1);
+        // margin-right: var(--spacing-m-1);
+        margin-right: var(--spacing-m-2);
       }
     }
   }
@@ -37,6 +38,8 @@
     font-size: torem(16);
     font-weight: 700;
     line-height: torem(21);
+
+    padding: var(--spacing-s);
 
     &:not(:last-child) {
       margin-right: var(--spacing-m-1);

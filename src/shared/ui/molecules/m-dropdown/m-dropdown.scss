@@ -3,6 +3,7 @@
     border-radius: var(--spacing-xs);
     background: var(--surfaces-surface-2);
     position: relative;
+    color: var(--text-secondary);
   
     &__invest {
 
@@ -33,7 +34,7 @@
         &-select {
             padding: var(--spacing-xs);
             border-radius: var(--spacing-xs);
-            background: rgba(255, 255, 255, 0.1);
+            // background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
             display: flex;
             text-align: center;

@@ -3,8 +3,7 @@
     <div class="f-withdrawal-modal__wrap">
       <div class="f-withdrawal-modal__title">Withdraw Method</div>
       <div class="f-withdrawal-modal__subtitle">
-        Choose how you want to withdraw. Please note that by setting up a withdrawal method you will lose your ability
-        to reinvest earnings.
+        Choose how you want to withdraw. Please note that by setting up a withdrawal method you will lose your ability to reinvest Dividends.
       </div>
       <!--        v-if="orderType === 'init_btc'"-->
       <m-select

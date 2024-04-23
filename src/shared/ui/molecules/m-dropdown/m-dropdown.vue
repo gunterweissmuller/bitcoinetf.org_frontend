@@ -1,7 +1,7 @@
 <template>
     <div class="m-dropdown">
         <div @click="toggleCurrencyDropdown" class="m-dropdown__invest-select">
-            <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['m-dropdown__invest-select-arrow', {'m-dropdown__invest-select-arrow-reverse': showDropdown}]" alt="Down arrow icon"/>
+            <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['m-dropdown__invest-select-arrow', {'m-dropdown__invest-select-arrow-reverse': !showDropdown}]" alt="Down arrow icon"/>
             <span class="m-dropdown__invest-select-text m-dropdown__invest--text-primary m-dropdown--text-normal">{{ selectedOption.value }}</span>
         </div>
         <div  v-on-click-outside="() => showDropdown = false"  v-if="showDropdown" class="m-dropdown__invest-select-dropdown">

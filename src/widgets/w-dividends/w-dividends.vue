@@ -123,17 +123,17 @@
             <div class="w-dividends__item_info">
               <div class="w-dividends__item_info-title">{{ getDividendsDesc(item) }}</div>
               <div class="w-dividends__item_info-date">
-                {{ $app.filters.dayjs(item?.created_at)?.format('D MMMM YY') }}
+                {{ $app.filters.dayjs(item?.created_at)?.format('D MMM YY HH:mm') }}
               </div>
             </div>
             <div v-if="item.status === 'pending'" class="w-dividends__item_sums">Pending</div>
             <div v-else class="w-dividends__item_sums">
               <div class="w-dividends__item_info-usd">
-                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 8) }}
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }} <!--8-->
               </div>
               <div class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
-                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span>
+                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 6))"></span> <!--8-->
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@
         <div @click="loadMoreDividends" class="w-dividends__more-text">Load more</div>
       </div>
       <div v-if="!personalDividends.length" class="w-dividends__empty">
-        <img class="w-dividends__empty-pic" src="/img/cloud.png" alt="empty" />
+        <img class="w-dividends__empty-pic" :src="$app.store.user.theme === 'dark' ? '/img/cloud-dark.png' : '/img/cloud.png' " alt="empty" />
         <div class="w-dividends__empty-title">You don’t have any transactions yet.</div>
         <div class="w-dividends__empty-text">Buy your first ETF Shares and enjoy daily dividends!</div>
       </div>
@@ -165,6 +165,7 @@ import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
 import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
 import eNotEnoughBalanceModal from '~/src/entities/e-not-enough-balance-modal/e-not-enough-balance-modal.vue'
+import axios from "axios";
 
 const { $app } = useNuxtApp()
 
@@ -471,13 +472,20 @@ onMounted(() => {
 
   const time = new Date();
   const senondsDay = 24*60*60*1000; //24hr in miliseconds
-  const secondsEnd = 6*60*60*1000 + 30*60*1000; //6:30 moscow in miliseconds;
-  const secondsNow =  time.getHours()*60*60*1000 + time.getMinutes()*60*1000 + time.getSeconds()*1000;
+  const secondsEnd = 6*60*60*1000 + 30*60*1000; //6:30 hours in miliseconds;
+  const secondsNow = time.getHours()*60*60*1000 + time.getMinutes()*60*1000 + time.getSeconds()*1000;
 
-  // console.log( $app.filters.dayjs(time.getTime()).format('D MMM YY HH:mm:ss') , $app.filters.dayjs(time.getTime()-secondsNow+secondsEnd+senondsDay).format('D MMM YY HH:mm:ss')  );
+  const timeZone = -(time.getTimezoneOffset()+180)*60*1000; // timezone for moscow in miliseconds
+
+  // console.log(time.getTimezoneOffset(), time, timeZone, $app.filters.dayjs(time.getTime()).format('D MMM YY HH:mm:ss'), $app.filters.dayjs(time.getTime()-secondsNow+secondsEnd+senondsDay).format('D MMM YY HH:mm:ss')  );
 
   // Set the date we're counting down to
-  const countDownDate = time.getTime()-secondsNow+secondsEnd+senondsDay;
+  let countDownDate = time.getTime()-secondsNow+secondsEnd+senondsDay+timeZone;
+
+  // if end time > 24hr -> get this day time
+  if(countDownDate - time.getTime() > senondsDay) {
+    countDownDate = time.getTime()-secondsNow+secondsEnd+timeZone;
+  }
   
 
   // Update the count down every 1 second
@@ -515,7 +523,7 @@ onMounted(() => {
 })
 
 const timerStyle = computed(() => {
-  return `background: radial-gradient(${$app.store.user.theme === 'dark' ? '#171A17' : '#ffffff'} 63%, transparent 64%), conic-gradient(var(--accent-primary) 0% ${timerPercent.value}%, var(--surfaces-selection) ${timerPercent.value}% 50%);`
+  return `background: radial-gradient(var(--surfaces-surface-1) 63%, transparent 64%), conic-gradient(var(--accent-primary) 0% ${timerPercent.value}%, var(--surfaces-selection) ${timerPercent.value}% 50%);`
   return `background: radial-gradient(black 60%, transparent 61%), conic-gradient(#D53738 0% ${timerPercent.value}%, transparent ${timerPercent.value}% 100%)`;
 })
 

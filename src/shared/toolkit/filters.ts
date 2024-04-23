@@ -8,6 +8,7 @@ import isTomorrow from 'dayjs/plugin/isTomorrow'
 import timezone from 'dayjs/plugin/timezone'
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
 import 'dayjs/locale/ru'
 
 import validatorRegExpImpl from '~/src/shared/toolkit/validator'
@@ -19,6 +20,7 @@ dayjs.extend(isTomorrow)
 dayjs.extend(timezone)
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
+dayjs.extend(advancedFormat)
 
 // dayjs.locale('ru')
 

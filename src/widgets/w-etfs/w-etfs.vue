@@ -398,14 +398,22 @@ const checkKyc = async () => {
 }
 
 const handleVerify = async () => {
-  const isKycFinished = await checkKyc()
+  const isKycFinished = await checkKyc();
 
-  if (isKycFinished) {
-    //todo ?
-    navigateTo({ name: 'personal-kyc' })
-  } else {
-    navigateTo({ name: 'personal-kyc' })
-  }
+  window.open(window.location.origin + "/personal/kyc");
+
+  // navigateTo({ name: 'personal-kyc' }, {
+  //   open : {
+  //     target : "_blank"
+  //   }
+  // });
+
+  // if (isKycFinished) {
+  //   //todo ?
+  //   navigateTo({ name: 'personal-kyc' })
+  // } else {
+  //   navigateTo({ name: 'personal-kyc' })
+  // }
 }
 
 </script>

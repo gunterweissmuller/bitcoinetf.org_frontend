@@ -17,12 +17,12 @@
                 <a-input
                     class=""
                     label="Tether USDT (Polygon) Destination Address"
-                    :model-value="addressValue"
+                    v-model="addressValue"
                     text-icon-text="Copied!"
                     :icon="Icon.MonoPaste"
                     position-icon="right"
                 />
-                <a-button class="w-sell-etfs__continue" variant="primary" @click="() => {currentStep = Steps.Confirm}" text="Continue"></a-button>
+                <a-button class="w-sell-etfs__continue" :disabled="!addressValue" variant="primary" @click="() => {currentStep = Steps.Confirm}" text="Continue"></a-button>
             </div>
         </template>
 
@@ -50,7 +50,7 @@
                     </div>
                     <div class="w-sell-etfs__table-item">
                         <div class="w-sell-etfs__table-title">Destination Address</div>
-                        <div class="w-sell-etfs__table-text">3FZbgi23h45y458ruer930t034t4h9kLtktZc5</div>
+                        <div class="w-sell-etfs__table-text">{{addressValue}}</div>
                     </div>
                     <div class="w-sell-etfs__table-item">
                         <div class="w-sell-etfs__table-title">Early Termination Fee</div>

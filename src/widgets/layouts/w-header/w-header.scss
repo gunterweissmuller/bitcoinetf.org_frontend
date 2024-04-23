@@ -9,8 +9,9 @@
   display: flex;
   align-items: center;
   padding: torem(16, 0);
-  background: var(--surfaces-surface-glass-2);
+  // background: var(--surfaces-surface-glass-2);
   backdrop-filter: blur(32.5px);
+  
   box-shadow: var(--b-shadow-1);
 
   @include breakpoint($break-desktop-1024-minus) {
@@ -53,6 +54,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--surfaces-surface-glass-2);
     
 
     @include breakpoint($break-desktop-1024-minus) {
@@ -62,6 +64,7 @@
 
     @include breakpoint($break-desktop-1024) {
       justify-content: space-between;
+      background: transparent;
     }
 
     &__back {

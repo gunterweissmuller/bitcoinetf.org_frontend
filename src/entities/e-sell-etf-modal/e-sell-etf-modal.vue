@@ -1,5 +1,5 @@
 <template>
-      <m-modal bgBasic @close="handleClose" full-screen v-model="props.show">
+      <m-modal bgBasic @close="handleClose" :modalMobile="true" v-model="props.show">
         <div class="e-sell-etf-modal">
 
             <template v-if="currentStep === Steps.Sure">
