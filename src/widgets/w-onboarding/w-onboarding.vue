@@ -85,7 +85,7 @@ const finishOnboarding = (status) => {
 
 const goToNextStep = (isLast: boolean, next: Function) => {
 
-  console.log(isLast, props.nextRouteName)
+
   if (isLast && props.nextRouteName) {
 
     // finishOnboarding('finished')

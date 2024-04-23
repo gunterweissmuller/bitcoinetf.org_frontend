@@ -43,7 +43,6 @@ const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
 const isOpenModal = computed({
   get() {
-    console.log(props.modelValue);
     return props.modelValue
   },
   set(value) {

@@ -313,7 +313,7 @@ onMounted(()=>{
 
     const temp = Number(localStorage.getItem('investmentAmount'));
 
-    console.log(isNaN(temp), temp);
+
 
     investmentAmount.value = isNaN(temp) ? 2500 : temp;
     investmentAmountDisplay.value = String(investmentAmount.value) ;
@@ -468,7 +468,7 @@ const guaranteedPayout = computed(() => {
 
 const roundedGuaranteedPayout = computed(() => {
   return $app.filters.roundedFixed(investmentAmount.value + guaranteedPayout.value * 3, 2)
-  
+
 })
 
 

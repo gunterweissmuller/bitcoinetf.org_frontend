@@ -545,8 +545,8 @@ const focusOnInput = () => {
 //   () => props.modelValue,
 //   (value, oldValue) => {
 //     if (props.maxLength) {
-//       console.log('value', value)
-//       console.log('oldValue', value)
+//
+//
 //       if (value.length > props.maxLength) {
 //         emit('update:modelValue', oldValue)
 //       }

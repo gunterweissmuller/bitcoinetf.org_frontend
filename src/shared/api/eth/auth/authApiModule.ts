@@ -26,8 +26,6 @@ export default class AuthApiModule {
   }) {
 
     if(payload?.method === SignupMethods.Google) {
-      console.log(this.adapter);
-
       // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
     }
 
