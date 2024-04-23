@@ -19,8 +19,22 @@ export default defineNuxtRouteMiddleware((to) => {
     } else*/
     console.log('DOMAIN', config.public.DOMAIN)
     console.log('APP_DOMAIN', config.public.APP_DOMAIN)
+
+    // $app.store.purchase.type = selectedCurrency.value.value;
+    // $app.store.purchase.amount = investmentAmount.value;
+    // $app.store.purchase.amountUS = investmentAmount.value;
+
     if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name) && to.path !== '/redirect') {
-      const newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
+      let newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
+
+      if ($app.store.purchase.type) {
+        newUrl += "&purchaseType=" + $app.store.purchase.type;
+      }
+
+      if ($app.store.purchase.amountUS) {
+        newUrl += "&amount=" + $app.store.purchase.amountUS;
+      }
+
       console.log(newUrl)
       window.location.href = newUrl;
       return abortNavigation()
