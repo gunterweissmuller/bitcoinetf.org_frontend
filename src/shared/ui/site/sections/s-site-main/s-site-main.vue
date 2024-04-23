@@ -21,7 +21,7 @@
             height="18"
             loading="lazy"
           />
-          BTC. Dividends Distributed Daily. Contractually Guaranteed.<br />
+          BTC. Dividends Distributed Daily.<br />
           42%-100%+ Earnings on Your Investment. Contractually Guaranteed.
         </p>
         <div class="s-site-main__title_buttons_wrap">
