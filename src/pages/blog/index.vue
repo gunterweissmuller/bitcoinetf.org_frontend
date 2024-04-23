@@ -86,7 +86,7 @@ const getBlogNews = async (page : number = blogPagination.value.page) => {
 
 const handlePagination = async (page : number) => {
   await getBlogNews(page);
-  console.log(page);
+
 
   window.scrollTo(0,0);
 }

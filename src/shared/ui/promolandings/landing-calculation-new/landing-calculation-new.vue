@@ -227,7 +227,7 @@ onMounted(()=>{
       }
     });
   } else {
-    console.log("Metamask is not installed");
+
   }
 
   localStorage.setItem('theme', 'dark');
@@ -239,7 +239,7 @@ onMounted(()=>{
 //   () => (window as any).ethereum,
 //   () => {
 //     isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
-//     console.log("NEWWW", isMetamaskSupported.value);
+//
 //   }
 // )
 
@@ -522,7 +522,7 @@ const scrollToPurchase = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
-  console.log(offsetPosition);
+
   setTimeout(()=>{
     window.scrollTo({
       top: offsetPosition,
@@ -542,7 +542,7 @@ const isEmailDisabled = ref(false);
 const dataDisabled = ref(false);
 
 const countryChanged = (country) => {
-  // console.log(country, phone);
+  //
   countryCode.value = country.dialCode;
 }
 
@@ -613,7 +613,7 @@ const handleTelegramAuth = async () => {
     (window as any).Telegram.Login.auth(
       { bot_id: telegramBotId.value, request_access: true },
       (tgData: any) => {
-        console.log(tgData);
+
         if (!tgData) {
           // authorization failed
           isTelegramConnection.value = true;
@@ -672,7 +672,7 @@ const handleTelegramAuth = async () => {
       }
     )
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 
 
@@ -696,7 +696,7 @@ const testTG = async () => {
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       data = tgData;
-      console.log(tgData);
+
 
       if (!tgData) {
         // authorization failed
@@ -769,12 +769,12 @@ const handleTelegramConnect = async () => {
     telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
-      console.log("scrolltg",res);
+
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
 
-    //console.log(r);
+    //
 
   })
 }
@@ -791,7 +791,7 @@ onMounted(() => {
 $app.api.eth.auth
   .getAppleRedirect()
   .then(async (res) => {
-    console.log(res);
+
 
     function getJsonFromUrl(url) {
       if(!url) url = location.search;
@@ -806,7 +806,7 @@ $app.api.eth.auth
 
     const parsedUrl = getJsonFromUrl(res.url);
 
-    console.log(parsedUrl, window.AppleID);
+
 
     (window as any).AppleID.auth.init({
         clientId : parsedUrl.client_id,
@@ -827,17 +827,17 @@ const handleAppleConnect = async () => {
 try {
     const data = await (window as any).AppleID.auth.signIn()
     // Handle successful response.
-    console.log("test123", data);
+
 
     $app.store.authTemp.response = data.authorization.id_token;
 
-    console.log($app.store.authTemp.response, $app.api.eth.auth)
+
 
 
     $app.api.eth.auth
     .getAppleAuthType({apple_token: data.authorization.id_token})
     .then(async (res) => {
-      console.log(res);
+
 
       if(res.data.auth_type === 'registration') {
           signupStep.value = SignupSteps.Signup;
@@ -1084,7 +1084,7 @@ const signupAndBuy = async () => {
         handleOpenPurchase();
 
         if (props.isFiat) {
-        //   console.log("TRUE IS FIAT");
+        //
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,
@@ -1231,7 +1231,7 @@ const signupAndBuy = async () => {
         handleOpenPurchase();
 
         if (props.isFiat) {
-        //   console.log("TRUE IS FIAT");
+        //
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,

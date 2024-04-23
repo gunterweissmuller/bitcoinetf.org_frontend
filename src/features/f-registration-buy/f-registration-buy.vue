@@ -366,7 +366,7 @@ const getWallets = async () => {
   await $app.api.eth.billingEth
     .getWallets()
     .then((response: any) => {
-      console.log(response)
+
       wallets.value = response.data
     })
     .catch(() => {
@@ -387,15 +387,15 @@ const getMoonpayWallets = async () => {
 
     currentPayStep.value = StepsPay.Paid;
   } catch (e) {
-    console.log('error', e)
+
   }
 }
 
 const refCodeApply = async () => {
-  console.log(refApply.value);
+
   if(refApply.value) return
 
-  console.log($app.store.user?.info?.referrals?.used_code)
+
 
   if ($app.store.user?.info?.referrals?.used_code === null ) { //|| $app.store.user?.info?.referrals?.used_code === undefined
     await $app.api.eth.referral
@@ -407,7 +407,6 @@ const refCodeApply = async () => {
         $app.store.user.info.referrals.used_code = refCode.value;
       })
       .catch((e) => {
-        console.log(e)
         refCodeError.value = true
         if (e?.errors?.error?.message) {
           refCodeMessage.value = e.errors.error.message
@@ -440,12 +439,12 @@ const discountAmount = ref(0);
 const origAmount = $app.store.purchase.amount;
 const originalAmount = ref($app.store.purchase.amount);
 const originalWithDiscount = ref($app.store.purchase.amountUS);
-console.log("start", originalWithDiscount, $app.store.purchase.amountUS, discountAmount)
+
 const totalPayout = ref($app.store.purchase.totalPayout);
 
 onMounted(async () => {
   $app.store.purchase.amountUS = originalWithDiscount.value;
-  console.log(originalWithDiscount.value, $app.store.purchase.amountUS, $app.store.user?.info?.referrals?.used_code, $app.store.user?.info);
+
 
   refCode.value = $app.store.user?.info?.referrals?.used_code || '';
   await getWallets()

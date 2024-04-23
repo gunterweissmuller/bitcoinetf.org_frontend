@@ -5,7 +5,7 @@
       { 'l-main--indent': isVisibleInfo },
       { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
-      { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  }, 
+      { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  },
     ]"
   ><!---->
     <w-header v-if="route.name !== 'personal-buy-shares'" :list-info="listInfo" /> <!---->
@@ -78,7 +78,7 @@ const changeLoadingStatus = async (status: boolean) => {
 }
 
 const isVisibleInfo = computed(() => {
-  console.log("",route.name)
+
   return (
     route.name === 'personal-analytics' ||
     route.name === 'personal-performance' ||

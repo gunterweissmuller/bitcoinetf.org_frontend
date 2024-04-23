@@ -42,7 +42,7 @@ const lastPayment = computed(() => {
 //   $app.api.eth.billingEth
 //   .getLastPayment()
 //   .then((response: any) => {
-//     console.log('response', response);
+//
 //     $app.store.user.lastPayment = response.data
 //   })
 //   .catch(() => {

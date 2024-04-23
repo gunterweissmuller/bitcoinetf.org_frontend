@@ -73,11 +73,11 @@
               />
 
 
-              
+
             </div>
-            
+
             <button :disabled="!buttonClickEnable" @click="handleButtonClick" class="a-input-with-button__input-button">{{ buttonText }}</button>
-            
+
             <template v-if="icon">
               <span
                 v-if="textIcon && textIconText"
@@ -98,10 +98,10 @@
                 :name="icon"
                 @click="iconClickHandler()"
               />
-              
+
             </template>
 
-            
+
 
             <!--          <div v-show="isNotEmptyInputValue && !hiddenButton" class="a-input-with-button__btn-clear" @click="buttonEvent">-->
             <!--            <a-icon :name="inputButtonIcon" :width="24" :height="24" />-->
@@ -544,8 +544,8 @@ const focusOnInput = () => {
 //   () => props.modelValue,
 //   (value, oldValue) => {
 //     if (props.maxLength) {
-//       console.log('value', value)
-//       console.log('oldValue', value)
+//
+//
 //       if (value.length > props.maxLength) {
 //         emit('update:modelValue', oldValue)
 //       }
