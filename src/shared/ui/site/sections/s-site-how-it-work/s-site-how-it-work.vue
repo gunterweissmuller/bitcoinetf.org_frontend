@@ -45,7 +45,7 @@
       <div style="background: rgba(255, 255, 255, 0.1); height: 1px" />
       <div style="padding-top: 32px; padding-bottom: 32px">
         <p style="font-size: 24px; text-align: center">
-          <span style="color: #4d94ff">Sell ETFs at the fixed price</span> of $1 and retain your dividends.
+          <span style="color: #4d94ff">Sell ETFs at the fixed price</span> of $1 each and retain your dividends.
         </p>
       </div>
       <div style="background: rgba(255, 255, 255, 0.1); height: 1px" />

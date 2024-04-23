@@ -27,7 +27,7 @@
           label="Protection 2"
           title="USDT Protection Vault"
           :cost="`$${$app.filters.rounded(fundTotalUsd, 0)}`"
-          body="Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility."
+          body="Whenever our AI trading bot profits from the hedging operations, the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, irrespective of Bitcoin price volatility."
           :currentBalance="true"
           textButton="Verify on Blockchain"
         />
@@ -35,9 +35,9 @@
 
       <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 36%; bottom: -18px; z-index: 2">
         <m-guarantees-card
-          capital="$50,000,000 Paid Up Capital"
+          capital="$50,000,000 Paid-Up Capital"
           label="Protection 3"
-          body="The funds holding company in Hong Kong will use its paid up capital to satisfy guarantees if needed."
+          body="The funds holding company in Hong Kong will utilize its paid-up capital to fulfill guarantees if necessary."
           :currentBalance="false"
           textButton="Verify Official Record"
         />
@@ -118,9 +118,9 @@
           <swiper-slide class="s-site-main__item">
             <div class="s-site-main__item-value" style="display: flex; align-items: center">
               <div>
-                <p style="font-size: 20px; text-align: left">$50,000,000 Paid Up Capital</p>
+                <p style="font-size: 20px; text-align: left">$50,000,000 Paid-Up Capital</p>
                 <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px">
-                  The funds holding company in Hong Kong will use its paid up capital to satisfy guarantees if needed.
+                  The funds holding company in Hong Kong will utilize its paid-up capital to fulfill guarantees if necessary.
                 </p>
                 <button @click="$router.push('/personal/registration')" class="guarantees-card__button">
                   Verify Official Record
