@@ -4,7 +4,7 @@
       <div class="s-site-main__wrapper-title">
         <h1 class="s-site-main__title s-site-main__title--h1-lowercase">WE MAKE BITCOIN ETFs ACCESSIBLE FOR ALL</h1>
         <p class="s-site-main__title_info">
-          Buy Bitcoin ETFs that pays dividends: choose to earn
+          Buy Bitcoin ETFs that pay dividends: choose to earn
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[18px]"
             src="/img/icons/colorful/usdt.svg"
@@ -21,8 +21,8 @@
             height="18"
             loading="lazy"
           />
-          BTC. Dividends Distributed Daily & Contractually Guaranteed,<br />
-          with 42%-100%+ Earnings on Your Investment.
+          BTC. Dividends Distributed Daily. Contractually Guaranteed.<br />
+          42%-100%+ Earnings on Your Investment. Contractually Guaranteed.
         </p>
         <div class="s-site-main__title_buttons_wrap">
           <button @click="scrollToSection" class="s-site-main__learn_more_button">Learn more</button>
