@@ -277,7 +277,15 @@ const currencies = ref([
     apy3: 100
 
   }, ]);
-const selectedCurrency = ref(currencies.value[0]);
+
+
+const orderType = computed(() => {
+  // return 'usdt';
+  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc'
+});
+const selectedCurrency = computed(() => {
+  return orderType.value === 'init_btc' ? currencies.value[Math.floor((Math.random() * 2) + 0)] : orderType.value === 'usdt' ? currencies.value[0] : orderType.value === 'btc' ? currencies.value[1] : currencies.value[0];
+});
 
 let apyValue = computed(() => selectedCurrency.value.apy);
 let apyValue3 = ref(selectedCurrency.value.apy3);
@@ -294,10 +302,7 @@ const investmentAmountDisplay = ref('2,500');
 const investmentAmount = ref(2500);
 const investmentAmountWithDiscount = ref(2375);
 
-const orderType = computed(() => {
-  // return 'usdt';
-  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc'
-});
+
 
 onMounted(() => {
   $app.api.eth.auth.getUser().then((resp) => {
@@ -474,19 +479,19 @@ const roundedGuaranteedPayout = computed(() => {
 
 const showDropdown = ref(false);
 
-onMounted(()=>{
-  localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
-  if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
-    selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
-  }
-});
+// onMounted(()=>{
+//   localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
+//   if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
+//     selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
+//   }
+// });
 
-watch(
-  () => selectedCurrency.value,
-  (newValue) => {
-    localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
-  }
-)
+// watch(
+//   () => selectedCurrency.value,
+//   (newValue) => {
+//     localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
+//   }
+// )
 
 const toggleCurrencyDropdown = () => {
   showDropdown.value = !showDropdown.value;
