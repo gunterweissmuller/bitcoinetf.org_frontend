@@ -115,8 +115,8 @@
               :class="['w-dividends__item-pic', { 'w-dividends__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
             >
               <a-icon
-                width="18"
-                height="18"
+                width="14"
+                height="14"
                 :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
               />
             </div>

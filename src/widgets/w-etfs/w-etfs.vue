@@ -61,11 +61,7 @@
             <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
             <div v-else class="w-etfs__item_sums">
               <div class="w-etfs__item_info-usd">
-                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 8) }}
-              </div>
-              <div class="w-etfs__item_info-btc">
-                <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
-                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span>
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item?.usd_amount, 0) }}
               </div>
             </div>
           </div>
