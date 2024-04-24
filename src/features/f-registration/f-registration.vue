@@ -110,10 +110,10 @@
           </h5> -->
           <form class="f-registration__form" @submit.prevent="onSubmitEmailForm">
 
-              <a-input v-model="firstName" label="First name" required class="f-registration__name" />
-              <p class="f-registration__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
-              <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-              <p class="f-registration__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
+              <a-input :errorText="backendError.value && backendError.field === 'first_name' ? backendError.value : ''" v-model="firstName" label="First name" required class="f-registration__name" />
+              <!-- <p class="f-registration__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p> -->
+              <a-input :errorText="backendError.value && backendError.field === 'last_name' ? backendError.value : ''" v-model="lastName" label="Last name" required class="f-registration__name" />
+              <!-- <p class="f-registration__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p> -->
               <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
                   :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                   v-model="email" />
