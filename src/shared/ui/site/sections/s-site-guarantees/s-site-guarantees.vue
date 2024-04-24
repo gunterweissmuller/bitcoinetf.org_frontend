@@ -153,7 +153,7 @@
               <NuxtImg src="/img/main-guarantees-table-title-3.png" width="188" height="97" />
             </div>
             <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-4.png" width="188" />
+              <NuxtImg src="/img/main-guarantees-table-title-4.png" width="220" />
             </div>
           </div>
           <div class="s-site-guarantees__table-body">
