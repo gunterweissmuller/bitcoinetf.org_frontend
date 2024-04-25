@@ -39,6 +39,24 @@
             Launch App
           </button>
         </div>
+        <m-slider
+          :modules="[]"
+          :navigation="false"
+          slides-per-view="auto"
+          :space-between="8"
+          class="s-site-main__title-details"
+        >
+          <template #slides>
+            <swiper-slide class="s-site-main__title-detail">
+              <div class="s-site-main__title-detail-balance">${{ statistic }}</div>
+              <div class="s-site-main__title-detail-name">Total dividends paid</div>
+            </swiper-slide>
+            <swiper-slide class="s-site-main__title-detail">
+              <div class="s-site-main__title-detail-balance">${{ fundTotalUsd }}</div>
+              <div class="s-site-main__title-detail-name">Assets Under Management</div>
+            </swiper-slide>
+          </template>
+        </m-slider>
       </div>
     </div>
 
@@ -65,7 +83,6 @@ import { useNuxtApp } from '#app'
 import { computed, ref, nextTick } from 'vue'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
-import MProfitCalculator from '~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue'
 
 defineProps<{
   data: any
@@ -86,11 +103,11 @@ const getBtcValue = async () => {
 }
 
 const statistic = computed(() => {
-  return $app.store.user.statistic
+  return $app.filters.rounded($app.store.user.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2)
 })
 
 const fundTotalUsd = computed(() => {
-  return $app.store.user.fundTotalUsd
+  return $app.filters.rounded($app.store.user.fundTotalUsd, 0)
 })
 
 const scrollToSection = () => {
