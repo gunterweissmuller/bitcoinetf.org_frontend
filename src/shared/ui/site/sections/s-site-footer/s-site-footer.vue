@@ -61,14 +61,19 @@
           <div class="s-site-footer__menu-container" v-for="(menuItem, id) in menu" :key="id">
             <div class="s-site-footer__menu-title">{{ menuItem.title }}</div>
             <div class="s-site-footer__menu-column">
-              <nuxt-link
-                :to="link.href"
-                class="s-site-footer__menu-link"
-                v-for="(link, idx) in menuItem.items"
-                :key="idx"
-              >
-                {{ link.text }}
-              </nuxt-link>
+              <template v-for="(link, idx) in menuItem.items" :key="idx">
+                <a v-if="link.text === 'Bitcoin Whitepaper'"
+                  :href="link.href"
+                  target="_blank"
+                  class="s-site-footer__menu-link">
+                  {{ link.text }}
+                </a>
+                <nuxt-link v-else
+                  :to="link.href"
+                  class="s-site-footer__menu-link">
+                  {{ link.text }}
+                </nuxt-link>
+              </template>
             </div>
           </div>
         </div>
@@ -109,7 +114,7 @@ const menu = [
     items: [
       { text: 'Fund', href: '/fund' },
       { text: 'New', href: '/blog' },
-      { text: 'Bitcoin Whitepaper', href: '/#' }, //
+      { text: 'Bitcoin Whitepaper', href: 'https://files.bitcoinetf.org/etf/public/bitcoin.pdf' },
       { text: 'PR Package', href: '/#' }, //
     ],
   },

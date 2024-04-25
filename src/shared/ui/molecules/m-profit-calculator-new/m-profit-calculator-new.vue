@@ -300,9 +300,13 @@ const orderType = computed(() => {
 });
 
 onMounted(() => {
-  $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
-  });
+  const { isUserAuthenticated } = $app.store.auth
+
+  if (isUserAuthenticated) {
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    });
+  }
 })
 
 
@@ -313,7 +317,7 @@ onMounted(()=>{
 
     const temp = Number(localStorage.getItem('investmentAmount'));
 
-    console.log(isNaN(temp), temp);
+
 
     investmentAmount.value = isNaN(temp) ? 2500 : temp;
     investmentAmountDisplay.value = String(investmentAmount.value) ;
@@ -468,7 +472,7 @@ const guaranteedPayout = computed(() => {
 
 const roundedGuaranteedPayout = computed(() => {
   return $app.filters.roundedFixed(investmentAmount.value + guaranteedPayout.value * 3, 2)
-  
+
 })
 
 

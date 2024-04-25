@@ -17,8 +17,6 @@ export function useMoonpay() {
         },
         debug: true
       });
-
-      console.log('moonpay', moonPaySdk)
     }
 
     const show = () => {

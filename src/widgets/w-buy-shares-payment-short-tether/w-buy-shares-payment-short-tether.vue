@@ -218,7 +218,7 @@ const getMoonpayWallets = async () => {
       window.open(moonpayUrl, '_blank')
     }
   } catch (e) {
-    console.log('error', e)
+    console.error('error', e)
   }
 }
 
@@ -247,12 +247,12 @@ const handlePayMethod = (functionName) => {
 }
 
 watch(() => selectedMethod.value, (value) => {
-  console.log('watch selectedMethod')
+
   const { onClick } = payWith.value.find(item => item.value === value)
   handlePayMethod(onClick);
 
   nextTick(() => {
-    console.log('paymentAddress', paymentAddress)
+
   })
 })
 

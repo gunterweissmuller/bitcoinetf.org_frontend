@@ -45,11 +45,11 @@
               <div class="s-site-fund__about-title">About asset</div>
               <div v-if="asset.description" v-html="asset.description" class="s-site-fund__about-text"/>
             </div>
-            
+
             <div :class="[{'s-site-fund__drag-hide': !isDrag}]" v-if="id === 0" class="s-site-fund__drag">
               <div class="s-site-fund__drag-wrapper">
                 <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-fund__drag-arrow" alt="arrow" />
-                drag 
+                drag
                 <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-fund__drag-arrow s-site-fund__drag-arrow-reverse" alt="arrow" />
               </div>
             </div>
@@ -85,7 +85,7 @@ const handleScroll = (event) => {
   const elementPosition = element.offsetTop - (element.offsetHeight * 0.35);
   const toTop = window.pageYOffset ? window.pageYOffset : document.body.scrollTop;
 
-  // console.log(toTop, elementPosition);
+  //
 
   if(toTop >= elementPosition) {
     setTimeout(() => {

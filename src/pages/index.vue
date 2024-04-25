@@ -286,7 +286,7 @@ const protectionData = {
   },
   info_2: {
     title: 'Deposits to the Vault',
-    text: 'Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility.',
+    text: 'Whenever our AI trading bot profits from the hedging operations, the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, irrespective of Bitcoin price volatility.',
   },
   img: '/img/site-dark/s-site-protection/1.png',
   items: [

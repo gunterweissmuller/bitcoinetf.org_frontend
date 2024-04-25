@@ -313,9 +313,9 @@ const uploadFiles = async (files: any, selectType: any) => {
       .catch((e) => {})
     // .catch((e) => {
     //   const validationKeys = Object.keys(e.errors.error.validation)
-    //   console.log('e.errors.error.validation', validationKeys)
-    //   console.log('e.errors.error.validation', e.errors.error.validation)
-    //   console.log('currentScreen.fields', currentScreen.value.fields)
+    //
+    //
+    //
     //
     //   if (validationKeys.type) {
     //     currentScreen.value.fields.find((field) => field)
@@ -329,7 +329,7 @@ const uploadFiles = async (files: any, selectType: any) => {
     //     }
     //   })
     //
-    //   console.log(' currentScreen.value.fields', currentScreen.value.fields)
+    //
     // })
   }
 
