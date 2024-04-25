@@ -68,22 +68,22 @@ const props = withDefaults(
 // always unique id
 const CHART_ID : string = `${getCurrentInstance()?.uid ?? Math.floor(Math.random() * 10**10)}`;
 
-let CHART_INSTANCE: any = null
+let CHART_INSTANCE: any = null;
 
-const totalAmountBtc = ref(0)
-const totalAmountUsd = ref(0)
+const totalAmountBtc = ref(0);
+const totalAmountUsd = ref(0);
 
 const totalAmountUsdComp = computed(() => {
-  return $app.store.user.totalFund?.totalAmountUsd > 0 ? $app.store.user.totalFund.totalAmountUsd : ''
-})
+  return $app.store.user.totalFund?.totalAmountUsd > 0 ? $app.store.user.totalFund.totalAmountUsd : '';
+});
 
 const amountUsdDifference = computed(() => {
-  return $app.store.user.totalFund?.differenceUsd || 0
-})
+  return $app.store.user.totalFund?.differenceUsd || 0;
+});
 
 const difference = computed(() => {
-  return $app.store.user.totalFund?.difference || 0
-})
+  return $app.store.user.totalFund?.difference || 0;
+});
 
 const options = {
   responsive: true,
@@ -131,61 +131,72 @@ const config = {
   plugins: [],
 }
 
-const changeChartData = (tab) => {
+interface DataItem {
+  amount: number;
+  created_at: string;
+  label: string
+}
+
+const changeChartData = (tabs : DataItem[]) => {
   if (CHART_INSTANCE) {
-    CHART_INSTANCE.data.datasets[0].data = tab.map((item) => Number(item.amount))
-    CHART_INSTANCE.data.labels = tab.map((item) => {
+    CHART_INSTANCE.data.datasets[0].data = tabs.map((item) => Number(item.amount));
+    CHART_INSTANCE.data.labels = tabs.map((item) => {
       if (props.isTotalAssets) {
-        return item.label
+        return item.label;
       } else {
-        return $app.filters.dayjs(item?.created_at)?.format('MM.YY')
+        return $app.filters.dayjs(item?.created_at)?.format('MM.YY');
       }
     });
     CHART_INSTANCE.update();
   }
 }
 
-const getStatistics = async (tab?: any) => {
-  const requestPayload: any = {filters: {}}
+const getStatistics = async () => {
+  let response;
+  let data;
+  if (props.type === 'shareholders') {
+    response = await $app.api.eth.statisticEth.getShareholders();
+    data = response.data.data;
+    console.log(response);
+  } else {
+    const requestPayload: any = {filters: {}}
 
-  if (props.id) {
-    requestPayload.filters.asset_uuid = props.id
+    if (props.id) {
+      requestPayload.filters.asset_uuid = props.id;
+    }
+
+    response = props.isTotalAssets ? await $app.api.eth.statisticEth.getAssetsFund(requestPayload) : await $app.api.info.statistic.getAssetsStat(requestPayload);
+
+    totalAmountBtc.value = response?.total_amount_btc;
+    totalAmountUsd.value = response?.total_amount_usd;
+
+    $app.store.user.totalFund = {
+      totalAmountBtc: totalAmountBtc.value,
+      totalAmountUsd: totalAmountUsd.value,
+      dividendsUsd: response?.dividends_usd,
+      dividendsBtc: response?.dividends_btc,
+      allocation: response?.allocation,
+      differenceUsd: response?.difference_usd,
+      difference: response?.difference
+    }
+
+    data = response.data;
   }
 
-  const response = props.isTotalAssets ? await $app.api.eth.statisticEth.getAssetsFund(requestPayload)  : await $app.api.info.statistic.getAssetsStat(requestPayload)
 
-  totalAmountBtc.value = response?.total_amount_btc
-  totalAmountUsd.value = response?.total_amount_usd
-
-  $app.store.user.totalFund = {
-    totalAmountBtc: totalAmountBtc.value,
-    totalAmountUsd: totalAmountUsd.value,
-    dividendsUsd: response?.dividends_usd,
-    dividendsBtc: response?.dividends_btc,
-    allocation: response?.allocation,
-    differenceUsd: response?.difference_usd,
-    difference: response?.difference
-  }
-
-  let data = response.data;
-
-  interface DataItem {
-    amount: number;
-    created_at: number;
-  }
 
   if (data.length > 4) {
-    data = data.filter((item : DataItem) => item.amount != 0)
-    data = data.filter((item  : DataItem, index : number) => index === 0 || index === data.length - 1 || index === 4 || index === 8)
+    data = data.filter((item : DataItem) => item.amount != 0);
+    data = data.filter((item  : DataItem, index : number) => index === 0 || index === data.length - 1 || index === 4 || index === 8);
   }
 
-  let sortedData = data.sort((a : DataItem, b : DataItem) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
-  sortedData = sortedData.filter((item : DataItem) => item.amount != 0)
-  changeChartData(sortedData)
+  let sortedData = data.sort((a : DataItem, b : DataItem) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+  sortedData = sortedData.filter((item : DataItem) => item.amount != 0);
+  changeChartData(sortedData);
 }
 
 onMounted(async () => {
-  const chartStatus = Chart.getChart(CHART_ID) // <canvas> id
+  const chartStatus = Chart.getChart(CHART_ID); // <canvas> id
 
   if (!chartStatus) {
     Chart.defaults.font.size = 10;
@@ -193,8 +204,8 @@ onMounted(async () => {
     Chart.defaults.font.weight = 'bold';
     Chart.defaults.color = '#888CA0';
     const ctx = document.getElementById(CHART_ID) as HTMLCanvasElement;
-    CHART_INSTANCE = new Chart(ctx, config)
-    await getStatistics()
+    CHART_INSTANCE = new Chart(ctx, config);
+    await getStatistics();
   }
 })
 </script>
