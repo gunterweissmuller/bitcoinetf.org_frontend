@@ -138,7 +138,7 @@
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">$ {{  dayliDivsDisplay }}</p>
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
@@ -146,7 +146,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ monthlyDivsDisplay }}</p>
               </div>
             </div>
             <p class="landing-calculation__journey__invest--card-rating landing-calculation__journey--text-normal relative flex items-center mx-auto">
@@ -283,9 +283,8 @@ const orderType = computed(() => {
   // return 'usdt';
   return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc'
 });
-const selectedCurrency = computed(() => {
-  return orderType.value === 'init_btc' ? currencies.value[Math.floor((Math.random() * 2) + 0)] : orderType.value === 'usdt' ? currencies.value[0] : orderType.value === 'btc' ? currencies.value[1] : currencies.value[0];
-});
+
+const selectedCurrency = ref( orderType.value === 'init_btc' ? currencies.value[Math.floor((Math.random() * 2) + 0)] : orderType.value === 'usdt' ? currencies.value[0] : orderType.value === 'btc' ? currencies.value[1] : currencies.value[0]);
 
 let apyValue = computed(() => selectedCurrency.value.apy);
 let apyValue3 = ref(selectedCurrency.value.apy3);
@@ -316,7 +315,7 @@ onMounted(() => {
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
 
-    const temp = Number(localStorage.getItem('investmentAmount'));
+    const temp = Math.ceil(Number(localStorage.getItem('investmentAmount')));
 
     console.log(isNaN(temp), temp);
 
