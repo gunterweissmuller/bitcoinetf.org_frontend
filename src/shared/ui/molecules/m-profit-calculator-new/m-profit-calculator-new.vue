@@ -300,9 +300,13 @@ const orderType = computed(() => {
 });
 
 onMounted(() => {
-  $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
-  });
+  const { isUserAuthenticated } = $app.store.auth
+
+  if (isUserAuthenticated) {
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    });
+  }
 })
 
 
