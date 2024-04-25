@@ -20,7 +20,7 @@ const portfolio = defineAsyncComponent(() => import('~/src/widgets/w-portfolio/w
 const shareholders = defineAsyncComponent(() => import('~/src/widgets/w-shareholders/w-shareholders.vue'));
 
 const components = {
-  'personal-fund-tablet': {
+  'personal-fund': {
     id: 'fund-tablet',
     component: fundTablet,
   },
@@ -38,7 +38,7 @@ const components = {
   },
 }
 
-const activeComponent = computed(() => isLaptop.value || isDesktop.value ? components['personal-fund-tablet'] : components[route.name]);
+const activeComponent = computed(() => isLaptop.value || isDesktop.value ? components['personal-fund'] : components[route.name]);
 </script>
 
 <style src="./w-fund.scss" lang="scss" />

@@ -1,23 +1,5 @@
 <template>
   <div>
-    <template v-if="isTopTabs">
-      <div class="w-chart-fund__tabs w-chart-fund__tabs__indent" >
-        <div
-          v-for="(tab, idx) in tabs"
-          :key="idx"
-          :class="[
-            'w-chart-fund__item',
-            { 'w-chart-fund__item--active': currentTab.title === tab.title },
-            { 'w-chart-fund__item--live': 'ALL Live' === tab.title },
-            { 'w-chart-fund__item--all-live': 'ALL Live' === tab.title && currentTab.title === tab.title },
-          ]"
-          @click="getStatistics(tab)"
-        >
-          {{ tab.title }}
-        </div>
-      </div>
-    </template>
-
     <div id="fund-chart" :class="['w-chart-fund', { 'w-chart-fund--is-main': isMain }]">
       <div v-if="title" class="w-chart-fund__caption">
         <a-live class='w-chart-fund__caption-live' />
@@ -25,6 +7,7 @@
           {{ title }}
         </span>
         <a-icon
+          :style="{ visibility: props.type === 'shareholders' ? 'hidden' : '' }"
           width='18'
           height='18'
           class='w-chart-fund__caption-icon'
@@ -35,12 +18,8 @@
       <div class="w-chart-fund__head">
         <div class="w-chart-fund__titles">
           <div class="w-chart-fund__titles-title" v-if="totalAmountUsdComp">
-            ${{$app.filters.rounded(totalAmountUsdComp, 0)}}
+            ${{$app.filters.rounded(totalAmountUsdComp, 0)}} {{ props.type === 'shareholders' ? 'Shareholders' : '' }}
           </div>
-
-          <!-- <div class="w-chart-fund__titles-subtitle">
-            {{ $app.filters.rounded(totalAmountUsdComp, 0) }} Shares Issued
-          </div> -->
         </div>
 
         <div :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
@@ -51,34 +30,12 @@
               $app.filters.rounded(difference, 2)
             }}%)
           </div>
-
-          <!-- <div class="w-chart-fund__info-text">
-            {{ currentTab.title === 'ALL Live' ? 'Since launch in Jan 2023' : currentTab.info }}
-          </div> -->
         </div>
       </div>
 
-      <div :class="['w-chart-fund__chart', { 'w-chart-fund__chart--no-indent': isTopTabs }]">
+      <div class='w-chart-fund__chart'>
         <canvas :id="CHART_ID"></canvas>
       </div>
-
-      <!-- <template v-if="!isTopTabs">
-        <div class="w-chart-fund__tabs">
-          <div
-            v-for="(tab, idx) in tabs"
-            :key="idx"
-            :class="[
-              'w-chart-fund__item',
-              { 'w-chart-fund__item--active': currentTab.title === tab.title },
-              { 'w-chart-fund__item--live': 'ALL Live' === tab.title },
-              { 'w-chart-fund__item--all-live': 'ALL Live' === tab.title && currentTab.title === tab.title },
-            ]"
-            @click="getStatistics(tab)"
-          >
-            {{ tab.title }}
-          </div>
-        </div>
-      </template> -->
     </div>
   </div>
 </template>
@@ -97,14 +54,14 @@ const props = withDefaults(
     id?: string | null
     title: string
     isMain: boolean
-    isTopTabs?: boolean
     isTotalAssets?: boolean
+    type: 'assets' | 'shareholders'
   }>(),
   {
-    isTopTabs: false,
     isTotalAssets: false,
     isMain: false,
     id: null,
+    type: 'assets'
   },
 )
 
@@ -112,47 +69,6 @@ const props = withDefaults(
 const CHART_ID : string = `${getCurrentInstance()?.uid ?? Math.floor(Math.random() * 10**10)}`;
 
 let CHART_INSTANCE: any = null
-
-const tabs = ref([
-  {
-    title: '7d',
-    info: 'Past 7 Days',
-    unit: 'day',
-    value: 7,
-    requestType: 'daily',
-    data: [],
-  },
-  {
-    title: '1m',
-    info: 'Past month',
-    unit: 'month',
-    value: 1,
-    requestType: 'daily',
-    data: [],
-  },
-  {
-    title: '6m',
-    info: 'Past 6 months',
-    unit: 'month',
-    value: 6,
-    requestType: 'monthly',
-    data: [],
-  },
-  {
-    title: '1y',
-    info: 'Past year',
-    unit: 'year',
-    value: 1,
-    requestType: 'monthly',
-    data: [],
-  },
-  {
-    title: 'ALL Live',
-    info: 'Since Jan 2023',
-    requestType: 'monthly',
-    data: [],
-  },
-])
 
 const totalAmountBtc = ref(0)
 const totalAmountUsd = ref(0)
@@ -168,7 +84,6 @@ const amountUsdDifference = computed(() => {
 const difference = computed(() => {
   return $app.store.user.totalFund?.difference || 0
 })
-const currentTab = ref(tabs.value[tabs.value.length - 1])
 
 const options = {
   responsive: true,
@@ -216,55 +131,28 @@ const config = {
   plugins: [],
 }
 
-const changeChartData = (tab, requestType = 'monthly') => {
-
+const changeChartData = (tab) => {
   if (CHART_INSTANCE) {
     CHART_INSTANCE.data.datasets[0].data = tab.map((item) => Number(item.amount))
     CHART_INSTANCE.data.labels = tab.map((item) => {
-    if (props.isTotalAssets) {
-      return item.label
-    } else {
-      if (requestType === 'daily') {
-        return $app.filters.dayjs(item?.created_at)?.format('D.MM')
-      } else if (requestType === 'year') {
-        return $app.filters.dayjs(item?.created_at)?.format('YYYY')
+      if (props.isTotalAssets) {
+        return item.label
       } else {
         return $app.filters.dayjs(item?.created_at)?.format('MM.YY')
       }
-    }
-    })
-    CHART_INSTANCE.update()
+    });
+    CHART_INSTANCE.update();
   }
 }
 
 const getStatistics = async (tab?: any) => {
-  if (tab) {
-    currentTab.value = tab
-  } else {
-    currentTab.value = tabs.value[tabs.value.length - 1]
-  }
   const requestPayload: any = {filters: {}}
 
   if (props.id) {
     requestPayload.filters.asset_uuid = props.id
   }
 
-  if (tab?.unit) {
-    requestPayload.filters.period_to = $app.filters.dayjs().format('YYYY-MM-DD')
-    requestPayload.filters.period_from = $app.filters.dayjs().subtract(tab.value, tab.unit).format('YYYY-MM-DD')
-  }
-
-  if (tab?.type === 'ytd') {
-    requestPayload.filters.period_to = $app.filters.dayjs().format('YYYY-MM-DD')
-    requestPayload.filters.period_from = $app.filters.dayjs().startOf('year').format('YYYY-MM-DD')
-  }
-  let response
-  if (tab?.requestType) {
-    response = props.isTotalAssets ? await $app.api.eth.statisticEth.getAssetsFund(requestPayload) : await $app.api.info.statistic.getAssetsStat(requestPayload, tab?.requestType)
-  } else {
-    response = props.isTotalAssets ? await $app.api.eth.statisticEth.getAssetsFund(requestPayload)  : await $app.api.info.statistic.getAssetsStat(requestPayload)
-  }
-
+  const response = props.isTotalAssets ? await $app.api.eth.statisticEth.getAssetsFund(requestPayload)  : await $app.api.info.statistic.getAssetsStat(requestPayload)
 
   totalAmountBtc.value = response?.total_amount_btc
   totalAmountUsd.value = response?.total_amount_usd
@@ -279,43 +167,32 @@ const getStatistics = async (tab?: any) => {
     difference: response?.difference
   }
 
-  let data = response.data
-  if (tab?.title === '7d'){
-    data = data.filter((item, index) => !(index % 2))
-  }
-  if (tab?.title === '1m') {
-    data = data.filter((item, index) => index === 0 || index === data.length - 1 || index === 13 || index === 20)
-  }
-  if (tab?.title === '6m') {
-    data = data.filter((item, index) => index === 0 || index === data.length - 1 || index === 1 || index === 3)
-  }
-  if (tab?.title === '1y') {
-    if (data.length > 4) {
-      data = data.filter((item) => item.amount != 0)
-      data = data.filter((item, index) => index === 0 || index === data.length - 1 || index === 4 || index === 8)
-    }
+  let data = response.data;
+
+  interface DataItem {
+    amount: number;
+    created_at: number;
   }
 
-  if (tab === undefined || tab?.title === 'ALL Live') {
-    if (data.length > 4) {
-      data = data.filter((item) => item.amount != 0)
-      data = data.filter((item, index) => index === 0 || index === data.length - 1 || index === 4 || index === 8)
-    }
+  if (data.length > 4) {
+    data = data.filter((item : DataItem) => item.amount != 0)
+    data = data.filter((item  : DataItem, index : number) => index === 0 || index === data.length - 1 || index === 4 || index === 8)
   }
-  let sortedData = data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-  sortedData = sortedData.filter((item) => item.amount != 0)
-  changeChartData(sortedData, tab?.requestType)
+
+  let sortedData = data.sort((a : DataItem, b : DataItem) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+  sortedData = sortedData.filter((item : DataItem) => item.amount != 0)
+  changeChartData(sortedData)
 }
 
 onMounted(async () => {
   const chartStatus = Chart.getChart(CHART_ID) // <canvas> id
 
   if (!chartStatus) {
-    Chart.defaults.font.size = 10
-    Chart.defaults.font.family = 'Caption'
-    Chart.defaults.font.weight = 'bold'
-    Chart.defaults.color = '#888CA0'
-    const ctx = document.getElementById(CHART_ID)
+    Chart.defaults.font.size = 10;
+    Chart.defaults.font.family = 'Caption';
+    Chart.defaults.font.weight = 'bold';
+    Chart.defaults.color = '#888CA0';
+    const ctx = document.getElementById(CHART_ID) as HTMLCanvasElement;
     CHART_INSTANCE = new Chart(ctx, config)
     await getStatistics()
   }

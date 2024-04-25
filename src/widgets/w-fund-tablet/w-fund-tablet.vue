@@ -62,7 +62,7 @@
         Shareholders
       </div>
       <div class="w-fund-tablet__shareholders-charts">
-        <w-chart-fund title="AUM Growth" is-main is-total-assets />
+        <w-chart-fund title="Shareholder Growth" type="shareholders" is-main is-total-assets />
         <w-chart-shareholders
           title="Investment Strategies"
           is-desktop
