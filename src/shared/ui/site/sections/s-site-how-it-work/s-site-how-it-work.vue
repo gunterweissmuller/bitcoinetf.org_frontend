@@ -7,7 +7,6 @@
         assets. All generated profits are distributed to ETF shareholders. You can choose to get <br />
         paid in BTC or USDT.
       </p>
-      <!-- TODO need fix for mobile -->
       <p class="s-site-how-work__title_info for-mobile">
         Bitcoin ETFs are issued, after which the <br />
         fund's AI dynamically allocates new funds <br />
