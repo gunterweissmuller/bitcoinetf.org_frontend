@@ -177,21 +177,8 @@
                   text="Continue"></a-button>
           </form>
       </template>
-      <!--    <template v-else-if="currentStep === Steps.Bonus">-->
-      <!--      <div class="f-registration__bonus">-->
-      <!--        <div class="f-registration__bonus-wrap">-->
-      <!--          <img src="/img/bonus.png" alt="bonus" class="f-registration__bonus-wrap-pic" />-->
-      <!--          <div class="f-registration__bonus-wrap-title">$50 Welcome and referral bonus!</div>-->
-      <!--          <div class="f-registration__bonus-wrap-text">-->
-      <!--            You just earned a $50 bonus for signing up! Your bonus can be accessed in your bonus wallet, and can be-->
-      <!--            applied to your ETF purchases.-->
-      <!--          </div>-->
-      <!--          <a-button class="f-registration__bonus-wrap-btn" @click="getBonus" text="Got it!"></a-button>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--    </template>-->
   </div>
-  <e-registration-bonus-modal :confirmData="confirmResponse" v-model="isOpenModal" @accept="getBonus" @close="getBonus" />
+
   <f-terms-modal v-model="isOpenTermsModal" />
 </template>
 
@@ -232,7 +219,6 @@ const enum Steps {
   Email = 'Email',
   Code = 'Code',
   Password = 'Password',
-  Bonus = 'Bonus',
   TelegramSign = 'TelegramSign'
 }
 
@@ -263,9 +249,7 @@ watch(
   () => currentStep.value,
   (step) => {
       backendError.value = ''
-      if (step === Steps.Bonus) {
-          isOpenModal.value = true
-      }
+      
   },
 )
 
@@ -776,11 +760,12 @@ const onSubmitEmailForm = async () => {
         firstName.value = '';
         lastName.value = '';
         email.value = '';
-        currentStep.value = Steps.Bonus
+        
       })
       .then(async () => {
             await $app.api.eth.auth.getUser().then((resp) => {
-                $app.store.user.info = resp?.data
+                $app.store.user.info = resp?.data;
+                router.push('/personal/analytics');
             })
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -937,11 +922,12 @@ const codeContinue = async () => {
           // TODO falling user/me
           $app.store.auth.setTokens(jwtResponse.data)
           confirmResponse.value = jwtResponse.data
-          currentStep.value = Steps.Bonus
+          
         })
         .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data
+            $app.store.user.info = resp?.data;
+            router.push('/personal/analytics');
           });
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -976,11 +962,12 @@ const codeContinue = async () => {
         // TODO falling user/me
         $app.store.auth.setTokens(jwtResponse.data)
         confirmResponse.value = jwtResponse.data
-        currentStep.value = Steps.Bonus
+        
       })
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
-          $app.store.user.info = resp?.data
+          $app.store.user.info = resp?.data;
+          router.push('/personal/analytics')
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1016,11 +1003,12 @@ const codeContinue = async () => {
         // TODO falling user/me
         $app.store.auth.setTokens(jwtResponse.data)
         confirmResponse.value = jwtResponse.data
-        currentStep.value = Steps.Bonus
+        
       })
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
-          $app.store.user.info = resp?.data
+          $app.store.user.info = resp?.data;
+          router.push('/personal/analytics')
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1118,11 +1106,12 @@ const onSubmitPasswordForm = async () => {
           $app.store.auth.setTokens(jwtResponse.data)
           confirmResponse.value = jwtResponse.data
           isSubmitPasswordForm.value = false;
-          currentStep.value = Steps.Bonus
+          
       })
       .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
-              $app.store.user.info = resp?.data
+              $app.store.user.info = resp?.data;
+              router.push('/personal/analytics')
           });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1148,10 +1137,6 @@ const onSubmitPasswordForm = async () => {
       })
 }
 
-// Bonus Step
-const getBonus = () => {
-  router.push('/personal/analytics')
-}
 
 onMounted(() => {
   if (route.query.referral) {
