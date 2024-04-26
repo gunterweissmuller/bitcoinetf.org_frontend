@@ -165,14 +165,12 @@
               <input
                 :disabled="false"
                 :style="'max-width: '+inputMaxWidth+'px'"
-                :value="investmentAmountDisplay"
+                v-model="investmentAmountDisplay"
                 class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
                 placeholder="2,500"
                 type="text"
-                @keypress="validate"
                 :min="1"
                 :max="10000000"
-                @input="onPickerValueInput"
               />
             </div>
 
