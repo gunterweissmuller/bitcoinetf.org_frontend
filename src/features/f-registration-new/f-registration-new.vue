@@ -34,25 +34,25 @@
       <!-- old -->
 
       <div class="f-registration-new-content-right-wrapper">
-        <div class="f-registration w-full">
+        <div class="f-registration-right w-full">
           <template v-if="currentStep === Steps.Choice">
-              <div class='f-registration__back' @click='$router.back()'>
+              <div class='f-registration-right__back' @click='$router.back()'>
                   <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
               </div>
-              <h3 class="f-registration__title">Sign up</h3>
-              <h5 class="f-registration__subtitle">
+              <h3 class="f-registration-right__title">Sign up</h3>
+              <h5 class="f-registration-right__subtitle">
                   If you already have an account, you can
                   <nuxt-link to="/personal/login">log in here.</nuxt-link>
               </h5>
 
               <div class="flex flex-col items-center pb-12">
 
-                  <div v-for="method in methods" @click="method.onClick" class="f-registration-new__button">
-                    <div class="f-registration-new__button-left">
-                      <NuxtImg :src="method.img" width="24" height="24" class="f-registration-new__button-img-method" loading="lazy" />
+                  <div v-for="method in methods" @click="method.onClick" class="f-registration-right__button">
+                    <div class="f-registration-right__button-left">
+                      <NuxtImg :src="method.img" width="24" height="24" class="f-registration-right__button-img-method" loading="lazy" />
                       {{method.name}}
                     </div>
-                    <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-grey-right.svg' : '/img/icons/mono/chevron-grey-right.svg'" width="6" height="11" class="f-registration-new__button-img-arrow" loading="lazy" />
+                    <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-grey-right.svg' : '/img/icons/mono/chevron-grey-right.svg'" width="6" height="11" class="f-registration-right__button-img-arrow" loading="lazy" />
                   </div>
 
                 <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
@@ -62,26 +62,26 @@
           </template>
 
           <template v-else-if="currentStep === Steps.Email">
-              <div class='f-registration__back' @click='handleEmailBack'>
-                  <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+              <div class='f-registration-right__back' @click='handleEmailBack'>
+                  <a-icon class='f-registration-right__back-icon' width='24' :name='Icon.MonoChevronLeft' />
               </div>
-              <h3 class="f-registration__title">Sign up with {{ currentSignup }}</h3>
-              <h5 class="f-registration__subtitle">
+              <h3 class="f-registration-right__title">Sign up with {{ currentSignup }}</h3>
+              <h5 class="f-registration-right__subtitle">
                   Enter your details below and press Continue. We will send you a confirmation code shortly.
               </h5>
               <!-- <h5 class="f-registration__subtitle">
                   We will send you a confirmation code shortly. If you already have an account, you can
                   <nuxt-link to="/personal/login">log in here.</nuxt-link>
               </h5> -->
-              <form class="f-registration__form" @submit.prevent="onSubmitEmailForm">
+              <form class="f-registration-right__form" @submit.prevent="onSubmitEmailForm">
 
-                  <a-input v-model="firstName" label="First name" required class="f-registration__name" />
-                  <a-input v-model="lastName" label="Last name" required class="f-registration__name" />
-                  <a-input class="f-registration__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
+                  <a-input v-model="firstName" label="First name" required class="f-registration-right__name" />
+                  <a-input v-model="lastName" label="Last name" required class="f-registration-right__name" />
+                  <a-input class="f-registration-right__email" label="Email" validation-reg-exp-key="email" :disabled="currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
                       :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
                       v-model="email" />
 
-                <div class="f-registration__wrap_phone">
+                <div class="f-registration-right__wrap_phone">
                   <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
                 </div>
 
@@ -91,7 +91,7 @@
                       <a href="/" target="_blank" class="f-registration__ref-link">How to get referral codes</a>
                   </m-accordion> -->
 
-                  <div class="f-registration__agree">
+                  <div class="f-registration-right__agree">
                       <div class="mb-10">
                           <a-checkbox v-model="registrationAgreedUS" id="with_email"
                               label="<p >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>"
@@ -102,70 +102,92 @@
                           single />
                   </div>
 
-                  <a-button class="f-registration__button" :disabled="emailButtonDisabled || termsContinueDisabled" type="submit"
+                  <a-button class="f-registration-right__button f-registration-right__button-center" :disabled="emailButtonDisabled || termsContinueDisabled" type="submit"
                       text="Continue"></a-button>
 
-                  <p class="f-registration__error" v-if="backendError">{{ backendError }}</p>
+                  <p class="f-registration-right__error" v-if="backendError">{{ backendError }}</p>
               </form>
           </template>
           <template v-else-if="currentStep === Steps.Code">
-              <div class='f-registration__back' @click='currentStep = Steps.Email'>
-                  <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+              <div class='f-registration-right__back' @click='currentStep = Steps.Email'>
+                  <a-icon class='f-registration-right__back-icon' width='24' :name='Icon.MonoChevronLeft' />
               </div>
-              <h3 class="f-registration__title">
+              <h3 class="f-registration-right__title">
                   Enter your <br />
                   confirmation code
               </h3>
-              <h5 class="f-registration__subtitle">Please enter the 6 digit confirmation code we sent to your email.</h5>
+              <h5 class="f-registration-right__subtitle">Please enter the 6 digit confirmation code we sent to your email.</h5>
 
-              <a-pincode-input class="f-registration__opt" v-model="emailCode" :error-text="pincodeErrorText"
+              <a-pincode-input class="f-registration-right__opt" v-model="emailCode" :error-text="pincodeErrorText"
                   :autofocus="true" :number-digits="6" name="pincode" @update:completed="onCodeInput" />
-              <p v-show="backendError" class="f-registration__error">{{ backendError }}</p>
-              <p v-show="timerStarted" class="f-registration__resend-code">
+              <p v-show="backendError" class="f-registration-right__error">{{ backendError }}</p>
+              <p v-show="timerStarted" class="f-registration-right__resend-code">
                   You can request the code again via {{ timeLeft }} sec.
               </p>
-              <a-button :disabled="timerStarted" class="f-registration__button" text="Resend"
+              <a-button :disabled="timerStarted" class="f-registration-right__button f-registration-right__button-center" text="Resend"
                   :loading="pincodeTrigger && !isCodeCorrect" variant="tertiary" @click="resendCodeClick" />
 
-              <a-button class="f-registration__button" :disabled="!isCodeCorrect" @click="() => codeContinue()"
+              <a-button class="f-registration-right__button f-registration-right__button-center" :disabled="!isCodeCorrect" @click="() => codeContinue()"
                   text="Continue"></a-button>
           </template>
+
+          <template v-else-if="currentStep === Steps.Link">
+              
+              <h3 class="f-registration-right__title">
+                Verify your Email
+              </h3>
+              <h5 class="f-registration-right__subtitle">Please open the link we just sent to your email in order to continue.</h5>
+
+              <!-- <p v-show="timerStarted" class="f-registration__resend-code">
+                  You can request the code again via {{ timeLeft }} sec.
+              </p> -->
+              <a-button size="no-padding" :disabled="timerStarted" class="f-registration-right__button f-registration-right__button-resend-link" :text="timerStarted ? `Resend Link ${timeLeft} sec.` : 'Resend Link'"
+                  :loading="pincodeTrigger && !isCodeCorrect" variant="tertiary" @click="resendCodeClick" />
+          </template>
+
           <template v-else-if="currentStep === Steps.Password">
-              <div class='f-registration__back' @click='currentStep = Steps.Code'>
-                  <a-icon class='f-registration__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+              <div class='f-registration-right__back' @click='currentStep = Steps.Code'>
+                  <a-icon class='f-registration-right__back-icon' width='24' :name='Icon.MonoChevronLeft' />
               </div>
-              <h3 class="f-registration__title">Set your password</h3>
-              <h5 class="f-registration__subtitle">Please set a secure password for your account.</h5>
+              <h3 class="f-registration-right__title">Set your password</h3>
+              <h5 class="f-registration-right__subtitle">Please set a secure password for your account.</h5>
 
-              <form class="f-registration__form" @submit.prevent="onSubmitPasswordForm">
+              <form class="f-registration-right__form" @submit.prevent="onSubmitPasswordForm">
 
-                  <a-input class="f-registration__password" label="Password" :type="isPasswordType ? 'password' : 'text'"
+                  <a-input class="f-registration-right__password" label="Password" :type="isPasswordType ? 'password' : 'text'"
                       validation-reg-exp-key="password" required :icon="Icon.MonoEye" iconWithAction
                       @icon-click-handler="passwordIconClickHandler" positionIcon="right" :error-text="passwordErrorText"
                       @blur="passwordFieldBlurHandler" @update:is-valid="isPasswordValid = $event"
                       v-model="password"></a-input>
 
 
-                  <div class="f-registration__password_info">
+                  <div class="f-registration-right__password_info">
                       Must include a mix of upper case, lower case, numeric and special character.
                   </div>
-                  <a-button class="f-registration__button" :disabled="!isPasswordValid" type="submit"
+                  <a-button class="f-registration-right__button f-registration-right__button-center" :disabled="!isPasswordValid" type="submit"
                       text="Continue"></a-button>
               </form>
           </template>
-          <!--    <template v-else-if="currentStep === Steps.Bonus">-->
-          <!--      <div class="f-registration__bonus">-->
-          <!--        <div class="f-registration__bonus-wrap">-->
-          <!--          <img src="/img/bonus.png" alt="bonus" class="f-registration__bonus-wrap-pic" />-->
-          <!--          <div class="f-registration__bonus-wrap-title">$50 Welcome and referral bonus!</div>-->
-          <!--          <div class="f-registration__bonus-wrap-text">-->
-          <!--            You just earned a $50 bonus for signing up! Your bonus can be accessed in your bonus wallet, and can be-->
-          <!--            applied to your ETF purchases.-->
-          <!--          </div>-->
-          <!--          <a-button class="f-registration__bonus-wrap-btn" @click="getBonus" text="Got it!"></a-button>-->
-          <!--        </div>-->
-          <!--      </div>-->
-          <!--    </template>-->
+
+          <template v-else-if="currentStep === Steps.Loading">
+              <h3 class="f-registration-right__title">Loading...</h3>
+          </template>
+
+          <template v-else-if="currentStep === Steps.Error">
+            <p v-show="backendError" class="f-registration-right__error">{{ backendError }}</p>
+            <a-button @click="() => router.go(0)" text="Try Again" variant="tertiary"></a-button>
+          </template>
+
+          <template v-else-if="currentStep === Steps.Success">
+            <div class="f-registration-right__wrapper">
+              <nuxt-img class="f-registration-right__img-done" :src=" $app.store.user.theme === 'dark' ? '/img/wallet/done-dark.svg' : '/img/wallet/done.svg'"></nuxt-img>
+              <h3 class="f-registration-right__title">
+                Your email has been verified
+              </h3>
+              <h5 class="f-registration-right__subtitle">Your email was successfully verified, we will automatically redirect you to the next step.</h5>
+            </div>
+          </template>
+         
       </div>
       </div>
 
@@ -211,9 +233,13 @@ const enum Steps {
   Choice = 'Choice',
   Email = 'Email',
   Code = 'Code',
+  Link = 'Link',
   Password = 'Password',
   Bonus = 'Bonus',
-  TelegramSign = 'TelegramSign'
+  TelegramSign = 'TelegramSign',
+  Loading = 'Loading',
+  Error = 'Error',
+  Success = 'Success'
 }
 
 
@@ -244,7 +270,7 @@ function openTermsModal() {
 watch(
   () => currentStep.value,
   (step) => {
-      backendError.value = ''
+      // backendError.value = ''
       if (step === Steps.Bonus) {
           isOpenModal.value = true
       }
@@ -306,6 +332,73 @@ const metamaskError = ref("");
 const computedAddress = computed(() => address.value.substring(0, 8) + '...');
 
 onMounted(() => {
+
+  // if verify link
+
+  if (route.query.code && route.query.email) {
+    email.value = String(route.query.email);
+    emailCode.value = String(route.query.code);
+
+    router.replace({'query': ''});
+
+    currentStep.value = Steps.Loading;
+
+    $app.api.eth.auth
+      .confirmFast({
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        // isOpenModal.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        })
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if (aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }
+          }).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+
+        await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+          $app.store.user.blockchainUserWallet = resp?.data.uid
+        })
+      })
+      .then(async () => {
+        
+        // todo go to app
+        currentStep.value = Steps.Success;
+
+        setTimeout(() => {
+          currentStep.value = Steps.Bonus;
+        },3000);
+       
+      })
+      .catch((e) => {
+        currentStep.value = Steps.Error;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+
+  }
+
+  // metamask
+
   isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
 
   if(isMetamaskSupported.value) {
@@ -690,6 +783,8 @@ const onSubmitEmailForm = async () => {
 
   const tempPhone = phone.value.slice(countryCode.value.length+1);
 
+  localStorage.setItem('verifyLinkRedirect', String(router.currentRoute.value.path));
+
   backendError.value = ''
   const initPayload = {
     method: currentSignup.value,
@@ -706,9 +801,9 @@ const onSubmitEmailForm = async () => {
     initPayload.wallet_address = metamaskWalletAddress.value
   }
 
-  if (refCode.value ) {
-      initPayload.ref_code = refCode.value
-  }
+  // if (refCode.value ) {
+  //     initPayload.ref_code = refCode.value
+  // }
 
   console.log(currentSignup.value, initPayload.ref_code);
 
@@ -727,7 +822,9 @@ const onSubmitEmailForm = async () => {
         phone_number_code: countryCode.value,
       }).then((r: any) => {
         isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Code;
+        // currentStep.value = Steps.Code;
+        currentStep.value = Steps.Link;
+        startTimer()
     }).catch((e) => {
       isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
@@ -802,7 +899,9 @@ const onSubmitEmailForm = async () => {
       }).then((r: any) => {
         console.log('ww');
         isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Code;
+        // currentStep.value = Steps.Code;
+        currentStep.value = Steps.Link;
+        startTimer()
     }).catch((e) => {
       isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
@@ -820,7 +919,9 @@ const onSubmitEmailForm = async () => {
       .initMetamask(initPayload)
       .then(() => {
         isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Code;
+        // currentStep.value = Steps.Code;
+        currentStep.value = Steps.Link;
+        startTimer()
       })
       .catch((e) => {
         isSubmitEmailForm.value = false;
@@ -836,7 +937,9 @@ const onSubmitEmailForm = async () => {
       .init(initPayload)
       .then(() => {
         isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Code
+        // currentStep.value = Steps.Code;
+        currentStep.value = Steps.Link;
+        startTimer()
       })
       .catch((e) => {
         isSubmitEmailForm.value = false;
@@ -855,7 +958,7 @@ const timeLeft = ref<number>(0)
 
 const startTimer = () => {
   clearInterval(timer.value)
-  const stopDate = Date.now() + 60 * 1000
+  const stopDate = Date.now() + 60 * 5 * 1000
   timerStarted.value = true
 
   timer.value = setInterval(() => {

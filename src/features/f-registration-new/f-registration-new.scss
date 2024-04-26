@@ -146,11 +146,15 @@
       width: 6px;
       height: 11px;
     }
+
+    &-resend-link {
+      text-align-last: left;
+    }
   }
 
   // old
   &-content {
-    .f-registration {
+    .f-registration-right {
       padding: var(--spacing-m-2) 0 var(--spacing-m-3);
       flex-grow: 1;
       display: flex;
@@ -264,6 +268,47 @@
       &__button {
         width: 100%;
       }
+
+      &__button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: var(--spacing-m-1);
+        margin-bottom: var(--spacing-s);
+        cursor: pointer;
+    
+        color: var(--text-primary);
+        font-family: DM, sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    
+        border-radius: var(--spacing-s);
+        border: 1px solid var(--surfaces-border-1);
+    
+        &-left {
+          display: flex;
+        }
+    
+        &-img-method {
+          margin-right: var(--spacing-m-1);
+        }
+    
+        &-img-arrow {
+          width: 6px;
+          height: 11px;
+        }
+    
+        &-resend-link {
+          text-align-last: left;
+        }
+
+        &-center {
+          justify-content: center;
+        }
+      }
     
       &__opt {
         display: flex;
@@ -286,7 +331,18 @@
           margin-bottom: var(--spacing-m-3);
         }
       }
-    
+
+      &__wrapper {
+        text-align: center;
+      }
+
+      &__img-done {
+        width: 106px;
+        height: 106px;
+        margin: 0 auto var(--spacing-m-3) auto;
+      }
+      
+      //vue tel input
     
       .vue-tel-input {
         margin-top: var(--spacing-m-2);

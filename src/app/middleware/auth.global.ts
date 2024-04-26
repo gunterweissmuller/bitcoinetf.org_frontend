@@ -3,7 +3,7 @@ import {useNuxtApp, useRouter} from '#app'
 export default defineNuxtRouteMiddleware((to) => {
   const {$app} = useNuxtApp()
   const router = useRouter()
-  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
+  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-verify-email']
   const includedRouteMask = to.path.includes('personal')
   console.log(to);
   const urlParams = new URLSearchParams(window.location.search);
