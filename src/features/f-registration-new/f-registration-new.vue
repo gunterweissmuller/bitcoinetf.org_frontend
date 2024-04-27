@@ -343,7 +343,140 @@ onMounted(() => {
 
     currentStep.value = Steps.Loading;
 
-    $app.api.eth.auth
+    console.log($app.store.auth.accountMethod);
+
+    if($app.store.auth.accountMethod === 'metamask') {
+
+      $app.api.eth.auth.
+        confirmMetamask({
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+        fast: true,
+      })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data)
+          confirmResponse.value = jwtResponse.data
+          currentStep.value = Steps.Success;
+
+          setTimeout(() => {
+            currentStep.value = Steps.Bonus;
+          },3000);
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data
+          });
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+                //window.localStorage.removeItem('a_aid');
+                //window.localStorage.removeItem('a_utm');
+            });
+          }
+        })
+        .catch((e) => {
+          isCodeContinueProcess.value = false;
+          if (e?.errors?.error?.message) {
+            backendError.value = e.errors.error.message
+          } else {
+            backendError.value = 'Something went wrong'
+          }
+        })
+
+    } else if ($app.store.auth.accountMethod === 'telegram') {
+      $app.api.eth.auth.
+      confirmTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram?.response),
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        currentStep.value = Steps.Success;
+
+        setTimeout(() => {
+          currentStep.value = Steps.Bonus;
+        },3000);
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+    } else if ($app.store.auth.accountMethod === 'apple') {
+      $app.api.eth.auth.
+      confirmApple({
+        apple_token: $app.store.authTemp?.response,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+        currentStep.value = Steps.Success;
+
+        setTimeout(() => {
+          currentStep.value = Steps.Bonus;
+        },3000);
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = e.errors.error.message
+        } else {
+          backendError.value = 'Something went wrong'
+        }
+      })
+    } else {
+      // email
+
+      $app.api.eth.auth
       .confirmFast({
         email: $app.filters.trimSpaceIntoString(email.value),
         code: $app.filters.trimSpaceIntoString(emailCode.value),
@@ -377,14 +510,11 @@ onMounted(() => {
         })
       })
       .then(async () => {
-        
-        // todo go to app
         currentStep.value = Steps.Success;
 
         setTimeout(() => {
           currentStep.value = Steps.Bonus;
         },3000);
-       
       })
       .catch((e) => {
         currentStep.value = Steps.Error;
@@ -394,6 +524,8 @@ onMounted(() => {
           backendError.value = 'Something went wrong'
         }
       })
+
+    }
 
   }
 
@@ -824,6 +956,7 @@ const onSubmitEmailForm = async () => {
         isSubmitEmailForm.value = false;
         // currentStep.value = Steps.Code;
         currentStep.value = Steps.Link;
+        $app.store.auth.accountMethod = "apple";
         startTimer()
     }).catch((e) => {
       isSubmitEmailForm.value = false;
@@ -901,6 +1034,7 @@ const onSubmitEmailForm = async () => {
         isSubmitEmailForm.value = false;
         // currentStep.value = Steps.Code;
         currentStep.value = Steps.Link;
+        $app.store.auth.accountMethod = "telegram";
         startTimer()
     }).catch((e) => {
       isSubmitEmailForm.value = false;
@@ -921,6 +1055,7 @@ const onSubmitEmailForm = async () => {
         isSubmitEmailForm.value = false;
         // currentStep.value = Steps.Code;
         currentStep.value = Steps.Link;
+        $app.store.auth.accountMethod = "metamask";
         startTimer()
       })
       .catch((e) => {
@@ -939,6 +1074,7 @@ const onSubmitEmailForm = async () => {
         isSubmitEmailForm.value = false;
         // currentStep.value = Steps.Code;
         currentStep.value = Steps.Link;
+        $app.store.auth.accountMethod = "email";
         startTimer()
       })
       .catch((e) => {
