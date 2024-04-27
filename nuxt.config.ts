@@ -224,6 +224,16 @@ export default defineNuxtConfig({
           file: '~/src/widgets/w-fund/w-fund.vue',
         },
         {
+          name: 'personal-assets',
+          path: '/personal/assets',
+          file: '~/src/widgets/w-assets/w-assets.vue',
+        },
+        {
+          name: 'personal-assets-symbol',
+          path: '/personal/assets/:symbol',
+          file: '~/src/widgets/w-assets/w-assets.vue',
+        },
+        {
           name: 'personal-wallet',
           path: '/personal/wallet',
           file: '~/src/widgets/w-wallet/w-wallet.vue',

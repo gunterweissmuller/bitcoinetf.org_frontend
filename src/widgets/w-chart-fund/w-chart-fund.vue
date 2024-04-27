@@ -101,6 +101,7 @@ const options = {
       },
     },
     y: {
+      display: false,
       border: {
         display: false,
       },
@@ -113,24 +114,6 @@ const options = {
   },
 }
 
-const config = {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      {
-        data: [],
-        backgroundColor: 'rgba(77, 148, 255, 0.3)',
-        borderColor: '#4D94FF',
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-  options,
-  plugins: [],
-}
-
 interface DataItem {
   amount: number;
   created_at: string;
@@ -140,11 +123,11 @@ interface DataItem {
 const changeChartData = (tabs : DataItem[]) => {
   if (CHART_INSTANCE) {
     CHART_INSTANCE.data.datasets[0].data = tabs.map((item) => Number(item.amount));
-    CHART_INSTANCE.data.labels = tabs.map((item) => {
+    CHART_INSTANCE.data.labels = tabs.map((item, index : number) => {
       if (props.isTotalAssets) {
-        return item.label;
+        return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY');
       } else {
-        return $app.filters.dayjs(item?.created_at)?.format('MM.YY');
+        return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY');
       }
     });
     CHART_INSTANCE.update();
@@ -157,7 +140,6 @@ const getStatistics = async () => {
   if (props.type === 'shareholders') {
     response = await $app.api.eth.statisticEth.getShareholders();
     data = response.data.data;
-    console.log(response);
   } else {
     const requestPayload: any = {filters: {}}
 
@@ -203,9 +185,38 @@ onMounted(async () => {
     Chart.defaults.font.family = 'Caption';
     Chart.defaults.font.weight = 'bold';
     Chart.defaults.color = '#888CA0';
-    const ctx = document.getElementById(CHART_ID) as HTMLCanvasElement;
-    CHART_INSTANCE = new Chart(ctx, config);
-    await getStatistics();
+
+    const ctx = document.getElementById(CHART_ID);
+
+    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 145);
+    gradient.addColorStop(0, 'rgba(0, 102, 255, 0.2)');
+    gradient.addColorStop(1, 'rgba(0, 102, 255, 0.1)');
+
+    const config = {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            borderColor: '#4D94FF',
+            borderWidth: 1,
+            tension: 0.4,
+            fill: true,
+            backgroundColor: gradient,
+            pointRadius: 10,
+            pointBackgroundColor: 'transparent',
+            pointBorderColor: 'transparent',
+            drawActiveElementsOnTop: true
+          },
+        ],
+      },
+      options: options,
+      plugins: [],
+    }
+
+    CHART_INSTANCE = new Chart(ctx, config)
+    await getStatistics()
   }
 })
 </script>

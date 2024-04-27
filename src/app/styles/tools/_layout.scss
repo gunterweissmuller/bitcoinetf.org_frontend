@@ -113,6 +113,10 @@ $header-notification-height-fhd: 96;
     min-height: vh(100);
     overflow: hidden;
 
+    &--assets {
+      padding-top: torem(calc($header-height-mobile + 34 + 32));
+    }
+
     &--purchase {
       padding-top: 0;
     }
