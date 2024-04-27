@@ -43,7 +43,7 @@
           :modules="[]"
           :navigation="false"
           slides-per-view="auto"
-          :space-between="8"
+          :space-between="0"
           class="s-site-main__title-details"
         >
           <template #slides>
