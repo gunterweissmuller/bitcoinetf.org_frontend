@@ -107,8 +107,6 @@ const textCenter = {
     const yCoor = chart.getDatasetMeta(0).data[0]?.y
     ctx.save()
     ctx.textAlign = 'center'
-    // ctx.fillText('Real-time Portfolio Value', xCoor, yCoor - 20)
-
     ctx.font = 'bold 16px Dm, sans-serif'
     ctx.fillStyle = $app.store.user.theme === 'dark' ? '#F1F2F4' : '#22242b'
     ctx.fillText('$' + $app.filters.rounded(fullBalanceFund.value, 2), xCoor, yCoor + 0)
@@ -144,18 +142,6 @@ const options = ref({
     legend: {
       display: false,
     },
-    // labels: {
-    //   render: 'image',
-    //   images: [
-    //     { src: '/img/portfolio/baa.svg', width: 16, height: 16 },
-    //     { src: '/img/portfolio/fba.svg', width: 16, height: 16 },
-    //     { src: '/img/portfolio/boa.svg', width: 16, height: 16 },
-    //     { src: '/img/portfolio/brf.svg', width: 16, height: 16 },
-    //     { src: '/img/portfolio/sba.svg', width: 16, height: 16 },
-    //     { src: '/img/portfolio/usdt.svg', width: 16, height: 16 },
-    //     { src: '/img/portfolio/vault.svg', width: 16, height: 16 },
-    //   ],
-    // },
     tooltip: {
       callbacks: {
         label: function(context) {

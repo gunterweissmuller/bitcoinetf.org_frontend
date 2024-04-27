@@ -1,15 +1,15 @@
 <template>
   <div class="w-fund page-max-width--big">
-    <keep-alive>
-      <component v-if="activeComponent" :is="activeComponent.component" />
-    </keep-alive>
+    <!-- <keep-alive> -->
+    <component v-if="activeComponent" :is="activeComponent.component" />
+    <!-- </keep-alive> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import useMediaDevice from '~/composables/useMediaDevice'
+import useMediaDevice from '~/composables/useMediaDevice';
 
 const route = useRoute()
 const { isLaptop, isDesktop } = useMediaDevice();

@@ -6,23 +6,6 @@
   border-radius: var(--spacing-s);
   background: var(--surfaces-surface-glass);
 
-  // &--is-main {
-  //   .w-chart-fund__caption {
-  //     color: var(--text-tertiary);
-  //     font-family: Dm, sans-serif;
-  //     font-size: torem(14);
-  //     font-weight: 500;
-  //     line-height: normal;
-  //     margin-bottom: var(--spacing-s);
-  //   }
-  // }
-
-
-  @include breakpoint($break-desktop-1440) {
-    padding: var(--spacing-m-2);
-    //margin-bottom: 0;
-  }
-
   &__caption {
     display: flex;
     align-items: center;
@@ -81,12 +64,6 @@
     flex-direction: column;
 
     &-difference {
-      // margin-left: auto;
-      // width: max-content;
-      // background: rgba(49, 237, 33, 0.06);
-      // padding: var(--spacing-xs) var(--spacing-s);
-      // border-radius: var(--bradius-m);
-
       font-family: Dm, sans-serif;
       font-size: torem(10);
       font-weight: 700;
@@ -114,11 +91,9 @@
 
   &__chart {
     height: torem(152);
-    // margin-bottom: var(--spacing-m-1);
 
     @include breakpoint($break-desktop-1440) {
-      //width: torem(560);
-      height: torem(175);
+      height: torem(210);
     }
 
     &--no-indent {

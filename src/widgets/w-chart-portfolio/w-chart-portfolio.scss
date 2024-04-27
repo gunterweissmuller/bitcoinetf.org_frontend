@@ -6,14 +6,6 @@
   background: var(--surfaces-surface-glass);
   box-shadow: var(--b-shadow-1);
 
-  //@include breakpoint($break-desktop-1440) {
-  //  margin-bottom: 0;
-  //}
-
-  @include breakpoint($break-desktop-1024) {
-    padding: var(--spacing-m-2);
-  }
-
   &__types {
     display: flex;
     align-items: center;
@@ -143,6 +135,7 @@
   }
 
   .m-slider {
+    width: 100%;
     padding-bottom: torem(16);
   }
 }

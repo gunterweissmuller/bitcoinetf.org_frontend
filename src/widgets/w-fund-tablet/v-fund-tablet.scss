@@ -48,13 +48,23 @@
 
   &__fund {
     &-charts {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: torem(16);
+      display: flex;
+      justify-content: space-between;
+      gap: torem(16);
+
+      width: 100%;
     }
 
     &-chart {
-      width: 100%;
+      width: calc(50% - #{torem(8)});
+      max-width: calc(50% - #{torem(8)});
+      min-height: torem(345);
+
+      margin-bottom: 0;
+
+      .w-chart-fund {
+        height: 100%;
+      }
     }
   }
 

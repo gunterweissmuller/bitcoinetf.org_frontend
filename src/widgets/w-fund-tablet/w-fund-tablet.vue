@@ -33,11 +33,12 @@
       <div class="w-fund-tablet__fund-charts">
         <w-chart-fund class="w-fund-tablet__fund-chart" title="AUM Growth" is-main is-total-assets />
         <w-chart-portfolio
-        ref="chartPortfolioRef"
-        class="w-fund-tablet__fund-chart"
-        v-if="assets?.length"
-        :assets="assets"
-        :btc-value="$app.store.user.btcValue"
+          ref="chartPortfolioRef"
+          class="w-fund-tablet__fund-chart"
+          v-if="assets?.length"
+          :assets="assets"
+          :btc-value="$app.store.user.btcValue"
+          title="AUM Allocation"
         />
       </div>
     </div>

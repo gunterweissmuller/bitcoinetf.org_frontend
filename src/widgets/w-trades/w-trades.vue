@@ -45,8 +45,6 @@ import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
 import { useWindowSize } from '@vueuse/core'
 
-const { width } = useWindowSize()
-
 const route = useRoute()
 const { $app } = useNuxtApp()
 
@@ -64,7 +62,7 @@ const props = withDefaults(
     isPage: false,
     perPage: 4,
     gridTemplate: 1,
-    isMain: false
+    isMain: false,
     filters: null
   },
 )
@@ -128,7 +126,6 @@ onMounted(async () => {
   sub
     .on('publication', function (ctx) {
       $app.store.user.latestTrade = ctx.data.message?.result_amount
-      console.log(ctx.data.message);
 
       if (route.name !== 'personal-assets-symbol' || ctx.data.message.asset_uuid === props.filters?.asset_uuid) {
         trades.value = [ctx.data.message, ...trades.value]
