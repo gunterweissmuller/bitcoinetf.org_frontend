@@ -182,5 +182,9 @@ export const auth = defineStore('auth', {
     }),
   },
 
-  
+  persist: {
+    storage: persistedState.cookiesWithOptions({
+      maxAge: 31557600,
+    }),
+  },
 })
