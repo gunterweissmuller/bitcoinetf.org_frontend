@@ -1,6 +1,6 @@
 .w-chart-portfolio {
   padding: var(--spacing-m-1) var(--spacing-m-2);
-  margin-bottom: var(--spacing-m-2);
+  margin-bottom: var(--spacing-m-1);
   border-radius: torem(8);
   border: torem(1) solid var(--surfaces-surface-glass-border);
   background: var(--surfaces-surface-glass);
@@ -54,10 +54,10 @@
 
   &__chart {
     position: relative;
-    height: torem(311);
+    height: torem(194);
 
     @include breakpoint($break-desktop-1024) {
-      height: torem(400);
+      height: torem(194);
     }
   }
 

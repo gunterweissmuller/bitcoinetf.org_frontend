@@ -1,14 +1,14 @@
 <template>
   <div v-if="renderedTrades.length" class="w-trades">
     <div class="w-trades__head">
-      <div class="w-trades__head-title">Latest trades</div>
+      <div class="w-trades__head-title">Latest Trades</div>
       <nuxt-link v-if="!isPage && renderedTrades.length && !hideView" :to="fullPageNuxtLink" class="w-trades__head-info"
         >View All
       </nuxt-link>
     </div>
-    <div v-if="renderedTrades.length && !isExpand" :class="[{'w-trades__content-main' : props.isMain}, {'w-trades__content' : !props.isMain}]" :style=" width > 1010 ? {height: `${(renderedTrades?.length / props.gridTemplate) * 94}px`} : {}">
-      <transition-group name="fade" tag="div" :class="[{'w-trades__content-main-wrapper' : props.isMain}]" :style=" width > 1010 ? {'display': 'grid', 'grid-template-columns': 'repeat( '+ props.gridTemplate +', 1fr)', 'max-height': 94 * (props.perPage/props.gridTemplate) +'px'} : {'display': 'flex', 'flex-direction': 'column'}">
-        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :isMain="props.isMain"/>
+    <div v-if="renderedTrades.length && !isExpand" class="w-trades__content">
+      <transition-group name="fade" tag="div">
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" />
       </transition-group>
     </div>
 
@@ -188,9 +188,6 @@ onUnmounted(() => {
   position: absolute;
   right: 1000px;
   bottom: 0;
-  display: none;
-
-  
-  // transform: translateX(200px);
+  transform: translateY(100px);
 }
 </style>

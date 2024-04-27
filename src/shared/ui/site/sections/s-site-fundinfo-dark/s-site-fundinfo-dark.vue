@@ -38,9 +38,9 @@
       </div>
       <div class="s-site-fundinfo-dark__charts">
         <div class="s-site-fundinfo-dark__chart">
-          <w-chart-performance
+          <w-chart-protection
             v-if="assets?.length"
-            title="Performance"
+            title="Protection"
             :assets="assets"
           />
           <div class="caption">Portfolio</div>
@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import WChartPerformance from '~/src/widgets/w-chart-performance/w-chart-performance.vue'
+import WChartProtection from '~/src/widgets/w-chart-protection/w-chart-protection.vue'
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue'
 import WTrades from '~/src/widgets/w-trades/w-trades.vue'
 import EAssets from '~/src/entities/e-assets/e-assets.vue'

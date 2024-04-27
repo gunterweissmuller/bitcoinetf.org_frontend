@@ -53,7 +53,7 @@
                 $app.store.user.info = resp?.data
               });
 
-              await router.push('/personal/analytics/performance')
+              await router.push('/personal/fund/portfolio')
             });
       }
     })

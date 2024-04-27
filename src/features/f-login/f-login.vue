@@ -194,7 +194,7 @@ const onSubmitEmailForm = () => {
       })
 
       await $app.store.auth.reInitData()
-      await router.push('/personal/analytics/performance')
+      await router.push('/personal/fund/portfolio')
     })
     .catch((e) => {
       isSubmitEmailForm.value = false;
@@ -250,7 +250,7 @@ onMounted(() => {
     })
 
     $app.store.auth.reInitData()
-    router.push('/personal/analytics/performance')
+    router.push('/personal/fund/portfolio')
 
   }
 });
@@ -548,7 +548,7 @@ const handleMetamaskConnect = async () => {
                 })
 
                 $app.store.auth.reInitData()
-                router.push('/personal/analytics/performance')
+                router.push('/personal/fund/portfolio')
               })
               .catch((e) => {
                 if (e?.errors?.error?.message) {

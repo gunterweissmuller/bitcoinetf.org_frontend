@@ -40,4 +40,4 @@ const activeTabIndex = computed<number>(() => {
 })
 </script>
 
-<style src="./e-analytics-tabs.scss" scoped lang="scss" />
+<style src="./e-fund-tabs.scss" scoped lang="scss" />

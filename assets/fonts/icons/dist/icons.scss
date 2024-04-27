@@ -1,4 +1,5 @@
 :root {
+<<<<<<< HEAD
   --icon-colorful--alert-content: "\f101";
   --icon-colorful--alpha-content: "\f102";
   --icon-colorful--apple-content: "\f103";
@@ -168,13 +169,170 @@
   --icon-mono--wallet-content: "\f1a7";
   --icon-mono--withdraw-content: "\f1a8";
   --icon-mono--x-content: "\f1a9";
+=======
+  --icon-colorful--alpha-content: "\f101";
+  --icon-colorful--asset-baa-content: "\f102";
+  --icon-colorful--asset-boa-content: "\f103";
+  --icon-colorful--asset-brf-content: "\f104";
+  --icon-colorful--asset-fba-content: "\f105";
+  --icon-colorful--asset-sba-content: "\f106";
+  --icon-colorful--asset-usd-content: "\f107";
+  --icon-colorful--asset-vault-content: "\f108";
+  --icon-colorful--bitcoin-font-content: "\f109";
+  --icon-colorful--bitcoin-full-content: "\f10a";
+  --icon-colorful--bitcoin-content: "\f10b";
+  --icon-colorful--btc-dark-logo-content: "\f10c";
+  --icon-colorful--btc-lightning-content: "\f10d";
+  --icon-colorful--camera-content: "\f10e";
+  --icon-colorful--comment-content: "\f10f";
+  --icon-colorful--copy-content: "\f110";
+  --icon-colorful--facebook-circle-content: "\f111";
+  --icon-colorful--facebook-content: "\f112";
+  --icon-colorful--fk-content: "\f113";
+  --icon-colorful--folder-content: "\f114";
+  --icon-colorful--google-pay-content: "\f115";
+  --icon-colorful--google-content: "\f116";
+  --icon-colorful--logo-white-content: "\f117";
+  --icon-colorful--mail-shiny-content: "\f118";
+  --icon-colorful--mail-content: "\f119";
+  --icon-colorful--mastercard-content: "\f11a";
+  --icon-colorful--metamask-content: "\f11b";
+  --icon-colorful--mir-content: "\f11c";
+  --icon-colorful--piastrix-content: "\f11d";
+  --icon-colorful--raiffeisen-content: "\f11e";
+  --icon-colorful--sber-content: "\f11f";
+  --icon-colorful--sbp-content: "\f120";
+  --icon-colorful--star-half-content: "\f121";
+  --icon-colorful--star-content: "\f122";
+  --icon-colorful--telegram-content: "\f123";
+  --icon-colorful--telegram2-content: "\f124";
+  --icon-colorful--tinkoff-content: "\f125";
+  --icon-colorful--tron-content: "\f126";
+  --icon-colorful--twitter-content: "\f127";
+  --icon-colorful--usdant-content: "\f128";
+  --icon-colorful--usdt-trc20-content: "\f129";
+  --icon-colorful--usdt-content: "\f12a";
+  --icon-colorful--usdttron-content: "\f12b";
+  --icon-colorful--visa-content: "\f12c";
+  --icon-colorful--visawhite-content: "\f12d";
+  --icon-colorful--vk-content: "\f12e";
+  --icon-colorful--vtb-content: "\f12f";
+  --icon-colorful--walletConnect-content: "\f130";
+  --icon-colorful--whatsApp-content: "\f131";
+  --icon-colorful--yoomoney-content: "\f132";
+  --icon-mono--action--check-mark-content: "\f133";
+  --icon-mono--action--close-content: "\f134";
+  --icon-mono--action--cross-content: "\f135";
+  --icon-mono--action--edit-content: "\f136";
+  --icon-mono--action--favorite-filled-content: "\f137";
+  --icon-mono--action--favorite-content: "\f138";
+  --icon-mono--action--filter-content: "\f139";
+  --icon-mono--action--maximize-content: "\f13a";
+  --icon-mono--action--menu-content: "\f13b";
+  --icon-mono--action--minimize-content: "\f13c";
+  --icon-mono--action--more-content: "\f13d";
+  --icon-mono--action--play-filled-content: "\f13e";
+  --icon-mono--action--play-outline-content: "\f13f";
+  --icon-mono--action--play-content: "\f140";
+  --icon-mono--action--player-pause-content: "\f141";
+  --icon-mono--action--plus-content: "\f142";
+  --icon-mono--action--program-content: "\f143";
+  --icon-mono--action--resizer-content: "\f144";
+  --icon-mono--action--settings-content: "\f145";
+  --icon-mono--action--share-arrow-content: "\f146";
+  --icon-mono--action--share-content: "\f147";
+  --icon-mono--action--skip-left-content: "\f148";
+  --icon-mono--action--skip-right-content: "\f149";
+  --icon-mono--action--sort-content: "\f14a";
+  --icon-mono--action--trash-content: "\f14b";
+  --icon-mono--action--volume-off-content: "\f14c";
+  --icon-mono--action--volume-on-content: "\f14d";
+  --icon-mono--action--watch-next-content: "\f14e";
+  --icon-mono--analytics-content: "\f14f";
+  --icon-mono--apple-pay-content: "\f150";
+  --icon-mono--apple-content: "\f151";
+  --icon-mono--bit-content: "\f152";
+  --icon-mono--bitcoin-b-content: "\f153";
+  --icon-mono--blog-content: "\f154";
+  --icon-mono--btc-uni-content: "\f155";
+  --icon-mono--chevron-bottom-content: "\f156";
+  --icon-mono--chevron-left-content: "\f157";
+  --icon-mono--chevron-light-bottom-content: "\f158";
+  --icon-mono--chevron-right-content: "\f159";
+  --icon-mono--chevron-top-content: "\f15a";
+  --icon-mono--copy-content: "\f15b";
+  --icon-mono--credit-card-content: "\f15c";
+  --icon-mono--earnings-content: "\f15d";
+  --icon-mono--external-link-content: "\f15e";
+  --icon-mono--eye-crossed-content: "\f15f";
+  --icon-mono--eye-content: "\f160";
+  --icon-mono--facebook-black-content: "\f161";
+  --icon-mono--facebook-content: "\f162";
+  --icon-mono--file-content: "\f163";
+  --icon-mono--info-content: "\f164";
+  --icon-mono--instagram-black-content: "\f165";
+  --icon-mono--learn-content: "\f166";
+  --icon-mono--link-content: "\f167";
+  --icon-mono--linkedin-black-content: "\f168";
+  --icon-mono--lock-content: "\f169";
+  --icon-mono--logout-content: "\f16a";
+  --icon-mono--mail-light-content: "\f16b";
+  --icon-mono--mail-content: "\f16c";
+  --icon-mono--medium-content: "\f16d";
+  --icon-mono--menu-content: "\f16e";
+  --icon-mono--message-content: "\f16f";
+  --icon-mono--minus-content: "\f170";
+  --icon-mono--money-content: "\f171";
+  --icon-mono--more-content: "\f172";
+  --icon-mono--navigation--arrow-bottom-content: "\f173";
+  --icon-mono--navigation--arrow-left-white-content: "\f174";
+  --icon-mono--navigation--arrow-left-content: "\f175";
+  --icon-mono--navigation--arrow-right-content: "\f176";
+  --icon-mono--navigation--arrow-top-content: "\f177";
+  --icon-mono--navigation--chevron-bottom-content: "\f178";
+  --icon-mono--navigation--chevron-left-content: "\f179";
+  --icon-mono--navigation--chevron-right-content: "\f17a";
+  --icon-mono--navigation--chevron-top-content: "\f17b";
+  --icon-mono--navigation--download-order-content: "\f17c";
+  --icon-mono--navigation--download-pause-content: "\f17d";
+  --icon-mono--navigation--download-stoped-content: "\f17e";
+  --icon-mono--navigation--download-content: "\f17f";
+  --icon-mono--navigation--downloaded-content: "\f180";
+  --icon-mono--navigation--items-content: "\f181";
+  --icon-mono--navigation--loader-content: "\f182";
+  --icon-mono--navigation--logout-content: "\f183";
+  --icon-mono--navigation--search-content: "\f184";
+  --icon-mono--navigation--user-content: "\f185";
+  --icon-mono--paste-content: "\f186";
+  --icon-mono--plus-content: "\f187";
+  --icon-mono--profile-content: "\f188";
+  --icon-mono--satoshi-uni-content: "\f189";
+  --icon-mono--support-content: "\f18a";
+  --icon-mono--telegram-black-content: "\f18b";
+  --icon-mono--telegram-content: "\f18c";
+  --icon-mono--telegram2-black-content: "\f18d";
+  --icon-mono--terms-content: "\f18e";
+  --icon-mono--theme-content: "\f18f";
+  --icon-mono--twitter-content: "\f190";
+  --icon-mono--unknown-black-content: "\f191";
+  --icon-mono--vk-content: "\f192";
+  --icon-mono--wallet-content: "\f193";
+  --icon-mono--withdraw-content: "\f194";
+  --icon-mono--x-content: "\f195";
+>>>>>>> features/fund_components_remake
 }
 
 @font-face {
 font-family: "icons";
+<<<<<<< HEAD
 src: url("icons.eot?57d39e488dc6a1dd69f281dcea96fc7e?#iefix") format("embedded-opentype"),
 url("icons.woff2?57d39e488dc6a1dd69f281dcea96fc7e") format("woff2"),
 url("icons.woff?57d39e488dc6a1dd69f281dcea96fc7e") format("woff");
+=======
+src: url("icons.eot?c0d1b1f1454aac7a69671a4b6c456ae8?#iefix") format("embedded-opentype"),
+url("icons.woff2?c0d1b1f1454aac7a69671a4b6c456ae8") format("woff2"),
+url("icons.woff?c0d1b1f1454aac7a69671a4b6c456ae8") format("woff");
+>>>>>>> features/fund_components_remake
 font-weight: normal;
 font-style: normal;
 }
@@ -2495,8 +2653,33 @@ font-feature-settings: 'liga';
   fill: currentColor;
   }
 
+<<<<<<< HEAD
   .icon-mono--eye-crossed:before {
   content: "\f173";
+=======
+  .icon-mono--external-link:before {
+  content: "\f15e";
+>>>>>>> features/fund_components_remake
+  }
+
+  .icon-mono--external-link-css,
+  %icon-mono--external-link-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
+  .icon-mono--eye-crossed:before {
+  content: "\f15f";
   }
 
   .icon-mono--eye-crossed-css,
@@ -2516,7 +2699,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--eye:before {
+<<<<<<< HEAD
   content: "\f174";
+=======
+  content: "\f160";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--eye-css,
@@ -2536,7 +2723,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--facebook-black:before {
+<<<<<<< HEAD
   content: "\f175";
+=======
+  content: "\f161";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--facebook-black-css,
@@ -2556,7 +2747,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--facebook:before {
+<<<<<<< HEAD
   content: "\f176";
+=======
+  content: "\f162";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--facebook-css,
@@ -2576,7 +2771,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--file:before {
+<<<<<<< HEAD
   content: "\f177";
+=======
+  content: "\f163";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--file-css,
@@ -2596,7 +2795,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--info:before {
+<<<<<<< HEAD
   content: "\f178";
+=======
+  content: "\f164";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--info-css,
@@ -2616,7 +2819,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--instagram-black:before {
+<<<<<<< HEAD
   content: "\f179";
+=======
+  content: "\f165";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--instagram-black-css,
@@ -2636,7 +2843,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--learn:before {
+<<<<<<< HEAD
   content: "\f17a";
+=======
+  content: "\f166";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--learn-css,
@@ -2676,7 +2887,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--link:before {
+<<<<<<< HEAD
   content: "\f17c";
+=======
+  content: "\f167";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--link-css,
@@ -2696,7 +2911,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--linkedin-black:before {
+<<<<<<< HEAD
   content: "\f17d";
+=======
+  content: "\f168";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--linkedin-black-css,
@@ -2716,7 +2935,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--lock:before {
+<<<<<<< HEAD
   content: "\f17e";
+=======
+  content: "\f169";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--lock-css,
@@ -2736,7 +2959,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--logout:before {
+<<<<<<< HEAD
   content: "\f17f";
+=======
+  content: "\f16a";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--logout-css,
@@ -2756,7 +2983,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--mail-light:before {
+<<<<<<< HEAD
   content: "\f180";
+=======
+  content: "\f16b";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--mail-light-css,
@@ -2776,7 +3007,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--mail:before {
+<<<<<<< HEAD
   content: "\f181";
+=======
+  content: "\f16c";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--mail-css,
@@ -2796,7 +3031,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--medium:before {
+<<<<<<< HEAD
   content: "\f182";
+=======
+  content: "\f16d";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--medium-css,
@@ -2816,7 +3055,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--menu:before {
+<<<<<<< HEAD
   content: "\f183";
+=======
+  content: "\f16e";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--menu-css,
@@ -2836,7 +3079,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--message:before {
+<<<<<<< HEAD
   content: "\f184";
+=======
+  content: "\f16f";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--message-css,
@@ -2856,7 +3103,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--minus:before {
+<<<<<<< HEAD
   content: "\f185";
+=======
+  content: "\f170";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--minus-css,
@@ -2875,8 +3126,32 @@ font-feature-settings: 'liga';
   fill: currentColor;
   }
 
+  .icon-mono--money:before {
+  content: "\f171";
+  }
+
+  .icon-mono--money-css,
+  %icon-mono--money-css {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+  }
+
   .icon-mono--more:before {
+<<<<<<< HEAD
   content: "\f186";
+=======
+  content: "\f172";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--more-css,
@@ -2896,7 +3171,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--arrow-bottom:before {
+<<<<<<< HEAD
   content: "\f187";
+=======
+  content: "\f173";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--arrow-bottom-css,
@@ -2916,7 +3195,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--arrow-left-white:before {
+<<<<<<< HEAD
   content: "\f188";
+=======
+  content: "\f174";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--arrow-left-white-css,
@@ -2936,7 +3219,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--arrow-left:before {
+<<<<<<< HEAD
   content: "\f189";
+=======
+  content: "\f175";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--arrow-left-css,
@@ -2956,7 +3243,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--arrow-right:before {
+<<<<<<< HEAD
   content: "\f18a";
+=======
+  content: "\f176";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--arrow-right-css,
@@ -2976,7 +3267,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--arrow-top:before {
+<<<<<<< HEAD
   content: "\f18b";
+=======
+  content: "\f177";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--arrow-top-css,
@@ -2996,7 +3291,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--chevron-bottom:before {
+<<<<<<< HEAD
   content: "\f18c";
+=======
+  content: "\f178";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--chevron-bottom-css,
@@ -3016,7 +3315,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--chevron-left:before {
+<<<<<<< HEAD
   content: "\f18d";
+=======
+  content: "\f179";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--chevron-left-css,
@@ -3036,7 +3339,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--chevron-right:before {
+<<<<<<< HEAD
   content: "\f18e";
+=======
+  content: "\f17a";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--chevron-right-css,
@@ -3056,7 +3363,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--chevron-top:before {
+<<<<<<< HEAD
   content: "\f18f";
+=======
+  content: "\f17b";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--chevron-top-css,
@@ -3076,7 +3387,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--download-order:before {
+<<<<<<< HEAD
   content: "\f190";
+=======
+  content: "\f17c";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--download-order-css,
@@ -3096,7 +3411,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--download-pause:before {
+<<<<<<< HEAD
   content: "\f191";
+=======
+  content: "\f17d";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--download-pause-css,
@@ -3116,7 +3435,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--download-stoped:before {
+<<<<<<< HEAD
   content: "\f192";
+=======
+  content: "\f17e";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--download-stoped-css,
@@ -3136,7 +3459,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--download:before {
+<<<<<<< HEAD
   content: "\f193";
+=======
+  content: "\f17f";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--download-css,
@@ -3156,7 +3483,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--downloaded:before {
+<<<<<<< HEAD
   content: "\f194";
+=======
+  content: "\f180";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--downloaded-css,
@@ -3176,7 +3507,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--items:before {
+<<<<<<< HEAD
   content: "\f195";
+=======
+  content: "\f181";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--items-css,
@@ -3196,7 +3531,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--loader:before {
+<<<<<<< HEAD
   content: "\f196";
+=======
+  content: "\f182";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--loader-css,
@@ -3216,7 +3555,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--logout:before {
+<<<<<<< HEAD
   content: "\f197";
+=======
+  content: "\f183";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--logout-css,
@@ -3236,7 +3579,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--search:before {
+<<<<<<< HEAD
   content: "\f198";
+=======
+  content: "\f184";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--search-css,
@@ -3256,7 +3603,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--navigation--user:before {
+<<<<<<< HEAD
   content: "\f199";
+=======
+  content: "\f185";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--navigation--user-css,
@@ -3276,7 +3627,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--paste:before {
+<<<<<<< HEAD
   content: "\f19a";
+=======
+  content: "\f186";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--paste-css,
@@ -3296,7 +3651,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--plus:before {
+<<<<<<< HEAD
   content: "\f19b";
+=======
+  content: "\f187";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--plus-css,
@@ -3316,7 +3675,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--profile:before {
+<<<<<<< HEAD
   content: "\f19c";
+=======
+  content: "\f188";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--profile-css,
@@ -3336,7 +3699,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--satoshi-uni:before {
+<<<<<<< HEAD
   content: "\f19d";
+=======
+  content: "\f189";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--satoshi-uni-css,
@@ -3356,7 +3723,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--support:before {
+<<<<<<< HEAD
   content: "\f19e";
+=======
+  content: "\f18a";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--support-css,
@@ -3376,7 +3747,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--telegram-black:before {
+<<<<<<< HEAD
   content: "\f19f";
+=======
+  content: "\f18b";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--telegram-black-css,
@@ -3396,7 +3771,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--telegram:before {
+<<<<<<< HEAD
   content: "\f1a0";
+=======
+  content: "\f18c";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--telegram-css,
@@ -3416,7 +3795,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--telegram2-black:before {
+<<<<<<< HEAD
   content: "\f1a1";
+=======
+  content: "\f18d";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--telegram2-black-css,
@@ -3436,7 +3819,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--terms:before {
+<<<<<<< HEAD
   content: "\f1a2";
+=======
+  content: "\f18e";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--terms-css,
@@ -3456,7 +3843,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--theme:before {
+<<<<<<< HEAD
   content: "\f1a3";
+=======
+  content: "\f18f";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--theme-css,
@@ -3476,7 +3867,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--twitter:before {
+<<<<<<< HEAD
   content: "\f1a4";
+=======
+  content: "\f190";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--twitter-css,
@@ -3496,7 +3891,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--unknown-black:before {
+<<<<<<< HEAD
   content: "\f1a5";
+=======
+  content: "\f191";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--unknown-black-css,
@@ -3516,7 +3915,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--vk:before {
+<<<<<<< HEAD
   content: "\f1a6";
+=======
+  content: "\f192";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--vk-css,
@@ -3536,7 +3939,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--wallet:before {
+<<<<<<< HEAD
   content: "\f1a7";
+=======
+  content: "\f193";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--wallet-css,
@@ -3556,7 +3963,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--withdraw:before {
+<<<<<<< HEAD
   content: "\f1a8";
+=======
+  content: "\f194";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--withdraw-css,
@@ -3576,7 +3987,11 @@ font-feature-settings: 'liga';
   }
 
   .icon-mono--x:before {
+<<<<<<< HEAD
   content: "\f1a9";
+=======
+  content: "\f195";
+>>>>>>> features/fund_components_remake
   }
 
   .icon-mono--x-css,

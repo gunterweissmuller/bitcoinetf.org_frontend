@@ -3,6 +3,7 @@
     <div :class="['w-purchases__wrap', { 'w-purchases__wrap--full-width': !isPage }]">
       <div class="w-purchases__head">
         <div class="w-purchases__head-title">Latest Purchases</div>
+        <!-- FIX :to name on features/fund_remake -->
         <nuxt-link
           v-if="!isPage && purchases?.length"
           :to="{ name: 'personal-analytics-fund-latest-purchases' }"

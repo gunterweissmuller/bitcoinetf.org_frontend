@@ -1,6 +1,6 @@
 <template>
   <header
-    v-if="route.name !== 'personal-kyc'"
+    v-if="route.name !== 'personal-kyc' && !(isFundPage && (isLaptop || isDesktop))"
     :class="['w-header', { 'w-header--no-indent': route.path.includes('analytics') || route.path.includes('wallet'), 'w-header--empty': route.name === 'personal-purchase' }]"
   >
     <div class='w-header__wrap'>
@@ -44,6 +44,9 @@
         />
       </div>
       <div v-if='isVisibleInfo' id='marquee'>
+        <div class="w-header__live">
+          <a-live />
+        </div>
         <m-slider
           class="w-header__info"
           id="w-header__info-slider"
@@ -83,6 +86,7 @@
 
 <script setup lang='ts'>
 import { useRoute } from 'vue-router'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import EHeaderLinks from '~/src/entities/e-header-links/e-header-links.vue'
 import EBreadcrumbs from '~/src/entities/e-breadcrumbs/e-breadcrumbs.vue'
 import useMediaDevice from '~/composables/useMediaDevice'
@@ -99,7 +103,7 @@ import EPageInfoBuyShares from '~/src/entities/e-page-info-modal/ui/e-page-info-
 import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info-statements.vue'
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { nextTick, onUnmounted, onMounted, computed } from 'vue'
-import EAnalyticsTabs from '~/src/features/e-analytics-tabs/e-analytics-tabs.vue'
+import EAnalyticsTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
 import { Autoplay } from 'swiper'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
@@ -119,6 +123,8 @@ const props = withDefaults(
     listInfo: [],
   },
 )
+
+
 
 const btcUsdt = ref(null)
 const apyValue = ref(14)
@@ -152,7 +158,7 @@ const routeNames = computed(() => ({
     title: 'More',
     titleCrumb: 'More',
     breadcrumbs: false,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
   },
   'personal-buy-shares-payment': {
     title: 'Payment',
@@ -191,32 +197,29 @@ const routeNames = computed(() => ({
     customTitle: true,
     titleCrumb: 'Buy ETF Shares',
     breadcrumbs: false,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
     info: EPageInfoBuyShares,
   },
-  'personal-analytics': {
-    title: 'Analytics',
-    titleCrumb: 'Analytics',
+  // FIX THIS
+  'personal-fund': {
+    title: 'Shareholders',
+    titleCrumb: 'Shareholders',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
-  'personal-performance': {
-    title: 'Analytics',
-    titleCrumb: 'Performance',
+  'personal-protection': {
+    title: 'Fund',
+    titleCrumb: 'Protection',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-portfolio': {
-    title: 'Analytics',
+    title: 'Fund',
     titleCrumb: 'Portfolio',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
-  'personal-fund': {
-    title: 'Analytics',
-    titleCrumb: 'Fund',
+  'personal-shareholders': {
+    title: 'Fund',
+    titleCrumb: 'Shareholders',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-wallet': {
     title: 'Wallet',
@@ -250,25 +253,25 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoEarnings,
   },
-  'personal-analytics-performance-latest-trades': {
+  'personal-fund-protection-latest-trades': {
     title: 'Latest trades',
     titleCrumb: 'Latest trades',
     breadcrumbs: true,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
   },
-  'personal-analytics-fund-latest-purchases': {
+  'personal-fund-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
-    urlToBack: 'personal-fund',
+    urlToBack: 'personal-shareholders',
   },
-  'personal-analytics-fund-top-shareholders': {
+  'personal-fund-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
-    urlToBack: 'personal-fund',
+    urlToBack: 'personal-shareholders',
   },
-  'personal-analytics-portfolio-latest-activity': {
+  'personal-fund-portfolio-latest-activity': {
     title: 'Latest activity',
     titleCrumb: 'Latest activity',
     breadcrumbs: true,
@@ -286,19 +289,21 @@ const routeNames = computed(() => ({
     title: $app.store.asset?.name,
     titleCrumb: $app.store.asset?.name,
     breadcrumbs: true,
-    urlToBack: 'personal-performance',
-    customBreadcrumbs: ['personal-analytics', $app.store.asset?.name || ''],
+    urlToBack: 'personal-protection',
+    customBreadcrumbs: ['personal-fund', $app.store.asset?.name || ''],
   },
 }))
 
-const analyticsLinks = {
-  title: 'Analytics',
+const fundLinks = {
+  title: 'Fund',
   links: [
-    { text: 'Performance', name: 'personal-performance' },
     { text: 'Portfolio', name: 'personal-portfolio' },
-    { text: 'Fund', name: 'personal-fund' },
+    { text: 'Protection', name: 'personal-protection' },
+    { text: 'Shareholders', name: 'personal-shareholders' },
   ],
 }
+
+const isFundPage = computed<boolean>(() => fundLinks.links.find(el => el.name === route.name || 'personal-fund' === route.name))
 
 const walletLinks = {
   title: 'Wallet',
@@ -310,10 +315,10 @@ const walletLinks = {
 }
 
 const linksList = {
-  'personal-analytics': analyticsLinks,
-  'personal-performance': analyticsLinks,
-  'personal-portfolio': analyticsLinks,
-  'personal-fund': analyticsLinks,
+  'personal-fund': fundLinks,
+  'personal-protection': fundLinks,
+  'personal-portfolio': fundLinks,
+  'personal-shareholders': fundLinks,
   'personal-wallet': walletLinks,
   'personal-dividends': walletLinks,
   'personal-referrals': walletLinks,
@@ -322,9 +327,9 @@ const linksList = {
 
 const isVisibleInfo = computed(() => {
   return (
-    route.name === 'personal-analytics' ||
-    route.name === 'personal-performance' ||
     route.name === 'personal-fund' ||
+    route.name === 'personal-protection' ||
+    route.name === 'personal-shareholders' ||
     route.name === 'personal-portfolio'
   )
 })
@@ -387,8 +392,8 @@ const assetsByKey = computed(() => {
   }, {})
 })
 
-const fundTotalBtc = computed(() => {
-  return $app.store.assets.fundTotalBtc
+const shareholdersTotalBtc = computed(() => {
+  return $app.store.assets.shareholdersTotalBtc
 })
 
 const marqueList = computed(() => [
@@ -457,8 +462,8 @@ const marqueList = computed(() => [
   },
   {
     text: 'Bitcoin Reserve Fund Balance',
-    value: fundTotalBtc.value,
-    modifyValue: `${$app.filters.convertValue($app.filters.rounded(fundTotalBtc.value, 5)) }`,
+    value: shareholdersTotalBtc.value,
+    modifyValue: `${$app.filters.convertValue($app.filters.rounded(shareholdersTotalBtc.value, 5)) }`,
   },
   {
     text: 'BTC Options TD Balance',
@@ -477,8 +482,8 @@ const marqueList = computed(() => [
   },
   {
     text: 'Total AUM',
-    value: $app.filters.rounded(fundTotalUsd.value, 2),
-    modifyValue: `$${$app.filters.rounded(fundTotalUsd.value, 2)}`,
+    value: $app.filters.rounded(shareholdersTotalUsd.value, 2),
+    modifyValue: `$${$app.filters.rounded(shareholdersTotalUsd.value, 2)}`,
   },
   {
     text: 'Latest Bitcoin ETF Share Issuance',
@@ -487,13 +492,12 @@ const marqueList = computed(() => [
   },
 ])
 
-
 const filteredMarqueList = computed(() => {
   return marqueList.value.filter((el) => el?.value)
 })
 
-const fundTotalUsd = computed(() => {
-  return $app.store.user.fundTotalUsd
+const shareholdersTotalUsd = computed(() => {
+  return $app.store.user.shareholdersTotalUsd
 })
 
 const getDividendsByYear = async () => {
@@ -507,11 +511,11 @@ const getDividendsByYear = async () => {
 }
 
 const tabs = computed(() => {
-  if (route.path.includes('analytics') || route.path.includes('asset')) {
+  if (route.path.includes('fund') || route.path.includes('asset')) {
     return [
-      { text: 'Performance', name: 'personal-performance' },
       { text: 'Portfolio', name: 'personal-portfolio' },
-      { text: 'Fund', name: 'personal-fund' },
+      { text: 'Protection', name: 'personal-protection' },
+      { text: 'Shareholders', name: 'personal-shareholders' },
     ]
   }
 

@@ -175,6 +175,8 @@ export enum Icon {
   MonoWallet = 'mono--wallet',
   MonoWithdraw = 'mono--withdraw',
   MonoX = 'mono--x',
+  MonoMoney = 'mono--money',
+  MonoExternalLink = 'mono--external-link',
 }
 export const files = {
   [Icon.ColorfulAlert]: '/img/icons/colorful/alert.svg',
@@ -352,4 +354,6 @@ export const files = {
   [Icon.MonoWallet]: '/img/icons/mono/wallet.svg',
   [Icon.MonoWithdraw]: '/img/icons/mono/withdraw.svg',
   [Icon.MonoX]: '/img/icons/mono/x.svg',
+  [Icon.MonoMoney]: '/img/icons/mono/money.svg',
+  [Icon.MonoExternalLink]: '/img/icons/mono/external-link.svg',
 }

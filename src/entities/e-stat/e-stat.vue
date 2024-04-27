@@ -2,32 +2,37 @@
   <div class="e-stat">
     <template v-if="type === 'default'">
       <div :class="['e-stat-default__head', { 'e-stat-default__head--fixed': fixedHeader }]">
-        <button
-          v-if="toggleTitle"
-          class="e-stat-default__head-toggle"
-          @mousedown="$emit('toggle-mouse-down')"
-          @mouseup="$emit('toggle-mouse-up')"
-          @touchstart="$emit('toggle-mouse-down')"
-          @touchend="$emit('toggle-mouse-up')"
-          @click="$emit('toggle-value')"
-        >
-          {{ toggleTitle }}
-        </button>
-        <div v-if="popper" class="e-stat-default__head-popper">
-          <m-popper hover :title="popper.title" :text="popper.text">
-            <a-icon class="e-stat-default__head-icon" width="18" height="18" :name="Icon.MonoInfo" />
-          </m-popper>
+        <a-icon v-if="props.iconType === 'full'" width="32" :name="props.icon" />
+
+        <div v-else class="e-stat__icon">
+          <a-icon width="14" :name="props.icon" />
         </div>
+
+        <a-live />
       </div>
+
       <div class="e-stat-default__wrap">
         <div class="e-stat-default__title">
-          <span :class="['e-stat-default__title-text', `e-stat-default__title-text--${titleColor}`]">{{ title }}</span>
-          <span v-if="difference" class="e-stat-default__title-difference">{{ difference }}</span>
+          <span :class="['e-stat-default__title-name', `e-stat-default__title-text--${titleColor}`]">
+            {{ info }}
+          </span>
+          <span :class="['e-stat-default__title-text', `e-stat-default__title-text--${titleColor}`]">
+            {{ title }}
+          </span>
         </div>
-        <div v-if="subtitle" v-html="subtitle" class="e-stat-default__subtitle"></div>
-        <div v-if="date" class="e-stat-default__date">{{ date }}</div>
       </div>
-      <div class="e-stat-default__info">{{ info }}</div>
+
+      <a-dropdown v-if="props.bottom === 'dropdown'"/>
+      <button
+        class="e-stat__blockchain"
+        v-if="props.bottom === 'link'"
+      >
+        <a-icon width="14" :name="Icon.MonoExternalLink" />
+        <a :href="`https://${config.public.EXPLORER_API}/account/${$app.store.user?.blockchainUserWallet}`" target="_blank" class="e-stat__blockchain-title">
+          Verify on Blockchain
+        </a>
+      </button>
+      <div v-if="props.bottom === 'none'" style="height: 21px"></div>
     </template>
     <template v-else>
       <nuxt-link :to="{ name: titleLink }" v-if="listType === 'files'" class="e-stat-list__title">
@@ -67,14 +72,13 @@
 </template>
 
 <script setup lang="ts">
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import { Icon } from '~/src/shared/constants/icons'
-import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
-import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import { Icon } from '~/src/shared/constants/icons';
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
 import { useNuxtApp } from '#app'
 
-const { $app } = useNuxtApp()
+const { $app } = useNuxtApp();
 
 const props = withDefaults(
   defineProps<{
@@ -93,6 +97,9 @@ const props = withDefaults(
     list?: any
     popper?: any
     fixedHeader?: boolean
+    icon: string
+    iconType: 'full' | 'small'
+    bottom: 'dropdown' | 'link' | 'none'
   }>(),
   {
     titleColor: 'primary',
@@ -105,19 +112,14 @@ const props = withDefaults(
     list: [],
     popper: undefined,
     fixedHeader: false,
+    icon: Icon.ColorfulBitcoin,
+    iconType: 'full',
+    subtitle: '',
+    bottom: 'none'
   },
-)
+);
 
-const emit = defineEmits(['update:model-value', 'toggle-value', 'toggle-mouse-down', 'toggle-mouse-up'])
-
-const selected = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emit('update:model-value', value)
-  },
-})
+const config = useRuntimeConfig();
 </script>
 
 <style src="./e-stat.scss" lang="scss" />

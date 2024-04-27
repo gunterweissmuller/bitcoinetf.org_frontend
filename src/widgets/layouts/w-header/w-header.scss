@@ -85,10 +85,15 @@
   }
 
   &__info {
-    margin-top: torem(16);
+    // margin-top: torem(16);
     @include breakpoint($break-desktop-1024) {
       display: none !important;
     }
+  }
+
+  &__live {
+    padding-left: torem(16);
+    padding-right: torem(8);
   }
 
   &__buy {
@@ -209,5 +214,17 @@
     -webkit-transition-timing-function: linear !important;
     transition-timing-function: linear !important;
     position: relative;
+  }
+}
+
+#marquee {
+  display: flex;
+  align-items: center;
+  gap: torem(8);
+
+  margin-top: torem(16);
+
+  @include breakpoint($break-desktop-1024) {
+    display: none !important;
   }
 }

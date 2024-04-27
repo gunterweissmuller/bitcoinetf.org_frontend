@@ -1,20 +1,14 @@
-.w-trades {
+.w-shareholders {
   margin-bottom: var(--spacing-m-1);
   display: flex;
   flex-direction: column;
 
-  @include breakpoint($break-desktop-1440) {
-    //margin-bottom: 0;
-  }
-
-  .m-deal {
-    &:not(:last-child) {
-      border-bottom: torem(1) solid var(--surfaces-border-1);
-    }
-  }
+  //@include breakpoint($break-desktop-1440) {
+  //  margin-bottom: 0;
+  //}
 
   &__head {
-    margin-bottom: var(--spacing-m-1);
+    margin-bottom: torem(16);
     display: flex;
     justify-content: space-between;
 
@@ -35,19 +29,14 @@
   }
 
   &__content {
-    background: var(--surfaces-surface-1);
+    height: 100%;
     box-shadow: var(--b-shadow-1);
     border: torem(1) solid var(--surfaces-surface-glass-border);
+    background: var(--surfaces-surface-glass);
     border-radius: var(--spacing-s);
 
-    &-main {
-
-      &-wrapper {
-        gap: var(--spacing-xs);
-        border-radius: var(--spacing-m-1);
-        overflow: hidden;
-        background: #01040F;
-      }
+    .m-deal {
+      border-bottom: none !important;
     }
   }
 

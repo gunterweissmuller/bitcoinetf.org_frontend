@@ -1,7 +1,7 @@
 <template>
   <div class="w-activity">
     <div class="w-activity__head">
-      <div class="w-activity__head-title">Latest activity</div>
+      <div class="w-activity__head-title">Latest Activity</div>
       <nuxt-link v-if="!isPage && renderedSpillovers?.length" :to="fullPageNuxtLink" class="w-activity__head-info"
         >View all
       </nuxt-link>
