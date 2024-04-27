@@ -1,6 +1,5 @@
 <template>
-  <div class="s-site-marquee">
-    <div :class="[{ 's-site-marquee-bg': isBackground }]"></div>
+  <div class="s-site-marquee" :class="{ 's-site-marquee-bg': isBackground }">
 
     <div class="s-site-marquee__wrapper">
       <div class="s-site-marquee__row" v-for="index in 12">

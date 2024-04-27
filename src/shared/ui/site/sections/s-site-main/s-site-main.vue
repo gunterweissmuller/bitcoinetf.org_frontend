@@ -43,20 +43,23 @@
     </div>
 
     <NuxtImg
-      style="position: absolute; bottom: -118px; height: 500px"
+      style="position: absolute; bottom: 0px; height: 470px"
       class="s-site-main__title_icon section-left-img aspect-square w-[584px]"
       src="img/site-dark/s-site-main/1.png"
       loading="lazy"
     />
-    <div class="s-site-main__line-gradient" style="position: absolute; bottom: -118px"></div>
+    <!-- <div class="s-site-main__line-gradient" style="position: absolute; bottom: -118px"></div> -->
 
     <NuxtImg
-      style="position: absolute; bottom: -88px; height: 500px; right: 0"
+      style="position: absolute; bottom: 0; height: 470px; right: 0"
       class="s-site-main__title_icon right-icon aspect-square w-[413px]"
       src="/img/main-section-right.png"
       loading="lazy"
     />
     <div class="s-site-main__line-gradient" style="position: absolute; bottom: -88px; right: 0"></div>
+    <div class="s-site-main__slider-wrapper">
+      <s-site-marquee :data="marqueeData" />
+    </div>
   </section>
 </template>
 
@@ -66,6 +69,7 @@ import { computed, ref, nextTick } from 'vue'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import MProfitCalculator from '~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue'
+import SSiteMarquee from '../s-site-marquee/s-site-marquee.vue'
 
 defineProps<{
   data: any
@@ -119,6 +123,27 @@ function clickLaunch() {
 onMounted(async () => {
   await getBtcValue()
 })
+
+const marqueeData = {
+  low_cards: [
+    {
+      link: '/#',
+      img: '/img/icons/colorful/yahoo.svg',
+    },
+    {
+      link: '/#',
+      img: '/img/icons/colorful/bloomberg.svg',
+    },
+    {
+      link: '/#',
+      img: '/img/icons/colorful/coindesk.svg',
+    },
+    {
+      link: '/#',
+      img: '/img/icons/colorful/cointelegraph.svg',
+    },
+  ],
+}
 </script>
 
 <style src="./s-site-main.scss" lang="scss" />

@@ -6,7 +6,7 @@
     hidden-mobile
   />
   <s-site-main :data="mainData" />
-  <s-site-marquee :data="marqueeData" />
+  <!-- <s-site-marquee :data="marqueeData" /> -->
   <s-site-how-it-work />
   <s-site-main-calculate />
   <s-site-guarantees />

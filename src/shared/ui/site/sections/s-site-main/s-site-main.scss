@@ -1,11 +1,11 @@
 .s-site-main {
   position: relative;
   padding-top: torem(196);
-  padding-bottom: torem(312);
+  padding-bottom: torem(426);
 
   @media (max-width: 767px) {
     padding-top: torem(160);
-    padding-bottom: torem(64);
+    padding-bottom: torem(10);
   }
 
   .l-site-dark {
@@ -310,5 +310,11 @@
       max-width: 100%;
       margin-left: 0;
     }
+  }
+  &__slider-wrapper {
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+
   }
 }
