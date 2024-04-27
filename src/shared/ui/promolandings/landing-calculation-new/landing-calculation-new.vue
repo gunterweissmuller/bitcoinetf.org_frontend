@@ -80,6 +80,7 @@
             label="Email"
             v-model="email"
             :buttonText="codeSendText"
+            :buttonClickEnable="Boolean(email) && isEmailValid"
             :buttonClick="() => {sendCode()}"
             validation-reg-exp-key="email"
             :disabled="dataDisabled || isEmailDisabled"
@@ -919,8 +920,8 @@ const sendCode = async () => {
     backendError.value = {value: 'Phone number is not valid', field: 'phone'};
     return;
   }
-  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid || token.value === '') {
-    backendError.value = {value: 'Fill in all the fields', field: 'default'};
+  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value || token.value === '') {
+    backendError.value = 'Fill in all the fields';
     return;
   }
   if(timerStarted.value) {
@@ -1087,6 +1088,18 @@ const confirmResponse = ref(null)
 const isSignupAndBuy = ref(false);
 
 const signupAndBuy = async () => {
+
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
+
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '' || codeEmail.value === '') {
+    backendError.value = 'Fill in all the fields';
+    return;
+  }
 
   if(isSignupAndBuy.value) return;
   isSignupAndBuy.value = true;
@@ -1352,6 +1365,18 @@ const signupAndBuy = async () => {
 const isSignupAndBuyGoogle = ref(false);
 
 const signupAndBuyGoogle = () => {
+
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
+
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '') {
+    backendError.value = 'Fill in all the fields';
+    return;
+  }
 
   if(isSignupAndBuyGoogle.value) return;
   isSignupAndBuyGoogle.value = true;
