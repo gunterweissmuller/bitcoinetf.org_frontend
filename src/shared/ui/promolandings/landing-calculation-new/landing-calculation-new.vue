@@ -249,7 +249,136 @@ onMounted(()=>{
 
     signupStep.value = SignupSteps.Loading;
 
-    $app.api.eth.auth
+    if($app.store.auth.accountMethod === 'metamask') {
+
+      $app.api.eth.auth.
+        confirmMetamask({
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+        fast: true,
+      })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data)
+          confirmResponse.value = jwtResponse.data
+      
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data
+          });
+
+          signupStep.value = SignupSteps.Default;
+          purchaseStep.value = PurchaseSteps.Purchase;
+          scrollToPurchase();
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+                //window.localStorage.removeItem('a_aid');
+                //window.localStorage.removeItem('a_utm');
+            });
+          }
+        })
+        .catch((e) => {
+          isCodeContinueProcess.value = false;
+          if (e?.errors?.error?.message) {
+            backendError.value = e.errors.error.message
+          } else {
+            backendError.value = 'Something went wrong'
+          }
+        })
+
+    } else if ($app.store.auth.accountMethod === 'telegram') {
+    $app.api.eth.auth.
+    confirmTelegram({
+      telegram_data: JSON.stringify($app.store.authTelegram?.response),
+      email: $app.filters.trimSpaceIntoString(email.value),
+      code: $app.filters.trimSpaceIntoString(emailCode.value),
+    })
+    .then((jwtResponse: any) => {
+      // TODO falling user/me
+      $app.store.auth.setTokens(jwtResponse.data)
+      confirmResponse.value = jwtResponse.data
+  
+    })
+    .then(async () => {
+      await $app.api.eth.auth.getUser().then((resp) => {
+        $app.store.user.info = resp?.data
+      });
+
+      signupStep.value = SignupSteps.Default;
+      purchaseStep.value = PurchaseSteps.Purchase;
+      scrollToPurchase();
+
+      const aAid = window.localStorage.getItem('PAPVisitorId');
+      if(aAid) {
+        $app.api.eth.auth.papSignUp({
+          payload: {
+            pap_id: aAid,
+            utm_label: window.localStorage.getItem('a_utm'),
+          }}).then((r: any) => {
+          //window.localStorage.removeItem('a_aid');
+          //window.localStorage.removeItem('a_utm');
+        });
+      }
+    })
+    .catch((e) => {
+      isCodeContinueProcess.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+    } else if ($app.store.auth.accountMethod === 'apple') {
+    $app.api.eth.auth.
+    confirmApple({
+      apple_token: $app.store.authTemp?.response,
+      email: $app.filters.trimSpaceIntoString(email.value),
+      code: $app.filters.trimSpaceIntoString(emailCode.value),
+    })
+    .then((jwtResponse: any) => {
+      // TODO falling user/me
+      $app.store.auth.setTokens(jwtResponse.data)
+      confirmResponse.value = jwtResponse.data
+      
+    })
+    .then(async () => {
+      await $app.api.eth.auth.getUser().then((resp) => {
+        $app.store.user.info = resp?.data
+      });
+
+      signupStep.value = SignupSteps.Default;
+      purchaseStep.value = PurchaseSteps.Purchase;
+      scrollToPurchase();
+
+      const aAid = window.localStorage.getItem('PAPVisitorId');
+      if(aAid) {
+        $app.api.eth.auth.papSignUp({
+          payload: {
+            pap_id: aAid,
+            utm_label: window.localStorage.getItem('a_utm'),
+          }}).then((r: any) => {
+          //window.localStorage.removeItem('a_aid');
+          //window.localStorage.removeItem('a_utm');
+        });
+      }
+    })
+    .catch((e) => {
+      isCodeContinueProcess.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = e.errors.error.message
+      } else {
+        backendError.value = 'Something went wrong'
+      }
+    })
+    } else {
+      $app.api.eth.auth
       .confirmFast({
         email: $app.filters.trimSpaceIntoString(email.value),
         code: $app.filters.trimSpaceIntoString(codeEmail.value),
@@ -316,6 +445,8 @@ onMounted(()=>{
           backendError.value = 'Something went wrong'
         }
       })
+
+    }
   }
 
 
@@ -1067,6 +1198,7 @@ const sendCode = async () => {
       .then(() => {
         //isSubmitEmailForm.value = false;
         //currentStep.value = Steps.Code;
+        $app.store.auth.accountMethod = "metamask";
       })
       .catch((e) => {
         //isSubmitEmailForm.value = false;
@@ -1089,8 +1221,7 @@ const sendCode = async () => {
         phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
-        isSubmitEmailForm.value = false;
-        currentStep.value = Steps.Code;
+        $app.store.auth.accountMethod = "telegram";
     }).catch((e) => {
       isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
@@ -1111,6 +1242,7 @@ const sendCode = async () => {
         phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
+        $app.store.auth.accountMethod = "apple";
     }).catch((e) => {
       if (e?.errors?.error?.message) {
         backendError.value = e.errors.error.message
@@ -1125,7 +1257,8 @@ const sendCode = async () => {
   await $app.api.eth.auth
     .init(initPayload).then(()=>{
       sendCodeLoading.value = false
-      codeSended.value = true
+      codeSended.value = true;
+      $app.store.auth.accountMethod = "email";
     })
     .catch((e) => {
       isMainInputDisabled.value = false;

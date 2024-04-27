@@ -48,11 +48,11 @@
                     <div class="flex flex-col items-center pb-12">
     
                         <div v-for="method in methods" @click="method.onClick" class="f-login-new__button">
-                        <div class="f-login-new__button-left">
-                            <NuxtImg :src="method.img" width="24" height="24" class="f-login-new__button-img-method" loading="lazy" />
-                            {{method.name}}
-                        </div>
-                        <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-grey-right.svg' : '/img/icons/mono/chevron-grey-right.svg'" width="6" height="11" class="f-login-new__button-img-arrow" loading="lazy" />
+                            <div class="f-login-new__button-left">
+                                <NuxtImg :src="method.img" width="24" height="24" class="f-login-new__button-img-method" loading="lazy" />
+                                {{method.name}}
+                            </div>
+                            <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-grey-right.svg' : '/img/icons/mono/chevron-grey-right.svg'" width="6" height="11" class="f-login-new__button-img-arrow" loading="lazy" />
                         </div>
     
                     <component :is="'script'" src="https://telegram.org/js/telegram-widget.js?22"></component>
@@ -85,14 +85,61 @@
                         </div>
                         <a-button id="test_5" class="f-login__button" text="Log in" :disabled="!isEmailValid || !password"
                         type="submit"></a-button>
+                        <a-button @click="() => {currentStep = Steps.OneTimeLink}" :icon="Icon.MonoLinkBlue" id="one-time-link" class="f-login__button-one-time" text="Sign in with a one-time link" variant="secondary"></a-button>
                         <p v-if="backendError" class="f-login__error">{{ $app.filters.capitalize(backendError) }}</p>
                     </form>
                     </div>
                 </template>
 
+                <template v-else-if="currentStep === Steps.OneTimeLink">
+                    <div class="f-login">
+                    <div class='f-login__back' @click='currentStep = Steps.Choice'>
+                        <a-icon class='f-login__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+                    </div>
+                    <h3 id="test_1" class="f-login__title">Log in with a one-time link</h3>
+                    <h5 class="f-login__subtitle">
+                        Enter the verified email address registered with your account, and we’ll send you a link to log in.
+                    </h5>
+                    <form class="f-login__form" @submit.prevent="onSubmitOneTimeLink">
+                        <div id="test_2">
+                        <a-input class="f-login__email" label="Email" validation-reg-exp-key="email" required
+                            :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
+                            v-model="email" />
+                        </div>
+
+                        <a-button id="test_5" class="f-login__button" text="Log in" :disabled="!isEmailValid || !password"
+                        type="submit"></a-button>
+                        <p v-if="backendError" class="f-login__error">{{ $app.filters.capitalize(backendError) }}</p>
+                    </form>
+                    </div>
+                </template>
+
+                <template v-else-if="currentStep === Steps.Check">
+                    <div class="f-login__wrapper">
+                        <nuxt-img class="f-login__img-done" :src=" $app.store.user.theme === 'dark' ? '/img/wallet/done-dark.svg' : '/img/wallet/done.svg'"></nuxt-img>
+                        <h3 id="test_1" class="f-login__title">Check your email for a one-time link</h3>
+                        <h5 class="f-login__subtitle">
+                            Check your inbox for a one-time link at {user@email.com}. If you don’t see the email, ensure that your email address is verified and check your spam folder.
+                        </h5>
+                        <a-button class="f-login__button" text="Resend Link" :disabled="true" variant="tertiary"></a-button>
+                    </div>
+                </template>
+
+                <template v-else-if="currentStep === Steps.Error">
+                    <div class="f-login">
+                        <!--todo img-->
+                        <nuxt-img class="f-login__img-cloud" :src=" $app.store.user.theme === 'dark' ? '/img/cloud-error-dark.svg' : '/img/cloud-error.svg'"></nuxt-img>
+                        <h3 id="test_1" class="f-login__title">Something went wrong!</h3>
+                        <h5 class="f-login__subtitle">
+                            Something must’ve gone wrong, please try again.
+                        </h5>
+                        <a-button class="f-login__button" text="Go back" @click="currentStep = Steps.Choice"></a-button>
+                    </div>
+                </template>
+
                 <template v-else-if="currentStep === Steps.Loading">
                     <div class="f-login">
-                    Loading...
+                        Loading...
                     </div>
                 </template>
             
@@ -124,9 +171,12 @@
     const router = useRouter()
 
     const enum Steps {
-    Choice = 'Choice',
-    Login = 'Login',
-    Loading = 'Loading',
+        Choice = 'Choice',
+        Login = 'Login',
+        Loading = 'Loading',
+        OneTimeLink = 'OneTimeLink',
+        Check = 'Check',
+        Error = 'Error',
     }
     const currentLogin = ref(SignupMethods.Email);
     const currentStep = ref(Steps.Choice)
@@ -134,7 +184,7 @@
     // Choice step
 
     const choiceToEmail = () => {
-    currentStep.value = Steps.Login
+        currentStep.value = Steps.Login
     }
 
 
@@ -208,6 +258,10 @@
         })
     }
 
+    const onSubmitOneTimeLink = () => {
+
+    }
+
     // google
 
     const googleUrl = ref("");
@@ -254,8 +308,8 @@
     });
 
     const handleGoogleConnect = () => {
-    currentLogin.value = SignupMethods.Google;
-    window.location.href = googleUrl.value;
+        currentLogin.value = SignupMethods.Google;
+        window.location.href = googleUrl.value;
     }
 
     //telegram
