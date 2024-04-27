@@ -109,7 +109,6 @@ const emit = defineEmits(['toggle-menu', 'click-link'])
 const hashMap = {
   'personal-dividends': 'walletDividends',
   'personal-referrals': 'walletReferral',
-  'personal-bonus': 'walletBonus'
 }
 
 const boostText = computed(() => {
@@ -118,8 +117,6 @@ const boostText = computed(() => {
       return 'Dividends'
     case 'personal-referrals':
       return 'Referrals'
-    case 'personal-bonus':
-      return 'Bonus'
     default:
       return ''
   }
@@ -158,7 +155,7 @@ const isShowBuyPopper = computed<boolean>(() => {
   return (
     (isMobile.value || isTablet.value) &&
     $app.store.user?.[hashMap?.[route.name]]?.usd_amount &&
-    (route.name === 'personal-dividends' || route.name === 'personal-referrals' || route.name === 'personal-bonus') &&
+    (route.name === 'personal-dividends' || route.name === 'personal-referrals' ) &&
     onboarding
   )
 })
@@ -182,7 +179,7 @@ const activeLinkClass = (link: string): boolean => {
       return route.name?.includes('personal-more')
     case 'personal-dividends':
       return (
-        route.name === 'personal-dividends' || route.name === 'personal-referrals' || route.name === 'personal-bonus'
+        route.name === 'personal-dividends' || route.name === 'personal-referrals' 
       )
 
     default:

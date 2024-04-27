@@ -6,14 +6,6 @@
       We are delighted to offer our clients a unique and efficient way to receive the interest they've earned.
     </div>
 
-    <div class="e-page-info-wallet__subtitle e-page-info-wallet__subtitle-big">BONUS Wallet:</div>
-
-    <div class="e-page-info-wallet__subtitle">Purpose:</div>
-    <div class="e-page-info-wallet__text">
-      This is where you receive bonus USD. This is where you get credited for your sign up or during our special
-      promotional events.
-    </div>
-
     <div class="e-page-info-wallet__subtitle e-page-info-wallet__subtitle-big">REFERRAL Wallet:</div>
 
     <div class="e-page-info-wallet__subtitle">Purpose:</div>
