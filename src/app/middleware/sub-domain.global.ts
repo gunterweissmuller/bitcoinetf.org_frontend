@@ -17,17 +17,27 @@ export default defineNuxtRouteMiddleware((to) => {
       const newUrl = `http://${config.public.DOMAIN}${to.path}`
       window.location.href = newUrl;
     } else*/
-    console.log('DOMAIN', config.public.DOMAIN)
-    console.log('APP_DOMAIN', config.public.APP_DOMAIN)
+
+    // $app.store.purchase.type = selectedCurrency.value.value;
+    // $app.store.purchase.amount = investmentAmount.value;
+    // $app.store.purchase.amountUS = investmentAmount.value;
+
     if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name) && to.path !== '/redirect') {
-      const newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
-      console.log(newUrl)
+      let newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
+
+      if ($app.store.purchase.type) {
+        newUrl += "&purchaseType=" + $app.store.purchase.type;
+      }
+
+      if ($app.store.purchase.amountUS) {
+        newUrl += "&amount=" + $app.store.purchase.amountUS;
+      }
+
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
       const newUrl = `https://${config.public.DOMAIN}${to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
-      console.log(newUrl)
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})

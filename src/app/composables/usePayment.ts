@@ -56,7 +56,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       iconType: Icon.ColorfulMoonpay,
       value: 'moonpay',
       onClick: 'openMoonpay',
-      show: false,
+      show: true,
     },
     {
       icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -104,7 +104,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
 
       return moonpayUrl
     } catch (e) {
-      console.log('error', e)
+      console.error('error', e)
     }
   }
 
@@ -125,7 +125,6 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     });
 
     const res = await response.json();
-    console.log("BUYINIT", res);
 
     if (res) {
       $app.store.user.buyShares = res
@@ -159,7 +158,6 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
 
     sub
       .on('publication', async function (ctx) {
-        console.log("PUB",ctx, ctx.data.message?.data?.status)
         if (ctx.data.message?.data?.status === 'success') {
           callbackOnPayment(ctx)
           paymentAmount.value.amount = ctx.data.message?.data?.amount

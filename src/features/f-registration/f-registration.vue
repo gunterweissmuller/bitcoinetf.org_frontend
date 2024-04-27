@@ -181,21 +181,8 @@
                   text="Continue"></a-button>
           </form>
       </template>
-      <!--    <template v-else-if="currentStep === Steps.Bonus">-->
-      <!--      <div class="f-registration__bonus">-->
-      <!--        <div class="f-registration__bonus-wrap">-->
-      <!--          <img src="/img/bonus.png" alt="bonus" class="f-registration__bonus-wrap-pic" />-->
-      <!--          <div class="f-registration__bonus-wrap-title">$50 Welcome and referral bonus!</div>-->
-      <!--          <div class="f-registration__bonus-wrap-text">-->
-      <!--            You just earned a $50 bonus for signing up! Your bonus can be accessed in your bonus wallet, and can be-->
-      <!--            applied to your ETF purchases.-->
-      <!--          </div>-->
-      <!--          <a-button class="f-registration__bonus-wrap-btn" @click="getBonus" text="Got it!"></a-button>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--    </template>-->
   </div>
-  <e-registration-bonus-modal :confirmData="confirmResponse" v-model="isOpenModal" @accept="getBonus" @close="getBonus" />
+
   <f-terms-modal v-model="isOpenTermsModal" />
 </template>
 
@@ -220,10 +207,14 @@ import axios from "axios";
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { document } from 'postcss'
+import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
+
+const {connectToReplenishment} = useConnectReplenishmentChannel($app)
+
 const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
@@ -232,7 +223,6 @@ const enum Steps {
   Email = 'Email',
   Code = 'Code',
   Password = 'Password',
-  Bonus = 'Bonus',
   TelegramSign = 'TelegramSign'
 }
 
@@ -241,7 +231,7 @@ const phone = ref(null);
 const countryCode = ref(null);
 
 const countryChanged = (country) => {
-  // console.log(country, phone);
+  //
   countryCode.value = country.dialCode;
 }
 
@@ -262,10 +252,8 @@ function openTermsModal() {
 watch(
   () => currentStep.value,
   (step) => {
-      backendError.value = {value: '', field: 'default'}
-      if (step === Steps.Bonus) {
-          isOpenModal.value = true
-      }
+      backendError.value = ''
+      
   },
 )
 
@@ -335,7 +323,7 @@ onMounted(() => {
         }
     });
   } else {
-    console.log("Metamask is not installed");
+    console.error("Metamask is not installed");
   }
 
 })
@@ -391,7 +379,7 @@ const handleMetamaskConnect = async () => {
 
     const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
 
-    console.log("SIGNED MSG", signedMsg);
+
     metamaskSignature.value = signedMsg;
     isMetamaskConnecting.value = false;
     currentStep.value = Steps.Email;
@@ -449,7 +437,7 @@ const handleGoogleConnect = async () => {
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
+
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
@@ -460,12 +448,12 @@ const handleTelegramAuth = async () => {
   await (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
-      console.log(tgData);
+
       if (!tgData) {
         // authorization failed
       } else {
 
-        console.log(tgData);
+
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -491,7 +479,7 @@ const handleTelegramAuth = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
@@ -515,12 +503,12 @@ const testTG = async () => {
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       data = tgData;
-      console.log(tgData);
+
 
       if (!tgData) {
         // authorization failed
       } else {
-        console.log(tgData);
+
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -546,6 +534,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
+                  connectToReplenishment()
 
                   await router.push('/personal/analytics/performance')
                 });
@@ -561,13 +550,13 @@ const testTG = async () => {
 
 const handleTelegramConnect = async () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
+
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
-      console.log(res);
+
     })
   })
 }
@@ -579,7 +568,7 @@ onMounted(() => {
   $app.api.eth.auth
     .getAppleRedirect()
     .then(async (res) => {
-      console.log(res);
+
 
       function getJsonFromUrl(url) {
         if(!url) url = location.search;
@@ -594,7 +583,7 @@ onMounted(() => {
 
       const parsedUrl = getJsonFromUrl(res.url);
 
-      console.log(parsedUrl, window.AppleID);
+
 
       (window as any).AppleID.auth.init({
           clientId : parsedUrl.client_id,
@@ -615,17 +604,17 @@ const handleAppleConnect = async () => {
   try {
       const data = await (window as any).AppleID.auth.signIn()
       // Handle successful response.
-      console.log("test123", data);
+
 
       $app.store.authTemp.response = data.authorization.id_token;
 
-      console.log($app.store.authTemp.response, $app.api.eth.auth);
+
 
 
       $app.api.eth.auth
       .getAppleAuthType({apple_token: data.authorization.id_token})
       .then(async (res) => {
-        console.log(res);
+
 
         if(res.data.auth_type === 'registration') {
 
@@ -663,7 +652,7 @@ const handleAppleConnect = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
@@ -728,11 +717,11 @@ const onSubmitEmailForm = async () => {
       initPayload.ref_code = refCode.value
   }
 
-  console.log(currentSignup.value, initPayload.ref_code);
+
 
   if(currentSignup.value === SignupMethods.Apple) {
 
-    console.log($app.store.authTemp.response);
+
 
     $app.api.eth.auth
       .initApple({
@@ -784,11 +773,12 @@ const onSubmitEmailForm = async () => {
         firstName.value = '';
         lastName.value = '';
         email.value = '';
-        currentStep.value = Steps.Bonus
+        
       })
       .then(async () => {
             await $app.api.eth.auth.getUser().then((resp) => {
-                $app.store.user.info = resp?.data
+                $app.store.user.info = resp?.data;
+                router.push('/personal/analytics');
             })
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -836,7 +826,7 @@ const onSubmitEmailForm = async () => {
         phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
-        console.log('ww');
+
         isSubmitEmailForm.value = false;
         currentStep.value = Steps.Code;
     }).catch((e) => {
@@ -981,11 +971,12 @@ const codeContinue = async () => {
           // TODO falling user/me
           $app.store.auth.setTokens(jwtResponse.data)
           confirmResponse.value = jwtResponse.data
-          currentStep.value = Steps.Bonus
+          
         })
         .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data
+            $app.store.user.info = resp?.data;
+            router.push('/personal/analytics');
           });
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1020,11 +1011,12 @@ const codeContinue = async () => {
         // TODO falling user/me
         $app.store.auth.setTokens(jwtResponse.data)
         confirmResponse.value = jwtResponse.data
-        currentStep.value = Steps.Bonus
+        
       })
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
-          $app.store.user.info = resp?.data
+          $app.store.user.info = resp?.data;
+          router.push('/personal/analytics')
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1060,11 +1052,12 @@ const codeContinue = async () => {
         // TODO falling user/me
         $app.store.auth.setTokens(jwtResponse.data)
         confirmResponse.value = jwtResponse.data
-        currentStep.value = Steps.Bonus
+        
       })
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
-          $app.store.user.info = resp?.data
+          $app.store.user.info = resp?.data;
+          router.push('/personal/analytics')
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1162,11 +1155,12 @@ const onSubmitPasswordForm = async () => {
           $app.store.auth.setTokens(jwtResponse.data)
           confirmResponse.value = jwtResponse.data
           isSubmitPasswordForm.value = false;
-          currentStep.value = Steps.Bonus
+          
       })
       .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
-              $app.store.user.info = resp?.data
+              $app.store.user.info = resp?.data;
+              router.push('/personal/analytics')
           });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1192,10 +1186,6 @@ const onSubmitPasswordForm = async () => {
       })
 }
 
-// Bonus Step
-const getBonus = () => {
-  router.push('/personal/analytics')
-}
 
 onMounted(() => {
   if (route.query.referral) {
@@ -1204,6 +1194,8 @@ onMounted(() => {
       accordionRef.value?.open()
   }
 })
+
+
 </script>
 
 <style lang="scss" src="./f-registration.scss" />

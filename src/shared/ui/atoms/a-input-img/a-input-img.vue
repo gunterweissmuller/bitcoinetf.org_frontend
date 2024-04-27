@@ -26,7 +26,7 @@
                 'a-input-img__input--custom',
                 { 'a-input-img__input--focused': $attrs.open },
                 { 'a-input-img__input-icon-left': leftIcon },
-                
+
               ]"
             >
               <a-icon v-if="leftIcon" width="24" height="24" :class="[`a-input-img__left-icon`]" :name="leftIcon" :imgTrue="imgTrue"/>
@@ -96,7 +96,7 @@
             </template>
 
             <template v-if="img">
-              <NuxtImg 
+              <NuxtImg
                 :class="[
                   `a-input-img__img`,
                   `a-input-img__img--${positionIcon}`,
@@ -540,8 +540,8 @@ const focusOnInput = () => {
 //   () => props.modelValue,
 //   (value, oldValue) => {
 //     if (props.maxLength) {
-//       console.log('value', value)
-//       console.log('oldValue', value)
+//
+//
 //       if (value.length > props.maxLength) {
 //         emit('update:modelValue', oldValue)
 //       }

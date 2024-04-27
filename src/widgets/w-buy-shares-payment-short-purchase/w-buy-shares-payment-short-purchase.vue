@@ -33,7 +33,7 @@
     <a-input
       class="flex gap-4 justify-between mt-6 rounded-lg"
       label="Amount"
-      :model-value="$app.filters.roundedFixed(calcValue, 2) + ' USDT'"
+      :model-value="$app.filters.rounded(Math.ceil(calcValue*100)/100,2) + ' USDT'"
       :disabled="true"
       :text-icon="amountCopied"
       text-icon-text="Copied!"
@@ -41,7 +41,7 @@
       position-icon="right"
       @on-input-click="() => copyToClipboardAmount()"
       isBoldInput
-    />
+    /> <!-- $app.filters.roundedFixed(calcValue, 2)  -->
 
     <!-- <button :disabled="timerStarted" @click="startTronTimer" class="block	w-full justify-center items-center py-5 mt-4 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg" tabindex="0">
       {{ tronButtonCheckPayment }}
@@ -208,7 +208,7 @@ onMounted(async () => {
     });
 
     const res = await response.json();
-    console.log("BUYINIT", res);
+
 
     if (res) {
       router.replace({
@@ -409,7 +409,7 @@ onMounted(async () => {
 
   sub
     .on('publication', async function (ctx) {
-      console.log("PUB",ctx, ctx.data.message?.data?.status)
+
       if (ctx.data.message?.data?.status === 'success') {
         infoPayment.value = ctx.data.message?.data
       }
@@ -435,7 +435,7 @@ const transformSlotProps = (props) => {
 
 const copiedAddressValue = ref(computedAddr.value);
 const addressCopied = ref(false);
-const copiedAmountValue = ref($app.filters.roundedFixed(props.calcValue, 2));
+const copiedAmountValue = ref(Math.ceil(props.calcValue*100)/100); //  $app.filters.roundedFixed(props.calcValue, 2)
 const amountCopied = ref(false);
 
 const { copy } = useClipboard({ copiedAddressValue });
@@ -446,7 +446,7 @@ const copyToClipboardAddress = () => {
 }
 
 const copyToClipboardAmount = () => {
-  copy(copiedAmountValue.value);
+  copy(String(copiedAmountValue.value));
   amountCopied.value = true;
 }
 

@@ -13,7 +13,7 @@
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
-            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM'"
+            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM' || disabledAmount"
             :style="['max-width: '+inputMaxWidth+'px', currentAmount !== 'CUSTOM' ? 'pointer-events: none' : '' ]"
             v-model="investmentAmountDisplay"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -25,7 +25,7 @@
 
           /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
 
-          <div class="relative">
+          <div class="relative" :class="{'landing_calculation__dropdown-isdisabled': disabledAmount}">
             <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
               <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center gap-4 cursor-pointer">
                 <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
@@ -58,7 +58,7 @@
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
-            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM'"
+            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM' || disabledAmount"
             :style="['max-width: '+inputMaxWidth+'px', currentAmount !== 'CUSTOM' ? 'pointer-events: none' : '' ]"
             v-model="investmentAmountDisplay"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -70,7 +70,7 @@
 
           /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
 
-          <div class="relative">
+          <div class="relative"  :class="{'landing_calculation__dropdown-isdisabled': disabledAmount}">
             <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
               <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center gap-4 cursor-pointer">
                 <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
@@ -240,12 +240,14 @@ const props = withDefaults(
     openPurchase?: any
     isInputDisbled?: boolean
     isUserAuth?: boolean
+    disabledAmount?: boolean
   }>(),
   {
     openSignup: () => {},
     openPurchase: () => {},
     isInputDisbled: false,
     isUserAuth: false,
+    disabledAmount: false
   },
 )
 
@@ -298,9 +300,13 @@ const orderType = computed(() => {
 });
 
 onMounted(() => {
-  $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
-  });
+  const { isUserAuthenticated } = $app.store.auth
+
+  if (isUserAuthenticated) {
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    });
+  }
 })
 
 
@@ -311,7 +317,7 @@ onMounted(()=>{
 
     const temp = Number(localStorage.getItem('investmentAmount'));
 
-    console.log(isNaN(temp), temp);
+
 
     investmentAmount.value = isNaN(temp) ? 2500 : temp;
     investmentAmountDisplay.value = String(investmentAmount.value) ;
@@ -466,7 +472,7 @@ const guaranteedPayout = computed(() => {
 
 const roundedGuaranteedPayout = computed(() => {
   return $app.filters.roundedFixed(investmentAmount.value + guaranteedPayout.value * 3, 2)
-  
+
 })
 
 
@@ -552,10 +558,14 @@ const outSideClick =  (ev) => {
 
 
 const toggleAmountDropdown = () => {
+  if (props.disabledAmount) return
+
   showAmountDropdown.value = !showAmountDropdown.value;
 };
 
 const selectAmount = (amount : any) => {
+  if (props.disabledAmount) return
+
   if(amount === 'CUSTOM') {
     currentAmount.value = amounts.value.find((el) => el.amount === amount)?.amount ?? amounts.value[0].amount;
   } else {
@@ -570,6 +580,9 @@ const selectAmount = (amount : any) => {
 const handleContinue = () => {
   if(route.path === '/') {
     router.push("/personal/registration");
+    $app.store.purchase.type = selectedCurrency.value.value;
+    $app.store.purchase.amount = investmentAmount.value;
+    $app.store.purchase.amountUS = investmentAmount.value;
   } else {
     if (props.isUserAuth) {
       props.openPurchase();

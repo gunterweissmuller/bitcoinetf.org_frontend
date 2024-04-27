@@ -328,6 +328,9 @@ onMounted(() => {
   $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
   });
+
+
+  
 })
 
 const isOpen = ref($app.store.user.isInvestModalShow.show);
@@ -339,10 +342,14 @@ const investmentAmountDisplay = ref('2,500');
 const investmentAmount : any = ref(2500);
 
 onMounted(()=>{
-  if(localStorage.getItem('investmentAmount')) {
-    investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
-    investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
-    // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // if(localStorage.getItem('investmentAmount')) {
+  //   investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+  //   investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
+  //   // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // }
+  if($app.store?.purchase?.amountUS) {
+    investmentAmount.value = Number($app.store.purchase.amountUS);
+    investmentAmountDisplay.value = $app.store.purchase.amountUS || '2,500';
   }
 })
 
@@ -463,6 +470,16 @@ const selectedCurrency = ref(currencies.value[1]); //orderType.value == 'btc' ? 
 const apyValue = ref(selectedCurrency.value.apy);
 const dayliDivs = computed(() => {
   return guaranteedPayout.value / 365
+});
+
+onMounted(() => {
+  // if(localStorage.getItem("investType")) {
+  //   selectCurrency({value: localStorage.getItem("investType")});
+  // }
+
+  // if($app.store.purchase.type) {
+  //   selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+  // }
 })
 
 const dayliDivsDisplay = computed(() => {
@@ -493,7 +510,12 @@ watch(
   () => $app.store.user.isInvestModalShow.show,
   () => {
     isOpen.value = $app.store.user.isInvestModalShow.show;
-    selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+
+    if (orderType.value !== 'init_btc') {
+      selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+    } else if($app.store.purchase.type) {
+      selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+    }
   }
 )
 
