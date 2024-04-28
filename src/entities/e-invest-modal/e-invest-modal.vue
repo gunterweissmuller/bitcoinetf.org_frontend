@@ -298,7 +298,7 @@
 
 
           </article>
-          <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch whitespace-nowrap "> Continue </button>
+          <button @click="handleContinue" tabindex="0" :disabled="investmentAmount < 100" class="e-invest__button justify-center items-center self-stretch whitespace-nowrap "> Continue </button>
           <div class="e-invest__error-message">
             <p v-if="investmentAmount < 100">The minimum investment amount must be at least 100</p>
           </div>
