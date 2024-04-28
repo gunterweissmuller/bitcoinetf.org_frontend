@@ -56,9 +56,9 @@ export default defineNuxtRouteMiddleware((to) => {
     if (to.name === 'personal-fund') {
       return navigateTo({name: 'personal-portfolio'})
     }
-    if (to.name === 'personal-assets') {
-      return navigateTo({name: 'personal-assets-symbol', params: { symbol: assets()[0]?.symbol.toLowerCase() }})
-    }
+    // if (to.name === 'personal-assets') {
+    //   return navigateTo({name: 'personal-assets-symbol', params: { symbol: assets()[0]?.symbol.toLowerCase() ?? 'baa' }})
+    // }
     if (to.name === 'personal-wallet') {
       return navigateTo({name: 'personal-dividends'})
     }

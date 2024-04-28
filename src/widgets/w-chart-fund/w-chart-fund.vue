@@ -47,7 +47,7 @@ import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons'
 
-const {$app} = useNuxtApp()
+const { $app } = useNuxtApp();
 
 const props = withDefaults(
   defineProps<{
@@ -55,7 +55,7 @@ const props = withDefaults(
     title: string
     isMain: boolean
     isTotalAssets?: boolean
-    type: 'assets' | 'shareholders'
+    type: 'assets' | 'shareholders' | 'asset'
   }>(),
   {
     isTotalAssets: false,
@@ -63,7 +63,7 @@ const props = withDefaults(
     id: null,
     type: 'assets'
   },
-)
+);
 
 // always unique id
 const CHART_ID : string = `${getCurrentInstance()?.uid ?? Math.floor(Math.random() * 10**10)}`;
@@ -117,7 +117,7 @@ const options = {
 interface DataItem {
   amount: number;
   created_at: string;
-  label: string
+  label: string;
 }
 
 const changeChartData = (tabs : DataItem[]) => {
@@ -164,8 +164,6 @@ const getStatistics = async () => {
 
     data = response.data;
   }
-
-
 
   if (data.length > 4) {
     data = data.filter((item : DataItem) => item.amount != 0);
@@ -215,8 +213,8 @@ onMounted(async () => {
       plugins: [],
     }
 
-    CHART_INSTANCE = new Chart(ctx, config)
-    await getStatistics()
+    CHART_INSTANCE = new Chart(ctx, config);
+    await getStatistics();
   }
 })
 </script>

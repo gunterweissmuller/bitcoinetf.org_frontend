@@ -83,9 +83,9 @@
 </template>
 
 <script lang='ts' setup>
-import { Autoplay } from 'swiper'
-import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
-import { SwiperSlide } from 'swiper/vue'
+import { Autoplay } from 'swiper';
+import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
+import { SwiperSlide } from 'swiper/vue';
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';
 import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.vue';
 import WShareholdersStats from '~/src/widgets/w-shareholders-stats/w-shareholders-stats.vue';

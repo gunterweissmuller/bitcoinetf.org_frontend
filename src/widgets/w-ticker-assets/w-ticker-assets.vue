@@ -1,5 +1,5 @@
 <template>
-  <div class="w-ticker-assets">
+  <div class="w-ticker-assets" v-if="props.asset">
 
     <div class="w-ticker-assets__caption">
       <div :class="['w-ticker-assets__caption-symbol', `bg--${props.asset.symbol.toLowerCase()}`]"></div>
@@ -14,11 +14,11 @@
     </div>
 
     <h2 class="w-ticker-assets__heading">
-      {{ asset.name }}
+      {{ props.asset.name }}
     </h2>
 
     <p class="w-ticker-assets__description">
-      {{ asset.description }}
+      {{ props.asset.description }}
     </p>
 
     <!-- FIX HREF -->
@@ -31,14 +31,10 @@
 </template>
 
 <script lang='ts' setup>
-interface Asset {
-  symbol: string;
-  name: string;
-  description: string;
-}
+import { IAsset } from '~/src/shared/types/global';
 
 const props = defineProps<{
-  asset: Asset
+  asset: IAsset
 }>();
 </script>
 

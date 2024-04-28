@@ -20,7 +20,7 @@
           <a-icon
             width='22'
             height='22'
-            v-if='routeNames?.[route?.name]?.info'
+            v-if='routeNames?.[route?.name]?.info && !(isLaptop || isDesktop)'
             class='w-header__img'
             :class="{'w-header__img--left': route.name === 'personal-buy-shares' || route.name === 'personal-earnings'}"
             :name='Icon.MonoInfo'

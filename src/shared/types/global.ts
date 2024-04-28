@@ -1,11 +1,12 @@
 export interface IAsset {
-  id: string
-  title: string
-  shortTitle: string
-  type: string
-  earning: string
+  id: string,
+  title: string,
+  shortTitle: string,
+  type: string,
+  earning: string,
   apy: string,
-  symbol: string
+  symbol: string,
+  uuid: number
 }
 
 interface IDealActivityType {
@@ -30,12 +31,12 @@ export interface IDeal {
   activityType?: IDealActivityType
 }
 
-export type IWalletType = 'dividends' | 'referral'
-export type IMethod = 'none' | 'manual' | 'automatic_daily'
+export type IWalletType = 'dividends' | 'referral';
+export type IMethod = 'none' | 'manual' | 'automatic_daily';
 
 export interface ADropdownOption {
-  name: string; // отображаемое значение
-  value: any; // значение для логики
+  name: string;
+  value: any;
 }
 
-export type OrderType = 'init_btc' | 'usdt' | 'btc'
+export type OrderType = 'init_btc' | 'usdt' | 'btc';
