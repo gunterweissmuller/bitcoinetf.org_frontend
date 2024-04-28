@@ -64,7 +64,7 @@ const route = useRoute();
 const assets = computed(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
 });
-  
+
 // reroute from personal-asset to personal-asset-symbol
 if (route.params.symbol === undefined) {
   watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
