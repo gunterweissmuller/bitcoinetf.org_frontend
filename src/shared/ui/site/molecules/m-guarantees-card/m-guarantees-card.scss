@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: flex-start;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(32px);
   position: relative;
 
@@ -20,10 +20,10 @@
     align-items: center;
 
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
 
-    color: #FFF;
+    color: #fff;
 
     text-align: center;
     /* Body 1/Bold */
@@ -35,7 +35,7 @@
   }
 
   &__title {
-    color: #FFF;
+    color: #fff;
     /* H6/Bold */
     font-family: DM, sans-serif;
     font-size: 20px;
@@ -45,9 +45,9 @@
   }
 
   &__capital {
-    color: #FFF;
+    color: #fff;
 
-    font-family: "Plus Jakarta Sans";
+    font-family: 'Jakarta', sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 700;
@@ -55,7 +55,7 @@
   }
 
   &__cost {
-    color: var(--Text-Primary, #F1F2F4);
+    color: var(--Text-Primary, #f1f2f4);
     /* H3/Bold */
     font-family: DM, sans-serif;
     font-size: 32px;
@@ -68,7 +68,7 @@
   }
 
   &__current_balance {
-    color: #FFF;
+    color: #fff;
 
     /* H6/Bold */
     font-family: Dm, sans-serif;
@@ -88,9 +88,9 @@
       gap: var(--Spacing-S, 8px);
       border-radius: 4px;
 
-      background: var(--Accent-Primary, #4D94FF);
+      background: var(--Accent-Primary, #4d94ff);
 
-      color: var(--Text-Inverse-Primary, #FFF);
+      color: var(--Text-Inverse-Primary, #fff);
       /* Caption 2/Bold */
       font-family: Dm, sans-serif;
       font-size: 10px;
@@ -102,9 +102,9 @@
 
   &__body_text {
     margin-top: torem(16);
-    color: #FFF;
+    color: #fff;
 
-    font-family: "Plus Jakarta Sans";
+    font-family: 'Jakarta', sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
@@ -119,9 +119,9 @@
     align-items: center;
 
     border-radius: var(--Spacing-S, 8px);
-    background: var(--Button-Primary, #4D94FF);
+    background: var(--Button-Primary, #4d94ff);
 
-    color: var(--Text-Inverse-Primary, #FFF);
+    color: var(--Text-Inverse-Primary, #fff);
     /* Body 2/Bold */
     font-family: Dm, sans-serif;
     font-size: 14px;

@@ -681,7 +681,7 @@
         <clipPath id="clip15_83_3870">
           <rect width="32" height="32" fill="white" transform="translate(486.5 405.82)" />
         </clipPath>
-        <clipPath id="clip16_83_3870">
+        <clipPath>
           <rect width="669" height="306" fill="white" transform="translate(0 438)" />
         </clipPath>
         <clipPath id="clip17_83_3870">
@@ -722,17 +722,22 @@ import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 type TSide = '.left-side' | '.right-side' | '.left-col' | '.right-col' | '.alone-col'
 
 const SPEED = 50
+const motionPathFrom = reactive({})
+const motionPathTo = reactive({})
+
+const paths = ['.left-side', '.right-side', '.left-col', '.right-col', '.alone-col']
+const icons = ['.btc-icon', '.tether-icon', '.btc-icon-col', '.tether-icon-col', '.tether-alone']
 
 onMounted(() => {
-  const paths = ['.left-side', '.right-side', '.left-col', '.right-col', '.alone-col']
-  const icons = ['.btc-icon', '.tether-icon', '.btc-icon-col', '.tether-icon-col', '.tether-alone']
-
   paths.forEach((path, index) => {
     const iconElements = document.querySelectorAll(icons[index])
     drawMotionPath(path, iconElements, duration(path, SPEED), delay(path, iconElements.length, SPEED))
   })
 })
-
+onUnmounted(() => {
+  Object.values(motionPathTo).forEach((motion) => motion.kill())
+  Object.values(motionPathFrom).forEach((motion) => motion.kill())
+})
 function duration(path: string, speed: number): number {
   return MotionPathPlugin.getLength(path) / speed
 }
@@ -755,8 +760,10 @@ function motionPath(sideClass: TSide) {
 function drawMotionPath(pathClass: TSide, iconElements: NodeListOf<Element>, duration = 4, delay = null) {
   gsap.registerPlugin(MotionPathPlugin)
   iconElements.forEach((icon, index) => {
-    gsap.from(icon, { opacity: 0, duration: 1, delay: duration })
-    gsap.to(icon, {
+    const uniqueIndex = `${pathClass}-${index}`
+
+    motionPathFrom[uniqueIndex] = gsap.from(icon, { opacity: 0, duration: 1, delay: duration })
+    motionPathTo[uniqueIndex] = gsap.to(icon, {
       motionPath: motionPath(pathClass),
       transformOrigin: '50% 50%',
       duration,
@@ -776,15 +783,19 @@ onMounted(() => {
   crossfade()
 })
 
+const crossfadeAnimation = ref()
 function crossfade() {
-  var action = gsap
-    .timeline()
-    .to(texts.value, { duration: 1, y: '-=36' })
-    .to(texts.value[0], { y: '+=216', duration: 0 }) // the first to the end
+  gsap.timeline().to(texts.value, { duration: 1, y: '-=36' }).to(texts.value[0], { y: '+=216', duration: 0 }) // the first to the end
+
   texts.value.push(texts.value.shift()) // the first (shift) to the end (push) from the array
   // start endless run
-  gsap.delayedCall(next, crossfade)
+
+  crossfadeAnimation.value = gsap.delayedCall(next, crossfade)
 }
+
+onUnmounted(() => {
+  crossfadeAnimation.value?.kill()
+})
 </script>
 
 <style scoped lang="scss">
@@ -795,9 +806,13 @@ function crossfade() {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   svg {
     width: 100%;
     height: 100%;
+    @media screen and (max-width: 767px) {
+      max-height: 681px;
+    }
   }
 }
 .text {

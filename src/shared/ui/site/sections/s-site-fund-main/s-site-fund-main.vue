@@ -6,14 +6,14 @@
     </div>
     <div class="l-site-dark">
       <div class="s-site-fund-main__wrapper">
-        <div class="s-site-fund-main__left">
+        <!-- <div class="s-site-fund-main__left">
           <div class="s-site-fund-main__message">
             <div class="s-site-fund-main__message-text">{{ data.message }}</div>
             <div class="s-site-fund-main__message-arrow">
               <img src="/img/site-dark/s-site-fund-main/arrow.svg" alt="">
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="s-site-fund-main__right">
           <div class="s-site-fund-main__text">{{ data.text }}</div>
           <nuxt-link to="/personal/registration">

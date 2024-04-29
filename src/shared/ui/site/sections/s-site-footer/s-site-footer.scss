@@ -290,10 +290,10 @@
         opacity: 0.6;
       }
       &[href='/#'] {
-        // color: #FFFFFF80;
+        color: #ffffff80;
 
         &:hover {
-          // cursor: default;
+          cursor: default;
           opacity: 1;
           color: #ffffff80;
         }
@@ -365,7 +365,7 @@
 
       &:nth-child(2) {
         margin-left: auto;
-        margin-right: torem(16);
+        margin-right: torem(32);
 
         @media (max-width: 991px) {
           margin-left: 0;

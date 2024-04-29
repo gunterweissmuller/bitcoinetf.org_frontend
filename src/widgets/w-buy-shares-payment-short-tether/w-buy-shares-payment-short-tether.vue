@@ -3,9 +3,9 @@
     <div class="w-buy-shares-payment-short-tether__wrap">
       <div class="w-buy-shares-payment-short-tether__tron" v-if="!isFiat">
         <div class="w-buy-shares-payment-short-tether__tron-wrapper">
-          
+
           <div class="w-buy-shares-payment-short-tether__accordion-qr">
-            <qrcode-vue :value="$app.store.user.info?.account?.tron_wallet" level="L" render-as="svg" foreground="#000" background="#fff"/>
+            <qrcode-vue :value="paymentAddress" level="L" render-as="svg" foreground="#000" background="#fff"/>
           </div>
           <div class="w-buy-shares-payment-short-tether__tron-subtitle">
             Your order will automatically close in:
@@ -21,23 +21,39 @@
           {{ $app.store.user.statistic?.trc_bonus?.percent }}% Discount Applied!
         </div>
 
-        <a-input
-          bgColor="tetherspecial"
-          class="w-buy-shares-payment-short-tether__accordion-stable-method"
+<!--        <a-input-->
+<!--          bgColor="tetherspecial"-->
+<!--          class="w-buy-shares-payment-short-tether__accordion-stable-method"-->
+<!--          label="Deposit method"-->
+<!--          model-value="Tether USDT (Tron, TRC-20)"-->
+<!--          :icon="Icon.ColorfulTron"-->
+<!--          position-icon="left"-->
+<!--          disabled-->
+<!--          @on-input-click="copy(paymentAddress)"-->
+<!--        />-->
+
+        <m-select
+          class="f-withdrawal-modal__methods mb-5"
+          :left-input-icon="selectedMethodIcon"
           label="Deposit method"
-          model-value="Tether USDT (Tron, TRC-20)"
-          :icon="Icon.ColorfulTron"
-          position-icon="left"
-          disabled
-          @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
+          v-model="selectedMethod"
+          :options="methods"
         />
 
-        <div class="w-buy-shares-payment-short-tether__double-input">
+        <a v-if="btnMoonpayActive" :href="moonpayPaymentLink" target="_blank">
+          <button
+            @click="btnMoonpayActive = false"
+            class="w-buy-shares-payment-short-tether__paybtn w-full justify-center items-center whitespace-nowrap rounded-lg mb-5" tabindex="0">
+            Pay
+          </button>
+        </a>
+
+        <div class="w-buy-shares-payment-short-tether__double-input" v-if="!btnMoonpayActive">
           <div class="w-buy-shares-payment-short-tether__accordion-stable-address">
             <a-input
               bgColor="tetherspecial"
               label="Deposit address on Tron chain:"
-              :model-value="$app.store.user?.info?.account.tron_wallet"
+              :model-value="paymentAddress"
               disabled
               :icon="Icon.ColorfulCopy"
               position-icon="right"
@@ -50,7 +66,7 @@
             <a-input
               bgColor="tetherspecial"
               label="Amount"
-              :model-value="`${$app.filters.rounded(calcValue)} USDT`"
+              :model-value="`${ $app.filters.rounded(Math.ceil(calcValue*100)/100,2) } USDT`"
               disabled
               :text-icon="amountCopied"
               text-icon-text="Copied!"
@@ -60,7 +76,7 @@
             />
           </div>
         </div>
-        
+
         <div class="w-buy-shares-payment-short-tether__tron-info">
           Deposit your funds and stay on this screen. Your Bitcoin ETF shares will arrive shortly.
         </div>
@@ -131,6 +147,9 @@ import EBuySharesSuccessModal from "~/src/entities/e-buy-shares-success-modal/e-
 import {Centrifuge} from "centrifuge";
 import ACheckbox from "~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue";
 import VueCountdown from '@chenfengyuan/vue-countdown';
+import { usePayment } from '~/src/app/composables/usePayment';
+import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
+import { PayTypes } from '~/src/shared/constants/payWith'
 
 const props = withDefaults(
   defineProps<{
@@ -149,6 +168,93 @@ const props = withDefaults(
 const router = useRouter()
 const route = useRoute()
 const { $app } = useNuxtApp()
+const {
+  orderType,
+  payWith,
+  initPayment: initApolloPayment,
+  getPayWallets,
+  currentPayType,
+  paymentAddress,
+  openMoonpayHandler,
+  getMoonpayPaymentUrl,
+} = usePayment($app)
+const { isApple, isSafari } = useDevice();
+const moonpayPaymentLink = ref(null)
+const btnMoonpayActive = ref(false)
+const selectedMethod = ref('usdt-trc')
+const methods = computed(() => payWith.value.filter(({ show }) => show).map(item => ({
+  ...item,
+  label: item.title,
+  icon: item.iconType,
+})))
+const selectedMethodIcon = computed(() => payWith.value.find(item => item.value === selectedMethod.value)?.iconType)
+
+const openTrc = async () => {
+  currentPayType.value = PayTypes.Tron;
+
+  await $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  });
+
+  await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+    $app.store.user.blockchainUserWallet = resp?.data.uid;
+  });
+
+  // todo uncomment
+  // if(!$app.store.user?.info?.account?.tron_wallet) {
+  //   $app.store.user.info.account.tron_wallet = $app.store.user.wallets.tron;
+  // }
+
+}
+
+const getMoonpayWallets = async () => {
+  try {
+    const moonpayUrl = await getMoonpayPaymentUrl()
+
+    if (isSafari || isApple) {
+      moonpayPaymentLink.value = moonpayUrl
+      btnMoonpayActive.value = true
+    } else {
+      window.open(moonpayUrl, '_blank')
+    }
+  } catch (e) {
+    console.error('error', e)
+  }
+}
+
+const openMoonpay = async () => {
+  return await openMoonpayHandler(getMoonpayWallets, () => {}, false)
+}
+
+
+const openEth = async () => {
+  currentPayType.value = PayTypes.Ethereum;
+}
+
+const openPolygon = async () => {
+  currentPayType.value = PayTypes.Polygon;
+}
+
+const handlePayMethod = (functionName) => {
+  const handlers = {
+    openMoonpay,
+    openEth,
+    openPolygon,
+    openTrc,
+  }
+
+  handlers[functionName]()
+}
+
+watch(() => selectedMethod.value, (value) => {
+
+  const { onClick } = payWith.value.find(item => item.value === value)
+  handlePayMethod(onClick);
+
+  nextTick(() => {
+
+  })
+})
 
 const onCountdownEnd = () => {
   window.history.pushState({}, document.title, window.location.pathname);
@@ -202,13 +308,13 @@ const { copy } = useClipboard({ copiedValue })
 
 const copyToClipboard = (address = false) => {
   if (address) {
-    copy($app.store.user.info.account.tron_wallet)
+    copy(paymentAddress)
     addressCopied.value = true
     setTimeout(() => {
       addressCopied.value = false
     }, 1000)
   } else {
-    copy(props.calcValue)
+    copy(String(Math.ceil(props.calcValue*100)/100))
     amountCopied.value = true
     setTimeout(() => {
       amountCopied.value = false
@@ -229,7 +335,7 @@ const isUserAuthenticated = computed(() => {
 })
 const transationByUUID = ref('')
 const allPaymentsTypesMerchant = ref([])
-const initPayment = async () =>{
+const initPayment = async () => {
   transationByUUID.value = await $app.api.eth.billingEth
     .getTransactionByUuid($app.store.user?.buyShares?.uuid || route.query.replenishment)
   merchant001Link.value = transationByUUID.value?.data?.redirect_uri
@@ -240,32 +346,35 @@ const initPayment = async () =>{
 }
 onMounted(async () => {
   if (true && $app.store.user?.buyShares?.uuid) { //props.isFiat
-    await initPayment()
+    // await initPayment()
+    await initApolloPayment()
   }
-  if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
-    await $app.api.eth.billingEth
-      .buyShares({
-        amount: props.calcValueOriginal, // props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal
-        dividends: false,
-        referral: false,
-        bonus: false,
-      })
-      .then(({ data }) => {
-        if (data) {
-          router.replace({
-            query: { replenishment: data.uuid }
-          })
-          $app.store.user.buyShares = data
-        }
-      })
-  }
+  await initApolloPayment()
+  await getPayWallets()
+  // if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
+  //   await $app.api.eth.billingEth
+  //     .buyShares({
+  //       amount: props.calcValueOriginal, // props.calcValueOriginal < 100 ? 100 : props.calcValueOriginal
+  //       dividends: false,
+  //       referral: false,
+  //       bonus: false,
+  //     })
+  //     .then(({ data }) => {
+  //       if (data) {
+  //         router.replace({
+  //           query: { replenishment: data.uuid }
+  //         })
+  //         $app.store.user.buyShares = data
+  //       }
+  //     })
+  // }
 
   if ($app.store.persiste.latestTronCheckDate) {
     initializeClock()
     // timerStarted.value = true
   }
   initializeTronClock()
-  startTronTimer();
+  // startTronTimer();
 })
 
 watch(

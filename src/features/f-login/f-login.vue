@@ -55,7 +55,7 @@
                     class="aspect-square w-[18px]" />
                 <div class="grow">Log in with Apple</div>
             </div>
-        </div>  
+        </div>
 
         <!--<div
           class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5">
@@ -121,9 +121,12 @@ import { SiweMessage } from 'siwe'
 import { computed, ref } from 'vue'
 import { BrowserProvider, parseUnits } from "ethers";
 import { hostname } from '~/src/app/adapters/ethAdapter'
+import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
+
+const {connectToReplenishment} = useConnectReplenishmentChannel($app)
 
 const enum Steps {
   Choice = 'Choice',
@@ -194,6 +197,7 @@ const onSubmitEmailForm = () => {
       })
 
       await $app.store.auth.reInitData()
+      connectToReplenishment()
       await router.push('/personal/analytics/performance')
     })
     .catch((e) => {
@@ -225,7 +229,7 @@ onMounted(() => {
 
   if(isMetamaskSupported.value) {
     (window as any).ethereum.on("chainChanged", (chainId: string) => {
-      console.log(chainId);
+
       if (chainId !== "0x1") {
         metamaskError.value = "This network is not supported. Please change the network to Ethereum."
       } else if (chainId === "0x1") {
@@ -233,7 +237,7 @@ onMounted(() => {
       }
     });
   } else {
-    console.log("Metamask is not installed");
+    console.error("Metamask is not installed");
   }
 
   axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
@@ -250,6 +254,7 @@ onMounted(() => {
     })
 
     $app.store.auth.reInitData()
+    connectToReplenishment()
     router.push('/personal/analytics/performance')
 
   }
@@ -270,11 +275,11 @@ const handleTelegramAuth = async () => {
   (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
-      console.log(tgData);
+
       if (!tgData) {
         // authorization failed
       } else {
-        console.log(tgData);
+
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -294,16 +299,16 @@ const handleTelegramAuth = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                   });
-
+                  connectToReplenishment()
                   await router.push('/personal/analytics/performance')
                 });
           }
         })
 
-        
+
 
       }
-      
+
       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
     }
   );
@@ -311,7 +316,7 @@ const handleTelegramAuth = async () => {
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
+
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
@@ -328,12 +333,12 @@ const testTG = async () => {
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       data = tgData;
-      console.log(tgData);
+
 
       if (!tgData) {
           // authorization failed
         } else {
-          console.log(tgData);
+
 
           $app.api.eth.auth.telegramGetAuthType({
             telegram_data: JSON.stringify(tgData),
@@ -353,13 +358,13 @@ const testTG = async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
                       $app.store.user.info = resp?.data
                     });
-
+                    connectToReplenishment()
                     await router.push('/personal/analytics/performance')
                   });
             }
           })
 
-          
+
 
         }
 
@@ -371,26 +376,26 @@ const testTG = async () => {
 
 const handleTelegramConnect = () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
+
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
-      console.log(res);
+
     })
   })
 }
 
 
-//apple 
+//apple
 
 onMounted(() => {
 
 $app.api.eth.auth
   .getAppleRedirect()
   .then(async (res) => {
-    console.log(res);
+
 
     function getJsonFromUrl(url) {
       if(!url) url = location.search;
@@ -405,7 +410,7 @@ $app.api.eth.auth
 
     const parsedUrl = getJsonFromUrl(res.url);
 
-    console.log(parsedUrl, window.AppleID);
+
 
     (window as any).AppleID.auth.init({
         clientId : parsedUrl.client_id,
@@ -426,17 +431,17 @@ const handleAppleConnect = async () => {
 try {
     const data = await (window as any).AppleID.auth.signIn()
     // Handle successful response.
-    console.log("test123", data);
+
 
     $app.store.authTemp.response = data.authorization.id_token;
 
-    console.log($app.store.authTemp.response, $app.api.eth.auth)
 
-    
+
+
     $app.api.eth.auth
     .getAppleAuthType({apple_token: data.authorization.id_token})
     .then(async (res) => {
-      console.log(res);
+
 
       if(res.data.auth_type === 'registration') {
           router.push("/personal/registration");
@@ -455,7 +460,7 @@ try {
                 await $app.api.eth.auth.getUser().then((resp) => {
                   $app.store.user.info = resp?.data
                 });
-
+                connectToReplenishment()
                 await router.push('/personal/analytics/performance')
               });
         }
@@ -532,7 +537,7 @@ const handleMetamaskConnect = async () => {
               accounts[0],
             ]
           }).then((msg: string) => {
-            console.log("SIGNED MSG", msg);
+
             metamaskSignature.value = msg;
             $app.api.eth.auth
               .loginMetamask({ signature: msg, message: res.data.message, wallet_address: signer.address})
@@ -548,6 +553,7 @@ const handleMetamaskConnect = async () => {
                 })
 
                 $app.store.auth.reInitData()
+                connectToReplenishment()
                 router.push('/personal/analytics/performance')
               })
               .catch((e) => {
@@ -563,10 +569,10 @@ const handleMetamaskConnect = async () => {
           });
 
         }).catch((err: any) => {
-          console.log(err);
+          console.error(err);
         });
       }).catch((err: any) => {
-        console.log(err);
+        console.error(err);
       });
 
     }).catch((err: any) => {
@@ -581,6 +587,7 @@ const handleMetamaskConnect = async () => {
 const onForgotPasswordClick = () => {
   router.push('/personal/reset')
 }
+
 </script>
 
 <style lang="scss" src="./f-login.scss"/>

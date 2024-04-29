@@ -15,6 +15,21 @@
         :options="methods"
       />
 
+      <div v-if="orderType === 'init_btc'" class="f-withdrawal-modal__warning">
+        <div class="f-withdrawal-modal__warning-icon">
+          <a-icon
+            width="22"
+            height="22"
+            :name="Icon.MonoInfo"
+          />
+        </div>
+
+        <div class="f-withdrawal-modal__warning-text">
+          After adding a withdrawal method, dividends will only be available in the selected type
+        </div>
+      </div>
+
+
       <nuxt-link
         v-if="selectedMethod === 'bitcoin_lightning'"
         to="/bitcoin-education"
@@ -27,6 +42,7 @@
       <a-input
         v-if="selectedMethodType"
         class="f-withdrawal-modal__address"
+        :class="{'f-withdrawal-modal__address-margin': selectedMethod === 'polygon_usdt'}"
         :icon="Icon.MonoPaste"
         :text-icon="copiedLink"
         text-icon-text="Copied!"
@@ -38,7 +54,7 @@
         @icon-click-handler="acceptCopy"
         :label="inputLabel"
       />
-      <div v-if="selectedMethodType" class="f-withdrawal-modal__address-text">
+      <div v-if="selectedMethodType && selectedMethod !== 'polygon_usdt'" class="f-withdrawal-modal__address-text">
         {{ subInfo }}
       </div>
       <a-button
@@ -66,6 +82,7 @@
 
 <script setup lang="ts">
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { computed, ref } from 'vue'
 import { Icon } from '~/src/shared/constants/icons'
 import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
@@ -143,7 +160,7 @@ const buttonDisabled = computed(() => {
   } else if (selectedMethod.value === 'bitcoin_lightning') {
     return !isEmailValid.value
   } else if (selectedMethod.value === 'polygon_usdt') {
-    return false
+    return !validMatic.value //false
   }
 
   return true
@@ -212,13 +229,19 @@ watch(() => orderType, (value) => {
     selectedMethod.value = 'polygon_usdt'
   }
 })
-const validBlockChain = ref(false)
+const validBlockChain = ref(false);
+const validMatic = ref(false);
 watch(()=> selectedAddress.value, (value) => {
   if (selectedMethod.value === 'bitcoin_on_chain') {
     validBlockChain.value = validate(value)
   }
   if (selectedAddress.value.includes('mailto:')) {
     selectedAddress.value = selectedAddress.value.replace('mailto:','')
+  }
+  if(selectedMethod.value === 'polygon_usdt') {
+    validMatic.value = window?.WAValidator?.validate(selectedAddress.value, 'matic')
+
+    //
   }
 })
 

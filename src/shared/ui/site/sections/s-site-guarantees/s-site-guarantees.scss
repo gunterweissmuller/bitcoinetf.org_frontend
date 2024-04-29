@@ -41,7 +41,7 @@
     position: relative;
     display: flex;
     justify-content: center;
-    max-width: 900px;
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -55,7 +55,7 @@
     &-item {
       color: #fff;
 
-      font-family: 'Plus Jakarta Sans';
+      font-family: 'Jakarta', sans-serif;
       font-size: 24px;
       font-style: normal;
       font-weight: 700;
@@ -103,7 +103,7 @@
 
   &__table-head {
     display: grid;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Jakarta', sans-serif;
     grid-template-columns: 4fr repeat(4, 3fr);
     position: relative;
     margin-bottom: torem(16);
@@ -144,6 +144,15 @@
       top: 0;
       z-index: 2;
     }
+
+    &.first-row {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    &.sixth-row {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
   }
   &__table-row-item {
     display: flex;
@@ -177,7 +186,7 @@
 .third-row,
 .fifth-row {
   :first-child {
-    background-color: #366fff;
+      background-color: #366fff;
   }
 }
 
@@ -185,6 +194,6 @@
 .fourth-row,
 .sixth-row {
   :first-child {
-    background-color: #205fff;
+      background-color: #205fff;
   }
 }

@@ -53,7 +53,7 @@ const getBlogNews = async (page = 1) => {
     blogNews.value = response.data
     newsLength.value = response?.total
   } catch (error) {
-    console.log(error)
+    console.error(error)
   } finally {
     isLoading.value = false
   }

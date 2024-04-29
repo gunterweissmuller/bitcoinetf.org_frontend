@@ -18,7 +18,7 @@
             ${{ $app.filters.rounded(resultSumUsd, 2) }}
           </div>
           <div
-            v-if="resultSumBtc"
+            v-if="resultSumBtc && $app.store.user?.info?.account?.order_type !== 'usdt'"
             class="w-chart-earnings__projected-btc"
             v-html="$app.filters.convertValue($app.filters.rounded(resultSumBtc, 8))"
           ></div>

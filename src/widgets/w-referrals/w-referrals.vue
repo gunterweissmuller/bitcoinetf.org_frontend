@@ -57,7 +57,7 @@
   </div>
   <e-referral-share-modal v-model="isOpenShareModal" />
   <f-referrals-modal :address="address" :method="method" v-model="isOpenModal" @accept="setMethod" />
-  <w-onboarding :steps="renderedSteps" next-route-name="personal-bonus" />
+  <!-- <w-onboarding :steps="renderedSteps" next-route-name="personal-bonus" /> -->
 </template>
 
 <script setup lang="ts">
