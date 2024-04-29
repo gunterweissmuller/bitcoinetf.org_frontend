@@ -160,7 +160,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       .on('publication', async function (ctx) {
         if (ctx.data.message?.data?.status === 'success') {
           callbackOnPayment(ctx)
-          paymentAmount.value.real_amount = ctx.data.message?.data?.amount
+          paymentAmount.value.amount = ctx.data.message?.data?.amount
           isOpenSuccessPaymentModal.value = true
         }
       })
