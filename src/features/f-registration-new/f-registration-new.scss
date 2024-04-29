@@ -303,10 +303,15 @@
     
         &-resend-link {
           text-align-last: left;
+          border: 1px solid transparent;
         }
 
         &-center {
           justify-content: center;
+        }
+
+        &-continue {
+          color: var(--text-inverse-primary);
         }
       }
     

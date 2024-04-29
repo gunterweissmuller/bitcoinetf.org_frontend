@@ -580,4 +580,64 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  async initOneTimeLink(payload: { email: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/one-time-password/init',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginOneTimeLink(payload: { email: string, password: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/login/one-time-pass',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async resendOneTimeLink(payload: { email: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/one-time-password/resend',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
 }

@@ -119,14 +119,14 @@
                         <nuxt-img class="f-login__img-done" :src=" $app.store.user.theme === 'dark' ? '/img/wallet/done-dark.svg' : '/img/wallet/done.svg'"></nuxt-img>
                         <h3 id="test_1" class="f-login__title">Check your email for a one-time link</h3>
                         <h5 class="f-login__subtitle">
-                            Check your inbox for a one-time link at {user@email.com}. If you don’t see the email, ensure that your email address is verified and check your spam folder.
+                            Check your inbox for a one-time link at {{ email }}. If you don’t see the email, ensure that your email address is verified and check your spam folder.
                         </h5>
-                        <a-button class="f-login__button" text="Resend Link" :disabled="true" variant="tertiary"></a-button>
+                        <a-button class="f-login__button" :text="timerStarted ? `Resend Link ${timeLeft} sec.` : 'Resend Link'" @click="resendCodeClick" :disabled="timerStarted" variant="tertiary"></a-button>
                     </div>
                 </template>
 
                 <template v-else-if="currentStep === Steps.Error">
-                    <div class="f-login">
+                    <div class="f-login__wrapper">
                         <!--todo img-->
                         <nuxt-img class="f-login__img-cloud" :src=" $app.store.user.theme === 'dark' ? '/img/cloud-error-dark.svg' : '/img/cloud-error.svg'"></nuxt-img>
                         <h3 id="test_1" class="f-login__title">Something went wrong!</h3>
@@ -138,7 +138,7 @@
                 </template>
 
                 <template v-else-if="currentStep === Steps.Loading">
-                    <div class="f-login">
+                    <div class="f-login__wrapper">
                         Loading...
                     </div>
                 </template>
@@ -149,12 +149,10 @@
       </div>
     </div>
     
-    <e-registration-bonus-modal :confirmData="confirmResponse" v-model="isOpenModal" @accept="getBonus" @close="getBonus" />
-    <f-terms-modal v-model="isOpenTermsModal" />
   </template>
   
   <script setup lang="ts">
-    import { useNuxtApp, useRouter } from '#app'
+    import { useNuxtApp, useRouter, useRoute } from '#app'
     import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
     import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
     import { Icon } from '~/src/shared/constants/icons'
@@ -169,6 +167,7 @@
 
     const { $app } = useNuxtApp()
     const router = useRouter()
+    const route = useRoute()
 
     const enum Steps {
         Choice = 'Choice',
@@ -195,17 +194,17 @@
     const isEmailValid = ref(false)
 
     function emailFieldBlurHandler() {
-    if (isEmailValid.value) {
-        emailErrorText.value = ''
-        return
-    }
+        if (isEmailValid.value) {
+            emailErrorText.value = ''
+            return
+        }
 
-    if (email.value) {
-        emailErrorText.value = 'Invalid email address'
-        return
-    }
+        if (email.value) {
+            emailErrorText.value = 'Invalid email address'
+            return
+        }
 
-    emailErrorText.value = 'Required'
+        emailErrorText.value = 'Required'
     }
 
     // Password Field
@@ -214,51 +213,73 @@
     const isPasswordValid = ref(false)
 
     function passwordFieldBlurHandler() {
-    if (isPasswordValid.value) {
-        passwordErrorText.value = ''
-        return
-    }
+        if (isPasswordValid.value) {
+            passwordErrorText.value = ''
+            return
+        }
 
-    passwordErrorText.value = 'Required'
+        passwordErrorText.value = 'Required'
     }
 
     const isSubmitEmailForm = ref(false);
 
     const onSubmitEmailForm = () => {
 
-    if(isSubmitEmailForm.value) return;
-    isSubmitEmailForm.value = true;
+        if(isSubmitEmailForm.value) return;
+        isSubmitEmailForm.value = true;
 
-    $app.api.eth.auth
-        .login({ email: $app.filters.trimSpaceIntoString(email.value), password: $app.filters.trimSpaceIntoString(password.value) })
-        .then((jwtResponse: any) => {
-        $app.store.auth.setTokens(jwtResponse.data)
-        })
-        .then(async () => {
-        isSubmitEmailForm.value = false;
+        $app.api.eth.auth
+            .login({ email: $app.filters.trimSpaceIntoString(email.value), password: $app.filters.trimSpaceIntoString(password.value) })
+            .then((jwtResponse: any) => {
+                $app.store.auth.setTokens(jwtResponse.data)
+            })
+            .then(async () => {
+                isSubmitEmailForm.value = false;
 
-        await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data
-        })
+                await $app.api.eth.auth.getUser().then((resp) => {
+                    $app.store.user.info = resp?.data
+                })
 
-        await $app.store.auth.reInitData()
-        await router.push('/personal/analytics/performance')
-        })
-        .catch((e) => {
-        isSubmitEmailForm.value = false;
-        if (e?.errors?.error?.message) {
-            backendError.value = e.errors.error.message
-        } else {
-            backendError.value = 'Something went wrong'
-        }
+                await $app.store.auth.reInitData()
+                await router.push('/personal/analytics/performance')
+            })
+            .catch((e) => {
+                isSubmitEmailForm.value = false;
+                if (e?.errors?.error?.message) {
+                    backendError.value = e.errors.error.message
+                } else {
+                    backendError.value = 'Something went wrong'
+                }
 
-        if(e?.errors === HttpStatusCode.CONFLICT) {
-            backendError.value = 'email is already in use';
-        }
-        })
+                if(e?.errors === HttpStatusCode.CONFLICT) {
+                    backendError.value = 'email is already in use';
+                }
+            })
     }
 
+    const isSubmitOneTimeLink = ref(false);
+
     const onSubmitOneTimeLink = () => {
+
+        if(isSubmitOneTimeLink.value) return;
+        isSubmitOneTimeLink.value = true;
+
+        $app.api.eth.auth
+            .initOneTimeLink({ email: $app.filters.trimSpaceIntoString(email.value) })
+            .then((res: any) => {
+                console.log("res",res);
+                isSubmitOneTimeLink.value = false;
+                currentStep.value = Steps.Check;
+                startTimer();
+            }).catch((e) => {
+                isSubmitOneTimeLink.value = false;
+                if (e?.errors?.error?.message) {
+                    backendError.value = e.errors.error.message
+                } else {
+                    backendError.value = 'Something went wrong'
+                }
+
+            })
 
     }
 
@@ -273,38 +294,99 @@
 
     onMounted(() => {
 
-    isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+        // one time link
 
-    if(isMetamaskSupported.value) {
-        (window as any).ethereum.on("chainChanged", (chainId: string) => {
-        console.log(chainId);
-        if (chainId !== "0x1") {
-            metamaskError.value = "This network is not supported. Please change the network to Ethereum."
-        } else if (chainId === "0x1") {
-            metamaskError.value = "";
+        if (route.query.code && route.query.email) {
+            email.value = String(route.query.email);
+            const pass = String(route.query.code);
+
+            router.replace({'query': ''});
+
+            currentStep.value = Steps.Loading;
+
+            // email
+
+            $app.api.eth.auth
+            .loginOneTimeLink({
+                email: $app.filters.trimSpaceIntoString(email.value),
+                password: $app.filters.trimSpaceIntoString(pass),
+            })
+            .then((jwtResponse: any) => {
+                // TODO falling user/me
+                $app.store.auth.setTokens(jwtResponse.data)
+            })
+            .then(async () => {
+                await $app.api.eth.auth.getUser().then((resp) => {
+                    $app.store.user.info = resp?.data
+                })
+
+                const aAid = window.localStorage.getItem('PAPVisitorId');
+                if (aAid) {
+                    $app.api.eth.auth.papSignUp({
+                        payload: {
+                        pap_id: aAid,
+                        utm_label: window.localStorage.getItem('a_utm'),
+                        }
+                    }).then((r: any) => {
+                        //window.localStorage.removeItem('a_aid');
+                        //window.localStorage.removeItem('a_utm');
+                    });
+                }
+
+                await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+                    $app.store.user.blockchainUserWallet = resp?.data.uid
+                })
+            })
+            .then(async () => {
+                await $app.store.auth.reInitData()
+                await router.push('/personal/analytics/performance')
+            })
+            .catch((e) => {
+                currentStep.value = Steps.Error;
+                if (e?.errors?.error?.message) {
+                backendError.value = e.errors.error.message
+                } else {
+                backendError.value = 'Something went wrong'
+                }
+            })
+
         }
+
+
+        // metamask
+
+        isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
+
+        if(isMetamaskSupported.value) {
+            (window as any).ethereum.on("chainChanged", (chainId: string) => {
+            console.log(chainId);
+            if (chainId !== "0x1") {
+                metamaskError.value = "This network is not supported. Please change the network to Ethereum."
+            } else if (chainId === "0x1") {
+                metamaskError.value = "";
+            }
+            });
+        } else {
+            console.log("Metamask is not installed");
+        }
+
+        axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
+            googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
         });
-    } else {
-        console.log("Metamask is not installed");
-    }
 
-    axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
-        googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
-    });
+        if($app.store.authGoogle.response?.access_token) {
+            currentStep.value = Steps.Loading;
 
-    if($app.store.authGoogle.response?.access_token) {
-        currentStep.value = Steps.Loading;
+            $app.store.auth.setTokens($app.store.authGoogle.response)
+            $app.store.authGoogle.setResponse({}, SignupMethods.Google);
+            $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data
+            })
 
-        $app.store.auth.setTokens($app.store.authGoogle.response)
-        $app.store.authGoogle.setResponse({}, SignupMethods.Google);
-        $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
-        })
+            $app.store.auth.reInitData()
+            router.push('/personal/analytics/performance')
 
-        $app.store.auth.reInitData()
-        router.push('/personal/analytics/performance')
-
-    }
+        }
     });
 
     const handleGoogleConnect = () => {
@@ -362,76 +444,76 @@
     }
 
     onMounted(() => {
-    axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-        console.log(r);
-        telegramRedirectUrl.value = r.data.data.redirect_url;
-        telegramBotName.value = r.data.data.bot_name;
-        telegramBotId.value = r.data.data.bot_id;
+        axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+            console.log(r);
+            telegramRedirectUrl.value = r.data.data.redirect_url;
+            telegramBotName.value = r.data.data.bot_name;
+            telegramBotId.value = r.data.data.bot_id;
 
-    })
+        })
     })
 
     const testTG = async () => {
 
-    let data = null;
-    await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+        let data = null;
+        await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
 
-    await (window as any).Telegram.Login.auth(
-        { bot_id: telegramBotId.value, request_access: true },
-        (tgData: any) => {
-        data = tgData;
-        console.log(tgData);
-
-        if (!tgData) {
-            // authorization failed
-            } else {
+        await (window as any).Telegram.Login.auth(
+            { bot_id: telegramBotId.value, request_access: true },
+            (tgData: any) => {
+            data = tgData;
             console.log(tgData);
 
-            $app.api.eth.auth.telegramGetAuthType({
-                telegram_data: JSON.stringify(tgData),
-            }).then((r: any) => {
-                if(r.data.auth_type === 'registration') {
-                $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
-                router.push("/personal/registration");
+            if (!tgData) {
+                // authorization failed
                 } else {
-                $app.api.eth.auth.
-                    loginTelegram({
+                console.log(tgData);
+
+                $app.api.eth.auth.telegramGetAuthType({
                     telegram_data: JSON.stringify(tgData),
-                    })
-                    .then((jwtResponse: any) => {
-                        $app.store.auth.setTokens(jwtResponse.data)
-                    })
-                    .then(async () => {
-                        await $app.api.eth.auth.getUser().then((resp) => {
-                        $app.store.user.info = resp?.data
+                }).then((r: any) => {
+                    if(r.data.auth_type === 'registration') {
+                    $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+                    router.push("/personal/registration");
+                    } else {
+                    $app.api.eth.auth.
+                        loginTelegram({
+                        telegram_data: JSON.stringify(tgData),
+                        })
+                        .then((jwtResponse: any) => {
+                            $app.store.auth.setTokens(jwtResponse.data)
+                        })
+                        .then(async () => {
+                            await $app.api.eth.auth.getUser().then((resp) => {
+                            $app.store.user.info = resp?.data
+                            });
+
+                            await router.push('/personal/analytics/performance')
                         });
+                    }
+                })
 
-                        await router.push('/personal/analytics/performance')
-                    });
+                
+
                 }
-            })
 
-            
-
+            // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
             }
-
-        // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
-        }
-    );
-    return data;
+        );
+        return data;
     }
 
     const handleTelegramConnect = () => {
-    axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-        console.log(r);
-        telegramRedirectUrl.value = r.data.data.redirect_url;
-        telegramBotName.value = r.data.data.bot_name;
-        telegramBotId.value = r.data.data.bot_id;
+        axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
+            console.log(r);
+            telegramRedirectUrl.value = r.data.data.redirect_url;
+            telegramBotName.value = r.data.data.bot_name;
+            telegramBotId.value = r.data.data.bot_id;
 
-        handleTelegramAuth().then((res) => {
-        console.log(res);
+            handleTelegramAuth().then((res) => {
+            console.log(res);
+            })
         })
-    })
     }
 
 
@@ -439,38 +521,38 @@
 
     onMounted(() => {
 
-    $app.api.eth.auth
-    .getAppleRedirect()
-    .then(async (res) => {
-        console.log(res);
+        $app.api.eth.auth
+        .getAppleRedirect()
+        .then(async (res) => {
+            console.log(res);
 
-        function getJsonFromUrl(url) {
-        if(!url) url = location.search;
-        var query = url.substr(1).split("?")[1];
-        var result = {};
-        query.split("&").forEach(function(part) {
-            var item = part.split("=");
-            result[item[0]] = decodeURIComponent(item[1]);
-        });
-        return result;
-        }
+            function getJsonFromUrl(url) {
+            if(!url) url = location.search;
+            var query = url.substr(1).split("?")[1];
+            var result = {};
+            query.split("&").forEach(function(part) {
+                var item = part.split("=");
+                result[item[0]] = decodeURIComponent(item[1]);
+            });
+            return result;
+            }
 
-        const parsedUrl = getJsonFromUrl(res.url);
+            const parsedUrl = getJsonFromUrl(res.url);
 
-        console.log(parsedUrl, window.AppleID);
+            console.log(parsedUrl, window.AppleID);
 
-        (window as any).AppleID.auth.init({
-            clientId : parsedUrl.client_id,
-            scope : parsedUrl.scope,
-            redirectURI : parsedUrl.redirect_uri,
-            usePopup : true
-        });
+            (window as any).AppleID.auth.init({
+                clientId : parsedUrl.client_id,
+                scope : parsedUrl.scope,
+                redirectURI : parsedUrl.redirect_uri,
+                usePopup : true
+            });
 
-    })
-    .catch((e) => {
-        // Todo: notify something went wrond
-        console.error(e)
-    })
+        })
+        .catch((e) => {
+            // Todo: notify something went wrond
+            console.error(e)
+        })
     })
 
     const handleAppleConnect = async () => {
@@ -634,37 +716,82 @@
     router.push('/personal/reset')
     }
   
-  // methods
+    // methods
+
+    const methods = [
+        {
+            name: 'Email',
+            img: $app.store.user.theme === 'dark' ? '/img/icons/mono/mail-light.svg' : '/img/icons/mono/mail.svg',
+            onClick: choiceToEmail
+        },
+        {
+            name: 'Metamask',
+            img: '/img/icons/colorful/metamask.svg',
+            onClick: handleMetamaskConnect
+        },
+        {
+            name: 'Google',
+            img: '/img/icons/colorful/google.svg',
+            onClick: handleGoogleConnect
+        },
+        {
+            name: 'Telegram',
+            img: '/img/icons/colorful/telegram3.svg',
+            onClick: testTG
+        },
+        {
+            name: 'Apple',
+            img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
+            onClick: handleAppleConnect
+        },
+    ]
+
+    // resend one time link
+
+    const timer = ref<NodeJS.Timer | null>(null)
+    const timerStarted = ref<boolean>(false)
+    const timeLeft = ref<number>(0)
+
+    const startTimer = () => {
+        clearInterval(timer.value)
+        const stopDate = Date.now() + 60 * 6 * 1000
+        timerStarted.value = true
+
+        timer.value = setInterval(() => {
+            timeLeft.value = parseInt((stopDate - Date.now()) / 1000)
+            if (timeLeft.value < 1) {
+                timerStarted.value = false
+                clearInterval(timer.value)
+            }
+        }, 1000 / 25)
+    }
+
+    const resendCodeClick = async () => {
+        if (timerStarted.value) {
+            return
+        }
+
+        backendError.value = ''
+
+        startTimer()
+
+        await $app.api.eth.auth
+            .resendOneTimeLink({ email: email.value })
+            .then(() => {
+                // currentStep.value = Steps.Password
+            })
+            .catch((e) => {
+                if (e?.errors?.error?.message) {
+                    backendError.value = e.errors.error.message
+                } else {
+                    backendError.value = 'Something went wrong'
+                }
+            })
+    }
+
+
+</script>
   
-  const methods = [
-    {
-      name: 'Email',
-      img: $app.store.user.theme === 'dark' ? '/img/icons/mono/mail-light.svg' : '/img/icons/mono/mail.svg',
-      onClick: choiceToEmail
-    },
-    {
-      name: 'Metamask',
-      img: '/img/icons/colorful/metamask.svg',
-      onClick: handleMetamaskConnect
-    },
-    {
-      name: 'Google',
-      img: '/img/icons/colorful/google.svg',
-      onClick: handleGoogleConnect
-    },
-    {
-      name: 'Telegram',
-      img: '/img/icons/colorful/telegram3.svg',
-      onClick: testTG
-    },
-    {
-      name: 'Apple',
-      img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
-      onClick: handleAppleConnect
-    },
-  ]
-  </script>
-  
-  <style lang="scss" src="./f-login-new.scss" />
+<style lang="scss" src="./f-login-new.scss" />
   
   

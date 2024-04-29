@@ -102,7 +102,7 @@
                           single />
                   </div>
 
-                  <a-button class="f-registration-right__button f-registration-right__button-center" :disabled="emailButtonDisabled || termsContinueDisabled" type="submit"
+                  <a-button class="f-registration-right__button f-registration-right__button-continue f-registration-right__button-center" :disabled="emailButtonDisabled || termsContinueDisabled" type="submit"
                       text="Continue"></a-button>
 
                   <p class="f-registration-right__error" v-if="backendError">{{ backendError }}</p>
