@@ -9,7 +9,6 @@ interface authState {
     userAgent: string,
     websocketToken: string,
     refCode: string,
-    accountMethod: string,
 }
 
 export const auth = defineStore('auth', {
@@ -19,7 +18,6 @@ export const auth = defineStore('auth', {
     userAgent: '',
     websocketToken: '',
     refCode: '',
-    accountMethod: 'email',
   } as authState),
 
   actions: {

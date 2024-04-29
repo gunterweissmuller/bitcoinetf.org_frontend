@@ -30,7 +30,7 @@ import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 const {$app} = useNuxtApp()
 const buttonVariants = {
   types: ['primary', 'secondary', 'tertiary', 'primary2'],
-  sizes: ['default', 'small', 'no-padding'],
+  sizes: ['default', 'small'],
   iconPositions: ['left', 'right'],
   fontSize: ['default-size', 'big-size'],
 }
@@ -43,7 +43,7 @@ const props = withDefaults(
     icon?: Icon | null
     iconPosition?: 'left' | 'right'
     variant?: 'primary' | 'secondary' | 'tertiary' | 'primary2'
-    size?: 'default' | 'small' | 'no-padding'
+    size?: 'default' | 'small'
     type?: 'button' | 'submit' | 'reset'
     loading?: boolean
     isFullWidth?: boolean

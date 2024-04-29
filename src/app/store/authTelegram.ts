@@ -20,10 +20,4 @@ export const authTelegram = defineStore('authTelegram', {
     },
   },
 
-  persist: {
-    storage: persistedState.cookiesWithOptions({
-      maxAge: 31557600,
-    }),
-  },
-
 })

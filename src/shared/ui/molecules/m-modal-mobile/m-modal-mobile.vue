@@ -349,7 +349,7 @@ defineExpose({ open, close })
     background: #ffffff;
     overflow-y: hidden;
     transform: translate3d(0, v-bind('translateValueString'), 0);
-    // height: v-bind('sheetHeightString'); todo uncomment ?
+    height: v-bind('sheetHeightString');
     max-width: v-bind('maxWidthString');
     width: 100%;
     max-height: v-bind('maxHeightString');

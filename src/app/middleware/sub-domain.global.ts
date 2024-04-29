@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const { $app } = useNuxtApp()
   const config = useRuntimeConfig()
 
-  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-verify-email', 'personal-login-one-time']
+  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-purchaseb']
   const includedRouteMask = to.path.includes('personal')
   const tokens = $app.store.auth.getTokens;
   //config.public.DOMAIN = 'localhost';

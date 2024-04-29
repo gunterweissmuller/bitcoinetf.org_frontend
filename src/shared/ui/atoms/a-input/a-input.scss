@@ -1,6 +1,6 @@
 .a-input {
   @include desktop-device {
-    &__input-container:hover  {
+    &__input-container:hover &__input {
       background-color: var(--surfaces-surface-2);
       border-color: var(--accent-primary);
 
@@ -9,7 +9,7 @@
       }
     }
 
-    &__input-container:focus  {
+    &__input-container:focus &__input {
       background-color: var(--surfaces-surface-2);
       border-color: var(--accent-primary);
 
@@ -29,7 +29,7 @@
   }
 
   @include desktop-device {
-    &--error &__input-container:hover {
+    &--error &__input-container:hover &__input {
       background-color: var(--surfaces-surface-2);
       border-color: var(--accent-danger);
     }
@@ -124,8 +124,8 @@
     min-width: torem(100);
     height: torem(56);
     color: var(--text-primary);
-    // background-color: var(--surfaces-surface-2);
-    border: torem(1) solid transparent;
+    background-color: var(--surfaces-surface-2);
+    border: torem(1) solid var(--surfaces-surface-2);
     border-radius: torem(8);
     caret-color: var(--text-primary);
     /* stylelint-disable-next-line */
@@ -248,7 +248,7 @@
       flex-direction: column;
       justify-content: center;
       max-width: 100%;
-      // background-color: var(--surfaces-surface-2);
+      background-color: var(--surfaces-surface-2);
     }
 
     &--open {
