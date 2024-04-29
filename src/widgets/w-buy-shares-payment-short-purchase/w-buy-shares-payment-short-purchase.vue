@@ -68,7 +68,6 @@ import AInputImg from '~/src/shared/ui/atoms/a-input-img/a-input-img.vue'
 import { useNuxtApp, useRouter, useRoute } from '#app'
 import { ref,onMounted, onUnmounted, watch } from 'vue'
 import QrcodeVue from 'qrcode.vue'
-import EBuySharesSuccessModal from "~/src/entities/e-buy-shares-success-modal/e-buy-shares-success-modal.vue";
 import {Centrifuge} from "centrifuge";
 import ACheckbox from "~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue";
 import VueCountdown from '@chenfengyuan/vue-countdown';

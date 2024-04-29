@@ -158,7 +158,6 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
 
     sub
       .on('publication', async function (ctx) {
-        console.log(ctx)
         if (ctx.data.message?.data?.status === 'success') {
           callbackOnPayment(ctx)
           paymentAmount.value.amount = ctx.data.message?.data?.amount
