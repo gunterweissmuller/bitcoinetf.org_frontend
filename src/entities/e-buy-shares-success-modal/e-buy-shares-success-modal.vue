@@ -150,7 +150,12 @@ const close = () => {
     })
     .catch(() => {
       // Todo: notify something went wrond
-    })
+    });
+
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    });
+
   emit('close')
 }
 
