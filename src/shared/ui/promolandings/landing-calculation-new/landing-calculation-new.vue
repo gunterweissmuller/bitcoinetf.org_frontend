@@ -157,7 +157,7 @@
 
       <template v-if="signupStep === SignupSteps.Error">
         <div class="landing-calculation__wrapper">
-          <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
           <a-button @click="() => router.go(0)" text="Try Again" variant="tertiary"></a-button>
         </div>
       </template>
@@ -303,9 +303,18 @@ onMounted(()=>{
         .catch((e) => {
           isCodeContinueProcess.value = false;
           if (e?.errors?.error?.message) {
-            backendError.value = e.errors.error.message
+            backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
           } else {
-            backendError.value = 'Something went wrong'
+            backendError.value = {value: 'Something went wrong', field: 'default'} 
           }
         })
 
@@ -346,10 +355,19 @@ onMounted(()=>{
     .catch((e) => {
       isCodeContinueProcess.value = false;
       if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
-      } else {
-        backendError.value = 'Something went wrong'
-      }
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
+        } else {
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
+        }
     })
     } else if ($app.store.auth.accountMethod === 'apple') {
     $app.api.eth.auth.
@@ -388,10 +406,19 @@ onMounted(()=>{
     .catch((e) => {
       isCodeContinueProcess.value = false;
       if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
-      } else {
-        backendError.value = 'Something went wrong'
-      }
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
+        } else {
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
+        }
     })
     } else {
       $app.api.eth.auth
@@ -456,9 +483,18 @@ onMounted(()=>{
         isSignupAndBuy.value = false;
         signupStep.value = SignupSteps.Error;
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
         }
       })
 
@@ -1165,7 +1201,7 @@ const sendCode = async () => {
     return;
   }
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value || token.value === '') {
-    backendError.value = 'Fill in all the fields';
+    backendError.value = {value: 'Fill in all the fields', field: 'default'};
     return;
   }
   if(timerStarted.value) {
@@ -1344,11 +1380,11 @@ const signupAndBuy = async () => {
   var valid = re.test(phone.value);
 
   if(!valid) {
-    backendError.value = 'Phone number is not valid';
+    backendError.value = {value: 'Phone number is not valid', field: 'phone'};
     return;
   }
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '' || codeEmail.value === '') {
-    backendError.value = 'Fill in all the fields';
+    backendError.value = {value: 'Fill in all the fields', field: 'default'};
     return;
   }
 
@@ -1621,11 +1657,11 @@ const signupAndBuyGoogle = () => {
   var valid = re.test(phone.value);
 
   if(!valid) {
-    backendError.value = 'Phone number is not valid';
+    backendError.value = {value: 'Phone number is not valid', field: 'phone'};
     return;
   }
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '') {
-    backendError.value = 'Fill in all the fields';
+    backendError.value = {value: 'Fill in all the fields', field: 'default'};
     return;
   }
 
