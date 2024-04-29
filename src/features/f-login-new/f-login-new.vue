@@ -107,7 +107,7 @@
                             v-model="email" />
                         </div>
 
-                        <a-button id="test_5" class="f-login__button" text="Log in" :disabled="!isEmailValid || !password"
+                        <a-button id="test_5" class="f-login__button" text="Log in" :disabled="!isEmailValid"
                         type="submit"></a-button>
                         <p v-if="backendError" class="f-login__error">{{ $app.filters.capitalize(backendError) }}</p>
                     </form>
