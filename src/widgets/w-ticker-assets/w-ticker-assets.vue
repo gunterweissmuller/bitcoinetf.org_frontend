@@ -22,7 +22,7 @@
     </p>
 
     <!-- FIX HREF -->
-    <a href="" class="w-ticker-assets__link">
+    <a :href="`https://${config.public.EXPLORER_API}/`" target="_blank" class="w-ticker-assets__link">
       <img src="/img/icons/mono/action/link.svg" alt="">
       View on blockchain
       <span></span>
@@ -36,6 +36,8 @@ import { IAsset } from '~/src/shared/types/global';
 const props = defineProps<{
   asset: IAsset
 }>();
+
+const config = useRuntimeConfig();
 </script>
 
 <style lang='scss' src="./w-ticker-assets.scss"></style>

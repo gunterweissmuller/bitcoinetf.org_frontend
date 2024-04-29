@@ -125,9 +125,9 @@
       </div>
       <div class="m-deal__info">
         <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.amount, 0) }} Shares</div>
-        <div class="m-deal__info-purchase-percent">
+        <!-- <div class="m-deal__info-purchase-percent">
           13% of the circulation
-        </div>
+        </div> -->
       </div>
     </template>
     <!-- rename percent -->
