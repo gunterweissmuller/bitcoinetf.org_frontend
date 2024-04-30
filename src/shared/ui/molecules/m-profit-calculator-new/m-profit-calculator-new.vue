@@ -13,7 +13,7 @@
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
-            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM'"
+            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM' || disabledAmount"
             :style="['max-width: '+inputMaxWidth+'px', currentAmount !== 'CUSTOM' ? 'pointer-events: none' : '' ]"
             v-model="investmentAmountDisplay"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -25,7 +25,7 @@
 
           /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
 
-          <div class="relative">
+          <div class="relative" :class="{'landing_calculation__dropdown-isdisabled': disabledAmount}">
             <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
               <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center cursor-pointer">
                 <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
@@ -58,7 +58,7 @@
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
           <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
           <input
-            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM'"
+            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM' || disabledAmount"
             :style="['max-width: '+inputMaxWidth+'px', currentAmount !== 'CUSTOM' ? 'pointer-events: none' : '' ]"
             v-model="investmentAmountDisplay"
             class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
@@ -70,7 +70,7 @@
 
           /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
 
-          <div class="relative">
+          <div class="relative"  :class="{'landing_calculation__dropdown-isdisabled': disabledAmount}">
             <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
               <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center cursor-pointer">
                 <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
@@ -123,16 +123,16 @@
         <div :class="['landing-calculation__journey__invest--card-inner', {'landing-calculation__journey__invest--card-inner-flip': selectedCurrency.value === 'BTC'}]">
 
           <!-- FRONT -->
-          <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
+          <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex  relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Guaranteed Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
               <div class="landing-calculation__journey__invest--card-stats landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80 "> Daily Payout</p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-bold text-white">$ {{  dayliDivsDisplay }}</p>
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Total Profit </p>
@@ -140,7 +140,7 @@
               </div>
               <div class="landing-calculation__journey--text-normal flex flex-col text-center">
                 <p class="landing-calculation__journey__invest--card-stats-title font-medium text-white text-opacity-80"> Monthly Dividends </p>
-                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ $app.filters.rounded(dayliDivs * 31, 1) }}</p>
+                <p class="landing-calculation__journey__invest--card-stats-value font-black text-white">${{ monthlyDivsDisplay }}</p>
               </div>
             </div>
             <p class="landing-calculation__journey__invest--card-rating landing-calculation__journey--text-normal relative flex items-center mx-auto">
@@ -159,10 +159,10 @@
           <!-- BACK -->
 
           <!--v-if="selectedCurrency.value === 'BTC'"-->
-          <div  class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex overflow-hidden relative flex-col justify-center w-full rounded-lg">
+          <div  class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex  relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 1) }} </p>
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto"> ${{ roundedGuaranteedPayout }} </p>
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around">
@@ -230,16 +230,18 @@ const router = useRouter()
 
 const props = withDefaults(
   defineProps<{
-    openSignup: any
-    openPurchase: any
-    isInputDisbled: boolean
-    isUserAuth: boolean
+    openSignup?: any
+    openPurchase?: any
+    isInputDisbled?: boolean
+    isUserAuth?: boolean
+    disabledAmount?: boolean
   }>(),
   {
     openSignup: () => {},
     openPurchase: () => {},
     isInputDisbled: false,
     isUserAuth: false,
+    disabledAmount: false
   },
 )
 
@@ -269,9 +271,16 @@ const currencies = ref([
     apy3: 100
 
   }, ]);
-const selectedCurrency = ref(currencies.value[0]);
 
-let apyValue = ref(selectedCurrency.value.apy);
+
+const orderType = computed(() => {
+  // return 'usdt';
+  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc'
+});
+
+const selectedCurrency = ref( orderType.value === 'init_btc' ? currencies.value[Math.floor((Math.random() * 2) + 0)] : orderType.value === 'usdt' ? currencies.value[0] : orderType.value === 'btc' ? currencies.value[1] : currencies.value[0]);
+
+let apyValue = computed(() => selectedCurrency.value.apy);
 let apyValue3 = ref(selectedCurrency.value.apy3);
 const pickerValue = ref(2500)
 const refCode = ref('')
@@ -286,15 +295,16 @@ const investmentAmountDisplay = ref('2,500');
 const investmentAmount = ref(2500);
 const investmentAmountWithDiscount = ref(2375);
 
-const orderType = computed(() => {
-  // return 'usdt';
-  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc'
-});
+
 
 onMounted(() => {
-  $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
-  });
+  const { isUserAuthenticated } = $app.store.auth
+
+  if (isUserAuthenticated) {
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    });
+  }
 })
 
 
@@ -303,13 +313,15 @@ onMounted(() => {
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
 
-    const temp = Number(localStorage.getItem('investmentAmount'));
+    const temp = Math.ceil(Number(localStorage.getItem('investmentAmount')));
 
-    console.log(isNaN(temp), temp);
+    if(!isNaN(temp)) {
+      investmentAmount.value = isNaN(temp) ? 2500 : temp;
+      investmentAmountDisplay.value = String(investmentAmount.value) ;
+      $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+    }
 
-    investmentAmount.value = isNaN(temp) ? 2500 : temp;
-    investmentAmountDisplay.value = String(investmentAmount.value) ;
-    $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+    
   }
 
   $app.store.purchase.type = selectedCurrency.value.value;
@@ -347,8 +359,14 @@ const onPickerValueInput = (event) => {
 
 watch(
   () => investmentAmountDisplay.value,
-  (newValue) => {
-    let tempOriginal = Number(newValue.split(",").join("")); //Number
+  (newValue, oldValue) => {
+    let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
+
+    if(isNaN(tempOriginal)) {
+      investmentAmount.value = Number(oldValue.split(",").join(""));
+      investmentAmountDisplay.value = oldValue;
+      return;
+    }
 
     if(Number(tempOriginal) > 500000) {
       investmentAmount.value = 500000;
@@ -458,23 +476,27 @@ const guaranteedPayout = computed(() => {
   return investmentAmount.value * (apyValueComputed.value / 100)
 })
 
+const roundedGuaranteedPayout = computed(() => {
+  return $app.filters.roundedFixed(investmentAmount.value + guaranteedPayout.value * 3, 2)
+
+})
 
 
 const showDropdown = ref(false);
 
-onMounted(()=>{
-  localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
-  if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
-    selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
-  }
-});
+// onMounted(()=>{
+//   localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
+//   if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
+//     selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
+//   }
+// });
 
-watch(
-  () => selectedCurrency.value,
-  (newValue) => {
-    localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
-  }
-)
+// watch(
+//   () => selectedCurrency.value,
+//   (newValue) => {
+//     localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
+//   }
+// )
 
 const toggleCurrencyDropdown = () => {
   showDropdown.value = !showDropdown.value;
@@ -542,10 +564,14 @@ const outSideClick =  (ev) => {
 
 
 const toggleAmountDropdown = () => {
+  if (props.disabledAmount) return
+
   showAmountDropdown.value = !showAmountDropdown.value;
 };
 
 const selectAmount = (amount : any) => {
+  if (props.disabledAmount) return
+
   if(amount === 'CUSTOM') {
     currentAmount.value = amounts.value.find((el) => el.amount === amount)?.amount ?? amounts.value[0].amount;
   } else {
@@ -560,6 +586,9 @@ const selectAmount = (amount : any) => {
 const handleContinue = () => {
   if(route.path === '/') {
     router.push("/personal/registration");
+    $app.store.purchase.type = selectedCurrency.value.value;
+    $app.store.purchase.amount = investmentAmount.value;
+    $app.store.purchase.amountUS = investmentAmount.value;
   } else {
     if (props.isUserAuth) {
       props.openPurchase();

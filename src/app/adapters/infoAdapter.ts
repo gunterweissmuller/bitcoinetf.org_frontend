@@ -53,7 +53,7 @@ export class InfoAdapter extends ApiAdapter {
       })
     }
 
-    // console.log(`\x1B[34m${operationDescription}\x1B[30m | ${method} | **${endpoint}** ...`)
+    //
 
     if (this.store.auth.accessToken) {
       req.headers.set('Authorization', `JWTBearer ${this.store.auth.accessToken}`)
@@ -88,7 +88,7 @@ export class InfoAdapter extends ApiAdapter {
 
       responseData = await resolvePayloadAsync(response)
 
-      // console.log(
+      //
       //   `\x1B[34m${operationDescription}\x1B[30m | ${method} | !!completed!! / \x1B[32m${sw.getDiff()}ms.\x1B[37m`,
       // )
 

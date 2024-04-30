@@ -760,8 +760,10 @@ function motionPath(sideClass: TSide) {
 function drawMotionPath(pathClass: TSide, iconElements: NodeListOf<Element>, duration = 4, delay = null) {
   gsap.registerPlugin(MotionPathPlugin)
   iconElements.forEach((icon, index) => {
-    motionPathFrom[index] = gsap.from(icon, { opacity: 0, duration: 1, delay: duration })
-    motionPathTo[index] = gsap.to(icon, {
+    const uniqueIndex = `${pathClass}-${index}`
+
+    motionPathFrom[uniqueIndex] = gsap.from(icon, { opacity: 0, duration: 1, delay: duration })
+    motionPathTo[uniqueIndex] = gsap.to(icon, {
       motionPath: motionPath(pathClass),
       transformOrigin: '50% 50%',
       duration,

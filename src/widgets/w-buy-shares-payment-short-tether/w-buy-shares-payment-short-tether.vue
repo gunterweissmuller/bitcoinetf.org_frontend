@@ -43,12 +43,12 @@
         <a v-if="btnMoonpayActive" :href="moonpayPaymentLink" target="_blank">
           <button
             @click="btnMoonpayActive = false"
-            class="f-registration-buy__purchase--step-btn f-registration-buy__button-continue f-registration-buy--text-normal w-full justify-center items-center whitespace-nowrap rounded-lg" tabindex="0">
+            class="w-buy-shares-payment-short-tether__paybtn w-full justify-center items-center whitespace-nowrap rounded-lg mb-5" tabindex="0">
             Pay
           </button>
         </a>
 
-        <div class="w-buy-shares-payment-short-tether__double-input">
+        <div class="w-buy-shares-payment-short-tether__double-input" v-if="!btnMoonpayActive">
           <div class="w-buy-shares-payment-short-tether__accordion-stable-address">
             <a-input
               bgColor="tetherspecial"
@@ -66,7 +66,7 @@
             <a-input
               bgColor="tetherspecial"
               label="Amount"
-              :model-value="`${$app.filters.rounded(calcValue)} USDT`"
+              :model-value="`${ $app.filters.rounded(Math.ceil(calcValue*100)/100,2) } USDT`"
               disabled
               :text-icon="amountCopied"
               text-icon-text="Copied!"
@@ -218,12 +218,12 @@ const getMoonpayWallets = async () => {
       window.open(moonpayUrl, '_blank')
     }
   } catch (e) {
-    console.log('error', e)
+    console.error('error', e)
   }
 }
 
 const openMoonpay = async () => {
-  return await openMoonpayHandler(getMoonpayWallets(), () => {}, false)
+  return await openMoonpayHandler(getMoonpayWallets, () => {}, false)
 }
 
 
@@ -247,12 +247,12 @@ const handlePayMethod = (functionName) => {
 }
 
 watch(() => selectedMethod.value, (value) => {
-  console.log('watch selectedMethod')
+
   const { onClick } = payWith.value.find(item => item.value === value)
   handlePayMethod(onClick);
 
   nextTick(() => {
-    console.log('paymentAddress', paymentAddress)
+
   })
 })
 
@@ -314,7 +314,7 @@ const copyToClipboard = (address = false) => {
       addressCopied.value = false
     }, 1000)
   } else {
-    copy(props.calcValue)
+    copy(String(Math.ceil(props.calcValue*100)/100))
     amountCopied.value = true
     setTimeout(() => {
       amountCopied.value = false

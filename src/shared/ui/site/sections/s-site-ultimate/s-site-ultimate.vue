@@ -40,7 +40,7 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 
 defineProps<{
   data: any
-  files: any
+  files?: any
 }>()
 </script>
 

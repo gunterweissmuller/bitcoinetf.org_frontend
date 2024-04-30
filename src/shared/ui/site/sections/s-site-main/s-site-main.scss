@@ -90,6 +90,19 @@
     @media (max-width: 767px) {
       max-width: torem(343);
     }
+
+    &--h1-lowercase {
+      text-transform: none;
+      font-family: Jakarta, sans-serif;
+      font-size: torem(64);
+      line-height: torem(76);
+      font-weight: 800;
+
+      @media (max-width: 767px) {
+        font-size: torem(36);
+        line-height: torem(43);
+      }
+    }
   }
 
   &__title_buttons_wrap {
@@ -253,7 +266,9 @@
     @media (max-width: 991px) {
       max-width: torem(320);
     }
-
+    @media screen and (max-width: 767px) {
+      padding: torem(24);
+    }
     &-value {
       font-family: Jakarta, sans-serif;
       //font-size: torem(42);
@@ -261,9 +276,28 @@
       line-height: 130%;
       font-weight: 800;
       margin-bottom: torem(4);
+      height: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      &--wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+     
+      &--title {
+        font-size: 24px;
+        line-height: 28px;
+        text-align: left;
+      }
+      &--description {
+        font-size: 16px;
+        text-align: left;
+        line-height: 120%;
+        margin-top: 16px;
+        font-weight: 500;
+      }
+      
     }
 
     &-description {

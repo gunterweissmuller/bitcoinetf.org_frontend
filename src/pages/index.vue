@@ -1,11 +1,14 @@
 <template>
-  <m-scroll-navigation v-if="sections && y > sections[0]?.top" :length="sections.length + 1" :data="scrollInfo" />
+  <m-scroll-navigation
+    v-if="sections && y > sections[0]?.top"
+    :length="sections.length + 1"
+    :data="scrollInfo"
+    hidden-mobile
+  />
   <s-site-main :data="mainData" />
   <s-site-marquee :data="marqueeData" />
   <s-site-how-it-work />
-  <section style="border-radius: 24px" class="s-site-main-calculate" :data-name="'Buy Bitcoin ETF Shares'">
-    <landing-calculation />
-  </section>
+  <s-site-main-calculate />
   <s-site-guarantees />
   <!-- <s-site-welcome :data="welcomeData"/> -->
   <!--<s-site-ultimate :data="ultimateData"/>-->
@@ -40,6 +43,8 @@ import SSiteBitcoinEducation from '~/src/shared/ui/site/sections/s-site-bitcoin-
 import SSiteNews from '~/src/shared/ui/site/sections/s-site-news/s-site-news.vue'
 import SSiteHowItWork from '~/src/shared/ui/site/sections/s-site-how-it-work/s-site-how-it-work.vue'
 import SSiteGuarantees from '~/src/shared/ui/site/sections/s-site-guarantees/s-site-guarantees.vue'
+import SSiteMainCalculate from '~/src/shared/ui/site/sections/s-site-main-calculate/s-site-main-calculate.vue'
+
 import { useWindowScroll } from '@vueuse/core'
 import { useWindowSize } from '@vueuse/core'
 import { useNuxtApp } from '#app'
@@ -152,19 +157,19 @@ const mainData = {
 const marqueeData = {
   low_cards: [
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/yahoo.svg',
     },
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/bloomberg.svg',
     },
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/coindesk.svg',
     },
     {
-      link: '',
+      link: '/#',
       img: '/img/icons/colorful/cointelegraph.svg',
     },
   ],
@@ -281,7 +286,7 @@ const protectionData = {
   },
   info_2: {
     title: 'Deposits to the Vault',
-    text: 'Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility.',
+    text: 'Whenever our AI trading bot profits from the hedging operations, the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, irrespective of Bitcoin price volatility.',
   },
   img: '/img/site-dark/s-site-protection/1.png',
   items: [

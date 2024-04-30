@@ -5,16 +5,16 @@
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
           <div class="w-dividends__amount-sum">
-            ${{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }}
+            ${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}
             <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
               >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
             >
           </div>
-          <div v-if="walletDividends?.btc_amount" class="w-dividends__btc" v-html="btcAmount"></div>
+          <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
       </div>
       <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
-        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name="Icon.ColorfulBitcoin" />
+        <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name=" orderType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin" />
         <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
         <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
       </button>
@@ -58,7 +58,7 @@
               <div class="w-dividends__item_info-usd">
                 {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 8) }}
               </div>
-              <div class="w-dividends__item_info-btc">
+              <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
                 <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span>
               </div>
@@ -94,6 +94,7 @@ const { $app } = useNuxtApp()
 
 const isOpenModal = ref(false)
 const transactionsKey = ref(0)
+const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc')
 
 const enum DIVIDENDS_TYPES {
   PLUS = 'debit_to_client',

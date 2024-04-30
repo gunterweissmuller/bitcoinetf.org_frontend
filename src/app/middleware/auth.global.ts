@@ -5,7 +5,6 @@ export default defineNuxtRouteMiddleware((to) => {
   const router = useRouter()
   const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
   const includedRouteMask = to.path.includes('personal')
-  console.log(to);
   const urlParams = new URLSearchParams(window.location.search);
   if(to.query.accessToken) {
     $app.store.auth.setTokens({
@@ -13,6 +12,16 @@ export default defineNuxtRouteMiddleware((to) => {
       refresh_token: urlParams.get('refreshToken'),
       websocket_token: urlParams.get('websocketToken')
     });
+
+    if(to.query.purchaseType) {
+      $app.store.purchase.type = urlParams.get('purchaseType');
+    }
+
+    if(to.query.amount) {
+      $app.store.purchase.amount = urlParams.get('amount');
+      $app.store.purchase.amountUS = urlParams.get('amount');
+    }
+
     //router.replace({ path: to.path, query: {} })
     $app.api.eth.auth.getUser().then((resp) => {
       $app.store.user.info = resp?.data

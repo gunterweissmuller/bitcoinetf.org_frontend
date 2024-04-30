@@ -28,8 +28,7 @@
           <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
             <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" />
             <!-- <span class="grow">dividends in</span> -->
-
-            <div class="ml-2 relative" v-on-click-outside="() => showDropdown = false">
+            <div class="relative" v-on-click-outside="() => showDropdown = false">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
                 <div @click="toggleCurrencyDropdown" class="e-invest__invest-select-value"> <!--@click="toggleCurrencyDropdown"-->
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
@@ -39,13 +38,13 @@
               </div>
               <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
                 <ul class="text-sm font-medium text-gray-700">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
+                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
               </div>
 
               <div v-if="showDropdown" :class="[{'e-invest__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'e-invest__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="e-invest__invest-select-dropdown w-full absolute mt-1 z-10">
                 <ul class=" text-sm font-medium">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
+                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
               </div>
             </div>
@@ -160,14 +159,12 @@
               <input
                 :disabled="false"
                 :style="'max-width: '+inputMaxWidth+'px'"
-                :value="investmentAmount"
+                v-model="investmentAmountDisplay"
                 class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
                 placeholder="2,500"
                 type="text"
-                @keypress="validate"
                 :min="1"
                 :max="10000000"
-                @input="onPickerValueInput"
               />
             </div>
 
@@ -304,7 +301,9 @@ const router = useRouter()
 const route = useRoute()
 const { width } = useWindowSize()
 
-const orderType = ref($app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc');
+const orderType = computed(() => {
+  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
+});
 watch(
   () => $app.store.user.info,
   () => {
@@ -316,6 +315,9 @@ onMounted(() => {
   $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
   });
+
+
+  
 })
 
 const isOpen = ref($app.store.user.isInvestModalShow.show);
@@ -327,10 +329,18 @@ const investmentAmountDisplay = ref('2,500');
 const investmentAmount : any = ref(2500);
 
 onMounted(()=>{
-  if(localStorage.getItem('investmentAmount')) {
-    investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
-    investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
-    // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // if(localStorage.getItem('investmentAmount')) {
+  //   investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+  //   investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
+  //   // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // }
+  if($app.store?.purchase?.amountUS) {
+    const temp = Math.ceil(Number($app.store.purchase.amountUS));
+
+    if(!isNaN(temp)) {
+      investmentAmount.value = temp;
+      investmentAmountDisplay.value = String(temp);
+    }
   }
 })
 
@@ -349,8 +359,14 @@ const onPickerValueInput = (event) => {
 
 watch(
   () => investmentAmountDisplay.value,
-  (newValue) => {
-    let tempOriginal = Number(newValue.split(",").join("")); //Number
+  (newValue, oldValue) => {
+    let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
+
+    if(isNaN(tempOriginal)) {
+      investmentAmount.value = Number(oldValue.split(",").join(""));
+      investmentAmountDisplay.value = oldValue;
+      return;
+    }
 
     if(Number(tempOriginal) > 500000) {
       investmentAmount.value = 500000;
@@ -451,6 +467,16 @@ const selectedCurrency = ref(currencies.value[1]); //orderType.value == 'btc' ? 
 const apyValue = ref(selectedCurrency.value.apy);
 const dayliDivs = computed(() => {
   return guaranteedPayout.value / 365
+});
+
+onMounted(() => {
+  // if(localStorage.getItem("investType")) {
+  //   selectCurrency({value: localStorage.getItem("investType")});
+  // }
+
+  // if($app.store.purchase.type) {
+  //   selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+  // }
 })
 
 const dayliDivsDisplay = computed(() => {
@@ -481,7 +507,12 @@ watch(
   () => $app.store.user.isInvestModalShow.show,
   () => {
     isOpen.value = $app.store.user.isInvestModalShow.show;
-    selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+
+    if (orderType.value !== 'init_btc') {
+      selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+    } else if($app.store.purchase.type) {
+      selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+    }
   }
 )
 
@@ -493,7 +524,7 @@ const toggleCurrencyDropdown = () => {
 
 const selectCurrency = (currency : any) => {
   selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
-  toggleCurrencyDropdown();
+  showDropdown.value = false;
 }
 
 // modal

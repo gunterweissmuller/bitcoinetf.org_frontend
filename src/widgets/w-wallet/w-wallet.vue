@@ -5,7 +5,11 @@
       <e-send-to-buy-shares :active-component="activeComponent?.id" />
       <div class="w-wallet__box-main">
         <keep-alive>
-          <component v-if="activeComponent?.component" :is="activeComponent?.component" />
+          <component
+            v-if="activeComponent?.component"
+            :is="activeComponent?.component"
+            :key="`active-tab-route-${route.name}`"
+          />
         </keep-alive>
       </div>
     </div>
@@ -28,19 +32,16 @@ interface ITabsItem {
 const tabsList = ref<ITabsItem[]>([
   { text: 'Dividends', name: 'personal-dividends' },
   { text: 'Referrals', name: 'personal-referrals' },
-  { text: 'Bonus', name: 'personal-bonus' },
 ])
 
 const activeTab = ref<string>('dividends')
 
 const dividends = defineAsyncComponent(() => import('~/src/widgets/w-dividends/w-dividends.vue'))
 const referrals = defineAsyncComponent(() => import('~/src/widgets/w-referrals/w-referrals.vue'))
-const bonus = defineAsyncComponent(() => import('~/src/widgets/w-bonus/w-bonus.vue'))
 
 const components = {
   'personal-dividends': { component: dividends, id: 'personal-dividends' },
   'personal-referrals': { component: referrals, id: 'personal-referrals' },
-  'personal-bonus': { component: bonus, id: 'personal-bonus' },
 }
 
 const activeComponent = computed(() => components?.[route?.name])

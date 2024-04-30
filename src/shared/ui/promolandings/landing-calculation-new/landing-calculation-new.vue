@@ -27,7 +27,7 @@
 
     <!-- JOURNEY LAYOUT -->
     <!-- <m-profit-calculator :hiddenBottomButton="true" :visibleTronLabel="isFiatLanding" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :is-fiat="isFiatLanding"/> -->
-    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated"></m-profit-calculator-new>
+    <m-profit-calculator-new :isUserAuth="isUserAuth" :isInputDisbled="purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" @calculator-amount="calcAmountUpdated" @refCode="refcodeUpdated" :disabled-amount="isSignupAndBuy"></m-profit-calculator-new>
 
 
 
@@ -66,8 +66,13 @@
         <div class="landing-calculation__signup-main">
           <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
+          
           <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
+          
           <vue-tel-input :disabled="dataDisabled || isMainInputDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
 
           <a-input-with-button
             bgColor="tetherspecial"
@@ -75,6 +80,7 @@
             label="Email"
             v-model="email"
             :buttonText="codeSendText"
+            :buttonClickEnable="Boolean(email) && isEmailValid"
             :buttonClick="() => {sendCode()}"
             validation-reg-exp-key="email"
             :disabled="dataDisabled || isEmailDisabled"
@@ -84,7 +90,7 @@
             @update:is-valid="isEmailValid = $event"
           />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />
-          <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
 
           <div class="landing-calculation__signup-main__agree">
               <div class="mb-10">
@@ -93,7 +99,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -111,9 +117,13 @@
             required
           />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
+
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
+          
           <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
-          <p class="landing-calculation__error" v-if="backendError">{{ backendError }}</p>
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
 
           <div class="landing-calculation__signup-main__agree">
               <div class="mb-10">
@@ -122,7 +132,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
         </div>
       </template>
 
@@ -227,7 +237,7 @@ onMounted(()=>{
       }
     });
   } else {
-    console.log("Metamask is not installed");
+
   }
 
   localStorage.setItem('theme', 'dark');
@@ -239,7 +249,7 @@ onMounted(()=>{
 //   () => (window as any).ethereum,
 //   () => {
 //     isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
-//     console.log("NEWWW", isMetamaskSupported.value);
+//
 //   }
 // )
 
@@ -321,7 +331,7 @@ watch(
   }
 )
 
-const backendError = ref('')
+const backendError = ref({value: '', field: 'default'});
 
 function getTimeTron() {
   let createdDate = $app.filters.dayjs($app.store.user.statistic?.trc_bonus?.decrease)
@@ -484,14 +494,19 @@ const investBuySignup = () => {
   scrollToSignup();
 }
 
+const handleOpenPurchase = () => {
+  $app.store.purchase.amountUS = buyAmount.value;
+  purchaseStep.value = PurchaseSteps.Purchase;
+  scrollToPurchase();
+}
+
 const investBuy = async () => {
 
   if(buyAmountOriginal.value < 100) return
 
   signupStep.value = SignupSteps.Default;
   signupMethod.value = SignupMethods.None;
-  purchaseStep.value = PurchaseSteps.Purchase;
-  scrollToPurchase();
+  handleOpenPurchase();
 
   await $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
@@ -517,7 +532,7 @@ const scrollToPurchase = () => {
   const elementPosition = element.offsetTop;
   const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
 
-  console.log(offsetPosition);
+
   setTimeout(()=>{
     window.scrollTo({
       top: offsetPosition,
@@ -537,7 +552,7 @@ const isEmailDisabled = ref(false);
 const dataDisabled = ref(false);
 
 const countryChanged = (country) => {
-  // console.log(country, phone);
+  //
   countryCode.value = country.dialCode;
 }
 
@@ -590,8 +605,7 @@ onMounted(() => {
     $app.api.eth.auth.getUser().then((resp) => {
       $app.store.user.info = resp?.data
       //purchase
-      purchaseStep.value = PurchaseSteps.Purchase;
-      scrollToPurchase();
+      handleOpenPurchase();
     });
   }
 
@@ -609,7 +623,7 @@ const handleTelegramAuth = async () => {
     (window as any).Telegram.Login.auth(
       { bot_id: telegramBotId.value, request_access: true },
       (tgData: any) => {
-        console.log(tgData);
+
         if (!tgData) {
           // authorization failed
           isTelegramConnection.value = true;
@@ -649,8 +663,7 @@ const handleTelegramAuth = async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
                       $app.store.user.info = resp?.data
                       //purchase
-                      purchaseStep.value = PurchaseSteps.Purchase;
-                      scrollToPurchase();
+                      handleOpenPurchase();
                     });
 
                     // await router.push('/personal/analytics/performance')
@@ -669,7 +682,7 @@ const handleTelegramAuth = async () => {
       }
     )
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 
 
@@ -693,7 +706,7 @@ const testTG = async () => {
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       data = tgData;
-      console.log(tgData);
+
 
       if (!tgData) {
         // authorization failed
@@ -734,8 +747,7 @@ const testTG = async () => {
                   await $app.api.eth.auth.getUser().then((resp) => {
                     $app.store.user.info = resp?.data
                     //purchase
-                    purchaseStep.value = PurchaseSteps.Purchase;
-                    scrollToPurchase();
+                    handleOpenPurchase();
                   });
 
                   // await router.push('/personal/analytics/performance')
@@ -767,12 +779,12 @@ const handleTelegramConnect = async () => {
     telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
-      console.log("scrolltg",res);
+
       // signupStep.value = SignupSteps.TelegramButton;
     })
 
 
-    //console.log(r);
+    //
 
   })
 }
@@ -789,7 +801,7 @@ onMounted(() => {
 $app.api.eth.auth
   .getAppleRedirect()
   .then(async (res) => {
-    console.log(res);
+
 
     function getJsonFromUrl(url) {
       if(!url) url = location.search;
@@ -804,7 +816,7 @@ $app.api.eth.auth
 
     const parsedUrl = getJsonFromUrl(res.url);
 
-    console.log(parsedUrl, window.AppleID);
+
 
     (window as any).AppleID.auth.init({
         clientId : parsedUrl.client_id,
@@ -825,17 +837,17 @@ const handleAppleConnect = async () => {
 try {
     const data = await (window as any).AppleID.auth.signIn()
     // Handle successful response.
-    console.log("test123", data);
+
 
     $app.store.authTemp.response = data.authorization.id_token;
 
-    console.log($app.store.authTemp.response, $app.api.eth.auth)
+
 
 
     $app.api.eth.auth
     .getAppleAuthType({apple_token: data.authorization.id_token})
     .then(async (res) => {
-      console.log(res);
+
 
       if(res.data.auth_type === 'registration') {
           signupStep.value = SignupSteps.Signup;
@@ -869,8 +881,7 @@ try {
               .then(async () => {
                 await $app.api.eth.auth.getUser().then((resp) => {
                   $app.store.user.info = resp?.data;
-                  purchaseStep.value = PurchaseSteps.Purchase;
-                  scrollToPurchase();
+                  handleOpenPurchase();
                 });
 
               });
@@ -906,10 +917,10 @@ const sendCode = async () => {
   var valid = re.test(phone.value);
 
   if(!valid) {
-    backendError.value = 'Phone number is not valid';
+    backendError.value = {value: 'Phone number is not valid', field: 'phone'};
     return;
   }
-  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid || token.value === '') {
+  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value || token.value === '') {
     backendError.value = 'Fill in all the fields';
     return;
   }
@@ -940,7 +951,7 @@ const sendCode = async () => {
   timerStarted.value = true;
 
   const tempPhone = phone.value.slice(countryCode.value.length+1);
-  backendError.value = '';
+  backendError.value = {value: '', field: 'default'};
   sendCodeLoading.value = true;
 
   const initPayload = { first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value), phone_number: $app.filters.trimSpaceIntoString(tempPhone), phone_number_code: $app.filters.trimSpaceIntoString(countryCode.value) , refcode: $app.filters.trimSpaceIntoString(refCode.value) }
@@ -960,9 +971,18 @@ const sendCode = async () => {
         //isSubmitEmailForm.value = false;
         isMainInputDisabled.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
         }
       })
   } else if(signupMethod.value === SignupMethods.Telegram) {
@@ -982,9 +1002,18 @@ const sendCode = async () => {
     }).catch((e) => {
       isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
+        backendError.value = {value: e.errors.error.message, field: 'default'}  
+
+        if(e?.errors?.error?.validation) {
+          if(e?.errors?.error?.validation?.first_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+          }
+          if(e?.errors?.error?.validation?.last_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+          }
+        }
       } else {
-        backendError.value = 'Something went wrong'
+        backendError.value = {value: 'Something went wrong', field: 'default'} 
       }
     })
 
@@ -1001,9 +1030,18 @@ const sendCode = async () => {
       }).then((r: any) => {
     }).catch((e) => {
       if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
+        backendError.value = {value: e.errors.error.message, field: 'default'}
+
+        if(e?.errors?.error?.validation) {
+          if(e?.errors?.error?.validation?.first_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+          }
+          if(e?.errors?.error?.validation?.last_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+          }
+        }
       } else {
-        backendError.value = 'Something went wrong'
+        backendError.value = {value: 'Something went wrong', field: 'default'} 
       }
     })
 
@@ -1019,10 +1057,23 @@ const sendCode = async () => {
       isMainInputDisabled.value = false;
       console.error("ERROR", e);
       if (e?.errors?.error?.message) {
+        backendError.value = {value: e.errors.error.message, field: 'default'}
+        
         if (e.errors.error.code === 'ETF:011002') {
           //email is already in use
           router.push('/personal/login')
         }
+
+        if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
+      } else {
+        backendError.value = {value: 'Something went wrong', field: 'default'} 
       }
     })
   }
@@ -1038,10 +1089,22 @@ const isSignupAndBuy = ref(false);
 
 const signupAndBuy = async () => {
 
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
+
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '' || codeEmail.value === '') {
+    backendError.value = 'Fill in all the fields';
+    return;
+  }
+
   if(isSignupAndBuy.value) return;
   isSignupAndBuy.value = true;
 
-  backendError.value = ''
+  backendError.value = {value: '', field: 'default'} 
 
   if(signupMethod.value === SignupMethods.Metamask) {
     await $app.api.eth.auth.
@@ -1080,11 +1143,10 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        scrollToPurchase();
+        handleOpenPurchase();
 
         if (props.isFiat) {
-        //   console.log("TRUE IS FIAT");
+        //
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,
@@ -1104,14 +1166,23 @@ const signupAndBuy = async () => {
       })
       .catch((e) => {
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
         }
       })
   } else if (signupMethod.value === SignupMethods.Telegram) {
 
-    backendError.value = ''
+    backendError.value = {value: '', field: 'default'} 
     await $app.api.eth.auth.
       confirmTelegram({
         telegram_data: JSON.stringify($app.store.authTelegram.response),
@@ -1128,12 +1199,11 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          purchaseStep.value = PurchaseSteps.Purchase;
-          scrollToPurchase();
+          handleOpenPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1147,13 +1217,22 @@ const signupAndBuy = async () => {
       .catch((e) => {
         isCodeContinueProcess.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
         }
       })
   } else if (signupMethod.value === SignupMethods.Apple) {
-    backendError.value = ''
+    backendError.value = {value: '', field: 'default'} 
 
     await $app.api.eth.auth.
       confirmApple({
@@ -1171,12 +1250,11 @@ const signupAndBuy = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          purchaseStep.value = PurchaseSteps.Purchase;
-          scrollToPurchase();
+          handleOpenPurchase();
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1189,9 +1267,18 @@ const signupAndBuy = async () => {
       })
       .catch((e) => {
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
         }
       })
   } else {
@@ -1230,11 +1317,10 @@ const signupAndBuy = async () => {
         })
       })
       .then(async () => {
-        purchaseStep.value = PurchaseSteps.Purchase;
-        scrollToPurchase();
+        handleOpenPurchase();
 
         if (props.isFiat) {
-        //   console.log("TRUE IS FIAT");
+        //
           await $app.api.eth.billingEth
             .buyShares({
               amount: 1000,
@@ -1254,10 +1340,22 @@ const signupAndBuy = async () => {
       })
       .catch((e) => {
         isSignupAndBuy.value = false;
+        console.log("CATCH")
         if (e?.errors?.error?.message) {
-          backendError.value = e.errors.error.message
+          console.log(e?.errors?.error?.message)
+          backendError.value = {value: e.errors.error.message, field: 'default'} 
+
+          if(e?.errors?.error?.validation) {
+            console.log(e?.errors?.error?.message.validation)
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
         } else {
-          backendError.value = 'Something went wrong'
+          backendError.value = {value: 'Something went wrong', field: 'default'} 
         }
       })
   }
@@ -1268,6 +1366,18 @@ const isSignupAndBuyGoogle = ref(false);
 
 const signupAndBuyGoogle = () => {
 
+  var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
+  var valid = re.test(phone.value);
+
+  if(!valid) {
+    backendError.value = 'Phone number is not valid';
+    return;
+  }
+  if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '') {
+    backendError.value = 'Fill in all the fields';
+    return;
+  }
+
   if(isSignupAndBuyGoogle.value) return;
   isSignupAndBuyGoogle.value = true;
 
@@ -1275,13 +1385,13 @@ const signupAndBuyGoogle = () => {
   var valid = re.test(phone.value);
 
   if(!valid) {
-    backendError.value = 'Phone number is not valid';
+    backendError.value = {value: 'Phone number is not valid', field: 'phone'};
     isSignupAndBuyGoogle.value = false;
     return;
   }
 
   if(firstName.value === '' || lastName.value === '' ) {
-    backendError.value = 'Fill in all the fields';
+    backendError.value = {value: 'Fill in all the fields', field: 'default'};
     isSignupAndBuyGoogle.value = false;
     return;
   }
@@ -1323,13 +1433,11 @@ const signupAndBuyGoogle = () => {
     .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data
-            purchaseStep.value = PurchaseSteps.Purchase;
-            scrollToPurchase();
-
+            handleOpenPurchase();
         })
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
-        if(aAid) {
+        if(aAid && window.localStorage.getItem('a_utm')) {
           $app.api.eth.auth.papSignUp({
             payload: {
               pap_id: aAid,
@@ -1348,9 +1456,18 @@ const signupAndBuyGoogle = () => {
       console.error(e);
       isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
-            backendError.value = e.errors.error.message
+            backendError.value = {value: e.errors.error.message, field: 'default'}
+
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
         } else {
-            backendError.value = 'Something went wrong'
+            backendError.value = {value: 'Something went wrong', field: 'default'}
         }
     })
 
