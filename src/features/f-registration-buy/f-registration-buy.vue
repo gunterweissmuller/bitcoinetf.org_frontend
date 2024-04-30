@@ -312,7 +312,6 @@ const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
   Purchase = 'Purchase',
-  Bonus = 'Bonus'
 }
 const enum StepsPay {
   PayWith = 'PayWith',
@@ -346,9 +345,7 @@ watch(
   () => currentStep.value,
   (step) => {
     backendError.value = ''
-    if (step === Steps.Bonus) {
-      isOpenModal.value = true
-    }
+   
   },
 )
 
@@ -547,7 +544,7 @@ const paymentAmount = ref({ amount: 0 })
 
 const openMoonpay = async () => {
   return await openMoonpayHandler(getMoonpayWallets, (ctx) => {
-    paymentAmount.value.amount = ctx.data.message?.data?.amount
+    paymentAmount.value.amount = ctx.data.message?.data?.amount;
     isOpenSuccessPaymentModal.value = true
   })
 }

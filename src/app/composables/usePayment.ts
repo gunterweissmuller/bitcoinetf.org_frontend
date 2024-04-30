@@ -56,7 +56,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       iconType: Icon.ColorfulMoonpay,
       value: 'moonpay',
       onClick: 'openMoonpay',
-      show: false,
+      show: true,
     },
     {
       icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -165,6 +165,8 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
         }
       })
       .subscribe()
+
+      isMoonpaySelected.value = false;
   }
 
   const getPayWallets = async () => {

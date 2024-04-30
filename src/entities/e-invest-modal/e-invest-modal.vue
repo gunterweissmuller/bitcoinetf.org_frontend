@@ -313,7 +313,9 @@ const router = useRouter()
 const route = useRoute()
 const { width } = useWindowSize()
 
-const orderType = ref($app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc');
+const orderType = computed(() => {
+  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
+});
 watch(
   () => $app.store.user.info,
   () => {

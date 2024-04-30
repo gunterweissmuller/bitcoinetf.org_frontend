@@ -236,12 +236,6 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoWallet,
   },
-  'personal-bonus': {
-    title: 'Wallet',
-    titleCrumb: 'Bonus',
-    breadcrumbs: false,
-    info: EPageInfoWallet,
-  },
   'personal-kyc': { title: 'Kyc', breadcrumbs: false },
   'personal-support': { title: 'Support', breadcrumbs: false },
   'personal-earnings': {
@@ -305,7 +299,6 @@ const walletLinks = {
   links: [
     { text: 'Dividends', name: 'personal-dividends' },
     { text: 'Referrals', name: 'personal-referrals' },
-    { text: 'Bonus', name: 'personal-bonus' },
   ],
 }
 
@@ -317,7 +310,6 @@ const linksList = {
   'personal-wallet': walletLinks,
   'personal-dividends': walletLinks,
   'personal-referrals': walletLinks,
-  'personal-bonus': walletLinks,
 }
 
 const isVisibleInfo = computed(() => {
@@ -350,7 +342,7 @@ const isShowBuyPopper = computed<boolean>(() => {
   return (
     (isDesktop.value || isLaptop.value) &&
     $app.store.user.dividends?.usd_amount &&
-    (route.name === 'personal-dividends' || route.name === 'personal-referrals' || route.name === 'personal-bonus')
+    (route.name === 'personal-dividends' || route.name === 'personal-referrals' )
   )
 })
 
@@ -519,7 +511,6 @@ const tabs = computed(() => {
     return [
       { text: 'Dividends', name: 'personal-dividends' },
       { text: 'Referrals', name: 'personal-referrals' },
-      { text: 'Bonus', name: 'personal-bonus' },
     ]
   }
 

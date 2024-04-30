@@ -1,5 +1,5 @@
 <template>
-  <m-modal class="f-terms-modal" :max-height="MAX_HEIGHT" v-model="isOpenModal" @close="close">
+  <m-modal :scroll="true" class="f-terms-modal" :max-height="MAX_HEIGHT" v-model="isOpenModal" @close="close">
     <div class="f-terms-modal__wrap">
       <div class="f-terms-modal__head">
         <div class="f-terms-modal__head-title">{{ title }}</div>
