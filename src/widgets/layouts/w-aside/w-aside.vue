@@ -391,7 +391,7 @@ const routesList = [
         link: 'personal-dividends',
       },
       {
-        title: 'Referrals',
+        title: 'ETFs',
         icon: Icon.MonoEarnings,
         link: 'personal-referrals',
       },
@@ -460,7 +460,7 @@ const activeLinkClass = (link: string): boolean => {
       )
     case 'personal-dividends':
       return (
-        route.name === 'personal-dividends' || route.name === 'personal-referrals' 
+        route.name === 'personal-dividends' ||   route.name === 'personal-etfs' // route.name === 'personal-referrals' || route.name === 'personal-bonus'
       )
     case 'personal-more':
       return route.name?.includes('personal-more')

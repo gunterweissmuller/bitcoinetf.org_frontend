@@ -278,6 +278,12 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoWallet,
   },
+  'personal-etfs': {
+    title: 'Wallet',
+    titleCrumb: 'ETFs',
+    breadcrumbs: false,
+    info: EPageInfoWallet,
+  },
   'personal-referrals': {
     title: 'Wallet',
     titleCrumb: 'Referrals',
@@ -345,10 +351,12 @@ const fundLinks = {
 const isFundPage = computed<boolean>(() => fundLinks.links.find(el => el.name === route.name || 'personal-fund' === route.name))
 
 const walletLinks = {
-  title: 'Wallet',
+  title: 'Assets',
   links: [
     { text: 'Dividends', name: 'personal-dividends' },
     { text: 'Referrals', name: 'personal-referrals' },
+    { text: 'ETFs', name: 'personal-etfs' },
+    // { text: 'Bonus', name: 'personal-bonus' },
   ],
 }
 const assetsLinks = {
@@ -366,6 +374,7 @@ const linksList = {
   'personal-referrals': walletLinks,
   'personal-bonus': walletLinks,
   'personal-assets': assetsLinks,
+  'personal-etfs': walletLinks,
 }
 
 const isVisibleInfo = computed(() => {
@@ -386,6 +395,7 @@ const isVisibleLinks = computed<boolean>(
     linksList?.[route?.name]?.links &&
     (isLaptop.value || isDesktop.value)
 )
+console.log(linksList?.[route?.name]?.links, route?.name, linksList?.[route?.name])
 
 const isVisibleBreadcrumbs = computed<boolean>(
   () => routeNames.value?.[route?.name]?.breadcrumbs && (isLaptop.value || isDesktop.value),
@@ -579,7 +589,10 @@ const tabs = computed(() => {
   if (route.path.includes('wallet')) {
     return [
       { text: 'Dividends', name: 'personal-dividends' },
-      { text: 'Referrals', name: 'personal-referrals' },
+      { text: 'ETFs', name: 'personal-etfs' },
+      // { text: 'Dividends', name: 'personal-dividends' },
+      // { text: 'Referrals', name: 'personal-referrals' },
+      // { text: 'Bonus', name: 'personal-bonus' },
     ]
   }
 

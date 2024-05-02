@@ -1,6 +1,6 @@
 <template>
   <div v-if="!(isDesktop || isLaptop)" class="e-analytics-tabs">
-    <div class="e-analytics-tabs__list">
+    <div class="e-analytics-tabs__list" :style="`grid-template-columns: repeat(${tabBars.length}, 1fr);`">
       <nuxt-link
         v-for="(tab, idx) in tabBars"
         :key="idx"

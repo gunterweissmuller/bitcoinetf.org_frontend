@@ -172,7 +172,7 @@ export default defineNuxtConfig({
             map: null,
           }
         },
-      },
+      }, 
     ],
   },
   nitro: {
@@ -252,6 +252,16 @@ export default defineNuxtConfig({
           name: 'personal-bonus',
           path: '/personal/wallet/bonus',
           file: '~/src/widgets/w-wallet/w-wallet.vue',
+        },
+        {
+          name: 'personal-etfs',
+          path: '/personal/wallet/etfs',
+          file: '~/src/widgets/w-etfs/w-etfs.vue',
+        },
+        {
+          name: 'personal-sell-etfs',
+          path: '/personal/wallet/sell/etfs',
+          file: '~/src/widgets/w-sell-etfs/w-sell-etfs.vue',
         },
       ]
       routes.push(...extendedRoutes)
