@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to) => {
     return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT')
   };
   const router = useRouter()
-  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
+  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-verify-email', 'personal-login-one-time']
   const includedRouteMask = to.path.includes('personal')
   const urlParams = new URLSearchParams(window.location.search);
   if(to.query.accessToken) {
@@ -53,6 +53,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
 
   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
+    console.log(to.name)
     return navigateTo({name: 'personal-login'})
   }
 

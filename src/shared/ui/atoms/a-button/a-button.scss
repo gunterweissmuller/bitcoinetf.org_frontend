@@ -104,6 +104,18 @@
     }
   }
 
+  &--no-padding {
+    height: torem(56);
+    padding: 0 !important;
+    border-radius: torem(8);
+
+    .a-button__label {
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: torem(21);
+    }
+  }
+
   &--big-size {
     .a-button__label {
       font-size: 18px;
