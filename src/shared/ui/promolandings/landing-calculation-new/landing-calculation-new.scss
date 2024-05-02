@@ -412,6 +412,9 @@
   &__error {
     color: var(--accent-danger)
   }
+  &__error-message{
+    color: var(--accent-danger)
+  }
   &__dropdown-isdisabled {
     pointer-events: none;
     cursor: not-allowed;

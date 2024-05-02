@@ -28,7 +28,6 @@
           <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center gap-2 font-medium text-center whitespace-nowrap">
             <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" />
             <!-- <span class="grow">dividends in</span> -->
-
             <div class="relative" v-on-click-outside="() => showDropdown = false">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
                 <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 cursor-pointer"> <!--@click="toggleCurrencyDropdown"-->
@@ -39,13 +38,13 @@
               </div>
               <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
                 <ul class="text-sm font-medium text-gray-700">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
+                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
               </div>
 
               <div v-if="showDropdown" :class="[{'e-invest__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'e-invest__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="e-invest__invest-select-dropdown w-full absolute mt-1 z-10">
                 <ul class=" text-sm font-medium">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
+                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
               </div>
             </div>
@@ -146,7 +145,10 @@
 
 
           </article>
-          <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
+          <button @click="handleContinue" tabindex="0" :disabled="investmentAmount < 100" class="e-invest__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
+          <div class="e-invest__error-message">
+            <p v-if="investmentAmount < 100">The minimum investment amount must be at least 100</p>
+          </div>
         </div>
     </m-modal>
 
@@ -166,14 +168,12 @@
               <input
                 :disabled="false"
                 :style="'max-width: '+inputMaxWidth+'px'"
-                :value="investmentAmount"
+                v-model="investmentAmountDisplay"
                 class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
                 placeholder="2,500"
                 type="text"
-                @keypress="validate"
                 :min="1"
                 :max="10000000"
-                @input="onPickerValueInput"
               />
             </div>
 
@@ -295,7 +295,10 @@
 
 
           </article>
-          <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch whitespace-nowrap "> Continue </button>
+          <button @click="handleContinue" tabindex="0" :disabled="investmentAmount < 100" class="e-invest__button justify-center items-center self-stretch whitespace-nowrap "> Continue </button>
+          <div class="e-invest__error-message">
+            <p v-if="investmentAmount < 100">The minimum investment amount must be at least 100</p>
+          </div>
         </div>
     </m-modal>
   </div>
@@ -316,7 +319,9 @@ const router = useRouter()
 const route = useRoute()
 const { width } = useWindowSize()
 
-const orderType = ref($app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc');
+const orderType = computed(() => {
+  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
+});
 watch(
   () => $app.store.user.info,
   () => {
@@ -348,8 +353,12 @@ onMounted(()=>{
   //   // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
   // }
   if($app.store?.purchase?.amountUS) {
-    investmentAmount.value = Number($app.store.purchase.amountUS);
-    investmentAmountDisplay.value = $app.store.purchase.amountUS || '2,500';
+    const temp = Math.ceil(Number($app.store.purchase.amountUS));
+
+    if(!isNaN(temp)) {
+      investmentAmount.value = temp;
+      investmentAmountDisplay.value = String(temp);
+    }
   }
 })
 
@@ -368,8 +377,14 @@ const onPickerValueInput = (event) => {
 
 watch(
   () => investmentAmountDisplay.value,
-  (newValue) => {
-    let tempOriginal = Number(newValue.split(",").join("")); //Number
+  (newValue, oldValue) => {
+    let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
+
+    if(isNaN(tempOriginal)) {
+      investmentAmount.value = Number(oldValue.split(",").join(""));
+      investmentAmountDisplay.value = oldValue;
+      return;
+    }
 
     if(Number(tempOriginal) > 500000) {
       investmentAmount.value = 500000;
@@ -527,7 +542,7 @@ const toggleCurrencyDropdown = () => {
 
 const selectCurrency = (currency : any) => {
   selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
-  toggleCurrencyDropdown();
+  showDropdown.value = false;
 }
 
 // modal

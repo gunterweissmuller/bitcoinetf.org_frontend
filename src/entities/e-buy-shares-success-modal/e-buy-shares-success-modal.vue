@@ -6,7 +6,7 @@
           <div v-if="$app.store.user?.info?.profile?.full_name" class="e-buy-shares-success-modal__info-name">
             {{ $app.store.user?.info?.profile?.full_name }}
           </div>
-          <div class="e-buy-shares-success-modal__info-sum">{{ $app.filters.rounded(values?.real_amount, 2) }}</div>
+          <div class="e-buy-shares-success-modal__info-sum">{{ $app.filters.rounded(values?.amount, 2) }}</div>
           <div class="e-buy-shares-success-modal__info-text">Bitcoin ETF Shares</div>
           <div class="e-buy-shares-success-modal__info-date">
             Maturity:
@@ -150,7 +150,14 @@ const close = () => {
     })
     .catch(() => {
       // Todo: notify something went wrond
-    })
+    });
+
+    $app.api.eth.auth.getUser().then((resp) => {
+      $app.store.user.info = resp?.data
+    }).catch(() => {
+      // Todo: notify something went wrond
+    });
+
   emit('close')
 }
 

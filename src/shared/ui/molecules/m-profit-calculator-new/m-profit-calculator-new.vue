@@ -321,11 +321,13 @@ onMounted(()=>{
 
     const temp = Math.ceil(Number(localStorage.getItem('investmentAmount')));
 
+    if(!isNaN(temp)) {
+      investmentAmount.value = isNaN(temp) ? 2500 : temp;
+      investmentAmountDisplay.value = String(investmentAmount.value) ;
+      $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+    }
 
-
-    investmentAmount.value = isNaN(temp) ? 2500 : temp;
-    investmentAmountDisplay.value = String(investmentAmount.value) ;
-    $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+    
   }
 
   $app.store.purchase.type = selectedCurrency.value.value;
@@ -363,8 +365,14 @@ const onPickerValueInput = (event) => {
 
 watch(
   () => investmentAmountDisplay.value,
-  (newValue) => {
-    let tempOriginal = Number(newValue.split(",").join("")); //Number
+  (newValue, oldValue) => {
+    let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
+
+    if(isNaN(tempOriginal)) {
+      investmentAmount.value = Number(oldValue.split(",").join(""));
+      investmentAmountDisplay.value = oldValue;
+      return;
+    }
 
     if(Number(tempOriginal) > 500000) {
       investmentAmount.value = 500000;

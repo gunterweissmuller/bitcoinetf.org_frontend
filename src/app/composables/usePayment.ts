@@ -165,6 +165,8 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
         }
       })
       .subscribe()
+
+      isMoonpaySelected.value = false;
   }
 
   const getPayWallets = async () => {
