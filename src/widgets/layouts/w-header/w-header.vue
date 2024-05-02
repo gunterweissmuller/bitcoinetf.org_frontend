@@ -200,8 +200,8 @@ const routeNames = computed(() => ({
     info: EPageInfoAnalytics,
   },
   'personal-more': {
-    title: 'More',
-    titleCrumb: 'More',
+    title: 'Profile',
+    titleCrumb: 'Profile',
     breadcrumbs: false,
     urlToBack: 'personal-protection',
   },

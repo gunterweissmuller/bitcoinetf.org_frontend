@@ -28,7 +28,7 @@
           :space-between="spaceBetween"
           :slides-per-view="slidesPerView"
           :slides-per-group="slidesPerGroup"
-          :grab-cursor="true"
+          :grab-cursor="grabCursor"
           :speed="speed"
           :autoplay="autoplay"
           :pagination="isPagination"
@@ -47,7 +47,7 @@
           @init="onSwiperInit"
           @resize="onSwiperResize"
           @update="onSwiperUpdate"
-          @slide-change="onSlideChange"
+          @activeIndexChange="onSlideChange"
         >
           <slot name="slides" />
         </swiper>
@@ -81,7 +81,7 @@ import 'swiper/css/free-mode'
 import 'swiper/scss/grid'
 import 'swiper/css/scrollbar'
 
-const emit = defineEmits(['reach-last-slide', 'swiper-init', 'slide-change'])
+const emit = defineEmits(['reach-last-slide', 'swiper-init', 'slide-change', 'get-real-index'])
 
 const props = withDefaults(
   defineProps<{
@@ -107,6 +107,7 @@ const props = withDefaults(
     slidesLength?: number
     qaLocatorSection?: string | number
     variantNavigationButton?: 'default' | 'ghost'
+    grabCursor: boolean
   }>(),
   {
     spaceBetween: 16,
@@ -130,8 +131,10 @@ const props = withDefaults(
     slidesLength: 0,
     qaLocatorSection: '',
     variantNavigationButton: 'default',
+    grabCursor: true,
   },
 )
+
 const swiperRef = ref<HTMLElement | null>(null)
 
 const clickableButtonsArea = ref<string>('')
@@ -222,7 +225,11 @@ onMounted(() => {
 })
 
 const onSlideChange = (swiper) => {
-  emit('slide-change', swiper.activeIndex)
+  emit('slide-change', swiper)
+  getRealIndex(swiper.realIndex)
+}
+const getRealIndex = (index: number) => {
+  emit('get-real-index', index)
 }
 </script>
 
