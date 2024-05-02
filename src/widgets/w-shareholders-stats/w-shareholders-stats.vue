@@ -9,7 +9,7 @@
     />
     <e-stat
       info="DIVIDENTS PAID"
-      :title="`$${$app.filters.rounded($app.store.user?.dividends?.usd_amount)}`"
+      :title="`$${$app.filters.rounded(dividentsPaid, 2)}`"
       :icon="Icon.MonoEarnings"
       iconType="small"
       bottom="dropdown"
@@ -50,11 +50,11 @@ import EStat from '~/src/entities/e-stat/e-stat.vue';
 import { Icon } from '~/src/shared/constants/icons';
 import { useNuxtApp } from '#app';
 
-const { $app } = useNuxtApp()
-const globalStatistic = computed(() => {
-  return $app.store.user.statistic
-})
+const { $app } = useNuxtApp();
 
+const globalStatistic = computed(() => $app.store.user.statistic);
+
+const dividentsPaid = computed<number>(() => $app.store.user.statistic.dividends_earned_btc * $app.store.user.btcValue);
 </script>
 
 <style src="./w-shareholders-stats.scss" lang="scss" />
