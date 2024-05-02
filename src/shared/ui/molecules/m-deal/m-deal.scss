@@ -1,15 +1,12 @@
 .m-deal {
-  min-height: torem(94);
+  min-height: torem(70);
   padding: torem(16);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // background: var(--surfaces-surface-1);
-  
 
-  &-main {
-    background: var(--Surfaces-Surface-Glass-2, rgba(46, 47, 56, 0.30)) !important;
-    border-bottom: none !important;
+  &:not(:last-child) {
+    border-bottom: 2px solid #F1F2F4;
   }
 
   &__fade-enter-active,
@@ -20,11 +17,6 @@
   &__fade-enter-from,
   &__fade-leave-to {
     opacity: 0;
-  }
-
-
-  &:not(:last-child) {
-    border-bottom: torem(1) solid var(--color-border-1);
   }
 
   &__trade {
@@ -89,7 +81,7 @@
       justify-content: space-between;
       flex-direction: row;
       padding-right: torem(0);
-      gap: var(--spacing-s);
+
     }
 
     &-title {
@@ -141,14 +133,11 @@
       line-height: torem(18);
       width: 100%;
       display: flex;
-      align-items: center;
-      text-align: end;
-
       &-right{
         margin-left: auto;
       }
       &-date {
-        font-family: Caption, Dm, sans-serif;
+        font-family: Dm, sans-serif;
         font-weight: 700;
         font-size: torem(12);
         line-height: torem(16);
@@ -166,10 +155,6 @@
             z-index: 2;
           }
         }
-      }
-
-      &-action {
-        color: var(--accent-primary);
       }
     }
 
@@ -191,6 +176,7 @@
       font-size: torem(12);
       font-weight: 700;
       line-height: torem(16);
+      color: var(--text-secondary);
     }
 
     &-transfer-result {
@@ -219,7 +205,7 @@
     }
 
     &-purchase-result {
-      color: var(--text-primary);
+      color: var(--accent-primary);
       font-family: Dm, sans-serif;
       font-size: torem(14);
       font-weight: 700;
@@ -268,4 +254,14 @@
   width: torem(18);
   height: torem(18);
   min-width: torem(18);
+}
+
+.m-deal__info-shareholders-result {
+  color: var(--text-primary);
+}
+
+body[data-theme='dark'] {
+  .m-deal:not(:last-child) {
+    border-bottom: 2px solid #1B1A1F;
+  }
 }

@@ -271,4 +271,4 @@ defineExpose({
 })
 </script>
 
-<style src="./w-chart-performance.scss" lang="scss" />
+<style src="./w-chart-protection.scss" lang="scss" />

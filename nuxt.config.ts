@@ -70,7 +70,7 @@ export default defineNuxtConfig({
     [
       '@/modules/iconica',
       {
-        iconDir: 'public/img/icons',
+        iconDir: "public/img/icons",
         outputFile: 'src/shared/constants/icons.ts',
       },
     ],
@@ -204,24 +204,34 @@ export default defineNuxtConfig({
     'pages:extend'(routes) {
       const extendedRoutes = [
         {
-          name: 'personal-analytics',
-          path: '/personal/analytics',
-          file: '~/src/widgets/w-analytics/w-analytics.vue',
-        },
-        {
-          name: 'personal-performance',
-          path: '/personal/analytics/performance',
-          file: '~/src/widgets/w-analytics/w-analytics.vue',
-        },
-        {
           name: 'personal-fund',
-          path: '/personal/analytics/fund',
-          file: '~/src/widgets/w-analytics/w-analytics.vue',
+          path: '/personal/fund',
+          file: '~/src/widgets/w-fund/w-fund.vue',
+        },
+        {
+          name: 'personal-protection',
+          path: '/personal/fund/protection',
+          file: '~/src/widgets/w-fund/w-fund.vue',
+        },
+        {
+          name: 'personal-shareholders',
+          path: '/personal/fund/shareholders',
+          file: '~/src/widgets/w-fund/w-fund.vue',
         },
         {
           name: 'personal-portfolio',
-          path: '/personal/analytics/portfolio',
-          file: '~/src/widgets/w-analytics/w-analytics.vue',
+          path: '/personal/fund/portfolio',
+          file: '~/src/widgets/w-fund/w-fund.vue',
+        },
+        {
+          name: 'personal-assets',
+          path: '/personal/assets',
+          file: '~/src/widgets/w-assets/w-assets.vue',
+        },
+        {
+          name: 'personal-assets-symbol',
+          path: '/personal/assets/:symbol',
+          file: '~/src/widgets/w-assets/w-assets.vue',
         },
         {
           name: 'personal-wallet',

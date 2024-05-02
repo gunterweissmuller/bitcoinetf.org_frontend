@@ -1,7 +1,7 @@
 import fs, { promises } from 'fs'
 import os from 'os'
 import { join, sep } from 'path'
-import glob from 'glob'
+import { sync } from 'glob'
 import webfontsGenerator from 'webfonts-generator'
 
 const prefixTempDir = 'for-fontagon'
@@ -42,18 +42,18 @@ const asyncWebfontsGenerator = (
 
 export default async (options, nuxt) => {
   nuxt.hook('build:before', async () => {
-    let tempDir
-
+    let tempDir;
     try {
       tempDir = fs.mkdtempSync(join(os.tmpdir(), prefixTempDir))
-      const paths = glob?.sync(join(options.iconDir, svgPattern).replace(/\\/g, '/'))
+      const paths = sync(join(options.iconDir, svgPattern).replace(/\\/g, '/'))
 
       if (!paths) {
         return
       }
 
       for (const path of paths) {
-        const tempPath = path.replace(options.iconDir + '/', '').replaceAll('/', '--')
+        const newPath = path.replace(/\\/g, '/');
+        const tempPath = newPath.replace(options.iconDir + '/', '').replaceAll('/', '--')
         const dest = join(tempDir, tempPath)
 
         fs.copyFileSync(path, dest, fs.constants.COPYFILE_EXCL)

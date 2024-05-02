@@ -49,4 +49,5 @@ export default class FundApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
 }

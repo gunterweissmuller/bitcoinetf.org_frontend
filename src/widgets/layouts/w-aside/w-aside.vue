@@ -22,7 +22,7 @@
             text="Buy Bitcoin ETF Shares"
             @click="() => {$app.store.user.isInvestModalShow.show = true;}"
           />
-          
+
         </div>
         <div class="w-aside__links">
           <ul class="w-aside__list">
@@ -256,24 +256,24 @@ const openTermsModal = () => {
 
 const routesList = [
   {
-    title: 'Analytics',
+    title: 'Fund',
     icon: Icon.MonoAnalytics,
-    link: 'personal-performance',
+    link: 'personal-fund',
     subNav: [
-      {
-        title: 'Performance',
-        icon: Icon.MonoEarnings,
-        link: 'personal-performance',
-      },
       {
         title: 'Portfolio',
         icon: Icon.MonoEarnings,
         link: 'personal-portfolio',
       },
       {
-        title: 'Fund',
+        title: 'Protection',
         icon: Icon.MonoEarnings,
-        link: 'personal-fund',
+        link: 'personal-protection',
+      },
+      {
+        title: 'Shareholders',
+        icon: Icon.MonoEarnings,
+        link: 'personal-shareholders',
       },
     ],
   },
@@ -369,9 +369,9 @@ const logout = () => {
 
 const activeLinkClass = (link: string): boolean => {
   switch (link) {
-    case 'personal-performance':
+    case 'personal-protection':
       return (
-        route.name === 'personal-performance' || route.name === 'personal-portfolio' || route.name === 'personal-fund'
+        route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
       )
     case 'personal-dividends':
       return (

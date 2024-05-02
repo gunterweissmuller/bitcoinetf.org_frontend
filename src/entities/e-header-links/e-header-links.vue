@@ -42,6 +42,7 @@ const props = defineProps<{
   routesList: ILinkItem[]
   routeNames: any[]
 }>()
+
 </script>
 
 <style src="./e-header-links.scss" lang="scss" />

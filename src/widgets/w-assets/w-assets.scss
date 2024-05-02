@@ -1,0 +1,46 @@
+.w-assets {
+  display: flex;
+  flex-direction: column;
+  gap: torem(16);
+
+  @include breakpoint($break-desktop-1024) {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    gap: torem(32);
+  }
+
+  &__charts {
+    display: flex;
+    flex-direction: column;
+    gap: torem(16);
+
+    @include breakpoint($break-desktop-1024) {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: torem(16);
+    }
+
+    .w-chart-fund, .w-chart-portfolio {
+      margin-bottom: 0;
+    }
+  }
+
+  &__info {
+    .m-slider__wrap {
+      width: 100%;
+
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .m-slider {
+    display: none;
+
+    @include breakpoint($break-desktop-1024) {
+      display: block;
+    }
+  }
+}
+

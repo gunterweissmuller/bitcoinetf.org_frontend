@@ -100,7 +100,7 @@ const props = withDefaults(
     breakpoints?: object
     grid?: object
     id?: string | number
-    modules: Array<any>
+    modules: Array<any> | null
     centeredSlides?: boolean
     freeMode?: boolean
     activeIndex?: number
