@@ -22,7 +22,7 @@
     </p>
 
     <!-- FIX HREF -->
-    <a :href="`https://${config.public.EXPLORER_API}/`" target="_blank" class="w-ticker-assets__link">
+    <a :href="`https://${config.public.EXPLORER_API}/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4`" target="_blank" class="w-ticker-assets__link">
       <img src="/img/icons/mono/action/link.svg" alt="">
       View on blockchain
       <span></span>
