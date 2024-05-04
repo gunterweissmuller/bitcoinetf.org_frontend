@@ -211,7 +211,8 @@
         </div>
 
       </article>
-      <button @click="handleContinue" tabindex="0" :class="[{'landing-calculation__journey__button-btc': selectedCurrency.value === 'BTC'}]" class="landing-calculation__journey__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Buy Bitcoin ETFs </button>
+      <button @click="handleContinue" :disabled="investmentAmount < 100" tabindex="0" :class="[{'landing-calculation__journey__button-btc': selectedCurrency.value === 'BTC'}]" class="landing-calculation__journey__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Buy Bitcoin ETFs </button>
+      <div class="landing-calculation__journey__error-message" v-if="investmentAmount < 100">The minimum investment amount must be at least 100</div>
     </div>
 
     </div>

@@ -107,7 +107,7 @@ const props = withDefaults(
     slidesLength?: number
     qaLocatorSection?: string | number
     variantNavigationButton?: 'default' | 'ghost'
-    grabCursor: boolean
+    grabCursor?: boolean
   }>(),
   {
     spaceBetween: 16,
