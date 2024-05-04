@@ -52,9 +52,9 @@ import { useNuxtApp } from '#app';
 
 const { $app } = useNuxtApp();
 
-const globalStatistic = computed(() => $app.store.user.statistic);
+const globalStatistic = computed(() => $app.store.user?.statistic);
 
-const dividentsPaid = computed<number>(() => $app.store.user.statistic.dividends_earned_btc * $app.store.user.btcValue);
+const dividentsPaid = computed<number>(() => $app.store.user?.statistic?.dividends_earned_btc * $app.store.user?.btcValue);
 </script>
 
 <style src="./w-shareholders-stats.scss" lang="scss" />
