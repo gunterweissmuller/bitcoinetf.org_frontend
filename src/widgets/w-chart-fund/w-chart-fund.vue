@@ -17,17 +17,29 @@
 
       <div class="w-chart-fund__head">
         <div class="w-chart-fund__titles">
-          <div class="w-chart-fund__titles-title" v-if="totalAmountUsdComp">
-            ${{$app.filters.rounded(totalAmountUsdComp, 0)}} {{ props.type === 'shareholders' ? 'Shareholders' : '' }}
+          <div class="w-chart-fund__titles-title" v-if="totalAmountUsdComp && props.type === 'assets'">
+            ${{$app.filters.rounded(totalAmountUsdComp, 0)}}
+          </div>
+          <div class="w-chart-fund__titles-title" v-if="props.type === 'shareholders'">
+            {{ shareholdersAmount }} Shareholders
           </div>
         </div>
 
-        <div :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
+        <div v-if="props.type === 'assets'" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
           <div
             :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': difference < 0 }]"
           >
             {{ amountUsdDifference > 0 ? '+' : '' }} ${{ $app.filters.rounded(amountUsdDifference, 2) }} ({{
               $app.filters.rounded(difference, 2)
+            }}%)
+          </div>
+        </div>
+
+        <div v-else :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': !shareholdersStatistic?.is_growth }]">
+          <div :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': !shareholdersStatistic?.is_growth }]">
+            {{ shareholdersStatistic?.is_growth ? '+' : '-'}}${{ $app.filters.rounded(shareholdersStatistic?.half_year_change_size_usd, 2) }}
+            ({{
+              $app.filters.rounded(shareholdersStatistic?.percent, 2)
             }}%)
           </div>
         </div>
@@ -85,6 +97,9 @@ const difference = computed(() => {
   return $app.store.user.totalFund?.difference || 0;
 });
 
+const shareholdersAmount = ref<number | null>(null);
+const shareholdersStatistic = ref<SharehodlersStatistic | null>(null);
+
 const options = {
   responsive: true,
   maintainAspectRatio: false,
@@ -120,15 +135,17 @@ interface DataItem {
   label: string;
 }
 
+interface SharehodlersStatistic {
+  is_growth: boolean;
+  percent: number;
+  half_year_change_size_usd: number;
+}
+
 const changeChartData = (tabs : DataItem[]) => {
   if (CHART_INSTANCE) {
-    CHART_INSTANCE.data.datasets[0].data = tabs.map((item) => Number(item.amount));
-    CHART_INSTANCE.data.labels = tabs.map((item, index : number) => {
-      if (props.isTotalAssets) {
-        return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY');
-      } else {
-        return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY');
-      }
+    CHART_INSTANCE.data.datasets[0].data = tabs.map((item : DataItem) => Number(item.amount));
+    CHART_INSTANCE.data.labels = tabs.map((item : DataItem) => {
+      return $app.filters.dayjs(item?.created_at)?.format('MMM YYYY');
     });
     CHART_INSTANCE.update();
   }
@@ -138,8 +155,17 @@ const getStatistics = async () => {
   let response;
   let data;
   if (props.type === 'shareholders') {
-    response = await $app.api.eth.statisticEth.getShareholders();
-    data = response.data.data;
+    response = await $app.api.eth.statisticEth.getShareholdersGrowth();
+
+    shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders).shareholders;
+    shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
+
+    data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent);
+    data = data.map((item : Record<string, any>, index : number) : DataItem => ({
+      amount: item[`aum_size_${index}`],
+      created_at: new Date(`2 ${item["x"+index]}`).toISOString().replace(/T.*/, ''),
+      label: item[`x${index}`]
+    }));
   } else {
     const requestPayload: any = {filters: {}}
 
@@ -163,6 +189,7 @@ const getStatistics = async () => {
     }
 
     data = response.data;
+
   }
 
   if (data.length > 4) {
