@@ -351,7 +351,7 @@ const fundLinks = {
 const isFundPage = computed<boolean>(() => fundLinks.links.find(el => el.name === route.name || 'personal-fund' === route.name))
 
 const walletLinks = {
-  title: 'Assets',
+  title: 'Wallet',
   links: [
     { text: 'Dividends', name: 'personal-dividends' },
     { text: 'Referrals', name: 'personal-referrals' },
@@ -395,7 +395,6 @@ const isVisibleLinks = computed<boolean>(
     linksList?.[route?.name]?.links &&
     (isLaptop.value || isDesktop.value)
 )
-console.log(linksList?.[route?.name]?.links, route?.name, linksList?.[route?.name])
 
 const isVisibleBreadcrumbs = computed<boolean>(
   () => routeNames.value?.[route?.name]?.breadcrumbs && (isLaptop.value || isDesktop.value),
@@ -589,10 +588,7 @@ const tabs = computed(() => {
   if (route.path.includes('wallet')) {
     return [
       { text: 'Dividends', name: 'personal-dividends' },
-      { text: 'ETFs', name: 'personal-etfs' },
-      // { text: 'Dividends', name: 'personal-dividends' },
-      // { text: 'Referrals', name: 'personal-referrals' },
-      // { text: 'Bonus', name: 'personal-bonus' },
+      { text: 'Referrals', name: 'personal-referrals' },
     ]
   }
 
