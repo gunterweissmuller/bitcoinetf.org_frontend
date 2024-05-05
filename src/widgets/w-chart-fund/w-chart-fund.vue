@@ -28,7 +28,7 @@
 
       <div class="w-chart-fund__head">
         <div class="w-chart-fund__titles">
-          <div class="w-chart-fund__titles-title" v-if="totalAmountUsdComp && props.type === 'assets'">
+          <div class="w-chart-fund__titles-title" v-if="totalAmountUsdComp && (props.type === 'assets' || props.type === 'asset')">
             ${{$app.filters.rounded(totalAmountUsdComp, 0)}}
           </div>
           <div class="w-chart-fund__titles-title" v-if="props.type === 'shareholders'">
@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div v-if="props.type === 'assets'" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
+        <div v-if="props.type === 'assets' || props.type === 'asset'" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
           <div
             :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': difference < 0 }]"
           >
@@ -117,7 +117,7 @@ const shareholdersStatistic = ref<SharehodlersStatistic | null>(null);
 const tooltipText: Record<ChartType, string> = {
   'assets': 'AUM = Assets under management.',
   'shareholders': '',
-  'asset': ''
+  'asset': 'Value'
 };
 
 const options = {

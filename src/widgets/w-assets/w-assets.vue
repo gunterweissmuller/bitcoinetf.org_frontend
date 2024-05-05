@@ -27,7 +27,7 @@
     </m-slider>
     <div class="w-assets__charts">
       <w-ticker-assets :asset="asset" />
-      <w-chart-fund title="Value" is-main is-total-assets />
+      <w-chart-fund title="Value" type="asset" is-main is-total-assets />
       <w-chart-portfolio
         ref="chartPortfolioRef"
         v-if="asset"
