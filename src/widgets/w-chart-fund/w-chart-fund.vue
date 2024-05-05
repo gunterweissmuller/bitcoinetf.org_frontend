@@ -6,13 +6,24 @@
         <span class="w-chart-fund__caption-text">
           {{ title }}
         </span>
-        <a-icon
+        <a-tooltip-info
+          :caption="title"
           :style="{ visibility: props.type === 'shareholders' ? 'hidden' : '' }"
-          width='18'
-          height='18'
-          class='w-chart-fund__caption-icon'
-          :name='Icon.MonoInfo'
-        />
+          position="left"
+        >
+          <template #button>
+            <a-icon
+              width='18'
+              height='18'
+              class='w-chart-fund__caption-icon'
+              :name='Icon.MonoInfo'
+            />
+          </template>
+          <template #text>
+            {{ tooltipText[props.type] }}
+          </template>
+        </a-tooltip-info>
+
       </div>
 
       <div class="w-chart-fund__head">
@@ -57,9 +68,12 @@ import Chart from 'chart.js/auto'
 import { useNuxtApp } from '#app'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
-import { Icon } from '~/src/shared/constants/icons'
+import { Icon } from '~/src/shared/constants/icons';
+import ATooltipInfo from '~/src/shared/ui/atoms/a-tooltip-info/a-tooltip-info.vue';
 
 const { $app } = useNuxtApp();
+
+type ChartType = 'assets' | 'shareholders' | 'asset';
 
 const props = withDefaults(
   defineProps<{
@@ -67,7 +81,7 @@ const props = withDefaults(
     title: string
     isMain: boolean
     isTotalAssets?: boolean
-    type: 'assets' | 'shareholders' | 'asset'
+    type: ChartType
   }>(),
   {
     isTotalAssets: false,
@@ -99,6 +113,12 @@ const difference = computed(() => {
 
 const shareholdersAmount = ref<number | null>(null);
 const shareholdersStatistic = ref<SharehodlersStatistic | null>(null);
+
+const tooltipText: Record<ChartType, string> = {
+  'assets': 'AUM = Assets under management.',
+  'shareholders': '',
+  'asset': ''
+};
 
 const options = {
   responsive: true,

@@ -5,12 +5,22 @@
       <span class="w-chart-fund__caption-text">
         {{ title }}
       </span>
-      <a-icon
-        width='18'
-        height='18'
-        class='w-chart-fund__caption-icon'
-        :name='Icon.MonoInfo'
-      />
+      <a-tooltip-info
+        :caption="title"
+        position="left"
+      >
+        <template #button>
+          <a-icon
+            width='18'
+            height='18'
+            class='w-chart-fund__caption-icon'
+            :name='Icon.MonoInfo'
+          />
+        </template>
+        <template #text>
+          {{ tooltipText }}
+        </template>
+      </a-tooltip-info>
     </div>
     <div class="w-chart-portfolio__chart">
       <canvas :id="CHART_ID" />
@@ -52,6 +62,7 @@ import { SwiperSlide } from 'swiper/vue';
 import { Icon } from '~/src/shared/constants/icons';
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import ATooltipInfo from '~/src/shared/ui/atoms/a-tooltip-info/a-tooltip-info.vue';
 
 const props = defineProps({
   slider: {
@@ -128,6 +139,8 @@ const textCenter = {
 const colorBgSvg = computed(() => {
   return $app.store.user.theme === 'dark' ? '#22242B' : 'white'
 })
+
+const tooltipText = 'AUM = Assets under management.';
 
 const options = ref({
   responsive: true,
