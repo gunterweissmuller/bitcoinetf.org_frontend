@@ -1,14 +1,14 @@
 <template>
-  <div v-if="!(isDesktop || isLaptop)" class="e-analytics-tabs">
-    <div class="e-analytics-tabs__list">
+  <div v-if="!(isDesktop || isLaptop)" class="e-fund-tabs">
+    <div class="e-fund-tabs__list" :style="`grid-template-columns: repeat(${tabBars.length}, 1fr);`">
       <nuxt-link
         v-for="(tab, idx) in tabBars"
         :key="idx"
         :id="`${tab.name}-tab-mobile`"
         :to="{ name: tab.name }"
         :class="[
-          'e-analytics-tabs__item',
-          { 'e-analytics-tabs__item--active': tab.name === tabBars[activeTabIndex]?.name },
+          'e-fund-tabs__item',
+          { 'e-fund-tabs__item--active': tab.name === tabBars[activeTabIndex]?.name },
         ]"
       >
         {{ tab.text }}

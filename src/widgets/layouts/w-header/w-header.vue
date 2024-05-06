@@ -76,7 +76,7 @@
         </m-slider>
       </div>
 
-      <e-analytics-tabs :tab-bars='tabs' />
+      <e-fund-tabs :tab-bars='tabs' />
 
       <m-slider
         id="assets"
@@ -134,7 +134,7 @@ import EPageInfoBuyShares from '~/src/entities/e-page-info-modal/ui/e-page-info-
 import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info-statements.vue'
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { nextTick, onUnmounted, onMounted, computed } from 'vue'
-import EAnalyticsTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
+import EFundTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
 import { Autoplay } from 'swiper'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
@@ -579,6 +579,7 @@ const tabs = computed(() => {
   if (route.path.includes('wallet')) {
     return [
       { text: 'Dividends', name: 'personal-dividends' },
+      { text: 'ETFs', name: 'personal-etfs' },
     ]
   }
 

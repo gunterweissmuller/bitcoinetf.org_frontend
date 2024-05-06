@@ -1,7 +1,12 @@
-.e-analytics-tabs {
+.e-fund-tabs {
   margin-top: var(--spacing-m-1);
   @include breakpoint($break-desktop-1024) {
     display: none;
+  }
+
+  @include breakpoint($break-desktop-1024-minus) {
+    margin-top: torem(26);
+    padding: 0 var(--spacing-m-1) var(--spacing-m-2) var(--spacing-m-1);
   }
 
   &__list {
@@ -11,6 +16,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
+
+    @include breakpoint($break-desktop-1024-minus) {
+      border-radius: var(--spacing-s);
+      background: var(--surfaces-surface-2);
+      padding: 0;
+    }
   }
 
   &__item {
@@ -23,6 +34,10 @@
     padding: torem(0, 5, 16);
     text-align: center;
 
+    @include breakpoint($break-desktop-1024-minus) {
+      padding: var(--spacing-s);
+    }
+
     &--active {
       &::before {
         content: '';
@@ -30,13 +45,23 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: calc(100%);
+        width: calc(100% - #{torem(16)});
         height: torem(2);
-        background: var(--surfaces-border-blue);
+        background: var(--accent-primary);
+
+        @include breakpoint($break-desktop-1024-minus) {
+          display: none;
+        }
       }
 
       color: var(--accent-primary);
       font-weight: 700;
+
+      @include breakpoint($break-desktop-1024-minus) {
+        border-radius: var(--spacing-s);
+        background: var(--surfaces-surface-1);
+        box-shadow: 1px 0px 11px 0px rgba(0, 0, 0, 0.07);
+      }
     }
   }
 }
