@@ -28,7 +28,7 @@
         v-if="props.bottom === 'link'"
       >
         <a-icon width="14" :name="Icon.MonoExternalLink" />
-        <a :href="`https://${config.public.EXPLORER_API}/account/${$app.store.user?.blockchainUserWallet}`" target="_blank" class="e-stat__blockchain-title">
+        <a :href="`https://${config.public.EXPLORER_API}/account/${config.public.RESERVE_WALLET_ADDRESS}`" target="_blank" class="e-stat__blockchain-title">
           Verify on Blockchain
         </a>
       </button>

@@ -125,6 +125,7 @@ export default defineNuxtConfig({
       INFO_API: process.env.NUXT_PUBLIC_INFO_API,
       ETH_API: process.env.NUXT_PUBLIC_ETH_API,
       EXPLORER_API: process.env.NUXT_PUBLIC_EXPLORER_API,
+      RESERVE_WALLET_ADDRESS: process.env.NUXT_PUBLIC_RESERVE_WALLET_ADDRESS,
       ICON_API: process.env.NUXT_PUBLIC_ICON_API,
       DOMAIN: process.env.DOMAIN,
       APP_DOMAIN: process.env.APP_DOMAIN,
@@ -172,7 +173,7 @@ export default defineNuxtConfig({
             map: null,
           }
         },
-      }, 
+      },
     ],
   },
   nitro: {
