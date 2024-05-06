@@ -167,4 +167,38 @@ export default class StatisticEthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  async getShareholdersGrowth(payload: any) {
+    try {
+      let filtersQuery = ''
+
+      if (payload?.filters) {
+        Object.entries(payload.filters).forEach(([key, value]) => {
+          if (value) {
+            filtersQuery += `filters[${key}]=${value}&`
+          }
+        })
+      }
+
+      Object.entries(this.filters.omit(payload, ['filters'])).forEach(([key, value]) => {
+        if (value) {
+          filtersQuery += `${key}=${value}&`
+        }
+      })
+
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `statistic/shareholders/growth?${filtersQuery}`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting a list of asset statistics records by day',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
 }

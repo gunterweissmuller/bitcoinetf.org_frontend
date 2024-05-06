@@ -1,16 +1,12 @@
 <template>
   <div class="w-fund page-max-width--small">
-    <w-chart-fund title="Shareholder Growth" is-main is-total-assets />
+    <w-chart-fund title="Shareholder Growth" is-main is-total-assets type="shareholders" />
     <w-chart-shareholders
       title="Investment Strategies"
       :strategies="strategies"
     />
-    <!-- <w-shareholders-stats /> -->
-
-    <!-- new component diffirent chart -->
     <w-top-shareholders />
     <w-purchases />
-    <!-- <w-news /> -->
 
     <w-onboarding :steps="renderedSteps" :next-route-name="lastPayment ? 'personal-earnings' : 'personal-wallet'" />
   </div>

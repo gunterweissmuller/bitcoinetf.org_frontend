@@ -3,7 +3,6 @@
     <m-slider
       class="w-assets__info"
       id="w-assets__info-slider"
-      :modules="[Autoplay]"
       loop
       :speed="3000"
       :space-between="0"
@@ -28,7 +27,7 @@
     </m-slider>
     <div class="w-assets__charts">
       <w-ticker-assets :asset="asset" />
-      <w-chart-fund title="Value" is-main is-total-assets />
+      <w-chart-fund title="Value" type="asset" is-main is-total-assets />
       <w-chart-portfolio
         ref="chartPortfolioRef"
         v-if="asset"
@@ -80,6 +79,9 @@ const asset = computed<IAsset | undefined>(() => {
   return assets.value
     .find((item: { symbol: string; }) => item.symbol === symbol.value.toUpperCase());
 });
+
+console.log(asset.value);
+
 
 const assetsChartData = computed(() => {
   const unset = {

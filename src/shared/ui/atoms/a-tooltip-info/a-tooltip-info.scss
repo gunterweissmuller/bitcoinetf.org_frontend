@@ -1,0 +1,78 @@
+.a-tooltip-info {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: auto;
+
+  &__button {
+    cursor: pointer;
+  }
+
+  &__tooltip {
+    position: absolute;
+    // top: calc(100% + #{torem(12)});
+    z-index: 100;
+
+    display: flex;
+    flex-direction: column;
+    gap: torem(16);
+
+    padding: torem(16);
+
+    border-radius: torem(8);
+    background: var(--surfaces-surface-glass);
+    filter: drop-shadow(0 0 6px 0 rgba(#000, .06));
+
+    &--top            { bottom: calc(100% + #{torem(12)}) }
+    &--top::before    { bottom: torem(-12); left: calc(50% - #{torem(8)}); transform: translateY(-50%) rotate(180deg); }
+
+    &--bottom         { top: calc(100% + #{torem(12)}) }
+    &--bottom::before { top: torem(-4); left: calc(50% - #{torem(8)}); transform: translateY(-50%) rotate(0deg); }
+
+    &--left           { right: calc(100% + #{torem(12)}) }
+    &--left::before   { right: torem(-12); top: 50%; transform: translateY(-50%) rotate(90deg); }
+
+    &--right          { left: calc(100% + #{torem(12)}) }
+    &--right::before  { left: torem(-12); top: 50%; transform: translateY(-50%) rotate(-90deg); }
+
+    &::before {
+      content: '';
+      position: absolute;
+      // left: calc(50% - #{torem(8)});
+      // top: torem(-4);
+      // transform: translateY(-50%);
+
+      width: 0px;
+      height: 0px;
+      border-style: solid;
+      border-width: 0 torem(8) torem(8) torem(8);
+      border-color: transparent transparent var(--surfaces-surface-glass) transparent;
+    }
+
+    &-caption {
+      display: flex;
+      align-items: center;
+      gap: torem(8);
+
+      font-family: Dm, sans-serif;
+      font-weight: 700;
+      font-size: torem(12);
+      line-height: torem(16);
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    &-text {
+      min-width: torem(210);
+
+      font-weight: Dm, sans-serif;
+      font-weight: 500;
+      font-size: torem(12);
+      line-height: torem(16);
+      color: var(--text-secondary);
+    }
+  }
+}

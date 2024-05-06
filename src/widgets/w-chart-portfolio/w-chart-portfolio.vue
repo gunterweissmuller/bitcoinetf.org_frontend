@@ -5,12 +5,22 @@
       <span class="w-chart-fund__caption-text">
         {{ title }}
       </span>
-      <a-icon
-        width='18'
-        height='18'
-        class='w-chart-fund__caption-icon'
-        :name='Icon.MonoInfo'
-      />
+      <a-tooltip-info
+        :caption="title"
+        position="left"
+      >
+        <template #button>
+          <a-icon
+            width='18'
+            height='18'
+            class='w-chart-fund__caption-icon'
+            :name='Icon.MonoInfo'
+          />
+        </template>
+        <template #text>
+          {{ tooltipText }}
+        </template>
+      </a-tooltip-info>
     </div>
     <div class="w-chart-portfolio__chart">
       <canvas :id="CHART_ID" />
@@ -52,6 +62,7 @@ import { SwiperSlide } from 'swiper/vue';
 import { Icon } from '~/src/shared/constants/icons';
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import ATooltipInfo from '~/src/shared/ui/atoms/a-tooltip-info/a-tooltip-info.vue';
 
 const props = defineProps({
   slider: {
@@ -89,12 +100,12 @@ const theme = computed<'dark' | 'light'>(() => $app.store.user.theme);
 const unsetColor = computed<string>(() => theme.value === 'light' ? '#F3F8FF' : '#252F4480');
 
 const bgMap = {
-  bst: 'rgba(252, 43, 94)',
-  bft: 'rgba(14, 133, 237)',
-  bot: 'rgba(117, 64, 239)',
-  usdt: 'rgba(29, 202, 140)',
-  baa: 'rgba(239, 186, 50)',
-  brf: 'rgba(255, 141, 7)',
+  bst: '#FC2B5E',
+  bft: '#0E85ED',
+  bot: '#7540EF',
+  usdt: '#1DCA8C',
+  baa: '#EFBA32',
+  brf: '#FF8D07',
   vault: 'rgba(92, 206, 214)',
   others: unsetColor.value
 }
@@ -117,7 +128,7 @@ const textCenter = {
     const value = localStorage.getItem('display-currency') || 'btc'
     let text = ''
     if (value === 'btc') {
-      text = `₿ ${$app.filters.rounded(resultSumBtc.value, 8)}`
+      text = `₿${$app.filters.rounded(resultSumBtc.value, 8)}`
     } else {
       text = `丰 ${$app.filters.rounded(resultSumBtc.value * 100000000)}`
     }
@@ -128,6 +139,8 @@ const textCenter = {
 const colorBgSvg = computed(() => {
   return $app.store.user.theme === 'dark' ? '#22242B' : 'white'
 })
+
+const tooltipText = 'AUM = Assets under management.';
 
 const options = ref({
   responsive: true,

@@ -7,7 +7,6 @@
       <m-slider
         class="w-fund-tablet__info"
         id="w-fund-tablet__info-slider"
-        :modules="[Autoplay]"
         loop
         :speed="3000"
         :space-between="0"

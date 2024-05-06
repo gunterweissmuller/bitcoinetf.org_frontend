@@ -1,8 +1,6 @@
 <template>
   <div class="w-fund page-max-width--big">
-    <!-- <keep-alive> -->
     <component v-if="activeComponent" :is="activeComponent.component" />
-    <!-- </keep-alive> -->
   </div>
 </template>
 

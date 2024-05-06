@@ -48,7 +48,6 @@ export default defineNuxtRouteMiddleware((to) => {
       $app.store.user.theme = to.query.theme
     }
     return navigateTo({path: to.path}, {replace: true})
-    //router.replace({ path: to.path, query: {} })
   }
 
 
@@ -58,7 +57,7 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   if (excludedRouteNames.includes(to.name) && $app.store.auth.isUserAuthenticated) {
-    return navigateTo({name: 'personal-fund'})
+    return navigateTo({name: 'personal-portfolio'})
   }
 
 
@@ -66,9 +65,6 @@ export default defineNuxtRouteMiddleware((to) => {
     if (to.name === 'personal-fund') {
       return navigateTo({name: 'personal-portfolio'})
     }
-    // if (to.name === 'personal-assets') {
-    //   return navigateTo({name: 'personal-assets-symbol', params: { symbol: assets()[0]?.symbol.toLowerCase() ?? 'baa' }})
-    // }
     if (to.name === 'personal-wallet') {
       return navigateTo({name: 'personal-dividends'})
     }
