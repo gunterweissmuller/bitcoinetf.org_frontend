@@ -129,6 +129,44 @@
     }
   }
 
+  &__button-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: torem(20);
+    white-space: nowrap;
+    border-radius: var(--spacing-s);
+    width: 100%;
+    max-width: 410px;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5rem;
+
+    color: rgb(39 39 42);
+    background: #ffffff;
+    margin-top: var(--spacing-m-1);
+
+    &-first {
+      color: #ffffff;
+      background-color: rgb(37 99 235);
+      margin-top: 0;
+    }
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      
+      & > * {
+        margin-left: var(--spacing-s);
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
 
   .vue-tel-input {
     margin-top: var(--spacing-m-2);

@@ -82,6 +82,13 @@
       flex-direction: row;
       padding-right: torem(0);
 
+      & > * {
+        margin-left: var(--spacing-s);
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
     }
 
     &-title {

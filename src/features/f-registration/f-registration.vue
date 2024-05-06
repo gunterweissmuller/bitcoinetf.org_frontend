@@ -37,19 +37,17 @@
 
           <div class="flex flex-col items-center pb-12">
               <div @click="choiceToEmail"
-                  class="flex justify-center items-center px-16 py-5 mt-8 max-w-full text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg max-w-[410px] w-full max-md:px-5 cursor-pointer">
-                  <div class="flex gap-2 items-center">
+                  class="f-registration__button-main f-registration__button-main-first">
+                  <div class="f-registration__button-main-wrapper">
                       <NuxtImg src="/img/icons/mono/mail-light.svg" width="18" height="14"
                           class="aspect-square w-[18px]" loading="lazy" />
                       <div class="grow">Sign up with Email</div>
                   </div>
               </div>
 
-
-
               <div @click="handleMetamaskConnect"
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
-                  <div class="flex gap-2 items-center">
+                  class="f-registration__button-main">
+                  <div class="f-registration__button-main-wrapper">
                       <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18"
                           class="aspect-square w-[18px]" loading="lazy" />
                       <div class="grow">Sign up with Metamask</div>
@@ -57,8 +55,8 @@
               </div>
 
               <div @click="handleGoogleConnect"
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
-                  <div class="flex gap-2 items-center">
+                  class="f-registration__button-main">
+                  <div class="f-registration__button-main-wrapper">
                       <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18"
                           class="aspect-square w-[18px]" loading="lazy" />
                       <div class="grow">Sign up with Google</div>
@@ -69,8 +67,8 @@
               <!-- <button @click="testTG">test</button> -->
 
             <div @click="testTG"
-                 class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
-              <div class="flex gap-2 items-center">
+                 class="f-registration__button-main">
+              <div class="f-registration__button-main-wrapper">
                 <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18"
                          class="aspect-square w-[18px]" loading="lazy" />
                 <div class="grow">Sign up with Telegram</div>
@@ -83,8 +81,8 @@
 
               <div
                   @click="handleAppleConnect"
-                  class="flex justify-center items-center px-16 py-5 mt-4 max-w-full text-base font-bold whitespace-nowrap bg-white rounded-lg shadow-sm text-zinc-800 max-w-[410px] w-full max-md:px-5 cursor-pointer">
-                  <div class="flex gap-2 items-center">
+                  class="f-registration__button-main">
+                  <div class="f-registration__button-main-wrapper">
                       <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18"
                           class="aspect-square w-[18px]" />
                       <div class="grow">Sign up with Apple</div>

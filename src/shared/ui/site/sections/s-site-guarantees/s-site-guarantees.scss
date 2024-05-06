@@ -179,8 +179,15 @@
   &__table-row-item {
     display: flex;
     align-items: center;
-    gap: torem(9);
     padding: torem(0, 16);
+
+    & > * {
+      margin-left: torem(9);
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
 
     &:not(:first-child) {
       font-size: torem(18);

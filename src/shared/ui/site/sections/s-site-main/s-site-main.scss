@@ -146,7 +146,6 @@
     padding: var(--Spacing-M1, 16px) var(--Spacing-L2, 48px);
     justify-content: center;
     align-items: center;
-    gap: var(--Spacing-S, 8px);
     border-radius: var(--Spacing-S, 8px);
     background: var(--Button-Primary, #4d94ff);
 
@@ -157,6 +156,14 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+
+    & > * {
+      margin-left: var(--spacing-s);
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
 
     & a:hover {
       color: #ffffff;

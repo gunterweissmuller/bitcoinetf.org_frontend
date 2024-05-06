@@ -28,9 +28,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: torem(12);
     padding: torem(12, 16, 14);
     background: rgba(255, 255, 255, 0.10);
+
+    & > * {
+      margin-left: torem(12);
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
 
     @include breakpoint($break-desktop-1024) {
       padding: torem(12, 80, 14);
@@ -45,9 +52,16 @@
       font-family: Jakarta, sans-serif;
       display: flex;
       align-items: center;
-      gap: torem(4);
       font-size: torem(14);
       line-height: 1;
+
+      & > * {
+        margin-left: torem(4);
+  
+        &:first-child {
+          margin-left: 0;
+        }
+      }
 
       i {
         color: #12DF00;
