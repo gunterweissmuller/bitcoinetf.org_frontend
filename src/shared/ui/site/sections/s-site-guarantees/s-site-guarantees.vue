@@ -20,6 +20,7 @@
           body="The reserve fund serves as a safety net, absorbing losses and maintaining liquidity during times of market turmoil. By diversifying our holdings into Bitcoin, we can weather unexpected events and continue delivering steady returns to our investors."
           :currentBalance="true"
           textButton="Verify on Blockchain"
+          @click="goToRegistration"
         />
       </div>
       <div class="s-site-guarantees__card-wrapper">
@@ -30,6 +31,7 @@
           body="Whenever our AI trading bot profits from the hedging operations, the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, irrespective of Bitcoin price volatility."
           :currentBalance="true"
           textButton="Verify on Blockchain"
+          @click="goToRegistration"
         />
       </div>
 
@@ -40,6 +42,7 @@
           body="The funds holding company in Hong Kong will utilize its paid up capital to fulfill guarantees if necessary."
           :currentBalance="false"
           textButton="Verify Official Record"
+          @click="goToRegistration"
         />
       </div>
 
@@ -82,7 +85,7 @@
                     continue delivering steady returns to our investors.
                   </p>
                 </div>
-                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">
+                <button @click="goToRegistration" class="guarantees-card__button">
                   Verify on Blockchain
                 </button>
               </div>
@@ -113,7 +116,7 @@
                     stable, regardless of the Bitcoin price volatility.
                   </p>
                 </div>
-                <button @click="$router.push('/personal/registration')" class="guarantees-card__button">
+                <button @click="goToRegistration" class="guarantees-card__button">
                   Verify on Blockchain
                 </button>
               </div>
@@ -129,7 +132,7 @@
                   </p>
                 </div>
                 <div class="s-site-main__item-value--footer">
-                  <button @click="$router.push('/personal/registration')" class="guarantees-card__button">
+                  <button @click="goToRegistration" class="guarantees-card__button">
                     Verify Official Record
                   </button>
                 </div>
@@ -168,7 +171,7 @@
             <div class="s-site-guarantees__table-row first-row">
               <div class="s-site-guarantees__table-row-item">Original investment loss</div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> <spa>Mid to High Risk</spa>
+                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> <span>Mid to High Risk</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
                 <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>High Risk</span>
@@ -177,8 +180,8 @@
                 <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> <span>Mid Risk</span>
               </div>
               <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>No Risk (Triple</span>
-                Protection)
+                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>No Risk (Triple
+                Protection)</span>
               </div>
             </div>
             <div class="s-site-guarantees__table-row second-row">
@@ -278,8 +281,14 @@ import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { useNuxtApp } from '#app'
 import { computed } from 'vue'
+import { auth } from '~/src/app/store/auth'
 
 const { $app } = useNuxtApp()
+const $router = useRouter()
+const authStore = auth()
+const isAuth = computed(() => authStore.isUserAuthenticated)
+
+  
 
 const fundTotalBtc = computed(() => {
   return $app.store.assets.fundTotalBtc
@@ -314,5 +323,18 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll',handleScroll);
 })
+
+function goToRegistration() {
+    if (isAuth.value) {
+      const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
+      const blockchainLink = isProd
+        ? 'https://explorer.nextdev.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
+        : 'https://explorer.stage.techetf.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
+        
+      window.open(blockchainLink, '_blank').focus()
+    } else {
+      $router.push('/personal/registration')
+    }
+  }
 </script>
 <style src="./s-site-guarantees.scss" lang="scss" />
