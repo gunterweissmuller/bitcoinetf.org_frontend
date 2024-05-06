@@ -37,7 +37,7 @@
     />
     <e-stat
       info="Corp. Paid-In Share Capital"
-      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :title="`$${$app.filters.rounded(50000000)}`"
       :icon="Icon.MonoMoney"
       iconType="small"
       bottom="none"
