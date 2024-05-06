@@ -1,4 +1,5 @@
 import {useNuxtApp, useRouter} from '#app'
+import useMediaDevice from '~/composables/useMediaDevice';
 
 export default defineNuxtRouteMiddleware((to) => {
   const {$app} = useNuxtApp();
@@ -6,7 +7,9 @@ export default defineNuxtRouteMiddleware((to) => {
     return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT')
   };
   const router = useRouter()
+  const { isLaptop, isDesktop } = useMediaDevice();
   const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
+  const fundRouteNames = [ 'personal-portfolio', 'personal-protection', 'personal-shareholders' ]
   const includedRouteMask = to.path.includes('personal')
   console.log(to);
   const urlParams = new URLSearchParams(window.location.search);
@@ -52,7 +55,10 @@ export default defineNuxtRouteMiddleware((to) => {
 
 
   if (includedRouteMask && $app.store.auth.isUserAuthenticated) {
-    if (to.name === 'personal-fund') {
+    if (fundRouteNames.includes(to.name) && (isLaptop.value || isDesktop.value)) {
+      return navigateTo({name: 'personal-fund'})
+    }
+    if (to.name === 'personal-fund' && !(isLaptop.value || isDesktop.value)) {
       return navigateTo({name: 'personal-portfolio'})
     }
     if (to.name === 'personal-wallet') {
