@@ -127,7 +127,7 @@ const close = () => {
     .getLastPayment()
     .then((response: any) => {
       $app.store.user.lastPayment = response.data
-      router.push('/personal/analytics/performance')
+      router.push('/personal/fund/portfolio')
     })
     .catch(() => {
       // Todo: notify something went wrond

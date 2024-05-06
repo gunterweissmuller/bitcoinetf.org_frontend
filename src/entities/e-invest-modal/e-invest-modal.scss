@@ -283,6 +283,17 @@
     @include breakpoint($break-tablet-minus) {
       margin-top: var(--spacing-m-2);
     }
+    &[disabled] {
+      opacity: 0.5 !important;
+      cursor: not-allowed;
+    }
+  }
+
+  &__error-message{
+    height: 0;
+    color: var(--accent-danger);
+    @include font-accent-s;
+    font-weight: 400;
   }
 }
 

@@ -1,0 +1,115 @@
+.e-sold-modal {
+
+    // padding: var(--spacing-l-2) var(--spacing-m-2);
+
+    &__img {
+        width: 106px;
+        height: 106px;
+        margin: 0 auto;
+        margin-bottom: var(--spacing-m-3);
+    }
+
+    &__title {
+        color: var(--text-primary);
+        text-align: center;
+        font-family: Dm,sans-serif;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: var(--spacing-s);
+    }
+
+    &__text {
+        color: var(--text-secondary);
+        text-align: center;
+        font-family: Dm,sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+
+        margin-bottom: var(--spacing-m-3);
+    }
+
+    &__agree {
+        padding: var(--spacing-m-1);
+        border-radius: var(--spacing-s);
+        border: 1px solid var(--surfaces-border-1);
+        margin-bottom: var(--spacing-m-3);
+    }
+
+    &__button {
+        width: 100%;
+        margin-bottom: var(--spacing-m-1);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__timer {
+        margin: var(--spacing-m-3) 0;
+
+        &-title {
+            color: var(--Text-Primary, #22242B);
+            text-align: center;
+            font-family: Dm,sans-serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: var(--spacing-s);
+        }
+
+        &-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        &-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &-numbers {
+            display: flex;
+        }
+
+
+        &-number {
+            padding: 10px;
+            border-radius: 2px;
+            background: var(--surfaces-selection);
+
+            color: var(--Accent-Primary, #06F);
+            text-align: center;
+            font-family: Dm,sans-serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            margin-left: var(--spacing-xs);
+            
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &-text {
+                margin-top: var(--spacing-xs);
+
+                color: var(--text-tertiary);
+                text-align: center;
+                font-family: Dm,sans-serif;
+                font-size: 10px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+            }
+        }
+
+    }
+
+}

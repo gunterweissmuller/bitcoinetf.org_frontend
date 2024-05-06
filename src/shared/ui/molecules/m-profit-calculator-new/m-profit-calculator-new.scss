@@ -486,8 +486,18 @@
       &-btc {
         color: var(--btcoin-500, #ff8d07);
       }
-    }
 
+      &:disabled{
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+    &__error-message{
+      height: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent-danger);
+    }
     &-reinvest-wrapper {
       display: flex;
       margin: auto;

@@ -113,7 +113,7 @@ const menu = [
     title: 'About',
     items: [
       { text: 'Fund', href: '/fund' },
-      { text: 'New', href: '/blog' },
+      { text: 'News', href: '/blog' },
       { text: 'Bitcoin Whitepaper', href: 'https://files.bitcoinetf.org/etf/public/bitcoin.pdf' },
       { text: 'PR Package', href: '/#' }, //
     ],

@@ -1,3 +1,4 @@
+
 .w-chart-performance-fund {
     padding: var(--spacing-m-1);
     margin-bottom: var(--spacing-m-2);
@@ -5,27 +6,27 @@
     border: torem(1) solid var(--surfaces-surface-glass-border);
     border-radius: var(--spacing-s);
     background: var(--surfaces-surface-glass);
-  
-  
+
+
     @include breakpoint($break-desktop-1440) {
       padding: var(--spacing-m-1);
       //margin-bottom: 0;
     }
-  
+
     &__caption {
       font-size: torem(16);
       line-height: torem(20);
       font-weight: 600;
       margin-bottom: torem(16);
     }
-  
+
     &__head {
       color: var(--text-tertiary);
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--spacing-s);
-  
+
       &-title {
         color: var(--text-tertiary);
         font-family: Dm, sans-serif;
@@ -33,7 +34,7 @@
         font-weight: 500;
         line-height: normal;
       }
-  
+
       &-subtitle {
         padding: var(--spacing-xs) var(--spacing-s);
         font-family: Dm, sans-serif;
@@ -44,24 +45,24 @@
         background: var(--surfaces-surface-2);
       }
     }
-  
+
     &__info {
       display: flex;
       flex-direction: column;
       margin-bottom: var(--spacing-m-2);
-  
+
       &-title {
         display: flex;
         align-items: center;
         justify-content: space-between;
-  
+
         &-usd {
           font-family: Dm, sans-serif;
           font-size: torem(14);
           font-weight: 700;
           line-height: torem(18);
         }
-  
+
         &-percent {
           padding: var(--spacing-xs) var(--spacing-s);
           border-radius: torem(16);
@@ -73,10 +74,10 @@
           font-weight: 700;
           line-height: normal;
         }
-  
+
         margin-bottom: var(--spacing-xs);
       }
-  
+
       &-subtitle {
         font-family: Dm, sans-serif;
         font-size: torem(12);
@@ -84,12 +85,12 @@
         line-height: torem(16);
         margin-bottom: var(--spacing-xs);
       }
-  
+
       &-text {
         display: flex;
         align-items: center;
         justify-content: space-between;
-  
+
         &-btc {
           display: flex;
           align-items: center;
@@ -98,12 +99,12 @@
           font-size: torem(12);
           font-weight: 500;
           line-height: normal;
-  
+
           i {
             margin-right: torem(2);
           }
         }
-  
+
         &-info {
           color: var(--text-tertiary);
           font-family: Dm, sans-serif;
@@ -113,10 +114,10 @@
         }
       }
     }
-  
+
     &__chart {
       position: relative;
-  
+
       &-ticker {
         position: absolute;
         left: torem(5);
@@ -129,13 +130,12 @@
         font-weight: 700;
         line-height: normal;
       }
-  
+
       height: torem(152);
-  
+
       @include breakpoint($break-desktop-1440) {
         height: torem(282);
       }
     }
-  
+
   }
-  

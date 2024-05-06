@@ -2,13 +2,12 @@
   z-index: 100;
   position: fixed;
   display: flex;
-  //background: var(--surfaces-surface-glass-2);
   flex-direction: column;
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
   top: 0;
   left: 0;
-  padding: torem(107, 15, 96, 15);
+  padding: torem(107, 0, 96, 0);
   justify-content: flex-start;
   display: none;
 
@@ -22,14 +21,6 @@
     justify-content: flex-start;
     background: var(--surfaces-surface-2);
     height: 100vh;
-  }
-
-  &__refer {
-    margin-bottom: torem(24);
-
-    @include breakpoint($break-desktop-1024) {
-      display: none;
-    }
   }
 
   &__logo {
@@ -66,15 +57,41 @@
     }
   }
 
+  &__profile {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-m-2);
+
+    padding: var(--spacing-m-2) var(--spacing-m-1);
+    border-radius: var(--spacing-s);
+
+    background: var(--surfaces-surface-glass-2);
+    box-shadow: 0 0 torem(6) 0 rgba(black, .06);
+
+    margin: var(--spacing-m-2) 0;
+
+    height: auto;
+  }
+
 
   &__avatar {
-    padding: torem(24, 32);
     display: flex;
     flex-direction: column;
     align-items: center;
 
     @include breakpoint($break-desktop-1024) {
       display: none;
+    }
+
+    &-logo {
+      position: relative;
+    }
+
+    &-type {
+      position: absolute;
+      top: torem(-6);
+      right: torem(-6);
     }
 
     &-pic {
@@ -94,6 +111,7 @@
       font-weight: 500;
       font-size: torem(14);
       line-height: torem(18);
+      color: var(--text-secondary);
     }
   }
 
@@ -234,6 +252,10 @@
 
     }
 
+    &--logout .w-aside__link-text {
+      color: var(--text-tertiary);
+    }
+
     &-mobile {
       @include breakpoint($break-desktop-1024) {
         display: none;
@@ -320,6 +342,10 @@
       }
     }
 
+    &-switch {
+      margin-left: auto;
+    }
+
 
     &--active {
       border-radius: var(--bradius-s);
@@ -350,7 +376,7 @@
     width: 100%;
     top: 0;
     left: 0;
-    padding: torem(0, 15, 0, 15);
+    padding: 0;
     height: 100%;
     justify-content: flex-start;
 
@@ -369,6 +395,21 @@
       &__inner {
         overflow: visible;
         height: auto;
+
+        @include breakpoint($break-desktop-1024) {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: flex-start;
+          gap: torem(24);
+        }
+      }
+
+      &__profile {
+        display: flex;
+
+        @include breakpoint($break-desktop-1024) {
+          margin-top: 0;
+        }
       }
 
       &__logo {
@@ -391,17 +432,12 @@
 
       &__refer {
         display: block;
-
-        @include breakpoint($break-desktop-1024) {
-          display: none;
-        }
-
       }
 
       &__list {
         border-radius: torem(8);
         border: torem(1) solid var(--surfaces-border-1);
-        background: var(--surfaces-surface-glass-2);
+        background: var(--surfaces-surface-1);
         flex-direction: column;
         display: flex;
       }
@@ -428,13 +464,6 @@
           }
         }
 
-
-        &--logout {
-          @include breakpoint($break-desktop-1024) {
-            display: none;
-          }
-        }
-
         &--avatar {
           display: none;
         }
@@ -443,4 +472,20 @@
     }
   }
 
+}
+
+
+.w-aside__link-img--referrals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: torem(24);
+  height: torem(24);
+}
+
+.w-aside__link:hover .w-aside__link-img--referrals svg path {
+  @include breakpoint($break-desktop-1024) {
+    fill: #fff;
+  }
 }

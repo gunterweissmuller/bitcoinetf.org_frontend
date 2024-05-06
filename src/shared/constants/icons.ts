@@ -129,6 +129,7 @@ export enum Icon {
   MonoLearn = 'mono--learn',
   MonoLinkToPage = 'mono--link-to-page',
   MonoLink = 'mono--link',
+  MonoLinkBlue = 'mono--link-blue',
   MonoLinkedinBlack = 'mono--linkedin-black',
   MonoLock = 'mono--lock',
   MonoLogout = 'mono--logout',
@@ -175,6 +176,8 @@ export enum Icon {
   MonoWallet = 'mono--wallet',
   MonoWithdraw = 'mono--withdraw',
   MonoX = 'mono--x',
+  MonoMoney = 'mono--money',
+  MonoExternalLink = 'mono--external-link',
 }
 export const files = {
   [Icon.ColorfulAlert]: '/img/icons/colorful/alert.svg',
@@ -306,6 +309,7 @@ export const files = {
   [Icon.MonoLearn]: '/img/icons/mono/learn.svg',
   [Icon.MonoLinkToPage]: '/img/icons/mono/link-to-page.svg',
   [Icon.MonoLink]: '/img/icons/mono/link.svg',
+  [Icon.MonoLinkBlue]: '/img/icons/mono/link-blue.svg',
   [Icon.MonoLinkedinBlack]: '/img/icons/mono/linkedin-black.svg',
   [Icon.MonoLock]: '/img/icons/mono/lock.svg',
   [Icon.MonoLogout]: '/img/icons/mono/logout.svg',
@@ -352,4 +356,6 @@ export const files = {
   [Icon.MonoWallet]: '/img/icons/mono/wallet.svg',
   [Icon.MonoWithdraw]: '/img/icons/mono/withdraw.svg',
   [Icon.MonoX]: '/img/icons/mono/x.svg',
+  [Icon.MonoMoney]: '/img/icons/mono/money.svg',
+  [Icon.MonoExternalLink]: '/img/icons/mono/external-link.svg',
 }

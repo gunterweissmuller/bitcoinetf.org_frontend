@@ -1,8 +1,7 @@
 <template>
   <div class="w-wallet page-max-width--big">
-    <!--    <e-analytics-tabs v-model:active-tab="activeTab" :tab-bars="tabsList" />-->
     <div class="w-wallet__box">
-      <e-send-to-buy-shares :active-component="activeComponent?.id" />
+      <!-- <e-send-to-buy-shares :active-component="activeComponent?.id" /> -->
       <div class="w-wallet__box-main">
         <keep-alive>
           <component
@@ -19,7 +18,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
-import EAnalyticsTabs from '~/src/features/e-analytics-tabs/e-analytics-tabs.vue'
 import ESendToBuyShares from '~/src/entities/e-send-to-buy-shares/e-send-to-buy-shares.vue'
 
 const route = useRoute()
@@ -38,10 +36,14 @@ const activeTab = ref<string>('dividends')
 
 const dividends = defineAsyncComponent(() => import('~/src/widgets/w-dividends/w-dividends.vue'))
 const referrals = defineAsyncComponent(() => import('~/src/widgets/w-referrals/w-referrals.vue'))
+const bonus = defineAsyncComponent(() => import('~/src/widgets/w-bonus/w-bonus.vue'))
+const etfs = defineAsyncComponent(() => import('~/src/widgets/w-etfs/w-etfs.vue'))
 
 const components = {
   'personal-dividends': { component: dividends, id: 'personal-dividends' },
   'personal-referrals': { component: referrals, id: 'personal-referrals' },
+  'personal-bonus': { component: bonus, id: 'personal-bonus' },
+  'personal-etfs': { component: etfs, id: 'personal-etfs' },
 }
 
 const activeComponent = computed(() => components?.[route?.name])

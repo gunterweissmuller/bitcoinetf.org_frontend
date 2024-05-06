@@ -12,7 +12,7 @@
     </div>
 
     <div class="s-site-guarantees__main-section">
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 0; top: -7px">
+      <div class="s-site-guarantees__card-wrapper">
         <m-guarantees-card
           :label="'Protection 1'"
           title="BTC Reserve Fund"
@@ -22,7 +22,7 @@
           textButton="Verify on Blockchain"
         />
       </div>
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; right: 0; top: 18%; z-index: 3">
+      <div class="s-site-guarantees__card-wrapper">
         <m-guarantees-card
           label="Protection 2"
           title="USDT Protection Vault"
@@ -33,11 +33,11 @@
         />
       </div>
 
-      <div class="s-site-guarantees__card-wrapper" style="position: absolute; left: 36%; bottom: -18px; z-index: 2">
+      <div class="s-site-guarantees__card-wrapper">
         <m-guarantees-card
-          capital="$50,000,000 Paid-Up Capital"
+          capital="$50,000,000 Paid Up Capital"
           label="Protection 3"
-          body="The funds holding company in Hong Kong will utilize its paid-up capital to fulfill guarantees if necessary."
+          body="The funds holding company in Hong Kong will utilize its paid up capital to fulfill guarantees if necessary."
           :currentBalance="false"
           textButton="Verify Official Record"
         />
@@ -61,7 +61,7 @@
             <div class="s-site-main__item-value">
               <div class="s-site-main__item-value--wrapper">
                 <div class="s-site-main__item-value-body">
-                  <p class="s-site-main__item-value--title" style="font-size: 20px;">BTC Reserve Fund</p>
+                  <p class="s-site-main__item-value--title" style="font-size: 20px">BTC Reserve Fund</p>
                   <p style="font-size: 32px; text-align: left">{{ $app.filters.rounded(fundTotalBtc, 2) }} BTC</p>
                   <p class="guarantees-card__current_balance" style="font-size: 20px; text-align: left">
                     Current Balance
@@ -76,7 +76,7 @@
                       LIVE DATA</span
                     >
                   </p>
-                  <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px; font-weight: 500;">
+                  <p style="font-size: 16px; text-align: left; line-height: 120%; margin-top: 16px; font-weight: 500">
                     The reserve fund serves as a safety net, absorbing losses and maintaining liquidity during times of
                     market turmoil. By diversifying our holdings into Bitcoin, we can weather unexpected events and
                     continue delivering steady returns to our investors.
@@ -92,8 +92,8 @@
             <div class="s-site-main__item-value">
               <div class="s-site-main__item-value--wrapper">
                 <div class="s-site-main__item-value--body">
-                  <p class="s-site-main__item-value--title" style="font-size: 20px;">USDT Protection Vault</p>
-                  <p  style="font-size: 32px; text-align: left">${{ $app.filters.rounded(fundTotalUsd, 0) }}</p>
+                  <p class="s-site-main__item-value--title" style="font-size: 20px">USDT Protection Vault</p>
+                  <p style="font-size: 32px; text-align: left">${{ $app.filters.rounded(fundTotalUsd, 0) }}</p>
                   <p class="guarantees-card__current_balance" style="font-size: 20px; text-align: left">
                     Current Balance
                     <span

@@ -6,20 +6,20 @@
     hidden-mobile
   />
   <s-site-main :data="mainData" />
-  <s-site-marquee :data="marqueeData" />
+  <!-- <s-site-marquee :data="marqueeData" /> -->
   <s-site-how-it-work />
   <s-site-main-calculate />
   <s-site-guarantees />
   <!-- <s-site-welcome :data="welcomeData"/> -->
-  <!--<s-site-ultimate :data="ultimateData"/>-->
   <!--<s-site-act :data="actData"/>-->
-  <!--<s-site-investor :data="investorData"/>-->
-  <!--<s-site-fundinfo-dark/>-->
+  <!-- <s-site-investor :data="investorData"/> -->
+  <!-- <s-site-fundinfo-dark/> -->
   <!--<s-site-fund/>-->
-  <!--<s-site-protection :data="protectionData"/>-->
+  <!-- <s-site-protection :data="protectionData"/> -->
   <s-site-bitcoin-education :data="blogNewsEdu" :is-education="true" />
   <s-site-earnings :data="earningsData" />
   <s-site-transparency :data="transparencyData" />
+  <s-site-ultimate :data="ultimateData"/>
   <s-site-news :data="blogNews" v-if="blogNews?.length" />
   <s-site-footer />
 </template>

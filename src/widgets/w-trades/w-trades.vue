@@ -1,14 +1,14 @@
 <template>
   <div v-if="renderedTrades.length" class="w-trades">
     <div class="w-trades__head">
-      <div class="w-trades__head-title">Latest trades</div>
+      <div class="w-trades__head-title">Latest Trades</div>
       <nuxt-link v-if="!isPage && renderedTrades.length && !hideView" :to="fullPageNuxtLink" class="w-trades__head-info"
         >View All
       </nuxt-link>
     </div>
-    <div v-if="renderedTrades.length && !isExpand" :class="[{'w-trades__content-main' : props.isMain}, {'w-trades__content' : !props.isMain}]" :style=" width > 1010 ? {height: `${(renderedTrades?.length / props.gridTemplate) * 94}px`} : {}">
-      <transition-group name="fade" tag="div" :class="[{'w-trades__content-main-wrapper' : props.isMain}]" :style=" width > 1010 ? {'display': 'grid', 'grid-template-columns': 'repeat( '+ props.gridTemplate +', 1fr)', 'max-height': 94 * (props.perPage/props.gridTemplate) +'px'} : {'display': 'flex', 'flex-direction': 'column'}">
-        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :isMain="props.isMain"/>
+    <div v-if="renderedTrades.length && !isExpand" class="w-trades__content">
+      <transition-group name="fade" tag="div">
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" />
       </transition-group>
     </div>
 
@@ -45,8 +45,6 @@ import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
 import { useWindowSize } from '@vueuse/core'
 
-const { width } = useWindowSize()
-
 const route = useRoute()
 const { $app } = useNuxtApp()
 
@@ -58,12 +56,14 @@ const props = withDefaults(
     hideView?: boolean
     gridTemplate?: number
     isMain?: boolean
+    filters: Record<string, string> | null
   }>(),
   {
     isPage: false,
     perPage: 4,
     gridTemplate: 1,
-    isMain: false
+    isMain: false,
+    filters: null
   },
 )
 
@@ -85,24 +85,14 @@ const fullPageNuxtLink = computed(() => {
   return nuxtLinkObject
 })
 
-const loadMoreTrades = async () => {
+const loadMoreTrades = () => {
   currentPage.value += 1
 
-  if (route.name === 'personal-asset-id') {
-    await getTrades(route.params.id)
-  } else if (route.query.asset_uuid) {
-    await getTrades(route.query.asset_uuid)
-  } else {
-    await getTrades()
-  }
+  getTrades()
 }
 
-const getTrades = async (assetId?: string) => {
-  const tradesFilters = {}
-
-  if (assetId) {
-    tradesFilters.asset_uuid = assetId
-  }
+const getTrades = async () => {
+  const tradesFilters = props.filters ?? {};
 
   const requestParams = {
     per_page: props.perPage,
@@ -124,13 +114,7 @@ const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
 onMounted(async () => {
-  if (route.name === 'personal-asset-id') {
-    await getTrades(route.params.id)
-  } else if (route.query.asset_uuid) {
-    await getTrades(route.query.asset_uuid)
-  } else {
-    await getTrades()
-  }
+  await getTrades()
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
@@ -142,7 +126,8 @@ onMounted(async () => {
   sub
     .on('publication', function (ctx) {
       $app.store.user.latestTrade = ctx.data.message?.result_amount
-     if (route.name !== 'personal-asset-id' && !route.query.asset_uuid) {
+
+      if (route.name !== 'personal-assets-symbol' || ctx.data.message.asset_uuid === props.filters?.asset_uuid) {
         trades.value = [ctx.data.message, ...trades.value]
       }
     })
@@ -151,6 +136,10 @@ onMounted(async () => {
 
 onUnmounted(() => {
   centrifuge.value?.disconnect()
+})
+
+watch(() => props.filters, () => {
+  getTrades();
 })
 </script>
 
@@ -188,9 +177,6 @@ onUnmounted(() => {
   position: absolute;
   right: 1000px;
   bottom: 0;
-  display: none;
-
-  
-  // transform: translateX(200px);
+  transform: translateY(100px);
 }
 </style>

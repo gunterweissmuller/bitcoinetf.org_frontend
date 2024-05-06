@@ -1,9 +1,12 @@
 import {useNuxtApp, useRouter} from '#app'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const {$app} = useNuxtApp()
+  const {$app} = useNuxtApp();
+  const assets = () => {
+    return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT')
+  };
   const router = useRouter()
-  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
+  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-verify-email', 'personal-login-one-time']
   const includedRouteMask = to.path.includes('personal')
   const urlParams = new URLSearchParams(window.location.search);
   if(to.query.accessToken) {
@@ -50,18 +53,22 @@ export default defineNuxtRouteMiddleware((to) => {
 
 
   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
+    console.log(to.name)
     return navigateTo({name: 'personal-login'})
   }
 
   if (excludedRouteNames.includes(to.name) && $app.store.auth.isUserAuthenticated) {
-    return navigateTo({name: 'personal-analytics'})
+    return navigateTo({name: 'personal-fund'})
   }
 
 
   if (includedRouteMask && $app.store.auth.isUserAuthenticated) {
-    if (to.name === 'personal-analytics') {
-      return navigateTo({name: 'personal-performance'})
+    if (to.name === 'personal-fund') {
+      return navigateTo({name: 'personal-portfolio'})
     }
+    // if (to.name === 'personal-assets') {
+    //   return navigateTo({name: 'personal-assets-symbol', params: { symbol: assets()[0]?.symbol.toLowerCase() ?? 'baa' }})
+    // }
     if (to.name === 'personal-wallet') {
       return navigateTo({name: 'personal-dividends'})
     }

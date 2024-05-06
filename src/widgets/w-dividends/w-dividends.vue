@@ -12,12 +12,84 @@
           </div>
           <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
+
+        <div class="w-dividends__timer" :style="timerStyle">
+          <div class="w-dividends__timer-name">NEXT PAYOUT</div>
+          <div class="w-dividends__timer-time">{{ timerText }}</div>
+        </div>
+
       </div>
-      <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
+
+      <div class="w-dividends__cards">
+
+        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw" @click="openModal">
+
+          <div class="w-dividends__cards-add">
+            <div class="w-dividends__cards-add-img">
+              <a-icon
+                width="32"
+                height="32"
+                :name="Icon.MonoPlus"
+              />
+            </div>
+            <div class="w-dividends__cards-add-text">
+              Add Withdrawal Method
+            </div>
+          </div>
+          
+        </div>
+
+        <div v-else class="w-dividends__cards-item w-dividends__cards-item-withdraw">
+          <div class="w-dividends__cards-header" @click="openModal">
+            <a-icon width="24" height="24" class="w-dividends__cards-icon-method" :name="typeMethodIcon" />
+            <a-icon width="18" height="18" class="w-dividends__cards-icon-edit"  :name="Icon.MonoActionEdit" />
+          </div>
+          <div class="w-dividends__cards-body">
+            <div class="w-dividends__cards-subtitle">
+              WITHDRAW TO:
+            </div>
+            <div class="w-dividends__cards-title-second">
+              {{ address }}
+            </div>
+          </div>
+          <div class="w-dividends__cards-footer">
+            <div class="w-dividends__cards-text">
+              {{ subInfo }}
+            </div>
+          </div>
+        </div>
+        
+        <div class="w-dividends__cards-item w-dividends__cards-item-dividends">
+          <div class="w-dividends__cards-header">
+            <div class="w-dividends__cards-icon-dollar">
+              <a-icon width="14" height="14"  :name="Icon.MonoDollar" />
+            </div>
+            <a-live />
+          </div>
+          <div class="w-dividends__cards-body">
+            <div class="w-dividends__cards-subtitle">
+              TOTAL DIVIDENDS PAID
+            </div>
+            <div class="w-dividends__cards-title">
+              ${{$app.filters.rounded($app.store.user.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2) }}
+            </div>
+          </div>
+          <div class="w-dividends__cards-footer">
+            <div class="w-dividends__cards-text w-dividends__cards-dropdown">
+              <m-dropdown :options="timeOptions"/>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- OLD -->
+      <!-- <button v-if="!selectedMethod" @click="openModal" class="w-dividends__withdrawal" type="button">
         <a-icon width="24" height="24" class="w-dividends__withdrawal-icon" :name=" orderType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin" />
         <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
         <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
       </button>
+      
       <div v-else class="w-dividends__amount-method" @click="openModal">
         <div class="w-dividends__amount-method__wrap">
           <a-icon width="24" height="24" class="w-dividends__amount-method__icon" :name="typeMethodIcon" />
@@ -33,7 +105,8 @@
 
           <a-icon width="18" height="18" class="w-dividends__amount-method__chevron" :name="Icon.MonoChevronRight" />
         </div>
-      </div>
+      </div> -->
+
       <div class="w-dividends__subtitle">Transactions</div>
       <div v-if="personalDividends.length" class="w-dividends__list">
         <transition-group name="fade" tag="div">
@@ -42,25 +115,25 @@
               :class="['w-dividends__item-pic', { 'w-dividends__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
             >
               <a-icon
-                width="18"
-                height="18"
+                width="14"
+                height="14"
                 :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
               />
             </div>
             <div class="w-dividends__item_info">
               <div class="w-dividends__item_info-title">{{ getDividendsDesc(item) }}</div>
               <div class="w-dividends__item_info-date">
-                {{ $app.filters.dayjs(item?.created_at)?.format('D MMMM YY') }}
+                {{ $app.filters.dayjs(item?.created_at)?.format('D MMM YY HH:mm') }}
               </div>
             </div>
             <div v-if="item.status === 'pending'" class="w-dividends__item_sums">Pending</div>
             <div v-else class="w-dividends__item_sums">
               <div class="w-dividends__item_info-usd">
-                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 8) }}
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }} <!--8-->
               </div>
               <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
-                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span>
+                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 6))"></span> <!--8-->
               </div>
             </div>
           </div>
@@ -70,7 +143,7 @@
         <div @click="loadMoreDividends" class="w-dividends__more-text">Load more</div>
       </div>
       <div v-if="!personalDividends.length" class="w-dividends__empty">
-        <img class="w-dividends__empty-pic" src="/img/cloud.png" alt="empty" />
+        <img class="w-dividends__empty-pic" :src="$app.store.user.theme === 'dark' ? '/img/cloud-dark.png' : '/img/cloud.png' " alt="empty" />
         <div class="w-dividends__empty-title">You don’t have any transactions yet.</div>
         <div class="w-dividends__empty-text">Buy your first ETF Shares and enjoy daily dividends!</div>
       </div>
@@ -89,6 +162,10 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
+import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
+import eNotEnoughBalanceModal from '~/src/entities/e-not-enough-balance-modal/e-not-enough-balance-modal.vue'
+import axios from "axios";
 
 const { $app } = useNuxtApp()
 
@@ -103,13 +180,15 @@ const enum DIVIDENDS_TYPES {
 }
 
 const openModal = async () => {
-  const isKycFinished = await checkKyc()
+  // const isKycFinished = await checkKyc()
 
-  if (isKycFinished) {
-    isOpenModal.value = true
-  } else {
-    navigateTo({ name: 'personal-kyc' })
-  }
+  // if (isKycFinished) {
+  //   isOpenModal.value = true
+  // } else {
+  //   navigateTo({ name: 'personal-kyc' })
+  // }
+
+  isOpenModal.value = true
 }
 
 const walletDividends = ref([])
@@ -154,6 +233,12 @@ const setMethod = async (value) => {
 
 const typeWorkMethod = computed(() => {
   return (method.value === 'bitcoin_lightning' || method.value === 'polygon_usdt') ? 'Automatic' : 'Manual'
+})
+
+const subInfo = computed(() => {
+  return method.value === 'bitcoin_lightning' || method.value === 'polygon_usdt'
+    ? 'Withdrawals will be made automatically daily'
+    : ' Withdrawals will be made automatically once the cash balance reaches $250.'
 })
 
 const typeMethodIcon = computed(() => {
@@ -377,6 +462,95 @@ const renderedSteps = computed(() => {
 const nextRouteName = computed(() => {
   return localStorage?.getItem('journey') ? 'personal-referrals' : 'personal-buy-shares'
 })
+
+//timer style
+
+const timerPercent = ref(0);
+const timerText = ref("");
+
+onMounted(() => {
+
+  const time = new Date();
+  const senondsDay = 24*60*60*1000; //24hr in miliseconds
+  const secondsEnd = 6*60*60*1000 + 30*60*1000; //6:30 hours in miliseconds;
+  const secondsNow = time.getHours()*60*60*1000 + time.getMinutes()*60*1000 + time.getSeconds()*1000;
+
+  const timeZone = -(time.getTimezoneOffset()+180)*60*1000; // timezone for moscow in miliseconds
+
+  // console.log(time.getTimezoneOffset(), time, timeZone, $app.filters.dayjs(time.getTime()).format('D MMM YY HH:mm:ss'), $app.filters.dayjs(time.getTime()-secondsNow+secondsEnd+senondsDay).format('D MMM YY HH:mm:ss')  );
+
+  // Set the date we're counting down to
+  let countDownDate = time.getTime()-secondsNow+secondsEnd+senondsDay+timeZone;
+
+  // if end time > 24hr -> get this day time
+  if(countDownDate - time.getTime() > senondsDay) {
+    countDownDate = time.getTime()-secondsNow+secondsEnd+timeZone;
+  }
+  
+
+  // Update the count down every 1 second
+  const x = setInterval(function() {
+    
+    const now = new Date().getTime();
+    // Find the distance between now and the count down date
+    const distance = countDownDate - now;
+
+    timerPercent.value = distance / (senondsDay/100);
+
+    // Time calculations for days, hours, minutes and seconds
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Display the result in the element with id="demo"
+    const displayHours = String(hours).length < 2 ? "0" + hours : hours ;
+    const displayMinutes = String(minutes).length < 2 ? "0" + minutes : minutes;
+    const displaySeconds = String(seconds).length < 2 ? "0" + seconds : seconds;
+    timerText.value = displayHours+":"+ displayMinutes+":"+displaySeconds;
+
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      timerText.value = "Finished";
+    }
+  }, 1000);
+
+//  setTimeout(()=>{
+//   setInterval(() => {
+//     timerPercent.value += 1;
+//   },10);
+//  }, 5000)
+})
+
+const timerStyle = computed(() => {
+  return `background: radial-gradient(var(--surfaces-surface-1) 63%, transparent 64%), conic-gradient(var(--accent-primary) 0% ${timerPercent.value}%, var(--surfaces-selection) ${timerPercent.value}% 50%);`
+  return `background: radial-gradient(black 60%, transparent 61%), conic-gradient(#D53738 0% ${timerPercent.value}%, transparent ${timerPercent.value}% 100%)`;
+})
+
+// time dropdown
+
+const timeOptions = [
+  {value : "All time"},
+  {value : "1 year"},
+  {value : "6 months"},
+  {value : "3 months"},
+  {value : "1 month"},
+  {value : "1 week"},
+  {value : "7 days"},
+  {value : "24 hours"},
+]
+
+const methods = [
+  {
+    label: 'Tether USDT (Polygon)',
+    value: 'polygon_usdt',
+    icon: Icon.ColorfulTron,
+  },
+]
+
+const timeValue = ref(methods[0]?.value);
+
+
 </script>
 
 <style src="./w-dividends.scss" lang="scss" />

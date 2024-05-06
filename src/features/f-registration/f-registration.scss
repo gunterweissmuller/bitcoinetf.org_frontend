@@ -178,10 +178,11 @@
   }
   
   .vti__dropdown {
-    background: var(--surfaces-surface-2) !important;
+    // background: var(--surfaces-surface-2) !important;
+    background: transparent !important;
   
     &-list {
-      background: var(--surfaces-surface-2);
+      background: var(--surfaces-surface-1);
       border: none;
     }
   
@@ -191,7 +192,8 @@
   }
   
   .vti__input {
-    background: var(--surfaces-surface-2);
+    // background: var(--surfaces-surface-2);
+    background: transparent !important;
     border: transparent
   }
 

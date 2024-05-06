@@ -10,7 +10,7 @@
           size="32px"
           class="w-header-auth__controls-avatar w-header-auth__controls-avatar--mobile"
           photo-src="/img/avatar.png"
-          @click="$router.push({ name: 'personal-performance' })"
+          @click="$router.push({ name: 'personal-portfolio' })"
         />
         <div class="w-header-auth__links">
           <nuxt-link v-for="(link, idx) in LINKS" :key="idx" :to="link.link" class="w-header-auth__link">
@@ -53,7 +53,7 @@
           class="w-header-auth__controls-avatar"
           photo-src="/img/avatar.png"
           :left-label="$app.store.user?.info?.account?.username"
-          @click="$router.push({ name: 'personal-performance' })"
+          @click="$router.push({ name: 'personal-portfolio' })"
         />
       </div>
       <div :class="['w-header-auth__burger', { 'w-header-auth__burger__active': isOpenMenu }]" @click="openMenu">
