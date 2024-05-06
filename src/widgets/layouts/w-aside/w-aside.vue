@@ -73,8 +73,8 @@
             active-class="w-aside__link--active"
             @click="onClickLink"
           >
-            <a-icon class="w-aside__link-img" :name="Icon.MonoMore" width="24" height="24" />
-            <p class="w-aside__link-text">More</p>
+            <a-icon class="w-aside__link-img" :name="Icon.MonoProfile" width="24" height="24" />
+            <p class="w-aside__link-text">Profile</p>
             <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
           </nuxt-link>
         </div>
@@ -355,30 +355,13 @@ const openTermsModal = () => {
 const routesList = [
   {
     title: 'Fund',
-    icon: Icon.MonoAnalytics,
+    icon: Icon.MonoActivity,
     link: 'personal-fund',
-    subNav: [
-      {
-        title: 'Portfolio',
-        icon: Icon.MonoEarnings,
-        link: 'personal-portfolio',
-      },
-      {
-        title: 'Protection',
-        icon: Icon.MonoEarnings,
-        link: 'personal-protection',
-      },
-      {
-        title: 'Shareholders',
-        icon: Icon.MonoEarnings,
-        link: 'personal-shareholders',
-      },
-    ],
   },
   {
-    title: 'Dividends',
-    icon: Icon.MonoEarnings,
-    link: 'personal-earnings',
+    title: 'Assets',
+    icon: Icon.MonoAnalytics,
+    link: 'personal-assets',
   },
   {
     title: 'Wallet',
@@ -393,9 +376,9 @@ const routesList = [
       {
         title: 'ETFs',
         icon: Icon.MonoEarnings,
-        link: 'personal-referrals',
+        link: 'personal-etfs',
       },
-     
+
     ],
   },
 ]
@@ -454,6 +437,10 @@ const logout = () => {
 
 const activeLinkClass = (link: string): boolean => {
   switch (link) {
+    case 'personal-fund':
+      return (
+        route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
+      )
     case 'personal-protection':
       return (
         route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
