@@ -174,9 +174,15 @@
 
 @font-face {
 font-family: "icons";
+<<<<<<< HEAD
 src: url("icons.eot?9c87250cd91bc853a9805fcabe59757c?#iefix") format("embedded-opentype"),
 url("icons.woff2?9c87250cd91bc853a9805fcabe59757c") format("woff2"),
 url("icons.woff?9c87250cd91bc853a9805fcabe59757c") format("woff");
+=======
+src: url("icons.eot?221271af4a6a46dbd160c5e1c096a33e?#iefix") format("embedded-opentype"),
+url("icons.woff2?221271af4a6a46dbd160c5e1c096a33e") format("woff2"),
+url("icons.woff?221271af4a6a46dbd160c5e1c096a33e") format("woff");
+>>>>>>> features/fund-routing
 font-weight: normal;
 font-style: normal;
 }
