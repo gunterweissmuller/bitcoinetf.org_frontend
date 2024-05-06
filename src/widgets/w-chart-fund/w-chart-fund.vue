@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div v-if="props.type === 'assets' || props.type === 'asset'" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
+        <div v-if="!!!shareholdersStatistic && (props.type === 'assets' || props.type === 'asset')" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
           <div
             :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': difference < 0 }]"
           >
@@ -174,15 +174,18 @@ const changeChartData = (tabs : DataItem[]) => {
 const getStatistics = async () => {
   let response;
   let data;
-  if (props.type === 'shareholders') {
+  if (['shareholders', 'assets'].includes(props.type)) {
     response = await $app.api.eth.statisticEth.getShareholdersGrowth();
 
-    shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders).shareholders;
+    shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders)[props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd'];
     shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
+    $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
+
+    const valueType = props.type === 'shareholders' ? 'y' : 'aum_size_';
 
     data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent);
     data = data.map((item : Record<string, any>, index : number) : DataItem => ({
-      amount: item[`aum_size_${index}`],
+      amount: item[`${valueType}${index}`],
       created_at: new Date(`2 ${item["x"+index]}`).toISOString().replace(/T.*/, ''),
       label: item[`x${index}`]
     }));

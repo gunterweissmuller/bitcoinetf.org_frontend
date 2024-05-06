@@ -16,14 +16,14 @@
     />
     <e-stat
       info="BTC IN RESERVE FUND"
-      :title="`$${$app.filters.rounded($app.store.user?.btcValue)}`"
+      :title="`$${$app.filters.rounded(btcReserve)}`"
       :icon="Icon.ColorfulBitcoin"
       iconType="full"
       bottom="link"
     />
     <e-stat
       info="USDT PROTECTION VAULT"
-      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :title="`$${$app.filters.rounded(usdtReserve)}`"
       :icon="Icon.ColorfulUsdt"
       iconType="full"
       bottom="link"
@@ -37,7 +37,7 @@
     />
     <e-stat
       info="Corp. Paid-In Share Capital"
-      :title="`$${$app.filters.rounded(globalStatistic?.average_size_usd)}`"
+      :title="`$${$app.filters.rounded(50000000)}`"
       :icon="Icon.MonoMoney"
       iconType="small"
       bottom="none"
@@ -55,6 +55,9 @@ const { $app } = useNuxtApp();
 const globalStatistic = computed(() => $app.store.user?.statistic);
 
 const dividentsPaid = computed<number>(() => $app.store.user?.statistic?.dividends_earned_btc * $app.store.user?.btcValue);
+
+const btcReserve = computed(() => $app.store.assets.brf?.full_balance)
+const usdtReserve = computed(() => $app.store.assets.usdt?.full_balance)
 </script>
 
 <style src="./w-shareholders-stats.scss" lang="scss" />
