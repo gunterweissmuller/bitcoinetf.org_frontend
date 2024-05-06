@@ -372,7 +372,6 @@ const linksList = {
   'personal-wallet': walletLinks,
   'personal-dividends': walletLinks,
   'personal-referrals': walletLinks,
-  'personal-bonus': walletLinks,
   'personal-assets': assetsLinks,
   'personal-etfs': walletLinks,
 }
