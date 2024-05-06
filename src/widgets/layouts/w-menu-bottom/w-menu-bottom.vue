@@ -50,7 +50,7 @@
           ]"
           width="24"
           height="24"
-          :name="Icon.MonoMenu"
+          :name="Icon.MonoProfile"
         />
         <p
           :class="[
@@ -58,7 +58,7 @@
             { 'w-menu-bottom__item-text--active': activeLinkClass('personal-more') },
           ]"
         >
-          Menu
+          Profile
         </p>
       </li>
     </ul>
@@ -93,7 +93,7 @@ const navList = [
   { title: 'Fund', icon: Icon.MonoAnalytics, link: 'personal-portfolio' },
   { title: 'Dividends', icon: Icon.MonoEarnings, link: 'personal-earnings' },
   {
-    title: "BUY <i class='a-icons icon-mono--btc-uni convert-icon' aria-hidden='true' ></i> ETF ",
+    title: "ETFs",
     icon: Icon.ColorfulBitcoin,
     link: 'personal-buy-shares',
   },
@@ -179,7 +179,7 @@ const activeLinkClass = (link: string): boolean => {
       return route.name?.includes('personal-more')
     case 'personal-dividends':
       return (
-        route.name === 'personal-dividends' || route.name === 'personal-referrals' 
+        route.name === 'personal-dividends' || route.name === 'personal-referrals'
       )
 
     default:
