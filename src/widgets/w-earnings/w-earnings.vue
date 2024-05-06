@@ -12,7 +12,7 @@
     <e-stats-protection :statistic="vault" :vault="transactions"/>
   </div>
   <e-earnings-empty v-else/>
-  <w-onboarding :steps="renderedSteps" next-route-name="personal-wallet"/>
+  <!-- <w-onboarding :steps="renderedSteps" next-route-name="personal-wallet"/> -->
 </template>
 
 <script setup lang="ts">

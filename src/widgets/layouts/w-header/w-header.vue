@@ -284,12 +284,6 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoWallet,
   },
-  'personal-referrals': {
-    title: 'Wallet',
-    titleCrumb: 'Referrals',
-    breadcrumbs: false,
-    info: EPageInfoWallet,
-  },
   'personal-kyc': { title: 'Kyc', breadcrumbs: false },
   'personal-support': { title: 'Support', breadcrumbs: false },
   'personal-earnings': {
@@ -354,7 +348,6 @@ const walletLinks = {
   title: 'Wallet',
   links: [
     { text: 'Dividends', name: 'personal-dividends' },
-    { text: 'Referrals', name: 'personal-referrals' },
     { text: 'ETFs', name: 'personal-etfs' },
     // { text: 'Bonus', name: 'personal-bonus' },
   ],
@@ -371,7 +364,6 @@ const linksList = {
   'personal-shareholders': fundLinks,
   'personal-wallet': walletLinks,
   'personal-dividends': walletLinks,
-  'personal-referrals': walletLinks,
   'personal-assets': assetsLinks,
   'personal-etfs': walletLinks,
 }
@@ -587,7 +579,6 @@ const tabs = computed(() => {
   if (route.path.includes('wallet')) {
     return [
       { text: 'Dividends', name: 'personal-dividends' },
-      { text: 'Referrals', name: 'personal-referrals' },
     ]
   }
 

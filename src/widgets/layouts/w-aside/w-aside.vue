@@ -393,7 +393,7 @@ const routesList = [
       {
         title: 'ETFs',
         icon: Icon.MonoEarnings,
-        link: 'personal-referrals',
+        link: 'personal-etfs',
       },
      
     ],

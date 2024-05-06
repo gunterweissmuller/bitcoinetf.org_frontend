@@ -10,7 +10,7 @@
     />
     <w-news />
 
-    <w-onboarding :steps="renderedSteps" next-route-name="personal-protection" />
+    <!-- <w-onboarding :steps="renderedSteps" next-route-name="personal-protection" /> -->
   </div>
 </template>
 
