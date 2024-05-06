@@ -93,6 +93,7 @@
     padding: torem(60, 40);
     border-radius: torem(24);
     margin: torem(60, 20, 0);
+
     @media screen and (max-width: 767px) {
       padding: torem(16);
       margin: 0;
@@ -102,6 +103,7 @@
   &__table-container {
     width: 100%;
     overflow: auto;
+    position: relative;
   }
   &__table {
     width: 100%;
@@ -198,6 +200,55 @@
     display: none;
     @media screen and (max-width: 767px) {
       display: block;
+    }
+  }
+
+  &__drag {
+
+    @media (max-width: 1360px) {
+      opacity: 1;
+      height: 120px;
+      width: 120px;
+    }
+
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    background: rgba(1, 4, 15, 0.10);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    transition: 1s;
+    opacity: 0;
+    
+    top: 50%;
+    right: -40px;
+    transform: translateY(-50%);
+    z-index: 1;
+
+    color: #ffffff;
+    font-family: Jakarta, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 120%; /* 16.8px */
+    
+    &-hide {
+      opacity: 0;
+    }
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    &-arrow {
+      width: 20px;
+      height: 20px;
+
+      &-reverse {
+        transform: scaleX(-1);
+      }
     }
   }
 }
