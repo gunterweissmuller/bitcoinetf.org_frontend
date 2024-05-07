@@ -183,7 +183,6 @@ const getStatistics = async () => {
     shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
     $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
 
-    const valueType = props.type === 'shareholders' ? 'y' : 'aum_size_';
     $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
 
     const valueType = props.type === 'shareholders' ? 'y' : 'aum_size_';
