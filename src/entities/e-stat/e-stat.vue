@@ -22,7 +22,10 @@
         </div>
       </div>
 
-      <a-dropdown v-if="props.bottom === 'dropdown'"/>
+      <a-dropdown
+        v-if="props.bottom === 'dropdown'"
+        @get-current-option="handleDropdown"
+      />
       <button
         class="e-stat__blockchain"
         v-if="props.bottom === 'link'"
@@ -76,9 +79,7 @@ import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons';
 import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
-import { useNuxtApp } from '#app'
-
-const { $app } = useNuxtApp();
+import { ADropdownOption } from '~/src/shared/types/global';
 
 const props = withDefaults(
   defineProps<{
@@ -120,6 +121,12 @@ const props = withDefaults(
 );
 
 const config = useRuntimeConfig();
+
+const emit = defineEmits(['get-current-option', 'click-file']);
+
+const handleDropdown = (currentOption : ADropdownOption) => {
+  emit('get-current-option', currentOption);
+}
 </script>
 
 <style src="./e-stat.scss" lang="scss" />

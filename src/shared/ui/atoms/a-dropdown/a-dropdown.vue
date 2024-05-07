@@ -44,27 +44,27 @@ const props = defineProps({
     default: [
       {
         name: '24h',
-        value: 0
-      },
-      {
-        name: '7d',
         value: 1
       },
       {
+        name: '7d',
+        value: 7
+      },
+      {
         name: '1m',
-        value: 2
+        value: 30
       },
       {
         name: '6m',
-        value: 3
+        value: 180
       },
       {
         name: '1y',
-        value: 4
+        value: 365
       },
       {
         name: 'All time',
-        value: 5
+        value: 'all'
       },
     ]
   },
@@ -115,6 +115,9 @@ const changeOption = (value : number) => {
   emit('get-current-option', currentOption.value);
   dropdownState.value = false;
 }
+
+emit('update:current', current.value);
+emit('get-current-option', currentOption.value);
 
 watch(() => props.current, () => {
   current.value = props.current;
