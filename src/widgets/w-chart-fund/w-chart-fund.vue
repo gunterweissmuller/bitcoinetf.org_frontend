@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div v-if="!!!shareholdersStatistic && (props.type === 'assets' || props.type === 'asset')" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
+        <div v-if="!!!shareholdersStatistic && (!!!shareholdersStatistic && (props.type === 'assets' || props.type === 'asset'))" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
           <div
             :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': difference < 0 }]"
           >
@@ -181,6 +181,9 @@ const getStatistics = async () => {
 
     shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders)[props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd'];
     shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
+    $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
+
+    const valueType = props.type === 'shareholders' ? 'y' : 'aum_size_';
     $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
 
     const valueType = props.type === 'shareholders' ? 'y' : 'aum_size_';

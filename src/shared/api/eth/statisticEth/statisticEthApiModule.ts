@@ -113,11 +113,40 @@ export default class StatisticEthApiModule {
     }
   }
 
-  async getGlobalStats() {
+  // async getGlobalStats() {
+  //   try {
+  //     return await this.adapter.requestJsonAsync({
+  //       apiVersion: ApiVersion.V2,
+  //       parameterValue: 'statistic',
+  //       request: {
+  //         method: HTTPMethod.GET,
+  //       },
+  //       operationDescription: 'Method for obtaining statistics',
+  //     })
+  //   } catch (e) {
+  //     if (e instanceof ApiErrorFlow) {
+  //       throw new ApiErrorFlow(e.errors)
+  //     }
+
+  //     return Promise.reject(new Error('Something bad happened'))
+  //   }
+  // }
+
+  async getGlobalStats(payload: any) {
     try {
+      let filtersQuery = ''
+
+      if (payload?.filters) {
+        Object.entries(payload.filters).forEach(([key, value]) => {
+          if (value) {
+            filtersQuery += `${key}=${value}&`
+          }
+        })
+      }
+
       return await this.adapter.requestJsonAsync({
         apiVersion: ApiVersion.V2,
-        parameterValue: 'statistic',
+        parameterValue: `statistic?${filtersQuery}`,
         request: {
           method: HTTPMethod.GET,
         },
