@@ -5,8 +5,8 @@
         <div class="w-etfs__amount-wrap">
           <div class="w-etfs__amount-title">Bitcoin ETF Shares</div>
           <div class="w-etfs__amount-sum">
-            {{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }}
-            <!-- {{ $app.filters.rounded(divSumIn3Years,2,) }} -->
+            {{ $app.filters.rounded($app.store.user?.lastPayment?.total_balance_usd, 2)  }}
+            <!-- {{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }} -->
           </div>
         </div>
         <div class="w-etfs__amount-buttons">
@@ -178,6 +178,17 @@ const selectedAddressShort = computed(() => {
   return address.value.slice(0, 5) + '...' + address.value.slice(address.value.length - 4)
 })
 
+const getLastPayment = async () => {
+  $app.api.eth.billingEth
+  .getLastPayment()
+  .then((response: any) => {
+    $app.store.user.lastPayment = response.data
+  })
+  .catch(() => {
+    // Todo: notify something went wrond
+  })
+}
+
 const getWalletDividends = async () => {
   await $app.api.eth.billingEth
     .getWallet({ type: 'dividends' })
@@ -281,6 +292,7 @@ const centrifugeToken = config.public.WS_TOKEN
 onMounted(async () => {
   await getWalletDividends()
   await getPersonalDividends()
+  await getLastPayment()
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
@@ -295,6 +307,7 @@ onMounted(async () => {
       setTimeout(async () => {
         await getPersonalDividends(true)
         await getWalletDividends()
+        await getLastPayment()
       }, 1500)
     })
     .subscribe()
@@ -393,10 +406,14 @@ const checkKyc = async () => {
   })
 }
 
-const handleVerify = async () => {
-  const isKycFinished = await checkKyc();
+const explorerURL = config.public.EXPLORER_API;
+const explorerHostname = `https://${explorerURL}`;
 
-  window.open(window.location.origin + "/personal/kyc");
+const handleVerify = async () => {
+  window.open(`${explorerHostname}/account/${$app.store.user?.blockchainUserWallet}`, '_blank')
+  // const isKycFinished = await checkKyc();
+
+  // window.open(window.location.origin + "/personal/kyc");
 
   // navigateTo({ name: 'personal-kyc' }, {
   //   open : {

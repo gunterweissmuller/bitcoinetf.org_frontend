@@ -156,6 +156,9 @@ const selectedMethodRegexp = computed(() => {
 })
 
 const buttonDisabled = computed(() => {
+
+  if(props?.address === selectedAddress.value) return true;
+
   if (selectedMethod.value === 'bitcoin_on_chain') {
     return !validBlockChain.value
   } else if (selectedMethod.value === 'bitcoin_lightning') {
