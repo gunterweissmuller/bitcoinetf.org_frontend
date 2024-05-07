@@ -6,7 +6,14 @@
         >View All
       </nuxt-link>
     </div>
-    <div v-if="renderedTrades.length && !isExpand" class="w-trades__content">
+
+    <div v-if="renderedTrades.length && !isExpand && props.isMain" :class="[{'w-trades__content-main': true}, {'w-trades__content' : !props.isMain}]" :style=" width > 1010 ? {height: `${(renderedTrades?.length / props.gridTemplate) * 94}px`} : {}">
+      <transition-group name="fade" tag="div" :class="[{'w-trades__content-main-wrapper' : true}]" :style=" width > 1010 ? {'display': 'grid', 'grid-template-columns': 'repeat( '+ props.gridTemplate +', 1fr)', 'max-height': 94 * (props.perPage/props.gridTemplate) +'px'} : {'display': 'flex', 'flex-direction': 'column'}">
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :pageType="props.isMain ? 'main' : 'default'" :isMain="props.isMain"/>
+      </transition-group>
+    </div>
+
+    <div v-if="renderedTrades.length && !isExpand && !props.isMain" class="w-trades__content">
       <transition-group name="fade" tag="div">
         <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" />
       </transition-group>
@@ -45,6 +52,7 @@ import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
 import { useWindowSize } from '@vueuse/core'
 
+const { width } = useWindowSize()
 const route = useRoute()
 const { $app } = useNuxtApp()
 
@@ -150,33 +158,69 @@ watch(() => props.filters, () => {
   position: relative;
 }
 
-// .fade-leave-active,
-.fade-enter-active
- {
-  transition:
-    opacity 0.8s,
-    bottom 0.8s,
-    transform 0.8s;
+.w-trades__content {
+  .fade-leave-active,
+  .fade-enter-active
+  {
+    transition:
+      opacity 0.8s,
+      bottom 0.8s,
+      transform 0.8s;
+  }
+
+  .fade-enter-from {
+    transform: translateX(-200px);
+  }
+
+  .fade-enter-to {
+    transform: translateX(0px);
+  }
+
+  .fade-leave-to,
+  .fade-enter-from
+  {
+    opacity: 0;
+  }
+
+  .fade-leave-to {
+    position: absolute;
+    right: 1000px;
+    bottom: 0;
+    transform: translateY(100px);
+  }
 }
 
-.fade-enter-from {
-  transform: translateX(-200px);
-}
 
-.fade-enter-to {
-  transform: translateX(0px);
-}
 
-// .fade-leave-to,
-.fade-enter-from
- {
-  opacity: 0;
-}
+.w-trades__content-main {
 
-.fade-leave-to {
-  position: absolute;
-  right: 1000px;
-  bottom: 0;
-  transform: translateY(100px);
+  .fade-enter-active
+  {
+    transition:
+      opacity 0.8s,
+      bottom 0.8s,
+      transform 0.8s;
+  }
+
+  .fade-enter-from {
+    transform: translateX(-200px);
+  }
+
+  .fade-enter-to {
+    transform: translateX(0px);
+  }
+
+  .fade-enter-from
+  {
+    opacity: 0;
+  }
+
+  .fade-leave-to {
+    position: absolute;
+    right: 1000px;
+    bottom: 0;
+    display: none;
+  }
+
 }
 </style>
