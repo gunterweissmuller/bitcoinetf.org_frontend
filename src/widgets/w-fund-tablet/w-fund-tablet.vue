@@ -8,11 +8,12 @@
         class="w-fund-tablet__info"
         id="w-fund-tablet__info-slider"
         loop
-        :speed="3000"
+        :speed="30000"
         :space-between="0"
-        slides-per-view="auto"
+        slides-per-view="1"
         :mousewheel="false"
         :looped-slides="0"
+        :modules="[Autoplay, Parallax]"
         :autoplay="{
           delay: 0,
           disableOnInteraction: false,
@@ -22,12 +23,13 @@
         disableOnInteraction
       >
         <template #slides>
-          <swiper-slide class='w-header__item' v-for='(item, id) in filteredMarqueList' :key='id'>
-              <div class='w-header__item-title'>{{ item.text }}</div>
-              <div class='w-header__item-text' v-html="item.modifyValue"></div>
+          <swiper-slide class="w-header__item-row" v-for="index in 2" :key="index">
+            <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
+              <div class="w-header__item-title">{{ item.text }}</div>
+              <div class="w-header__item-text" v-html="item.modifyValue"></div>
+            </div>
           </swiper-slide>
         </template>
-
       </m-slider>
       <div class="w-fund-tablet__fund-charts">
         <w-chart-fund class="w-fund-tablet__fund-chart" title="AUM Growth" is-main is-total-assets />
@@ -82,7 +84,7 @@
 </template>
 
 <script lang='ts' setup>
-import { Autoplay } from 'swiper';
+import { Autoplay, Parallax } from 'swiper';
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
 import { SwiperSlide } from 'swiper/vue';
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';
