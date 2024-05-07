@@ -26,8 +26,8 @@
 
     </m-slider>
     <div class="w-assets__charts">
-      <w-ticker-assets :asset="asset" />
-      <w-chart-fund title="Value" type="asset" is-main is-total-assets />
+      <w-ticker-assets :asset="asset" :active-explorer-link="['USDT', 'BRF'].includes(asset?.symbol)" />
+      <w-chart-fund title="Value" type="asset" is-main is-total-assets :asset="asset" v-if="asset" />
       <w-chart-portfolio
         ref="chartPortfolioRef"
         v-if="asset"
@@ -80,7 +80,7 @@ const asset = computed<IAsset | undefined>(() => {
   if (!assets.value) return false;
 
   return assets.value
-    .find((item: { symbol: string; }) => item.symbol === symbol.value.toUpperCase());
+    .find((item: { symbol: string; }) => item.symbol === symbol.value?.toUpperCase());
 });
 
 console.log(asset.value);

@@ -22,7 +22,12 @@
     </p>
 
     <!-- FIX HREF -->
-    <a :href="`https://${config.public.EXPLORER_API}/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4`" target="_blank" class="w-ticker-assets__link">
+    <a
+      v-if="activeExplorerLink"
+      :href="`https://${config.public.EXPLORER_API}/account/${config.public.RESERVE_WALLET_ADDRESS}`"
+      target="_blank"
+      class="w-ticker-assets__link"
+    >
       <img src="/img/icons/mono/action/link.svg" alt="">
       View on blockchain
       <span></span>
@@ -35,6 +40,7 @@ import { IAsset } from '~/src/shared/types/global';
 
 const props = defineProps<{
   asset: IAsset
+  activeExplorerLink?: boolean,
 }>();
 
 const config = useRuntimeConfig();
