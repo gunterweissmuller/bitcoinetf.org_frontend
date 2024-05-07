@@ -112,11 +112,11 @@ export default class StatisticEthApiModule {
     }
   }
 
-  async getGlobalStats() {
+  async getGlobalStats(params?:any) {
     try {
       return await this.adapter.requestJsonAsync({
         apiVersion: ApiVersion.V2,
-        parameterValue: 'statistic',
+        parameterValue: `statistic${ params?.dividends_earned_btc ? "?dividends_earned_btc_daily_filter=" + params?.dividends_earned_btc : "" }`,
         request: {
           method: HTTPMethod.GET,
         },
