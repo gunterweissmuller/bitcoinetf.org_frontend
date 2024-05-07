@@ -70,6 +70,7 @@ import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons';
 import ATooltipInfo from '~/src/shared/ui/atoms/a-tooltip-info/a-tooltip-info.vue';
+import { IAsset } from '~/src/shared/types/global'
 
 const { $app } = useNuxtApp();
 
@@ -81,7 +82,8 @@ const props = withDefaults(
     title: string
     isMain: boolean
     isTotalAssets?: boolean
-    type: ChartType
+    type: ChartType,
+    asset: IAsset,
   }>(),
   {
     isTotalAssets: false,
@@ -186,6 +188,19 @@ const getStatistics = async () => {
     data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent);
     data = data.map((item : Record<string, any>, index : number) : DataItem => ({
       amount: item[`${valueType}${index}`],
+      created_at: new Date(`2 ${item["x"+index]}`).toISOString().replace(/T.*/, ''),
+      label: item[`x${index}`]
+    }));
+  } else if (['asset'].includes(props.type)) {
+    const { data: { flow: responseData } } = await $app.api.eth.statisticEth.getStatisticFlow({ asset: props.asset });
+    response = responseData
+
+    shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
+    $app.store.user.totalFund.totalAmountUsd = response.find((item: Record<string, any>) => item.value).value;
+
+    data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent && !item.value);
+    data = data.map((item : Record<string, any>, index : number) : DataItem => ({
+      amount: item[`y${index}`],
       created_at: new Date(`2 ${item["x"+index]}`).toISOString().replace(/T.*/, ''),
       label: item[`x${index}`]
     }));

@@ -3,6 +3,7 @@ import { HTTPMethod } from '~/src/shared/constants/httpMethods'
 import { ApiErrorFlow } from '~/src/shared/toolkit/apiErrorFlow'
 import { INVERSIFY_TYPES } from '~/src/shared/types/inversifyTypes'
 import {ApiVersion} from "~/src/shared/constants/api";
+import { IAsset } from '~/src/shared/types/global'
 
 @injectable()
 export default class StatisticEthApiModule {
@@ -192,6 +193,25 @@ export default class StatisticEthApiModule {
           method: HTTPMethod.GET,
         },
         operationDescription: 'Getting a list of asset statistics records by day',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getStatisticFlow(payload: { asset: IAsset }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        apiVersion: ApiVersion.V2,
+        parameterValue: `statistic/flow?asset_uuid=${payload.asset.uuid}`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting a list of asset statistics records flow',
       })
     } catch (e) {
       if (e instanceof ApiErrorFlow) {
