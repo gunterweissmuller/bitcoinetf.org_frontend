@@ -11,7 +11,7 @@
         <a-input class="f-reset-password__email" label="Email" validation-reg-exp-key="email" required
           :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
           v-model="email" />
-        <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+        <vue-turnstile :theme="$app.store.user.theme === 'dark' ? 'dark' : 'light'" :site-key="siteKey" v-model="token" class="captchaTurn" />
 
         <p class="f-reset-password__error" v-if="backendError">{{ backendError }}</p>
         <a-button class="f-reset__button" :text="isSuccessEmailSend ? sentText : 'Continue'" type="submit"
@@ -71,6 +71,15 @@ const email = ref('')
 const emailErrorText = ref('')
 const isEmailValid = ref(false)
 const isSuccessEmailSend = ref(false)
+
+watch(
+  () => isEmailValid.value,
+  () => {
+    if(isEmailValid.value) {
+      emailErrorText.value = ''
+    }
+  }
+)
 
 function emailFieldBlurHandler() {
   if (isEmailValid.value) {

@@ -86,7 +86,7 @@
                   <p class="f-registration-right__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
                 </div>
 
-                <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+                <vue-turnstile :theme="$app.store.user.theme === 'dark' ? 'dark' : 'light'" :site-key="siteKey" v-model="token" class="captchaTurn" />
                   <!-- <m-accordion ref="accordionRef" class="f-registration__ref" title="Referral code">
                       <a-input label="Referral code" class="f-registration__ref-code" v-model="refCode" />
                       <a href="/" target="_blank" class="f-registration__ref-link">How to get referral codes</a>
@@ -291,6 +291,16 @@ const email = ref('')
 const emailErrorText = ref('')
 const isEmailValid = ref(false)
 const isEmailDisabled = ref(false);
+
+watch(
+  () => isEmailValid.value,
+  () => {
+    if(isEmailValid.value) {
+      emailErrorText.value = ''
+    }
+  }
+)
+
 
 function emailFieldBlurHandler() {
   if (isEmailValid.value) {
@@ -735,7 +745,7 @@ const handleTelegramAuth = async () => {
                     $app.store.user.info = resp?.data
                   });
 
-                  await router.push('/personal/analytics/performance')
+                  await router.push('/personal/fund/portfolio')
                 });
           }
         })
@@ -790,7 +800,8 @@ const testTG = async () => {
                     $app.store.user.info = resp?.data
                   });
 
-                  await router.push('/personal/analytics/performance')
+                  await router.push('/personal/fund/portfolio')
+
                 });
           }
         })
@@ -907,7 +918,7 @@ const handleAppleConnect = async () => {
                     $app.store.user.info = resp?.data
                   });
 
-                  await router.push('/personal/analytics/performance')
+                  await router.push('/personal/fund/portfolio')
                 });
           }
 

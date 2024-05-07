@@ -114,7 +114,7 @@
     @update="isOpenModalRefer = $event"
   />
   <f-terms-modal v-model="isOpenTermsModal" title="Purchase agreement" :download="false" />
-  <w-onboarding :steps="renderedSteps" />
+  <!-- <w-onboarding :steps="renderedSteps" /> -->
 </template>
 
 <script setup lang="ts">

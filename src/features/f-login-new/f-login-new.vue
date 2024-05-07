@@ -74,7 +74,7 @@
               </div>
               <h3 id="test_1" class="f-login__title">Log in</h3>
               <h5 class="f-login__subtitle">
-                Please enter your email and password to get started. No account?
+                Please enter your email and password. No account?
                 <nuxt-link to="/personal/registration">Create an account here.</nuxt-link>
               </h5>
               <form class="f-login__form" @submit.prevent="onSubmitEmailForm">
@@ -249,6 +249,15 @@ const backendError = ref('')
 const email = ref(process.dev ? 'emard.roselyn11136@yahoo.com' : '')
 const emailErrorText = ref('')
 const isEmailValid = ref(false)
+
+watch(
+  () => isEmailValid.value,
+  () => {
+    if(isEmailValid.value) {
+      emailErrorText.value = ''
+    }
+  }
+)
 
 function emailFieldBlurHandler() {
   if (isEmailValid.value) {
@@ -442,7 +451,7 @@ onMounted(() => {
     })
 
     $app.store.auth.reInitData()
-    router.push('/personal/analytics/performance')
+    router.push('/personal/fund/portfolio');
   }
 })
 
@@ -735,7 +744,7 @@ const handleMetamaskConnect = async () => {
                           })
 
                           $app.store.auth.reInitData()
-                          router.push('/personal/analytics/performance')
+                          router.push('/personal/fund/portfolio');
                         })
                         .catch((e) => {
                           if (e?.errors?.error?.message) {

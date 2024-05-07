@@ -8,7 +8,7 @@
     <w-top-shareholders />
     <w-purchases />
 
-    <w-onboarding :steps="renderedSteps" :next-route-name="lastPayment ? 'personal-earnings' : 'personal-wallet'" />
+    <!-- <w-onboarding :steps="renderedSteps" :next-route-name="lastPayment ? 'personal-earnings' : 'personal-wallet'" /> -->
   </div>
 </template>
 

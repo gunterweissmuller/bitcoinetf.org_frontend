@@ -3,7 +3,7 @@
     <w-shareholders-stats />
     <w-trades />
     <w-activity />
-    <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" />
+    <!-- <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" /> -->
   </div>
 </template>
 
