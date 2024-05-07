@@ -41,7 +41,6 @@ const etfs = defineAsyncComponent(() => import('~/src/widgets/w-etfs/w-etfs.vue'
 
 const components = {
   'personal-dividends': { component: dividends, id: 'personal-dividends' },
-  'personal-referrals': { component: referrals, id: 'personal-referrals' },
   'personal-etfs': { component: etfs, id: 'personal-etfs' },
 }
 
