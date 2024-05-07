@@ -232,6 +232,11 @@
   }
 
   &__item {
+    &-row{
+      width: auto;
+      display: flex;
+    }
+    
     width: auto;
     border-radius: var(--spacing-xs);
     margin-right: var(--spacing-s);
@@ -255,15 +260,17 @@
     }
   }
 
-  .swiper-wrapper {
-    -webkit-transition-timing-function: linear !important;
-    transition-timing-function: linear !important;
-    position: relative;
-  }
+  
 
   .m-slider {
     padding-left: torem(8);
   }
+}
+
+.swiper-wrapper {
+  -webkit-transition-timing-function: linear !important;
+  transition-timing-function: linear !important;
+  position: relative;
 }
 
 #marquee {
