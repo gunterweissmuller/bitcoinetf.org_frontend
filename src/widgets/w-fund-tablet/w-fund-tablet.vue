@@ -23,7 +23,7 @@
         disableOnInteraction
       >
         <template #slides>
-          <swiper-slide class="w-header__item-row" v-for="index in 2" :key="index">
+          <swiper-slide class="w-header__item-row" v-for="index in 2" :key="index" style="min-width: 1620px">
             <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
               <div class="w-header__item-title">{{ item.text }}</div>
               <div class="w-header__item-text" v-html="item.modifyValue"></div>
