@@ -3,6 +3,7 @@
     :class="[
       { 'l-main': route.name !== 'personal-kyc' },
       { 'l-main--indent': isVisibleInfo },
+      { 'l-main--no-indent': route.name == 'personal-support' },
       // { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
       { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  },
@@ -81,7 +82,6 @@ const changeLoadingStatus = async (status: boolean) => {
 }
 
 const isVisibleInfo = computed(() => {
-
   return (
     route.name === 'personal-fund' ||
     route.name === 'personal-protection' ||

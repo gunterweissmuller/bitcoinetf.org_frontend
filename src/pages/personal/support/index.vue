@@ -7,7 +7,10 @@
 .support-page{
   iframe{
     width: 100%;
-    height: 68vh;
+    height: calc(100vh - 214px);
+    @include breakpoint($break-desktop-1024) {
+      height: calc(100vh - 151px); // 103px topHeight + 48px by left and right padding
+    }
   }
 }
 </style>
