@@ -62,7 +62,7 @@
               <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
               <div v-else class="w-etfs__item_sums">
                 <div class="w-etfs__item_info-usd">
-                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(referral_amount, 0) }}
+                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item.referral_amount, 0) }}
                 </div>
               </div>
             </div>
