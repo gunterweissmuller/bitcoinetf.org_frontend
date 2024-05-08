@@ -66,7 +66,7 @@
             <a-input
               bgColor="tetherspecial"
               label="Amount"
-              :model-value="`${$app.filters.rounded(calcValue)} USDT`"
+              :model-value="`${ $app.filters.rounded(Math.ceil(calcValue*100)/100,2) } USDT`"
               disabled
               :text-icon="amountCopied"
               text-icon-text="Copied!"
@@ -218,7 +218,7 @@ const getMoonpayWallets = async () => {
       window.open(moonpayUrl, '_blank')
     }
   } catch (e) {
-    console.log('error', e)
+    console.error('error', e)
   }
 }
 
@@ -247,12 +247,12 @@ const handlePayMethod = (functionName) => {
 }
 
 watch(() => selectedMethod.value, (value) => {
-  console.log('watch selectedMethod')
+
   const { onClick } = payWith.value.find(item => item.value === value)
   handlePayMethod(onClick);
 
   nextTick(() => {
-    console.log('paymentAddress', paymentAddress)
+
   })
 })
 
@@ -314,7 +314,7 @@ const copyToClipboard = (address = false) => {
       addressCopied.value = false
     }, 1000)
   } else {
-    copy(props.calcValue)
+    copy(String(Math.ceil(props.calcValue*100)/100))
     amountCopied.value = true
     setTimeout(() => {
       amountCopied.value = false

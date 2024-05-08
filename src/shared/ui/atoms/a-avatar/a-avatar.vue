@@ -20,7 +20,7 @@ const props = withDefaults(
   {
     type: 'default',
     text: '',
-    size: '24px',
+    size: '32px',
     leftLabel: '',
     photoSrc: false,
     robotData: '',

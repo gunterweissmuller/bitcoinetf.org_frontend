@@ -3,6 +3,7 @@ import { HTTPMethod } from '~/src/shared/constants/httpMethods'
 import { ApiErrorFlow } from '~/src/shared/toolkit/apiErrorFlow'
 import { INVERSIFY_TYPES } from '~/src/shared/types/inversifyTypes'
 import {ApiVersion} from "~/src/shared/constants/api";
+import { IAsset } from '~/src/shared/types/global'
 
 @injectable()
 export default class StatisticEthApiModule {
@@ -59,7 +60,7 @@ export default class StatisticEthApiModule {
     }
   }
 
-  async getDividendsByYear(payload) {
+  async getDividendsByYear(payload : any) {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'statistic/dividends',
@@ -112,11 +113,40 @@ export default class StatisticEthApiModule {
     }
   }
 
-  async getGlobalStats() {
+  // async getGlobalStats() {
+  //   try {
+  //     return await this.adapter.requestJsonAsync({
+  //       apiVersion: ApiVersion.V2,
+  //       parameterValue: 'statistic',
+  //       request: {
+  //         method: HTTPMethod.GET,
+  //       },
+  //       operationDescription: 'Method for obtaining statistics',
+  //     })
+  //   } catch (e) {
+  //     if (e instanceof ApiErrorFlow) {
+  //       throw new ApiErrorFlow(e.errors)
+  //     }
+
+  //     return Promise.reject(new Error('Something bad happened'))
+  //   }
+  // }
+
+  async getGlobalStats(payload: any) {
     try {
+      let filtersQuery = ''
+
+      if (payload?.filters) {
+        Object.entries(payload.filters).forEach(([key, value]) => {
+          if (value) {
+            filtersQuery += `${key}=${value}&`
+          }
+        })
+      }
+
       return await this.adapter.requestJsonAsync({
         apiVersion: ApiVersion.V2,
-        parameterValue: 'statistic',
+        parameterValue: `statistic?${filtersQuery}`,
         request: {
           method: HTTPMethod.GET,
         },
@@ -140,6 +170,77 @@ export default class StatisticEthApiModule {
           params: payload,
         },
         operationDescription: 'Obtaining a list of top 100 shareholders',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getStrategies() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'statistic/shareholders/strategies',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting strategies',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getShareholdersGrowth(payload: any) {
+    try {
+      let filtersQuery = ''
+
+      if (payload?.filters) {
+        Object.entries(payload.filters).forEach(([key, value]) => {
+          if (value) {
+            filtersQuery += `filters[${key}]=${value}&`
+          }
+        })
+      }
+
+      Object.entries(this.filters.omit(payload, ['filters'])).forEach(([key, value]) => {
+        if (value) {
+          filtersQuery += `${key}=${value}&`
+        }
+      })
+
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `statistic/shareholders/growth?${filtersQuery}`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting a list of asset statistics records by day',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getStatisticFlow(payload: { asset: IAsset }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        apiVersion: ApiVersion.V2,
+        parameterValue: `statistic/flow?asset_uuid=${payload.asset.uuid}`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting a list of asset statistics records flow',
       })
     } catch (e) {
       if (e instanceof ApiErrorFlow) {

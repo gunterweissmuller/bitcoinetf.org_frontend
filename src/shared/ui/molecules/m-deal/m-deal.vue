@@ -2,86 +2,35 @@
   <div :id="withId ? withId : ''" class="m-deal" :class="{'m-deal-main':props.isMain}">
     <template v-if="type === 'trade'">
       <div class="m-deal__trade">
-        
+        <div :class="['m-deal__type', `bg--${deal.asset.symbol.toLowerCase()}`]"></div>
         <div class="m-deal__right m-deal__right--trade">
           <div class="m-deal__name m-deal__name--trade">
             <div class="m-deal__name-title">
-              <div :class="['m-deal__type', `bg--${deal.asset.symbol.toLowerCase()}`]"></div>
               <span>{{ deal.asset.name }}</span>
             </div>
-           
-            <div class="m-deal__info-deal m-deal__info-deal-action">
-              <template v-if="deal.asset.symbol === 'BAA'">
-                <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
-                  Sell Price: ${{$app.filters.rounded(deal.bitcoin_price,2)}}
-                </span>
-                <span class="m-deal__info-deal-images">
-                  <img v-for="number in getTwoRandom(deal?.bitcoin_price)" :src="`/img/dealtype/${number}.svg`" alt="">
-                </span>
-              </template>
-
-              <template v-else-if="deal.asset.symbol === 'BFT'">
-                <span class="m-deal__info-deal-right">
-                  Exit Price: ${{ sumDollars }}
-                </span>
-              </template>
-
-              <template v-else-if="deal.asset.symbol === 'BOT'">
-                <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
-                  Settlement Price: ${{$app.filters.rounded(deal.bitcoin_price,2)}}
-                </span>
-              </template>
-
-              <template v-else-if="deal.asset.symbol === 'BST'">
-                <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
-                  Sell: {{ (deal?.initial_amount / btcValue).toFixed(4) }} BTC @
-
-                  {{ $app.filters.rounded(btcValue, 2) }} (${{ $app.filters.rounded(deal.initial_amount, 2) }})
-                </span>
-              </template>
-
-              <template v-else-if="deal.asset.symbol === 'USDT'">
-                <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
-                  USDT Staking Yield +${{ $app.filters.rounded(deal.initial_amount, 2) }}
-                </span>
-              </template>
-            </div>
-          </div>
-
-          <div class="m-deal__info m-deal__info--trade">
-
-            <!-- new -->
-            <div class="m-deal__info-deal">
-              <span class="m-deal__info-deal-date">
-                {{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}
-              </span>
-
-              <div v-if="deal.type === 'close'" class="m-deal__info-deal-right m-deal__info-result">
-                <div v-if="deal.asset.symbol === 'BAA' && (Number(deal.result_amount) > 0)">
-                  <!-- {{ deal.result_amount ? '+' : '' }} -->
-                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
-                </div>
-                <div v-if="deal.asset.symbol === 'BFT' && (Number(deal.result_amount) > 0)">
-                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
-                </div>
-                <div v-if="deal.asset.symbol === 'BOT' && (Number(deal.result_amount) > 0)">
-                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
-                </div>
-                <div v-if="deal.asset.symbol === 'BST' && (Number(deal.result_amount) > 0)">
-                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
-                </div>
-                <div v-if="deal.asset.symbol === 'USDT' && (Number(deal.result_amount) > 0)">
-                  P&L: ${{ $app.filters.rounded(deal.result_amount, 2) }}
-                </div>
+            <div v-if="deal.type === 'close'" class="m-deal__info-result">
+              <div v-if="deal.asset.symbol === 'BAA' && (Number(deal.result_amount) > 0)">
+                {{ deal.result_amount ? '+' : '' }}${{ $app.filters.rounded(deal.result_amount, 2) }}
+              </div>
+              <div v-if="deal.asset.symbol === 'BFT' && (Number(deal.result_amount) > 0)">
+                {{ deal.result_amount ? '+' : '' }}${{ $app.filters.rounded(deal.result_amount, 2) }}
+              </div>
+              <div v-if="deal.asset.symbol === 'BOT' && (Number(deal.result_amount) > 0)">
+                {{ deal.result_amount ? '+' : '' }}${{ $app.filters.rounded(deal.result_amount, 2) }}
+              </div>
+              <div v-if="deal.asset.symbol === 'BST' && (Number(deal.result_amount) > 0)">
+                {{ deal.result_amount ? '+' : '' }}${{ $app.filters.rounded(deal.result_amount, 2) }}
+              </div>
+              <div v-if="deal.asset.symbol === 'USDT' && (Number(deal.result_amount) > 0)">
+                {{ deal.result_amount ? '+' : '' }}${{ $app.filters.rounded(deal.result_amount, 2) }}
               </div>
             </div>
-
-            <!-- old -->
-            <div v-if="false" class="m-deal__info-deal">
+          </div>
+          <div class="m-deal__info m-deal__info--trade">
+            <div class="m-deal__info-deal">
                 <template v-if="deal.asset.symbol === 'BAA'">
                   <span class="m-deal__info-deal-date">
-                    <!-- {{ $app.filters.dayjs(deal.created_at).format('DD:MM:YY hh:mm') }} -->
-                    {{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}
+                    {{ $app.filters.dayjs(deal.created_at).format('DD.MM.YY hh:mm') }}
                   </span>
                   <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
                     Sell Price: ${{$app.filters.rounded(deal.bitcoin_price,2)}}
@@ -93,7 +42,7 @@
 
                 <template v-else-if="deal.asset.symbol === 'BFT'">
                   <span class="m-deal__info-deal-date">
-                    {{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}
+                    {{ $app.filters.dayjs(deal.created_at).format('DD.MM.YY hh:mm') }}
                   </span>
                   <span class="m-deal__info-deal-right">
                     Exit Price: ${{ sumDollars }}
@@ -102,9 +51,8 @@
 
                 <template v-else-if="deal.asset.symbol === 'BOT'">
                   <span class="m-deal__info-deal-date">
-                    {{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}
+                    {{ $app.filters.dayjs(deal.created_at).format('DD.MM.YY hh:mm') }}
                   </span>
-                  
                   <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
                     Settlement Price: ${{$app.filters.rounded(deal.bitcoin_price,2)}}
                   </span>
@@ -112,18 +60,16 @@
 
                 <template v-else-if="deal.asset.symbol === 'BST'">
                   <span class="m-deal__info-deal-date">
-                    {{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}
+                    {{ $app.filters.dayjs(deal.created_at).format('DD.MM.YY hh:mm') }}
                   </span>
                   <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
-                    Sell: {{ (deal?.initial_amount / btcValue).toFixed(4) }} BTC @
-
-                    {{ $app.filters.rounded(btcValue, 2) }} (${{ $app.filters.rounded(deal.initial_amount, 2) }})
+                    Exit Price: ${{ $app.filters.rounded(deal.initial_amount, 2) }}
                   </span>
                 </template>
 
                 <template v-else-if="deal.asset.symbol === 'USDT'">
                   <span class="m-deal__info-deal-date">
-                    {{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}
+                    {{ $app.filters.dayjs(deal.created_at).format('DD.MM.YY hh:mm') }}
                   </span>
                   <span class="m-deal__info-deal-right" v-if="deal.type === 'close'">
                     USDT Staking Yield +${{ $app.filters.rounded(deal.initial_amount, 2) }}
@@ -141,7 +87,7 @@
             <div :class="['m-deal__type', `bg--${deal.to_asset.symbol.toLowerCase()}`]"></div>
             <span>{{ deal.to_asset.name }}</span>
           </div>
-          <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}</div>
+          <div class="m-deal__name-date">{{ $app.filters.dayjs(deal.created_at).format('DD.MM.YY hh:mm') }}</div>
         </div>
         <div class="m-deal__info">
           <div class="m-deal__info-inflow-result">+ ${{ $app.filters.rounded(deal.amount, 2) }}</div>
@@ -179,9 +125,9 @@
       </div>
       <div class="m-deal__info">
         <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.amount, 0) }} Shares</div>
-        <div class="m-deal__info-purchase-percent">
+        <!-- <div class="m-deal__info-purchase-percent">
           13% of the circulation
-        </div>
+        </div> -->
       </div>
     </template>
     <!-- rename percent -->
@@ -198,28 +144,28 @@
         </div>
       </div>
       <div class="m-deal__info">
-        <div class="m-deal__info-purchase-result">{{ $app.filters.rounded(deal.total_payments, 0) }} Shares</div>
-        <div class="m-deal__info-purchase">{{ $app.filters.rounded((deal.total_payments / fundTotalUsd * 100), 6) }}%</div>
+        <div class="m-deal__info-purchase-result m-deal__info-shareholders-result">{{ $app.filters.rounded(deal.total_payments, 0) }} Shares</div>
+        <div class="m-deal__info-purchase">{{ $app.filters.rounded((deal.total_payments / fundTotalUsd * 100), 2) }}% of circulation</div>
       </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import { Icon } from '~/src/shared/constants/icons'
-import { useNuxtApp } from '#app'
-import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue'
-import { computed } from 'vue'
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import { Icon } from '~/src/shared/constants/icons';
+import { useNuxtApp } from '#app';
+import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue';
+import { computed } from 'vue';
 
-const { $app } = useNuxtApp()
+const { $app } = useNuxtApp();
 
 const dealTypes: any = {
   open: 'Open',
   close: 'Close',
 }
 
-const sumDollars = ref('')
+const sumDollars = ref('');
 
 const props = withDefaults(
   defineProps<{

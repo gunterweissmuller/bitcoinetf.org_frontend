@@ -3,12 +3,15 @@
     :class="[
       { 'l-main': route.name !== 'personal-kyc' },
       { 'l-main--indent': isVisibleInfo },
-      { 'l-main--indent-wallet': route.path.includes('wallet') },
+      // { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
-      { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  }, 
+      { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  },
+      { 'l-main--assets': route.name === 'personal-assets-symbol' },
+      { 'l-main--no-header': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  }, 
+      { 'l-main--no-header': route.path.includes('wallet') },
     ]"
   ><!---->
-    <w-header v-if="route.name !== 'personal-buy-shares'" :list-info="listInfo" /> <!---->
+    <w-header v-if="route.name !== 'personal-buy-shares' && route.name !== 'personal-sell-etfs'" :list-info="listInfo" /> <!---->
     <template v-if="route.name !== 'personal-kyc'">
       <w-aside v-if="isDesktop || isLaptop"  />
     </template>
@@ -78,12 +81,14 @@ const changeLoadingStatus = async (status: boolean) => {
 }
 
 const isVisibleInfo = computed(() => {
-  console.log("",route.name)
+
   return (
-    route.name === 'personal-analytics' ||
-    route.name === 'personal-performance' ||
     route.name === 'personal-fund' ||
-    route.name === 'personal-portfolio'
+    route.name === 'personal-protection' ||
+    route.name === 'personal-shareholders' ||
+    route.name === 'personal-portfolio' ||
+    route.name === 'personal-assets' ||
+    route.name === 'personal-assets-symbol'
   )
 })
 

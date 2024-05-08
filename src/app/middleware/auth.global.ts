@@ -1,11 +1,13 @@
 import {useNuxtApp, useRouter} from '#app'
+import useMediaDevice from '~/composables/useMediaDevice';
 
 export default defineNuxtRouteMiddleware((to) => {
-  const {$app} = useNuxtApp()
+  const {$app} = useNuxtApp();
   const router = useRouter()
-  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
+  const { isLaptop, isDesktop } = useMediaDevice();
+  const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-verify-email', 'personal-login-one-time']
+  const fundRouteNames = [ 'personal-portfolio', 'personal-protection', 'personal-shareholders' ]
   const includedRouteMask = to.path.includes('personal')
-  console.log(to);
   const urlParams = new URLSearchParams(window.location.search);
   if(to.query.accessToken) {
     $app.store.auth.setTokens({
@@ -13,6 +15,16 @@ export default defineNuxtRouteMiddleware((to) => {
       refresh_token: urlParams.get('refreshToken'),
       websocket_token: urlParams.get('websocketToken')
     });
+
+    if(to.query.purchaseType) {
+      $app.store.purchase.type = urlParams.get('purchaseType');
+    }
+
+    if(to.query.amount) {
+      $app.store.purchase.amount = urlParams.get('amount');
+      $app.store.purchase.amountUS = urlParams.get('amount');
+    }
+
     //router.replace({ path: to.path, query: {} })
     $app.api.eth.auth.getUser().then((resp) => {
       $app.store.user.info = resp?.data
@@ -36,22 +48,25 @@ export default defineNuxtRouteMiddleware((to) => {
       $app.store.user.theme = to.query.theme
     }
     return navigateTo({path: to.path}, {replace: true})
-    //router.replace({ path: to.path, query: {} })
   }
 
 
   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
+    console.log(to.name)
     return navigateTo({name: 'personal-login'})
   }
 
   if (excludedRouteNames.includes(to.name) && $app.store.auth.isUserAuthenticated) {
-    return navigateTo({name: 'personal-analytics'})
+    return navigateTo({name: 'personal-portfolio'})
   }
 
 
   if (includedRouteMask && $app.store.auth.isUserAuthenticated) {
-    if (to.name === 'personal-analytics') {
-      return navigateTo({name: 'personal-performance'})
+    if (fundRouteNames.includes(to.name) && (isLaptop.value || isDesktop.value)) {
+      return navigateTo({name: 'personal-fund'})
+    }
+    if (to.name === 'personal-fund' && !(isLaptop.value || isDesktop.value)) {
+      return navigateTo({name: 'personal-portfolio'})
     }
     if (to.name === 'personal-wallet') {
       return navigateTo({name: 'personal-dividends'})

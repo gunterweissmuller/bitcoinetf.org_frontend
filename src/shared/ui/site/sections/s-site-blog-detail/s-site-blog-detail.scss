@@ -15,8 +15,15 @@
   &__info {
     display: flex;
     align-items: center;
-    gap: torem(8);
     margin-bottom: torem(48);
+
+    & > * {
+      margin-left: torem(8);
+  
+      &:first-child {
+        margin-left: 0;
+      }
+    }
 
     &-item {
       font-size: torem(12);

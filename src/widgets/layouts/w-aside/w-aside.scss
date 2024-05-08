@@ -51,9 +51,9 @@
 
     @include breakpoint($break-desktop-1024) {
       display: block;
-      padding-bottom: torem(16);
-      border-bottom: torem(1) solid var(--color-border-1);
-      margin-bottom: torem(16);
+      /*padding-bottom: torem(16);*/
+      /*border-bottom: torem(1) solid var(--color-border-1);*/
+      margin-bottom: var(--spacing-m-1);
     }
   }
 
@@ -262,7 +262,7 @@
       }
     }
 
-    &:last-child {
+    /*&:last-child {
       @include breakpoint($break-desktop-1024) {
         &:before {
           position: absolute;
@@ -277,7 +277,7 @@
 
       }
 
-    }
+    }*/
 
 
     &--indent {

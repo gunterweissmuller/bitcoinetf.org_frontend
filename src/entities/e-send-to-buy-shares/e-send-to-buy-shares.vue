@@ -24,7 +24,6 @@ const props = defineProps<{
 const hashMap = {
     'personal-dividends': 'walletDividends',
     'personal-referrals': 'walletReferral',
-   'personal-bonus': 'walletBonus'
 }
 
 const boostText = computed(() => {
@@ -33,8 +32,6 @@ const boostText = computed(() => {
       return 'Dividends'
     case 'personal-referrals':
       return 'Referrals'
-    case 'personal-bonus':
-      return 'Bonus'
     default:
       return ''
   }

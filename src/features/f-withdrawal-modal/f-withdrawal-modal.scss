@@ -9,8 +9,9 @@
   }
 
   &__wrap {
+
     display: flex;
-    padding: 0 var(--spacing-m-1) var(--spacing-m-1) var(--spacing-m-1);
+    padding: torem(26) var(--spacing-m-1) var(--spacing-m-1) var(--spacing-m-1);
     flex-direction: column;
 
     @include breakpoint($break-tablet) {

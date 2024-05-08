@@ -27,6 +27,8 @@ export const assets = defineStore('assets', {
     fundTotalBtc() {
       return this.items.find((el => el.symbol === 'BRF'))?.incoming_amount_btc || 0
     },
+    brf: (state) => state.items.find(({ symbol }) => symbol === 'BRF'),
+    usdt: (state) => state.items.find(({ symbol }) => symbol === 'USDT'),
   },
 
   persist: true,

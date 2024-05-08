@@ -1,39 +1,38 @@
 .e-live {
-    position: relative;
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    width: torem(18);
-    height: torem(18);
-    min-width: torem(18);
-    min-height: torem(18);
-  
-    &::after {
-      content: '';
-  
-      width: torem(6);
-      height: torem(6);
-      min-width: torem(6);
-  
-      border-radius: 100%;
-      background: var(--accent-success);
-    }
-  
-    // т.к. не могу использовать rgba(var(), opacity)
-    &::before {
-      content: '';
-  
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-  
-      border-radius: 100%;
-      background: var(--accent-success);
-      opacity: .16;
-    }
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: torem(18);
+  height: torem(18);
+  min-width: torem(18);
+  min-height: torem(18);
+
+  &::after {
+    content: '';
+
+    width: torem(6);
+    height: torem(6);
+    min-width: torem(6);
+
+    border-radius: 100%;
+    background: var(--accent-success);
   }
-  
+
+  // т.к. не могу использовать rgba(var(), opacity)
+  &::before {
+    content: '';
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    border-radius: 100%;
+    background: var(--accent-success);
+    opacity: .16;
+  }
+}

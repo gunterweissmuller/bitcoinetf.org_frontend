@@ -158,6 +158,45 @@
     
   }
 
+  &-mobile {
+      display: table;
+      .m-modal {
+        &-wrapper {
+          height: 100%;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+          padding: var(--spacing-m-1);
+          background-color: #00000054;
+          background-image: none;
+          width: auto;
+          display: table-cell;
+        }
+  
+        &-container {
+          width: 100%;
+  
+          padding: var(--spacing-l-2);
+          border-radius: var(--spacing-m-3);
+          margin: 0 auto;
+          max-width: torem(480);
+          background-size: cover;
+          background-image: url("/img/ref-bg.jpg");
+          background-repeat: no-repeat;
+          background-position: center top;
+
+          &-basic {
+            background: var(--surfaces-surface-1);
+          }
+
+  
+          &-big {
+            max-width: torem(520);
+          }
+        }
+      }
+  }
+
 }
 
 .bottom-sheet {

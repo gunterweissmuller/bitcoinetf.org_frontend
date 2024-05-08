@@ -85,7 +85,7 @@ const finishOnboarding = (status) => {
 
 const goToNextStep = (isLast: boolean, next: Function) => {
 
-  console.log(isLast, props.nextRouteName)
+
   if (isLast && props.nextRouteName) {
 
     // finishOnboarding('finished')
@@ -162,7 +162,7 @@ const secondButtonClick = (isLast) => {
 
 const goToExtended = () => {
   localStorage.setItem('journey', 'finished')
-  router.push({ name: 'personal-analytics' })
+  router.push({ name: 'personal-fund' })
 }
 
 const loading = computed(() => {

@@ -23,7 +23,7 @@
             text="Buy Bitcoin ETF Shares"
             @click="() => {$app.store.user.isInvestModalShow.show = true;}"
           />
-          
+
         </div>
 
         <div class="w-aside__links">
@@ -73,8 +73,8 @@
             active-class="w-aside__link--active"
             @click="onClickLink"
           >
-            <a-icon class="w-aside__link-img" :name="Icon.MonoMore" width="24" height="24" />
-            <p class="w-aside__link-text">More</p>
+            <a-icon class="w-aside__link-img" :name="Icon.MonoProfile" width="24" height="24" />
+            <p class="w-aside__link-text">Profile</p>
             <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
           </nuxt-link>
         </div>
@@ -101,7 +101,7 @@
           <w-certificate
             :type="userType"
             :username="$app.store.user?.info?.profile?.full_name"
-            :shares="$app.store.user?.lastPayment?.total_balance_usd ?? 0"
+            :shares="$app.store.user?.buyShares ?? 0"
             time="1094"
           />
         </div>
@@ -119,7 +119,7 @@
             <li class="w-aside__item w-aside__item-mobile">
               <nuxt-link
                 class="w-aside__link"
-                :to="{ name: 'personal-referrals' }"
+                :to="{ name: 'personal-more-referrals' }"
                 active-class="w-aside__link--active"
                 target="_self"
                 @click="onClickLink"
@@ -354,31 +354,14 @@ const openTermsModal = () => {
 
 const routesList = [
   {
-    title: 'Analytics',
-    icon: Icon.MonoAnalytics,
-    link: 'personal-performance',
-    subNav: [
-      {
-        title: 'Performance',
-        icon: Icon.MonoEarnings,
-        link: 'personal-performance',
-      },
-      {
-        title: 'Portfolio',
-        icon: Icon.MonoEarnings,
-        link: 'personal-portfolio',
-      },
-      {
-        title: 'Fund',
-        icon: Icon.MonoEarnings,
-        link: 'personal-fund',
-      },
-    ],
+    title: 'Fund',
+    icon: Icon.MonoActivity,
+    link: 'personal-fund',
   },
   {
-    title: 'Dividends',
-    icon: Icon.MonoEarnings,
-    link: 'personal-earnings',
+    title: 'Assets',
+    icon: Icon.MonoAnalytics,
+    link: 'personal-assets',
   },
   {
     title: 'Wallet',
@@ -391,15 +374,11 @@ const routesList = [
         link: 'personal-dividends',
       },
       {
-        title: 'Referrals',
+        title: 'ETFs',
         icon: Icon.MonoEarnings,
-        link: 'personal-referrals',
+        link: 'personal-etfs',
       },
-      {
-        title: 'Bonus',
-        icon: Icon.MonoEarnings,
-        link: 'personal-bonus',
-      },
+
     ],
   },
 ]
@@ -458,13 +437,17 @@ const logout = () => {
 
 const activeLinkClass = (link: string): boolean => {
   switch (link) {
-    case 'personal-performance':
+    case 'personal-fund':
       return (
-        route.name === 'personal-performance' || route.name === 'personal-portfolio' || route.name === 'personal-fund'
+        route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
+      )
+    case 'personal-protection':
+      return (
+        route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
       )
     case 'personal-dividends':
       return (
-        route.name === 'personal-dividends' || route.name === 'personal-referrals' || route.name === 'personal-bonus'
+        route.name === 'personal-dividends' ||   route.name === 'personal-etfs' // route.name === 'personal-referrals' || route.name === 'personal-bonus'
       )
     case 'personal-more':
       return route.name?.includes('personal-more')

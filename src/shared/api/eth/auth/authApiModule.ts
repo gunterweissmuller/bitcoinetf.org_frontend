@@ -26,8 +26,6 @@ export default class AuthApiModule {
   }) {
 
     if(payload?.method === SignupMethods.Google) {
-      console.log(this.adapter);
-
       // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
     }
 
@@ -565,6 +563,66 @@ export default class AuthApiModule {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/provider/apple/login',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initOneTimeLink(payload: { email: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/one-time-password/init',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginOneTimeLink(payload: { email: string, password: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/login/one-time-pass',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async resendOneTimeLink(payload: { email: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/one-time-password/resend',
         request: {
           method: HTTPMethod.POST,
         },
