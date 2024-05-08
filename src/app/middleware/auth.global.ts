@@ -11,7 +11,6 @@ export default defineNuxtRouteMiddleware((to) => {
   const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset']
   const fundRouteNames = [ 'personal-portfolio', 'personal-protection', 'personal-shareholders' ]
   const includedRouteMask = to.path.includes('personal')
-  console.log(to);
   const urlParams = new URLSearchParams(window.location.search);
   if(to.query.accessToken) {
     $app.store.auth.setTokens({
