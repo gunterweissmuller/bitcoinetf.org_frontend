@@ -37,7 +37,7 @@
         :slider="false"
       />
     </div>
-    <w-trades :filters="filters" />
+    <w-trades :filters="filters" is-assets />
     <w-activity :filters="filters" />
     <w-news />
   </div>
@@ -83,9 +83,6 @@ const asset = computed<IAsset | undefined>(() => {
     .find((item: { symbol: string; }) => item.symbol === symbol.value.toUpperCase());
 });
 
-console.log(asset.value);
-
-
 const assetsChartData = computed(() => {
   const unset = {
     symbol: 'OTHERS',
@@ -96,7 +93,7 @@ const assetsChartData = computed(() => {
   return [asset.value, unset];
 });
 
-const filters = computed(() => ({ asset_uuid: asset.value?.uuid }));
+const filters = computed(() => ({ asset_uuid: asset.value ? asset.value?.uuid : false }));
 
 const btcUsdt = ref(null);
 

@@ -33,7 +33,7 @@ const props = withDefaults(
   defineProps<{
     isPage?: boolean
     perPage?: number
-    filters: Record<string, string> | null
+    filters: Record<string, string | false> | null
   }>(),
   {
     isPage: false,
@@ -65,6 +65,8 @@ const loadMoreSpillovers = () => {
 
 const getSpillovers = async () => {
   const tradesFilters = props.filters ?? {};
+
+  if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
     per_page: props.perPage,
