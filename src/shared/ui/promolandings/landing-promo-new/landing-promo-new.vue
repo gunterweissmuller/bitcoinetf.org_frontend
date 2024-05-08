@@ -11,7 +11,7 @@
       Get a {{ $app.store.user.statistic?.trc_bonus?.percent }}% Discount on ETF Purchases with <br><a-icon :name="Icon.ColorfulUsdttron"/>Tether (USDT) - Invest Smarter, Not Harder!
     </div>
     <div class="landing-promo-new__cta">
-      <a-button fontSize="big-size" variant="primary2" text="Get started!" @click="scrollToSection"/>
+      <a-button fontSize="big-size" variant="primary" text="Get started!" @click="scrollToSection"/>
     </div>
 
   </div>

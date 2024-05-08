@@ -50,6 +50,7 @@
 
     &--right {
       right: torem(15);
+      color: #0066ff;
     }
 
     &--left {
@@ -70,20 +71,21 @@
     &--tetherspecial {
       &:hover {
         .a-input__input-container {
-          // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
-          background: transparent;
+          background-color: var(--surfaces-surface-2);
+          // background: transparent;
         }
 
         .a-input__input {
-          background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
-          background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
+          // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
+          // background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
           // border: 1px solid transparent;
         }
       }
 
       .a-input__input-container {
         // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
-        background: transparent;
+        background-color: var(--surfaces-surface-2);
+        // background: transparent;
       }
 
       .a-input__input {

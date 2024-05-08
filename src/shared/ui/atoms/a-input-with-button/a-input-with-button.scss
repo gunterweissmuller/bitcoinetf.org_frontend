@@ -111,7 +111,7 @@
     min-width: torem(100);
     height: torem(56);
     color: var(--text-primary);
-    background-color: var(--surfaces-surface-2);
+    // background-color: var(--surfaces-surface-2);
     border: torem(1) solid var(--surfaces-surface-2);
     border-radius: torem(8);
     caret-color: var(--text-primary);
@@ -229,7 +229,7 @@
       flex-direction: column;
       justify-content: center;
       max-width: 100%;
-      background-color: var(--surfaces-surface-2)
+      // background-color: var(--surfaces-surface-2)
     }
 
     &--open {
