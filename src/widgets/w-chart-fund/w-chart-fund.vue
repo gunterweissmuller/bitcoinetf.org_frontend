@@ -82,6 +82,7 @@ const props = withDefaults(
     title: string
     isMain: boolean
     isTotalAssets?: boolean
+    aumSizeUsd?: boolean
     type: ChartType,
     asset: IAsset,
   }>(),
@@ -89,7 +90,8 @@ const props = withDefaults(
     isTotalAssets: false,
     isMain: false,
     id: null,
-    type: 'assets'
+    type: 'assets',
+    aumSizeUsd: false,
   },
 );
 
@@ -178,8 +180,9 @@ const getStatistics = async () => {
   let data;
   if (['shareholders', 'assets'].includes(props.type)) {
     response = await $app.api.eth.statisticEth.getShareholdersGrowth();
-
-    shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders)[props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd'];
+    console.log(props.type);
+    const statisticField = props.aumSizeUsd ? 'aum_size_usd' : props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd'
+    shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders)[statisticField];
     shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
     $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
 
