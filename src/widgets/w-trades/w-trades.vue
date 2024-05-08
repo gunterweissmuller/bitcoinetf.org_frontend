@@ -87,9 +87,9 @@ const centrifuge = ref(null)
 
 const fullPageNuxtLink = computed(() => {
   const nuxtLinkObject = { name: 'personal-analytics-performance-latest-trades', query: {} }
-  if (route.name === 'personal-asset-id') {
-    nuxtLinkObject.query.asset_uuid = route.params.id
-  }
+  // if (route.name === 'personal-asset-id') {
+  //   nuxtLinkObject.query.asset_uuid = route.params.id
+  // }
 
   return nuxtLinkObject
 })
