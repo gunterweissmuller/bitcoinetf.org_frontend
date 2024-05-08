@@ -19,14 +19,14 @@
               Buy
           </div>
 
-          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
+          <!-- <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
             <a-icon
                 width="18"
                 height="18"
                 :name="Icon.MonoMinus"
               />
               Sell
-          </div>
+          </div> -->
 
           <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="handleVerify">
             <a-icon

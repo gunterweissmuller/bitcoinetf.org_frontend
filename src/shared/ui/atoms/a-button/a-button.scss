@@ -56,6 +56,19 @@
     }
   }
 
+  &--primary-website {
+    color: var(--text-inverse-primary);
+    background: var(--button-primary-website);
+
+    .a-button__label {
+      color: var(--color-text-contrast);
+    }
+
+    .a-button__icon {
+      color: var(--color-icon-tertiary);
+    }
+  }
+
   &--secondary {
     background: var(--button-secondary);
 

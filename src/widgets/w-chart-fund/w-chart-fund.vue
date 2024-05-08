@@ -262,7 +262,7 @@ onMounted(async () => {
         datasets: [
           {
             data: [],
-            borderColor: '#4D94FF',
+            borderColor: '#0066ff', // '#4D94FF'
             borderWidth: 1,
             tension: 0.4,
             fill: true,

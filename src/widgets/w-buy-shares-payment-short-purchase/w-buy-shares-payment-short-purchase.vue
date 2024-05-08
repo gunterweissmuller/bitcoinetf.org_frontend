@@ -50,9 +50,11 @@
       Cancel Order
     </button>
     <footer class="text-center py-6">
-      <nuxt-link to="/personal/support" target="_blank">
-        <span  class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</span>
+
+      <nuxt-link to="/personal/support" target="_blank" >
+        <a-button text="Contact support" variant="tertiary" isFullWidth />
       </nuxt-link>
+
 
     </footer>
   </div>
