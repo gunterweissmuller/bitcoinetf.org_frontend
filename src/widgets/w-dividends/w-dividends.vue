@@ -71,7 +71,7 @@
               TOTAL DIVIDENDS PAID
             </div>
             <div class="w-dividends__cards-title">
-              ${{$app.filters.rounded($app.store.user.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2) }}
+              ${{$app.filters.rounded(tempDividendsEarnedBtc * $app.store.user.btcValue, 2) }}
             </div>
           </div>
           <div class="w-dividends__cards-footer">
@@ -529,15 +529,35 @@ const timerStyle = computed(() => {
 
 // time dropdown
 
+const tempDividendsEarnedBtc = ref($app.store.user.statistic?.dividends_earned_btc || 0);
+
+onMounted(() => {
+  $app.api.eth.statisticEth.getGlobalStats().then((res) => {
+    tempDividendsEarnedBtc.value = res.data.dividends_earned_btc;
+  })
+})
+
+const getTotalDividendsPaid = (time : any) => {
+  const filterObj : Record<string, any> = {}
+
+  if (time !== 'all') {
+    filterObj.dividends_earned_btc_daily_filter = time;
+  }
+
+  $app.api.eth.statisticEth.getGlobalStats({ filters: filterObj }).then((res) => {
+    tempDividendsEarnedBtc.value = res.data.dividends_earned_btc;
+  })
+}
+
 const timeOptions = [
-  {value : "All time"},
-  {value : "1 year"},
-  {value : "6 months"},
-  {value : "3 months"},
-  {value : "1 month"},
-  {value : "1 week"},
-  {value : "7 days"},
-  {value : "24 hours"},
+  {value : "All time", callback: () => getTotalDividendsPaid('all')},
+  {value : "1 year", callback: () => getTotalDividendsPaid(365)},
+  {value : "6 months", callback: () => getTotalDividendsPaid(180)},
+  {value : "3 months", callback: () => getTotalDividendsPaid(90)},
+  {value : "1 month", callback: () => getTotalDividendsPaid(30)},
+  {value : "1 week", callback: () => getTotalDividendsPaid(7)},
+  {value : "7 days", callback: () => getTotalDividendsPaid(7)},
+  {value : "24 hours", callback: () => getTotalDividendsPaid(1)},
 ]
 
 const methods = [

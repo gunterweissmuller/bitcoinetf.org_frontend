@@ -33,6 +33,7 @@
 
     const selectOption = (option : any) => {
         selectedOption.value = props.options.find((el) => el.value === option.value) ?? props.options[0].value;
+        option?.callback();
         toggleCurrencyDropdown();
     }
 </script>

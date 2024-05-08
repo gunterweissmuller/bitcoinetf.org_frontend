@@ -113,6 +113,9 @@ export default class StatisticEthApiModule {
     }
   }
 
+
+  async getGlobalStats(payload?:any) {
+
   // async getGlobalStats() {
   //   try {
   //     return await this.adapter.requestJsonAsync({
@@ -132,7 +135,6 @@ export default class StatisticEthApiModule {
   //   }
   // }
 
-  async getGlobalStats(payload: any) {
     try {
       let filtersQuery = ''
 
