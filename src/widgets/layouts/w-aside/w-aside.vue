@@ -137,7 +137,7 @@
                 <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
               </nuxt-link>
             </li>
-            <li class="w-aside__item w-aside__item-mobile">
+            <li class="w-aside__item w-aside__item-mobile" @click="themeValue = !themeValue">
               <div
                 class="w-aside__link"
               >
@@ -146,8 +146,9 @@
                   Dark Theme
                 </p>
                 <div class="w-aside__link-switch">
-                  <a-switch
-                    v-model.modelValue="themeValue"
+                  <a-switch-new
+                    :modelValue="themeValue"
+                    @update:model-value="themeValue = !themeValue"
                   />
                 </div>
               </div>
@@ -262,7 +263,7 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { ref } from 'vue'
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import WCertificate from '~/src/widgets/w-certificate/w-certificate.vue';
-import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
+import ASwitchNew from '~/src/shared/ui/atoms/a-switch-new/a-switch-new.vue'
 
 const { $app } = useNuxtApp()
 
