@@ -112,11 +112,23 @@ export default class StatisticEthApiModule {
     }
   }
 
-  async getGlobalStats(params?:any) {
+  async getGlobalStats(payload?:any) {
     try {
+      let filtersQuery = ''
+
+      if (payload?.filters) {
+        Object.entries(payload.filters).forEach(([key, value]) => {
+          if (value) {
+            filtersQuery += `${key}=${value}&`
+          }
+        })
+      }
+
+      console.log(payload);
+
       return await this.adapter.requestJsonAsync({
         apiVersion: ApiVersion.V2,
-        parameterValue: `statistic${ params?.dividends_earned_btc ? "?dividends_earned_btc_daily_filter=" + params?.dividends_earned_btc : "" }`,
+        parameterValue: `statistic?${filtersQuery}`,
         request: {
           method: HTTPMethod.GET,
         },

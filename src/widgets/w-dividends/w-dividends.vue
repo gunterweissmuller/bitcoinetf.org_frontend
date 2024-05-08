@@ -538,13 +538,19 @@ onMounted(() => {
 })
 
 const getTotalDividendsPaid = (time : any) => {
-  $app.api.eth.statisticEth.getGlobalStats({dividends_earned_btc : time}).then((res) => {
+  const filterObj : Record<string, any> = {}
+
+  if (time !== 'all') {
+    filterObj.dividends_earned_btc_daily_filter = time;
+  }
+
+  $app.api.eth.statisticEth.getGlobalStats({ filters: filterObj }).then((res) => {
     tempDividendsEarnedBtc.value = res.data.dividends_earned_btc;
   })
 }
 
 const timeOptions = [
-  {value : "All time", callback: () => getTotalDividendsPaid(false)},
+  {value : "All time", callback: () => getTotalDividendsPaid('all')},
   {value : "1 year", callback: () => getTotalDividendsPaid(365)},
   {value : "6 months", callback: () => getTotalDividendsPaid(180)},
   {value : "3 months", callback: () => getTotalDividendsPaid(90)},
