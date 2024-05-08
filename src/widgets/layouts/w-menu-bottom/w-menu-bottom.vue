@@ -90,8 +90,8 @@ const { $app } = useNuxtApp()
 const { isMobile, isTablet } = useMediaDevice()
 
 const navList = [
-  { title: 'Fund', icon: Icon.MonoAnalytics, link: 'personal-portfolio' },
-  { title: 'Dividends', icon: Icon.MonoEarnings, link: 'personal-earnings' },
+  { title: 'Fund', icon: Icon.MonoActivity, link: 'personal-portfolio' },
+  { title: 'Assets', icon: Icon.MonoAnalytics, link: 'personal-assets' },
   {
     title: "ETFs",
     icon: Icon.ColorfulBitcoin,
