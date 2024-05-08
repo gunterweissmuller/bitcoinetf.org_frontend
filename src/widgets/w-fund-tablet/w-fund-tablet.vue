@@ -10,20 +10,19 @@
         loop
         :speed="30000"
         :space-between="0"
-        slides-per-view="1"
+        slides-per-view="auto"
         :mousewheel="false"
         :looped-slides="0"
-        :modules="[Autoplay, Parallax]"
+        :modules="[Autoplay]"
         :autoplay="{
           delay: 0,
           disableOnInteraction: false,
         }"
-        centeredSlides
         :allowTouchMove="false"
         disableOnInteraction
       >
         <template #slides>
-          <swiper-slide class="w-header__item-row" v-for="index in 2" :key="index" style="min-width: 1620px">
+          <swiper-slide class="w-header__item-row" v-for="index in 3" :key="index">
             <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
               <div class="w-header__item-title">{{ item.text }}</div>
               <div class="w-header__item-text" v-html="item.modifyValue"></div>
