@@ -31,7 +31,7 @@
         </template>
       </m-slider>
       <div class="w-fund-tablet__fund-charts">
-        <w-chart-fund class="w-fund-tablet__fund-chart" title="AUM Growth" is-main is-total-assets />
+        <w-chart-fund class="w-fund-tablet__fund-chart" title="AUM Growth" is-main is-total-assets aum-size-usd />
         <w-chart-portfolio
           ref="chartPortfolioRef"
           class="w-fund-tablet__fund-chart"

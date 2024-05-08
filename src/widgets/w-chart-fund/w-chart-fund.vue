@@ -180,7 +180,6 @@ const getStatistics = async () => {
   let data;
   if (['shareholders', 'assets'].includes(props.type)) {
     response = await $app.api.eth.statisticEth.getShareholdersGrowth();
-    console.log(props.type);
     const statisticField = props.aumSizeUsd ? 'aum_size_usd' : props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd'
     shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders)[statisticField];
     shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
