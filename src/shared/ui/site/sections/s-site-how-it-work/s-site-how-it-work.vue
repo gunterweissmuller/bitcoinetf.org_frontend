@@ -3,13 +3,14 @@
     <div class="s-site-how-work__wrapper-title">
       <h2 class="s-site-how-work__title title-site-h1">Passive Income <br />for Smart Investors</h2>
       <p class="s-site-how-work__title_info for-desktop">
-        Bitcoin ETFs are issued, after which the fund's AI <br />
-        dynamically allocates new funds among portfolio assets.
+        When Bitcoin ETFs are issued, proceeds are dynamically allocated between portfolio <br />
+        assets. All generated profits are distributed to ETF shareholders. You can choose to get <br />
+        paid in BTC or USDT.
       </p>
       <p class="s-site-how-work__title_info for-mobile">
-        Bitcoin ETFs are issued, after which the <br />
-        fund's AI dynamically allocates new funds <br />
-        among portfolio assets.
+        When Bitcoin ETFs are issued, proceeds are dynamically allocated between portfolio <br />
+        assets. All generated profits are distributed to ETF shareholders. You can choose to get <br />
+        paid in BTC or USDT.
       </p>
 
       <a-animation-passive-income />
@@ -19,8 +20,8 @@
       <div style="background: rgba(255, 255, 255, 0.1); height: 1px" />
       <div style="padding-top: 32px; padding-bottom: 32px">
         <p style="font-size: 24px; text-align: center">
-          <span style="color: #4d94ff">Purchase ETFs for $1 each</span> and begin earning
-          <span style="color: #4d94ff">daily dividends</span>, accruing <br />
+          <span style="color: #0066ff">Purchase ETFs for $1 each</span> and begin earning  <!--#4d94ff-->
+          <span style="color: #0066ff">daily dividends</span>, accruing <br />  <!--#4d94ff-->
           in either
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[24px]"
@@ -43,13 +44,13 @@
       <div style="background: rgba(255, 255, 255, 0.1); height: 1px" />
       <div style="padding-top: 32px; padding-bottom: 32px">
         <p style="font-size: 24px; text-align: center">
-          <span style="color: #4d94ff">Sell ETFs at the fixed price</span> of $1 and retain your dividends.
+          <span style="color: #0066ff">Sell ETFs at the fixed price</span> of $1 each and retain your dividends.  <!--#4d94ff-->
         </p>
       </div>
       <div style="background: rgba(255, 255, 255, 0.1); height: 1px" />
       <div style="padding-top: 32px; padding-bottom: 32px">
         <p style="font-size: 24px; text-align: center">
-          Original Investment is <span style="color: #4d94ff">NEVER at risk</span>
+          Original Investment is <span style="color: #0066ff">NEVER at risk</span> <!--#4d94ff-->
         </p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <header
-    v-if="route.name !== 'personal-kyc'"
+    v-if="route.name !== 'personal-kyc' && !(isFundPage && (isLaptop || isDesktop))"
     :class="['w-header', { 'w-header--no-indent': route.path.includes('analytics') || route.path.includes('wallet'), 'w-header--empty': route.name === 'personal-purchase' }]"
   >
     <div class='w-header__wrap'>
@@ -20,7 +20,7 @@
           <a-icon
             width='22'
             height='22'
-            v-if='routeNames?.[route?.name]?.info'
+            v-if='routeNames?.[route?.name]?.info && !(isLaptop || isDesktop)'
             class='w-header__img'
             :class="{'w-header__img--left': route.name === 'personal-buy-shares' || route.name === 'personal-earnings'}"
             :name='Icon.MonoInfo'
@@ -44,6 +44,9 @@
         />
       </div>
       <div v-if='isVisibleInfo' id='marquee'>
+        <div class="w-header__live">
+          <a-live />
+        </div>
         <m-slider
           class="w-header__info"
           id="w-header__info-slider"
@@ -73,16 +76,48 @@
         </m-slider>
       </div>
 
-      <e-analytics-tabs :tab-bars='tabs' />
+      <e-fund-tabs :tab-bars='tabs' />
+
+      <m-slider
+        id="assets"
+        slides-per-view="auto"
+        :space-between="16"
+        v-if="route.name === 'personal-assets-symbol' || route.name === 'personal-assets'"
+      >
+        <template #slides>
+
+          <swiper-slide
+            class="w-header__slide"
+            v-for="(asset, id) in navAssets"
+            :key="id"
+          >
+            <nuxt-link
+              class="w-header__slide-link"
+              :class="{ active: activeAsset(asset.symbol) }"
+              :to="{ name: 'personal-assets-symbol', params: { symbol: asset.symbol.toLowerCase() } }"
+            >
+              <div class="w-header__slide-content">
+                <div :class="['w-header__type-symbol', `bg--${asset.symbol.toLowerCase()}`]"></div>
+                <span class="w-header__type-name">
+                  {{ asset.symbol }}
+                </span>
+              </div>
+            </nuxt-link>
+          </swiper-slide>
+
+        </template>
+      </m-slider>
     </div>
   </header>
   <e-page-info-modal v-if='routeNames?.[route?.name]?.info' v-model='isOpenModal'>
     <component :is='routeNames[route.name].info' />
   </e-page-info-modal>
+
 </template>
 
 <script setup lang='ts'>
 import { useRoute } from 'vue-router'
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import EHeaderLinks from '~/src/entities/e-header-links/e-header-links.vue'
 import EBreadcrumbs from '~/src/entities/e-breadcrumbs/e-breadcrumbs.vue'
 import useMediaDevice from '~/composables/useMediaDevice'
@@ -99,7 +134,7 @@ import EPageInfoBuyShares from '~/src/entities/e-page-info-modal/ui/e-page-info-
 import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info-statements.vue'
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { nextTick, onUnmounted, onMounted, computed } from 'vue'
-import EAnalyticsTabs from '~/src/features/e-analytics-tabs/e-analytics-tabs.vue'
+import EFundTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
 import { Autoplay } from 'swiper'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
@@ -107,7 +142,7 @@ import { SwiperSlide } from 'swiper/vue'
 
 const { $app } = useNuxtApp()
 
-const route = useRoute()
+const route = useRoute();
 
 const { isLaptop, isDesktop, isMobile, isTablet } = useMediaDevice()
 
@@ -119,6 +154,8 @@ const props = withDefaults(
     listInfo: [],
   },
 )
+
+
 
 const btcUsdt = ref(null)
 const apyValue = ref(14)
@@ -148,17 +185,37 @@ const infoList = [
 ]
 
 const routeNames = computed(() => ({
-  'personal-more': {
-    title: 'More',
-    titleCrumb: 'More',
+  'personal-assets': {
+    title: 'Assets',
+    titleCrumb: 'Assets',
     breadcrumbs: false,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-portfolio',
+    info: EPageInfoAnalytics,
+  },
+  'personal-assets-symbol': {
+    title: 'Assets',
+    titleCrumb: 'Assets',
+    breadcrumbs: false,
+    urlToBack: 'personal-portfolio',
+    info: EPageInfoAnalytics,
+  },
+  'personal-more': {
+    title: 'Profile',
+    titleCrumb: 'Profile',
+    breadcrumbs: false,
+    urlToBack: 'personal-protection',
   },
   'personal-buy-shares-payment': {
     title: 'Payment',
     titleCrumb: 'Payment',
     breadcrumbs: false,
     urlToBack: 'personal-buy-shares',
+  },
+  'personal-more-referrals': {
+    title: 'Referrals',
+    titleCrumb: 'Referrals',
+    breadcrumbs: true,
+    urlToBack: 'personal-more',
   },
   'personal-more-personal-details': {
     title: 'Personal details',
@@ -191,32 +248,29 @@ const routeNames = computed(() => ({
     customTitle: true,
     titleCrumb: 'Buy ETF Shares',
     breadcrumbs: false,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
     info: EPageInfoBuyShares,
   },
-  'personal-analytics': {
-    title: 'Analytics',
-    titleCrumb: 'Analytics',
+  // FIX THIS
+  'personal-fund': {
+    title: 'Shareholders',
+    titleCrumb: 'Shareholders',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
-  'personal-performance': {
-    title: 'Analytics',
-    titleCrumb: 'Performance',
+  'personal-protection': {
+    title: 'Fund',
+    titleCrumb: 'Protection',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-portfolio': {
-    title: 'Analytics',
+    title: 'Fund',
     titleCrumb: 'Portfolio',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
-  'personal-fund': {
-    title: 'Analytics',
-    titleCrumb: 'Fund',
+  'personal-shareholders': {
+    title: 'Fund',
+    titleCrumb: 'Shareholders',
     breadcrumbs: false,
-    info: EPageInfoAnalytics,
   },
   'personal-wallet': {
     title: 'Wallet',
@@ -236,18 +290,6 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoWallet,
   },
-  'personal-referrals': {
-    title: 'Wallet',
-    titleCrumb: 'Referrals',
-    breadcrumbs: false,
-    info: EPageInfoWallet,
-  },
-  'personal-bonus': {
-    title: 'Wallet',
-    titleCrumb: 'Bonus',
-    breadcrumbs: false,
-    info: EPageInfoWallet,
-  },
   'personal-kyc': { title: 'Kyc', breadcrumbs: false },
   'personal-support': { title: 'Support', breadcrumbs: false },
   'personal-earnings': {
@@ -256,25 +298,25 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoEarnings,
   },
-  'personal-analytics-performance-latest-trades': {
+  'personal-fund-protection-latest-trades': {
     title: 'Latest trades',
     titleCrumb: 'Latest trades',
     breadcrumbs: true,
-    urlToBack: 'personal-performance',
+    urlToBack: 'personal-protection',
   },
-  'personal-analytics-fund-latest-purchases': {
+  'personal-fund-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
-    urlToBack: 'personal-fund',
+    urlToBack: 'personal-shareholders',
   },
-  'personal-analytics-fund-top-shareholders': {
+  'personal-fund-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
-    urlToBack: 'personal-fund',
+    urlToBack: 'personal-shareholders',
   },
-  'personal-analytics-portfolio-latest-activity': {
+  'personal-fund-portfolio-latest-activity': {
     title: 'Latest activity',
     titleCrumb: 'Latest activity',
     breadcrumbs: true,
@@ -292,48 +334,55 @@ const routeNames = computed(() => ({
     title: $app.store.asset?.name,
     titleCrumb: $app.store.asset?.name,
     breadcrumbs: true,
-    urlToBack: 'personal-performance',
-    customBreadcrumbs: ['personal-analytics', $app.store.asset?.name || ''],
+    urlToBack: 'personal-protection',
+    customBreadcrumbs: ['personal-fund', $app.store.asset?.name || ''],
   },
 }))
 
-const analyticsLinks = {
-  title: 'Analytics',
+const fundLinks = {
+  title: 'Fund',
   links: [
-    { text: 'Performance', name: 'personal-performance' },
     { text: 'Portfolio', name: 'personal-portfolio' },
-    { text: 'Fund', name: 'personal-fund' },
+    { text: 'Protection', name: 'personal-protection' },
+    { text: 'Shareholders', name: 'personal-shareholders' },
   ],
 }
 
+const isFundPage = computed<boolean>(() => fundLinks.links.find(el => el.name === route.name || 'personal-fund' === route.name))
+
 const walletLinks = {
-  title: 'Assets',
+  title: 'Wallet',
   links: [
     { text: 'Dividends', name: 'personal-dividends' },
     { text: 'ETFs', name: 'personal-etfs' },
-    // { text: 'Referrals', name: 'personal-referrals' },
     // { text: 'Bonus', name: 'personal-bonus' },
   ],
 }
+const assetsLinks = {
+  title: 'Assets',
+  links: [],
+}
 
 const linksList = {
-  'personal-analytics': analyticsLinks,
-  'personal-performance': analyticsLinks,
-  'personal-portfolio': analyticsLinks,
-  'personal-fund': analyticsLinks,
+  'personal-fund': fundLinks,
+  'personal-protection': fundLinks,
+  'personal-portfolio': fundLinks,
+  'personal-shareholders': fundLinks,
   'personal-wallet': walletLinks,
   'personal-dividends': walletLinks,
-  'personal-referrals': walletLinks,
-  'personal-bonus': walletLinks,
+  'personal-assets': assetsLinks,
   'personal-etfs': walletLinks,
 }
 
 const isVisibleInfo = computed(() => {
   return (
-    route.name === 'personal-analytics' ||
-    route.name === 'personal-performance' ||
     route.name === 'personal-fund' ||
-    route.name === 'personal-portfolio'
+    route.name === 'personal-protection' ||
+    route.name === 'personal-shareholders' ||
+    route.name === 'personal-portfolio' ||
+    route.name === 'personal-assets' ||
+    route.name === 'personal-assets-symbol'
+
   )
 })
 
@@ -341,9 +390,8 @@ const isVisibleLinks = computed<boolean>(
   () =>
     !routeNames.value?.[route?.name]?.breadcrumbs &&
     linksList?.[route?.name]?.links &&
-    (isLaptop.value || isDesktop.value),
+    (isLaptop.value || isDesktop.value)
 )
-console.log(linksList?.[route?.name]?.links, route?.name, linksList?.[route?.name])
 
 const isVisibleBreadcrumbs = computed<boolean>(
   () => routeNames.value?.[route?.name]?.breadcrumbs && (isLaptop.value || isDesktop.value),
@@ -359,7 +407,7 @@ const isShowBuyPopper = computed<boolean>(() => {
   return (
     (isDesktop.value || isLaptop.value) &&
     $app.store.user.dividends?.usd_amount &&
-    (route.name === 'personal-dividends' || route.name === 'personal-referrals' || route.name === 'personal-bonus')
+    (route.name === 'personal-dividends' || route.name === 'personal-referrals' )
   )
 })
 
@@ -375,8 +423,19 @@ const closePopper = () => {
 }
 
 const assets = computed(() => {
-  return $app.store.assets.items
-})
+  return $app.store.assets.items;
+});
+
+const navAssets = computed(() => {
+  return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT');
+});
+
+const activeAsset = (symbol : string) : boolean => {
+  if (route.name === 'personal-assets-symbol') {
+    return route.params.symbol === symbol.toLowerCase()
+  }
+  return false;
+};
 
 const totalSum = computed(() => {
   if (!assets.value?.length) return 0
@@ -396,8 +455,8 @@ const assetsByKey = computed(() => {
   }, {})
 })
 
-const fundTotalBtc = computed(() => {
-  return $app.store.assets.fundTotalBtc
+const shareholdersTotalBtc = computed(() => {
+  return $app.store.assets.shareholdersTotalBtc
 })
 
 const marqueList = computed(() => [
@@ -466,8 +525,8 @@ const marqueList = computed(() => [
   },
   {
     text: 'Bitcoin Reserve Fund Balance',
-    value: fundTotalBtc.value,
-    modifyValue: `${$app.filters.convertValue($app.filters.rounded(fundTotalBtc.value, 5)) }`,
+    value: shareholdersTotalBtc.value,
+    modifyValue: `${$app.filters.convertValue($app.filters.rounded(shareholdersTotalBtc.value, 5)) }`,
   },
   {
     text: 'BTC Options TD Balance',
@@ -486,8 +545,8 @@ const marqueList = computed(() => [
   },
   {
     text: 'Total AUM',
-    value: $app.filters.rounded(fundTotalUsd.value, 2),
-    modifyValue: `$${$app.filters.rounded(fundTotalUsd.value, 2)}`,
+    value: $app.filters.rounded(shareholdersTotalUsd.value, 2),
+    modifyValue: `$${$app.filters.rounded(shareholdersTotalUsd.value, 2)}`,
   },
   {
     text: 'Latest Bitcoin ETF Share Issuance',
@@ -496,13 +555,12 @@ const marqueList = computed(() => [
   },
 ])
 
-
 const filteredMarqueList = computed(() => {
   return marqueList.value.filter((el) => el?.value)
 })
 
-const fundTotalUsd = computed(() => {
-  return $app.store.user.fundTotalUsd
+const shareholdersTotalUsd = computed(() => {
+  return $app.store.user.shareholdersTotalUsd
 })
 
 const getDividendsByYear = async () => {
@@ -516,11 +574,11 @@ const getDividendsByYear = async () => {
 }
 
 const tabs = computed(() => {
-  if (route.path.includes('analytics') || route.path.includes('asset')) {
+  if (route.path.includes('fund')) {
     return [
-      { text: 'Performance', name: 'personal-performance' },
       { text: 'Portfolio', name: 'personal-portfolio' },
-      { text: 'Fund', name: 'personal-fund' },
+      { text: 'Protection', name: 'personal-protection' },
+      { text: 'Shareholders', name: 'personal-shareholders' },
     ]
   }
 
@@ -528,9 +586,6 @@ const tabs = computed(() => {
     return [
       { text: 'Dividends', name: 'personal-dividends' },
       { text: 'ETFs', name: 'personal-etfs' },
-      // { text: 'Dividends', name: 'personal-dividends' },
-      // { text: 'Referrals', name: 'personal-referrals' },
-      // { text: 'Bonus', name: 'personal-bonus' },
     ]
   }
 

@@ -3,7 +3,7 @@
     <!--orderType == 'init_btc'--><m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
 
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
+          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> 
             <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" />
             <!-- <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest</h1> -->
 
@@ -25,13 +25,12 @@
           </header>
           <VueWriter :start="1100" :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center" :array="['and receive my daily']" :iterations="1" />
           <!-- <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center">and receive my daily</p> -->
-          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center gap-2 font-medium text-center whitespace-nowrap">
+          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
             <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" />
             <!-- <span class="grow">dividends in</span> -->
-
             <div class="relative" v-on-click-outside="() => showDropdown = false">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
-                <div @click="toggleCurrencyDropdown" class="relative flex items-center justify-center gap-2 cursor-pointer"> <!--@click="toggleCurrencyDropdown"-->
+                <div @click="toggleCurrencyDropdown" class="e-invest__invest-select-value"> <!--@click="toggleCurrencyDropdown"-->
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
                   <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
@@ -39,22 +38,16 @@
               </div>
               <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
                 <ul class="text-sm font-medium text-gray-700">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
+                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
               </div>
 
               <div v-if="showDropdown" :class="[{'e-invest__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'e-invest__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="e-invest__invest-select-dropdown w-full absolute mt-1 z-10">
                 <ul class=" text-sm font-medium">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
+                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
                 </ul>
               </div>
             </div>
-
-            <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
-              <NuxtImg src="/img/icons/colorful/usdt.svg" class="self-start w-6 aspect-square" alt="USDT logo" />
-              <span>USDT</span>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="my-auto aspect-square w-[18px]" alt="Down arrow icon" />
-            </div> -->
 
           </div>
 
@@ -69,7 +62,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2)  }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">$ {{  $app.filters.rounded(dayliDivs, 2) }}</p>
@@ -104,7 +97,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 2) }}</p>
@@ -146,14 +139,17 @@
 
 
           </article>
-          <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
+          <button @click="handleContinue" tabindex="0" :disabled="investmentAmount < 100" class="e-invest__button justify-center items-center self-stretch px-16 py-5 text-base font-bold text-white whitespace-nowrap bg-blue-600 rounded-lg"> Continue </button>
+          <div class="e-invest__error-message">
+            <p v-if="investmentAmount < 100">The minimum investment amount must be at least 100</p>
+          </div>
         </div>
     </m-modal>
 
     <!-- REINVEST -->
     <!--orderType == 'usdt' || orderType == 'btc'--><m-modal modalBig v-if="orderType == 'usdt' || orderType == 'btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!---->
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> <!--gap-4-->
+          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap">
             <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />
             <!-- <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1> -->
 
@@ -166,27 +162,25 @@
               <input
                 :disabled="false"
                 :style="'max-width: '+inputMaxWidth+'px'"
-                :value="investmentAmount"
+                v-model="investmentAmountDisplay"
                 class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
                 placeholder="2,500"
                 type="text"
-                @keypress="validate"
                 :min="1"
                 :max="10000000"
-                @input="onPickerValueInput"
               />
             </div>
 
             <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" />
             <!-- and increase my -->
           </p>
-          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center gap-2 font-medium text-center whitespace-nowrap">
+          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
             <VueWriter :start="2800" :typeSpeed="60" class="grow" :array="['daily dividends in']" :iterations="1" />
             <!-- <span class="grow">daily dividends in</span> -->
 
-            <div class="relative opacity-50">
+            <div class="ml-2 relative opacity-50">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
-                <div  class="relative flex items-center justify-center gap-2 ">
+                <div  class="e-invest__invest-select-value">
                   <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square " alt="USDT logo" loading="lazy" />
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
                   <!-- <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square ', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/> -->
@@ -198,12 +192,6 @@
                 </ul>
               </div> -->
             </div>
-
-            <!-- <div class="flex gap-2 justify-center py-1.5 pr-6 pl-2.5 text-xl bg-sky-50 rounded">
-              <NuxtImg src="/img/icons/colorful/usdt.svg" class="self-start w-6 aspect-square" alt="USDT logo" />
-              <span>USDT</span>
-              <NuxtImg src="/img/icons/mono/chevron-bottom.svg" class="my-auto aspect-square w-[18px]" alt="Down arrow icon" />
-            </div> -->
 
           </div>
 
@@ -218,7 +206,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Your Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>
@@ -253,7 +241,7 @@
                 <p class="e-invest__invest--card-sum e-invest--text-normal relative font-black text-white"> ${{ (investmentAmount + guaranteedPayout * 3).toFixed(2) }} </p>
                 <p class="e-invest__invest--card-subtitle e-invest--text-normal relative font-medium text-white text-opacity-80"> Interest + Original Investment Amount </p>
                 <div class="e-invest__invest--card-line"></div>
-                <div class="flex relative gap-0">
+                <div class="flex relative">
                   <div class="e-invest__invest--card-stats e-invest--text-normal flex flex-col flex-1">
                     <p class="e-invest__invest--card-stats-title font-medium text-white text-opacity-80"> Daily Payout</p>
                     <p class="e-invest__invest--card-stats-value font-bold text-white">${{  $app.filters.rounded(dayliDivs, 1) }}</p>
@@ -295,7 +283,10 @@
 
 
           </article>
-          <button @click="handleContinue" tabindex="0" class="e-invest__button justify-center items-center self-stretch whitespace-nowrap "> Continue </button>
+          <button @click="handleContinue" tabindex="0" :disabled="investmentAmount < 100" class="e-invest__button justify-center items-center self-stretch whitespace-nowrap "> Continue </button>
+          <div class="e-invest__error-message">
+            <p v-if="investmentAmount < 100">The minimum investment amount must be at least 100</p>
+          </div>
         </div>
     </m-modal>
   </div>
@@ -316,7 +307,9 @@ const router = useRouter()
 const route = useRoute()
 const { width } = useWindowSize()
 
-const orderType = ref($app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc');
+const orderType = computed(() => {
+  return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
+});
 watch(
   () => $app.store.user.info,
   () => {
@@ -328,6 +321,9 @@ onMounted(() => {
   $app.api.eth.auth.getUser().then((resp) => {
     $app.store.user.info = resp?.data
   });
+
+
+  
 })
 
 const isOpen = ref($app.store.user.isInvestModalShow.show);
@@ -339,10 +335,18 @@ const investmentAmountDisplay = ref('2,500');
 const investmentAmount : any = ref(2500);
 
 onMounted(()=>{
-  if(localStorage.getItem('investmentAmount')) {
-    investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
-    investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
-    // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // if(localStorage.getItem('investmentAmount')) {
+  //   investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
+  //   investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
+  //   // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
+  // }
+  if($app.store?.purchase?.amountUS) {
+    const temp = Math.ceil(Number($app.store.purchase.amountUS));
+
+    if(!isNaN(temp)) {
+      investmentAmount.value = temp;
+      investmentAmountDisplay.value = String(temp);
+    }
   }
 })
 
@@ -361,8 +365,14 @@ const onPickerValueInput = (event) => {
 
 watch(
   () => investmentAmountDisplay.value,
-  (newValue) => {
-    let tempOriginal = Number(newValue.split(",").join("")); //Number
+  (newValue, oldValue) => {
+    let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
+
+    if(isNaN(tempOriginal)) {
+      investmentAmount.value = Number(oldValue.split(",").join(""));
+      investmentAmountDisplay.value = oldValue;
+      return;
+    }
 
     if(Number(tempOriginal) > 500000) {
       investmentAmount.value = 500000;
@@ -463,6 +473,16 @@ const selectedCurrency = ref(currencies.value[1]); //orderType.value == 'btc' ? 
 const apyValue = ref(selectedCurrency.value.apy);
 const dayliDivs = computed(() => {
   return guaranteedPayout.value / 365
+});
+
+onMounted(() => {
+  // if(localStorage.getItem("investType")) {
+  //   selectCurrency({value: localStorage.getItem("investType")});
+  // }
+
+  // if($app.store.purchase.type) {
+  //   selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+  // }
 })
 
 const dayliDivsDisplay = computed(() => {
@@ -493,7 +513,12 @@ watch(
   () => $app.store.user.isInvestModalShow.show,
   () => {
     isOpen.value = $app.store.user.isInvestModalShow.show;
-    selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+
+    if (orderType.value !== 'init_btc') {
+      selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
+    } else if($app.store.purchase.type) {
+      selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+    }
   }
 )
 
@@ -505,7 +530,7 @@ const toggleCurrencyDropdown = () => {
 
 const selectCurrency = (currency : any) => {
   selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
-  toggleCurrencyDropdown();
+  showDropdown.value = false;
 }
 
 // modal

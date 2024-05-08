@@ -13,5 +13,9 @@ export const authTemp = defineStore('authTemp', {
     responseMethod: SignupMethods.Email,
   } as authTempState),
 
-  
+  persist: {
+    storage: persistedState.cookiesWithOptions({
+      maxAge: 31557600,
+    }),
+  },
 })

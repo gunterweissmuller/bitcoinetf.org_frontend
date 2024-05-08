@@ -33,6 +33,8 @@ export interface IFiltersPack {
 
   roundedFixed(value: unknown): unknown
 
+  roundedFixed2(value: unknown): unknown
+
   convertValue(value: unknown): unknown
 
   cloneDeep(value: unknown): unknown
@@ -133,6 +135,21 @@ export default class FiltersPack implements IFiltersPack {
 
     if (!number) {
       return 0
+    }
+
+    const re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')'
+    return number.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  }
+
+  roundedFixed2(num: number, n: number = 0, x: number = 3) {
+    if (!num) {
+      return '0.' + '0'.repeat(n);
+    }
+
+    const number = Number(num)
+
+    if (!number) {
+      return '0.' + '0'.repeat(n);
     }
 
     const re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')'

@@ -94,11 +94,13 @@ const ActualApy = computed(() => {
 })
 
 const dividendsPrice = computed(() => {
+  return '11';
   return `$${$app.filters.rounded($app.store.user.btcValue * (props.data.winning_amount_btc || 0), 2)}`
 })
 
 
 const earnignsText = computed(() => {
+  return '22';
   if (props.data.symbol === 'BRF') {
     return '$' + $app.filters.rounded(props.data?.incoming_amount_btc * $app.store.user.btcValue, 2)
   }
@@ -107,6 +109,7 @@ const earnignsText = computed(() => {
 })
 
 const earnignsTextSub = computed(() => {
+  return '33';
   if (props.data.symbol === 'BRF') {
     return $app.filters.convertValue($app.filters.rounded(props.data?.incoming_amount_btc, 8))
   }

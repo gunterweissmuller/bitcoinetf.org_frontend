@@ -2,22 +2,36 @@
   &__wrapper {
     display: flex;
     align-items: center;
-    gap: torem(100);
     color: var(--text-inverse-primary);
     border-radius: torem(16);
     box-shadow: 0 0 torem(6) 0 rgba(0, 0, 0, 0.06);
     overflow: hidden;
     padding: torem(80, 64);
+    
+    & > * {
+      margin-left: torem(100);
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
 
     @media (max-width: 991px) {
       flex-direction: column-reverse;
-      gap: torem(64);
       text-align: center;
       padding: torem(80, 16);
       border-radius: 0;
       background-repeat: no-repeat !important;
       background-size: cover !important;
       background-position: center center !important;
+
+      & > * {
+        margin-left: torem(64);
+  
+        &:first-child {
+          margin-left: 0;
+        }
+      }
     }
 
     &--no-bg {

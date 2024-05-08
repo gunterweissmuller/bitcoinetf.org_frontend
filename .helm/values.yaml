@@ -8,6 +8,7 @@ global:
     NuxtEthApi: "api.bitcoinetf.org"
     NuxtExplorerApi: "explorer.nextdev.org"
     NuxtIconsApi: "icons.bitcoinetf.org"
+    NuxtReserveWalletAddress: "PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4"
   stage:
     nodeEnv: "development"
     NuxtWsUrl: "wss://wss.stage.techetf.org/connection/websocket"
@@ -16,3 +17,4 @@ global:
     NuxtEthApi: "api.stage.techetf.org"
     NuxtExplorerApi: "explorer.stage.techetf.org"
     NuxtIconsApi: "icons.stage.techetf.org"
+    NuxtReserveWalletAddress: "PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4"

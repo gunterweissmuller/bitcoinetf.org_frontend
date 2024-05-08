@@ -5,12 +5,12 @@
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
           <div class="w-dividends__amount-sum">
-            ${{ $app.filters.rounded(walletDividends?.btc_amount * $app.store.user.btcValue, 2) }}
+            ${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}
             <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
               >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
             >
           </div>
-          <div v-if="walletDividends?.btc_amount" class="w-dividends__btc" v-html="btcAmount"></div>
+          <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
 
         <div class="w-dividends__timer" :style="timerStyle">
@@ -131,7 +131,7 @@
               <div class="w-dividends__item_info-usd">
                 {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }} <!--8-->
               </div>
-              <div class="w-dividends__item_info-btc">
+              <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
                 <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 6))"></span> <!--8-->
               </div>
@@ -151,7 +151,7 @@
   </div>
   <f-withdrawal-modal :address="address" :method="method" v-model="isOpenModal" @accept="setMethod" />
 
-  <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" :is-purchase="nextRouteName == 'personal-buy-shares'"/>
+  <!-- <w-onboarding :steps="renderedSteps" :next-route-name="nextRouteName" :is-purchase="nextRouteName == 'personal-buy-shares'"/> -->
 </template>
 
 <script setup lang="ts">

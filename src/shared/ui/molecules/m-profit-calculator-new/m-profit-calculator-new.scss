@@ -272,7 +272,19 @@
           &-stars {
             margin: 0rem var(--spacing-s);
             display: flex;
-            gap: var(--spacing-xs);
+
+            & > * {
+              margin-left: var(--spacing-xs);
+              
+              &:first-child {
+                margin-left: 0;
+              }
+            }
+
+            img {
+              width: 18px;
+              height: 18px;
+            }
           }
         }
 
@@ -303,13 +315,36 @@
 
       &-select {
         padding: var(--spacing-s) var(--spacing-m-1);
-        gap: var(--spacing-s);
         border-radius: var(--spacing-s);
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(12px);
 
+        & > * {
+          margin-left: var(--spacing-s);
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+        
         @include breakpoint($break-tablet-minus) {
           padding: var(--spacing-xs) var(--spacing-s);
+        }
+
+        &-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+
+          & > * {
+            margin-left: var(--spacing-m-1);
+
+            &:first-child {
+              margin-left: 0;
+            }
+          }
         }
 
         &-text {
@@ -451,8 +486,18 @@
       &-btc {
         color: var(--btcoin-500, #ff8d07);
       }
-    }
 
+      &:disabled{
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+    &__error-message{
+      height: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent-danger);
+    }
     &-reinvest-wrapper {
       display: flex;
       margin: auto;

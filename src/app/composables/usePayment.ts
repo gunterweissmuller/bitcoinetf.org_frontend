@@ -56,7 +56,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       iconType: Icon.ColorfulMoonpay,
       value: 'moonpay',
       onClick: 'openMoonpay',
-      show: false,
+      show: true,
     },
     {
       icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -104,7 +104,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
 
       return moonpayUrl
     } catch (e) {
-      console.log('error', e)
+      console.error('error', e)
     }
   }
 
@@ -125,14 +125,17 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     });
 
     const res = await response.json();
-    console.log("BUYINIT", res);
 
     if (res) {
       $app.store.user.buyShares = res
     }
   }
 
-  const openMoonpay = async (callback, callbackOnPayment, init: boolean = true) => {
+  const openMoonpayHandler = async (
+    callback: CallableFunction = async () => {},
+    callbackOnPayment: CallableFunction = () => {},
+    init: boolean = true
+  ) => {
     if (isMoonpaySelected.value) {
       return
     }
@@ -142,7 +145,6 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     if (init) {
       await initPayment()
     }
-
 
     await callback()
 
@@ -156,7 +158,6 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
 
     sub
       .on('publication', async function (ctx) {
-        console.log("PUB",ctx, ctx.data.message?.data?.status)
         if (ctx.data.message?.data?.status === 'success') {
           callbackOnPayment(ctx)
           paymentAmount.value.amount = ctx.data.message?.data?.amount
@@ -164,6 +165,8 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
         }
       })
       .subscribe()
+
+      isMoonpaySelected.value = false;
   }
 
   const getPayWallets = async () => {
@@ -180,11 +183,11 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     payWith,
     switches,
     initPayment,
-    openMoonpay,
     getPayWallets,
     paymentAddress,
     currentPayType,
     isMoonpaySelected,
+    openMoonpayHandler,
     getMoonpayPaymentUrl,
   };
 }

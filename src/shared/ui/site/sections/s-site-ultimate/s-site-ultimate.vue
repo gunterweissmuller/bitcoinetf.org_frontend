@@ -8,10 +8,10 @@
         <h2 v-html="data.title" class="s-site-ultimate__title title-site-h2"/>
         <div class="s-site-ultimate__content">
           <div class="s-site-ultimate__message">
-            <div class="s-site-ultimate__message-text">{{ data.message }}</div>
+            <!-- <div class="s-site-ultimate__message-text">{{ data.message }}11</div>
             <div class="s-site-ultimate__message-arrow">
               <img src="/img/site-dark/s-site-ultimate/arrow.svg" alt=""/>
-            </div>
+            </div> -->
           </div>
           <div class="s-site-ultimate__info">
             <div v-html="data.info.text" class="s-site-ultimate__info-text"/>
@@ -40,7 +40,7 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 
 defineProps<{
   data: any
-  files: any
+  files?: any
 }>()
 </script>
 

@@ -46,13 +46,8 @@
                 <div class="f-registration-buy__purchase--confirm-item">
                   <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Investment Amount</p>
 
-                  <div v-if="true" class="flex gap-2 justify-between"> <!--discountAmount <= 0-->
+                  <div class="flex justify-between">
                     <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amountUS, 2) }} </p>
-                  </div>
-
-                  <div v-if="false" class="flex gap-2 justify-between">
-                    <p class="f-registration-buy__purchase--step-text-sale f-registration-buy--text-normal"> US${{  $app.filters.rounded($app.store.purchase.amount, 0)  }} </p>
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded(originalWithDiscount, 2) }} <span class="f-registration-buy__purchase--step-title">(-${{ $app.filters.rounded(discountAmount, 2)  }} off)</span></p>
                   </div>
 
                 </div>
@@ -213,7 +208,7 @@
                 <div v-for="pay in payWith">
                   <div v-if="pay.show" @click="pay.onClick ? handlePayMethod(pay.onClick) : () => currentPayStep = StepsPay.Process" class="f-registration-buy__purchase-pay-item flex flex-col justify-center cursor-pointer">
                     <div class="flex flex-col justify-center p-5 w-full ">
-                      <div class="flex gap-1">
+                      <div class="f-registration-buy__purchase-pay-item-wrapper">
                         <NuxtImg :src="pay.icon" alt="USDT TRC20 option" class="f-registration-buy__purchase-pay-item-icon f-registration-buy__purchase-pay-item-icon-method w-6 aspect-square" loading="lazy"/>
                         <p class="flex-auto font-semibold">{{ pay.title }}</p>
 
@@ -312,7 +307,6 @@ const token = ref('')
 const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
 const enum Steps {
   Purchase = 'Purchase',
-  Bonus = 'Bonus'
 }
 const enum StepsPay {
   PayWith = 'PayWith',
@@ -346,9 +340,7 @@ watch(
   () => currentStep.value,
   (step) => {
     backendError.value = ''
-    if (step === Steps.Bonus) {
-      isOpenModal.value = true
-    }
+   
   },
 )
 
@@ -366,7 +358,7 @@ const getWallets = async () => {
   await $app.api.eth.billingEth
     .getWallets()
     .then((response: any) => {
-      console.log(response)
+
       wallets.value = response.data
     })
     .catch(() => {
@@ -387,15 +379,15 @@ const getMoonpayWallets = async () => {
 
     currentPayStep.value = StepsPay.Paid;
   } catch (e) {
-    console.log('error', e)
+
   }
 }
 
 const refCodeApply = async () => {
-  console.log(refApply.value);
+
   if(refApply.value) return
 
-  console.log($app.store.user?.info?.referrals?.used_code)
+
 
   if ($app.store.user?.info?.referrals?.used_code === null ) { //|| $app.store.user?.info?.referrals?.used_code === undefined
     await $app.api.eth.referral
@@ -407,7 +399,6 @@ const refCodeApply = async () => {
         $app.store.user.info.referrals.used_code = refCode.value;
       })
       .catch((e) => {
-        console.log(e)
         refCodeError.value = true
         if (e?.errors?.error?.message) {
           refCodeMessage.value = e.errors.error.message
@@ -440,12 +431,12 @@ const discountAmount = ref(0);
 const origAmount = $app.store.purchase.amount;
 const originalAmount = ref($app.store.purchase.amount);
 const originalWithDiscount = ref($app.store.purchase.amountUS);
-console.log("start", originalWithDiscount, $app.store.purchase.amountUS, discountAmount)
+
 const totalPayout = ref($app.store.purchase.totalPayout);
 
 onMounted(async () => {
   $app.store.purchase.amountUS = originalWithDiscount.value;
-  console.log(originalWithDiscount.value, $app.store.purchase.amountUS, $app.store.user?.info?.referrals?.used_code, $app.store.user?.info);
+
 
   refCode.value = $app.store.user?.info?.referrals?.used_code || '';
   await getWallets()
@@ -547,8 +538,8 @@ const isOpenSuccessPaymentModal = ref(false)
 const paymentAmount = ref({ amount: 0 })
 
 const openMoonpay = async () => {
-  return await openMoonpayHandler(getMoonpayWallets(), (ctx) => {
-    paymentAmount.value.amount = ctx.data.message?.data?.amount
+  return await openMoonpayHandler(getMoonpayWallets, (ctx) => {
+    paymentAmount.value.amount = ctx.data.message?.data?.amount;
     isOpenSuccessPaymentModal.value = true
   })
 }

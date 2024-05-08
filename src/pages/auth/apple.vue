@@ -2,11 +2,11 @@
 Loading...
 
 <div class="AppleIDSignInOnSuccess">
-    
+
 </div>
 
 <div class="AppleIDSignInOnFailure">
-    
+
 </div>
 
 </template>
@@ -23,7 +23,7 @@ const router = useRouter()
 onMounted(()=>{
     let searchReplaced = location.search.replace('/', '%2F').replace(':', "%3A");
 
-    const refParam = $app.store.auth?.refCode ? "&ref_code=" + $app.store.auth.refCode : ""; 
+    const refParam = $app.store.auth?.refCode ? "&ref_code=" + $app.store.auth.refCode : "";
 
     const headers = {
         'Content-Type': 'application/json',
@@ -33,16 +33,14 @@ onMounted(()=>{
     // Listen for authorization success.
 document.addEventListener('AppleIDSignInOnSuccess', (event) => {
     // Handle successful response.
-    console.log("test123",event.detail.data);
 });
 
 
 // Listen for authorization failures.
 document.addEventListener('AppleIDSignInOnFailure', (event) => {
      // Handle error.
-     console.log("test123",event.detail.error);
 });
-    
+
 })
 
 

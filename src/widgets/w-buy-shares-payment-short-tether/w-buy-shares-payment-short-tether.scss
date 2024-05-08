@@ -129,9 +129,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: var(--spacing-m-1);
 
-
+      & > * {
+        margin-left: var(--spacing-m-1);
+  
+        &:first-child {
+          margin-left: 0;
+        }
+      }
     }
 
     &-box,
@@ -299,7 +304,7 @@
     }
     &-timer{
 
-      color: var(--Accent-Primary, #4D94FF);
+      color: var(--accent-primary);
       text-align: center;
       font-size: 24px !important;
       font-weight: 700;
@@ -476,5 +481,14 @@
       grid-template-columns: 1fr;
       gap: 0;
     }
+  }
+
+  &__paybtn {
+    font-size: torem(16);
+    font-weight: 700;
+    border-radius: var(--spacing-s);
+    background: var(--button-primary);
+    padding: var(--spacing-m-1) var(--spacing-l-2);
+    color: var(--text-inverse-primary);
   }
 }

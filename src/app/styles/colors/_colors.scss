@@ -9,20 +9,21 @@
   --text-inverse-tertiary: #ffffff99;
   --text-inverse-secondary: #FFFFFFCC;
 
-  --accent-primary: #0066ff;
+  --accent-primary: #0066ff; //#4d94ff
   --accent-success: #12df00;
   --accent-danger: #ec0202;
   --accent-secondary: #ff8d07;
   --accent-warning: #ffb445;
 
-  --button-primary: #06F;
+  --button-primary: #06F; // #4d94ff
+  --button-primary-website: #4d94ff;
   --button-secondary: #E3EEFF;
 
   --blue-50: #F3F8FF;
   --blue-100: #E3EEFF;
   --blue-200: #CBDFFF;
   --gray-200: #C8CAD7;
-  --blue-500: #06F;
+  --blue-500: #06F; // #06F #4d94ff
 
   --color-bg: #FFFFFF;
 
@@ -38,6 +39,7 @@
   --surfaces-surface-glass-border: #ffffff14;
   --surfaces-background: #ffffff;
   --surfaces-surface-glass: #ffffff52;
+  --surfaces-surface-3: #C8CAD7;
 
   --b-shadow-1: #{torem(0, 0, 6, 0)} #0000000F;
   --b-shadow-2: #{torem(1, 0, 11, 0)} #00000012;
@@ -63,15 +65,15 @@
 
   --checkbox-box: #F1F2F4;
   --checkbox-box-border: #BCBECC;
-  --checkbox-box--checked: #0066FF;
-  --checkbox-box-border--checked: #0066FF;
+  --checkbox-box--checked: #0066FF; //#4D94FF
+  --checkbox-box-border--checked: #0066FF; //#4D94FF
 }
 
 body[data-theme='dark'] {
   --checkbox-box: #3F424E;
   --checkbox-box-border: #62667C;
-  --checkbox-box--checked: #4D94FF;
-  --checkbox-box-border--checked: #4D94FF;
+  --checkbox-box--checked: #0066ff;
+  --checkbox-box-border--checked: #0066ff;
 
   --system: #ffffff;
 
@@ -83,13 +85,13 @@ body[data-theme='dark'] {
   --text-inverse-tertiary: rgba(255, 255, 255, 0.60);
   --text-inverse-secondary: rgba(255, 255, 255, 0.80);
 
-  --accent-primary: #4D94FF;
+  --accent-primary: #0066ff; //#4D94FF
   --accent-secondary: #FF8D07;
   --accent-success: #12DF00;
   --accent-danger: #EC0202;
   --accent-warning: #FFB445;
 
-  --button-primary: #4D94FF;
+  --button-primary: #0066ff; //#4D94FF
   --button-secondary: #252F44;
 
   --surfaces-background: #000;
@@ -101,6 +103,7 @@ body[data-theme='dark'] {
   --surfaces-surface-glass: rgba(34, 36, 43, 0.50);
   --surfaces-surface-glass-2: rgba(46, 47, 56, 0.30);
   --surfaces-surface-glass-border: rgba(63, 66, 78, 0.08);
+  --surfaces-surface-3: #3F424E;
   --surfaces-selection: rgba(37, 47, 68, 0.50);
 
   --b-shadow-1: #{torem(0, 0, 6, 0)} #0000000F;

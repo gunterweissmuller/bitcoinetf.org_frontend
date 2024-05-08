@@ -85,10 +85,9 @@
 
       justify-content: center;
       align-items: center;
-      gap: var(--Spacing-S, 8px);
       border-radius: 4px;
 
-      background: var(--Accent-Primary, #4d94ff);
+      background: var(--accent-primary);
 
       color: var(--Text-Inverse-Primary, #fff);
       /* Caption 2/Bold */
@@ -97,6 +96,14 @@
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+
+      & > * {
+        margin-left: var(--spacing-s);
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
     }
   }
 
@@ -119,7 +126,7 @@
     align-items: center;
 
     border-radius: var(--Spacing-S, 8px);
-    background: var(--Button-Primary, #4d94ff);
+    background: var(--button-primary);
 
     color: var(--Text-Inverse-Primary, #fff);
     /* Body 2/Bold */

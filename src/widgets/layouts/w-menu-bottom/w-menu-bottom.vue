@@ -50,7 +50,7 @@
           ]"
           width="24"
           height="24"
-          :name="Icon.MonoMenu"
+          :name="Icon.MonoProfile"
         />
         <p
           :class="[
@@ -58,7 +58,7 @@
             { 'w-menu-bottom__item-text--active': activeLinkClass('personal-more') },
           ]"
         >
-          Menu
+          Profile
         </p>
       </li>
     </ul>
@@ -90,10 +90,10 @@ const { $app } = useNuxtApp()
 const { isMobile, isTablet } = useMediaDevice()
 
 const navList = [
-  { title: 'Analytics', icon: Icon.MonoAnalytics, link: 'personal-performance' },
+  { title: 'Fund', icon: Icon.MonoAnalytics, link: 'personal-portfolio' },
   { title: 'Dividends', icon: Icon.MonoEarnings, link: 'personal-earnings' },
   {
-    title: "BUY <i class='a-icons icon-mono--btc-uni convert-icon' aria-hidden='true' ></i> ETF ",
+    title: "ETFs",
     icon: Icon.ColorfulBitcoin,
     link: 'personal-buy-shares',
   },
@@ -108,18 +108,15 @@ const emit = defineEmits(['toggle-menu', 'click-link'])
 
 const hashMap = {
   'personal-dividends': 'walletDividends',
-  'personal-referrals': 'walletReferral',
-  'personal-bonus': 'walletBonus'
+  // 'personal-referrals': 'walletReferral',
 }
 
 const boostText = computed(() => {
   switch (route.name) {
     case 'personal-dividends':
       return 'Dividends'
-    case 'personal-referrals':
-      return 'Referrals'
-    case 'personal-bonus':
-      return 'Bonus'
+    // case 'personal-referrals':
+    //   return 'Referrals'
     default:
       return ''
   }
@@ -158,8 +155,7 @@ const isShowBuyPopper = computed<boolean>(() => {
   return (
     (isMobile.value || isTablet.value) &&
     $app.store.user?.[hashMap?.[route.name]]?.usd_amount &&
-    (route.name === 'personal-dividends' || route.name === 'personal-referrals' || route.name === 'personal-bonus') &&
-    onboarding
+    onboarding  &&  route.name === 'personal-dividends'  // || route.name === 'personal-referrals'
   )
 })
 
@@ -169,11 +165,11 @@ const closePopper = () => {
 
 const activeLinkClass = (link: string): boolean => {
   switch (link) {
-    case 'personal-performance':
+    case 'personal-protection':
       return (
-        route.name === 'personal-performance' ||
+        route.name === 'personal-protection' ||
         route.name === 'personal-portfolio' ||
-        route.name === 'personal-fund' ||
+        route.name === 'personal-shareholders' ||
         route.name === 'personal-asset-id'
       )
     case 'personal-earnings':
@@ -182,7 +178,7 @@ const activeLinkClass = (link: string): boolean => {
       return route.name?.includes('personal-more')
     case 'personal-dividends':
       return (
-        route.name === 'personal-dividends' || route.name === 'personal-referrals' || route.name === 'personal-bonus'
+        route.name === 'personal-dividends' // || route.name === 'personal-referrals'
       )
 
     default:

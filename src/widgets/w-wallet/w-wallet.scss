@@ -1,4 +1,5 @@
 .w-wallet {
+  max-width: 100% !important;
 
   &__box {
     @include breakpoint($break-desktop-1024) {
@@ -13,6 +14,8 @@
 
     &-main {
       margin-right: initial;
+      width: 100%;
+
       width: 100%;
 
       @include breakpoint($break-desktop-1440) {

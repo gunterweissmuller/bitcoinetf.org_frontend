@@ -27,7 +27,7 @@
           After adding a withdrawal method, dividends will only be available in the selected type
         </div>
       </div>
-      
+
 
       <nuxt-link
         v-if="selectedMethod === 'bitcoin_lightning'"
@@ -156,6 +156,9 @@ const selectedMethodRegexp = computed(() => {
 })
 
 const buttonDisabled = computed(() => {
+
+  if(props?.address === selectedAddress.value) return true;
+
   if (selectedMethod.value === 'bitcoin_on_chain') {
     return !validBlockChain.value
   } else if (selectedMethod.value === 'bitcoin_lightning') {
@@ -242,7 +245,7 @@ watch(()=> selectedAddress.value, (value) => {
   if(selectedMethod.value === 'polygon_usdt') {
     validMatic.value = window?.WAValidator?.validate(selectedAddress.value, 'matic')
 
-    // console.log(window?.WAValidator?.validate(selectedAddress.value, 'matic'));
+    //
   }
 })
 

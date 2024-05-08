@@ -42,6 +42,7 @@
       bgBasic?: boolean
       modalSmall?: boolean
       modalBig?: boolean
+      scroll?: boolean
       modalMobile?: boolean
     }>(),
     {
@@ -53,6 +54,7 @@
       bgBasic: false,
       modalSmall: false,
       modalBig: false,
+      scroll: false,
       modalMobile: false,
     },
   )
@@ -103,11 +105,14 @@
   watch(
     () => props.modelValue,
     (value) => {
-      if (value) {
-        document.body.classList.add('no-scroll')
-      } else {
-        document.body.classList.remove('no-scroll')
+      if(!props.scroll) {
+        if (value) {
+          document.body.classList.add('no-scroll')
+        } else {
+          document.body.classList.remove('no-scroll')
+        }
       }
+      
       if (isMobile.value && !props.fullScreen) {
         value ? myBottomSheet.value?.open() : myBottomSheet.value?.close()
       }

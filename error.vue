@@ -86,8 +86,6 @@ const wsUpdateBtcPrice = () => {
 }
 
 const wsUpdateAssets = () => {
-  console.log('centrifugeURL', centrifugeURL)
-  console.log('centrifugeToken', centrifugeToken)
   centrifugeAssets.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
   })

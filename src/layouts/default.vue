@@ -5,6 +5,8 @@
       { 'l-main--indent': isVisibleInfo },
       // { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
+      { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  },
+      { 'l-main--assets': route.name === 'personal-assets-symbol' },
       { 'l-main--no-header': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  }, 
       { 'l-main--no-header': route.path.includes('wallet') },
     ]"
@@ -79,12 +81,14 @@ const changeLoadingStatus = async (status: boolean) => {
 }
 
 const isVisibleInfo = computed(() => {
-  console.log("",route.name)
+
   return (
-    route.name === 'personal-analytics' ||
-    route.name === 'personal-performance' ||
     route.name === 'personal-fund' ||
-    route.name === 'personal-portfolio'
+    route.name === 'personal-protection' ||
+    route.name === 'personal-shareholders' ||
+    route.name === 'personal-portfolio' ||
+    route.name === 'personal-assets' ||
+    route.name === 'personal-assets-symbol'
   )
 })
 

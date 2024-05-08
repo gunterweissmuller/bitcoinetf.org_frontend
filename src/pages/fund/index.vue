@@ -53,7 +53,7 @@ const getElements = () => {
   sections.value = Object.values(sectionsArray).map((section, index) => ({
     top: section.offsetTop - header.offsetHeight,
     name: index > 0 ? section.dataset.name : '',
-    id: index - 1,
+    id: index,
   }));
 
   sections.value.push(lasElement);
