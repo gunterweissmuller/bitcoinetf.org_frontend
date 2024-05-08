@@ -125,6 +125,25 @@ export default class BillingEthApiModule {
     }
   }
 
+  async getSharesTransactions(payload:any) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `billing/payment/shares/personal`,
+        request: {
+          method: HTTPMethod.GET,
+          params: payload,
+        },
+        operationDescription: 'Getting a list of transactions',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async setWithdrawalMethod({ walletType, method, address = null }) {
     try {
       return await this.adapter.requestJsonAsync({
