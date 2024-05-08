@@ -101,8 +101,8 @@
           <w-certificate
             :type="userType"
             :username="$app.store.user?.info?.profile?.full_name"
-            :shares="$app.store.user?.buyShares ?? 0"
-            time="1094"
+            :shares="$app.store.user?.lastPayment?.total_balance_usd ?? 0"
+            :time="1094"
           />
         </div>
 
