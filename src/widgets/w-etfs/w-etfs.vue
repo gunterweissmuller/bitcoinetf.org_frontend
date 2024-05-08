@@ -55,13 +55,13 @@
             <div class="w-etfs__item_info">
               <div class="w-etfs__item_info-title">{{ getDividendsDesc(item) }}</div>
               <div class="w-etfs__item_info-date">
-                {{ $app.filters.dayjs(item?.created_at)?.format('D MMMM YY') }}
+                {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
               </div>
             </div>
             <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
             <div v-else class="w-etfs__item_sums">
               <div class="w-etfs__item_info-usd">
-                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item?.usd_amount, 0) }}
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item?.usd_amount || item?.real_amount, 0) }}
               </div>
             </div>
           </div>
@@ -101,8 +101,8 @@ const transactionsKey = ref(0)
 const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc')
 
 const enum DIVIDENDS_TYPES {
-  PLUS = 'debit_to_client',
-  MINUS = 'credit_from_client',
+  PLUS = 'credit_from_client',
+  // MINUS = 'credit_from_client',
   ESCAPE = 'withdrawal',
 }
 
@@ -213,6 +213,14 @@ const getDividendsDesc = (item) => {
     return 'Dividends Withdrawal (External Wallet)'
   }
 
+  if (item.hasOwnProperty('referral_amount') && item.referral_amount) {
+    return 'Referal Bonus ETFs'
+  }
+
+  if (item.hasOwnProperty('referral_amount') && !item.referral_amount) {
+    return 'Buy ETFs'
+  }
+
   switch (item?.withdrawal_method) {
     case 'bitcoin_lightning': {
       return 'Lightning withdrawal'
@@ -233,7 +241,7 @@ const getPersonalDividends = async (initial = false) => {
     currentPage.value = 1
   }
   await $app.api.eth.billingEth
-    .getTransactions({
+    .getSharesTransactions({
       page: currentPage.value,
       per_page: 4,
       type: 'dividends',
