@@ -15,7 +15,7 @@
 
     <div v-if="renderedTrades.length && !isExpand && !props.isMain" class="w-trades__content">
       <transition-group name="fade" tag="div">
-        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" />
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :type="props.isAssets ? 'asset' : 'trade'" />
       </transition-group>
     </div>
 
@@ -64,14 +64,16 @@ const props = withDefaults(
     hideView?: boolean
     gridTemplate?: number
     isMain?: boolean
-    filters: Record<string, string> | null
+    filters: Record<string, string | false> | null
+    isAssets: boolean
   }>(),
   {
     isPage: false,
     perPage: 4,
     gridTemplate: 1,
     isMain: false,
-    filters: null
+    filters: null,
+    isAssets: false,
   },
 )
 
@@ -84,11 +86,10 @@ const expandMore = ref(2)
 const centrifuge = ref(null)
 
 const fullPageNuxtLink = computed(() => {
-  // FIX name on features/fund_remake
   const nuxtLinkObject = { name: 'personal-analytics-performance-latest-trades', query: {} }
-  if (route.name === 'personal-asset-id') {
-    nuxtLinkObject.query.asset_uuid = route.params.id
-  }
+  // if (route.name === 'personal-asset-id') {
+  //   nuxtLinkObject.query.asset_uuid = route.params.id
+  // }
 
   return nuxtLinkObject
 })
@@ -101,6 +102,8 @@ const loadMoreTrades = () => {
 
 const getTrades = async () => {
   const tradesFilters = props.filters ?? {};
+
+  if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
     per_page: props.perPage,

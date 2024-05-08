@@ -34,8 +34,7 @@
       :title="`$${$app.filters.rounded(filteredValues.aum_usd ?? globalStatistic?.aum_usd)}`"
       :icon="Icon.MonoAnalytics"
       iconType="small"
-      bottom="dropdown"
-      @get-current-option="(currentOption : ADropdownOption) => handleDropdown(currentOption, 'aum_usd')"
+      bottom="none"
     />
     <e-stat
       info="Corp. Paid-In Share Capital"

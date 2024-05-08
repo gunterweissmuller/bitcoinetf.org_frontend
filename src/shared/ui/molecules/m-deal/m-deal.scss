@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   // background: var(--surfaces-surface-1);
-  
+
 
   &-main {
     background: var(--Surfaces-Surface-Glass-2, rgba(46, 47, 56, 0.30)) !important;
@@ -33,6 +33,32 @@
     width: 100%;
     display: flex;
     align-items: center;
+  }
+
+  &__trade-asset {
+    .m-deal__type {
+      width: torem(18) !important;
+      height: torem(18) !important;
+      min-width: torem(18) !important;
+      margin-right: torem(4) !important;
+    }
+
+    .m-deal__name-result--asset {
+      font-family: Dm, sans-serif;
+      font-weight: 700;
+      font-size: torem(12);
+      line-height: torem(16);
+      color: var(--accent-primary);
+      text-align: right;
+    }
+
+    .m-deal__info-deal-right {
+      color: var(--accnet-danger);
+    }
+
+    .m-deal__info-deal-right.plus {
+      color: var(--accent-success);
+    }
   }
 
   &__right {
