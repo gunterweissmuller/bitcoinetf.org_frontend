@@ -1,6 +1,6 @@
 <template>
   <div class="w-portfolio page-max-width--small">
-    <w-chart-fund title="AUM Growth" is-main is-total-assets />
+    <w-chart-fund title="AUM Growth" is-main is-total-assets aum-size-usd />
     <w-chart-portfolio
       ref="chartPortfolioRef"
       v-if="assets?.length"
