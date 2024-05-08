@@ -211,6 +211,12 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     urlToBack: 'personal-buy-shares',
   },
+  'personal-more-referrals': {
+    title: 'Referrals',
+    titleCrumb: 'Referrals',
+    breadcrumbs: true,
+    urlToBack: 'personal-more',
+  },
   'personal-more-personal-details': {
     title: 'Personal details',
     titleCrumb: 'Personal details',

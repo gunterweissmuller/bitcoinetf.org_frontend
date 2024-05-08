@@ -245,11 +245,6 @@ export default defineNuxtConfig({
           file: '~/src/widgets/w-wallet/w-wallet.vue',
         },
         {
-          name: 'personal-referrals',
-          path: '/personal/wallet/referrals',
-          file: '~/src/widgets/w-wallet/w-wallet.vue',
-        },
-        {
           name: 'personal-etfs',
           path: '/personal/wallet/etfs',
           file: '~/src/widgets/w-etfs/w-etfs.vue',

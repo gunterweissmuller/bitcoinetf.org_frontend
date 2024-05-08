@@ -119,7 +119,7 @@
             <li class="w-aside__item w-aside__item-mobile">
               <nuxt-link
                 class="w-aside__link"
-                :to="{ name: 'personal-referrals' }"
+                :to="{ name: 'personal-more-referrals' }"
                 active-class="w-aside__link--active"
                 target="_self"
                 @click="onClickLink"
