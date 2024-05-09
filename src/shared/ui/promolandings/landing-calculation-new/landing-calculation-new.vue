@@ -112,10 +112,8 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100" @click="signupAndBuy" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
-          <div class="landing-calculation__error-message">
-            <p v-if="buyAmountOriginal < 100">The minimum investment amount must be at least 100</p>
-          </div>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100 || timerStarted" @click="sendCode" :text="timerStarted ? codeSendBuyText : codeSendBuyText + ' $' + $app.filters.rounded(buyAmountOriginal, 0) + ' BUY'"></a-button> <!--signupAndBuy-->
+
         </div>
       </template>
 
@@ -149,9 +147,6 @@
           </div>
 
           <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
-          <div class="landing-calculation__error-message">
-            <p v-if="buyAmountOriginal < 100">The minimum investment amount must be at least 100</p>
-          </div>
         </div>
       </template>
       <template v-if="signupStep === SignupSteps.Loading">
