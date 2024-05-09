@@ -370,7 +370,7 @@ onMounted(() => {
           await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
             setTimeout(() => {
-              router.push('/personal/analytics');
+              router.push('/personal/fund/portfolio');
             },3000);
           });
 
@@ -424,7 +424,7 @@ onMounted(() => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
           setTimeout(() => {
-            router.push('/personal/analytics');
+            router.push('/personal/fund/portfolio');
           },3000);
         });
 
@@ -476,7 +476,7 @@ onMounted(() => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
           setTimeout(() => {
-            router.push('/personal/analytics');
+            router.push('/personal/fund/portfolio');
           },3000);
         });
 
@@ -550,7 +550,7 @@ onMounted(() => {
 
       
         setTimeout(() => {
-          router.push('/personal/analytics');
+          router.push('/personal/fund/portfolio');
         },3000);
       })
       .catch((e) => {
@@ -1047,7 +1047,7 @@ const onSubmitEmailForm = async () => {
       .then(async () => {
             await $app.api.eth.auth.getUser().then((resp) => {
                 $app.store.user.info = resp?.data;
-                router.push('/personal/analytics');
+                router.push('/personal/fund/portfolio');
             })
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1262,7 +1262,7 @@ const codeContinue = async () => {
         .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
-            router.push('/personal/analytics');
+            router.push('/personal/fund/portfolio');
           });
 
           const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1310,7 +1310,7 @@ const codeContinue = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          router.push('/personal/analytics');
+          router.push('/personal/fund/portfolio');
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1359,7 +1359,7 @@ const codeContinue = async () => {
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data;
-          router.push('/personal/analytics');
+          router.push('/personal/fund/portfolio');
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -1479,7 +1479,7 @@ const onSubmitPasswordForm = async () => {
       .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
               $app.store.user.info = resp?.data;
-              router.push('/personal/analytics');
+              router.push('/personal/fund/portfolio');
           });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
