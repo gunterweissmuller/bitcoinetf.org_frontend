@@ -273,7 +273,7 @@ onMounted(()=>{
       $app.api.eth.auth.
         confirmMetamask({
         email: $app.filters.trimSpaceIntoString(email.value),
-        code: $app.filters.trimSpaceIntoString(emailCode.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
         fast: true,
       })
         .then((jwtResponse: any) => {
@@ -326,7 +326,7 @@ onMounted(()=>{
     confirmTelegram({
       telegram_data: JSON.stringify($app.store.authTelegram?.response),
       email: $app.filters.trimSpaceIntoString(email.value),
-      code: $app.filters.trimSpaceIntoString(emailCode.value),
+      code: $app.filters.trimSpaceIntoString(codeEmail.value),
     })
     .then((jwtResponse: any) => {
       // TODO falling user/me
@@ -377,7 +377,7 @@ onMounted(()=>{
     confirmApple({
       apple_token: $app.store.authTemp?.response,
       email: $app.filters.trimSpaceIntoString(email.value),
-      code: $app.filters.trimSpaceIntoString(emailCode.value),
+      code: $app.filters.trimSpaceIntoString(codeEmail.value),
     })
     .then((jwtResponse: any) => {
       // TODO falling user/me
