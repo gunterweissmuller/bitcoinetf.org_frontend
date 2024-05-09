@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!(isDesktop || isLaptop)" class="e-fund-tabs">
+  <div v-if="!(isDesktop || isLaptop)" class="e-fund-tabs" :class="[{'e-fund-tabs__wallet' : route.path.includes('wallet')}]">
     <div class="e-fund-tabs__list" :style="`grid-template-columns: repeat(${tabBars.length}, 1fr);`">
       <nuxt-link
         v-for="(tab, idx) in tabBars"
