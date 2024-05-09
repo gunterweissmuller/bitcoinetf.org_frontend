@@ -147,6 +147,9 @@
           </div>
 
           <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
+          <div class="landing-calculation__error-message">
+            <p v-if="buyAmountOriginal < 100">The minimum investment amount must be at least 100</p>
+          </div>
         </div>
       </template>
       <template v-if="signupStep === SignupSteps.Loading">
