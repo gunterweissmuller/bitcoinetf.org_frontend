@@ -189,15 +189,11 @@ const routeNames = computed(() => ({
     title: 'Assets',
     titleCrumb: 'Assets',
     breadcrumbs: false,
-    urlToBack: 'personal-portfolio',
-    info: EPageInfoAnalytics,
   },
   'personal-assets-symbol': {
     title: 'Assets',
     titleCrumb: 'Assets',
     breadcrumbs: false,
-    urlToBack: 'personal-portfolio',
-    info: EPageInfoAnalytics,
   },
   'personal-more': {
     title: 'Profile',
