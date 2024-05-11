@@ -442,6 +442,10 @@ const activeLinkClass = (link: string): boolean => {
       return (
         route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
       )
+    case 'personal-assets':
+      return (
+        route.name === 'personal-assets-symbol'
+      )
     case 'personal-protection':
       return (
         route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
