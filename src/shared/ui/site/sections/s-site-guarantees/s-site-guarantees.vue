@@ -28,7 +28,7 @@
           label="Protection 2"
           title="USDT Protection Vault"
           :cost="`$${$app.filters.rounded(fundTotalUsd, 0)}`"
-          body="Whenever our AI trading bot profits from the hedging operations, the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, irrespective of Bitcoin price volatility."
+          body="Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility."
           :currentBalance="true"
           textButton="Verify on Blockchain"
           @click="goToRegistration"
@@ -155,16 +155,16 @@
               </p>
             </div>
             <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-1.png" width="188" height="97" />
+              <NuxtImg src="/img/main-guarantees-table-title-1.svg" width="220" height="97" />
             </div>
             <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-2.png" width="188" height="97" />
+              <NuxtImg src="/img/main-guarantees-table-title-2.svg" width="220" height="97" />
             </div>
             <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-3.png" width="188" height="97" />
+              <NuxtImg src="/img/main-guarantees-table-title-3.svg" width="220" height="97" />
             </div>
             <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-4.png" width="220" />
+              <NuxtImg src="/img/main-guarantees-table-title-4.svg" width="220" />
             </div>
           </div>
           <div class="s-site-guarantees__table-body">

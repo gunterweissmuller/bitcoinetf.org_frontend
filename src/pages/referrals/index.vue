@@ -141,7 +141,7 @@ const idData = {
     {
       title: 'Competitive Returns',
       img: '/img/site-dark/s-site-referrals-id/slides/1.png',
-      text: `Our ETF yields up to 33% APY, with returns amplified by Bitcoin's price appreciation, ensuring our investors enjoy superior gains.`,
+      text: `Our ETF yields up to 100%+ projected APY, with returns amplified by Bitcoin's price appreciation, ensuring our investors enjoy superior gains.`,
     },
     {
       title: 'Transparency',

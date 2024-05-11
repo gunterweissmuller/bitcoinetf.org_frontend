@@ -11,18 +11,16 @@
   }
   &__item {
     cursor: pointer;
-    min-width: 22vw;
+    min-width: 25vw;
     @media screen and (max-width: 767px) {
       min-width: 50vw;
     }
     img {
-      width: auto;
-      height: torem(24);
+      min-height: torem(24);
     }
   }
   &__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    display: flex;
     min-width: 100vw;
     animation: marquee 60s linear infinite;
     height: torem(88);
@@ -31,7 +29,7 @@
     }
   }
   &__wrapper {
-    padding: 0 10vw;
+    
     position: relative;
     z-index: 2;
     display: flex;

@@ -3,16 +3,12 @@
     <div class="s-site-how-work__wrapper-title">
       <h2 class="s-site-how-work__title title-site-h1">Passive Income <br />for Smart Investors</h2>
       <p class="s-site-how-work__title_info for-desktop">
-        When Bitcoin ETFs are issued, proceeds are dynamically allocated between portfolio <br />
-        assets. All generated profits are distributed to ETF shareholders. You can choose to get <br />
-        paid in BTC or USDT.
+        When Bitcoin ETFs are issued, proceeds are dynamically allocated between portfolio assets. All generated profits
+        are distributed to ETF shareholders. You can choose to get paid in BTC or USDT.
       </p>
       <p class="s-site-how-work__title_info for-mobile">
-        When Bitcoin ETFs are issued, proceeds are dynamically allocated between portfolio <br />
-        assets. All generated profits are distributed to ETF shareholders. You can choose to get <br />
-        paid in BTC or USDT.
+        Bitcoin ETFs are issued, after which the fund's AI dynamically allocates new funds among portfolio assets.
       </p>
-
       <a-animation-passive-income />
       <div class="s-site-how-work__linear-gradient"></div>
     </div>

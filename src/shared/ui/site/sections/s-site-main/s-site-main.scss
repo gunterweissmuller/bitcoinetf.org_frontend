@@ -83,7 +83,7 @@
     -webkit-text-fill-color: transparent;
 
     @media (max-width: 991px) {
-      max-width: torem(400);
+      // max-width: torem(400);
       margin-bottom: torem(163);
     }
 
@@ -118,7 +118,7 @@
 
   &__learn_more_button {
     display: flex;
-    height: 56px;
+    height: torem(56);
     padding: var(--Spacing-M1, 16px) var(--Spacing-L2, 48px);
     justify-content: center;
     align-items: center;
@@ -181,7 +181,10 @@
     font-style: normal;
 
     @media (max-width: 767px) {
-      width: 343px;
+      width: torem(343);
+      br{
+        display: none;
+      }
     }
 
     & img {

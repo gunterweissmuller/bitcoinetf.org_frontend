@@ -122,7 +122,7 @@ const menu = [
     title: 'Account',
     items: [
       { text: 'Sign Up', href: '/personal/registration' },
-      { text: 'Offers', href: '/offers' },
+      // { text: 'Offers', href: '/offers' },
       { text: 'Tutorials', href: '/tutorials' },
     ],
   },
