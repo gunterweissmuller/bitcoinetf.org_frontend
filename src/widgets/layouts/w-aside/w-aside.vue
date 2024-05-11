@@ -83,6 +83,7 @@
           <div class="w-aside__avatar">
             <div class="w-aside__avatar-logo">
               <a-icon
+                v-if="userType != 'init_btc'"
                 class="w-aside__avatar-type"
                 :name="userType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin"
                 width="24" height="24"
@@ -229,7 +230,6 @@
               <div class="w-aside__link">
                 <a-icon class="w-aside__link-img" :name="Icon.MonoLogout" width="24" height="24" />
                 <p class="w-aside__link-text">Log out</p>
-                <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
               </div>
             </li>
           </ul>

@@ -203,7 +203,7 @@ const routeNames = computed(() => ({
     title: 'Profile',
     titleCrumb: 'Profile',
     breadcrumbs: false,
-    urlToBack: 'personal-protection',
+    // urlToBack: 'personal-protection',
   },
   'personal-buy-shares-payment': {
     title: 'Payment',
