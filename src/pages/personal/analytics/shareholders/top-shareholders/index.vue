@@ -1,11 +1,11 @@
 <template>
   <div class="latest-purchases page-max-width--big">
-    <w-shareholders is-page />
+    <w-top-shareholders is-page />
   </div>
 </template>
 
 <script setup lang="ts">
-import WShareholders from '~/src/widgets/w-shareholders/w-shareholders.vue'
+import WTopShareholders from '~/src/widgets/w-top-shareholders/w-top-shareholders.vue'
 </script>
 
 <style lang="scss">
