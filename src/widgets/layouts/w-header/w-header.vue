@@ -294,25 +294,25 @@ const routeNames = computed(() => ({
     breadcrumbs: false,
     info: EPageInfoEarnings,
   },
-  'personal-fund-protection-latest-trades': {
+  'personal-analytics-performance-latest-trades': {
     title: 'Latest trades',
     titleCrumb: 'Latest trades',
     breadcrumbs: true,
     urlToBack: 'personal-protection',
   },
-  'personal-fund-shareholders-latest-purchases': {
+  'personal-analytics-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
   },
-  'personal-fund-shareholders-top-shareholders': {
+  'personal-analytics-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
   },
-  'personal-fund-portfolio-latest-activity': {
+  'personal-analytics-portfolio-latest-activity': {
     title: 'Latest activity',
     titleCrumb: 'Latest activity',
     breadcrumbs: true,
