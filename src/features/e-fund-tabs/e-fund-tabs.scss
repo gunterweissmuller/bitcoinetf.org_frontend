@@ -40,7 +40,7 @@
     }
   }
 
-  
+
 
   &__list {
     padding: torem(0, 16);
@@ -72,8 +72,8 @@
         transform: translateX(-50%);
         width: calc(100% - #{torem(16)});
         height: torem(2);
-        //background: var(--surfaces-border-blue);
-        background: var(--accent-primary);
+        background: var(--surfaces-border-blue);
+        // background: var(--accent-primary);
 
       }
 
