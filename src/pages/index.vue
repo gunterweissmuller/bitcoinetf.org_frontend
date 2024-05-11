@@ -337,7 +337,7 @@ const earningsData = {
     },
     {
       title: 'Trust & Transparency',
-      text: 'Official statements for peace of mind.',
+      text: 'Official statements for peace of mind',
     },
   ],
 }
