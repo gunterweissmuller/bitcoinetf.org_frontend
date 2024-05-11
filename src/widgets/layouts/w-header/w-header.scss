@@ -39,6 +39,7 @@
 
   @include breakpoint($break-desktop-1024-minus) {
     padding: 0;
+    padding-top: torem(16);
     box-shadow: none;
   }
 
@@ -265,7 +266,7 @@
       width: auto;
       display: flex;
     }
-    
+
     width: auto;
     border-radius: var(--spacing-xs);
     margin-right: var(--spacing-s);
@@ -289,7 +290,7 @@
     }
   }
 
-  
+
 
   .m-slider {
     padding-left: torem(8);
