@@ -5,7 +5,7 @@
       <!-- FIX :to name on features/fund_remake -->
       <nuxt-link
         v-if="!isPage && shareholders?.length"
-        :to="{ name: 'personal-analytics-fund-top-shareholders' }"
+        :to="{ name: 'personal-analytics-shareholders-top-shareholders' }"
         class="w-shareholders__head-info"
         >View all
       </nuxt-link>

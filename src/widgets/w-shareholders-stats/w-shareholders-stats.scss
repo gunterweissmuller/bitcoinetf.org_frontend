@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: torem(8);
-  margin-bottom: var(--spacing-m-1);
+  margin-bottom: var(--spacing-m-2);
 
   @include breakpoint($break-desktop-1024) {
     grid-gap: torem(16);

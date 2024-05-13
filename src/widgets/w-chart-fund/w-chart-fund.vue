@@ -8,7 +8,7 @@
         </span>
         <a-tooltip-info
           :caption="title"
-          :style="{ visibility: props.type === 'shareholders' ? 'hidden' : '' }"
+          :style="{ visibility: [ 'shareholders', 'asset' ].includes(props.type) ? 'hidden' : '' }"
           position="left"
         >
           <template #button>

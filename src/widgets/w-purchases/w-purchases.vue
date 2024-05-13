@@ -6,7 +6,7 @@
         <!-- FIX :to name on features/fund_remake -->
         <nuxt-link
           v-if="!isPage && purchases?.length"
-          :to="{ name: 'personal-analytics-fund-latest-purchases' }"
+          :to="{ name: 'personal-analytics-shareholders-latest-purchases' }"
           class="w-purchases__head-info"
           >View all
         </nuxt-link>
