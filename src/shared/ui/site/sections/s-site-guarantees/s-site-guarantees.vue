@@ -264,7 +264,7 @@
           </div>
         </div>
 
-        <div :class="[{'s-site-guarantees__drag-hide': !isDrag}]" class="s-site-guarantees__drag">
+        <div v-if="false":class="[{'s-site-guarantees__drag-hide': !isDrag}]" class="s-site-guarantees__drag">
           <div class="s-site-guarantees__drag-wrapper">
             <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow" alt="arrow" />
             drag 
