@@ -1,7 +1,12 @@
 <template>
   <div class="s-site-marquee enable-animation" :class="{ 's-site-marquee-bg': isBackground }">
     <ul class="s-site-marquee__row">
-      <li class="s-site-marquee__item" v-for="marquee in marqueeList" :key="marquee.link">
+      <li
+        class="s-site-marquee__item"
+        v-for="(marquee, index) in marqueeList"
+        :key="marquee.link"
+        :style="customStylesElementIndex(index)"
+      >
         <a :href="marquee.link" target="_blank">
           <nuxt-img :src="marquee.img" loading="lazy" />
         </a>
@@ -9,7 +14,12 @@
     </ul>
 
     <ul aria-hidden="true" class="s-site-marquee__row">
-      <li class="s-site-marquee__item" v-for="marquee in marqueeList" :key="marquee.link">
+      <li
+        class="s-site-marquee__item"
+        v-for="(marquee, index) in marqueeList"
+        :key="marquee.link"
+        :style="customStylesElementIndex(index)"
+      >
         <a :href="marquee.link" target="_blank">
           <nuxt-img :src="marquee.img" loading="lazy" />
         </a>
@@ -19,10 +29,11 @@
 </template>
 
 <script setup lang="ts">
-
 interface Props {
   data: MarqueeItem[] | any
   isBackground?: boolean
+  customStyles?: string
+  customElementIndex?: number
 }
 
 interface MarqueeItem {
@@ -40,8 +51,11 @@ const marqueeList = ref<MarqueeItem[]>([])
 onMounted(() => {
   marqueeList.value = [...props.data.low_cards]
 })
-// const marqueeListLength = computed(() => (marqueeList.value.length < 6 ? 4 : marqueeList.value.length))
-// const marqueeWidth = computed(() => `${marqueeList.value.length * 25}vw`)
+const customStylesElementIndex = computed(
+  () =>
+    (index: number): string =>
+      index == props.customElementIndex && props.customStyles ? props.customStyles : '',
+)
 </script>
 
 <style src="./s-site-marquee-new.scss" lang="scss" />
