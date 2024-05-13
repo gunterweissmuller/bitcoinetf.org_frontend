@@ -37,6 +37,12 @@
     }
   }
 
+  &--wallet {
+    @include breakpoint($break-desktop-1024-minus) {
+      padding-top: torem(0) !important;
+    }
+  }
+
   @include breakpoint($break-desktop-1024-minus) {
     padding: 0;
     padding-top: torem(16);
