@@ -104,7 +104,7 @@ const menu = [
     title: 'Platform',
     items: [
       { text: 'Buy ETF Shares', href: '/personal/login' },
-      { text: 'Mastercard', href: '/#' }, //
+      { text: 'Mastercard', href: '/#mastercard' }, 
       { text: 'Bitcoin Education', href: '/bitcoin-education' },
       { text: 'Referrals', href: '/referrals' },
     ],
