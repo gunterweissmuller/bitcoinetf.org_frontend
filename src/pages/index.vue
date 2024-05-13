@@ -109,8 +109,6 @@ onUpdated(() => {
 const timerId = ref(null)
 
 watch(y, (newVal) => {
-  console.log(y)
-
   clearTimeout(timerId.value)
   timerId.value = setTimeout(() => {
     getElements()
