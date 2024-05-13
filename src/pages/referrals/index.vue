@@ -6,7 +6,7 @@
     hidden-mobile
   />
   <s-site-referrals-main :data="mainData" />
-  <s-site-marquee :data="marqueeData" :is-background="false" />
+  <s-site-marquee-new :data="marqueeData" :is-background="false" />
   <s-site-referrals-id :data="idData" />
   <s-site-referrals-share :data="shareData" />
   <s-site-footer />
@@ -18,7 +18,7 @@ import SSiteReferralsMain from '~/src/shared/ui/site/sections/s-site-referrals-m
 import SSiteReferralsId from '~/src/shared/ui/site/sections/s-site-referrals-id/s-site-referrals-id.vue'
 import SSiteReferralsShare from '~/src/shared/ui/site/sections/s-site-referrals-share/s-site-referrals-share.vue'
 import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
-import SSiteMarquee from '~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue'
+import SSiteMarqueeNew from '~/src/shared/ui/site/sections/s-site-marquee-new/s-site-marquee-new.vue'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 definePageMeta({

@@ -5,7 +5,7 @@
     :data="scrollInfo"
   />
   <s-site-fund-main :data="mainData"/>
-  <s-site-marquee :data="marqueeData" :isBackground="false"/>
+  <s-site-marquee-new :data="marqueeData" :isBackground="false"/>
   <s-site-fund-vision :data="visionData"/>
   <s-site-fund-ceo :data="ceoData"/>
   <s-site-fund-main-info-dark/>
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import MScrollNavigation from "~/src/shared/ui/site/molecules/m-scroll-navigation/m-scroll-navigation.vue";
 import SSiteFundMain from "~/src/shared/ui/site/sections/s-site-fund-main/s-site-fund-main.vue";
-import SSiteMarquee from "~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue";
+import SSiteMarqueeNew from "~/src/shared/ui/site/sections/s-site-marquee-new/s-site-marquee-new.vue";
 import SSiteFundVision from "~/src/shared/ui/site/sections/s-site-fund-vision/s-site-fund-vision.vue";
 import SSiteFundCeo from "~/src/shared/ui/site/sections/s-site-fund-ceo/s-site-fund-ceo.vue";
 import SSiteFundMainInfoDark from '~/src/shared/ui/site/sections/s-site-fund-main-info-dark/s-site-fund-main-info-dark.vue'

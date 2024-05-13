@@ -73,7 +73,8 @@
     />
     <div class="s-site-main__line-gradient" style="position: absolute; bottom: -88px; right: 0"></div>
     <div class="s-site-main__slider-wrapper">
-      <s-site-marquee :data="marqueeData" />
+      <!-- <s-site-marquee :data="marqueeData" /> -->
+      <s-site-marquee-new  :data="marqueeData" />
     </div>
   </section>
 </template>
@@ -85,6 +86,7 @@ import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import MProfitCalculator from '~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue'
 import SSiteMarquee from '../s-site-marquee/s-site-marquee.vue'
+import SSiteMarqueeNew from '../s-site-marquee-new/s-site-marquee-new.vue'
 
 defineProps<{
   data: any
