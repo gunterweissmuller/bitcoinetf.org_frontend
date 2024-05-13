@@ -112,7 +112,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100 || timerStarted" @click="sendCode" :text="timerStarted ? codeSendBuyText : codeSendBuyText + ' $' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button> <!--signupAndBuy-->
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100 || timerStarted" @click="sendCode" :text="codeSendBuyText"></a-button> <!--signupAndBuy-->
           <div class="landing-calculation__error-message">
             <p v-if="buyAmountOriginal < 100">The minimum investment amount must be at least 100</p>
           </div>
@@ -1191,7 +1191,7 @@ const sendCodeLoading = ref(false)
 const codeSended = ref(false);
 const timerStarted = ref(false);
 const codeSendText = ref('Get Confirmation Code');
-const codeSendBuyText = ref('VERIFY &');
+const codeSendBuyText = ref('Get Confirmation Code');
 const codeSendedText = ref('Resend');
 const isMainInputDisabled = ref(false);
 
@@ -1218,7 +1218,7 @@ const sendCode = async () => {
   const timer = (sec: number) => {
     if(sec <= 0) {
       codeSendText.value = 'Get Confirmation Code';
-      codeSendBuyText.value = 'VERIFY &';
+      codeSendBuyText.value = 'Get Confirmation Code';
       timerStarted.value = false;
       return;
     }
