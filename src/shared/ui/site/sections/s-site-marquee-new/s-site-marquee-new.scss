@@ -16,11 +16,9 @@
 
   &__item {
     display: flex;
+    align-items: center;
     justify-content: center;
     cursor: pointer;
-    img {
-      min-height: torem(28);
-    }
     min-width: 25vw;
     @media screen and (max-width: 767px) {
       min-width: 50vw;

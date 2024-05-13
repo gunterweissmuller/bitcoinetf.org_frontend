@@ -6,7 +6,12 @@
     hidden-mobile
   />
   <s-site-referrals-main :data="mainData" />
-  <s-site-marquee-new :data="marqueeData" :is-background="false" />
+  <s-site-marquee-new
+    :data="marqueeData"
+    :is-background="false"
+    :custom-element-index="1"
+    custom-styles="padding-top: 6px;"
+  />
   <s-site-referrals-id :data="idData" />
   <s-site-referrals-share :data="shareData" />
   <s-site-footer />
