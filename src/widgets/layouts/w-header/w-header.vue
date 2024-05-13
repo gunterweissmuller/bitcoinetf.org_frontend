@@ -33,7 +33,7 @@
           :key='route.name'
           :routes='routeNames'
           :breadcrumbs='routeNames?.[route.name]?.customBreadcrumbs'
-          title='Analytics'
+          title='Fund'
         />
         <e-header-links
           v-if='isVisibleLinks'
@@ -299,18 +299,21 @@ const routeNames = computed(() => ({
     titleCrumb: 'Latest trades',
     breadcrumbs: true,
     urlToBack: 'personal-protection',
+    customBreadcrumbs: ['personal-protection', 'Latest Trades'],
   },
   'personal-analytics-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
+    customBreadcrumbs: ['personal-shareholders', 'Latest Purchases'],
   },
   'personal-analytics-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
+    customBreadcrumbs: ['personal-shareholders', 'Top 100 Shareholders'],
   },
   'personal-analytics-portfolio-latest-activity': {
     title: 'Latest activity',
@@ -318,6 +321,7 @@ const routeNames = computed(() => ({
     breadcrumbs: true,
     urlToBack: 'personal-portfolio',
     info: EPageInfoActivity,
+    customBreadcrumbs: ['personal-protection', 'Latest Activity'],
   },
   'personal-earnings-statements': {
     title: 'Statements',
