@@ -59,8 +59,6 @@ const getRouteLink = (crumb) => {
   }
 
   for (let key in props.routes) {
-    console.log(key, crumb);
-
     if (key.includes(crumb)) {
       route.title = props.routes[key].titleCrumb
       route.link = key
@@ -70,7 +68,6 @@ const getRouteLink = (crumb) => {
 
   return route
 }
-console.log(list.value)
 </script>
 
 <style src="./e-breadcrumbs.scss" lang="scss" />
