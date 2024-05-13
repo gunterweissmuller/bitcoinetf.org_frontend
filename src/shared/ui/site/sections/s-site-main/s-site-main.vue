@@ -12,7 +12,7 @@
             height="18"
             loading="lazy"
           />
-          USDT <br />
+          USDT 
           or
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[18px]"
