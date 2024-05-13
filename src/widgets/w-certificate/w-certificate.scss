@@ -15,7 +15,7 @@
   font-family: Dm, sans-serif;
   font-weight: 700;
   color: var(--text-inverse-secondary);
-  opacity: .8;
+  opacity: 0.8;
 
   &--btc {
     background-image: url(/img/certificates/btc_certificate.svg);
@@ -39,7 +39,7 @@
   &__count {
     font-size: torem(32);
     line-height: torem(41);
-    opacity: 1;
+    color: var(--text-inverse-primary);
   }
 
   &__title {

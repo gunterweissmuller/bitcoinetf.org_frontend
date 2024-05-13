@@ -324,6 +324,7 @@ const routeNames = computed(() => ({
     titleCrumb: 'Statements',
     breadcrumbs: true,
     urlToBack: 'personal-earnings',
+    customBreadcrumbs: ['personal-dividends', ''],
     info: EPageInfoStatements,
   },
   'personal-asset-id': {
