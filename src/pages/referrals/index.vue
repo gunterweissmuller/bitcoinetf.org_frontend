@@ -151,7 +151,7 @@ const idData = {
     {
       title: 'Cutting-Edge Solutions',
       img: '/img/site-dark/s-site-referrals-id/slides/3.png',
-      text: `As fintech evolves, so do our offerings. We’re committed to keeping our investors at the forefront of the industry`,
+      text: `As fintech evolves, so do our offerings. We’re committed to keeping our investors at the forefront of the industry.`,
     },
   ],
 }
