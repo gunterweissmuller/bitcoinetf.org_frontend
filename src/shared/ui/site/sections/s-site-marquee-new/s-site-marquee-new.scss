@@ -23,7 +23,9 @@
     @media screen and (max-width: 767px) {
       min-width: 50vw;
     }
-
+    img {
+      min-height: 24px;
+    }
     a[href='/#'] {
       pointer-events: none;
     }

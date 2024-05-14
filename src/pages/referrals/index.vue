@@ -10,7 +10,7 @@
     :data="marqueeData"
     :is-background="false"
     :custom-element-index="1"
-    custom-styles="padding-top: 6px;"
+    custom-styles="padding-top: 6px; height: 36px;"
   />
   <s-site-referrals-id :data="idData" />
   <s-site-referrals-share :data="shareData" />
