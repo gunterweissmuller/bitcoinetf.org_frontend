@@ -175,7 +175,7 @@
           </template>
 
           <template v-else-if="currentStep === Steps.Error">
-            <p v-show="backendError" class="f-registration-right-right__error">{{ backendError }}</p>
+            <p class="f-registration-right__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
             <a-button @click="() => router.go(0)" text="Try Again" variant="tertiary"></a-button>
           </template>
 

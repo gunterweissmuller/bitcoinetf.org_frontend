@@ -30,7 +30,7 @@
       line-height: torem(15);
       font-weight: 600;
       border-radius: torem(4);
-      color: var(--accent-primary);
+      color: var(--blue-400); // var(--accent-primary);
       padding: torem(6, 24);
     }
 
@@ -180,4 +180,8 @@
       }
     }
   }
+}
+
+.s-site-back {
+  color: var(--blue-400) !important;  // var(--accent-primary);
 }
