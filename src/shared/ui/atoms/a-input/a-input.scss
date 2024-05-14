@@ -50,7 +50,7 @@
 
     &--right {
       right: torem(15);
-      color: #0066ff;
+      color: var(--accent-primary)// #0066ff;
     }
 
     &--left {

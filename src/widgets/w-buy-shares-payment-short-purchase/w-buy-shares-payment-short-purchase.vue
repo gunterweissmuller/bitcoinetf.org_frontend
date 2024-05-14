@@ -24,7 +24,7 @@
       :disabled="true"
       :text-icon="addressCopied"
       text-icon-text="Copied!"
-      :icon="Icon.ColorfulCopy"
+      :icon="$app.store.user.theme === 'dark' ? Icon.ColorfulCopyBlue : Icon.ColorfulCopy"
       position-icon="right"
       @on-input-click="() => copyToClipboardAddress()"
       isBoldInput
@@ -37,7 +37,7 @@
       :disabled="true"
       :text-icon="amountCopied"
       text-icon-text="Copied!"
-      :icon="Icon.ColorfulCopy"
+      :icon="$app.store.user.theme === 'dark' ? Icon.ColorfulCopyBlue : Icon.ColorfulCopy"
       position-icon="right"
       @on-input-click="() => copyToClipboardAmount()"
       isBoldInput

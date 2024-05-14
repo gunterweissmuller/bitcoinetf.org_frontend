@@ -96,7 +96,7 @@
         <div @click="loadMoreDividends" class="w-etfs__more-text">Load more</div>
       </div>
       <div v-if="!personalDividends.length" class="w-etfs__empty">
-        <img class="w-etfs__empty-pic" src="/img/cloud.png" alt="empty" />
+        <img class="w-etfs__empty-pic" :src="$app.store.user.theme === 'dark' ? '/img/cloud-dark.png' : '/img/cloud.png'" alt="empty" />
         <div class="w-etfs__empty-title">You don’t have any transactions yet.</div>
         <div class="w-etfs__empty-text">Buy your first ETF Shares and enjoy daily dividends!</div>
       </div>

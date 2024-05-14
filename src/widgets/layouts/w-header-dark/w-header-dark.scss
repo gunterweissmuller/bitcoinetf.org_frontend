@@ -212,6 +212,16 @@
         margin-right: var(--spacing-m-3);
       }
     }
+
+    &-light {
+      &:hover {
+        color: var(--blue-400) !important;
+      }
+    }
+
+    &:hover {
+      color: var(--blue-500);
+    }
   }
 
   &__controls {
