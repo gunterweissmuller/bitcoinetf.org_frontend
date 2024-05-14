@@ -125,7 +125,7 @@
     border-radius: var(--Spacing-S, 8px);
     background: var(--Button-Secondary, #252f44);
 
-    color: var(--accent-primary);
+    color:  var(--blue-400);// var(--accent-primary);
     font-family: Dm, sans-serif;
     font-size: 16px;
     font-style: normal;
@@ -147,7 +147,7 @@
     justify-content: center;
     align-items: center;
     border-radius: var(--Spacing-S, 8px);
-    background: var(--button-primary);
+    background: var(--blue-400);// var(--button-primary);
 
     color: var(--Text-Inverse-Primary, #fff);
     /* Body 1/Bold */
@@ -322,6 +322,7 @@
     }
   }
   &__slider-wrapper {
+    width: 100%;
     position: absolute;
     bottom: 0;
     z-index: 2;

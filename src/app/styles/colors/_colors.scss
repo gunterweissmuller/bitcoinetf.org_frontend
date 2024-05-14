@@ -24,6 +24,7 @@
   --blue-200: #CBDFFF;
   --gray-200: #C8CAD7;
   --blue-500: #06F; // #06F #4d94ff
+  --blue-400: #4d94ff; // #06F 
 
   --color-bg: #FFFFFF;
 
@@ -72,8 +73,8 @@
 body[data-theme='dark'] {
   --checkbox-box: #3F424E;
   --checkbox-box-border: #62667C;
-  --checkbox-box--checked: #0066ff;
-  --checkbox-box-border--checked: #0066ff;
+  --checkbox-box--checked: #4D94FF;
+  --checkbox-box-border--checked: #4D94FF;
 
   --system: #ffffff;
 
@@ -85,13 +86,13 @@ body[data-theme='dark'] {
   --text-inverse-tertiary: rgba(255, 255, 255, 0.60);
   --text-inverse-secondary: rgba(255, 255, 255, 0.80);
 
-  --accent-primary: #0066ff; //#4D94FF
+  --accent-primary: #4D94FF; //#4D94FF
   --accent-secondary: #FF8D07;
   --accent-success: #12DF00;
   --accent-danger: #EC0202;
   --accent-warning: #FFB445;
 
-  --button-primary: #0066ff; //#4D94FF
+  --button-primary: #4D94FF; //#4D94FF
   --button-secondary: #252F44;
 
   --surfaces-background: #000;

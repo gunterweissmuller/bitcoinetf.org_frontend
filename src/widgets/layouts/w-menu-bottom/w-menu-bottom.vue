@@ -179,7 +179,8 @@ const activeLinkClass = (link: string): boolean => {
       return route.name?.includes('personal-more')
     case 'personal-dividends':
       return (
-        route.name === 'personal-dividends' // || route.name === 'personal-referrals'
+        route.name === 'personal-dividends' || // || route.name === 'personal-referrals'
+        route.name === 'personal-etfs'
       )
 
     default:

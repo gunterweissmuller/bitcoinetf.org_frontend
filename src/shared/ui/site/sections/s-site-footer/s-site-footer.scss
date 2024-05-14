@@ -73,6 +73,9 @@
 
   &__title_sub_bitcoin {
     margin-left: torem(14);
+    opacity: 0;
+    transition: 0.7s linear;
+    transform: scale(1.2);
   }
 
   &__title {
@@ -99,6 +102,18 @@
       }
       &:after {
         display: none !important;
+      }
+
+      & img {
+        opacity: 0;
+        transition: 0.7s linear;
+        transform: scale(1.2);
+      }
+
+      &.active img,
+      &.active .s-site-footer__title_sub_bitcoin {
+        opacity: 1;
+        transform: scale(1);
       }
     }
 

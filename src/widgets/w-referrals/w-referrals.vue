@@ -118,14 +118,10 @@
             @get-real-index="getRealIndex"
           >
             <template #slides>
-              <swiper-slide class="w-referrals__promo-item">
-                <img class="w-referrals__promo-img" src="/img/referrals/promo1.png" alt="promo" id="imageid" />
-              </swiper-slide>
-              <swiper-slide class="w-referrals__promo-item">
-                <img class="w-referrals__promo-img" src="/img/referrals/promo2.png" alt="promo" />
-              </swiper-slide>
-              <swiper-slide class="w-referrals__promo-item">
-                <img class="w-referrals__promo-img" src="/img/referrals/promo3.png" alt="promo" />
+              <swiper-slide class="w-referrals__promo-item" v-for="card in referralPromoCards" :key="card.name">
+                <w-referral-promo-card
+                  :data="card"
+                />
               </swiper-slide>
             </template>
           </m-slider>
@@ -200,10 +196,11 @@ import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import { useNuxtApp } from '#app'
-import { ADropdownOption } from '~/src/shared/types/global'
+import { ADropdownOption, TPromoCardDetails } from '~/src/shared/types/global'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { Pagination, Navigation } from 'swiper'
+import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-promo-card.vue'
 
 const isOpenModal = ref(false)
 const isOpenShareModal = ref(false)
@@ -468,7 +465,23 @@ const cardComments = [
   'Bitcoin ETF that pays daily dividends in USDT Tether.',
   'Bitcoin ETF that pays daily dividends in Bitcoin.',
 ]
-
+const referralPromoCards: TPromoCardDetails[] = [
+  {
+    name: 'brand',
+    title: 'Passive Income for Smart Investors',
+    description: 'Bitcoin ETF that pays dividends: choose to earn USDT or BTC',
+  },
+  {
+    name: 'tether',
+    title: 'Passive Income for Smart Investors',
+    description: 'Bitcoin ETF that pays daily dividends in USDT Tether.',
+  },
+  {
+    name: 'bitcoin',
+    title: 'Passive Income for Smart Investors',
+    description: 'Bitcoin ETF that pays daily dividends in Bitcoin.',
+  },
+]
 function getRealIndex(swipe) {
   shareData.text = cardComments[swipe]
 }

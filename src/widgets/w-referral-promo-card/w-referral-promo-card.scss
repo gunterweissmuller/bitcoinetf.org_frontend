@@ -1,0 +1,49 @@
+.w-referral-promo-card {
+  &__body {
+    display: flex;
+    max-width: torem(200);
+    flex-direction: column;
+    gap: torem(4);
+    font-family: DM, sans-serif;
+  }
+  &__description {
+    font-size: torem(12);
+    line-height: torem(15);
+    font-weight: 500;
+  }
+  &__image {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  &__logo {
+    margin-bottom: torem(26);
+  }
+  &__title {
+    font-weight: 700;
+    font-size: torem(18);
+    line-height: torem(23);
+  }
+  &__wrapper {
+    padding: torem(24);
+    position: relative;
+    border-radius: var(--spacing-s);
+    width: torem(311);
+    height: torem(180);
+    overflow: hidden;
+    &--brand {
+      background: url('/img/referrals/w-referral-promo-card-brand.svg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: auto;
+    }
+    &--tether {
+      background: linear-gradient(0deg, var(--Tether-500, #1ba27a), var(--Tether-500, #1ba27a)),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+    &--bitcoin {
+      background: linear-gradient(0deg, var(--Bitcoin-500, #ff8d07), var(--Bitcoin-500, #ff8d07)),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+  }
+}

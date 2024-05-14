@@ -16,7 +16,7 @@
           <div class="s-site-fund-ceo__info">
             <div v-html="data.info.text" class="s-site-fund-ceo__info-text"/>
             <nuxt-link to="/personal/registration">
-              <a-button :text="data.info.btn.text"/>
+              <a-button :text="data.info.btn.text" variant="primary2"/>
             </nuxt-link>
           </div>
         </div>
