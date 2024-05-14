@@ -199,11 +199,14 @@
   &__points {
     position: relative;
     z-index: 2;
-    display: flex;
+    // display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     padding-top: torem(60);
     border-top: torem(1) solid rgba(255, 255, 255, 0.10);
 
     @media (max-width: 991px) {
+      grid-template-columns: 1fr 1fr;
       flex-wrap: wrap;
       gap: torem(20);
       padding-top: torem(20);

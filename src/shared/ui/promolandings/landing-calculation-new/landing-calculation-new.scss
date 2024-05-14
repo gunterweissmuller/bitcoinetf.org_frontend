@@ -332,7 +332,7 @@
       font-weight: 400;
 
       &-link {
-        color: var(--Accent-Primary, #4D94FF);
+        color: var(--blue-400);// var(--accent-primary);
         font-weight: 700;
       }
     }
@@ -410,6 +410,9 @@
   }
 
   &__error {
+    color: var(--accent-danger)
+  }
+  &__error-message{
     color: var(--accent-danger)
   }
   &__dropdown-isdisabled {

@@ -226,7 +226,7 @@
         {
           data: [],
           backgroundColor: 'rgba(0, 102, 255, 0.20)',
-          borderColor: '#0066FF',
+          borderColor: '#4d94ff', // '#0066FF', 
           tension: 0.4,
           fill: true,
         },

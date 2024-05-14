@@ -5,16 +5,16 @@
         <div class="s-site-footer__top-wrapper">
           <h2 class="s-site-footer__title title-first title-site-h1">
             DON’T BUY CRYPTO,
-            <h2 class="s-site-footer__title title-site-h1 title-sub">
+            <h2 class="s-site-footer__title title-site-h1 title-sub" ref="$animationWrapper">
               <p class="s-site-footer__title_sub_earn">EARN</p>
               <NuxtImg
-                src="/img/icons/colorful/bitcoin.svg"
+                :src="`/img/icons/colorful/${animation.icon}.svg`"
                 width="60"
                 height="60"
                 class="aspect-square w-[60px]"
                 loading="lazy"
               />
-              <p class="s-site-footer__title_sub_bitcoin">BITCOIN</p>
+              <p class="s-site-footer__title_sub_bitcoin">{{ animation.text }}</p>
             </h2>
           </h2>
 
@@ -104,7 +104,7 @@ const menu = [
     title: 'Platform',
     items: [
       { text: 'Buy ETF Shares', href: '/personal/login' },
-      { text: 'Mastercard', href: '/#' }, //
+      { text: 'Mastercard', href: '/#mastercard' }, 
       { text: 'Bitcoin Education', href: '/bitcoin-education' },
       { text: 'Referrals', href: '/referrals' },
     ],
@@ -113,7 +113,7 @@ const menu = [
     title: 'About',
     items: [
       { text: 'Fund', href: '/fund' },
-      { text: 'New', href: '/blog' },
+      { text: 'News', href: '/blog' },
       { text: 'Bitcoin Whitepaper', href: 'https://files.bitcoinetf.org/etf/public/bitcoin.pdf' },
       { text: 'PR Package', href: '/#' }, //
     ],
@@ -122,7 +122,7 @@ const menu = [
     title: 'Account',
     items: [
       { text: 'Sign Up', href: '/personal/registration' },
-      { text: 'Offers', href: '/offers' },
+      // { text: 'Offers', href: '/offers' },
       { text: 'Tutorials', href: '/tutorials' },
     ],
   },
@@ -166,6 +166,21 @@ const subscribeToChimp = async () => {
     emailErrorText.value = 'Invalid email address'
   }
 }
+
+const animation = reactive({ icon: '', text: '' })
+const intervalId = ref()
+const $animationWrapper = ref()
+
+onMounted(() => {
+  intervalId.value = setInterval(() => {
+    animation.icon = animation.icon == 'bitcoin' ? 'usdt' : 'bitcoin'
+    animation.text = animation.text == 'bitcoin' ? 'usdt' : 'bitcoin'
+    $animationWrapper.value?.classList?.add('active')
+    setTimeout(() => {
+      $animationWrapper.value.classList.remove('active')
+    }, 2500)
+  }, 5000)
+})
 </script>
 
 <style src="./s-site-footer.scss" lang="scss" />

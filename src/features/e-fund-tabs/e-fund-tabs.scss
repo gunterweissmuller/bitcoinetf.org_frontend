@@ -1,0 +1,85 @@
+.e-fund-tabs {
+  margin-top: var(--spacing-m-1);
+  @include breakpoint($break-desktop-1024) {
+    display: none;
+  }
+
+  &__wallet {
+    @include breakpoint($break-desktop-1024-minus) {
+      margin-top: torem(26);
+      padding: 0 var(--spacing-m-1) var(--spacing-m-2) var(--spacing-m-1);
+    }
+
+    .e-fund-tabs__list {
+      @include breakpoint($break-desktop-1024-minus) {
+        border-radius: var(--spacing-s);
+        background: var(--surfaces-surface-2);
+        padding: 0;
+      }
+    }
+
+    .e-fund-tabs__item {
+      @include breakpoint($break-desktop-1024-minus) {
+        padding: var(--spacing-s);
+
+        &--active {
+
+          @include breakpoint($break-desktop-1024-minus) {
+            border-radius: var(--spacing-s);
+            background: var(--surfaces-surface-1);
+            box-shadow: 1px 0px 11px 0px rgba(0, 0, 0, 0.07);
+          }
+
+          &::before {
+            @include breakpoint($break-desktop-1024-minus) {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+  &__list {
+    padding: torem(0, 16);
+    max-width: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+
+  }
+
+  &__item {
+    position: relative;
+    display: block;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    font-size: torem(14);
+    line-height: torem(18);
+    padding: torem(0, 5, 16);
+    text-align: center;
+
+
+    &--active {
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - #{torem(16)});
+        height: torem(2);
+        background: var(--surfaces-border-blue);
+        // background: var(--accent-primary);
+
+      }
+
+      color: var(--accent-primary);
+      font-weight: 700;
+
+    }
+  }
+}

@@ -6,7 +6,12 @@
     hidden-mobile
   />
   <s-site-referrals-main :data="mainData" />
-  <s-site-marquee :data="marqueeData" :is-background="false" />
+  <s-site-marquee-new
+    :data="marqueeData"
+    :is-background="false"
+    :custom-element-index="1"
+    custom-styles="padding-top: 6px; height: 36px;"
+  />
   <s-site-referrals-id :data="idData" />
   <s-site-referrals-share :data="shareData" />
   <s-site-footer />
@@ -18,7 +23,7 @@ import SSiteReferralsMain from '~/src/shared/ui/site/sections/s-site-referrals-m
 import SSiteReferralsId from '~/src/shared/ui/site/sections/s-site-referrals-id/s-site-referrals-id.vue'
 import SSiteReferralsShare from '~/src/shared/ui/site/sections/s-site-referrals-share/s-site-referrals-share.vue'
 import SSiteFooter from '~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue'
-import SSiteMarquee from '~/src/shared/ui/site/sections/s-site-marquee/s-site-marquee.vue'
+import SSiteMarqueeNew from '~/src/shared/ui/site/sections/s-site-marquee-new/s-site-marquee-new.vue'
 import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 definePageMeta({
@@ -141,7 +146,7 @@ const idData = {
     {
       title: 'Competitive Returns',
       img: '/img/site-dark/s-site-referrals-id/slides/1.png',
-      text: `Our ETF yields up to 33% APY, with returns amplified by Bitcoin's price appreciation, ensuring our investors enjoy superior gains.`,
+      text: `Our ETF yields up to 100%+ projected APY, with returns amplified by Bitcoin's price appreciation, ensuring our investors enjoy superior gains.`,
     },
     {
       title: 'Transparency',
@@ -151,7 +156,7 @@ const idData = {
     {
       title: 'Cutting-Edge Solutions',
       img: '/img/site-dark/s-site-referrals-id/slides/3.png',
-      text: `As fintech evolves, so do our offerings. We’re committed to keeping our investors at the forefront of the industry`,
+      text: `As fintech evolves, so do our offerings. We’re committed to keeping our investors at the forefront of the industry.`,
     },
   ],
 }

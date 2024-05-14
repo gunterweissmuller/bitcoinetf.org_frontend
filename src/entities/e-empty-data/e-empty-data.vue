@@ -1,6 +1,6 @@
 <template>
   <div :class="['e-empty-data__empty', { 'e-empty-data__empty--small': small }]">
-    <img class="e-empty-data__empty-pic" src="/img/cloud.png" alt="empty" />
+    <img class="e-empty-data__empty-pic" :src=" $app.store.user.theme === 'dark' ? '/img/cloud-dark.png' : '/img/cloud.png'" alt="empty" />
     <div class="e-empty-data__empty-title">{{ title }}</div>
   </div>
 </template>

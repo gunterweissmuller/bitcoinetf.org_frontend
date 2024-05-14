@@ -1,0 +1,60 @@
+.w-certificate {
+  display: flex;
+  flex-direction: column;
+
+  max-width: torem(311);
+  width: 100%;
+  height: torem(196);
+
+  padding: torem(50, 144, 0, 34);
+
+  background-repeat: no-repeat;
+  background-size: 105% 105%;
+  background-position: center;
+
+  font-family: Dm, sans-serif;
+  font-weight: 700;
+  color: var(--text-inverse-secondary);
+  opacity: 0.8;
+
+  &--btc {
+    background-image: url(/img/certificates/btc_certificate.svg);
+  }
+
+  &--init_btc {
+    background-image: url(/img/certificates/btc_certificate.svg);
+  }
+
+  &--usdt {
+    background-image: url(/img/certificates/usdt_certificate.svg);
+  }
+
+  &__name {
+    font-size: torem(12);
+    line-height: torem(15);
+
+    margin-bottom: torem(4);
+  }
+
+  &__count {
+    font-size: torem(32);
+    line-height: torem(41);
+    color: var(--text-inverse-primary);
+  }
+
+  &__title {
+    font-size: torem(12);
+    line-height: torem(15);
+
+    margin-bottom: torem(4);
+  }
+
+  &__desc {
+    font-size: torem(10);
+    line-height: torem(13);
+
+    &:not(:last-of-type) {
+      margin-bottom: torem(4);
+    }
+  }
+}

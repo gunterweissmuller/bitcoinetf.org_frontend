@@ -3,8 +3,7 @@
     <div class="f-withdrawal-modal__wrap">
       <div class="f-withdrawal-modal__title">Withdraw Method</div>
       <div class="f-withdrawal-modal__subtitle">
-        Choose how you want to withdraw. Please note that by setting up a withdrawal method you will lose your ability
-        to reinvest earnings.
+        Choose how you want to withdraw. Please note that by setting up a withdrawal method you will lose your ability to reinvest Dividends.
       </div>
       <!--        v-if="orderType === 'init_btc'"-->
       <m-select
@@ -42,7 +41,6 @@
       <a-input
         v-if="selectedMethodType"
         class="f-withdrawal-modal__address"
-        :class="{'f-withdrawal-modal__address-margin': selectedMethod === 'polygon_usdt'}"
         :icon="Icon.MonoPaste"
         :text-icon="copiedLink"
         text-icon-text="Copied!"
@@ -54,7 +52,7 @@
         @icon-click-handler="acceptCopy"
         :label="inputLabel"
       />
-      <div v-if="selectedMethodType && selectedMethod !== 'polygon_usdt'" class="f-withdrawal-modal__address-text">
+      <div v-if="selectedMethodType" class="f-withdrawal-modal__address-text">
         {{ subInfo }}
       </div>
       <a-button
@@ -78,10 +76,13 @@
       >Remove withdrawal method</span>
     </div>
   </m-modal>
+
+  <e-not-enough-balance-modal :show="isNotEnoughModalShow" :close="closeNotEnoughModal" ></e-not-enough-balance-modal>
 </template>
 
 <script setup lang="ts">
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
+import eNotEnoughBalanceModal from '~/src/entities/e-not-enough-balance-modal/e-not-enough-balance-modal.vue'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { computed, ref } from 'vue'
 import { Icon } from '~/src/shared/constants/icons'
@@ -111,7 +112,7 @@ const props = withDefaults(
 const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
 const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc')
-const selectedMethod = ref(orderType.value === 'usdt' ? 'polygon_usdt' : props.method)
+const selectedMethod = ref(orderType.value === 'usdt' ? 'polygon_usdt' : props.method || 'bitcoin_on_chain')
 const selectedAddress = ref(props.address)
 const copiedLink = ref(false)
 
@@ -155,6 +156,9 @@ const selectedMethodRegexp = computed(() => {
 })
 
 const buttonDisabled = computed(() => {
+
+  if(props?.address === selectedAddress.value) return true;
+
   if (selectedMethod.value === 'bitcoin_on_chain') {
     return !validBlockChain.value
   } else if (selectedMethod.value === 'bitcoin_lightning') {
@@ -167,7 +171,7 @@ const buttonDisabled = computed(() => {
 })
 
 const subInfo = computed(() => {
-  return selectedMethod.value === 'bitcoin_lightning'
+  return selectedMethod.value === 'bitcoin_lightning' || selectedMethod.value === 'polygon_usdt'
     ? 'Withdrawals will be made automatically daily'
     : ' Withdrawals will be made automatically once the cash balance reaches $250.'
 })
@@ -245,9 +249,28 @@ watch(()=> selectedAddress.value, (value) => {
   }
 })
 
-const accept = () => {
-  isOpenModal.value = false
-  emit('accept', { method: selectedMethod.value, address: selectedAddress.value })
+const checkKyc = async () => {
+  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
+    return formsResponse.data[0].status === 'passed'
+  })
+}
+
+const accept = async () => {
+  if (selectedMethod.value === 'bitcoin_on_chain') {
+    if($app.store.user.walletDividends?.btc_amount * $app.store.user.btcValue < 250) {
+      isNotEnoughModalShow.value = true;
+      return;
+    }
+  }
+
+  const isKycFinished = await checkKyc()
+
+  if (isKycFinished) {
+    isOpenModal.value = false
+    emit('accept', { method: selectedMethod.value, address: selectedAddress.value })
+  } else {
+    navigateTo({ name: 'personal-kyc' })
+  }
 }
 const removeWallet = () =>{
   isOpenModal.value = false
@@ -261,6 +284,15 @@ const close = () => {
 onUnmounted(() => {
   document.body.classList.remove('no-scroll')
 })
+
+// not enough balance modal
+
+const isNotEnoughModalShow = ref(false);
+
+const closeNotEnoughModal = () => {
+  isNotEnoughModalShow.value = false;
+}
+
 
 </script>
 

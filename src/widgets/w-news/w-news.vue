@@ -12,7 +12,7 @@
         id="news-performance"
         :modules="[]"
         :navigation="false"
-        slides-per-view="auto"
+        :slides-per-view="slidesPerView"
         :space-between="16"
         class="w-news__slider"
       >
@@ -47,10 +47,20 @@
 </template>
 
 <script setup lang="ts">
-import { useNuxtApp } from '#app'
-import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
-import { SwiperSlide } from 'swiper/vue'
-import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
+import { useNuxtApp } from '#app';
+import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
+import { SwiperSlide } from 'swiper/vue';
+import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
+import useMediaDevice from '~/composables/useMediaDevice'
+
+const { isMobile, isTablet, isLaptop, isDesktop } = useMediaDevice();
+
+const slidesPerView = computed<number | 'auto'>(() => {
+  if (isDesktop.value) return 3;
+  if (isTablet.value || isLaptop.value) return 2.1;
+  if (isMobile.value) return 1.1;
+  return 'auto';
+});
 
 interface Post {
   slug: string;

@@ -56,6 +56,19 @@
     }
   }
 
+  &--primary-website {
+    color: var(--text-inverse-primary);
+    background: var(--blue-400);
+
+    .a-button__label {
+      color: var(--color-text-contrast);
+    }
+
+    .a-button__icon {
+      color: var(--color-icon-tertiary);
+    }
+  }
+
   &--secondary {
     background: var(--button-secondary);
 
@@ -101,6 +114,18 @@
       font-size: torem(14);
       font-weight: 700;
       line-height: torem(18);
+    }
+  }
+
+  &--no-padding {
+    height: torem(56);
+    padding: 0 !important;
+    border-radius: torem(8);
+
+    .a-button__label {
+      font-size: torem(16);
+      font-weight: 700;
+      line-height: torem(21);
     }
   }
 

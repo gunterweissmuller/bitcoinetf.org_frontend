@@ -2,7 +2,7 @@
   <m-modal full-screen kyc v-model="isOpenModal" @close="closeModal">
     <div class="e-kyc-start-modal">
       <div class="e-kyc-start-modal__content">
-        <div class="e-kyc-start-modal__title">Verify your identity and earn $5! 💸</div>
+        <div class="e-kyc-start-modal__title">Verify your identity!</div>
         <div class="e-kyc-start-modal__text">
           Your Safety is Our Priority - we need you to provide us with some personal information.
         </div>

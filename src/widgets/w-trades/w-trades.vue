@@ -1,14 +1,21 @@
 <template>
   <div v-if="renderedTrades.length" class="w-trades">
     <div class="w-trades__head">
-      <div class="w-trades__head-title">Latest trades</div>
+      <div class="w-trades__head-title">Latest Trades</div>
       <nuxt-link v-if="!isPage && renderedTrades.length && !hideView" :to="fullPageNuxtLink" class="w-trades__head-info"
         >View All
       </nuxt-link>
     </div>
-    <div v-if="renderedTrades.length && !isExpand" :class="[{'w-trades__content-main' : props.isMain}, {'w-trades__content' : !props.isMain}]" :style=" width > 1010 ? {height: `${(renderedTrades?.length / props.gridTemplate) * 94}px`} : {}">
-      <transition-group name="fade" tag="div" :class="[{'w-trades__content-main-wrapper' : props.isMain}]" :style=" width > 1010 ? {'display': 'grid', 'grid-template-columns': 'repeat( '+ props.gridTemplate +', 1fr)', 'max-height': 94 * (props.perPage/props.gridTemplate) +'px'} : {'display': 'flex', 'flex-direction': 'column'}">
-        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :isMain="props.isMain"/>
+
+    <div v-if="renderedTrades.length && !isExpand && props.isMain" :class="[{'w-trades__content-main': true}, {'w-trades__content' : !props.isMain}]" :style=" width > 1010 ? {height: `${(renderedTrades?.length / props.gridTemplate) * 94}px`} : {}">
+      <transition-group name="fade" tag="div" :class="[{'w-trades__content-main-wrapper' : true}]" :style=" width > 1010 ? {'display': 'grid', 'grid-template-columns': 'repeat( '+ props.gridTemplate +', 1fr)', 'max-height': 94 * (props.perPage/props.gridTemplate) +'px'} : {'display': 'flex', 'flex-direction': 'column'}">
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :pageType="props.isMain ? 'main' : 'default'" :isMain="props.isMain"/>
+      </transition-group>
+    </div>
+
+    <div v-if="renderedTrades.length && !isExpand && !props.isMain" class="w-trades__content">
+      <transition-group name="fade" tag="div">
+        <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :type="props.isAssets ? 'asset' : 'trade'" />
       </transition-group>
     </div>
 
@@ -46,7 +53,6 @@ import { useRoute } from '#imports'
 import { useWindowSize } from '@vueuse/core'
 
 const { width } = useWindowSize()
-
 const route = useRoute()
 const { $app } = useNuxtApp()
 
@@ -58,12 +64,16 @@ const props = withDefaults(
     hideView?: boolean
     gridTemplate?: number
     isMain?: boolean
+    filters: Record<string, string | false> | null
+    isAssets: boolean
   }>(),
   {
     isPage: false,
     perPage: 4,
     gridTemplate: 1,
-    isMain: false
+    isMain: false,
+    filters: null,
+    isAssets: false,
   },
 )
 
@@ -76,33 +86,24 @@ const expandMore = ref(2)
 const centrifuge = ref(null)
 
 const fullPageNuxtLink = computed(() => {
-  // FIX name on features/fund_remake
   const nuxtLinkObject = { name: 'personal-analytics-performance-latest-trades', query: {} }
-  if (route.name === 'personal-asset-id') {
-    nuxtLinkObject.query.asset_uuid = route.params.id
-  }
+  // if (route.name === 'personal-asset-id') {
+  //   nuxtLinkObject.query.asset_uuid = route.params.id
+  // }
 
   return nuxtLinkObject
 })
 
-const loadMoreTrades = async () => {
+const loadMoreTrades = () => {
   currentPage.value += 1
 
-  if (route.name === 'personal-asset-id') {
-    await getTrades(route.params.id)
-  } else if (route.query.asset_uuid) {
-    await getTrades(route.query.asset_uuid)
-  } else {
-    await getTrades()
-  }
+  getTrades()
 }
 
-const getTrades = async (assetId?: string) => {
-  const tradesFilters = {}
+const getTrades = async () => {
+  const tradesFilters = props.filters ?? {};
 
-  if (assetId) {
-    tradesFilters.asset_uuid = assetId
-  }
+  if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
     per_page: props.perPage,
@@ -124,13 +125,7 @@ const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
 onMounted(async () => {
-  if (route.name === 'personal-asset-id') {
-    await getTrades(route.params.id)
-  } else if (route.query.asset_uuid) {
-    await getTrades(route.query.asset_uuid)
-  } else {
-    await getTrades()
-  }
+  await getTrades()
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
@@ -142,7 +137,8 @@ onMounted(async () => {
   sub
     .on('publication', function (ctx) {
       $app.store.user.latestTrade = ctx.data.message?.result_amount
-     if (route.name !== 'personal-asset-id' && !route.query.asset_uuid) {
+
+      if (route.name !== 'personal-assets-symbol' || ctx.data.message.asset_uuid === props.filters?.asset_uuid) {
         trades.value = [ctx.data.message, ...trades.value]
       }
     })
@@ -151,6 +147,10 @@ onMounted(async () => {
 
 onUnmounted(() => {
   centrifuge.value?.disconnect()
+})
+
+watch(() => props.filters, () => {
+  getTrades();
 })
 </script>
 
@@ -161,36 +161,69 @@ onUnmounted(() => {
   position: relative;
 }
 
-// .fade-leave-active,
-.fade-enter-active
- {
-  transition:
-    opacity 0.8s,
-    bottom 0.8s,
-    transform 0.8s;
+.w-trades__content {
+  .fade-leave-active,
+  .fade-enter-active
+  {
+    transition:
+      opacity 0.8s,
+      bottom 0.8s,
+      transform 0.8s;
+  }
+
+  .fade-enter-from {
+    transform: translateX(-200px);
+  }
+
+  .fade-enter-to {
+    transform: translateX(0px);
+  }
+
+  .fade-leave-to,
+  .fade-enter-from
+  {
+    opacity: 0;
+  }
+
+  .fade-leave-to {
+    position: absolute;
+    right: 1000px;
+    bottom: 0;
+    transform: translateY(100px);
+  }
 }
 
-.fade-enter-from {
-  transform: translateX(-200px);
-}
 
-.fade-enter-to {
-  transform: translateX(0px);
-}
 
-// .fade-leave-to,
-.fade-enter-from
- {
-  opacity: 0;
-}
+.w-trades__content-main {
 
-.fade-leave-to {
-  position: absolute;
-  right: 1000px;
-  bottom: 0;
-  display: none;
+  .fade-enter-active
+  {
+    transition:
+      opacity 0.8s,
+      bottom 0.8s,
+      transform 0.8s;
+  }
 
-  
-  // transform: translateX(200px);
+  .fade-enter-from {
+    transform: translateX(-200px);
+  }
+
+  .fade-enter-to {
+    transform: translateX(0px);
+  }
+
+  .fade-enter-from
+  {
+    opacity: 0;
+  }
+
+  .fade-leave-to {
+    position: absolute;
+    right: 1000px;
+    bottom: 0;
+    display: none;
+  }
+
 }
 </style>

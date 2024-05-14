@@ -15,15 +15,22 @@
   &__info {
     display: flex;
     align-items: center;
-    gap: torem(8);
     margin-bottom: torem(48);
+
+    & > * {
+      margin-left: torem(8);
+  
+      &:first-child {
+        margin-left: 0;
+      }
+    }
 
     &-item {
       font-size: torem(12);
       line-height: torem(15);
       font-weight: 600;
       border-radius: torem(4);
-      color: var(--accent-primary);
+      color: var(--blue-400); // var(--accent-primary);
       padding: torem(6, 24);
     }
 
@@ -173,4 +180,8 @@
       }
     }
   }
+}
+
+.s-site-back {
+  color: var(--blue-400) !important;  // var(--accent-primary);
 }

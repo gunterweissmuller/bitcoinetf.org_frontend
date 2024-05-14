@@ -111,7 +111,7 @@
     min-width: torem(100);
     height: torem(56);
     color: var(--text-primary);
-    background-color: var(--surfaces-surface-2);
+    // background-color: var(--surfaces-surface-2);
     border: torem(1) solid var(--surfaces-surface-2);
     border-radius: torem(8);
     caret-color: var(--text-primary);
@@ -229,7 +229,7 @@
       flex-direction: column;
       justify-content: center;
       max-width: 100%;
-      background-color: var(--surfaces-surface-2)
+      // background-color: var(--surfaces-surface-2)
     }
 
     &--open {
@@ -293,7 +293,7 @@
       margin-right: var(--spacing-m-1);
       cursor: pointer;
       font-size: 10px;
-      line-height: 13px;
+      line-height: normal;
       white-space: nowrap;
       z-index: 10;
       position: relative;
@@ -375,7 +375,7 @@
 
   &--disabled,
   :disabled {
-    color: var(--text-secondary);
+    color: var(--text-inverse-tertiary);
     // color: var(--text-primary);
     cursor: default;
     pointer-events: none;

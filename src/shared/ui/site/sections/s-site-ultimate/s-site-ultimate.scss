@@ -1,9 +1,9 @@
 .s-site-ultimate {
   position: relative;
-  padding: torem(60, 0);
+  padding: torem(120, 0, 60, 0);
 
   @media (max-width: 767px) {
-    padding: torem(32, 0);
+    padding: torem(116, 0, 32, 0);
   }
 
   &__title {
@@ -178,10 +178,13 @@
 
   &__content {
     display: flex;
-    margin-bottom: torem(81);
+    margin-bottom: torem(120);
 
     @media (max-width: 991px) {
       flex-direction: column;
+    }
+    @media screen and (max-width: 767px){
+      margin-bottom: torem(40);
     }
   }
 

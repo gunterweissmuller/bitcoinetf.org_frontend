@@ -1,0 +1,106 @@
+.m-dropdown {
+    padding: var(--spacing-xs), var(--spacing-s);
+    border-radius: var(--spacing-xs);
+    background: var(--surfaces-surface-2);
+    position: relative;
+    color: var(--text-secondary);
+
+    min-width: 63px;
+  
+    &__invest {
+
+        &--text {
+            z-index: 10;
+            position: relative;
+
+            &-normal {
+                line-height: normal;
+                height: auto;
+            }
+
+            &-main {
+                color: var(--text-secondary);
+                font-family: DM,sans-serif;
+                font-size: 10px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+            }
+
+            &-primary {
+                color: var(--Text-Inverse-Primary);
+            }
+        }
+
+
+        &-select {
+            padding: var(--spacing-xs);
+            border-radius: var(--spacing-xs);
+            // background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            display: flex;
+            text-align: center;
+            white-space: nowrap;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            
+
+
+            &-text {
+                color: var(--text-secondary);
+                font-family: DM,sans-serif;
+                font-size: 10px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+
+            }
+
+            &-arrow {
+                width: 15px;
+                margin-right: var(--spacing-xs);
+                cursor: pointer;
+                aspect-ratio: 1/1;
+
+                &-reverse {
+                    transform: rotate(180deg);
+                }
+
+                @include breakpoint($break-tablet-minus) {
+                    width: 20px;
+                }
+            }
+
+            &-dropdown {
+                border-radius: var(--spacing-xs);
+                backdrop-filter: blur(32px);
+                width: 100%;
+                position: absolute;
+                margin-top: var(--spacing-xs);
+                z-index: 10;
+
+                &-item {
+                    color: var(--text-secondary);
+                    font-family: DM,sans-serif;
+                    font-size: 10px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    
+                    cursor: pointer;
+                    padding: var(--spacing-xs) var(--spacing-s);
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.15);
+                        border-radius: var(--spacing-s);
+                    }
+
+                }
+            }
+
+        }
+    }
+  }

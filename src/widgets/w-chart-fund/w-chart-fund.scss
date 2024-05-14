@@ -6,34 +6,32 @@
   border-radius: var(--spacing-s);
   background: var(--surfaces-surface-glass);
 
-  &--is-main {
-    .w-chart-fund__caption {
-      color: var(--text-tertiary);
-      font-family: Dm, sans-serif;
-      font-size: torem(14);
-      font-weight: 500;
-      line-height: normal;
-      margin-bottom: var(--spacing-s);
-    }
-  }
-
-
-  @include breakpoint($break-desktop-1440) {
-    padding: var(--spacing-m-2);
-    //margin-bottom: 0;
-  }
-
   &__caption {
-    font-size: torem(16);
-    line-height: torem(20);
-    font-weight: 600;
-    margin-bottom: torem(16);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: torem(8);
+
+    &-text {
+      font-size: torem(16);
+      line-height: torem(20);
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: center;
+    }
+
+    &-icon {
+      display: flex;
+
+      color: var(--text-tertiary);
+    }
   }
 
   &__head {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     margin-bottom: var(--spacing-m-1);
   }
 
@@ -43,9 +41,11 @@
 
     &-title {
       font-family: Dm, sans-serif;
-      font-size: torem(20);
-      font-weight: 700;
-      line-height: torem(26);
+      font-size: torem(16);
+      font-weight: 500;
+      line-height: torem(20);
+      color: var(--text-secondary);
+
       margin-bottom: var(--spacing-xs);
     }
 
@@ -64,16 +64,12 @@
     flex-direction: column;
 
     &-difference {
-      margin-left: auto;
-      width: max-content;
-      color: var(--accent-success);
-      background: rgba(49, 237, 33, 0.06);
-      padding: var(--spacing-xs) var(--spacing-s);
-      border-radius: var(--bradius-m);
       font-family: Dm, sans-serif;
       font-size: torem(10);
       font-weight: 700;
       line-height: torem(13);
+      color: var(--accent-success);
+
       margin-bottom: var(--spacing-xs);
 
       &--danger {
@@ -95,11 +91,9 @@
 
   &__chart {
     height: torem(152);
-    margin-bottom: var(--spacing-m-1);
 
     @include breakpoint($break-desktop-1440) {
-      //width: torem(560);
-      height: torem(175);
+      height: torem(210);
     }
 
     &--no-indent {

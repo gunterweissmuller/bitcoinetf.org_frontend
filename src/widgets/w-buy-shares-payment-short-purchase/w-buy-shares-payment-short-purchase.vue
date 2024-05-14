@@ -18,26 +18,26 @@
       @on-input-click="copy($app.store.user?.info?.account.tron_wallet)"
     />
     <a-input
-      class="flex gap-4 justify-between mt-6 rounded-lg"
+      class="flex justify-between mt-6 rounded-lg"
       label="Deposit address on Tron chain:"
       :model-value="computedAddr"
       :disabled="true"
       :text-icon="addressCopied"
       text-icon-text="Copied!"
-      :icon="Icon.ColorfulCopy"
+      :icon="$app.store.user.theme === 'dark' ? Icon.ColorfulCopyBlue : Icon.ColorfulCopy"
       position-icon="right"
       @on-input-click="() => copyToClipboardAddress()"
       isBoldInput
       isTextInputSmall
     />
     <a-input
-      class="flex gap-4 justify-between mt-6 rounded-lg"
+      class="flex justify-between mt-6 rounded-lg"
       label="Amount"
       :model-value="$app.filters.rounded(Math.ceil(calcValue*100)/100,2) + ' USDT'"
       :disabled="true"
       :text-icon="amountCopied"
       text-icon-text="Copied!"
-      :icon="Icon.ColorfulCopy"
+      :icon="$app.store.user.theme === 'dark' ? Icon.ColorfulCopyBlue : Icon.ColorfulCopy"
       position-icon="right"
       @on-input-click="() => copyToClipboardAmount()"
       isBoldInput
@@ -50,9 +50,11 @@
       Cancel Order
     </button>
     <footer class="text-center py-6">
-      <nuxt-link to="/personal/support" target="_blank">
-        <span  class="self-center mt-7 text-base font-bold text-blue-600 whitespace-nowrap" tabindex="0">Contact support</span>
+
+      <nuxt-link to="/personal/support" target="_blank" >
+        <a-button text="Contact support" variant="tertiary" isFullWidth />
       </nuxt-link>
+
 
     </footer>
   </div>
@@ -469,7 +471,7 @@ const cancelOrder = async () => {
   clearInterval(timeintervalPaid);
   timerStarted.value = false;
 
-  router.push('/personal/analytics');
+  router.push('/personal/fund');
 }
 
 </script>

@@ -8,16 +8,16 @@
         <h2 v-html="data.title" class="s-site-ultimate__title title-site-h2"/>
         <div class="s-site-ultimate__content">
           <div class="s-site-ultimate__message">
-            <div class="s-site-ultimate__message-text">{{ data.message }}</div>
+            <!-- <div class="s-site-ultimate__message-text">{{ data.message }}11</div>
             <div class="s-site-ultimate__message-arrow">
               <img src="/img/site-dark/s-site-ultimate/arrow.svg" alt=""/>
-            </div>
+            </div> -->
           </div>
           <div class="s-site-ultimate__info">
             <div v-html="data.info.text" class="s-site-ultimate__info-text"/>
             <nuxt-link :to="`/personal/registration`">
 
-              <a-button :text="data.info.btn.text"/>
+              <a-button :text="data.info.btn.text" variant="primary2"/>
             </nuxt-link>
           </div>
         </div>

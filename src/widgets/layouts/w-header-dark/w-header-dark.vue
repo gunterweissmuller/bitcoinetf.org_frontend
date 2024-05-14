@@ -33,10 +33,10 @@
           photo-src="/img/avatar.png"
           :left-label="$app.store.user?.info?.account?.username"
           :robot-data="$app.store.user?.info?.account?.uuid"
-          @click="$router.push({ name: 'personal-performance' })"
+          @click="$router.push({ name: 'personal-portfolio' })"
         />
         <div class="w-header-dark__links">
-          <nuxt-link v-for="(link, idx) in LINKS" :key="idx" :href="link.link" class="w-header-dark__link">
+          <nuxt-link v-for="(link, idx) in LINKS" :key="idx" :href="link.link" class="w-header-dark__link" :class="[{'w-header-dark__link-light': route.name === 'index' || route.name === 'tetherspecial'}]">
             {{ link.text }}
           </nuxt-link>
         </div>
@@ -45,14 +45,14 @@
             v-if="!isUserAuthenticated"
             size="small"
             text="Launch app"
-            :variant="'primary'"
+            :variant="route.name === '' ? 'primary-website' : 'primary2'"
             @click="$router.push({ name: 'personal-login' })"
           />
         </div>
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
         <nuxt-link to="/personal/login" v-if="!isUserAuthenticated"
-          ><a-button text="Launch app" size="small" :variant="'primary'"
+          ><a-button text="Launch app" size="small" :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
         /></nuxt-link>
         <a-avatar
           v-if="isUserAuthenticated"
@@ -62,7 +62,7 @@
           photo-src="/img/avatar.png"
           :left-label="$app.store.user?.info?.account?.username"
           :robot-data="$app.store.user?.info?.account?.uuid"
-          @click="$router.push({ name: 'personal-performance' })"
+          @click="$router.push({ name: 'personal-portfolio' })"
         />
       </div>
       <div :class="['w-header-dark__burger', { 'w-header-dark__burger__active': isOpenMenu }]" @click="openMenu">

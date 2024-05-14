@@ -76,7 +76,6 @@ const { data: sections } = useAsyncData('offers', async () => {
   &__items {
     display: flex;
     flex-direction: column;
-    gap: torem(16);
 
     .l-site {
       @media (max-width: 767px) {
