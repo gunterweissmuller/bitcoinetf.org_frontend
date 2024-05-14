@@ -541,6 +541,7 @@
     margin-top: torem(24);
 
     &--mobile {
+      margin-bottom: 24px;
       display: flex;
 
       @include breakpoint($break-desktop-1024) {

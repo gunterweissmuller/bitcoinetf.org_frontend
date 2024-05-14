@@ -15,7 +15,7 @@
     justify-content: space-between;
 
     // @include breakpoint($break-desktop-1024) {
-      
+
     // }
 
     &-title {
@@ -148,12 +148,12 @@
       }
     }
 
-    
+
 
 
     &-sum {
       position: relative;
-      text-align: center;
+      text-align: left;
       color: var(--text-primary);
       font-family: Dm, sans-serif;
       font-size: torem(42);
@@ -233,7 +233,7 @@
     }
 
 
-  
+
   }
 
   &__cards {
