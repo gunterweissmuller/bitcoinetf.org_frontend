@@ -107,7 +107,8 @@
   }
   &__table {
     width: 100%;
-    min-width: 1240px;
+    // min-width: 1240px;
+    min-width: 1000px;
 
     @media screen and (max-width: 767px) {
       min-width: 1040px;
@@ -117,6 +118,7 @@
     font-family: Dm, sans-serif;
     border-radius: 8px;
     background-color: #205fff;
+    overflow: hidden;
 
     & > :nth-child(2n-1) {
       background-color: #366fff;
@@ -129,6 +131,11 @@
     grid-template-columns: 4fr repeat(4, 3fr);
     position: relative;
     margin-bottom: torem(16);
+
+    @media screen and (max-width: 1400px) {
+      grid-template-columns: 3fr 3fr 2fr 2fr 4fr;
+    }
+
     @media screen and (max-width: 767px) {
       grid-template-columns: torem(152) repeat(4, 1fr);
     }
@@ -157,6 +164,11 @@
     display: grid;
     grid-template-columns: 4fr repeat(4, 3fr);
     position: relative;
+
+    @media screen and (max-width: 1400px) {
+      grid-template-columns: 3fr 3fr 2fr 2fr 4fr;
+    }
+
     @media screen and (max-width: 767px) {
       grid-template-columns: torem(152) repeat(4, 1fr);
     }
