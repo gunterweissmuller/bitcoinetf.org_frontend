@@ -471,7 +471,7 @@ const cancelOrder = async () => {
   clearInterval(timeintervalPaid);
   timerStarted.value = false;
 
-  router.push('/personal/analytics');
+  router.push('/personal/fund');
 }
 
 </script>

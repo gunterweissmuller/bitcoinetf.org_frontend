@@ -64,7 +64,7 @@
 
       <template v-if="signupStep === SignupSteps.Signup">
         <div class="landing-calculation__signup-main">
-          <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+          <vue-turnstile :theme="'dark'" :site-key="siteKey" v-model="token" class="captchaTurn" />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
           
@@ -112,7 +112,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100 || timerStarted" @click="sendCode" :text="codeSendBuyText"></a-button> <!--signupAndBuy-->
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuy || buyAmountOriginal < 100 || timerStarted || firstName === '' || lastName === '' || email === '' || phone === '' || !isEmailValid" @click="sendCode" :text="codeSendBuyText"></a-button> <!--signupAndBuy-->
           <div class="landing-calculation__error-message">
             <p v-if="buyAmountOriginal < 100">The minimum investment amount must be at least 100</p>
           </div>
@@ -121,7 +121,7 @@
 
       <template v-if="signupStep === SignupSteps.Google">
         <div class="landing-calculation__signup-main">
-          <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn" />
+          <vue-turnstile :theme="'dark'" :site-key="siteKey" v-model="token" class="captchaTurn" />
 
           <a-input
             bgColor="tetherspecial"
@@ -148,7 +148,7 @@
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
 
-          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
+          <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100 || firstName === '' || lastName === '' || email === '' || phone === ''" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
           <div class="landing-calculation__error-message">
             <p v-if="buyAmountOriginal < 100">The minimum investment amount must be at least 100</p>
           </div>
