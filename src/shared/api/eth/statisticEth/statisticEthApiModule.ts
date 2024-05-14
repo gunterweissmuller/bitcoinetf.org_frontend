@@ -163,6 +163,66 @@ export default class StatisticEthApiModule {
     }
   }
 
+  async getPersonalStats(payload?:any) {
+
+    try {
+      let filtersQuery = ''
+
+      if (payload?.filters) {
+        Object.entries(payload.filters).forEach(([key, value]) => {
+          if (value) {
+            filtersQuery += `${key}=${value}&`
+          }
+        })
+      }
+
+      return await this.adapter.requestJsonAsync({
+        apiVersion: ApiVersion.V1,
+        parameterValue: `billing/payment/dividends/personal/period${filtersQuery}`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Method for obtaining personal statistics',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getPersonalStatsReferrals(payload?:any) {
+
+    try {
+      let filtersQuery = ''
+
+      if (payload?.filters) {
+        Object.entries(payload.filters).forEach(([key, value]) => {
+          if (value) {
+            filtersQuery += `${key}=${value}&`
+          }
+        })
+      }
+
+      return await this.adapter.requestJsonAsync({
+        apiVersion: ApiVersion.V1,
+        parameterValue: `billing/payment/referrals/personal/period${filtersQuery}`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Method for obtaining personal statistics referrals',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async getShareholders(payload: any) {
     try {
       return await this.adapter.requestJsonAsync({

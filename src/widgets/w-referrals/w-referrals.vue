@@ -72,17 +72,17 @@
       <ul class="w-referrals__stats w-referrals__stats--desktop">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">$547</div>
+          <div class="w-referrals__stat-value">${{ personalReferralStats?.sum_referrals || 0 }}</div>
           <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
-          <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">148</div>
+          <div class="w-referrals__stat-heading">Invited investors</div>
+          <div class="w-referrals__stat-value">{{ personalReferralStats?.invited_investors || 0 }}</div>
           <img src="/img/referrals/invited.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
-          <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">58</div>
+          <div class="w-referrals__stat-heading">Accepted invitations</div>
+          <div class="w-referrals__stat-value">{{ personalReferralStats?.accepted_invitation || 0 }}</div>
           <img src="/img/referrals/accepted.png" class="w-referrals__stat-img" />
         </li>
       </ul>
@@ -167,17 +167,17 @@
       <ul class="w-referrals__stats w-referrals__stats--mobile">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">$547</div>
+          <div class="w-referrals__stat-value">${{ personalReferralStats?.sum_referrals || 0 }}</div>
           <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
-          <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">148</div>
+          <div class="w-referrals__stat-heading">Invited investors</div>
+          <div class="w-referrals__stat-value">{{ personalReferralStats?.invited_investors || 0 }}</div>
           <img src="/img/referrals/invited.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
-          <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">58</div>
+          <div class="w-referrals__stat-heading">Accepted invitations</div>
+          <div class="w-referrals__stat-value">{{ personalReferralStats?.accepted_invitation || 0 }}</div>
           <img src="/img/referrals/accepted.png" class="w-referrals__stat-img" />
         </li>
       </ul>
@@ -267,6 +267,7 @@ const shareSocials = [
   },
 ]
 
+const personalReferralStats = ref(null)
 const shareCurrentName = ref<string>(shareSocials[0].name)
 const shareCurrentSocial = computed(
   () => shareSocials.find((social) => social.name === shareCurrentName.value) ?? shareSocials[0],
@@ -373,6 +374,12 @@ const getPersonalReferrals = async (initial) => {
     })
 }
 
+const getPersonalReferralsStats = async () => {
+  const { data } = await $app.api.eth.statisticEth
+    .getPersonalStatsReferrals()
+  personalReferralStats.value = data
+}
+
 const withdrawalReferrals = async () => {
   $app.api.eth.billingEth
     .withdrawalReferrals()
@@ -395,6 +402,8 @@ const centrifugeToken = config.public.WS_TOKEN
 onMounted(async () => {
   await getWalletReferrals()
   await getPersonalReferrals()
+
+  getPersonalReferralsStats()
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken,

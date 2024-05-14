@@ -4,11 +4,7 @@
       <div class="w-dividends__amount">
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
-          <div class="w-dividends__amount-sum">
-            ${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}
-            <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
-              >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
-            >
+          <div class="w-dividends__amount-sum">${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
           </div>
           <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
@@ -36,7 +32,7 @@
               Add Withdrawal Method
             </div>
           </div>
-          
+
         </div>
 
         <div v-else class="w-dividends__cards-item w-dividends__cards-item-withdraw">
@@ -58,7 +54,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="w-dividends__cards-item w-dividends__cards-item-dividends">
           <div class="w-dividends__cards-header">
             <div class="w-dividends__cards-icon-dollar">
@@ -71,7 +67,7 @@
               TOTAL DIVIDENDS PAID
             </div>
             <div class="w-dividends__cards-title">
-              ${{$app.filters.rounded(tempDividendsEarnedBtc * $app.store.user.btcValue, 2) }}
+              ${{$app.filters.rounded(tempDividendsEarnedBtc, 2) }}
             </div>
           </div>
           <div class="w-dividends__cards-footer">
@@ -89,7 +85,7 @@
         <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
         <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
       </button>
-      
+
       <div v-else class="w-dividends__amount-method" @click="openModal">
         <div class="w-dividends__amount-method__wrap">
           <a-icon width="24" height="24" class="w-dividends__amount-method__icon" :name="typeMethodIcon" />
@@ -486,11 +482,11 @@ onMounted(() => {
   if(countDownDate - time.getTime() > senondsDay) {
     countDownDate = time.getTime()-secondsNow+secondsEnd+timeZone;
   }
-  
+
 
   // Update the count down every 1 second
   const x = setInterval(function() {
-    
+
     const now = new Date().getTime();
     // Find the distance between now and the count down date
     const distance = countDownDate - now;
@@ -529,11 +525,11 @@ const timerStyle = computed(() => {
 
 // time dropdown
 
-const tempDividendsEarnedBtc = ref($app.store.user.statistic?.dividends_earned_btc || 0);
+const tempDividendsEarnedBtc = ref(0);
 
 onMounted(() => {
-  $app.api.eth.statisticEth.getGlobalStats().then((res) => {
-    tempDividendsEarnedBtc.value = res.data.dividends_earned_btc;
+  $app.api.eth.statisticEth.getPersonalStats().then((res) => {
+    tempDividendsEarnedBtc.value = res.data.sum_dividends;
   })
 })
 
@@ -549,15 +545,27 @@ const getTotalDividendsPaid = (time : any) => {
   })
 }
 
+const getTotalDividendsPaidPersonal = (time : any) => {
+  const filterObj : Record<string, any> = {}
+
+  if (time !== 'all') {
+    filterObj.days = time;
+  }
+
+  $app.api.eth.statisticEth.getPersonalStats({ filters: filterObj }).then((res) => {
+    tempDividendsEarnedBtc.value = res.data.sum_dividends;
+  })
+}
+
 const timeOptions = [
-  {value : "All time", callback: () => getTotalDividendsPaid('all')},
-  {value : "1 year", callback: () => getTotalDividendsPaid(365)},
-  {value : "6 months", callback: () => getTotalDividendsPaid(180)},
-  {value : "3 months", callback: () => getTotalDividendsPaid(90)},
-  {value : "1 month", callback: () => getTotalDividendsPaid(30)},
-  {value : "1 week", callback: () => getTotalDividendsPaid(7)},
-  {value : "7 days", callback: () => getTotalDividendsPaid(7)},
-  {value : "24 hours", callback: () => getTotalDividendsPaid(1)},
+  {value : "All time", callback: () => getTotalDividendsPaidPersonal('all')},
+  {value : "1 year", callback: () => getTotalDividendsPaidPersonal(365)},
+  {value : "6 months", callback: () => getTotalDividendsPaidPersonal(180)},
+  {value : "3 months", callback: () => getTotalDividendsPaidPersonal(90)},
+  {value : "1 month", callback: () => getTotalDividendsPaidPersonal(30)},
+  {value : "1 week", callback: () => getTotalDividendsPaidPersonal(7)},
+  {value : "7 days", callback: () => getTotalDividendsPaidPersonal(7)},
+  {value : "24 hours", callback: () => getTotalDividendsPaidPersonal(1)},
 ]
 
 const methods = [
