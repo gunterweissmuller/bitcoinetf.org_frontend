@@ -52,7 +52,6 @@ export default defineNuxtRouteMiddleware((to) => {
 
 
   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
-    console.log(to.name)
     return navigateTo({name: 'personal-login'})
   }
 

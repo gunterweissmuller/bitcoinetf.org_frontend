@@ -12,8 +12,6 @@
     const router = useRouter()
 
     onMounted(()=>{
-        console.log(location.search);
-
         router.push(`/personal/login${location.search}`);
     })
 </script>

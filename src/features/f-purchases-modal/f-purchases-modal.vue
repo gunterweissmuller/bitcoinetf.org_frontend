@@ -113,7 +113,7 @@ const view = () => {
 }
 
 const issuing = () => {
-  window.open('${explorerHostname}/account/' + purchase.value.transaction_hash)
+  window.open('${explorerHostname}/transaction/' + purchase.value.transaction_hash)
 }
 const close = () => {
   isOpenModal.value = false

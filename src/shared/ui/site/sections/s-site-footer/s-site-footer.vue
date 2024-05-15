@@ -177,7 +177,7 @@ onMounted(() => {
     animation.text = animation.text == 'bitcoin' ? 'usdt' : 'bitcoin'
     $animationWrapper.value?.classList?.add('active')
     setTimeout(() => {
-      $animationWrapper.value.classList.remove('active')
+      $animationWrapper.value?.classList.remove('active')
     }, 2500)
   }, 5000)
 })

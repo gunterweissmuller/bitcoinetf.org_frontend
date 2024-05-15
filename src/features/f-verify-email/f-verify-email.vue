@@ -12,7 +12,6 @@
     const router = useRouter()
 
     onMounted(()=>{
-        console.log(location.search, localStorage.getItem('verifyLinkRedirect')?.search('/tetherspecial'));
 
         if(localStorage.getItem('verifyLinkRedirect')?.search('/tetherspecial') !== -1) {
           localStorage.removeItem('googleRedirect');
