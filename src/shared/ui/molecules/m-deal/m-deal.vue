@@ -211,7 +211,7 @@ const props = withDefaults(
   },
 )
 
-if (props.type === 'asset') console.log(props.deal)
+// if (props.type === 'asset') console.log(props.deal)
 
 const btcValue = computed(() => {
   return props.deal?.bitcoin_price || $app.store.user.btcValue

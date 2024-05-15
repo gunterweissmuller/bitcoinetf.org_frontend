@@ -55,12 +55,19 @@ import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.v
 import WTrades from '~/src/widgets/w-trades/w-trades.vue';
 import WActivity from '~/src/widgets/w-activity/w-activity.vue';
 import WNews from '~/src/widgets/w-news/w-news.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp();
 const route = useRoute();
+const router = useRouter();
+
+onMounted(() => {
+  if(!route.params?.symbol) {
+    router.push('/personal/assets/baa');
+  }
+})
 
 const assets = computed(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
@@ -73,6 +80,7 @@ if (route.params.symbol === undefined || route.name === 'personal-assets') {
     watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
   }
 }
+
 
 const symbol = computed<string>(() => {
   return Array.isArray(route.params.symbol) ? route.params.symbol[0] : route.params.symbol;
