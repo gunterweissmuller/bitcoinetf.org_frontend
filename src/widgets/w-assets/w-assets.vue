@@ -1,5 +1,5 @@
 <template>
-  <div class="w-assets page-max-width--big" v-if="route.params.symbol !== undefined">
+  <div class="w-assets page-max-width--big" v-if="route.params?.symbol !== undefined">
     <m-slider
       class="w-assets__info"
       id="w-assets__info-slider"
@@ -63,17 +63,12 @@ const { $app } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
 
-onMounted(() => {
-  if(!route.params?.symbol) {
-    router.push('/personal/assets/baa');
-  }
-})
 
 const assets = computed(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
 });
 
-if (route.params.symbol === undefined || route.name === 'personal-assets') {
+if (route.params?.symbol === undefined || route.name === 'personal-assets') {
   if (assets.value) {
     navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
   } else {
@@ -83,7 +78,7 @@ if (route.params.symbol === undefined || route.name === 'personal-assets') {
 
 
 const symbol = computed<string>(() => {
-  return Array.isArray(route.params.symbol) ? route.params.symbol[0] : route.params.symbol;
+  return Array.isArray(route.params?.symbol) ? route.params?.symbol[0] : route.params?.symbol;
 });
 
 const asset = computed<IAsset | undefined>(() => {
