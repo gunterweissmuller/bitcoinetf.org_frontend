@@ -420,6 +420,74 @@ onMounted(() => {
       })
   }
 
+  // facebook
+
+  const handleFacebookConnect = () => {
+    
+    const initFacebook = async (id) => {
+      (window as any).FB.init({
+        appId: id, //You will need to change this
+        cookie: true, // This is important, it's not enabled by default
+        version: "v13.0"
+      });
+    }
+
+    $app.api.eth.auth
+    .getCredintialsFacebook()
+    .then(async (res) => {
+      console.log(res);
+
+      await initFacebook(res?.data?.client_id);
+
+      (window as any).FB.login(function(response) {
+        console.log(response);
+        if (response?.authResponse) {
+          $app.store.authTemp.response = response.authResponse;
+
+          $app.api.eth.auth
+          .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+          .then(async (res) => {
+            console.log(res);
+
+            if(res.data.auth_type === 'registration') {
+                router.push("/personal/registration");
+              } else {
+                $app.api.eth.auth.
+                  loginFacebook({
+                    facebook_id: $app.store.authTemp.response?.userID,
+                    facebook_data: $app.store.authTemp.response?.accessToken,
+                  })
+                    .then((jwtResponse: any) => {
+                      $app.store.auth.setTokens(jwtResponse.data)
+                    })
+                    .then(async () => {
+                      await $app.api.eth.auth.getUser().then((resp) => {
+                        $app.store.user.info = resp?.data
+                      });
+
+                      await router.push('/personal/analytics/performance')
+                    });
+              }
+
+          })
+          .catch((e) => {
+            // Todo: notify something went wrond
+            console.error(e)
+          })
+
+        } else {
+        }
+      });
+
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+
+  }
+
+
   // metamask
 
   isMetamaskSupported.value = typeof (window as any).ethereum !== 'undefined'
@@ -807,6 +875,11 @@ const methods = [
     name: 'Apple',
     img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
     onClick: handleAppleConnect,
+  },
+  {
+    name: 'Facobook',
+    img: '/img/icons/colorful/facebook-circle.svg',
+    onClick: handleFacebookConnect,
   },
 ]
 
