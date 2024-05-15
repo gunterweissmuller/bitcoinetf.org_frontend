@@ -70,10 +70,15 @@ const assets = computed(() => {
 
 onMounted(() => {
   if (route.params?.symbol === undefined || route.name === 'personal-assets') {
+    console.log(assets.value, Boolean(assets.value))
     if (assets.value) {
       navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
     } else {
-      watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
+      console.log("else")
+      watch(assets, () => {
+        console.log("else",assets.value)
+        navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
+      });
     }
   }
 })
