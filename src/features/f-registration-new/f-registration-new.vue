@@ -348,8 +348,6 @@ onMounted(() => {
 
     currentStep.value = Steps.Loading;
 
-    console.log($app.store.auth.accountMethod);
-
     if($app.store.auth.accountMethod === 'metamask') {
 
       $app.api.eth.auth.
@@ -644,7 +642,6 @@ const handleMetamaskConnect = async () => {
 
     const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
 
-    console.log("SIGNED MSG", signedMsg);
     metamaskSignature.value = signedMsg;
     isMetamaskConnecting.value = false;
     currentStep.value = Steps.Email;
@@ -702,7 +699,6 @@ const handleGoogleConnect = async () => {
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
@@ -713,12 +709,10 @@ const handleTelegramAuth = async () => {
   await (window as any).Telegram.Login.auth(
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
-      console.log(tgData);
       if (!tgData) {
         // authorization failed
       } else {
 
-        console.log(tgData);
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -768,12 +762,10 @@ const testTG = async () => {
     { bot_id: telegramBotId.value, request_access: true },
     (tgData: any) => {
       data = tgData;
-      console.log(tgData);
 
       if (!tgData) {
         // authorization failed
       } else {
-        console.log(tgData);
 
         $app.api.eth.auth.telegramGetAuthType({
           telegram_data: JSON.stringify(tgData),
@@ -815,13 +807,12 @@ const testTG = async () => {
 
 const handleTelegramConnect = async () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r);
     telegramRedirectUrl.value = r.data.data.redirect_url;
     telegramBotName.value = r.data.data.bot_name;
     telegramBotId.value = r.data.data.bot_id;
 
     handleTelegramAuth().then((res) => {
-      console.log(res);
+      // console.log(res);
     })
   })
 }
@@ -833,7 +824,6 @@ onMounted(() => {
   $app.api.eth.auth
     .getAppleRedirect()
     .then(async (res) => {
-      console.log(res);
 
       function getJsonFromUrl(url) {
         if(!url) url = location.search;
@@ -848,7 +838,6 @@ onMounted(() => {
 
       const parsedUrl = getJsonFromUrl(res.url);
 
-      console.log(parsedUrl, window.AppleID);
 
       (window as any).AppleID.auth.init({
           clientId : parsedUrl.client_id,
@@ -869,17 +858,14 @@ const handleAppleConnect = async () => {
   try {
       const data = await (window as any).AppleID.auth.signIn()
       // Handle successful response.
-      console.log("test123", data);
 
       $app.store.authTemp.response = data.authorization.id_token;
 
-      console.log($app.store.authTemp.response, $app.api.eth.auth);
 
       
       $app.api.eth.auth
       .getAppleAuthType({apple_token: data.authorization.id_token})
       .then(async (res) => {
-        console.log(res);
 
         if(res.data.auth_type === 'registration') {
 
@@ -984,11 +970,9 @@ const onSubmitEmailForm = async () => {
   //     initPayload.ref_code = refCode.value
   // }
 
-  console.log(currentSignup.value, initPayload.ref_code);
 
   if(currentSignup.value === SignupMethods.Apple) {
 
-    console.log($app.store.authTemp.response);
 
     $app.api.eth.auth
       .initApple({
@@ -1095,7 +1079,6 @@ const onSubmitEmailForm = async () => {
         phone_number: tempPhone,
         phone_number_code: countryCode.value,
       }).then((r: any) => {
-        console.log('ww');
         isSubmitEmailForm.value = false;
         // currentStep.value = Steps.Code;
         currentStep.value = Steps.Link;

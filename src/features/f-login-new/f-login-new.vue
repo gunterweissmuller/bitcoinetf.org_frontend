@@ -309,7 +309,6 @@ const onSubmitEmailForm = () => {
       })
 
       await $app.store.auth.reInitData()
-      console.log('from here')
       router.push('/personal/fund/portfolio')
     })
     .catch((e) => {
@@ -335,7 +334,6 @@ const onSubmitOneTimeLink = () => {
   $app.api.eth.auth
     .initOneTimeLink({ email: $app.filters.trimSpaceIntoString(email.value) })
     .then((res: any) => {
-      console.log('res', res)
       isSubmitOneTimeLink.value = false
       currentStep.value = Steps.Check
       startTimer()
@@ -426,7 +424,6 @@ onMounted(() => {
 
   if (isMetamaskSupported.value) {
     ;(window as any).ethereum.on('chainChanged', (chainId: string) => {
-      console.log(chainId)
       if (chainId !== '0x1') {
         metamaskError.value = 'This network is not supported. Please change the network to Ethereum.'
       } else if (chainId === '0x1') {
@@ -468,11 +465,9 @@ const telegramBotId = ref('')
 
 const handleTelegramAuth = async () => {
   ;(window as any).Telegram.Login.auth({ bot_id: telegramBotId.value, request_access: true }, (tgData: any) => {
-    console.log(tgData)
     if (!tgData) {
       // authorization failed
     } else {
-      console.log(tgData)
 
       $app.api.eth.auth
         .telegramGetAuthType({
@@ -507,7 +502,6 @@ const handleTelegramAuth = async () => {
 
 onMounted(() => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r)
     telegramRedirectUrl.value = r.data.data.redirect_url
     telegramBotName.value = r.data.data.bot_name
     telegramBotId.value = r.data.data.bot_id
@@ -526,12 +520,10 @@ const testTG = async () => {
 
   await (window as any).Telegram.Login.auth({ bot_id: telegramBotId.value, request_access: true }, (tgData: any) => {
     data = tgData
-    console.log(tgData)
 
     if (!tgData) {
       // authorization failed
     } else {
-      console.log(tgData)
 
       $app.api.eth.auth
         .telegramGetAuthType({
@@ -568,13 +560,12 @@ const testTG = async () => {
 
 const handleTelegramConnect = () => {
   axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-    console.log(r)
     telegramRedirectUrl.value = r.data.data.redirect_url
     telegramBotName.value = r.data.data.bot_name
     telegramBotId.value = r.data.data.bot_id
 
     handleTelegramAuth().then((res) => {
-      console.log(res)
+      // console.log(res)
     })
   })
 }
@@ -585,7 +576,6 @@ onMounted(() => {
   $app.api.eth.auth
     .getAppleRedirect()
     .then(async (res) => {
-      console.log(res)
 
       function getJsonFromUrl(url) {
         if (!url) url = location.search
@@ -600,7 +590,6 @@ onMounted(() => {
 
       const parsedUrl = getJsonFromUrl(res.url)
 
-      console.log(parsedUrl, window.AppleID)
       ;(window as any).AppleID.auth.init({
         clientId: parsedUrl.client_id,
         scope: parsedUrl.scope,
@@ -618,16 +607,13 @@ const handleAppleConnect = async () => {
   try {
     const data = await (window as any).AppleID.auth.signIn()
     // Handle successful response.
-    console.log('test123', data)
 
     $app.store.authTemp.response = data.authorization.id_token
 
-    console.log($app.store.authTemp.response, $app.api.eth.auth)
 
     $app.api.eth.auth
       .getAppleAuthType({ apple_token: data.authorization.id_token })
       .then(async (res) => {
-        console.log(res)
 
         if (res.data.auth_type === 'registration') {
           router.push('/personal/registration')

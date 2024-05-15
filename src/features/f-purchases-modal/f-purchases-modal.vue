@@ -5,19 +5,19 @@
       <div class="w-purchases__modal__list">
         <div class="w-purchases__modal__item">
           <div class="w-purchases__modal__item-title">Basis in USD</div>
-          <div class="w-purchases__modal__item-number">${{ $app.filters.rounded(purchase.amount) }}</div>
+          <div class="w-purchases__modal__item-number">${{ $app.filters.rounded(purchase?.amount) }}</div>
         </div>
         <div class="w-purchases__modal__item">
           <div class="w-purchases__modal__item-title">Basis in {{ actualValue }}</div>
           <div
             class="w-purchases__modal__item-number"
-            v-html="$app.filters.convertValue($app.filters.rounded(purchase.amount_in_btc, 8))"
+            v-html="$app.filters.convertValue($app.filters.rounded(purchase?.amount_in_btc, 8))"
           ></div>
         </div>
         <div class="w-purchases__modal__item">
           <div class="w-purchases__modal__item-title">Current value</div>
           <div class="w-purchases__modal__item-number">
-            ${{ $app.filters.rounded(purchase.amount) }}
+            ${{ $app.filters.rounded(purchase?.amount) }}
           </div>
         </div>
         <div class="w-purchases__modal__item">
@@ -27,26 +27,26 @@
         <div class="w-purchases__modal__item">
           <div class="w-purchases__modal__item-title">Ends:</div>
           <div class="w-purchases__modal__item-number">
-            {{ $app.filters.dayjs(purchase.created_at).add(3, 'year').add(1,'day').format('DD MMM YYYY') }}
+            {{ $app.filters.dayjs(purchase?.created_at).add(3, 'year').add(1,'day').format('DD MMM YYYY') }}
           </div>
         </div>
         <div class="w-purchases__modal__item">
           <div class="w-purchases__modal__item-title">Status:</div>
-          <div class="w-purchases__modal__item-number">{{ purchase.status }}</div>
+          <div class="w-purchases__modal__item-number">{{ purchase?.status }}</div>
         </div>
       </div>
-      <a :href="`${explorerHostname}/account/${purchase.account.blockchain_wallet_address}`" target="_blank">
+      <a :href="`${explorerHostname}/account/${purchase?.account?.blockchain_wallet_address}`" target="_blank">
         <a-button
-          v-if="purchase.account.blockchain_wallet_address"
+          v-if="purchase?.account?.blockchain_wallet_address"
           :icon="Icon.MonoLink"
           class="f-purchases-modal__view f-purchases-modal__btn"
           text="View on Blockchain"
           @click="view"
         />
       </a>
-      <a :href="`${explorerHostname}/transaction/${purchase.transaction_hash}`" target="_blank">
+      <a :href="`${explorerHostname}/transaction/${purchase?.transaction_hash}`" target="_blank">
         <a-button
-          v-if="purchase.transaction_hash"
+          v-if="purchase?.transaction_hash"
           :icon="Icon.MonoLink"
           class="f-purchases-modal__issuing f-purchases-modal__btn"
           text="Issuing Transaction"
@@ -109,11 +109,11 @@ const actualValue = computed(() => {
 })
 
 const view = () => {
-  window.open('${explorerHostname}/account/' + purchase.value.account.blockchain_wallet_address)
+  window.open('${explorerHostname}/account/' + purchase?.value?.account?.blockchain_wallet_address)
 }
 
 const issuing = () => {
-  window.open('${explorerHostname}/account/' + purchase.value.transaction_hash)
+  window.open('${explorerHostname}/transaction/' + purchase?.value?.transaction_hash)
 }
 const close = () => {
   isOpenModal.value = false

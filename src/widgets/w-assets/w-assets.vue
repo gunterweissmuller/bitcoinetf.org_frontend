@@ -1,5 +1,5 @@
 <template>
-  <div class="w-assets page-max-width--big" v-if="route.params.symbol !== undefined">
+  <div class="w-assets page-max-width--big" v-if="route.params?.symbol !== undefined">
     <m-slider
       class="w-assets__info"
       id="w-assets__info-slider"
@@ -55,27 +55,32 @@ import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.v
 import WTrades from '~/src/widgets/w-trades/w-trades.vue';
 import WActivity from '~/src/widgets/w-activity/w-activity.vue';
 import WNews from '~/src/widgets/w-news/w-news.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp();
 const route = useRoute();
+const router = useRouter();
+
 
 const assets = computed(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
 });
 
-if (route.params.symbol === undefined || route.name === 'personal-assets') {
-  if (assets.value) {
-    navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
-  } else {
-    watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
+onMounted(() => {
+  if (route.params?.symbol === undefined || route.name === 'personal-assets') {
+    if (assets.value) {
+      navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
+    } else {
+      watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
+    }
   }
-}
+})
+
 
 const symbol = computed<string>(() => {
-  return Array.isArray(route.params.symbol) ? route.params.symbol[0] : route.params.symbol;
+  return Array.isArray(route.params?.symbol) ? route.params?.symbol[0] : route.params?.symbol;
 });
 
 const asset = computed<IAsset | undefined>(() => {
