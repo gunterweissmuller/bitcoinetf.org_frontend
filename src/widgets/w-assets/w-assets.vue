@@ -68,13 +68,15 @@ const assets = computed(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
 });
 
-if (route.params?.symbol === undefined || route.name === 'personal-assets') {
-  if (assets.value) {
-    navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
-  } else {
-    watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
+onMounted(() => {
+  if (route.params?.symbol === undefined || route.name === 'personal-assets') {
+    if (assets.value) {
+      navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
+    } else {
+      watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
+    }
   }
-}
+})
 
 
 const symbol = computed<string>(() => {
