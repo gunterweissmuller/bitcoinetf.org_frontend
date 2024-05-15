@@ -35,12 +35,5 @@
     }
   }
 
-  .m-slider {
-    display: none;
-
-    @include breakpoint($break-desktop-1024) {
-      display: block;
-    }
-  }
 }
 
