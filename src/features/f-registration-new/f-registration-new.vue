@@ -507,6 +507,58 @@ onMounted(() => {
             backendError.value = {value: 'Something went wrong', field: 'default'};
           }
       })
+    } else if ($app.store.auth.accountMethod === 'facebook') {
+      backendError.value = {value: '', field: 'default'};
+
+      $app.api.eth.auth.
+        confirmFacebook({
+          facebook_id: $app.store.authTemp.response?.userID,
+          email: $app.filters.trimSpaceIntoString(email.value),
+          code: $app.filters.trimSpaceIntoString(emailCode.value),
+        })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data)
+          confirmResponse.value = jwtResponse.data;
+          currentStep.value = Steps.Success;
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data;
+            setTimeout(() => {
+              router.push('/personal/fund/portfolio');
+            },3000);
+          });
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+              //window.localStorage.removeItem('a_aid');
+              //window.localStorage.removeItem('a_utm');
+            });
+          }
+        })
+        .catch((e) => {
+          isCodeContinueProcess.value = false;
+          if (e?.errors?.error?.message) {
+            backendError.value = {value: e.errors.error.message, field: 'default'};
+
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
+          } else {
+            backendError.value = {value: 'Something went wrong', field: 'default'};
+          }
+        })
     } else {
       // email
 
@@ -922,6 +974,74 @@ const handleAppleConnect = async () => {
 
 }
 
+//facebook
+
+const handleFacebookConnect = async () => {
+
+  const initFacebook = async (id) => {
+      (window as any).FB.init({
+        appId: id, //You will need to change this
+        cookie: true, // This is important, it's not enabled by default
+        version: "v13.0"
+      });
+    }
+
+    $app.api.eth.auth
+    .getCredintialsFacebook()
+    .then(async (res) => {
+      console.log(res);
+
+      await initFacebook(res?.data?.client_id);
+
+      (window as any).FB.login(function(response) {
+        console.log(response);
+        if (response?.authResponse) {
+          $app.store.authTemp.response = response.authResponse;
+
+          $app.api.eth.auth
+          .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+          .then(async (res) => {
+            console.log(res);
+
+            if(res.data.auth_type === 'registration') {
+                currentStep.value = Steps.Email;
+                currentSignup.value = SignupMethods.Facebook;
+              } else {
+                $app.api.eth.auth.
+                  loginFacebook({
+                    facebook_id: $app.store.authTemp.response?.userID,
+                    facebook_data: $app.store.authTemp.response?.accessToken,
+                  })
+                    .then((jwtResponse: any) => {
+                      $app.store.auth.setTokens(jwtResponse.data)
+                    })
+                    .then(async () => {
+                      await $app.api.eth.auth.getUser().then((resp) => {
+                        $app.store.user.info = resp?.data
+                      });
+
+                      await router.push('/personal/analytics/performance')
+                    });
+              }
+
+          })
+          .catch((e) => {
+            // Todo: notify something went wrond
+            console.error(e)
+          })
+
+        } else {
+        }
+      });
+
+    })
+    .catch((e) => {
+      // Todo: notify something went wrond
+      console.error(e)
+    })
+}
+
+
 
 // Ref code field
 const emailCode = ref('')
@@ -969,6 +1089,43 @@ const onSubmitEmailForm = async () => {
   // if (refCode.value ) {
   //     initPayload.ref_code = refCode.value
   // }
+
+
+  if(currentSignup.value === SignupMethods.Facebook) {
+
+    $app.api.eth.auth
+      .initFacebook({
+        facebook_id: $app.store.authTemp.response?.userID,
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+        isSubmitEmailForm.value = false;
+        currentStep.value = Steps.Link;
+        $app.store.auth.accountMethod = "facebook";
+    }).catch((e) => {
+      isSubmitEmailForm.value = false;
+      if (e?.errors?.error?.message) {
+        backendError.value = {value: e.errors.error.message, field: 'default'};
+
+        if(e?.errors?.error?.validation) {
+          if(e?.errors?.error?.validation?.first_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+          }
+          if(e?.errors?.error?.validation?.last_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+          }
+        }
+      } else {
+        backendError.value = {value: 'Something went wrong', field: 'default'};
+      }
+    })
+
+    return;
+  }
 
 
   if(currentSignup.value === SignupMethods.Apple) {
@@ -1374,7 +1531,56 @@ const codeContinue = async () => {
             backendError.value = {value: 'Something went wrong', field: 'default'};
           }
       })
-  }else {
+  } else if (currentSignup.value === SignupMethods.Facebook) {
+    backendError.value = {value: '', field: 'default'};
+
+    await $app.api.eth.auth.
+      confirmFacebook({
+        facebook_id: $app.store.authTemp.response?.userID,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(emailCode.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data;
+          router.push('/personal/fund/portfolio');
+        });
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+          backendError.value = {value: e.errors.error.message, field: 'default'};
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
+        } else {
+          backendError.value = {value: 'Something went wrong', field: 'default'};
+        }
+      })
+  } else {
     currentStep.value = Steps.Password
   }
   isCodeContinueProcess.value = false;
@@ -1533,6 +1739,11 @@ const methods = [
     name: 'Apple',
     img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
     onClick: handleAppleConnect
+  },
+  {
+    name: 'Facebook',
+    img: '/img/icons/colorful/facebook-circle.svg',
+    onClick: handleFacebookConnect
   },
 ]
 </script>

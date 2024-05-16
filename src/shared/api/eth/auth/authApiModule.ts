@@ -638,4 +638,104 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  async getCredintialsFacebook() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/credentials`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getAuthTypeFacebook(payload: { facebook_id: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/get-auth-type`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initFacebook(payload: any) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/init`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async confirmFacebook(payload: { facebook_id: string, email: string; code: string; }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/confirm`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginFacebook(payload: { facebook_id: string, facebook_data: any}) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/login`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
 }

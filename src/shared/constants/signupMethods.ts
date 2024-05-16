@@ -4,4 +4,5 @@ export const enum SignupMethods {
     Google = 'Google',
     Apple = 'Apple',
     Telegram = 'Telegram',
+    Facebook = 'Facebook',
   }
