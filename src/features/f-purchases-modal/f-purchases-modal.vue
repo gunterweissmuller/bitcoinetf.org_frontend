@@ -11,7 +11,7 @@
           <div class="w-purchases__modal__item-title">Basis in {{ actualValue }}</div>
           <div
             class="w-purchases__modal__item-number"
-            v-html="$app.filters.convertValue($app.filters.rounded(purchase?.amount_in_btc, 8))"
+            v-html="$app.filters.convertValue($app.filters.rounded(purchase?.amount_in_btc, 6))"
           ></div>
         </div>
         <div class="w-purchases__modal__item">
@@ -27,7 +27,7 @@
         <div class="w-purchases__modal__item">
           <div class="w-purchases__modal__item-title">Ends:</div>
           <div class="w-purchases__modal__item-number">
-            {{ $app.filters.dayjs(purchase?.created_at).add(3, 'year').add(1,'day').format('DD MMM YYYY') }}
+            {{ $app.filters.dayjs(purchase?.created_at).add(3, 'year').add(1,'day').format('DD MMM YY') }}
           </div>
         </div>
         <div class="w-purchases__modal__item">
