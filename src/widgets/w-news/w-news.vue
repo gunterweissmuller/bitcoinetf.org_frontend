@@ -8,7 +8,7 @@
     </div>
     <div class="w-news__wrap">
       <m-slider
-        v-show="blogPosts?.length"
+        v-show="blogPosts.length"
         id="news-performance"
         :modules="[]"
         :navigation="false"
@@ -89,6 +89,7 @@ const getBlogNews = async (page : number = 1) => {
     .$app.api.eth.news.getGhostBlogs( blogConfig(page) )
     .then(({ data } : { data: Blog }) => {
       blogPosts.value = data.posts;
+      console.log(blogPosts.value);
     });
 }
 

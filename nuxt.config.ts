@@ -5,6 +5,7 @@ const stripScssMarkerLocal = '/* STYLES STRIP IMPORTS MARKER */'
 const stripScssMarker = process.env.NODE_ENV === 'production' ? stripScssMarkerProd : stripScssMarkerLocal
 export default defineNuxtConfig({
   ssr: false,
+  debug: true,
   app: {
     head: {
       title: 'BitcoinETF',

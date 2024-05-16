@@ -178,7 +178,7 @@ export default class StatisticEthApiModule {
 
       return await this.adapter.requestJsonAsync({
         apiVersion: ApiVersion.V1,
-        parameterValue: `billing/payment/dividends/personal/period${filtersQuery}`,
+        parameterValue: `billing/payment/dividends/personal/period?${filtersQuery}`,
         request: {
           method: HTTPMethod.GET,
         },
@@ -208,7 +208,7 @@ export default class StatisticEthApiModule {
 
       return await this.adapter.requestJsonAsync({
         apiVersion: ApiVersion.V1,
-        parameterValue: `billing/payment/referrals/personal/period${filtersQuery}`,
+        parameterValue: `billing/payment/referrals/personal/period?${filtersQuery}`,
         request: {
           method: HTTPMethod.GET,
         },

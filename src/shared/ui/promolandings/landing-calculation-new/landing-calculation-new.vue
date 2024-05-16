@@ -58,6 +58,10 @@
             <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
+<!--          <div @click="handleFacebookConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Facebook}]">-->
+<!--            <nuxt-img src="/img/icons/colorful/facebook-circle.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>-->
+<!--          </div>-->
+
         </div>
         <div class="landing-calculation__signup-line"></div>
       </div>
@@ -67,10 +71,10 @@
           <vue-turnstile :theme="'dark'" :site-key="siteKey" v-model="token" class="captchaTurn" />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
-          
+
           <a-input bgColor="tetherspecial" :disabled="dataDisabled || isMainInputDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
-          
+
           <vue-tel-input :disabled="dataDisabled || isMainInputDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
 
@@ -137,7 +141,7 @@
 
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="lastName" label="Last Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-last-name" />
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
-          
+
           <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
 
@@ -282,7 +286,7 @@ onMounted(()=>{
           // TODO falling user/me
           $app.store.auth.setTokens(jwtResponse.data)
           confirmResponse.value = jwtResponse.data
-      
+
         })
         .then(async () => {
           await $app.api.eth.auth.getUser().then((resp) => {
@@ -308,7 +312,7 @@ onMounted(()=>{
         .catch((e) => {
           isCodeContinueProcess.value = false;
           if (e?.errors?.error?.message) {
-            backendError.value = {value: e.errors.error.message, field: 'default'} 
+            backendError.value = {value: e.errors.error.message, field: 'default'}
 
             if(e?.errors?.error?.validation) {
               if(e?.errors?.error?.validation?.first_name) {
@@ -319,7 +323,7 @@ onMounted(()=>{
               }
             }
           } else {
-            backendError.value = {value: 'Something went wrong', field: 'default'} 
+            backendError.value = {value: 'Something went wrong', field: 'default'}
           }
         })
 
@@ -334,7 +338,7 @@ onMounted(()=>{
       // TODO falling user/me
       $app.store.auth.setTokens(jwtResponse.data)
       confirmResponse.value = jwtResponse.data
-  
+
     })
     .then(async () => {
       await $app.api.eth.auth.getUser().then((resp) => {
@@ -360,7 +364,7 @@ onMounted(()=>{
     .catch((e) => {
       isCodeContinueProcess.value = false;
       if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             if(e?.errors?.error?.validation?.first_name) {
@@ -371,7 +375,7 @@ onMounted(()=>{
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
     })
     } else if ($app.store.auth.accountMethod === 'apple') {
@@ -385,7 +389,7 @@ onMounted(()=>{
       // TODO falling user/me
       $app.store.auth.setTokens(jwtResponse.data)
       confirmResponse.value = jwtResponse.data
-      
+
     })
     .then(async () => {
       await $app.api.eth.auth.getUser().then((resp) => {
@@ -411,7 +415,7 @@ onMounted(()=>{
     .catch((e) => {
       isCodeContinueProcess.value = false;
       if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             if(e?.errors?.error?.validation?.first_name) {
@@ -422,10 +426,61 @@ onMounted(()=>{
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
     })
-    } else {
+    } else if ($app.store.auth.accountMethod === 'facebook') {
+    $app.api.eth.auth.
+      confirmFacebook({
+        facebook_id: $app.store.authTemp.response?.userID,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data);
+        confirmResponse.value = jwtResponse.data;
+        // isOpenModal.value = true;
+        dataDisabled.value = true;
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data;
+        });
+
+        signupStep.value = SignupSteps.Default;
+        purchaseStep.value = PurchaseSteps.Purchase;
+        scrollToPurchase();
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
+        }
+      })
+      .catch((e) => {
+        if (e?.errors?.error?.message) {
+          backendError.value = {value: e.errors.error.message, field: 'default'}
+
+          if(e?.errors?.error?.validation) {
+            if(e?.errors?.error?.validation?.first_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            }
+            if(e?.errors?.error?.validation?.last_name) {
+              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+            }
+          }
+        } else {
+          backendError.value = {value: 'Something went wrong', field: 'default'}
+        }
+      })
+  } else {
       $app.api.eth.auth
       .confirmFast({
         email: $app.filters.trimSpaceIntoString(email.value),
@@ -488,7 +543,7 @@ onMounted(()=>{
         isSignupAndBuy.value = false;
         signupStep.value = SignupSteps.Error;
         if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             if(e?.errors?.error?.validation?.first_name) {
@@ -499,7 +554,7 @@ onMounted(()=>{
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
       })
 
@@ -709,7 +764,9 @@ enum SignupMethods {
   Metamask = "Metamask",
   Google = "Google",
   Telegram = "Telegram",
-  Apple = "Apple"
+  Apple = "Apple",
+  Facebook = "Facebook"
+
 }
 
 const signupStep = ref(SignupSteps.Default);
@@ -1185,6 +1242,72 @@ try {
 
 }
 
+// facebook
+
+const handleFacebookConnect = async () => {
+
+  const initFacebook = async (id) => {
+    (window as any).FB.init({
+      appId: id, //You will need to change this
+      cookie: true, // This is important, it's not enabled by default
+      version: "v13.0"
+    });
+  }
+
+  $app.api.eth.auth
+  .getCredintialsFacebook()
+  .then(async (res) => {
+    console.log(res);
+
+    await initFacebook(res?.data?.client_id);
+
+    (window as any).FB.login(function(response) {
+      console.log(response);
+      if (response?.authResponse) {
+        $app.store.authTemp.response = response.authResponse;
+
+        $app.api.eth.auth
+        .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+        .then(async (res) => {
+          console.log(res);
+
+          if(res.data.auth_type === 'registration') {
+            signupStep.value = SignupSteps.Signup;
+            signupMethod.value = SignupMethods.Facebook;
+            scrollToSignupFields();
+            } else {
+              $app.api.eth.auth.
+                loginFacebook({
+                  facebook_id: $app.store.authTemp.response?.userID,
+                  facebook_data: $app.store.authTemp.response?.accessToken,
+                })
+                  .then((jwtResponse: any) => {
+                    $app.store.auth.setTokens(jwtResponse.data)
+                  })
+                  .then(async () => {
+                    await $app.api.eth.auth.getUser().then((resp) => {
+                      $app.store.user.info = resp?.data
+                    });
+                  });
+            }
+
+        })
+        .catch((e) => {
+          // Todo: notify something went wrond
+          console.error(e)
+        })
+
+      } else {
+      }
+    });
+
+  })
+  .catch((e) => {
+    // Todo: notify something went wrond
+    console.error(e)
+  })
+
+}
 
 
 const sendCodeLoading = ref(false)
@@ -1262,7 +1385,7 @@ const sendCode = async () => {
         //isSubmitEmailForm.value = false;
         isMainInputDisabled.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             if(e?.errors?.error?.validation?.first_name) {
@@ -1273,7 +1396,7 @@ const sendCode = async () => {
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
       })
   } else if(signupMethod.value === SignupMethods.Telegram) {
@@ -1292,7 +1415,7 @@ const sendCode = async () => {
     }).catch((e) => {
       isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
-        backendError.value = {value: e.errors.error.message, field: 'default'}  
+        backendError.value = {value: e.errors.error.message, field: 'default'}
 
         if(e?.errors?.error?.validation) {
           if(e?.errors?.error?.validation?.first_name) {
@@ -1303,7 +1426,7 @@ const sendCode = async () => {
           }
         }
       } else {
-        backendError.value = {value: 'Something went wrong', field: 'default'} 
+        backendError.value = {value: 'Something went wrong', field: 'default'}
       }
     })
 
@@ -1332,7 +1455,37 @@ const sendCode = async () => {
           }
         }
       } else {
-        backendError.value = {value: 'Something went wrong', field: 'default'} 
+        backendError.value = {value: 'Something went wrong', field: 'default'}
+      }
+    })
+
+    return;
+  } else if (signupMethod.value === SignupMethods.Facebook) {
+    $app.api.eth.auth
+      .initFacebook({
+        facebook_id: $app.store.authTemp.response?.userID,
+        first_name: firstName.value,
+        last_name: lastName.value,
+        email: email.value,
+        ref_code: $app.store.auth.refCode,
+        phone_number: tempPhone,
+        phone_number_code: countryCode.value,
+      }).then((r: any) => {
+        $app.store.auth.accountMethod = "facebook";
+    }).catch((e) => {
+      if (e?.errors?.error?.message) {
+        backendError.value = {value: e.errors.error.message, field: 'default'}
+
+        if(e?.errors?.error?.validation) {
+          if(e?.errors?.error?.validation?.first_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+          }
+          if(e?.errors?.error?.validation?.last_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+          }
+        }
+      } else {
+        backendError.value = {value: 'Something went wrong', field: 'default'}
       }
     })
 
@@ -1350,7 +1503,7 @@ const sendCode = async () => {
       console.error("ERROR", e);
       if (e?.errors?.error?.message) {
         backendError.value = {value: e.errors.error.message, field: 'default'}
-        
+
         if (e.errors.error.code === 'ETF:011002') {
           //email is already in use
           router.push('/personal/login')
@@ -1365,7 +1518,7 @@ const sendCode = async () => {
             }
           }
       } else {
-        backendError.value = {value: 'Something went wrong', field: 'default'} 
+        backendError.value = {value: 'Something went wrong', field: 'default'}
       }
     })
   }
@@ -1396,7 +1549,7 @@ const signupAndBuy = async () => {
   if(isSignupAndBuy.value) return;
   isSignupAndBuy.value = true;
 
-  backendError.value = {value: '', field: 'default'} 
+  backendError.value = {value: '', field: 'default'}
 
   if(signupMethod.value === SignupMethods.Metamask) {
     await $app.api.eth.auth.
@@ -1458,7 +1611,7 @@ const signupAndBuy = async () => {
       })
       .catch((e) => {
         if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             if(e?.errors?.error?.validation?.first_name) {
@@ -1469,12 +1622,12 @@ const signupAndBuy = async () => {
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
       })
   } else if (signupMethod.value === SignupMethods.Telegram) {
 
-    backendError.value = {value: '', field: 'default'} 
+    backendError.value = {value: '', field: 'default'}
     await $app.api.eth.auth.
       confirmTelegram({
         telegram_data: JSON.stringify($app.store.authTelegram.response),
@@ -1509,7 +1662,7 @@ const signupAndBuy = async () => {
       .catch((e) => {
         isCodeContinueProcess.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             if(e?.errors?.error?.validation?.first_name) {
@@ -1520,11 +1673,11 @@ const signupAndBuy = async () => {
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
       })
   } else if (signupMethod.value === SignupMethods.Apple) {
-    backendError.value = {value: '', field: 'default'} 
+    backendError.value = {value: '', field: 'default'}
 
     await $app.api.eth.auth.
       confirmApple({
@@ -1559,7 +1712,7 @@ const signupAndBuy = async () => {
       })
       .catch((e) => {
         if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             if(e?.errors?.error?.validation?.first_name) {
@@ -1570,7 +1723,7 @@ const signupAndBuy = async () => {
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
       })
   } else {
@@ -1635,7 +1788,7 @@ const signupAndBuy = async () => {
         console.log("CATCH")
         if (e?.errors?.error?.message) {
           console.log(e?.errors?.error?.message)
-          backendError.value = {value: e.errors.error.message, field: 'default'} 
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
           if(e?.errors?.error?.validation) {
             console.log(e?.errors?.error?.message.validation)
@@ -1647,7 +1800,7 @@ const signupAndBuy = async () => {
             }
           }
         } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'} 
+          backendError.value = {value: 'Something went wrong', field: 'default'}
         }
       })
   }
