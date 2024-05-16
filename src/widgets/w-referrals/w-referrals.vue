@@ -24,10 +24,10 @@
 
           <div>
             <div class="w-referrals__amount-name">TOTAL REFERRALS EARNED</div>
-            <div class="w-referrals__amount-price">$0</div>
+            <div class="w-referrals__amount-price">${{ personalReferralStats?.sum_referrals || 0 }}</div>
           </div>
 
-          <a-dropdown @get-current-option="(option: ADropdownOption) => (totalSumCurrentOption = option)" />
+          <m-dropdown :options="timeOptions" />
         </div>
       </div>
 
@@ -201,6 +201,7 @@ import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { Pagination, Navigation } from 'swiper'
 import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-promo-card.vue'
+import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
 
 const isOpenModal = ref(false)
 const isOpenShareModal = ref(false)
@@ -371,9 +372,15 @@ const getPersonalReferrals = async (initial) => {
     })
 }
 
-const getPersonalReferralsStats = async () => {
+const getPersonalReferralsStats = async (time: any) => {
+  const filterObj : Record<string, any> = {}
+
+  if (time !== 'all') {
+    filterObj.days = time;
+  }
+
   const { data } = await $app.api.eth.statisticEth
-    .getPersonalStatsReferrals()
+    .getPersonalStatsReferrals({ filters: filterObj })
   personalReferralStats.value = data
 }
 
@@ -395,6 +402,17 @@ const loadMoreReferrals = async () => {
 const config = useRuntimeConfig()
 const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
+
+const timeOptions = [
+  {value : "All time", callback: () => getPersonalReferralsStats('all')},
+  {value : "1 year", callback: () => getPersonalReferralsStats(365)},
+  {value : "6 months", callback: () => getPersonalReferralsStats(180)},
+  {value : "3 months", callback: () => getPersonalReferralsStats(90)},
+  {value : "1 month", callback: () => getPersonalReferralsStats(30)},
+  {value : "1 week", callback: () => getPersonalReferralsStats(7)},
+  {value : "7 days", callback: () => getPersonalReferralsStats(7)},
+  {value : "24 hours", callback: () => getPersonalReferralsStats(1)},
+]
 
 onMounted(async () => {
   await getWalletReferrals()
