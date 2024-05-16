@@ -418,7 +418,7 @@ onMounted(() => {
       })
   }
 
-  
+
 
 
   // metamask
@@ -490,7 +490,7 @@ function getFbSdk(options) {
 
 
 const handleFacebookConnect = () => {
-    
+
   const initFacebook = async (id) => {
     (window as any).FB.init({
       appId: id, //You will need to change this
@@ -528,7 +528,7 @@ const handleFacebookConnect = () => {
       console.log(resp);
     });
 
-    
+
 
     (window as any).FB.login(function(response) {
       console.log(response);
@@ -922,11 +922,11 @@ const methods = [
     img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
     onClick: handleAppleConnect,
   },
-  {
-    name: 'Facobook',
-    img: '/img/icons/colorful/facebook-circle.svg',
-    onClick: handleFacebookConnect,
-  },
+  // {
+  //   name: 'Facebook',
+  //   img: '/img/icons/colorful/facebook-circle.svg',
+  //   onClick: handleFacebookConnect,
+  // },
 ]
 
 // resend one time link
