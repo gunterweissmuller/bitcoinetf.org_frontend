@@ -509,6 +509,58 @@ onMounted(() => {
             backendError.value = {value: 'Something went wrong', field: 'default'};
           }
       })
+    } else if ($app.store.auth.accountMethod === 'facebook') {
+      backendError.value = {value: '', field: 'default'};
+
+      $app.api.eth.auth.
+        confirmFacebook({
+          facebook_id: $app.store.authTemp.response?.userID,
+          email: $app.filters.trimSpaceIntoString(email.value),
+          code: $app.filters.trimSpaceIntoString(emailCode.value),
+        })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data)
+          confirmResponse.value = jwtResponse.data;
+          currentStep.value = Steps.Success;
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data;
+            setTimeout(() => {
+              router.push('/personal/fund/portfolio');
+            },3000);
+          });
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+              //window.localStorage.removeItem('a_aid');
+              //window.localStorage.removeItem('a_utm');
+            });
+          }
+        })
+        .catch((e) => {
+          isCodeContinueProcess.value = false;
+          if (e?.errors?.error?.message) {
+            backendError.value = {value: e.errors.error.message, field: 'default'};
+
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
+          } else {
+            backendError.value = {value: 'Something went wrong', field: 'default'};
+          }
+        })
     } else {
       // email
 
