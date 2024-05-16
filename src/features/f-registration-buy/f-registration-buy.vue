@@ -243,7 +243,7 @@
                   </a>
                   <p class="f-registration-buy__purchase--processing-text mt-4" v-if="!btnMoonpayActive">Processing payment, please wait</p>
 
-                  <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
+                  <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button" @click="openChat">
                     Having trouble? Contact Support
                   </footer>
                 </div>
@@ -340,7 +340,7 @@ watch(
   () => currentStep.value,
   (step) => {
     backendError.value = ''
-   
+
   },
 )
 
@@ -718,6 +718,12 @@ const togglePurchase = (target: any) => {
 
 const paymentModalClose = () => {
   router.replace({ query: null })
+}
+
+const openChat = () => {
+  if (window?.LiveChatWidget) {
+    window.LiveChatWidget.call('maximize');
+  }
 }
 </script>
 

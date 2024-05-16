@@ -35,18 +35,19 @@
       </div>
       <div class="w-header-auth__controls w-header-auth__controls-desktop">
         <a-button
-          v-if="!isUserAuthenticated"
+          v-if="!isUserAuthenticated && !isResetPage"
           size="small"
           variant="secondary"
           text="Log in"
           @click="$router.push({ name: 'personal-login' })"
         />
         <a-button
-          v-if="!isUserAuthenticated"
+          v-if="!isUserAuthenticated && !isResetPage"
           size="small"
           text="Sign up"
           @click="$router.push({ name: 'personal-registration' })"
         />
+        <div class="w-header-auth__controls--fake" v-if="isResetPage"></div>
         <a-avatar
           v-if="isUserAuthenticated"
           size="32px"
@@ -73,9 +74,14 @@ import { Icon } from '~/src/shared/constants/icons'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 
 const { $app } = useNuxtApp()
+const route = useRoute()
 
 const isUserAuthenticated = computed(() => {
   return $app.store.auth.isUserAuthenticated
+})
+
+const isResetPage = computed(() => {
+  return route.path === '/personal/reset'
 })
 
 const LINKS = [
