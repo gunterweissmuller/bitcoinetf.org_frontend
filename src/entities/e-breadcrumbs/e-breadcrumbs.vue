@@ -52,15 +52,15 @@ const list = computed(() => {
   return props.breadcrumbs ? props.breadcrumbs : breadcrumbsList
 })
 
-const getRouteLink = (crumb) => {
+const getRouteLink = (crumb : string) => {
   let route = {
     title: '',
     link: '',
   }
-
   for (let key in props.routes) {
     if (key.includes(crumb)) {
       route.title = props.routes[key].titleCrumb
+
       route.link = key
       break
     }

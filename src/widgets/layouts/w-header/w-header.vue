@@ -250,7 +250,7 @@ const routeNames = computed(() => ({
   // FIX THIS
   'personal-fund': {
     title: 'Shareholders',
-    titleCrumb: 'Shareholders',
+    titleCrumb: 'Fund',
     breadcrumbs: false,
   },
   'personal-protection': {
@@ -299,21 +299,21 @@ const routeNames = computed(() => ({
     titleCrumb: 'Latest trades',
     breadcrumbs: true,
     urlToBack: 'personal-protection',
-    customBreadcrumbs: ['personal-protection', 'Latest Trades'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Latest Trades'],
   },
   'personal-analytics-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
-    customBreadcrumbs: ['personal-shareholders', 'Latest Purchases'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-shareholders' : 'personal-fund'), 'Latest Purchases'],
   },
   'personal-analytics-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
-    customBreadcrumbs: ['personal-shareholders', 'Top 100 Shareholders'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-shareholders' : 'personal-fund'), 'Top 100 Shareholders'],
   },
   'personal-analytics-portfolio-latest-activity': {
     title: 'Latest activity',
@@ -321,7 +321,7 @@ const routeNames = computed(() => ({
     breadcrumbs: true,
     urlToBack: 'personal-portfolio',
     info: EPageInfoActivity,
-    customBreadcrumbs: ['personal-protection', 'Latest Activity'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Latest Activity'],
   },
   'personal-earnings-statements': {
     title: 'Statements',
