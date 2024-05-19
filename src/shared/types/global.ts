@@ -7,6 +7,8 @@ export interface IAsset {
   apy: string
   symbol: string
   uuid: number
+  name: string
+  description: string
 }
 
 interface IDealActivityType {
