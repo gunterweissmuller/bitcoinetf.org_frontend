@@ -774,7 +774,7 @@
     flex-direction: column;
 
     @include breakpoint($break-desktop-1024) {
-      //flex-direction: row-reverse;
+      flex-direction: row-reverse;
       gap: torem(24);
     }
   }
