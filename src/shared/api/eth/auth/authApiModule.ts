@@ -80,7 +80,6 @@ export default class AuthApiModule {
   }
 
   async initGoogle(payload: { username: string; email: string; refcode?: string, method?: SignupMethods }) {
-
     try {
 
       if(payload?.method === SignupMethods.Google) {
@@ -306,6 +305,25 @@ export default class AuthApiModule {
     }
   }
 
+  async getMessageMetamask() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/message',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Get Metamask message',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async refresh(payload: { refresh_token: string }) {
     try {
       return await this.adapter.requestJsonAsync({
@@ -479,6 +497,25 @@ export default class AuthApiModule {
     }
   }
 
+  async getCredintialsTelegram() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/telegram/credentials',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Receiving telegram credentials',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async getAppleRedirect() {
     try {
       return await this.adapter.requestJsonAsync({
@@ -568,6 +605,25 @@ export default class AuthApiModule {
         },
         data: payload,
         operationDescription: 'Setting a password',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getGoogleRedirectUrl() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/google-auth/redirect-url`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Receiving google redirect url',
         withoutPublic: true,
       })
     } catch (e) {
