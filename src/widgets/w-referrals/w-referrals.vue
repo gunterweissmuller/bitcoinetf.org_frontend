@@ -17,7 +17,7 @@
         <div class="w-referrals__amount-totalsum">
           <div class="w-referrals__amount-caption">
             <div class="w-referrals__amount-share">
-              <a-icon width="14" height="14" :name="Icon.MonoInfo" />
+              <a-icon width="14" height="14" :name="Icon.MonoActionShareSocial" />
             </div>
             <a-live class="w-referrals__amount-live" />
           </div>
@@ -72,17 +72,17 @@
       <ul class="w-referrals__stats w-referrals__stats--desktop">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">${{ personalReferralStats?.sum_referrals || 0 }}</div>
+          <div class="w-referrals__stat-value">${{ totalReferralStats?.sum_referrals || 0 }}</div>
           <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Invited investors</div>
-          <div class="w-referrals__stat-value">{{ personalReferralStats?.invited_investors || 0 }}</div>
+          <div class="w-referrals__stat-value">{{ totalReferralStats?.invited_investors || 0 }}</div>
           <img src="/img/referrals/invited.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Accepted invitations</div>
-          <div class="w-referrals__stat-value">{{ personalReferralStats?.accepted_invitation || 0 }}</div>
+          <div class="w-referrals__stat-value">{{ totalReferralStats?.accepted_invitation || 0 }}</div>
           <img src="/img/referrals/accepted.png" class="w-referrals__stat-img" />
         </li>
       </ul>
@@ -119,9 +119,7 @@
           >
             <template #slides>
               <swiper-slide class="w-referrals__promo-item" v-for="card in referralPromoCards" :key="card.name">
-                <w-referral-promo-card
-                  :data="card"
-                />
+                <w-referral-promo-card :data="card" />
               </swiper-slide>
             </template>
           </m-slider>
@@ -129,7 +127,7 @@
           <div class="w-referrals__comment">
             <div class="w-referrals__comment-caption">COMMENT</div>
             <div class="w-referrals__comment-text">
-              {{ shareData.text }}
+              {{ shareData.description }}
             </div>
           </div>
 
@@ -163,17 +161,17 @@
       <ul class="w-referrals__stats w-referrals__stats--mobile">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">${{ personalReferralStats?.sum_referrals || 0 }}</div>
+          <div class="w-referrals__stat-value">${{ totalReferralStats?.sum_referrals || 0 }}</div>
           <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Invited investors</div>
-          <div class="w-referrals__stat-value">{{ personalReferralStats?.invited_investors || 0 }}</div>
+          <div class="w-referrals__stat-value">{{ totalReferralStats?.invited_investors || 0 }}</div>
           <img src="/img/referrals/invited.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Accepted invitations</div>
-          <div class="w-referrals__stat-value">{{ personalReferralStats?.accepted_invitation || 0 }}</div>
+          <div class="w-referrals__stat-value">{{ totalReferralStats?.accepted_invitation || 0 }}</div>
           <img src="/img/referrals/accepted.png" class="w-referrals__stat-img" />
         </li>
       </ul>
@@ -181,7 +179,7 @@
   </div>
   <e-referral-share-modal v-model="isOpenShareModal" />
   <f-referrals-modal :address="address" :method="method" v-model="isOpenModal" @accept="setMethod" />
-  <!-- <w-onboarding :steps="renderedSteps" next-route-name="personal-bonus" /> -->
+  <w-onboarding :steps="renderedSteps" next-route-name="personal-bonus" v-if="false" />
 </template>
 
 <script setup lang="ts">
@@ -199,9 +197,13 @@ import { useNuxtApp } from '#app'
 import { ADropdownOption, TPromoCardDetails } from '~/src/shared/types/global'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
+//@ts-ignore
 import { Pagination, Navigation } from 'swiper'
 import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-promo-card.vue'
 import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
+import { user } from '~/src/app/store/user'
+
+const userStore = user()
 
 const isOpenModal = ref(false)
 const isOpenShareModal = ref(false)
@@ -230,58 +232,95 @@ const totalSumCurrentOption = ref<ADropdownOption | null>(null)
 const shareData = reactive({
   text: 'Sign up with my link buy Bitcoin ETFs and start earning daily dividends today: choose to earn USDT or BTC!',
   hashtags: '#BitcoinETF #Bitcoin #ETF #Tether',
-  url: 'bitcoinetf.org',
+  url: 'bitcoinetf.org/personal/registration',
+  description: 'Bitcoin ETF that pays dividends: choose to earn USDT or BTC',
 })
+
 const shareSocials = [
   {
-    network: `https://twitter.com/intent/tweet?text=${shareData.text}&url=${shareData.url}`,
     name: 'X',
     icon: Icon.MonoX,
   },
   {
-    network: `https://t.me/share/url?url=${shareData.url}&text=${shareData.text}`,
     name: 'Telegram',
     icon: Icon.MonoTelegram,
   },
   {
-    network: `https://www.facebook.com/sharer/sharer.php?u=${shareData.url}&title=${shareData.text}`,
     name: 'Facebook',
     icon: Icon.MonoFacebook,
   },
   {
-    network: `https://vk.com/share.php?url=${shareData.url}&title=${shareData.text}&noparse=true`,
     name: 'VK',
     icon: Icon.MonoVk,
   },
   {
-    network: `mailto:?subject=BitcoinETF&body=${shareData.url}%0D%0A${shareData.text}`,
     name: 'Email',
     icon: Icon.MonoMailLight,
   },
   {
-    network: `sms:?body=${shareData.text}%0D%0A${shareData.url}`,
     name: 'SMS',
     icon: Icon.MonoMessage,
   },
 ]
 
-const personalReferralStats = ref(null)
+const availableNetworks = {
+  email: 'mailto:?subject=@t&body=@u%0D%0A@d',
+  facebook: 'https://www.facebook.com/sharer/sharer.php?u=@u&title=@t&description=@d&quote=@q&hashtag=@h',
+  sms: 'sms:?body=@t%0D%0A@u%0D%0A@d',
+  telegram: 'https://t.me/share/url?url=@u&text=@t%0D%0A@d',
+  x: 'https://twitter.com/intent/tweet?text=@t&url=@u&hashtags=@h@tu',
+  vk: 'https://vk.com/share.php?url=@u&title=@t&description=@d&image=@m&noparse=true',
+}
+
+const personalReferralStats = ref<any>(null)
+const totalReferralStats = ref<any>(null)
 const shareCurrentName = ref<string>(shareSocials[0].name)
+
+//@ts-ignore
+const referralCode = computed(() => userStore.info?.referrals?.code)
+
+const referralLink = computed(() =>
+  referralCode.value
+    ? window.location.origin + '/personal/registration' + `?referral=${referralCode.value}`
+    : window.location.origin + '/personal/registration',
+)
+
 const shareCurrentSocial = computed(
   () => shareSocials.find((social) => social.name === shareCurrentName.value) ?? shareSocials[0],
 )
+const rawLink = computed(() => {
+  const ua = navigator.userAgent.toLowerCase()
+  const key = shareCurrentSocial.value.name.toLowerCase()
+
+  if (key === 'sms' && (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1)) {
+    return availableNetworks[key].replace(':?', ':&')
+  }
+
+  //@ts-ignore
+  return availableNetworks[key]
+})
+
+const shareLink = computed(() => {
+  let link = rawLink.value
+  const key = shareCurrentSocial.value.name.toLowerCase()
+
+  if (key === 'x') {
+    link = link.replace('&hashtags=@h', 'shareData.hashtags')
+    link = link.replace('@tu', '')
+  }
+
+  return link
+    .replace(/@tu/g, '&via=' + encodeURIComponent(''))
+    .replace(/@u/g, encodeURIComponent(referralLink.value))
+    .replace(/@t/g, encodeURIComponent(shareData.text))
+    .replace(/@d/g, encodeURIComponent(shareData.description))
+    .replace(/@q/g, encodeURIComponent(''))
+    .replace(/@h/g, shareData.hashtags)
+    .replace(/@m/g, encodeURIComponent(''))
+})
 
 const opendSharedViaSocial = () => {
-  window.open(shareCurrentSocial.value.network, '_blank')
-}
-function getBase64Image(img) {
-  var canvas = document.createElement('canvas')
-  canvas.width = img.width
-  canvas.height = img.height
-  var ctx = canvas.getContext('2d')
-  ctx.drawImage(img, 0, 0)
-  return canvas.toDataURL('image/png')
-  // return dataURL.replace(/^data:image\/?[A-z]*;base64,/)
+  window.open(shareLink.value, '_blank')
 }
 
 const share = async () => {
@@ -291,10 +330,10 @@ const share = async () => {
 const openShareModal = () => {
   isOpenShareModal.value = true
 }
-const centrifuge = ref(null)
+const centrifuge = ref<Centrifuge | null>(null)
 
-const walletReferrals = ref([])
-const personalReferrals = ref([])
+const walletReferrals = ref<any>([])
+const personalReferrals = ref<any>([])
 const currentPage = ref(1)
 const hasNextPage = ref(true)
 const transactionsKey = ref(0)
@@ -302,6 +341,7 @@ const transactionsKey = ref(0)
 const method = ref('')
 const address = ref('')
 const setMethodError = ref('')
+
 const setMethod = () => {
   setTimeout(async () => {
     await getWalletReferrals()
@@ -348,7 +388,7 @@ const getWalletReferrals = async () => {
     })
 }
 
-const getPersonalReferrals = async (initial) => {
+const getPersonalReferrals = async (initial: boolean = false): Promise<void> => {
   if (initial) {
     currentPage.value = 1
   }
@@ -372,16 +412,19 @@ const getPersonalReferrals = async (initial) => {
     })
 }
 
-const getPersonalReferralsStats = async (time: any) => {
-  const filterObj : Record<string, any> = {}
+const getPersonalReferralsStats = async (time: any = '') => {
+  const filterObj: Record<string, any> = {}
 
   if (time !== 'all') {
-    filterObj.days = time;
+    filterObj.days = time
   }
 
-  const { data } = await $app.api.eth.statisticEth
-    .getPersonalStatsReferrals({ filters: filterObj })
+  const { data } = await $app.api.eth.statisticEth.getPersonalStatsReferrals({ filters: filterObj })
   personalReferralStats.value = data
+
+  if (!time || time === 'all') {
+    totalReferralStats.value = data
+  }
 }
 
 const withdrawalReferrals = async () => {
@@ -390,8 +433,8 @@ const withdrawalReferrals = async () => {
     .then(() => {
       getWalletReferrals()
     })
-    .catch((e) => {
-      console.error(e.errors)
+    .catch((e: any) => {
+      console.error(e?.errors)
     })
 }
 
@@ -404,14 +447,14 @@ const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
 const timeOptions = [
-  {value : "All time", callback: () => getPersonalReferralsStats('all')},
-  {value : "1 year", callback: () => getPersonalReferralsStats(365)},
-  {value : "6 months", callback: () => getPersonalReferralsStats(180)},
-  {value : "3 months", callback: () => getPersonalReferralsStats(90)},
-  {value : "1 month", callback: () => getPersonalReferralsStats(30)},
-  {value : "1 week", callback: () => getPersonalReferralsStats(7)},
-  {value : "7 days", callback: () => getPersonalReferralsStats(7)},
-  {value : "24 hours", callback: () => getPersonalReferralsStats(1)},
+  { value: 'All time', callback: () => getPersonalReferralsStats('all') },
+  { value: '1 year', callback: () => getPersonalReferralsStats(365) },
+  { value: '6 months', callback: () => getPersonalReferralsStats(180) },
+  { value: '3 months', callback: () => getPersonalReferralsStats(90) },
+  { value: '1 month', callback: () => getPersonalReferralsStats(30) },
+  { value: '1 week', callback: () => getPersonalReferralsStats(7) },
+  { value: '7 days', callback: () => getPersonalReferralsStats(7) },
+  { value: '24 hours', callback: () => getPersonalReferralsStats(1) },
 ]
 
 onMounted(async () => {
@@ -433,7 +476,7 @@ onMounted(async () => {
       if (ctx.data.message.status === 'success') {
         await getPersonalReferrals(true)
       } else if (ctx.data.message.status === 'pending') {
-        personalReferrals.value = [ctx.data.message, ...personalReferrals.value]
+        personalReferrals.value = [ctx?.data?.message, ...personalReferrals.value]
       }
     })
     .subscribe()
@@ -462,11 +505,11 @@ const steps = computed(() => {
         },
       },
       on: {
-        beforeStep: async function (options) {
+        beforeStep: async function (options: any) {
           const elem = document.querySelector(options.step.attachTo.element)
           elem?.classList.add('onboarding-index')
         },
-        afterStep: function (options) {
+        afterStep: function (options: any) {
           const elem = document.querySelector(options.step.attachTo.element)
           elem?.classList.remove('onboarding-index')
         },
@@ -475,14 +518,10 @@ const steps = computed(() => {
   ]
 })
 
-const renderedSteps = computed(() => {
-  return steps.value.filter((step) => step.isRender !== false)
+const renderedSteps = computed((): any => {
+  return steps
 })
-const cardComments = [
-  'Bitcoin ETF that pays dividends: choose to earn USDT or BTC',
-  'Bitcoin ETF that pays daily dividends in USDT Tether.',
-  'Bitcoin ETF that pays daily dividends in Bitcoin.',
-]
+
 const referralPromoCards: TPromoCardDetails[] = [
   {
     name: 'brand',
@@ -500,8 +539,9 @@ const referralPromoCards: TPromoCardDetails[] = [
     description: 'Bitcoin ETF that pays daily dividends in Bitcoin.',
   },
 ]
-function getRealIndex(swipe) {
-  shareData.text = cardComments[swipe]
+
+function getRealIndex(swipe: number) {
+  shareData.description = referralPromoCards[swipe].description
 }
 </script>
 

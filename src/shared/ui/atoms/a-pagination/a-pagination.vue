@@ -2,7 +2,7 @@
   <div v-if="isVisible" class="a-pagination">
     <button
       v-for="(page, index) in visibleItems"
-      :key="((page as number) + index) as number"
+      :key="page + index"
       class="a-pagination__item a-font_button-s"
       :class="{ 'a-pagination__selected': pageIndex === page, 'disabledPage': page === ellipsisText }"
       :disabled="page === ellipsisText || disabledPagination"
@@ -95,7 +95,7 @@ const rightAdjacentPage = computed(() => {
   return currentPageIndex.value + 1
 })
 
-const visibleItems = computed(() => {
+const visibleItems = computed(() : (number | string)[] | number => {
   const items = []
 
   if (totalPages.value <= maxPageElements) {
@@ -114,7 +114,7 @@ const visibleItems = computed(() => {
     items.push(leftAdjacentPage.value)
   }
 
-  items.push(currentPageIndex)
+  items.push(currentPageIndex.value)
 
   if (currentPageIndex.value !== lastPage.value) {
     items.push(rightAdjacentPage.value)

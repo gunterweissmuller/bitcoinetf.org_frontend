@@ -8,7 +8,7 @@
         <div class='w-header__head__back' v-if='routeNames[route.name]?.urlToBack' @click='$router.back()'>
           <a-icon width='24' :name='Icon.MonoChevronLeft' />
         </div>
-        <p v-if='isVisibleTitle' class='w-header__title' :class="{'w-header__title--left': route.name === 'personal-buy-shares' || route.name === 'personal-earnings'}">
+        <div v-if='isVisibleTitle' class='w-header__title' :class="{'w-header__title--left': route.name === 'personal-buy-shares' || route.name === 'personal-earnings'}">
           <div class='w-header__title-container' v-if='routeNames?.[route.name]?.customTitle'>
             {{ routeNames?.[route.name]?.firstTitle }}
             <a-icon :name='Icon.ColorfulBitcoin' />
@@ -26,7 +26,7 @@
             :name='Icon.MonoInfo'
             @click='openModal'
           />
-        </p>
+        </div>
 
         <e-breadcrumbs
           v-if='isVisibleBreadcrumbs'
@@ -250,7 +250,7 @@ const routeNames = computed(() => ({
   // FIX THIS
   'personal-fund': {
     title: 'Shareholders',
-    titleCrumb: 'Shareholders',
+    titleCrumb: 'Fund',
     breadcrumbs: false,
   },
   'personal-protection': {
@@ -287,7 +287,7 @@ const routeNames = computed(() => ({
     info: EPageInfoWallet,
   },
   'personal-kyc': { title: 'Kyc', breadcrumbs: false },
-  'personal-support': { title: 'Support', breadcrumbs: false },
+  'personal-more-support': { title: 'Support',titleCrumb: 'Support',  breadcrumbs: true,  urlToBack: 'personal-more' },
   'personal-earnings': {
     title: 'Dividends',
     titleCrumb: 'Dividends',
@@ -299,21 +299,21 @@ const routeNames = computed(() => ({
     titleCrumb: 'Latest trades',
     breadcrumbs: true,
     urlToBack: 'personal-protection',
-    customBreadcrumbs: ['personal-protection', 'Latest Trades'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Latest Trades'],
   },
   'personal-analytics-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
-    customBreadcrumbs: ['personal-shareholders', 'Latest Purchases'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-shareholders' : 'personal-fund'), 'Latest Purchases'],
   },
   'personal-analytics-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
-    customBreadcrumbs: ['personal-shareholders', 'Top 100 Shareholders'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-shareholders' : 'personal-fund'), 'Top 100 Shareholders'],
   },
   'personal-analytics-portfolio-latest-activity': {
     title: 'Latest activity',
@@ -321,14 +321,13 @@ const routeNames = computed(() => ({
     breadcrumbs: true,
     urlToBack: 'personal-portfolio',
     info: EPageInfoActivity,
-    customBreadcrumbs: ['personal-protection', 'Latest Activity'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Latest Activity'],
   },
-  'personal-earnings-statements': {
+  'personal-more-statements': {
     title: 'Statements',
     titleCrumb: 'Statements',
     breadcrumbs: true,
-    urlToBack: 'personal-earnings',
-    customBreadcrumbs: ['personal-dividends', ''],
+    urlToBack: 'personal-more',
     info: EPageInfoStatements,
   },
   'personal-asset-id': {

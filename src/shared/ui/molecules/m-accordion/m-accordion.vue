@@ -106,16 +106,18 @@ const updateValue = () => {
 
 watch(
   () => props.activeLink,
-  (boolean) => {
+  () => {
     if (typeof props.activeLink === 'boolean') {
-      isOpen.value = boolean
+      isOpen.value = props.topLink == 'personal-dividens' ? true : false
     }
-  },
-  {
-    immediate: true,
   },
 )
 
+onMounted(() => {
+  if (props.activeLink) {
+    isOpen.value = true
+  }
+})
 watch(isOpen, (boolean) => {
   if (!props.scroll) return
   if (boolean) {

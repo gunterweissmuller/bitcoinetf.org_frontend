@@ -542,6 +542,7 @@ onMounted(()=>{
       .catch((e) => {
         isSignupAndBuy.value = false;
         signupStep.value = SignupSteps.Error;
+        scrollToPurchase();
         if (e?.errors?.error?.message) {
           backendError.value = {value: e.errors.error.message, field: 'default'}
 
@@ -590,7 +591,7 @@ onMounted(()=>{
 //   }
 // )
 
-const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 5;
+const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 0;
 
 const isMetamaskConnecting = ref(false);
 const metamaskSignatureMessage = ref('');
