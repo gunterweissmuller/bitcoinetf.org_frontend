@@ -409,7 +409,7 @@ const navList = ref([
   {
     title: 'Statement',
     icon: Icon.MonoFile,
-    link: '/personal/earnings/statements',
+    link: '/personal/more/statements',
   },
   {
     title: 'Purchase agreement',
@@ -420,7 +420,7 @@ const navList = ref([
   {
     title: 'Support',
     icon: Icon.MonoSupport,
-    link: '/personal/support',
+    link: '/personal/more/support',
   },
 ])
 
