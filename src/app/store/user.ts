@@ -1,3 +1,4 @@
+import { difference } from 'lodash';
 import { defineStore } from 'pinia'
 
 export const user = defineStore('user', {
@@ -10,7 +11,8 @@ export const user = defineStore('user', {
     totalFund: {
       totalAmountBtc: 0,
       totalAmountUsd: 0,
-      shareholders: 0
+      shareholders: 0,
+      differenceUsd: 0,
     },
     menu: false,
     hasEarnings: false,
