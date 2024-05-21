@@ -236,7 +236,6 @@ const getStatistics = async () => {
   // shareholders, assets
   if (['shareholders', 'assets'].includes(props.type)) {
     response = await $app.api.eth.statisticEth.getShareholdersGrowth();
-    console.log(response);
 
     const statisticField = props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd';
     dataAmount.value = response.find((item: Record<string, any>) => item.shareholders)[statisticField];
@@ -262,7 +261,6 @@ const getStatistics = async () => {
   } else if (['asset'].includes(props.type)) {
     const { data: { flow: responseData } } = await $app.api.eth.statisticEth.getStatisticFlow({ asset: props.asset });
     response = responseData;
-    console.log(response, 'assets');
 
     dataAmount.value = response.find((item: Record<string, any>) => item.value).value;
 
