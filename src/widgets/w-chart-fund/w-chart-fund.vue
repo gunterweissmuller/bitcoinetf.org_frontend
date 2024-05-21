@@ -42,7 +42,7 @@
           >
             {{ amountUsdDifference > 0 ? '+' : '' }} ${{ $app.filters.rounded(amountUsdDifference, 2) }} ({{
               $app.filters.rounded(difference, 2)
-            }}%)
+            }}%)1
           </div>
         </div>
 
@@ -51,7 +51,7 @@
             {{ shareholdersStatistic?.is_growth ? '+' : '-'}}${{ $app.filters.rounded(shareholdersStatistic?.half_year_change_size_usd, 2) }}
             ({{
               $app.filters.rounded(shareholdersStatistic?.percent, 2)
-            }}%)
+            }}%)2
           </div>
         </div>
       </div>
@@ -180,11 +180,16 @@ const getStatistics = async () => {
   let data;
   if (['shareholders', 'assets'].includes(props.type)) {
     response = await $app.api.eth.statisticEth.getShareholdersGrowth();
-    const statisticField = props.aumSizeUsd ? 'aum_size_usd' : props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd'
+    console.log(response);
+
+    const statisticField = props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd';
     shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders)[statisticField];
     shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
-    $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
-
+    if (statisticField === 'shareholders') {
+      $app.store.user.totalFund.shareholders = shareholdersAmount.value;
+    } else {
+      $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
+    }
     const valueType = props.type === 'shareholders' ? 'y' : 'aum_size_';
 
     data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent);

@@ -10,6 +10,7 @@ export const user = defineStore('user', {
     totalFund: {
       totalAmountBtc: 0,
       totalAmountUsd: 0,
+      shareholders: 0
     },
     menu: false,
     hasEarnings: false,
