@@ -106,10 +106,12 @@ const updateValue = () => {
 
 watch(
   () => props.activeLink,
-  () => {
-    if (typeof props.activeLink === 'boolean') {
-      isOpen.value = props.topLink == 'personal-dividens' ? true : false
-    }
+  (boolean) => {
+    setTimeout(() => {
+      if (typeof props.activeLink === 'boolean') {
+        isOpen.value = boolean
+      }
+    }, 0)
   },
 )
 
