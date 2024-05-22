@@ -63,6 +63,20 @@
     height: 100%;
     flex-direction: column;
 
+    &-convert {
+      display: flex;
+      align-items: center;
+
+      font-weight: 700;
+      font-size: torem(10);
+      line-height: torem(13);
+      color: var(--text-tertiary);
+
+      i {
+        transform: translate(1px, -.5px);
+      }
+    }
+
     &-difference {
       font-family: Dm, sans-serif;
       font-size: torem(10);
