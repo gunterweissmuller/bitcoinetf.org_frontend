@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { useNuxtApp, useRouter, useRoute } from '#app'
+import { useNuxtApp } from '#app'
 import { Icon } from '~/src/shared/constants/icons'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { useLogin } from '../f-login/useLogin';

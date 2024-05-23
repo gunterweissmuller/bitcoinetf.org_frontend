@@ -31,7 +31,7 @@ export function useLogin($app) {
             return
         }
         
-        if (email.value) {
+        if ($app.store.login.email) {
             emailErrorText.value = 'Invalid email address'
             return
         }
@@ -45,12 +45,12 @@ export function useLogin($app) {
     const isPasswordValid = ref(false)
 
     function passwordFieldBlurHandler() {
-    if (isPasswordValid.value) {
-        passwordErrorText.value = ''
-        return
-    }
+        if (isPasswordValid.value) {
+            passwordErrorText.value = ''
+            return
+        }
 
-    passwordErrorText.value = 'Required'
+        passwordErrorText.value = 'Required'
     }
 
     //
@@ -100,12 +100,14 @@ export function useLogin($app) {
 
     const onSubmitEmailForm = () => {
         if (isSubmitEmailForm.value) return
-        isSubmitEmailForm.value = true
+        isSubmitEmailForm.value = true;
+
+        
 
         $app.api.eth.auth
         .login({
-            email: $app.filters.trimSpaceIntoString(email.value),
-            password: $app.filters.trimSpaceIntoString(password.value),
+            email: $app.filters.trimSpaceIntoString($app.store.login.email),
+            password: $app.filters.trimSpaceIntoString($app.store.login.password),
         })
         .then((jwtResponse: any) => {
             isSubmitEmailForm.value = false;
@@ -132,7 +134,7 @@ export function useLogin($app) {
         isSubmitOneTimeLink.value = true
 
         $app.api.eth.auth
-        .initOneTimeLink({ email: $app.filters.trimSpaceIntoString(email.value) })
+        .initOneTimeLink({ email: $app.filters.trimSpaceIntoString($app.store.login.email) })
         .then(() => {
             isSubmitOneTimeLink.value = false
             $app.store.login.currentStep = Steps.Check
@@ -142,22 +144,19 @@ export function useLogin($app) {
             isSubmitOneTimeLink.value = false;
             catchLogin(e);
         })
-}
-
-    const timer = ref<NodeJS.Timer | null>(null)
-    const timerStarted = ref<boolean>(false)
-    const timeLeft = ref<number>(0)
+    }
 
     const startTimer = () => {
-        clearInterval(timer.value)
+        
+        clearInterval($app.store.login.timer)
         const stopDate = Date.now() + 60 * 6 * 1000
-        timerStarted.value = true
+        $app.store.login.timerStarted = true
 
-        timer.value = setInterval(() => {
-            timeLeft.value = parseInt((stopDate - Date.now()) / 1000)
-            if (timeLeft.value < 1) {
-                timerStarted.value = false
-                clearInterval(timer.value)
+        $app.store.login.timer = setInterval(() => {
+            $app.store.login.timeLeft = parseInt((stopDate - Date.now()) / 1000)
+            if ($app.store.login.timeLeft < 1) {
+                $app.store.login.timerStarted = false
+                clearInterval($app.store.login.timer)
             }
         }, 1000 / 25)
     }
@@ -165,16 +164,16 @@ export function useLogin($app) {
     // resend one time link
 
     const resendCodeClick = async () => {
-        if (timerStarted.value) {
+        if ($app.store.login.timerStarted) {
             return
         }
 
         backendError.value = ''
         startTimer()
         await $app.api.eth.auth
-            .resendOneTimeLink({ email: email.value })
+            .resendOneTimeLink({ email: $app.store.login.email })
             .catch((e) => {
-            catchLogin(e);
+                catchLogin(e);
             })
     }
 
@@ -233,39 +232,40 @@ export function useLogin($app) {
 
     // facebook
     function initFbSdk(options) {
-    return new Promise(resolve => {
-        window.fbAsyncInit = function () {
-            const defaults = { cookie: true, xfbml: true }
-            options = { ...defaults, ...options }
-            window.FB.init(options)
-            resolve()
-        };
-        /* eslint-disable */
-        (function (d, s, id) {
-            const fjs = d.getElementsByTagName(s)[0]
-            if (d.getElementById(id)) { return; }
-            const js = d.createElement(s); js.id = id
-            js.src = '//connect.facebook.net/zh_TW/sdk.js'
-            fjs.parentNode.insertBefore(js, fjs)
-        }(document, 'script', 'facebook-jssdk'))
-        /* eslint-enable */
-    })
+        return new Promise(resolve => {
+            window.fbAsyncInit = function () {
+                const defaults = { cookie: true, xfbml: true }
+                options = { ...defaults, ...options }
+                window.FB.init(options)
+                resolve()
+            };
+            /* eslint-disable */
+            (function (d, s, id) {
+                const fjs = d.getElementsByTagName(s)[0]
+                if (d.getElementById(id)) { return; }
+                const js = d.createElement(s); js.id = id
+                js.src = '//connect.facebook.net/zh_TW/sdk.js'
+                fjs.parentNode.insertBefore(js, fjs)
+            }(document, 'script', 'facebook-jssdk'))
+            /* eslint-enable */
+        })
     }
 
     function getFbSdk(options) {
-    return new Promise(async resolve => {
-        if (window.FB) {
-            resolve(window.FB)
-        } else {
-        await initFbSdk(options)
-            resolve(window.FB)
-        }
-    })
+        return new Promise(async resolve => {
+            if (window.FB) {
+                resolve(window.FB)
+            } else {
+            await initFbSdk(options)
+                resolve(window.FB)
+            }
+        })
     }
 
 
     const handleFacebookConnect = () => {
 
+        //old
         const initFacebook = async (id) => {
             (window as any).FB.init({
             appId: id, //You will need to change this
@@ -278,60 +278,86 @@ export function useLogin($app) {
         .getCredintialsFacebook()
         .then(async (res) => {
             console.log(res);
+            const facebookId = 934423128173330; //  res?.data?.client_id;
 
             // await initFacebook(res?.data?.client_id);
 
+            // way 2
             const sdk = await getFbSdk(
-            {
-                appId: res?.data?.client_id, //You will need to change this
-                cookie: true, // This is important, it's not enabled by default
-                version: "v13.0"
-            }
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
             ) //sdk === FB in this case
 
             console.log(sdk);
 
             sdk.init(
-            {
-                appId: res?.data?.client_id, //You will need to change this
-                cookie: true, // This is important, it's not enabled by default
-                version: "v13.0"
-            }
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
             );
 
-            sdk.login((resp) => {
-            console.log(resp);
+            sdk.login((response) => {
+                if (response?.authResponse) {
+                    $app.store.authTemp.response = response.authResponse;
+
+                    $app.api.eth.auth
+                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+                    .then(async (res) => {
+                        const tempLogin = () => {
+                            $app.api.eth.auth.
+                            loginFacebook({
+                                facebook_id: $app.store.authTemp.response?.userID,
+                                facebook_data: $app.store.authTemp.response?.accessToken,
+                            })
+                            .then((jwtResponse: any) => {
+                                continueLogin(jwtResponse);
+                            })
+                        }
+
+                        checkAuthType(res, tempLogin);
+                    })
+                    .catch((e) => {
+                        // Todo: notify something went wrond
+                        console.error(e)
+                    })
+
+                }
             });
 
-
-
+            return;
+            // old
             (window as any).FB.login(function(response) {
-            console.log(response);
-            if (response?.authResponse) {
-                $app.store.authTemp.response = response.authResponse;
+                console.log(response);
+                if (response?.authResponse) {
+                    $app.store.authTemp.response = response.authResponse;
 
-                $app.api.eth.auth
-                .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-                .then(async (res) => {
-                const tempLogin = () => {
-                    $app.api.eth.auth.
-                    loginFacebook({
-                        facebook_id: $app.store.authTemp.response?.userID,
-                        facebook_data: $app.store.authTemp.response?.accessToken,
+                    $app.api.eth.auth
+                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+                    .then(async (res) => {
+                        const tempLogin = () => {
+                            $app.api.eth.auth.
+                            loginFacebook({
+                                facebook_id: $app.store.authTemp.response?.userID,
+                                facebook_data: $app.store.authTemp.response?.accessToken,
+                            })
+                            .then((jwtResponse: any) => {
+                                continueLogin(jwtResponse);
+                            })
+                        }
+
+                        checkAuthType(res, tempLogin);
                     })
-                    .then((jwtResponse: any) => {
-                        continueLogin(jwtResponse);
+                    .catch((e) => {
+                        // Todo: notify something went wrond
+                        console.error(e)
                     })
+
                 }
-
-                checkAuthType(res, tempLogin);
-                })
-                .catch((e) => {
-                // Todo: notify something went wrond
-                console.error(e)
-                })
-
-            }
             });
 
         })
@@ -505,11 +531,11 @@ export function useLogin($app) {
             img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
             onClick: handleAppleConnect,
         },
-        // {
-        //   name: 'Facebook',
-        //   img: '/img/icons/colorful/facebook-circle.svg',
-        //   onClick: handleFacebookConnect,
-        // },
+        {
+          name: 'Facebook',
+          img: '/img/icons/colorful/facebook-circle.svg',
+          onClick: handleFacebookConnect,
+        },
     ]
 
 
@@ -518,15 +544,11 @@ export function useLogin($app) {
         emailErrorText,
         emailFieldBlurHandler,
         isEmailValid,
-        email,
-        password,
         passwordFieldBlurHandler,
         isPasswordValid,
         backendError,
         goToReset,
         onSubmitOneTimeLink,
-        timerStarted,
-        timeLeft,
         resendCodeClick,
         methods
     };

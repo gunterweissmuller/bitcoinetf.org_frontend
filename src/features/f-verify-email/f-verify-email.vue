@@ -14,7 +14,7 @@
     onMounted(()=>{
 
         if(localStorage.getItem('verifyLinkRedirect')?.search('/tetherspecial') !== -1) {
-          localStorage.removeItem('googleRedirect');
+          localStorage.removeItem('verifyLinkRedirect');
           router.push(`/tetherspecial${location.search}`);
         } else {
             router.push(`/personal/registration${location.search}`);

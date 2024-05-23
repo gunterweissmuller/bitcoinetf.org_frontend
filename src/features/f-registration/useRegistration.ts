@@ -19,10 +19,6 @@ export function useRegistration($app) {
         countryCode.value = country.dialCode;
     }
 
-    const confirmResponse = ref(null)
-    const currentSignup = ref(SignupMethods.Email);
-    const backendError = ref({value: '', field: 'default'})
-
     function openTermsModal() {
         $app.store.registration.isOpenTermsModal = true;
     }
@@ -70,22 +66,17 @@ export function useRegistration($app) {
     // Choice step
     const choiceToEmail = () => {
         $app.store.registration.currentStep = Steps.Email
-        currentSignup.value = SignupMethods.Email;
+        $app.store.registration.currentSignup = SignupMethods.Email;
     }
-
-    const isMetamaskSupported = ref(false);
-    const address = ref("");
-    const metamaskError = ref("");
 
     //
     const continueLogin = async (response) => {
         $app.store.registration.currentStep = Steps.Success
         $app.store.auth.setTokens(response.data);
-        confirmResponse.value = response.data;
 
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
-
+            connectToReplenishment();
             setTimeout(() => {
                 router.push('/personal/fund/portfolio');
             },2000);
@@ -108,124 +99,22 @@ export function useRegistration($app) {
         })
     }
 
-    const catchLogin = async (e) => {
+    const catchRegistration = async (e) => {
         if (e?.errors?.error?.message) {
-            backendError.value = {value: e.errors.error.message, field: 'default'};
+            $app.store.registration.backendError = {value: e.errors.error.message, field: 'default'};
             if(e?.errors?.error?.validation) {
                 if(e?.errors?.error?.validation?.first_name) {
-                    backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+                    $app.store.registration.backendError = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
                 }
                 if(e?.errors?.error?.validation?.last_name) {
-                    backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+                    $app.store.registration.backendError = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
                 }
             }
         } else {
-            backendError.value = {value: 'Something went wrong', field: 'default'};
+            $app.store.registration.backendError = {value: 'Something went wrong', field: 'default'};
         }
     }
     //
-
-    onMounted(() => {
-        // if verify link
-        if (route.query.code && route.query.email) {
-            email.value = String(route.query.email);
-            emailCode.value = String(route.query.code);
-
-            router.replace({'query': ''});
-
-            $app.store.registration.currentStep = Steps.Loading
-
-            if($app.store.auth.accountMethod === 'metamask') {
-
-                $app.api.eth.auth.
-                confirmMetamask({
-                    email: $app.filters.trimSpaceIntoString(email.value),
-                    code: $app.filters.trimSpaceIntoString(emailCode.value),
-                    fast: true,
-                })
-                .then((jwtResponse: any) => {
-                    // TODO falling user/me
-                    continueLogin(jwtResponse);
-                })
-                .catch((e) => {
-                    catchLogin(e);
-                })
-
-            } else if ($app.store.auth.accountMethod === 'telegram') {
-                $app.api.eth.auth.
-                confirmTelegram({
-                    telegram_data: JSON.stringify($app.store.authTelegram?.response),
-                    email: $app.filters.trimSpaceIntoString(email.value),
-                    code: $app.filters.trimSpaceIntoString(emailCode.value),
-                })
-                .then((jwtResponse: any) => {
-                    // TODO falling user/me
-                    continueLogin(jwtResponse);
-                })
-                .catch((e) => {
-                    catchLogin(e);
-                })
-            } else if ($app.store.auth.accountMethod === 'apple') {
-                $app.api.eth.auth.
-                confirmApple({
-                    apple_token: $app.store.authTemp?.response,
-                    email: $app.filters.trimSpaceIntoString(email.value),
-                    code: $app.filters.trimSpaceIntoString(emailCode.value),
-                })
-                .then((jwtResponse: any) => {
-                    // TODO falling user/me
-                    continueLogin(jwtResponse);
-                })
-                .catch((e) => {
-                    catchLogin(e);
-                })
-            } else if ($app.store.auth.accountMethod === 'facebook') {
-                backendError.value = {value: '', field: 'default'};
-
-                $app.api.eth.auth.
-                    confirmFacebook({
-                        facebook_id: $app.store.authTemp.response?.userID,
-                        email: $app.filters.trimSpaceIntoString(email.value),
-                        code: $app.filters.trimSpaceIntoString(emailCode.value),
-                    })
-                    .then((jwtResponse: any) => {
-                        // TODO falling user/me
-                        continueLogin(jwtResponse);
-                    })
-                    .catch((e) => {
-                        catchLogin(e);
-                    })
-            } else {
-                $app.api.eth.auth
-                .confirmFast({
-                    email: $app.filters.trimSpaceIntoString(email.value),
-                    code: $app.filters.trimSpaceIntoString(emailCode.value),
-                })
-                .then((jwtResponse: any) => {
-                    // TODO falling user/me
-                    continueLogin(jwtResponse);
-                })
-                .catch((e) => {
-                    $app.store.registration.currentStep = Steps.Error
-                    catchLogin(e);
-                })
-            }
-        }
-
-        // metamask
-        isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
-        if(isMetamaskSupported.value) {
-            (window as any).ethereum.on("chainChanged", (chainId: string) => {
-                if (chainId !== "0x1") {
-                    metamaskError.value = "This network is not supported. Please change the network to Ethereum."
-                } else if (chainId === "0x1") {
-                    metamaskError.value = "";
-                }
-            });
-        } else {
-            console.log("Metamask is not installed");
-        }
-    })
 
     //metamask
     const isMetamaskConnecting = ref(false);
@@ -237,7 +126,7 @@ export function useRegistration($app) {
         isMetamaskConnecting.value = true;
 
         //if metamask is not installed
-        if (!isMetamaskSupported.value) {
+        if (!$app.store.user.isMetamaskSupported) {
             if(isReload.value) {
                 isReload.value = false;
                 location.reload();
@@ -251,7 +140,7 @@ export function useRegistration($app) {
             return;
         }
 
-        currentSignup.value = SignupMethods.Metamask;
+        $app.store.registration.currentSignup = SignupMethods.Metamask;
 
         try {
             const provider = new BrowserProvider((window as any).ethereum);
@@ -261,15 +150,14 @@ export function useRegistration($app) {
             const responseSwitchChain: any = await(window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] });
             const responseBackend: any = await axios.get(`https://${hostname}/v1/auth/provider/metamask/message`);
 
-            metamaskSignatureMessage.value = responseBackend.data.message;
-            address.value = accounts[0];
-            metamaskWalletAddress.value = signer.address;
+            $app.store.registration.metamaskData.metamaskSignatureMessage = responseBackend.data.message;
+            $app.store.registration.metamaskData.metamaskWalletAddress = signer.address;
 
             const signedMsg = await (window as any).ethereum.request({"method": "personal_sign","params": [responseBackend.data.message, accounts[0],]});
 
-            metamaskSignature.value = signedMsg;
+            $app.store.registration.metamaskData.metamaskSignature = signedMsg;
             isMetamaskConnecting.value = false;
-            $app.store.registration.currentStep = Steps.Email
+            $app.store.registration.currentStep = Steps.Email;
         } catch (e) {
             console.error(e);
             isMetamaskConnecting.value = false;
@@ -278,16 +166,6 @@ export function useRegistration($app) {
     }
 
     // google
-    onMounted(() => {
-        if($app.store.authGoogle.response?.email) {
-            $app.store.registration.currentStep = Steps.Email
-            currentSignup.value = SignupMethods.Google;
-            firstName.value = $app.store.authGoogle.response.first_name;
-            lastName.value = $app.store.authGoogle.response.last_name;
-            email.value = $app.store.authGoogle.response.email;
-        }
-    });
-
     const handleGoogleConnect = async () => {
         $app.api.eth.auth.getGoogleRedirectUrl().then((url: any) => {
             window.location.href = url.url;
@@ -296,83 +174,42 @@ export function useRegistration($app) {
 
     // telegram
     const testTG = async () => {
-
         const dataTelegram = await $app.api.eth.auth.getCredintialsTelegram();
         const telegramBotId = dataTelegram?.data?.bot_id;
-
         let data = null;
         await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
 
         await (window as any).Telegram.Login.auth(
             { bot_id: telegramBotId.value, request_access: true },
             (tgData: any) => {
-                data = tgData;
-
-                if (!tgData) {
-                    // authorization failed
-                } else {
-
+                if (tgData) {
                     $app.api.eth.auth.telegramGetAuthType({
                     telegram_data: JSON.stringify(tgData),
                     }).then((r: any) => {
-                    if(r.data.auth_type === 'registration') {
-                        $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
-                        $app.store.registration.currentStep = Steps.Email
-                        currentSignup.value = SignupMethods.Telegram;
-                        firstName.value = $app.store.authTelegram.response.first_name;
-                        lastName.value = $app.store.authTelegram.response.last_name;
-                        email.value = $app.store.authTelegram.response.email;
-                    } else {
-                        $app.api.eth.auth.
-                        loginTelegram({
-                            telegram_data: JSON.stringify(tgData),
-                        })
-                        .then((jwtResponse: any) => {
-                            continueLogin(jwtResponse);
-                        })
-                    }
+                        if(r.data.auth_type === 'registration') {
+                            $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
+                            $app.store.registration.currentStep = Steps.Email
+                            $app.store.registration.currentSignup = SignupMethods.Telegram;
+                            firstName.value = $app.store.authTelegram.response.first_name;
+                            lastName.value = $app.store.authTelegram.response.last_name;
+                            email.value = $app.store.authTelegram.response.email;
+                        } else {
+                            $app.api.eth.auth.
+                            loginTelegram({
+                                telegram_data: JSON.stringify(tgData),
+                            })
+                            .then((jwtResponse: any) => {
+                                continueLogin(jwtResponse);
+                            })
+                        }
                     })
                 }
-
             }
         );
         return data;
     }
 
     // apple
-    onMounted(() => {
-        $app.api.eth.auth
-            .getAppleRedirect()
-            .then(async (res) => {
-
-            function getJsonFromUrl(url) {
-                if(!url) url = location.search;
-                var query = url.substr(1).split("?")[1];
-                var result = {};
-                query.split("&").forEach(function(part) {
-                var item = part.split("=");
-                result[item[0]] = decodeURIComponent(item[1]);
-                });
-                return result;
-            }
-
-            const parsedUrl = getJsonFromUrl(res.url);
-
-
-            (window as any).AppleID.auth.init({
-                clientId : parsedUrl.client_id,
-                scope : parsedUrl.scope,
-                redirectURI : parsedUrl.redirect_uri,
-                usePopup : true
-            });
-
-            })
-            .catch((e) => {
-                // Todo: notify something went wrond
-                console.error(e)
-            })
-    })
-
     const handleAppleConnect = async () => {
 
         try {
@@ -416,7 +253,7 @@ export function useRegistration($app) {
                     }
 
                     $app.store.registration.currentStep = Steps.Email
-                    currentSignup.value = SignupMethods.Apple;
+                    $app.store.registration.currentSignup = SignupMethods.Apple;
                 } else {
                     $app.api.eth.auth.
                     loginApple({
@@ -436,69 +273,135 @@ export function useRegistration($app) {
     }
 
     //facebook
+    function initFbSdk(options) {
+        return new Promise(resolve => {
+            window.fbAsyncInit = function () {
+                const defaults = { cookie: true, xfbml: true }
+                options = { ...defaults, ...options }
+                window.FB.init(options)
+                resolve()
+            };
+            /* eslint-disable */
+            (function (d, s, id) {
+                const fjs = d.getElementsByTagName(s)[0]
+                if (d.getElementById(id)) { return; }
+                const js = d.createElement(s); js.id = id
+                js.src = '//connect.facebook.net/zh_TW/sdk.js'
+                fjs.parentNode.insertBefore(js, fjs)
+            }(document, 'script', 'facebook-jssdk'))
+            /* eslint-enable */
+        })
+    }
+
+    function getFbSdk(options) {
+        return new Promise(async resolve => {
+            if (window.FB) {
+                resolve(window.FB)
+            } else {
+            await initFbSdk(options)
+                resolve(window.FB)
+            }
+        })
+    }
+
     const handleFacebookConnect = async () => {
 
+        //old
         const initFacebook = async (id) => {
             (window as any).FB.init({
                 appId: id, //You will need to change this
                 cookie: true, // This is important, it's not enabled by default
                 version: "v13.0"
             });
-            }
+        }
 
-            $app.api.eth.auth
-            .getCredintialsFacebook()
-            .then(async (res) => {
+        $app.api.eth.auth
+        .getCredintialsFacebook()
+        .then(async (res) => {
             console.log(res);
+            const facebookId = 934423128173330; //  res?.data?.client_id;
 
-            await initFacebook(res?.data?.client_id);
+            // await initFacebook(res?.data?.client_id);
 
-            (window as any).FB.login(function(response) {
-                console.log(response);
+            const sdk = await getFbSdk(
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
+            ) //sdk === FB in this case
+
+            console.log(sdk);
+
+            sdk.init(
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
+            );
+
+            sdk.login((response) => {
                 if (response?.authResponse) {
-                $app.store.authTemp.response = response.authResponse;
+                    $app.store.authTemp.response = response.authResponse;
 
-                $app.api.eth.auth
-                .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-                .then(async (res) => {
-                    if(res.data.auth_type === 'registration') {
-                        $app.store.registration.currentStep = Steps.Email
-                        currentSignup.value = SignupMethods.Facebook;
-                    } else {
-                        $app.api.eth.auth.
-                        loginFacebook({
-                            facebook_id: $app.store.authTemp.response?.userID,
-                            facebook_data: $app.store.authTemp.response?.accessToken,
-                        })
-                        .then((jwtResponse: any) => {
-                            continueLogin(jwtResponse);
-                        })
-                    }
+                    $app.api.eth.auth
+                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+                    .then(async (res) => {
+                        if(res.data.auth_type === 'registration') {
+                            $app.store.registration.currentStep = Steps.Email
+                            $app.store.registration.currentSignup = SignupMethods.Facebook;
+                        } else {
+                            $app.api.eth.auth.
+                            loginFacebook({
+                                facebook_id: $app.store.authTemp.response?.userID,
+                                facebook_data: $app.store.authTemp.response?.accessToken,
+                            })
+                            .then((jwtResponse: any) => {
+                                continueLogin(jwtResponse);
+                            })
+                        }
 
-                })
-                .catch((e) => {
-                    // Todo: notify something went wrond
-                    console.error(e)
-                })
-
-                } else {
+                    })
                 }
             });
 
-            })
-            .catch((e) => {
-                // Todo: notify something went wrond
-                console.error(e)
-            })
+            return;
+            //old
+            (window as any).FB.login(function(response) {
+                console.log(response);
+                if (response?.authResponse) {
+                    $app.store.authTemp.response = response.authResponse;
+
+                    $app.api.eth.auth
+                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+                    .then(async (res) => {
+                        if(res.data.auth_type === 'registration') {
+                            $app.store.registration.currentStep = Steps.Email
+                            $app.store.registration.currentSignup = SignupMethods.Facebook;
+                        } else {
+                            $app.api.eth.auth.
+                            loginFacebook({
+                                facebook_id: $app.store.authTemp.response?.userID,
+                                facebook_data: $app.store.authTemp.response?.accessToken,
+                            })
+                            .then((jwtResponse: any) => {
+                                continueLogin(jwtResponse);
+                            })
+                        }
+
+                    })
+                }
+            });
+
+        })
+        .catch((e) => {
+            // Todo: notify something went wrond
+            console.error(e)
+        })
     }
 
     // Ref code field
-    const emailCode = ref('')
-    const refCode = ref('')
-    const metamaskSignatureMessage = ref('')
-    const metamaskSignature = ref('')
-    const metamaskWalletAddress = ref('')
-
     const isSubmitEmailForm = ref(false);
 
     const onSubmitEmailForm = async () => {
@@ -507,7 +410,7 @@ export function useRegistration($app) {
         var valid = re.test(phone.value);
 
         if(!valid) {
-            backendError.value = {value: 'Phone number is not valid', field: 'phone'};
+            $app.store.registration.backendError = {value: 'Phone number is not valid', field: 'phone'};
             return;
         }
 
@@ -518,9 +421,9 @@ export function useRegistration($app) {
 
         localStorage.setItem('verifyLinkRedirect', String(router.currentRoute.value.path));
 
-        backendError.value = {value: '', field: 'default'};
+        $app.store.registration.backendError = {value: '', field: 'default'};
         const initPayload = {
-            method: currentSignup.value,
+            method: $app.store.registration.currentSignup,
             first_name: $app.filters.trimSpaceIntoString(firstName.value),
             last_name: $app.filters.trimSpaceIntoString(lastName.value),
             email: $app.filters.trimSpaceIntoString(email.value),
@@ -528,13 +431,7 @@ export function useRegistration($app) {
             phone_number_code: countryCode.value,
         }
 
-        if(currentSignup.value === SignupMethods.Metamask) {
-            initPayload.message = metamaskSignatureMessage.value
-            initPayload.signature = metamaskSignature.value
-            initPayload.wallet_address = metamaskWalletAddress.value
-        }
-
-        if(currentSignup.value === SignupMethods.Facebook) {
+        if($app.store.registration.currentSignup === SignupMethods.Facebook) {
 
             $app.api.eth.auth
             .initFacebook({
@@ -549,15 +446,16 @@ export function useRegistration($app) {
                 isSubmitEmailForm.value = false;
                 $app.store.registration.currentStep = Steps.Link
                 $app.store.auth.accountMethod = "facebook";
+                startTimer()
             }).catch((e) => {
                 isSubmitEmailForm.value = false;
-                catchLogin(e);
+                catchRegistration(e);
             })
 
             return;
         }
 
-        if(currentSignup.value === SignupMethods.Apple) {
+        if($app.store.registration.currentSignup === SignupMethods.Apple) {
             $app.api.eth.auth
             .initApple({
                 apple_token: $app.store.authTemp.response,
@@ -574,13 +472,13 @@ export function useRegistration($app) {
                 startTimer()
             }).catch((e) => {
                 isSubmitEmailForm.value = false;
-                catchLogin(e);
+                catchRegistration(e);
             })
 
             return;
         }
 
-        if (currentSignup.value === SignupMethods.Google) {
+        if ($app.store.registration.currentSignup === SignupMethods.Google) {
             if ($app.store.auth.refCode !== "") {
                 initPayload.ref_code = $app.store.auth.refCode
                 $app.store.auth.setRefCode("");
@@ -591,7 +489,6 @@ export function useRegistration($app) {
             .then((tokens: any) => {
                 $app.store.auth.setTokens(tokens.data)
                 $app.store.authGoogle.setResponse({}, SignupMethods.Google);
-                confirmResponse.value = tokens.data
                 isSubmitEmailForm.value = false;
                 firstName.value = '';
                 lastName.value = '';
@@ -617,13 +514,13 @@ export function useRegistration($app) {
             })
             .catch((e) => {
                 isSubmitEmailForm.value = false;
-                catchLogin(e);
+                catchRegistration(e);
             })
 
             return;
         }
 
-        if(currentSignup.value === SignupMethods.Telegram) {
+        if($app.store.registration.currentSignup === SignupMethods.Telegram) {
             $app.api.eth.auth
             .initTelegram({
                 telegram_data: JSON.stringify($app.store.authTelegram.response),
@@ -640,13 +537,16 @@ export function useRegistration($app) {
                 startTimer()
             }).catch((e) => {
                 isSubmitEmailForm.value = false;
-                catchLogin(e);
+                catchRegistration(e);
             })
 
             return;
         }
 
-        if (currentSignup.value === SignupMethods.Metamask) {
+        if ($app.store.registration.currentSignup === SignupMethods.Metamask) {
+            initPayload.message = $app.store.registration.metamaskData.metamaskSignatureMessage;
+            initPayload.signature = $app.store.registration.metamaskData.metamaskSignature;
+            initPayload.wallet_address = $app.store.registration.metamaskData.metamaskWalletAddress;
             await $app.api.eth.auth
             .initMetamask(initPayload)
             .then(() => {
@@ -657,11 +557,11 @@ export function useRegistration($app) {
             })
             .catch((e) => {
                 isSubmitEmailForm.value = false;
-                catchLogin(e);
+                catchRegistration(e);
             })
         } 
 
-        if(currentSignup.value === SignupMethods.Email) {
+        if($app.store.registration.currentSignup === SignupMethods.Email) {
             await $app.api.eth.auth
             .init(initPayload)
             .then(() => {
@@ -672,71 +572,57 @@ export function useRegistration($app) {
             })
             .catch((e) => {
                 isSubmitEmailForm.value = false;
-                catchLogin(e);
+                catchRegistration(e);
             })
         }
     }
 
-    const timer = ref<NodeJS.Timer | null>(null)
-    const timerStarted = ref<boolean>(false)
-    const timeLeft = ref<number>(0)
-
+    // timer 
     const startTimer = () => {
-        clearInterval(timer.value)
+        clearInterval($app.store.registration.timer)
         const stopDate = Date.now() + 60 * 5 * 1000
-        timerStarted.value = true
+        
+        $app.store.registration.timerStarted = true
 
-        timer.value = setInterval(() => {
-            timeLeft.value = parseInt((stopDate - Date.now()) / 1000)
-            if (timeLeft.value < 1) {
-                timerStarted.value = false
-                clearInterval(timer.value)
+        $app.store.registration.timer = setInterval(() => {
+            $app.store.registration.timeLeft = parseInt((stopDate - Date.now()) / 1000)
+            if ($app.store.registration.timeLeft < 1) {
+                $app.store.registration.timerStarted = false
+                clearInterval($app.store.registration.timer)
             }
         }, 1000 / 25)
     }
 
     // Code Step
-    const isCodeCorrect = ref(false)
-    const pincodeTrigger = ref(false)
-
     const resendCodeClick = async () => {
-        if (timerStarted.value) {
+        if ($app.store.registration.timerStarted) {
             return
         }
 
-        backendError.value = {value: '', field: 'default'};
+        $app.store.registration.backendError = {value: '', field: 'default'};
 
         startTimer()
 
         await $app.api.eth.auth
             .resend({ email: email.value })
-            .then(() => {
-            })
             .catch((e) => {
                 if (e?.errors?.error?.message) {
-                    backendError.value = {value: e.errors.error.message, field: 'default'};
+                    $app.store.registration.backendError = {value: e.errors.error.message, field: 'default'};
 
                     if(e?.errors?.error?.validation) {
-                    if(e?.errors?.error?.validation?.first_name) {
-                        backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
-                    }
-                    if(e?.errors?.error?.validation?.last_name) {
-                        backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
-                    }
+                        if(e?.errors?.error?.validation?.first_name) {
+                            $app.store.registration.backendError = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+                        }
+                        if(e?.errors?.error?.validation?.last_name) {
+                            $app.store.registration.backendError = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+                        }
                     }
                 } else {
-                    backendError.value = {value: 'Something went wrong', field: 'default'};
+                    $app.store.registration.backendError = {value: 'Something went wrong', field: 'default'};
                 }
             })
     }
 
-    //refferal
-    onMounted(() => {
-        if (route.query.referral) {
-            $app.store.auth.setRefCode({ref_code: route.query.referral});
-            refCode.value = route.query.referral
-        }
-    })
 
     // methods
     const methods = [
@@ -765,11 +651,11 @@ export function useRegistration($app) {
             img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
             onClick: handleAppleConnect
         },
-        // {
-        //     name: 'Facebook',
-        //     img: '/img/icons/colorful/facebook-circle.svg',
-        //     onClick: handleFacebookConnect
-        // },
+        {
+            name: 'Facebook',
+            img: '/img/icons/colorful/facebook-circle.svg',
+            onClick: handleFacebookConnect
+        },
     ]
 
 
@@ -779,13 +665,9 @@ export function useRegistration($app) {
         emailFieldBlurHandler,
         isEmailValid,
         email,
-        backendError,
-        timerStarted,
-        timeLeft,
         resendCodeClick,
         methods,
         handleEmailBack,
-        currentSignup,
         firstName,
         lastName,
         isEmailDisabled,
@@ -793,8 +675,7 @@ export function useRegistration($app) {
         phone,
         openTermsModal,
         siteKey,
-        pincodeTrigger,
-        isCodeCorrect,
-
+        catchRegistration,
+        continueLogin,
     };
 }

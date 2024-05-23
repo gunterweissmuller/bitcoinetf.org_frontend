@@ -17,7 +17,7 @@
                 :error-text="emailErrorText"
                 @blur="emailFieldBlurHandler"
                 @update:is-valid="isEmailValid = $event"
-                v-model="email"
+                v-model="$app.store.login.email"
                 />
             </div>
 
@@ -43,7 +43,7 @@
     import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 
     const { $app } = useNuxtApp()
-    const { currentStep, emailErrorText, emailFieldBlurHandler, isEmailValid, email, backendError, onSubmitOneTimeLink } = useLogin($app);
+    const { emailErrorText, emailFieldBlurHandler, isEmailValid, backendError, onSubmitOneTimeLink } = useLogin($app);
 
 </script>
 

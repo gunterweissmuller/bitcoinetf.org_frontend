@@ -45,20 +45,27 @@
 </template>
 
 <script setup lang="ts">
-import { useNuxtApp, useRouter, useRoute } from '#app'
-import { Icon } from '~/src/shared/constants/icons'
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import { useLogin } from './useLogin'
-import { Steps } from './steps'
-import fLoginChoice from '../f-login-choice/f-login-choice.vue'
-import fLoginError from '../f-login-error/f-login-error.vue'
-import fLoginLogin from '../f-login-login/f-login-login.vue'
-import fLoginLink from '../f-login-link/f-login-link.vue'
-import fLoginCheck from '../f-login-check/f-login-check.vue'
+  import { useNuxtApp } from '#app'
+  import { Icon } from '~/src/shared/constants/icons'
+  import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
+  import { Steps } from './steps'
+  import fLoginChoice from '../f-login-choice/f-login-choice.vue'
+  import fLoginError from '../f-login-error/f-login-error.vue'
+  import fLoginLogin from '../f-login-login/f-login-login.vue'
+  import fLoginLink from '../f-login-link/f-login-link.vue'
+  import fLoginCheck from '../f-login-check/f-login-check.vue'
 
-const { $app } = useNuxtApp()
-const router = useRouter()
-const route = useRoute()
+  const { $app } = useNuxtApp()
+
+  // reset 
+  onUnmounted(() => {
+    $app.store.login.currentStep = Steps.Choice;
+    $app.store.login.timerStarted = false;
+    $app.store.login.timeLeft = 0;
+    $app.store.login.timer = null;
+    $app.store.login.email = '';
+    $app.store.login.password = '';
+  });
 
 </script>
 

@@ -13,10 +13,10 @@
 
 <script setup lang="ts">
     import { useNuxtApp } from '#app'
-    import { useLogin } from '../f-login/useLogin';
     import { Steps } from '../f-login/steps';
     import aButton from '~/src/shared/ui/atoms/a-button/a-button.vue';
 
+    const { $app } = useNuxtApp()
 </script>
 
 <!-- todo split styles -->

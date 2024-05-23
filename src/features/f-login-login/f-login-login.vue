@@ -18,14 +18,14 @@
                 :error-text="emailErrorText"
                 @blur="emailFieldBlurHandler"
                 @update:is-valid="isEmailValid = $event"
-                v-model="email"
+                v-model="$app.store.login.email"
                 />
             </div>
 
             <a-input
                 id="test_3"
                 class="f-login__password"
-                v-model="password"
+                v-model="$app.store.login.password"
                 label="Password"
                 type="password"
                 @blur="passwordFieldBlurHandler"
@@ -39,14 +39,14 @@
                 id="test_5"
                 class="f-login__button"
                 text="Log in"
-                :disabled="!isEmailValid || !password"
+                :disabled="!isEmailValid || !$app.store.login.password"
                 type="submit"
             ></a-button>
             <a-button
                 @click="
-                () => {
-                    $app.store.login.currentStep = Steps.OneTimeLink
-                }
+                    () => {
+                        $app.store.login.currentStep = Steps.OneTimeLink
+                    }
                 "
                 :icon="Icon.MonoLinkBlue"
                 id="one-time-link"
@@ -69,7 +69,7 @@
     import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 
     const { $app } = useNuxtApp()
-    const { onSubmitEmailForm, emailErrorText, emailFieldBlurHandler, isEmailValid, email, password, passwordFieldBlurHandler, isPasswordValid, backendError, goToReset } = useLogin($app);
+    const { onSubmitEmailForm, emailErrorText, emailFieldBlurHandler, isEmailValid, passwordFieldBlurHandler, isPasswordValid, backendError, goToReset } = useLogin($app);
 
 </script>
 
