@@ -135,6 +135,9 @@
             validation-reg-exp-key="email"
             :disabled="true"
             required
+            :error-text="emailErrorText"
+            @blur="emailFieldBlurHandler"
+            @update:is-valid="isEmailValid = $event"
           />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
@@ -143,7 +146,7 @@
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
 
           <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
-          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
 
           <div class="landing-calculation__signup-main__agree">
               <div class="mb-10">
@@ -151,6 +154,8 @@
               </div>
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
+
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
 
           <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100 || firstName === '' || lastName === '' || email === '' || phone === ''" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
           <div class="landing-calculation__error-message">
@@ -1378,12 +1383,10 @@ const sendCode = async () => {
     await $app.api.eth.auth
       .initMetamask(initPayload)
       .then(() => {
-        //isSubmitEmailForm.value = false;
         //currentStep.value = Steps.Code;
         $app.store.auth.accountMethod = "metamask";
       })
       .catch((e) => {
-        //isSubmitEmailForm.value = false;
         isMainInputDisabled.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = {value: e.errors.error.message, field: 'default'}
@@ -1414,7 +1417,6 @@ const sendCode = async () => {
       }).then((r: any) => {
         $app.store.auth.accountMethod = "telegram";
     }).catch((e) => {
-      isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
         backendError.value = {value: e.errors.error.message, field: 'default'}
 
@@ -1820,6 +1822,8 @@ const signupAndBuyGoogle = () => {
     return;
   }
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '') {
+    console.log(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '')
+    console.log(firstName.value === '', lastName.value === '', email.value === '', !isEmailValid.value, token.value === '')
     backendError.value = {value: 'Fill in all the fields', field: 'default'};
     return;
   }
@@ -1865,9 +1869,9 @@ const signupAndBuyGoogle = () => {
   $app.api.eth.auth
     .initGoogle(initPayload)
     .then((tokens: any) => {
-      $app.store.auth.setTokens(tokens.data)
+      $app.store.auth.setTokens(tokens?.data)
       $app.store.authGoogle.setResponse({}, SignupMethods.Google);
-      confirmResponse.value = tokens.data
+      confirmResponse.value = tokens?.data
       // isSignupAndBuyGoogle.value = false;
       // firstName.value = '';
       // lastName.value = '';
@@ -1895,12 +1899,11 @@ const signupAndBuyGoogle = () => {
         }
 
         await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
-          $app.store.user.blockchainUserWallet = resp?.data.uid
+          $app.store.user.blockchainUserWallet = resp?.data?.uid
         })
     })
     .catch((e) => {
       console.error(e);
-      isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
             backendError.value = {value: e.errors.error.message, field: 'default'}
 
