@@ -70,7 +70,7 @@
   const { $app } = useNuxtApp()
   const router = useRouter()
   const route = useRoute()
-  const {firstName, lastName, email, continueLogin,  catchRegistration, } = useRegistration($app);
+  const { continueLogin,  catchRegistration, } = useRegistration($app);
   const metamaskError = ref("");
 
   onMounted(() => {
@@ -165,9 +165,9 @@
       if($app.store.authGoogle.response?.email) {
           $app.store.registration.currentStep = Steps.Email
           $app.store.registration.currentSignup = SignupMethods.Google;
-          firstName.value = $app.store.authGoogle.response.first_name;
-          lastName.value = $app.store.authGoogle.response.last_name;
-          email.value = $app.store.authGoogle.response.email;
+          $app.store.registration.firstName = $app.store.authGoogle.response.first_name;
+          $app.store.registration.lastName = $app.store.authGoogle.response.last_name;
+          $app.store.registration.email = $app.store.authGoogle.response.email;
       }
   });
 
@@ -185,6 +185,10 @@
     $app.store.registration.currentSignup = SignupMethods.Email;
     $app.store.registration.backendError = {value: '', field: 'default'};
     $app.store.registration.metamaskData = {};
+    $app.store.registration.firstName = '';
+    $app.store.registration.lastName = '';
+    $app.store.registration.email ='';
+    $app.store.registration.phone = '';
   });
 
 

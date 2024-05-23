@@ -12,10 +12,10 @@ interface registrationState {
     timerStarted: boolean,
     timeLeft: number,
     timer: any,
-    // firstName: string,
-    // lastName: string,
-    // email: string,
-    // phone: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
 }
 
 export const registration = defineStore('registration', {
@@ -28,10 +28,10 @@ export const registration = defineStore('registration', {
     timerStarted: false,
     timeLeft: 0,
     timer: null,
-    // firstName: '',
-    // lastName: '',
-    // email: '',
-    // phone: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
   } as registrationState),
 
   actions: {

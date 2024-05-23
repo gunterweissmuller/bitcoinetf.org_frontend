@@ -46,7 +46,7 @@ export function useRegistration($app) {
             return
         }
 
-        if (email.value) {
+        if ($app.store.registration.email) {
             emailErrorText.value = 'Invalid email address'
             return
         }
@@ -56,9 +56,9 @@ export function useRegistration($app) {
 
     const handleEmailBack = () => {
         $app.store.registration.currentStep = Steps.Choice;
-        firstName.value = '';
-        lastName.value = '';
-        email.value = '';
+        $app.store.registration.firstName = '';
+        $app.store.registration.lastName = '';
+        $app.store.registration.email = '';
         emailErrorText.value = '';
         isEmailValid.value = false;
     }
@@ -176,23 +176,24 @@ export function useRegistration($app) {
     const testTG = async () => {
         const dataTelegram = await $app.api.eth.auth.getCredintialsTelegram();
         const telegramBotId = dataTelegram?.data?.bot_id;
+
         let data = null;
-        await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
+        await (window as any).Telegram.Login.init('widget_login', telegramBotId, {"origin":"https:\/\/core.telegram.org"}, false, "en");
 
         await (window as any).Telegram.Login.auth(
-            { bot_id: telegramBotId.value, request_access: true },
+            { bot_id: telegramBotId, request_access: true },
             (tgData: any) => {
                 if (tgData) {
                     $app.api.eth.auth.telegramGetAuthType({
-                    telegram_data: JSON.stringify(tgData),
+                        telegram_data: JSON.stringify(tgData),
                     }).then((r: any) => {
                         if(r.data.auth_type === 'registration') {
                             $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
                             $app.store.registration.currentStep = Steps.Email
                             $app.store.registration.currentSignup = SignupMethods.Telegram;
-                            firstName.value = $app.store.authTelegram.response.first_name;
-                            lastName.value = $app.store.authTelegram.response.last_name;
-                            email.value = $app.store.authTelegram.response.email;
+                            $app.store.registration.firstName = $app.store.authTelegram.response.first_name;
+                            $app.store.registration.lastName = $app.store.authTelegram.response.last_name;
+                            $app.store.registration.email = $app.store.authTelegram.response.email;
                         } else {
                             $app.api.eth.auth.
                             loginTelegram({
@@ -243,13 +244,13 @@ export function useRegistration($app) {
                 if(res.data.auth_type === 'registration') {
 
                     if(data?.user?.email) {
-                        email.value = data?.user?.email;
+                        $app.store.registration.email = data?.user?.email;
                         isEmailDisabled.value = true;
                     }
 
                     if(data?.user?.name) {
-                        firstName.value = data?.user?.name?.firstName ? data?.user?.name?.firstName : '';
-                        lastName.value = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
+                        $app.store.registration.firstName = data?.user?.name?.firstName ? data?.user?.name?.firstName : '';
+                        $app.store.registration.lastName = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
                     }
 
                     $app.store.registration.currentStep = Steps.Email
@@ -407,7 +408,7 @@ export function useRegistration($app) {
     const onSubmitEmailForm = async () => {
 
         var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
-        var valid = re.test(phone.value);
+        var valid = re.test($app.store.registration.phone);
 
         if(!valid) {
             $app.store.registration.backendError = {value: 'Phone number is not valid', field: 'phone'};
@@ -417,16 +418,16 @@ export function useRegistration($app) {
         if(isSubmitEmailForm.value) return;
         isSubmitEmailForm.value = true;
 
-        const tempPhone = phone.value.slice(countryCode.value.length+1);
+        const tempPhone = $app.store.registration.phone.slice(countryCode.value.length+1);
 
         localStorage.setItem('verifyLinkRedirect', String(router.currentRoute.value.path));
 
         $app.store.registration.backendError = {value: '', field: 'default'};
         const initPayload = {
             method: $app.store.registration.currentSignup,
-            first_name: $app.filters.trimSpaceIntoString(firstName.value),
-            last_name: $app.filters.trimSpaceIntoString(lastName.value),
-            email: $app.filters.trimSpaceIntoString(email.value),
+            first_name: $app.filters.trimSpaceIntoString($app.store.registration.firstName),
+            last_name: $app.filters.trimSpaceIntoString($app.store.registration.lastName),
+            email: $app.filters.trimSpaceIntoString($app.store.registration.email),
             phone_number: tempPhone,
             phone_number_code: countryCode.value,
         }
@@ -436,9 +437,9 @@ export function useRegistration($app) {
             $app.api.eth.auth
             .initFacebook({
                 facebook_id: $app.store.authTemp.response?.userID,
-                first_name: firstName.value,
-                last_name: lastName.value,
-                email: email.value,
+                first_name: $app.store.registration.firstName,
+                last_name: $app.store.registration.lastName,
+                email: $app.store.registration.email,
                 ref_code: $app.store.auth.refCode,
                 phone_number: tempPhone,
                 phone_number_code: countryCode.value,
@@ -459,9 +460,9 @@ export function useRegistration($app) {
             $app.api.eth.auth
             .initApple({
                 apple_token: $app.store.authTemp.response,
-                first_name: firstName.value,
-                last_name: lastName.value,
-                email: email.value,
+                first_name: $app.store.registration.firstName,
+                last_name: $app.store.registration.lastName,
+                email: $app.store.registration.email,
                 ref_code: $app.store.auth.refCode,
                 phone_number: tempPhone,
                 phone_number_code: countryCode.value,
@@ -490,9 +491,9 @@ export function useRegistration($app) {
                 $app.store.auth.setTokens(tokens.data)
                 $app.store.authGoogle.setResponse({}, SignupMethods.Google);
                 isSubmitEmailForm.value = false;
-                firstName.value = '';
-                lastName.value = '';
-                email.value = '';
+                $app.store.registration.firstName = '';
+                $app.store.registration.lastName = '';
+                $app.store.registration.email = '';
             })
             .then(async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
@@ -524,9 +525,9 @@ export function useRegistration($app) {
             $app.api.eth.auth
             .initTelegram({
                 telegram_data: JSON.stringify($app.store.authTelegram.response),
-                first_name: firstName.value,
-                last_name: lastName.value,
-                email: email.value,
+                first_name: $app.store.registration.firstName,
+                last_name: $app.store.registration.lastName,
+                email: $app.store.registration.email,
                 ref_code: $app.store.auth.refCode,
                 phone_number: tempPhone,
                 phone_number_code: countryCode.value,
@@ -604,7 +605,7 @@ export function useRegistration($app) {
         startTimer()
 
         await $app.api.eth.auth
-            .resend({ email: email.value })
+            .resend({ email: $app.store.registration.email })
             .catch((e) => {
                 if (e?.errors?.error?.message) {
                     $app.store.registration.backendError = {value: e.errors.error.message, field: 'default'};
@@ -664,15 +665,11 @@ export function useRegistration($app) {
         emailErrorText,
         emailFieldBlurHandler,
         isEmailValid,
-        email,
         resendCodeClick,
         methods,
         handleEmailBack,
-        firstName,
-        lastName,
         isEmailDisabled,
         countryChanged,
-        phone,
         openTermsModal,
         siteKey,
         catchRegistration,
