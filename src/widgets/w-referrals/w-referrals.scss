@@ -874,6 +874,10 @@
     @include breakpoint($break-desktop-1024) {
       flex-direction: row-reverse;
       gap: torem(24);
+
+      .w-referrals__share {
+        width: 60%;
+      }
     }
   }
 }
