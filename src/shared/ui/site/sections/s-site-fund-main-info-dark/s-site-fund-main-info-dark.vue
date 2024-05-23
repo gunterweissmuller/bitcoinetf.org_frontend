@@ -2,7 +2,7 @@
     <section class="s-site-fund-main-info-dark" data-name="Perfomance">
       <div class="l-site-dark">
         <div class="s-site-fund-main-info-dark__title title-site-h1">REAL TIME FINANCIALS</div>
-  
+
         <div class="s-site-fund-main-info-dark__bottom-wrapper">
           <a-live />
           <div class="s-site-fund-main-info-dark__bottom">
@@ -23,7 +23,7 @@
               centeredSlides
               :allowTouchMove="false"
               disableOnInteraction
-  
+
             >
               <template #slides>
                 <swiper-slide class='s-site-fund-main-info-dark__bottom-elem' v-for='(item, id) in filteredMarqueList' :key='id'>
@@ -31,15 +31,15 @@
                   <div class='s-site-fund-main-info-dark__bottom-elem-text' v-html="item.modifyValue"></div>
                 </swiper-slide>
               </template>
-  
+
             </m-slider>
           </div>
         </div>
-  
-        
-  
+
+
+
         <div class="s-site-fund-main-info-dark__items">
-          
+
           <div class="s-site-fund-main-info-dark__item">
             <div class="s-site-fund-main-info-dark__item-title">${{
                 $app.filters.rounded(fundTotalUsd, 0)
@@ -47,7 +47,7 @@
             </div>
             <div class="s-site-fund-main-info-dark__item-subtitle">Assets Under Management</div>
           </div>
-  
+
         </div>
         <div class="s-site-fund-main-info-dark__charts">
           <div class="s-site-fund-main-info-dark__chart s-site-fund-main-info-dark__chart-gap">
@@ -56,21 +56,21 @@
               title="Earnings per Asset"
               :assets="assets"
             />
-          
+
           </div>
           <div class="s-site-fund-main-info-dark__chart">
-            <w-chart-fund-main title="AUM Growth" is-total-assets :id="route.params.id"/>
+            <w-chart-fund-main title="AUM Growth" is-total-assets :id="route.params.id" type="asset" />
           </div>
         </div>
-  
+
         <w-trades :isMain="true" :gridTemplate="3" :per-page="6" :hideView="true"/> <!--:isExpand="true"-->
-  
-  
-        
+
+
+
       </div>
     </section>
   </template>
-  
+
   <script setup lang="ts">
   import WChartProtection from '~/src/widgets/w-chart-protection/w-chart-protection.vue'
   import WChartProtectionFund from '~/src/widgets/w-chart-protection-fund/w-chart-protection-fund.vue'
@@ -86,7 +86,7 @@
   import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
   import { SwiperSlide } from 'swiper/vue'
   import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
-  
+
   defineProps({
     items: {
       type: Array,
@@ -95,32 +95,32 @@
       },
     },
   })
-  
+
   const {$app} = useNuxtApp()
   const route = useRoute()
-  
+
   const fundTotalBtc = computed(() => {
     return $app.store.assets.fundTotalBtc
   })
-  
+
   const centrifuge = ref(null)
-  
+
   const bottomInfo = ref(null)
-  
+
   const priceChange = ref('low')
-  
+
   const assets = computed(() => {
     return $app.store.assets?.items?.filter((item) => item?.symbol !== 'VAULT' && item?.symbol !== 'BRF') || []
   })
-  
+
   const assetsWithBRF = computed(() => {
     return $app.store.assets?.items?.filter((item) => item?.symbol !== 'VAULT') || []
   })
-  
+
   const fundTotalUsd = computed(() => {
     return $app.store.user.fundTotalUsd
   })
-  
+
   const assetsByKey = computed(() => {
     if (!assets.value) return {}
     return assets.value.reduce((acc, item) => {
@@ -130,13 +130,13 @@
       return acc
     }, {})
   })
-  
+
   const dividendByYear = ref(null)
   const purchases = computed(() => {
     return $app.store.user.lastPurchases || []
   })
   const btcUsdt = ref(null)
-  
+
   const getDividendsByYear = async () => {
     await $app.api.eth.statisticEth
       .getDividendsByYear({
@@ -146,7 +146,7 @@
         dividendByYear.value = dealsResponse?.data?.sum_dividends
       })
   }
-  
+
   const enableMarquee = ref(false)
   const marqueList = computed(() => [
     {
@@ -243,41 +243,41 @@
       modifyValue: `$${$app.filters.rounded(purchases.value?.[0]?.amount, 2)}`,
     },
   ])
-  
-  
+
+
   const filteredMarqueList = computed(() => {
     const arr = marqueList.value.filter((el) => el?.value)
     return [...arr, ...arr]
   })
-  
+
   setTimeout(()=>[
     enableMarquee.value = true
   ], 4000)
   const centrifugeURL = process.dev ? 'wss://wss.stage.techetf.org/connection/websocket' : 'wss://wss.bitcoinetf.org/connection/websocket'
-  
+
   onMounted(async () => {
     await getDividendsByYear()
-  
+
     await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
       btcUsdt.value = resp?.data?._value?.lastPrice
     })
-  
+
     bottomInfo.value = await useFetch(
       `https://api3.binance.com/api/v3/ticker/24hr?symbols=["ETHBTC","ETHUSDT","BTCUSDT","USDTRON","DOGEBTC"]`,
     )
-  
+
     const config = useRuntimeConfig()
     const centrifugeURL = config.public.WS_URL
     const centrifugeToken = config.public.WS_TOKEN
-  
+
     priceChange.value = centrifuge.value = new Centrifuge(centrifugeURL, {
       token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
     })
-  
+
     centrifuge.value.connect()
-  
+
     const sub = centrifuge.value.newSubscription('event_asset')
-  
+
     sub
       .on('publication', function (ctx) {
         if (assets.value?.length) {
@@ -290,15 +290,14 @@
       })
       .subscribe()
   })
-  
+
   const getPriceChange = (value) => {
     return value?.lastPrice < value?.prevClosePrice ? 'low' : 'high'
   }
-  
+
   onUnmounted(() => {
     centrifuge.value?.disconnect()
   })
   </script>
-  
+
   <style src="./s-site-fund-main-info-dark.scss" lang="scss"/>
-  

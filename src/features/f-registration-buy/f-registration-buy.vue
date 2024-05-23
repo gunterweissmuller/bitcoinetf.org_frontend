@@ -723,7 +723,11 @@ const paymentModalClose = () => {
 const openChat = () => {
   if (window?.LiveChatWidget) {
     window.LiveChatWidget.call('maximize');
+
+    return
   }
+
+  router.push('/personal/more/support')
 }
 </script>
 
