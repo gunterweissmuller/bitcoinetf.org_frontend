@@ -392,7 +392,7 @@ export function useLogin($app) {
             } else {
             $app.api.eth.auth
                 .telegramGetAuthType({
-                telegram_data: JSON.stringify(tgData),
+                    telegram_data: JSON.stringify(tgData),
                 })
                 .then((r: any) => {
                 const tempLogin = () => {

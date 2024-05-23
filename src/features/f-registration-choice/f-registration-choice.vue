@@ -24,15 +24,13 @@
 </template>
 
 <script setup lang="ts">
-    import { useNuxtApp, useRouter, useRoute } from '#app'
+    import { useNuxtApp } from '#app'
     import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
     import { Icon } from '~/src/shared/constants/icons'
     import 'vue-tel-input/vue-tel-input.css';
     import { useRegistration } from '../f-registration/useRegistration'
 
     const { $app } = useNuxtApp()
-    const router = useRouter()
-    const route = useRoute()
     const {methods} = useRegistration($app);
 
 </script>

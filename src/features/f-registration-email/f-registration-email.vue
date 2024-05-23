@@ -8,14 +8,14 @@
     </h5>
     <form class="f-registration-right__form" @submit.prevent="onSubmitEmailForm">
 
-        <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'first_name' ? $app.store.registration.backendError.value : ''" v-model="firstName" label="First name" required class="f-registration-right__name" />
-        <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'last_name' ? $app.store.registration.backendError.value : ''"  v-model="lastName" label="Last name" required class="f-registration-right__name" />
+        <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'first_name' ? $app.store.registration.backendError.value : ''" v-model="$app.store.registration.firstName" label="First name" required class="f-registration-right__name" />
+        <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'last_name' ? $app.store.registration.backendError.value : ''"  v-model="$app.store.registration.lastName" label="Last name" required class="f-registration-right__name" />
         <a-input class="f-registration-right__email" label="Email" validation-reg-exp-key="email" :disabled="$app.store.registration.currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
             :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
-            v-model="email" />
+            v-model="$app.store.registration.email" />
 
     <div class="f-registration-right__wrap_phone">
-        <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
+        <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="$app.store.registration.phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
         <p class="f-registration-right__error" v-if="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'phone'">{{ $app.store.registration.backendError.value }}</p>
     </div>
 
@@ -53,7 +53,7 @@
     
 
     const { $app } = useNuxtApp()
-    const {siteKey, phone, handleEmailBack, onSubmitEmailForm, firstName, lastName, isEmailDisabled, emailErrorText, emailFieldBlurHandler, isEmailValid, email, openTermsModal, countryChanged} = useRegistration($app);
+    const { siteKey, handleEmailBack, onSubmitEmailForm, isEmailDisabled, emailErrorText, emailFieldBlurHandler, isEmailValid, openTermsModal, countryChanged} = useRegistration($app);
 
     // Terms step
     const token = ref('')
@@ -65,7 +65,7 @@
     });
 
     const emailButtonDisabled = computed<boolean>(() => {
-        return !isEmailValid.value || !firstName.value || !lastName.value || !Boolean(token.value) //!registrationAgreed.value
+        return !isEmailValid.value || !$app.store.registration.firstName || !$app.store.registration.lastName || !Boolean(token.value) //!registrationAgreed.value
     })
 
 </script>
