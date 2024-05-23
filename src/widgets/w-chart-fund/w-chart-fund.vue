@@ -77,9 +77,12 @@
               width='11'
               height='11'
               class='w-chart-fund__caption-icon'
-              :name='Icon.MonoBitcoinB'
+              :class="{ 'bitcoin' : orderType !== 'usdt', 'usdt' : orderType === 'usdt' }"
+              :name="(orderType === 'usdt' ? Icon.ColorfulAssetUsd : Icon.MonoBitcoinB)"
             />
-            {{$app.filters.rounded(((dataAmount ?? 0)) / (orderType === 'usdt' ? 1 : btcPrice), 0)}}
+            <div class="w-chart-fund__info-text">
+              {{$app.filters.rounded(((dataAmount ?? 0)) / (orderType === 'usdt' ? 1 : btcPrice), 0)}}
+            </div>
           </div>
         </div>
 

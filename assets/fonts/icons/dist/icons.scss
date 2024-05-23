@@ -180,9 +180,15 @@
 
 @font-face {
 font-family: "icons";
+<<<<<<< HEAD
 src: url("icons.eot?587eecbfd347e6b126044ae64a2571c7?#iefix") format("embedded-opentype"),
 url("icons.woff2?587eecbfd347e6b126044ae64a2571c7") format("woff2"),
 url("icons.woff?587eecbfd347e6b126044ae64a2571c7") format("woff");
+=======
+src: url("icons.eot?f47f7579d5a5773e3e38ae3dea6750ed?#iefix") format("embedded-opentype"),
+url("icons.woff2?f47f7579d5a5773e3e38ae3dea6750ed") format("woff2"),
+url("icons.woff?f47f7579d5a5773e3e38ae3dea6750ed") format("woff");
+>>>>>>> fix/assets-chart
 font-weight: normal;
 font-style: normal;
 }
