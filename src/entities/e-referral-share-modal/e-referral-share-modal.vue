@@ -134,12 +134,12 @@ onMounted(() => {
   const code = $app.store.user.info?.referrals?.code
 
   if (code) {
-    referralLink.value = window.location.origin + '/personal/registration' + `?referral=${code}`
+    referralLink.value = window.location.origin.replace('app.', '') + '/personal/registration' + `?referral=${code}`
   } else {
-    referralLink.value = window.location.origin + '/personal/registration'
+    referralLink.value = window.location.origin.replace('app.', '') + '/personal/registration'
   }
 
-  locationOrigin.value = window.location.origin
+  locationOrigin.value = window.location.origin.replace('app.', '')
 })
 </script>
 
