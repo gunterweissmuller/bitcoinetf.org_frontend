@@ -652,11 +652,11 @@ export function useRegistration($app) {
             img: $app.store.user.theme === 'dark' ? '/img/icons/colorful/apple.svg' : '/img/icons/mono/apple.svg',
             onClick: handleAppleConnect
         },
-        {
-            name: 'Facebook',
-            img: '/img/icons/colorful/facebook-circle.svg',
-            onClick: handleFacebookConnect
-        },
+        // {
+        //     name: 'Facebook',
+        //     img: '/img/icons/colorful/facebook-circle.svg',
+        //     onClick: handleFacebookConnect
+        // },
     ]
 
 
