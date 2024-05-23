@@ -1,7 +1,7 @@
 import { useNuxtApp, defineNuxtRouteMiddleware, useRouter } from '#imports'
 import { useRuntimeConfig } from 'nuxt/app';
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware((to, from) => {
   const router = useRouter()
   const { $app } = useNuxtApp()
   const config = useRuntimeConfig()
@@ -37,7 +37,7 @@ export default defineNuxtRouteMiddleware((to) => {
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
-      const newUrl = `https://${config.public.DOMAIN}${to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
+      const newUrl = `https://${config.public.DOMAIN}${to.path || from}?theme=${localStorage.getItem('theme') || 'dark'}`
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})

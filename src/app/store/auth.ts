@@ -30,6 +30,7 @@ export const auth = defineStore('auth', {
     },
 
     logout() {
+      const router = useRouter()
       const config = useRuntimeConfig()
       this.accessToken = ''
       this.refreshToken = ''
@@ -42,9 +43,11 @@ export const auth = defineStore('auth', {
       if(window.location.hostname === config.public.APP_DOMAIN) {
         const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`
         window.location.href = newUrl;
+
+        return ;
       }
 
-      //navigateTo({ name: 'personal-login' })
+      navigateTo({ name: 'personal-login' })
     },
 
     async refresh() {

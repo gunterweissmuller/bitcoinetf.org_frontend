@@ -25,7 +25,7 @@
 
           /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
 
-          <div class="relative" :class="{'landing_calculation__dropdown-isdisabled': disabledAmount}">
+          <div class="relative" :class="{'landing_calculation__dropdown-isdisabled': (disabledAmount || props.isInputDisbled)}">
             <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
               <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center cursor-pointer">
                 <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
@@ -321,7 +321,7 @@ onMounted(()=>{
       $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
     }
 
-    
+
   }
 
   $app.store.purchase.type = selectedCurrency.value.value;
@@ -564,7 +564,7 @@ const outSideClick =  (ev) => {
 
 
 const toggleAmountDropdown = () => {
-  if (props.disabledAmount) return
+  if (props.disabledAmount || props.isInputDisbled) return
 
   showAmountDropdown.value = !showAmountDropdown.value;
 };
