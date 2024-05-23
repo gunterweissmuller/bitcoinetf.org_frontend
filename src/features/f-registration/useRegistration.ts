@@ -110,6 +110,10 @@ export function useRegistration($app) {
                     $app.store.registration.backendError = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
                 }
             }
+
+            if(e?.errors?.error?.message === 'email is already in use') {
+                $app.store.registration.backendError = {value: 'Email is already in use', field: 'email'};
+            }
         } else {
             $app.store.registration.backendError = {value: 'Something went wrong', field: 'default'};
         }

@@ -11,8 +11,9 @@
         <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'first_name' ? $app.store.registration.backendError.value : ''" v-model="$app.store.registration.firstName" label="First name" required class="f-registration-right__name" />
         <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'last_name' ? $app.store.registration.backendError.value : ''"  v-model="$app.store.registration.lastName" label="Last name" required class="f-registration-right__name" />
         <a-input class="f-registration-right__email" label="Email" validation-reg-exp-key="email" :disabled="$app.store.registration.currentSignup === SignupMethods.Google || isEmailDisabled ? true : false" required
-            :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
+            :error-text="emailErrorText " @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
             v-model="$app.store.registration.email" />
+        <p class="f-registration-right__error" v-if="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'email'">{{ $app.store.registration.backendError.value }}</p>
 
     <div class="f-registration-right__wrap_phone">
         <vue-tel-input  mode='international' v-on:country-changed="countryChanged" v-model="$app.store.registration.phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
@@ -20,21 +21,20 @@
     </div>
 
     <vue-turnstile :theme="$app.store.user.theme === 'dark' ? 'dark' : 'light'" :site-key="siteKey" v-model="token" class="captchaTurn" />
-        <div class="f-registration-right__agree">
-            <div class="mb-10">
-                <a-checkbox v-model="registrationAgreedUS" id="with_email"
-                    label="<p >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>"
-                    single />
-            </div>
-            <a-checkbox v-model="registrationAgreedTerms" id="with_email1"
-                label="<p>I agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal"
+    <p class="f-registration-right__error" v-if="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'default'">{{ $app.store.registration.backendError.value }}</p>
+    <div class="f-registration-right__agree">
+        <div class="mb-10">
+            <a-checkbox v-model="registrationAgreedUS" id="with_email"
+                label="<p >I declare that I am neither a U.S. citizen nor a resident, nor am I subject to U.S. tax or legal jurisdiction.</p>"
                 single />
         </div>
+        <a-checkbox v-model="registrationAgreedTerms" id="with_email1"
+            label="<p>I agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal"
+            single />
+    </div>
 
-        <a-button class="f-registration-right__button f-registration-right__button-continue f-registration-right__button-center" :disabled="emailButtonDisabled || termsContinueDisabled" type="submit"
-            text="Continue"></a-button>
-
-        <p class="f-registration-right__error" v-if="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'default'">{{ $app.store.registration.backendError.value }}</p>
+    <a-button class="f-registration-right__button f-registration-right__button-continue f-registration-right__button-center" :disabled="emailButtonDisabled || termsContinueDisabled" type="submit" text="Continue"></a-button>
+        
     </form>
 </template>
 
