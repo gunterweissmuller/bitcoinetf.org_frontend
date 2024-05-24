@@ -206,7 +206,7 @@
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>
           <div class="w-referrals__stat-value">
-            ${{ $app.filters.roundedFixed2(personalReferralStats?.sum_referrals, 2) || 0 }}
+            ${{ $app.filters.roundedFixed2(totalReferralStats?.sum_referrals, 2) || 0 }}
           </div>
           <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
         </li>
