@@ -29,7 +29,7 @@ export const auth = defineStore('auth', {
       this.websocketToken = payload.websocket_token
     },
 
-    logout() {
+    logout(redirect = true) {
       const router = useRouter()
       const config = useRuntimeConfig()
       this.accessToken = ''
@@ -47,7 +47,9 @@ export const auth = defineStore('auth', {
         return ;
       }
 
-      navigateTo({ name: 'personal-login' })
+      if (redirect) {
+        navigateTo({ name: 'personal-login' })
+      }
     },
 
     async refresh() {
