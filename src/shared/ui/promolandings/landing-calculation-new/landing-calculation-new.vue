@@ -1583,35 +1583,35 @@ const sendCode = async () => {
 
     return;
   } else {
+    initPayload.fast = true;
+    await $app.api.eth.auth
+      .init(initPayload).then(()=>{
+        sendCodeLoading.value = false
+        codeSended.value = true;
+        $app.store.auth.accountMethod = "email";
+      })
+      .catch((e) => {
+        isMainInputDisabled.value = false;
+        console.error("ERROR", e);
+        if (e?.errors?.error?.message) {
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
-  await $app.api.eth.auth
-    .init(initPayload).then(()=>{
-      sendCodeLoading.value = false
-      codeSended.value = true;
-      $app.store.auth.accountMethod = "email";
-    })
-    .catch((e) => {
-      isMainInputDisabled.value = false;
-      console.error("ERROR", e);
-      if (e?.errors?.error?.message) {
-        backendError.value = {value: e.errors.error.message, field: 'default'}
-
-        if (e.errors.error.code === 'ETF:011002') {
-          //email is already in use
-          router.push('/personal/login')
-        }
-
-        if(e?.errors?.error?.validation) {
-            if(e?.errors?.error?.validation?.first_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
-            }
-            if(e?.errors?.error?.validation?.last_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
-            }
+          if (e.errors.error.code === 'ETF:011002') {
+            //email is already in use
+            router.push('/personal/login')
           }
-      } else {
-        backendError.value = {value: 'Something went wrong', field: 'default'}
-      }
+
+          if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
+        } else {
+          backendError.value = {value: 'Something went wrong', field: 'default'}
+        }
     })
   }
 }

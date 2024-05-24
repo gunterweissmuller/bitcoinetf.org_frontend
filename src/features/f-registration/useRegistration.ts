@@ -565,6 +565,7 @@ export function useRegistration($app) {
         } 
 
         if($app.store.registration.currentSignup === SignupMethods.Email) {
+            initPayload.fast = true;
             await $app.api.eth.auth
             .init(initPayload)
             .then(() => {
