@@ -23,16 +23,11 @@ export default class AuthApiModule {
     signature?: string,
     wallet_address?: string,
     message?: string,
+    fast?: boolean
   }) {
-
-    if(payload?.method === SignupMethods.Google) {
-      // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
-    }
-
     try {
-
       return await this.adapter.requestJsonAsync({
-        parameterValue: 'auth/register/init',
+        parameterValue: `auth/register/init${ payload?.fast ? '?fast' : '' }`,
         request: {
           method: HTTPMethod.POST,
         },
