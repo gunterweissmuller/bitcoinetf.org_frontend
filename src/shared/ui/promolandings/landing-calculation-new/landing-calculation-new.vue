@@ -58,9 +58,9 @@
             <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
-<!--          <div @click="handleFacebookConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Facebook}]">-->
-<!--            <nuxt-img src="/img/icons/colorful/facebook-circle.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>-->
-<!--          </div>-->
+         <div @click="handleFacebookConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Facebook}]">
+            <nuxt-img src="/img/icons/colorful/facebook-circle.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
 
         </div>
         <div class="landing-calculation__signup-line"></div>
@@ -1249,9 +1249,40 @@ try {
 }
 
 // facebook
+function initFbSdk(options) {
+    return new Promise(resolve => {
+        window.fbAsyncInit = function () {
+            const defaults = { cookie: true, xfbml: true }
+            options = { ...defaults, ...options }
+            window.FB.init(options)
+            resolve()
+        };
+        /* eslint-disable */
+        (function (d, s, id) {
+            const fjs = d.getElementsByTagName(s)[0]
+            if (d.getElementById(id)) { return; }
+            const js = d.createElement(s); js.id = id
+            js.src = '//connect.facebook.net/zh_TW/sdk.js'
+            fjs.parentNode.insertBefore(js, fjs)
+        }(document, 'script', 'facebook-jssdk'))
+        /* eslint-enable */
+    })
+}
+
+function getFbSdk(options) {
+    return new Promise(async resolve => {
+        if (window.FB) {
+            resolve(window.FB)
+        } else {
+        await initFbSdk(options)
+            resolve(window.FB)
+        }
+    })
+}
 
 const handleFacebookConnect = async () => {
 
+  // old
   const initFacebook = async (id) => {
     (window as any).FB.init({
       appId: id, //You will need to change this
@@ -1265,8 +1296,66 @@ const handleFacebookConnect = async () => {
   .then(async (res) => {
     console.log(res);
 
-    await initFacebook(res?.data?.client_id);
+    const facebookId = 934423128173330; //  res?.data?.client_id;
 
+    // await initFacebook(res?.data?.client_id);
+
+    const sdk = await getFbSdk(
+        {
+            appId: facebookId, //You will need to change this
+            cookie: true, // This is important, it's not enabled by default
+            version: "v13.0"
+        }
+    ) //sdk === FB in this case
+
+    sdk.init(
+        {
+            appId: facebookId, //You will need to change this
+            cookie: true, // This is important, it's not enabled by default
+            version: "v13.0"
+        }
+    );
+
+    sdk.login((response) => {
+      if (response?.authResponse) {
+        $app.store.authTemp.response = response.authResponse;
+
+        $app.api.eth.auth
+        .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+        .then(async (res) => {
+          console.log(res);
+
+          if(res.data.auth_type === 'registration') {
+            signupStep.value = SignupSteps.Signup;
+            signupMethod.value = SignupMethods.Facebook;
+            scrollToSignupFields();
+            } else {
+              $app.api.eth.auth.
+                loginFacebook({
+                  facebook_id: $app.store.authTemp.response?.userID,
+                  facebook_data: $app.store.authTemp.response?.accessToken,
+                })
+                  .then((jwtResponse: any) => {
+                    $app.store.auth.setTokens(jwtResponse.data)
+                  })
+                  .then(async () => {
+                    await $app.api.eth.auth.getUser().then((resp) => {
+                      $app.store.user.info = resp?.data
+                    });
+                  });
+            }
+
+        })
+        .catch((e) => {
+          // Todo: notify something went wrond
+          console.error(e)
+        })
+
+      }
+    });
+
+    return;
+    //old
     (window as any).FB.login(function(response) {
       console.log(response);
       if (response?.authResponse) {
