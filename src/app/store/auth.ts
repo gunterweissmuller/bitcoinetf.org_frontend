@@ -29,7 +29,7 @@ export const auth = defineStore('auth', {
       this.websocketToken = payload.websocket_token
     },
 
-    logout() {
+    logout(redirect = true) {
       const config = useRuntimeConfig()
       this.accessToken = ''
       this.refreshToken = ''
@@ -44,7 +44,9 @@ export const auth = defineStore('auth', {
         window.location.href = newUrl;
       }
 
-      //navigateTo({ name: 'personal-login' })
+      if (redirect) {
+        navigateTo({ name: 'personal-login' })
+      }
     },
 
     async refresh() {
