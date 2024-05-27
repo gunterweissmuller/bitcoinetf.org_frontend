@@ -392,7 +392,12 @@ export function useRegistration($app) {
             phone_number: tempPhone,
             phone_number_code: countryCode.value,
         }
+        const referralCode = route.query?.referral
 
+        if (referralCode) {
+            initPayload.ref_code = referralCode
+        }
+        
         if($app.store.registration.currentSignup === SignupMethods.Facebook) {
 
             $app.api.eth.auth
