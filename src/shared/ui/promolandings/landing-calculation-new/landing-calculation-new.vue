@@ -58,9 +58,9 @@
             <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
-<!--          <div @click="handleFacebookConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Facebook}]">-->
-<!--            <nuxt-img src="/img/icons/colorful/facebook-circle.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>-->
-<!--          </div>-->
+         <div @click="handleFacebookConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Facebook}]">
+            <nuxt-img src="/img/icons/colorful/facebook-circle.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
 
         </div>
         <div class="landing-calculation__signup-line"></div>
@@ -135,6 +135,9 @@
             validation-reg-exp-key="email"
             :disabled="true"
             required
+            :error-text="emailErrorText"
+            @blur="emailFieldBlurHandler"
+            @update:is-valid="isEmailValid = $event"
           />
           <a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'first_name'">{{ backendError.value }}</p>
@@ -143,7 +146,7 @@
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'last_name'">{{ backendError.value }}</p>
 
           <vue-tel-input :disabled="dataDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
-          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
 
           <div class="landing-calculation__signup-main__agree">
               <div class="mb-10">
@@ -151,6 +154,8 @@
               </div>
               <a-checkbox v-model="registrationAgreedTerms" id="with_email1" label="<p>I Agree to the <span class='link'>Terms & Conditions</a></p>" @label-click="openTermsModal" single />
           </div>
+
+          <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
 
           <a-button class="landing-calculation__signup-main__button" :disabled="!registrationAgreedUS || !registrationAgreedTerms || buyAmount === 0 || isSignupAndBuyGoogle || buyAmountOriginal < 100 || firstName === '' || lastName === '' || email === '' || phone === ''" @click="signupAndBuyGoogle" :text=" '$' + $app.filters.rounded(buyAmount, 0) + ' BUY'"></a-button>
           <div class="landing-calculation__error-message">
@@ -1244,34 +1249,66 @@ try {
 }
 
 // facebook
+function initFbSdk(options) {
+    return new Promise(resolve => {
+        window.fbAsyncInit = function () {
+            const defaults = { cookie: true, xfbml: true }
+            options = { ...defaults, ...options }
+            window.FB.init(options)
+            resolve()
+        };
+        /* eslint-disable */
+        (function (d, s, id) {
+            const fjs = d.getElementsByTagName(s)[0]
+            if (d.getElementById(id)) { return; }
+            const js = d.createElement(s); js.id = id
+            js.src = '//connect.facebook.net/zh_TW/sdk.js'
+            fjs.parentNode.insertBefore(js, fjs)
+        }(document, 'script', 'facebook-jssdk'))
+        /* eslint-enable */
+    })
+}
+
+function getFbSdk(options) {
+    return new Promise(async resolve => {
+        if (window.FB) {
+            resolve(window.FB)
+        } else {
+        await initFbSdk(options)
+            resolve(window.FB)
+        }
+    })
+}
 
 const handleFacebookConnect = async () => {
-
-  const initFacebook = async (id) => {
-    (window as any).FB.init({
-      appId: id, //You will need to change this
-      cookie: true, // This is important, it's not enabled by default
-      version: "v13.0"
-    });
-  }
-
   $app.api.eth.auth
   .getCredintialsFacebook()
   .then(async (res) => {
-    console.log(res);
+    const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
 
-    await initFacebook(res?.data?.client_id);
+    const sdk = await getFbSdk(
+        {
+            appId: facebookId, //You will need to change this
+            cookie: true, // This is important, it's not enabled by default
+            version: "v13.0"
+        }
+    ) //sdk === FB in this case
 
-    (window as any).FB.login(function(response) {
-      console.log(response);
+    sdk.init(
+        {
+            appId: facebookId, //You will need to change this
+            cookie: true, // This is important, it's not enabled by default
+            version: "v13.0"
+        }
+    );
+
+    sdk.login((response) => {
       if (response?.authResponse) {
         $app.store.authTemp.response = response.authResponse;
 
         $app.api.eth.auth
         .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
         .then(async (res) => {
-          console.log(res);
-
           if(res.data.auth_type === 'registration') {
             signupStep.value = SignupSteps.Signup;
             signupMethod.value = SignupMethods.Facebook;
@@ -1298,10 +1335,8 @@ const handleFacebookConnect = async () => {
           console.error(e)
         })
 
-      } else {
       }
     });
-
   })
   .catch((e) => {
     // Todo: notify something went wrond
@@ -1378,12 +1413,10 @@ const sendCode = async () => {
     await $app.api.eth.auth
       .initMetamask(initPayload)
       .then(() => {
-        //isSubmitEmailForm.value = false;
         //currentStep.value = Steps.Code;
         $app.store.auth.accountMethod = "metamask";
       })
       .catch((e) => {
-        //isSubmitEmailForm.value = false;
         isMainInputDisabled.value = false;
         if (e?.errors?.error?.message) {
           backendError.value = {value: e.errors.error.message, field: 'default'}
@@ -1414,7 +1447,6 @@ const sendCode = async () => {
       }).then((r: any) => {
         $app.store.auth.accountMethod = "telegram";
     }).catch((e) => {
-      isSubmitEmailForm.value = false;
       if (e?.errors?.error?.message) {
         backendError.value = {value: e.errors.error.message, field: 'default'}
 
@@ -1492,35 +1524,35 @@ const sendCode = async () => {
 
     return;
   } else {
+    initPayload.fast = true;
+    await $app.api.eth.auth
+      .init(initPayload).then(()=>{
+        sendCodeLoading.value = false
+        codeSended.value = true;
+        $app.store.auth.accountMethod = "email";
+      })
+      .catch((e) => {
+        isMainInputDisabled.value = false;
+        console.error("ERROR", e);
+        if (e?.errors?.error?.message) {
+          backendError.value = {value: e.errors.error.message, field: 'default'}
 
-  await $app.api.eth.auth
-    .init(initPayload).then(()=>{
-      sendCodeLoading.value = false
-      codeSended.value = true;
-      $app.store.auth.accountMethod = "email";
-    })
-    .catch((e) => {
-      isMainInputDisabled.value = false;
-      console.error("ERROR", e);
-      if (e?.errors?.error?.message) {
-        backendError.value = {value: e.errors.error.message, field: 'default'}
-
-        if (e.errors.error.code === 'ETF:011002') {
-          //email is already in use
-          router.push('/personal/login')
-        }
-
-        if(e?.errors?.error?.validation) {
-            if(e?.errors?.error?.validation?.first_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
-            }
-            if(e?.errors?.error?.validation?.last_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
-            }
+          if (e.errors.error.code === 'ETF:011002') {
+            //email is already in use
+            router.push('/personal/login')
           }
-      } else {
-        backendError.value = {value: 'Something went wrong', field: 'default'}
-      }
+
+          if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
+        } else {
+          backendError.value = {value: 'Something went wrong', field: 'default'}
+        }
     })
   }
 }
@@ -1865,9 +1897,9 @@ const signupAndBuyGoogle = () => {
   $app.api.eth.auth
     .initGoogle(initPayload)
     .then((tokens: any) => {
-      $app.store.auth.setTokens(tokens.data)
+      $app.store.auth.setTokens(tokens?.data)
       $app.store.authGoogle.setResponse({}, SignupMethods.Google);
-      confirmResponse.value = tokens.data
+      confirmResponse.value = tokens?.data
       // isSignupAndBuyGoogle.value = false;
       // firstName.value = '';
       // lastName.value = '';
@@ -1895,12 +1927,11 @@ const signupAndBuyGoogle = () => {
         }
 
         await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
-          $app.store.user.blockchainUserWallet = resp?.data.uid
+          $app.store.user.blockchainUserWallet = resp?.data?.uid
         })
     })
     .catch((e) => {
       console.error(e);
-      isSubmitEmailForm.value = false;
         if (e?.errors?.error?.message) {
             backendError.value = {value: e.errors.error.message, field: 'default'}
 

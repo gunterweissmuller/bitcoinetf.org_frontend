@@ -7,6 +7,7 @@
           <div class="w-referrals__amount-text">${{ $app.filters.roundedFixed2(walletReferrals.usd_amount, 2) }}</div>
         </div>
         <a-button
+          v-if="!address"
           class="w-referrals__amount-withdraw"
           variant="secondary"
           text="Add Withdrawal Method"
@@ -14,6 +15,29 @@
           :icon="Icon.MonoPlus"
           @click="openModal"
         />
+
+        <div v-else class="w-referrals__cards-item w-referrals__cards-item-withdraw">
+          <div class="w-referrals__cards-header">
+            <a-icon width="24" height="24" class="w-referrals__cards-icon-method" :name="typeMethodIcon" />
+            <a-icon
+              width="18"
+              height="18"
+              class="w-referrals__cards-icon-edit"
+              :name="Icon.MonoActionEdit"
+              @click="openModal"
+            />
+          </div>
+          <div class="w-referrals__cards-body">
+            <div class="w-referrals__cards-subtitle">WITHDRAW TO:</div>
+            <div class="w-referrals__cards-title-second">
+              {{ address }}
+            </div>
+          </div>
+          <div class="w-referrals__cards-footer">
+            <div class="w-referrals__cards-text">Withdrawals will be made automatically daily</div>
+          </div>
+        </div>
+
         <div class="w-referrals__amount-totalsum">
           <div class="w-referrals__amount-caption">
             <div class="w-referrals__amount-share">
@@ -24,55 +48,69 @@
 
           <div>
             <div class="w-referrals__amount-name">TOTAL REFERRALS EARNED</div>
-            <div class="w-referrals__amount-price">${{ personalReferralStats?.sum_referrals || 0 }}</div>
+            <div class="w-referrals__amount-price">
+              ${{ $app.filters.roundedFixed2(personalReferralStats?.sum_referrals, 2) || 0 }}
+            </div>
           </div>
 
           <m-dropdown :options="timeOptions" />
         </div>
       </div>
 
-      <div class="w-referrals__subtitle">Transactions</div>
-
-      <div v-if="personalReferrals.length" class="w-referrals__list">
-        <transition-group name="fade" tag="div">
-          <div v-for="item in personalReferrals" :key="item?.uuid" class="w-referrals__item">
-            <div
-              class="w-referrals__item-pic"
-              :class="['w-referrals__item-pic', { 'w-referrals__item-pic--minus': item.type !== 'debit_to_client' }]"
-            >
-              <a-icon width="18" height="18" :name="item.type === 'debit_to_client' ? Icon.MonoPlus : Icon.MonoMinus" />
-            </div>
-            <div class="w-referrals__item_info">
-              <div class="w-referrals__item_info-title">Referral</div>
-              <div class="w-referrals__item_info-date">
-                {{ $app.filters.dayjs(item?.created_at)?.format('D MMMM YY HH:mm:ss') }}
+      <div v-if="isLoadingRefferals">
+        <div class="w-referrals__subtitle">Transactions</div>
+        <div v-if="personalReferrals.length" class="w-referrals__list">
+          <transition-group name="fade" tag="div">
+            <div v-for="item in personalReferrals" :key="item?.uuid" class="w-referrals__item">
+              <div
+                class="w-referrals__item-pic"
+                :class="['w-referrals__item-pic', { 'w-referrals__item-pic--minus': item.type !== 'debit_to_client' }]"
+              >
+                <a-icon
+                  width="18"
+                  height="18"
+                  :name="item.type === 'debit_to_client' ? Icon.MonoPlus : Icon.MonoMinus"
+                />
+              </div>
+              <div class="w-referrals__item_info">
+                <div class="w-referrals__item_info-title">Referral</div>
+                <div class="w-referrals__item_info-date">
+                  {{ $app.filters.dayjs(item?.created_at)?.format('D MMMM YY HH:mm:ss') }}
+                </div>
+              </div>
+              <div v-if="item.status === 'pending'" class="w-referrals__item_sums">Pending</div>
+              <div v-else class="w-referrals__item_sums">
+                <div class="w-referrals__item_info-usd">
+                  {{ item.type === 'debit_to_client' ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }}
+                </div>
               </div>
             </div>
-            <div v-if="item.status === 'pending'" class="w-referrals__item_sums">Pending</div>
-            <div v-else class="w-referrals__item_sums">
-              <div class="w-referrals__item_info-usd">
-                {{ item.type === 'debit_to_client' ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }}
-              </div>
-            </div>
-          </div>
-        </transition-group>
-      </div>
+          </transition-group>
+        </div>
 
-      <div v-if="personalReferrals.length && hasNextPage" class="w-referrals__more">
-        <div @click="loadMoreReferrals" class="w-referrals__more-text">Load more</div>
-      </div>
+        <div v-if="personalReferrals.length && hasNextPage" class="w-referrals__more">
+          <div @click="loadMoreReferrals" class="w-referrals__more-text">Load more</div>
+        </div>
 
-      <div v-if="!personalReferrals.length" class="w-referrals__empty">
-        <img v-if="$app.store.user.theme === 'light'" class="w-referrals__empty-pic" src="/img/cloud.png" alt="empty" />
-        <img v-else class="w-referrals__empty-pic" src="/img/cloud-dark.png" alt="empty" />
-        <div class="w-referrals__empty-title">You don’t have any transactions yet.</div>
-        <div class="w-referrals__empty-text">Start inviting your friends to earn referral bonuses!</div>
+        <div v-if="!personalReferrals.length" class="w-referrals__empty">
+          <img
+            v-if="$app.store.user.theme === 'light'"
+            class="w-referrals__empty-pic"
+            src="/img/cloud.png"
+            alt="empty"
+          />
+          <img v-else class="w-referrals__empty-pic" src="/img/cloud-dark.png" alt="empty" />
+          <div class="w-referrals__empty-title">You don’t have any transactions yet.</div>
+          <div class="w-referrals__empty-text">Start inviting your friends to earn referral bonuses!</div>
+        </div>
       </div>
 
       <ul class="w-referrals__stats w-referrals__stats--desktop">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">${{ totalReferralStats?.sum_referrals || 0 }}</div>
+          <div class="w-referrals__stat-value">
+            ${{ $app.filters.roundedFixed2(totalReferralStats?.sum_referrals, 2) || 0 }}
+          </div>
           <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
@@ -131,7 +169,13 @@
             </div>
           </div>
 
-          <button class="w-referrals__share-button" @click="share">Share on {{ shareCurrentSocial.name }}</button>
+          <button
+            :disabled="!mobileDetector && shareCurrentSocial.name === 'SMS'"
+            class="w-referrals__share-button"
+            @click="share"
+          >
+            Share on {{ shareCurrentSocial.name }}
+          </button>
         </div>
 
         <div class="w-referrals__instructions">
@@ -161,7 +205,9 @@
       <ul class="w-referrals__stats w-referrals__stats--mobile">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>
-          <div class="w-referrals__stat-value">${{ totalReferralStats?.sum_referrals || 0 }}</div>
+          <div class="w-referrals__stat-value">
+            ${{ $app.filters.roundedFixed2(totalReferralStats?.sum_referrals, 2) || 0 }}
+          </div>
           <img src="/img/referrals/earn.png" class="w-referrals__stat-img" />
         </li>
         <li class="w-referrals__stat">
@@ -203,6 +249,11 @@ import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-p
 import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
 import { user } from '~/src/app/store/user'
 
+interface ISetMethodBody {
+  address: string
+  method: string
+}
+
 const userStore = user()
 
 const isOpenModal = ref(false)
@@ -221,7 +272,7 @@ const openModal = async () => {
   if (isKycFinished) {
     isOpenModal.value = true
   } else {
-    navigateTo({ name: 'personal-kyc' })
+    navigateTo({ name: 'personal-kyc', query: { redirect: 'personal-more-referrals' } })
   }
 }
 
@@ -281,8 +332,8 @@ const referralCode = computed(() => userStore.info?.referrals?.code)
 
 const referralLink = computed(() =>
   referralCode.value
-    ? window.location.origin + '/personal/registration' + `?referral=${referralCode.value}`
-    : window.location.origin + '/personal/registration',
+    ? window.location.origin.replace('app.', '') + '/personal/registration' + `?referral=${referralCode.value}`
+    : window.location.origin.replace('app.', '') + '/personal/registration',
 )
 
 const shareCurrentSocial = computed(
@@ -334,6 +385,7 @@ const centrifuge = ref<Centrifuge | null>(null)
 
 const walletReferrals = ref<any>([])
 const personalReferrals = ref<any>([])
+const isLoadingRefferals = ref<boolean>(false)
 const currentPage = ref(1)
 const hasNextPage = ref(true)
 const transactionsKey = ref(0)
@@ -342,31 +394,28 @@ const method = ref('')
 const address = ref('')
 const setMethodError = ref('')
 
-const setMethod = () => {
-  setTimeout(async () => {
-    await getWalletReferrals()
-  }, 2000)
+const setMethod = async (payload: ISetMethodBody) => {
+  const { method, address } = payload
+  await $app.api.info.billing
+    .setWithdrawalMethod({
+      address,
+      method,
+      walletType: 'referral',
+    })
+    .then(async () => {
+      await getWalletReferrals()
+    })
+    // @ts-ignore
+    .catch((e) => {
+      if (e?.errors?.error?.message) {
+        setMethodError.value = e.errors.error.message
+      } else {
+        setMethodError.value = 'Something went wrong'
+      }
+    })
 }
 
-const typeWorkMethod = computed(() => {
-  return 'Manual'
-})
-
-const typeMethodIcon = computed(() => {
-  if (method.value === 'polygon_usdt') {
-    return Icon.ColorfulUsdt
-  }
-
-  return method.value === 'tron' ? Icon.ColorfulTron : Icon.ColorfulUsdant
-})
-
-const typeMethodText = computed(() => {
-  if (method.value === 'polygon_usdt') {
-    return 'Polygon'
-  }
-
-  return method.value === 'tron' ? 'Tron' : 'USDANT'
-})
+const typeMethodIcon = computed(() => Icon.ColorfulUsdtPolygon)
 
 const selectedAddressShort = computed(() => {
   if (!address.value) return ''
@@ -410,6 +459,11 @@ const getPersonalReferrals = async (initial: boolean = false): Promise<void> => 
     .catch(() => {
       // Todo: notify something went wrond
     })
+    .finally(() => {
+      if (initial) {
+        isLoadingRefferals.value = true
+      }
+    })
 }
 
 const getPersonalReferralsStats = async (time: any = '') => {
@@ -425,17 +479,6 @@ const getPersonalReferralsStats = async (time: any = '') => {
   if (!time || time === 'all') {
     totalReferralStats.value = data
   }
-}
-
-const withdrawalReferrals = async () => {
-  $app.api.eth.billingEth
-    .withdrawalReferrals()
-    .then(() => {
-      getWalletReferrals()
-    })
-    .catch((e: any) => {
-      console.error(e?.errors)
-    })
 }
 
 const loadMoreReferrals = async () => {
@@ -459,7 +502,7 @@ const timeOptions = [
 
 onMounted(async () => {
   await getWalletReferrals()
-  await getPersonalReferrals()
+  await getPersonalReferrals(true)
 
   getPersonalReferralsStats()
 
@@ -543,6 +586,15 @@ const referralPromoCards: TPromoCardDetails[] = [
 function getRealIndex(swipe: number) {
   shareData.description = referralPromoCards[swipe].description
 }
+const detectMob = () => {
+  const toMatch = [/Android/i, /webOS/i, /iPhone/i, /iPad/i, /iPod/i, /BlackBerry/i, /Windows Phone/i]
+
+  return toMatch.some((toMatchItem) => {
+    return navigator.userAgent.match(toMatchItem)
+  })
+}
+
+const mobileDetector = computed(() => detectMob())
 </script>
 
 <style src="./w-referrals.scss" lang="scss" />

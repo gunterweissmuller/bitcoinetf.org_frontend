@@ -308,7 +308,7 @@ const { copy } = useClipboard({ copiedValue })
 
 const copyToClipboard = (address = false) => {
   if (address) {
-    copy(paymentAddress)
+    copy(paymentAddress.value)
     addressCopied.value = true
     setTimeout(() => {
       addressCopied.value = false

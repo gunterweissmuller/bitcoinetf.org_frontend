@@ -5,6 +5,7 @@
     @mouseleave="hover(false)"
     @focus="toggle(true)"
     @blur="toggle(false)"
+    @click="toggleVisible()"
   >
     <div class="a-tooltip-info__button">
       <slot name="button"/>
@@ -64,6 +65,10 @@ const toggle = (direction : boolean) => {
 const hover = (direction: boolean) => {
   if (focus.value) return;
   open.value = direction;
+}
+
+const toggleVisible = () => {
+  toggle(!open.value)
 }
 </script>
 

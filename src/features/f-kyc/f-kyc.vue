@@ -158,7 +158,7 @@ const { addNotification } = useNotification()
 
 const { $app } = useNuxtApp()
 const router = useRouter()
-
+const route = useRoute()
 
 const { files, open, onChange, reset } = useFileDialog()
 
@@ -404,7 +404,8 @@ const onCancelStartKyc = () => {
 }
 
 const onFinishKycClick = () => {
-  router.push({ name: 'personal-dividends' })
+  const redirectRoute = route.query?.redirect as string
+  router.push({ name: redirectRoute || 'personal-dividends' })
 }
 
 onMounted(async () => {

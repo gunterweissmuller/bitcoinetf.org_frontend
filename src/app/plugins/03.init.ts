@@ -4,7 +4,6 @@ export default defineNuxtPlugin(async ({ $app, _route }: any) => {
   if (_route.path === '/personal/reset') {
     $app.store.auth.logout(false)
   }
-
   try {
     await $app.store.auth.refresh()
     if (isUserAuthenticated && !_route.query?.accessToken) {

@@ -20,7 +20,7 @@
             />
           </template>
           <template #text>
-            {{ tooltipText[props.type] }}
+
           </template>
         </a-tooltip-info>
 
@@ -28,25 +28,69 @@
 
       <div class="w-chart-fund__head">
         <div class="w-chart-fund__titles">
-          <div class="w-chart-fund__titles-title" v-if="totalAmountUsdComp && (props.type === 'assets' || props.type === 'asset')">
+          <!-- assets -->
+          <div
+            v-if="!!assetsStatistic && props.type === 'assets'"
+            class="w-chart-fund__titles-title"
+          >
             ${{$app.filters.rounded(totalAmountUsdComp, 0)}}
           </div>
-          <div class="w-chart-fund__titles-title" v-if="props.type === 'shareholders'">
-            {{ shareholdersAmount }} Shareholders
+
+          <!-- asset -->
+          <div
+            v-if="!!assetStatistic && props.type === 'asset'"
+            class="w-chart-fund__titles-title"
+          >
+          ${{$app.filters.rounded(dataAmount, 0)}}
+          </div>
+
+          <!-- shareholders -->
+          <div
+            v-if="!!shareholdersStatistic && props.type === 'shareholders'"
+            class="w-chart-fund__titles-title"
+          >
+            {{ dataAmount }} Shareholders
           </div>
         </div>
 
-        <div v-if="!!!shareholdersStatistic && (!!!shareholdersStatistic && (props.type === 'assets' || props.type === 'asset'))" :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': difference < 0 }]">
+        <!-- assets -->
+        <div
+          v-if="!!assetsStatistic && props.type === 'assets'"
+          :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': amountUsdDifference < 0 }]"
+        >
           <div
-            :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': difference < 0 }]"
+            :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': amountUsdDifference < 0 }]"
           >
             {{ amountUsdDifference > 0 ? '+' : '' }} ${{ $app.filters.rounded(amountUsdDifference, 2) }} ({{
-              $app.filters.rounded(difference, 2)
+              $app.filters.rounded(assetsStatistic?.percent_aum, 2)
             }}%)
           </div>
         </div>
 
-        <div v-else :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': !shareholdersStatistic?.is_growth }]">
+        <!-- asset -->
+        <div
+          v-if="!!assetStatistic && props.type === 'asset'"
+          :class="['w-chart-fund__info']"
+        >
+          <div class="w-chart-fund__info-convert">
+            <a-icon
+              width='11'
+              height='11'
+              class='w-chart-fund__caption-icon'
+              :class="{ 'bitcoin' : orderType !== 'usdt', 'usdt' : orderType === 'usdt' }"
+              :name="(orderType === 'usdt' ? Icon.ColorfulAssetUsd : Icon.MonoBitcoinB)"
+            />
+            <div class="w-chart-fund__info-text">
+              {{$app.filters.rounded(((dataAmount ?? 0)) / (orderType === 'usdt' ? 1 : btcPrice), 0)}}
+            </div>
+          </div>
+        </div>
+
+        <!-- shareholders -->
+        <div
+          v-if="!!shareholdersStatistic && props.type === 'shareholders'"
+          :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': !shareholdersStatistic?.is_growth }]"
+        >
           <div :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': !shareholdersStatistic?.is_growth }]">
             {{ shareholdersStatistic?.is_growth ? '+' : '-'}}${{ $app.filters.rounded(shareholdersStatistic?.half_year_change_size_usd, 2) }}
             ({{
@@ -70,7 +114,31 @@ import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons';
 import ATooltipInfo from '~/src/shared/ui/atoms/a-tooltip-info/a-tooltip-info.vue';
-import { IAsset } from '~/src/shared/types/global'
+import { IAsset } from '~/src/shared/types/global';
+
+interface DataItem {
+  amount: number;
+  created_at: string;
+  label: string;
+}
+
+interface SharehodlersStatistic {
+  is_growth: boolean;
+  percent: number;
+  half_year_change_size_usd: number;
+}
+
+interface AssetsStatistic {
+  is_growth_aum: boolean;
+  percent_aum: number;
+  half_year_change_size_usd_aum: number;
+}
+
+interface AssetStatistic {
+  is_growth: boolean;
+  percent: number;
+  half_year_change_size_usd: number;
+}
 
 const { $app } = useNuxtApp();
 
@@ -95,6 +163,9 @@ const props = withDefaults(
   },
 );
 
+const btcPrice = computed(() => $app.store.user?.statistic?.btc_price);
+const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc');
+
 // always unique id
 const CHART_ID : string = `${getCurrentInstance()?.uid ?? Math.floor(Math.random() * 10**10)}`;
 
@@ -111,12 +182,11 @@ const amountUsdDifference = computed(() => {
   return $app.store.user.totalFund?.differenceUsd || 0;
 });
 
-const difference = computed(() => {
-  return $app.store.user.totalFund?.difference || 0;
-});
+const dataAmount = ref<number | null>(null);
 
-const shareholdersAmount = ref<number | null>(null);
 const shareholdersStatistic = ref<SharehodlersStatistic | null>(null);
+const assetsStatistic = ref<AssetsStatistic | null>(null);
+const assetStatistic = ref<AssetStatistic | null>(null);
 
 const tooltipText: Record<ChartType, string> = {
   'assets': 'AUM = Assets under management.',
@@ -153,18 +223,6 @@ const options = {
   },
 }
 
-interface DataItem {
-  amount: number;
-  created_at: string;
-  label: string;
-}
-
-interface SharehodlersStatistic {
-  is_growth: boolean;
-  percent: number;
-  half_year_change_size_usd: number;
-}
-
 const changeChartData = (tabs : DataItem[]) => {
   if (CHART_INSTANCE) {
     CHART_INSTANCE.data.datasets[0].data = tabs.map((item : DataItem) => Number(item.amount));
@@ -178,34 +236,47 @@ const changeChartData = (tabs : DataItem[]) => {
 const getStatistics = async () => {
   let response;
   let data;
+  // shareholders, assets
   if (['shareholders', 'assets'].includes(props.type)) {
     response = await $app.api.eth.statisticEth.getShareholdersGrowth();
-    const statisticField = props.aumSizeUsd ? 'aum_size_usd' : props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd'
-    shareholdersAmount.value = response.find((item: Record<string, any>) => item.shareholders)[statisticField];
+
+    const statisticField = props.type === 'shareholders' ? 'shareholders' : 'aum_size_usd';
+    dataAmount.value = response.find((item: Record<string, any>) => item.shareholders)[statisticField];
     shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
-    $app.store.user.totalFund.totalAmountUsd = shareholdersAmount.value;
+    assetsStatistic.value = response.find((item: Record<string, any>) => item.percent_aum);
+
+    if (statisticField === 'shareholders') {
+      $app.store.user.totalFund.shareholders = dataAmount.value;
+    } else {
+      $app.store.user.totalFund.totalAmountUsd = dataAmount.value;
+    }
+    $app.store.user.totalFund.differenceUsd = assetsStatistic.value?.half_year_change_size_usd_aum;
 
     const valueType = props.type === 'shareholders' ? 'y' : 'aum_size_';
-
-    data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent);
+    data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent && !item.percent_aum);
     data = data.map((item : Record<string, any>, index : number) : DataItem => ({
       amount: item[`${valueType}${index}`],
       created_at: new Date(`2 ${item["x"+index]}`).toISOString().replace(/T.*/, ''),
       label: item[`x${index}`]
     }));
+
+  // asset
   } else if (['asset'].includes(props.type)) {
     const { data: { flow: responseData } } = await $app.api.eth.statisticEth.getStatisticFlow({ asset: props.asset });
-    response = responseData
+    response = responseData;
 
-    shareholdersStatistic.value = response.find((item: Record<string, any>) => item.percent);
-    $app.store.user.totalFund.totalAmountUsd = response.find((item: Record<string, any>) => item.value).value;
+    dataAmount.value = response.find((item: Record<string, any>) => item.value).value;
 
-    data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent && !item.value);
+    assetStatistic.value = response.find((item: Record<string, any>) => item.percent);
+
+    data = response.filter((item : Record<string, any>) => !item.shareholders && !item.percent && !item.value && !item.percent_aum);
     data = data.map((item : Record<string, any>, index : number) : DataItem => ({
       amount: item[`y${index}`],
       created_at: new Date(`2 ${item["x"+index]}`).toISOString().replace(/T.*/, ''),
       label: item[`x${index}`]
     }));
+
+  // xz che
   } else {
     const requestPayload: any = {filters: {}}
 

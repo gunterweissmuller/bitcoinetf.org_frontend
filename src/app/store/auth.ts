@@ -42,6 +42,8 @@ export const auth = defineStore('auth', {
       if(window.location.hostname === config.public.APP_DOMAIN) {
         const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`
         window.location.href = newUrl;
+
+        return ;
       }
 
       if (redirect) {

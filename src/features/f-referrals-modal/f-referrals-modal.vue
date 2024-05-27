@@ -2,15 +2,18 @@
   <m-modal @close="close" class="f-referrals-modal" :max-height="MAX_HEIGHT" v-model="isOpenModal">
     <div class="f-referrals-modal__wrap">
       <div class="f-referrals-modal__title">Withdraw Method</div>
-      <div class="f-referrals-modal__subtitle">You will automatically withdraw your entire balance.</div>
-      <m-select
-        class="f-referrals-modal__methods"
-        :left-input-icon="METHODS_OPTIONS?.[selectedMethod]?.icon"
+      <div class="f-referrals-modal__subtitle">Choose how you want to withdraw.</div>
+      
+      <a-input
+        :left-icon="METHODS_OPTIONS?.[selectedMethod]?.icon"
+        custom
+        readonly
+        :model-value="METHODS_OPTIONS?.[selectedMethod]?.text"
         label="Withdrawal method"
-        v-model="selectedMethod"
-        :options="methods"
+        :hidden-button="true"
+        data-test-id="a-input"
+        imgTrue
       />
-      <nuxt-link to="/bitcoin-education" class="f-referrals-modal__method-text">Get started with USDT (Tron)</nuxt-link>
       <a-input
         v-if="selectedMethod"
         class="f-referrals-modal__address"
@@ -23,10 +26,11 @@
         v-model="selectedAddress"
         :label="inputLabel"
       />
+      <div class="f-referrals-modal__address-text">Withdrawals will be made automatically daily</div>
       <a-button
         :disabled="!selectedAddress"
         class="f-referrals-modal__set f-referrals-modal__btn"
-        text="Withdraw"
+        text="Set withdrawal method"
         @click="accept"
       />
       <a-button
@@ -35,6 +39,14 @@
         variant="secondary"
         @click="close"
       />
+      <span
+        class="f-referrals-modal__remove"
+        text="Remove withdrawal method"
+        variant="tertiary"
+        @click="removeWallet"
+        v-if="address"
+        >Remove withdrawal method</span
+      >
     </div>
   </m-modal>
 </template>
@@ -128,8 +140,12 @@ watch(
 const accept = async () => {
   isOpenModal.value = false
   await setMethod({ method: selectedMethod.value, address: selectedAddress.value })
-  await withdrawalReferrals()
+  // await withdrawalReferrals()
   emit('accept', { method: selectedMethod.value, address: selectedAddress.value })
+}
+const removeWallet = () => {
+  isOpenModal.value = false
+  emit('accept', { method: 'none', address: 'none' })
 }
 const close = () => {
   isOpenModal.value = false
