@@ -265,24 +265,11 @@ export function useLogin($app) {
 
     const handleFacebookConnect = () => {
 
-        //old
-        const initFacebook = async (id) => {
-            (window as any).FB.init({
-            appId: id, //You will need to change this
-            cookie: true, // This is important, it's not enabled by default
-            version: "v13.0"
-            });
-        }
-
         $app.api.eth.auth
         .getCredintialsFacebook()
         .then(async (res) => {
-            console.log(res);
-            const facebookId = 934423128173330; //  res?.data?.client_id;
+            const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
 
-            // await initFacebook(res?.data?.client_id);
-
-            // way 2
             const sdk = await getFbSdk(
                 {
                     appId: facebookId, //You will need to change this
@@ -290,8 +277,6 @@ export function useLogin($app) {
                     version: "v13.0"
                 }
             ) //sdk === FB in this case
-
-            console.log(sdk);
 
             sdk.init(
                 {
@@ -302,37 +287,6 @@ export function useLogin($app) {
             );
 
             sdk.login((response) => {
-                if (response?.authResponse) {
-                    $app.store.authTemp.response = response.authResponse;
-
-                    $app.api.eth.auth
-                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-                    .then(async (res) => {
-                        const tempLogin = () => {
-                            $app.api.eth.auth.
-                            loginFacebook({
-                                facebook_id: $app.store.authTemp.response?.userID,
-                                facebook_data: $app.store.authTemp.response?.accessToken,
-                            })
-                            .then((jwtResponse: any) => {
-                                continueLogin(jwtResponse);
-                            })
-                        }
-
-                        checkAuthType(res, tempLogin);
-                    })
-                    .catch((e) => {
-                        // Todo: notify something went wrond
-                        console.error(e)
-                    })
-
-                }
-            });
-
-            return;
-            // old
-            (window as any).FB.login(function(response) {
-                console.log(response);
                 if (response?.authResponse) {
                     $app.store.authTemp.response = response.authResponse;
 
@@ -485,8 +439,6 @@ export function useLogin($app) {
 
             // sign message
             const msg = await (window as any).ethereum.request({method: 'personal_sign', params: [resMsg?.message, accounts[0]]});
-
-            console.log({ signature: msg, message: resMsg?.message, wallet_address: signer?.address })
 
             $app.api.eth.auth
             .loginMetamask({ signature: msg, message: resMsg?.message, wallet_address: signer?.address })

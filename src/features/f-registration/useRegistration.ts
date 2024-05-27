@@ -311,22 +311,10 @@ export function useRegistration($app) {
 
     const handleFacebookConnect = async () => {
 
-        //old
-        const initFacebook = async (id) => {
-            (window as any).FB.init({
-                appId: id, //You will need to change this
-                cookie: true, // This is important, it's not enabled by default
-                version: "v13.0"
-            });
-        }
-
         $app.api.eth.auth
         .getCredintialsFacebook()
         .then(async (res) => {
-            console.log(res);
-            const facebookId = 934423128173330; //  res?.data?.client_id;
-
-            // await initFacebook(res?.data?.client_id);
+            const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
 
             const sdk = await getFbSdk(
                 {
@@ -368,35 +356,6 @@ export function useRegistration($app) {
                     })
                 }
             });
-
-            return;
-            //old
-            (window as any).FB.login(function(response) {
-                console.log(response);
-                if (response?.authResponse) {
-                    $app.store.authTemp.response = response.authResponse;
-
-                    $app.api.eth.auth
-                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-                    .then(async (res) => {
-                        if(res.data.auth_type === 'registration') {
-                            $app.store.registration.currentStep = Steps.Email
-                            $app.store.registration.currentSignup = SignupMethods.Facebook;
-                        } else {
-                            $app.api.eth.auth.
-                            loginFacebook({
-                                facebook_id: $app.store.authTemp.response?.userID,
-                                facebook_data: $app.store.authTemp.response?.accessToken,
-                            })
-                            .then((jwtResponse: any) => {
-                                continueLogin(jwtResponse);
-                            })
-                        }
-
-                    })
-                }
-            });
-
         })
         .catch((e) => {
             // Todo: notify something went wrond

@@ -1281,24 +1281,10 @@ function getFbSdk(options) {
 }
 
 const handleFacebookConnect = async () => {
-
-  // old
-  const initFacebook = async (id) => {
-    (window as any).FB.init({
-      appId: id, //You will need to change this
-      cookie: true, // This is important, it's not enabled by default
-      version: "v13.0"
-    });
-  }
-
   $app.api.eth.auth
   .getCredintialsFacebook()
   .then(async (res) => {
-    console.log(res);
-
-    const facebookId = 934423128173330; //  res?.data?.client_id;
-
-    // await initFacebook(res?.data?.client_id);
+    const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
 
     const sdk = await getFbSdk(
         {
@@ -1323,8 +1309,6 @@ const handleFacebookConnect = async () => {
         $app.api.eth.auth
         .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
         .then(async (res) => {
-          console.log(res);
-
           if(res.data.auth_type === 'registration') {
             signupStep.value = SignupSteps.Signup;
             signupMethod.value = SignupMethods.Facebook;
@@ -1353,49 +1337,6 @@ const handleFacebookConnect = async () => {
 
       }
     });
-
-    return;
-    //old
-    (window as any).FB.login(function(response) {
-      console.log(response);
-      if (response?.authResponse) {
-        $app.store.authTemp.response = response.authResponse;
-
-        $app.api.eth.auth
-        .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-        .then(async (res) => {
-          console.log(res);
-
-          if(res.data.auth_type === 'registration') {
-            signupStep.value = SignupSteps.Signup;
-            signupMethod.value = SignupMethods.Facebook;
-            scrollToSignupFields();
-            } else {
-              $app.api.eth.auth.
-                loginFacebook({
-                  facebook_id: $app.store.authTemp.response?.userID,
-                  facebook_data: $app.store.authTemp.response?.accessToken,
-                })
-                  .then((jwtResponse: any) => {
-                    $app.store.auth.setTokens(jwtResponse.data)
-                  })
-                  .then(async () => {
-                    await $app.api.eth.auth.getUser().then((resp) => {
-                      $app.store.user.info = resp?.data
-                    });
-                  });
-            }
-
-        })
-        .catch((e) => {
-          // Todo: notify something went wrond
-          console.error(e)
-        })
-
-      } else {
-      }
-    });
-
   })
   .catch((e) => {
     // Todo: notify something went wrond
@@ -1911,8 +1852,6 @@ const signupAndBuyGoogle = () => {
     return;
   }
   if(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '') {
-    console.log(firstName.value === '' || lastName.value === '' || email.value === '' || !isEmailValid.value  || token.value === '')
-    console.log(firstName.value === '', lastName.value === '', email.value === '', !isEmailValid.value, token.value === '')
     backendError.value = {value: 'Fill in all the fields', field: 'default'};
     return;
   }
