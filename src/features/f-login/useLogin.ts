@@ -390,7 +390,7 @@ export function useLogin($app) {
                 clientId: parsedUrl?.client_id,
                 scope: parsedUrl?.scope,
                 redirectURI: parsedUrl?.redirect_uri,
-                usePopup: true,
+                usePopup: false,
             })
 
             const data = await (window as any).AppleID.auth.signIn()
