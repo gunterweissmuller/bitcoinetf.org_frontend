@@ -30,7 +30,6 @@ export const auth = defineStore('auth', {
     },
 
     logout(redirect = true) {
-      const router = useRouter()
       const config = useRuntimeConfig()
       this.accessToken = ''
       this.refreshToken = ''
