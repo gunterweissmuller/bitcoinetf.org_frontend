@@ -6,6 +6,7 @@ import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { Steps } from './steps'
 import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
+import { getCookie, deleteCookie } from '../../shared/helpers/cookie.helpers';
 
 export function useRegistration($app) {
     const router = useRouter()
@@ -392,10 +393,11 @@ export function useRegistration($app) {
             phone_number: tempPhone,
             phone_number_code: countryCode.value,
         }
-        const referralCode = route.query?.referral
+        const referralCode = getCookie('referral_code')
 
         if (referralCode) {
             initPayload.ref_code = referralCode
+            deleteCookie('referral_code')
         }
         
         if($app.store.registration.currentSignup === SignupMethods.Facebook) {

@@ -66,6 +66,7 @@
   import fRegistrationError from '../f-registration-error/f-registration-error.vue'
   import { useRegistration } from './useRegistration'
   import { SignupMethods } from '~/src/shared/constants/signupMethods'
+  import { setCookie } from '~/src/shared/helpers/cookie.helpers';
 
   const { $app } = useNuxtApp()
   const router = useRouter()
@@ -74,6 +75,12 @@
   const metamaskError = ref("");
 
   onMounted(() => {
+    const referralCode = route.query?.referral
+    const day = 86_400
+    if (referralCode) {
+        setCookie('referral_code', referralCode as string, {"max-age": day})
+    }
+        
     // if verify link
     if (route.query.code && route.query.email) {
         router.replace({'query': ''});
