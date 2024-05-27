@@ -160,6 +160,12 @@ const openPurchase = () => {
 
   isOpenModal.value = true
 }
+
+onMounted(() => {
+  if (!!purchases.length) {
+    getPurchases()
+  }
+})
 </script>
 
 <style src="./w-purchases.scss" lang="scss" />
