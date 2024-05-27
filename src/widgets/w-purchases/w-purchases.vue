@@ -162,7 +162,7 @@ const openPurchase = () => {
 }
 
 onMounted(() => {
-  if (!!purchases.length) {
+  if (!purchases.value.length) {
     getPurchases()
   }
 })
