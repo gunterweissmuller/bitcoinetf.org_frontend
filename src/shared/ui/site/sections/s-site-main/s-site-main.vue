@@ -4,7 +4,7 @@
       <div class="s-site-main__wrapper-title">
         <h1 class="s-site-main__title s-site-main__title--h1-lowercase">WE MAKE BITCOIN ETFs ACCESSIBLE FOR ALL</h1>
         <p class="s-site-main__title_info">
-          Buy Bitcoin ETFs that pays dividends: choose to earn
+          Buy Bitcoin ETF that pays dividends: choose to earn
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[18px]"
             src="/img/icons/colorful/usdt.svg"
@@ -87,6 +87,7 @@ import { SwiperSlide } from 'swiper/vue'
 import MProfitCalculator from '~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue'
 import SSiteMarquee from '../s-site-marquee/s-site-marquee.vue'
 import SSiteMarqueeNew from '../s-site-marquee-new/s-site-marquee-new.vue'
+import { auth } from '~/src/app/store/auth'
 
 defineProps<{
   data: any
@@ -94,6 +95,10 @@ defineProps<{
 }>()
 
 const { $app } = useNuxtApp()
+const router = useRouter()
+
+const authStore = auth()
+
 const btcValue = ref(0)
 
 const fundTotalBtc = computed(() => {
@@ -134,7 +139,11 @@ const scrollToSection = () => {
 }
 
 function clickLaunch() {
-  window.open('/personal/registration', '_blank').focus()
+  if (authStore.isUserAuthenticated) {
+    router.push('/personal/fund')
+  } else {
+    window.open('/personal/login', '_blank').focus()
+  }
 }
 
 onMounted(async () => {
