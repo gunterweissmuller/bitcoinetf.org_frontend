@@ -28,7 +28,7 @@
               Sell
           </div> -->
 
-          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="handleVerify">
+          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" :class="{ disabled: !isNonEmptyUserEtfBalance }" @click="handleVerify">
             <a-icon
                 width="18"
                 height="18"
@@ -461,7 +461,7 @@ const handleVerify = async () => {
   //   navigateTo({ name: 'personal-kyc' })
   // }
 }
-
+const isNonEmptyUserEtfBalance = computed(() => $app.store.user?.lastPayment?.total_balance_usd  > 0)
 </script>
 
 <style src="./w-etfs.scss" lang="scss" />

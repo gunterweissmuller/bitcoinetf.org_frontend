@@ -107,13 +107,13 @@ const assets = computed(() => {
 const strategies = [
   {
     name: 'Tether',
-    percent: 0,
+    percent: 60,
     icon: Icon.ColorfulUsdt,
     color: '#1BA27A'
   },
   {
     name: 'Bitcoin',
-    percent: 0,
+    percent: 40,
     icon: Icon.ColorfulBitcoin,
     color: '#FF8D07'
   },
