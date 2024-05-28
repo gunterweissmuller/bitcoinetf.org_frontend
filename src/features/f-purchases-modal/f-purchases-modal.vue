@@ -41,7 +41,6 @@
           :icon="Icon.MonoLink"
           class="f-purchases-modal__view f-purchases-modal__btn"
           text="View on Blockchain"
-          @click="view"
         />
       </a>
       <a :href="`${explorerHostname}/transaction/${props.purchase?.transaction_hash}`" target="_blank">
@@ -51,7 +50,6 @@
           class="f-purchases-modal__issuing f-purchases-modal__btn"
           text="Issuing Transaction"
           variant="secondary"
-          @click="issuing"
         />
       </a>
       <a-button
@@ -108,13 +106,6 @@ const actualValue = computed(() => {
   }
 })
 
-const view = () => {
-  window.open(`${explorerHostname}/account/` + props.purchase?.account?.blockchain_wallet_address)
-}
-
-const issuing = () => {
-  window.open(`${explorerHostname}/transaction/` + props.purchase?.transaction_hash)
-}
 const close = () => {
   isOpenModal.value = false
   emit('close')

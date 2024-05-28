@@ -3,7 +3,7 @@
     <aside ref="asideRef" :class="['w-aside', { 'w-aside--page': isPage }]">
       <div class="w-aside__inner">
         <div class="w-aside__logo">
-          <nuxt-link to="/">
+          <nuxt-link :to="{ name: 'index' }">
             <a-icon class="w-aside__logo-icon" :name="getLogo" width="142" height="24" />
           </nuxt-link>
         </div>
