@@ -41,6 +41,10 @@
     flex-direction: column;
     align-items: center;
 
+    @include breakpoint($break-tablet-minus) {
+      height: auto;
+    }
+
 
     &-btn {
       &--indent {
