@@ -7,6 +7,9 @@ import { hostname } from '~/src/app/adapters/ethAdapter'
 import { Steps } from './steps'
 import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 import { getCookie, deleteCookie } from '../../shared/helpers/cookie.helpers';
+import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/vue'
+import { useWeb3Modal, useWeb3ModalProvider, useWeb3ModalAccount, useWeb3ModalEvents } from '@web3modal/ethers/vue'
+  
 
 export function useRegistration($app) {
     const router = useRouter()
@@ -593,6 +596,82 @@ export function useRegistration($app) {
             })
     }
 
+    // walletConnect
+
+    const handleWalletConnect = async () => {
+        // 1. Get projectId at https://cloud.walletconnect.com
+        const projectId = '2c405771381e1a1f65a48a216a166f61'
+
+        // 2. Set chains
+        const mainnet = {
+            chainId: 1,
+            name: 'Ethereum',
+            currency: 'ETH',
+            explorerUrl: 'https://etherscan.io',
+            rpcUrl: 'https://cloudflare-eth.com'
+        }
+
+        // 3. Create your application's metadata object
+        const metadata = {
+            name: 'My Website',
+            description: 'My Website description',
+            url: 'https://mywebsite.com', // url must match your domain & subdomain
+            icons: ['https://avatars.githubusercontent.com/u/37784886']
+        }
+
+        // 4. Create Ethers config
+        const ethersConfig = defaultConfig({
+            /*Required*/
+            metadata,
+
+            /*Optional*/
+            enableEIP6963: true, // true by default
+            enableInjected: true, // true by default
+            enableCoinbase: true, // true by default
+            rpcUrl: '...', // used for the Coinbase SDK
+            defaultChainId: 1, // used for the Coinbase SDK
+        });
+
+        // 5. Create a Web3Modal instance
+        const modal = createWeb3Modal({
+            ethersConfig,
+            chains: [mainnet],
+            projectId,
+            enableAnalytics: true, // Optional - defaults to your Cloud configuration
+            enableOnramp: true // Optional - false as default
+        })
+
+        // 4. Use modal composable
+        const modal2 = useWeb3Modal()
+
+        modal.open();
+        // modal2.open({ view: 'Networks' })
+
+        const { address, chainId, isConnected } = useWeb3ModalAccount()
+        const { walletProvider } = useWeb3ModalProvider()
+
+        async function onSignMessage() {
+            const provider = new BrowserProvider(walletProvider)
+            const signer = await provider.getSigner()
+            const signature = await signer?.signMessage('Hello Web3Modal Ethers')
+            console.log(signature)
+        }
+
+        const events = useWeb3ModalEvents()
+
+
+        function handler(props){
+            // console.log(address.value, chainId.value, isConnected.value, events);
+        }
+        
+        modal.subscribeWalletInfo(handler)
+
+        // modal.getEvent() // get last event
+        // modal.subscribeEvents((event) => {
+        //     console.log(event,event.data.event)
+        // }) // subscribe to events
+    }
+
 
     // methods
     const methods = [
@@ -625,6 +704,11 @@ export function useRegistration($app) {
             name: 'Facebook',
             img: '/img/icons/colorful/facebook-circle.svg',
             onClick: handleFacebookConnect
+        },
+        {
+            name: 'WalletConnect',
+            img: '/img/icons/colorful/walletConnect.svg',
+            onClick: handleWalletConnect
         },
     ]
 
