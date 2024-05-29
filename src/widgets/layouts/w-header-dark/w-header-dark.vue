@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="w-header-dark__wrap">
-      <nuxt-link to="/" class="w-header-dark__logo">
+      <nuxt-link to="/" target="_blank" class="w-header-dark__logo">
         <a-icon class="w-aside__logo-icon" :name="Icon.ColorfulBtcDarkLogo" width="210" height="32" />
       </nuxt-link>
       <div :class="['w-header-dark__box', { 'w-header-dark__box__active': isOpenMenu }]">

@@ -182,7 +182,9 @@ const openModal = async () => {
   // } else {
   //   navigateTo({ name: 'personal-kyc' })
   // }
-
+  if (!isNonEmptyDividendsBalance.value){
+    return
+  }
   isOpenModal.value = true
 }
 

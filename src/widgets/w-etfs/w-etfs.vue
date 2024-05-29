@@ -443,6 +443,9 @@ const explorerURL = config.public.EXPLORER_API;
 const explorerHostname = `https://${explorerURL}`;
 
 const handleVerify = async () => {
+  if (!isNonEmptyUserEtfBalance.value){
+    return
+  }
   window.open(`${explorerHostname}/account/${$app.store.user?.blockchainUserWallet}`, '_blank')
   // const isKycFinished = await checkKyc();
 
