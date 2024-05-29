@@ -3,9 +3,7 @@
     <aside ref="asideRef" :class="['w-aside', { 'w-aside--page': isPage }]">
       <div class="w-aside__inner">
         <div class="w-aside__logo">
-          <nuxt-link :to="{ name: 'index' }">
-            <a-icon class="w-aside__logo-icon" :name="getLogo" width="142" height="24" />
-          </nuxt-link>
+          <a-icon class="w-aside__logo-icon" :name="getLogo" width="142" height="24" @click="goToHomePage" />
         </div>
 
         <div v-if="!isPage && isShowBuyButton" class="w-aside__button">
@@ -471,6 +469,11 @@ watch(() => themeValue.value, (value) => {
   document.body.dataset.theme = theme;
   $app.store.user.theme = theme;
 });
+
+function goToHomePage() {
+  const homePageUrl = window.location.origin.replace('app.', '')
+  window.open(homePageUrl, '_blank')?.focus()
+}
 </script>
 
 <style src="./w-aside.scss" lang="scss" />
