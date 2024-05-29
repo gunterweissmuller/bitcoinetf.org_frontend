@@ -2,6 +2,7 @@
   &__amount {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr 168px;
     grid-row-gap: torem(24);
     grid-column-gap: torem(8);
     margin-bottom: var(--spacing-m-2);
@@ -139,7 +140,6 @@
 
       height: auto;
       min-height: 1px;
-      aspect-ratio: 1/1;
 
       padding: 0;
 
