@@ -142,7 +142,7 @@ function clickLaunch() {
   if (authStore.isUserAuthenticated) {
     router.push('/personal/fund')
   } else {
-    window.open('/personal/register', '_blank').focus()
+    window.open('/personal/registration', '_blank').focus()
   }
 }
 
