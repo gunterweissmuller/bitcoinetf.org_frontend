@@ -1,5 +1,5 @@
 <template>
-  <div class="w-chart-shareholders" :class="{ desktop: props.isDesktop }" v-show="strategiesData && strategiesData.length">
+  <div class="w-chart-shareholders" :class="{ desktop: props.isDesktop }" v-show="strategies && strategies.length">
     <div class="w-chart-shareholders__title">
       <a-live />
 
@@ -77,36 +77,36 @@ const props = withDefaults(
   },
 );
 
-const getStrategies = async () => {
-  $app.api.eth.statisticEth.getStrategies()
-    .then((data : Strategy[] | undefined) => {
-      strategiesData.value = data ? data : [];
-    })
-    .catch(() => {
-      strategiesData.value = [];
-    });
-}
+// const getStrategies = async () => {
+//   $app.api.eth.statisticEth.getStrategies()
+//     .then((data : Strategy[] | undefined) => {
+//       strategiesData.value = data ? data : [];
+//     })
+//     .catch(() => {
+//       strategiesData.value = [];
+//     });
+// }
 
-const strategiesData = ref<Strategy[]>([]);
+// const strategiesData = ref<Strategy[]>([]);
 
-const strategies = computed<Strategy[]>(() => {
-  return strategiesData.value
-    .map( (strategy : Strategy) => {
-      const newStrategy = props.strategies.find((el : Strategy) => el.name === strategy.name);
+// const strategies = computed<Strategy[]>(() => {
+//   return strategiesData.value
+//     .map( (strategy : Strategy) => {
+//       const newStrategy = props.strategies.find((el : Strategy) => el.name === strategy.name);
 
-      if (newStrategy) {
-        newStrategy.percent = strategy.percent;
-        return newStrategy;
-      }
-      return Object.assign(strategy, {
-        icon: null,
-        color: null
-      });
-    })
-});
+//       if (newStrategy) {
+//         // newStrategy.percent = strategy.percent;
+//         return newStrategy;
+//       }
+//       return Object.assign(strategy, {
+//         icon: null,
+//         color: null
+//       });
+//     })
+// });
 
 onMounted(() => {
-  getStrategies();
+  // getStrategies();
 });
 </script>
 
