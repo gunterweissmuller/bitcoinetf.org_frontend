@@ -244,8 +244,6 @@ watch(()=> selectedAddress.value, (value) => {
   }
   if(selectedMethod.value === 'polygon_usdt') {
     validMatic.value = window?.WAValidator?.validate(selectedAddress.value, 'matic')
-
-    //
   }
 })
 

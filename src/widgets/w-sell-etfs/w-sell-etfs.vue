@@ -12,8 +12,8 @@
                 />
             </div>
             <div class="w-sell-etfs-body">
-                <div class="w-sell-etfs__amount-shares">25,584 Shares</div>
-                <div class="w-sell-etfs__amount-usd">For $25,584</div>
+                <div class="w-sell-etfs__amount-shares">{{ $app.filters.rounded($app.store.user.sellShares?.amount) }} Shares</div>
+                <div class="w-sell-etfs__amount-usd">For ${{ $app.filters.rounded($app.store.user.sellShares?.for) }}</div>
                 <a-input
                     class=""
                     label="Tether USDT (Polygon) Destination Address"
@@ -21,8 +21,10 @@
                     text-icon-text="Copied!"
                     :icon="Icon.MonoPaste"
                     position-icon="right"
+                    @icon-click-handler="onPaste"
+                    iconWithAction
                 />
-                <a-button class="w-sell-etfs__continue" :disabled="!addressValue" variant="primary" @click="() => {currentStep = Steps.Confirm}" text="Continue"></a-button>
+                <a-button class="w-sell-etfs__continue" :disabled="!validMatic" variant="primary" @click="() => {currentStep = Steps.Confirm}" text="Continue"></a-button>
             </div>
         </template>
 
@@ -42,11 +44,11 @@
                 <div class="w-sell-etfs__table">
                     <div class="w-sell-etfs__table-item">
                         <div class="w-sell-etfs__table-title">Amount of Shares You’re Selling</div>
-                        <div class="w-sell-etfs__table-text">25,584</div>
+                        <div class="w-sell-etfs__table-text">{{ $app.filters.rounded($app.store.user.sellShares?.amount) }}</div>
                     </div>
                     <div class="w-sell-etfs__table-item">
                         <div class="w-sell-etfs__table-title">For</div>
-                        <div class="w-sell-etfs__table-text">$25,584</div>
+                        <div class="w-sell-etfs__table-text">${{ $app.filters.rounded($app.store.user.sellShares?.for) }}</div>
                     </div>
                     <div class="w-sell-etfs__table-item">
                         <div class="w-sell-etfs__table-title">Destination Address</div>
@@ -54,15 +56,15 @@
                     </div>
                     <div class="w-sell-etfs__table-item">
                         <div class="w-sell-etfs__table-title">Early Termination Fee</div>
-                        <div class="w-sell-etfs__table-text">$394.48</div>
+                        <div class="w-sell-etfs__table-text">${{ $app.filters.rounded($app.store.user.sellShares?.early_termination_fee, 2) }}</div>
                     </div>
                     <div class="w-sell-etfs__table-item">
                         <div class="w-sell-etfs__table-title">Transaction Fee</div>
-                        <div class="w-sell-etfs__table-text">$3.38</div>
+                        <div class="w-sell-etfs__table-text">${{ $app.filters.rounded($app.store.user.sellShares?.transaction_fee, 2) }}</div>
                     </div>
                 </div>
 
-                <a-button class="w-sell-etfs__continue" variant="primary" @click="() => {isSoldModalShow = true}" text="Sell"></a-button>
+                <a-button class="w-sell-etfs__continue" variant="primary" @click="handleSell" text="Sell"></a-button>
             </div>
         </template>
         
@@ -97,10 +99,39 @@
 
     const addressValue = ref("");
 
+    const validMatic = ref(false);
+    watch(()=> addressValue.value, (value) => {
+        validMatic.value = window?.WAValidator?.validate(addressValue.value, 'matic');
+    })
+
     const isSoldModalShow = ref(false);
 
     const closeSoldModal = () => {
         isSoldModalShow.value = false;
+    }
+
+    const onPaste = () => {
+        navigator.clipboard
+        .readText()
+        .then(
+            (clipText) => {
+                addressValue.value = clipText;
+            },
+        );
+    }
+
+    const handleSell = () => {
+        $app.api.eth.billingEth
+        .confirmSellShares({
+            "destination": addressValue.value, 
+            "accept_early_termination_fee": true
+        })
+        .then((response: any) => {
+            isSoldModalShow.value = true;
+        })
+        .catch(() => {
+            // Todo: notify something went wrond
+        })
     }
 
 </script>
