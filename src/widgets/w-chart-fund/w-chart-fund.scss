@@ -5,7 +5,9 @@
   border: torem(1) solid var(--surfaces-surface-glass-border);
   border-radius: var(--spacing-s);
   background: var(--surfaces-surface-glass);
-
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   &__caption {
     display: flex;
     align-items: center;
@@ -114,6 +116,7 @@
   }
 
   &__chart {
+    flex-grow: 1;
     height: torem(152);
 
     @include breakpoint($break-desktop-1440) {
