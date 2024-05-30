@@ -18,11 +18,14 @@
   </template>
   
 <script setup lang="ts">
+    import { useNuxtApp } from '#app'
     import { computed, ref } from 'vue'
     import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue';
     import aCheckbox from '~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue';
     import aButton from '~/src/shared/ui/atoms/a-button/a-button.vue';
     import { useRouter } from '#vue-router';
+
+    const { $app } = useNuxtApp()
 
     const props = withDefaults(
         defineProps<{
@@ -58,8 +61,16 @@
     }
 
     const handleContinue = () => {
-        handleClose();
-        navigateTo({name: 'personal-etfs'});
+        $app.api.eth.billingEth
+        .getValuate()
+        .then((response: any) => {
+            $app.store.user.sellShares = Object.assign($app.store.user.sellShares, response.data);
+            handleClose();
+            navigateTo({name: 'personal-etfs'});
+        })
+        .catch(() => {
+            // Todo: notify something went wrond
+        })
     }
 </script>
 

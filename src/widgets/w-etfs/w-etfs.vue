@@ -38,7 +38,7 @@
           </div> -->
 
           <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"  text="Buy" variant="primary" :icon="Icon.MonoPlus" size="small"/>
-          <a-button :disabled="$app.store.user.sellShares?.amount <= 0" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true" text="Sell" variant="secondary" :icon="Icon.MonoMinus" size="small"/>
+          <a-button :disabled="$app.store.user.sellShares?.amount <= 0 || !$app.store.user.sellShares?.amount" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true" text="Sell" variant="secondary" :icon="Icon.MonoMinus" size="small"/>
           <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="handleVerify" text="Verify" variant="secondary" :icon="Icon.MonoLinkToPage" size="small"/>
         </div>
       </div>
@@ -58,7 +58,7 @@
                 />
               </div>
               <div class="w-etfs__item_info">
-                <div class="w-etfs__item_info-title">Referal Bonus ETFs</div>
+                <div class="w-etfs__item_info-title">Dividends Bonus ETFs</div>
                 <div class="w-etfs__item_info-date">
                   {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
                 </div>
@@ -81,7 +81,7 @@
                 />
               </div>
               <div class="w-etfs__item_info">
-                <div class="w-etfs__item_info-title">Referal Bonus ETFs</div>
+                <div class="w-etfs__item_info-title">Bonus ETFs</div>
                 <div class="w-etfs__item_info-date">
                   {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
                 </div>
@@ -173,6 +173,7 @@ const enum DIVIDENDS_TYPES {
   PLUS = 'credit_from_client',
   // MINUS = 'credit_from_client',
   ESCAPE = 'withdrawal',
+  SELL = 'sell'
 }
 
 const walletDividends = ref([])
@@ -234,6 +235,10 @@ const getWalletDividends = async () => {
 const getDividendsDesc = (item) => {
   if (item.type === DIVIDENDS_TYPES.ESCAPE) {
     return 'Dividends Withdrawal (External Wallet)'
+  }
+
+  if (item.type === DIVIDENDS_TYPES.SELL) {
+    return 'Sell ETFs'
   }
 
   // if (item.hasOwnProperty('referral_amount') && item.referral_amount) {
