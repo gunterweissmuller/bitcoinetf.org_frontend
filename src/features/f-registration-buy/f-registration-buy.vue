@@ -541,7 +541,7 @@ const openMoonpay = async () => {
   return await openMoonpayHandler(getMoonpayWallets, (ctx) => {
     paymentAmount.value.amount = ctx.data.message?.data?.amount;
     isOpenSuccessPaymentModal.value = true
-  })
+  }, true, false)
 }
 
 const openEth = async () => {
