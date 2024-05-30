@@ -67,6 +67,8 @@
   import { useRegistration } from './useRegistration'
   import { SignupMethods } from '~/src/shared/constants/signupMethods'
   import { setCookie } from '~/src/shared/helpers/cookie.helpers';
+import { useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
+import { BrowserProvider } from 'ethers'
 
   const { $app } = useNuxtApp()
   const router = useRouter()
@@ -197,6 +199,29 @@
     $app.store.registration.email ='';
     $app.store.registration.phone = '';
   });
+
+  // walletConnect
+  const { address, chainId, isConnected } = useWeb3ModalAccount()
+
+  const { walletProvider } = useWeb3ModalProvider()
+
+  async function onSignMessage() {
+      const provider = new BrowserProvider(walletProvider.value)
+      const signer = await provider.getSigner()
+      const signature = await signer?.signMessage('Hello Web3Modal Ethers')
+      console.log(signature)
+  }
+
+  watch(
+    () => address.value,
+    () => {
+      console.log("test123",address.value);
+
+      if(address.value) {
+        onSignMessage()
+      }
+    }
+  )
 
 
 </script>
