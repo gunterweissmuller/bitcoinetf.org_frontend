@@ -134,7 +134,8 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
   const openMoonpayHandler = async (
     callback: CallableFunction = async () => {},
     callbackOnPayment: CallableFunction = () => {},
-    init: boolean = true
+    init: boolean = true,
+    listenChannel: boolean = true,
   ) => {
     if (isMoonpaySelected.value) {
       return
@@ -148,25 +149,26 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
 
     await callback()
 
-    centrifuge.value = new Centrifuge(centrifugeURL, {
-      token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
-    })
-
-    centrifuge.value.connect()
-
-    const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
-
-    sub
-      .on('publication', async function (ctx) {
-        if (ctx.data.message?.data?.status === 'success') {
-          callbackOnPayment(ctx)
-          paymentAmount.value.amount = ctx.data.message?.data?.amount
-          isOpenSuccessPaymentModal.value = true
-        }
+    if (listenChannel) {
+      centrifuge.value = new Centrifuge(centrifugeURL, {
+        token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
       })
-      .subscribe()
 
-      isMoonpaySelected.value = false;
+      centrifuge.value.connect()
+
+
+      const sub = centrifuge.value.newSubscription(`replenishment.${accountUuid.value}`)
+
+      sub
+        .on('publication', async function (ctx) {
+          if (ctx.data.message?.data?.status === 'success') {
+            callbackOnPayment(ctx)
+          }
+        })
+        .subscribe()
+    }
+
+    isMoonpaySelected.value = false;
   }
 
   const getPayWallets = async () => {

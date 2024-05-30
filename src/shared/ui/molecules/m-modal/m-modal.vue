@@ -32,6 +32,8 @@
   import { useNuxtApp } from '#app'
   import MModalMobile from '~/src/shared/ui/molecules/m-modal-mobile/m-modal-mobile.vue'
 
+  type ModalMode = 'unique' | 'stack' | 'replace';
+
   const props = withDefaults(
     defineProps<{
       modelValue: boolean
@@ -44,6 +46,7 @@
       modalBig?: boolean
       scroll?: boolean
       modalMobile?: boolean
+      mode?: ModalMode,
     }>(),
     {
       modelValue: false,
@@ -112,7 +115,7 @@
           document.body.classList.remove('no-scroll')
         }
       }
-      
+
       if (isMobile.value && !props.fullScreen) {
         value ? myBottomSheet.value?.open() : myBottomSheet.value?.close()
       }
