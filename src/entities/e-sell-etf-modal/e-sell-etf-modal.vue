@@ -164,7 +164,6 @@
     }
 
     const initTimer = () => {
-        console.log("init", $app.store.user.sellShares?.created_at);
         if($app.store.user.sellShares?.created_at) {
             const tempDate = new Date();
             const tempTime = (tempDate.getTime() - $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf())/1000; // seconds after buy

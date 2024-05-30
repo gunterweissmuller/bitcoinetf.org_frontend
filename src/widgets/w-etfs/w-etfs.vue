@@ -19,7 +19,7 @@
               Buy
           </div>
 
-          <div v-if="$app.store.user.sellShares?.shares > 0" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
+          <div v-if="$app.store.user.sellShares?.amount > 0" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
             <a-icon
                 width="18"
                 height="18"
@@ -43,6 +43,52 @@
       <div v-if="personalDividends.length" class="w-etfs__list">
         <transition-group name="fade" tag="div">
           <template v-for="item in personalDividends" :key="item?.uuid" class="w-etfs__item">
+            <div class="w-etfs__item" v-if="item.dividend_amount">
+              <div
+                :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
+              >
+                <a-icon
+                  width="18"
+                  height="18"
+                  :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
+                />
+              </div>
+              <div class="w-etfs__item_info">
+                <div class="w-etfs__item_info-title">Referal Bonus ETFs</div>
+                <div class="w-etfs__item_info-date">
+                  {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
+                </div>
+              </div>
+              <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
+              <div v-else class="w-etfs__item_sums">
+                <div class="w-etfs__item_info-usd">
+                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item.dividend_amount, 0) }}
+                </div>
+              </div>
+            </div>
+            <div class="w-etfs__item" v-if="item.bonus_amount">
+              <div
+                :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
+              >
+                <a-icon
+                  width="18"
+                  height="18"
+                  :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
+                />
+              </div>
+              <div class="w-etfs__item_info">
+                <div class="w-etfs__item_info-title">Referal Bonus ETFs</div>
+                <div class="w-etfs__item_info-date">
+                  {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
+                </div>
+              </div>
+              <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
+              <div v-else class="w-etfs__item_sums">
+                <div class="w-etfs__item_info-usd">
+                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item.bonus_amount, 0) }}
+                </div>
+              </div>
+            </div>
             <div class="w-etfs__item" v-if="item.referral_amount">
               <div
                 :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
@@ -148,7 +194,6 @@ const getValuate = async () => {
   .getValuate()
   .then((response: any) => {
     $app.store.user.sellShares = Object.assign($app.store.user.sellShares, response.data);
-    console.log($app.store.user.sellShares);
   })
   .catch(() => {
     // Todo: notify something went wrond
