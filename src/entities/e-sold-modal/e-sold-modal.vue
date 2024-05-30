@@ -2,7 +2,7 @@
       <m-modal bgBasic @close="handleClose" full-screen :modalMobile="true" v-model="props.show">
         <div class="e-sold-modal">
 
-                <nuxt-img class="e-sold-modal__img" src="/img/wallet/done.svg"></nuxt-img>
+                <nuxt-img class="e-sold-modal__img" :src="$app.store.user.theme === 'dark' ? '/img/wallet/done-dark.svg' : '/img/wallet/done.svg'"></nuxt-img>
 
                 <div class="e-sold-modal__title">
                     Sold!
