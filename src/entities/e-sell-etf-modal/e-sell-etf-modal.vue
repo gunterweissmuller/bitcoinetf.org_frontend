@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="e-sell-etf-modal__timer">
-                    <div class="e-sell-etf-modal__timer-title"></div>
+                    <div class="e-sell-etf-modal__timer-title">Maturity in</div>
                     <div class="e-sell-etf-modal__timer-wrapper">
                         <div class="e-sell-etf-modal__timer-item ">
                             <div class="e-sell-etf-modal__timer-numbers">

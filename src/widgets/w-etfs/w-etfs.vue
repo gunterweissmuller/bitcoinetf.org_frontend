@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="w-etfs__amount-buttons">
-          <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}">
+          <!-- <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}">
             <a-icon
                 width="18"
                 height="18"
@@ -19,7 +19,7 @@
               Buy
           </div>
 
-          <div v-if="$app.store.user.sellShares?.amount > 0" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
+          <div :disable="$app.store.user.sellShares?.amount > 0" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
             <a-icon
                 width="18"
                 height="18"
@@ -35,7 +35,11 @@
                 :name="Icon.MonoLinkToPage"
               />
               Verify
-          </div>
+          </div> -->
+
+          <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"  text="Buy" variant="primary" :icon="Icon.MonoPlus" size="small"/>
+          <a-button :disabled="$app.store.user.sellShares?.amount <= 0" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true" text="Sell" variant="secondary" :icon="Icon.MonoMinus" size="small"/>
+          <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="handleVerify" text="Verify" variant="secondary" :icon="Icon.MonoLinkToPage" size="small"/>
         </div>
       </div>
 
@@ -159,6 +163,7 @@ import { Icon } from '~/src/shared/constants/icons'
 import eSellEtfModal from '~/src/entities/e-sell-etf-modal/e-sell-etf-modal.vue'
 import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
+import aButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 
 const { $app } = useNuxtApp()
 
