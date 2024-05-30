@@ -21,7 +21,7 @@ spec:
         ksync: {{ .Values.global.app_name }}
     spec:
       containers:
-        - name: nuxt
+        - name: {{ .Values.global.app_name }}
           image: {{ .Values.werf.image.app }}
           env:
 {{ include "apps-env-var-values" . | indent 12 }}
@@ -48,39 +48,6 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "500m"
-        - name: nginx
-          image: {{ .Values.werf.image.nginx }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            runAsNonRoot: true
-            runAsUser: 101
-            seccompProfile:
-              type: RuntimeDefault
-          ports:
-            - name: http
-              containerPort: 80
-          volumeMounts:
-            - name: nginx-config-volume-1
-              mountPath: /etc/nginx
-            - name: nginx-config-volume-2
-              mountPath: /etc/nginx/conf.d
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "2048Mi"
-              cpu: "750m"
-      volumes:
-        - name: nginx-config-volume-1
-          configMap:
-            name: nginx-config-1
-        - name: nginx-config-volume-2
-          configMap:
-            name: nginx-config-2
       imagePullSecrets:
         - name: docker-registry
 ---
@@ -90,7 +57,7 @@ metadata:
   name: {{ .Values.global.app_name }}
 spec:
   ports:
-    - port: 80
+    - port: 3000
       name: http
   selector:
     app: {{ .Values.global.app_name }}

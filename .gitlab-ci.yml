@@ -41,7 +41,8 @@ build:stage:
   tags:
     - runner-stage
   only:
-    - staging
+  - staging
+  - staging_frontend_test
   script:
     - build_image
 
@@ -50,7 +51,8 @@ deploy:stage:
   tags:
     - runner-stage
   only:
-    - staging
+  - staging
+  - staging_frontend_test
   environment:
     name: ${CI_COMMIT_REF_SLUG}
     url: "${STAGE_DOMAIN}${PRODUCTION_PATH}"
@@ -63,7 +65,8 @@ test:stage:
   tags:
     - runner-stage
   only:
-    - staging
+  - staging
+  - staging_frontend_test
   script:
     - test_app
 
@@ -72,7 +75,8 @@ destroy:stage:
   tags:
     - runner-stage
   only:
-    - staging
+  - staging
+  - staging_frontend_test
   environment:
     name: ${CI_COMMIT_REF_SLUG}
     action: stop
@@ -166,7 +170,7 @@ destroy:dev:
     export ENV_FULL_NAME="staging"
     export APP_NAMESPACE="${CI_COMMIT_REF_SLUG}"
     export APP_URL="${STAGE_TEST_DOMAIN}${PRODUCTION_PATH}"
-    export APP_URL0="${APP_STAGE_TEST_DOMAIN}${PRODUCTION_PATH}"
+    export APP0_URL="${APP_STAGE_TEST_DOMAIN}${PRODUCTION_PATH}"
     export WERF_REPO="${REGISTRY_NAME_STAGE}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
     export REPOSITORY_NAME="${REPOSITORY_NAME_STAGE}"
     export SECRET_VALUES_FILE="secret-values-stage.yaml"
