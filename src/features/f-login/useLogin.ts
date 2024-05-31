@@ -4,6 +4,7 @@ import { Steps } from './steps'
 import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 import { HttpStatusCode } from '~/src/shared/constants/httpStatusCodes'
 import { BrowserProvider } from 'ethers'
+import { useWeb3Modal, useWeb3ModalProvider, useWeb3ModalAccount, useWeb3ModalEvents } from '@web3modal/ethers/vue'
 
 export function useLogin($app) {
     const { connectToReplenishment } = useConnectReplenishmentChannel($app)
@@ -101,8 +102,6 @@ export function useLogin($app) {
     const onSubmitEmailForm = () => {
         if (isSubmitEmailForm.value) return
         isSubmitEmailForm.value = true;
-
-        
 
         $app.api.eth.auth
         .login({
@@ -455,6 +454,58 @@ export function useLogin($app) {
         }
     }
 
+    // walletConnect
+
+    const handleWalletConnect = async () => {
+       const { address, chainId, isConnected } = useWeb3ModalAccount()
+
+        if(address.value) {
+            const { walletProvider } = useWeb3ModalProvider()
+
+            async function onSignMessage() {
+                const provider = new BrowserProvider(walletProvider.value)
+                const signer = await provider.getSigner()
+                const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
+
+                $app.store.registration.walletConnectData.signature = signature;
+                $app.store.registration.walletConnectData.walletAddress = address.value;
+                
+            }
+            await onSignMessage();
+
+
+            $app.api.eth.auth.walletConnectGetAuthType({
+                wallet_connect_data: JSON.stringify({
+                    signature: $app.store.registration.walletConnectData.signature,
+                    address: $app.store.registration.walletConnectData.walletAddress,
+                    message: $app.store.registration.walletConnectData?.signatureMessage,
+                }),
+            }).then((r: any) => {
+                const tempLogin = () => {
+                    $app.api.eth.auth.
+                    wallletConnectLogin({
+                        wallet_connect_data: JSON.stringify({
+                            signature: $app.store.registration.walletConnectData.signature,
+                            address: $app.store.registration.walletConnectData.walletAddress,
+                            message: $app.store.registration.walletConnectData?.signatureMessage,
+                        }),
+                    })
+                    .then((jwtResponse: any) => {
+                        continueLogin(jwtResponse);
+                    })
+                }
+
+                checkAuthType(r, tempLogin)
+            })
+
+        } else {
+            // 4. Use modal composable
+            const modal = useWeb3Modal()
+
+            modal.open();
+        }
+    }
+
     // methods
 
     const methods = [
@@ -488,6 +539,11 @@ export function useLogin($app) {
           img: '/img/icons/colorful/facebook-circle.svg',
           onClick: handleFacebookConnect,
         },
+        {
+            name: 'WalletConnect',
+            img: '/img/icons/colorful/walletConnect.svg',
+            onClick: handleWalletConnect,
+        },
     ]
 
 
@@ -502,6 +558,8 @@ export function useLogin($app) {
         goToReset,
         onSubmitOneTimeLink,
         resendCodeClick,
-        methods
+        methods,
+        continueLogin,
+        checkAuthType
     };
 }

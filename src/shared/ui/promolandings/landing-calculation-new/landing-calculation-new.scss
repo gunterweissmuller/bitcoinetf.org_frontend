@@ -347,8 +347,12 @@
 
     &-buttons {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       margin-top: var(--spacing-m-2);
+
+      @include breakpoint($break-tablet-minus) {
+        flex-wrap: wrap;
+      }
       
       &-item {
         cursor: pointer;
@@ -356,6 +360,7 @@
         border-radius: 8px;
         background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
         border: 1px solid transparent;
+        margin: var(--spacing-s);
 
         &-img {
           width: 32px;

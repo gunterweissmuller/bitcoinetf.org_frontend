@@ -235,4 +235,8 @@ const modal = createWeb3Modal({
     enableAnalytics: true, // Optional - defaults to your Cloud configuration
     enableOnramp: true // Optional - false as default
 })
+
+$app.api.eth.auth.walletConnectGetCredentials().then((msg) => {
+  $app.store.registration.walletConnectData.signatureMessage = msg.data?.message;
+})
 </script>

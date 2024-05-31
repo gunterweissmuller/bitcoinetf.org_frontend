@@ -5,4 +5,5 @@ export const enum SignupMethods {
     Apple = 'Apple',
     Telegram = 'Telegram',
     Facebook = 'Facebook',
+    WalletConnect = 'WalletConnect'
   }

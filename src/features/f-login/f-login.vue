@@ -54,8 +54,12 @@
   import fLoginLogin from '../f-login-login/f-login-login.vue'
   import fLoginLink from '../f-login-link/f-login-link.vue'
   import fLoginCheck from '../f-login-check/f-login-check.vue'
+  import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
+  import { BrowserProvider } from 'ethers'
+  import { useLogin } from './useLogin'
 
   const { $app } = useNuxtApp()
+  const { continueLogin, checkAuthType } = useLogin($app);
 
   // reset 
   onUnmounted(() => {
@@ -66,6 +70,54 @@
     $app.store.login.email = '';
     $app.store.login.password = '';
   });
+
+  // walletConnect
+  const { address, chainId, isConnected } = useWeb3ModalAccount()
+
+  const { walletProvider } = useWeb3ModalProvider()
+
+  async function onSignMessage() {
+      const provider = new BrowserProvider(walletProvider.value)
+      const signer = await provider.getSigner()
+      const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
+
+      $app.store.registration.walletConnectData.signature = signature;
+      $app.store.registration.walletConnectData.walletAddress = address.value;
+
+      $app.api.eth.auth.walletConnectGetAuthType({
+          wallet_connect_data: JSON.stringify({
+              signature: $app.store.registration.walletConnectData.signature,
+              address: $app.store.registration.walletConnectData.walletAddress,
+              message: $app.store.registration.walletConnectData?.signatureMessage,
+          }),
+      }).then((r: any) => {
+          const tempLogin = () => {
+              $app.api.eth.auth.
+              wallletConnectLogin({
+                  wallet_connect_data: JSON.stringify({
+                      signature: $app.store.registration.walletConnectData.signature,
+                      address: $app.store.registration.walletConnectData.walletAddress,
+                      message: $app.store.registration.walletConnectData?.signatureMessage,
+                  }),
+              })
+              .then((jwtResponse: any) => {
+                  continueLogin(jwtResponse);
+              })
+          }
+
+          checkAuthType(r, tempLogin)
+      })
+  }
+
+  watch(
+    () => address.value,
+    () => {
+
+      if(address.value) {
+        onSignMessage()
+      }
+    }
+  )
 
 </script>
 
