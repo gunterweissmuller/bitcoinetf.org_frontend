@@ -67,6 +67,8 @@
   import { useRegistration } from './useRegistration'
   import { SignupMethods } from '~/src/shared/constants/signupMethods'
   import { setCookie } from '~/src/shared/helpers/cookie.helpers';
+  import { useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
+  import { BrowserProvider } from 'ethers'
 
   const { $app } = useNuxtApp()
   const router = useRouter()
@@ -139,6 +141,18 @@
                     catchRegistrationLink(e);
                 });
                 break;
+            case 'walletConnect':
+                body.fast = true;
+                body.wallet_connect_data = JSON.stringify($app.store.authTemp.response);
+                $app.api.eth.auth.walletConnectConfirm(body)
+                .then((jwtResponse: any) => {
+                    // TODO falling user/me
+                    continueLogin(jwtResponse);
+                })
+                .catch((e) => {
+                    catchRegistrationLink(e);
+                });
+                break;
             default:
                 $app.api.eth.auth.confirmFast(body)
                 .then((jwtResponse: any) => {
@@ -197,6 +211,57 @@
     $app.store.registration.email ='';
     $app.store.registration.phone = '';
   });
+
+  // walletConnect
+  const { address, chainId, isConnected } = useWeb3ModalAccount()
+
+  const { walletProvider } = useWeb3ModalProvider()
+
+  async function onSignMessage() {
+      const provider = new BrowserProvider(walletProvider.value)
+      const signer = await provider.getSigner()
+      const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
+
+      $app.store.registration.walletConnectData.signature = signature;
+      $app.store.registration.walletConnectData.walletAddress = address.value;
+      $app.store.registration.currentSignup = SignupMethods.WalletConnect;
+      $app.store.registration.currentStep = Steps.Email;
+
+      $app.api.eth.auth.walletConnectGetAuthType({
+          wallet_connect_data: JSON.stringify({
+              signature: $app.store.registration.walletConnectData.signature,
+              address: $app.store.registration.walletConnectData.walletAddress,
+              message: $app.store.registration.walletConnectData?.signatureMessage,
+          }),
+      }).then((r: any) => {
+          if(r.data.auth_type === 'registration') {
+              $app.store.registration.currentSignup = SignupMethods.WalletConnect;
+              $app.store.registration.currentStep = Steps.Email;
+          } else {
+              $app.api.eth.auth.
+              wallletConnectLogin({
+                  wallet_connect_data: JSON.stringify({
+                      signature: $app.store.registration.walletConnectData.signature,
+                      address: $app.store.registration.walletConnectData.walletAddress,
+                      message: $app.store.registration.walletConnectData?.signatureMessage,
+                  }),
+              })
+              .then((jwtResponse: any) => {
+                  continueLogin(jwtResponse);
+              })
+          }
+      })
+  }
+
+  watch(
+    () => address.value,
+    () => {
+
+      if(address.value) {
+        onSignMessage()
+      }
+    }
+  )
 
 
 </script>

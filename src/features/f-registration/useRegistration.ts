@@ -7,6 +7,9 @@ import { hostname } from '~/src/app/adapters/ethAdapter'
 import { Steps } from './steps'
 import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 import { getCookie, deleteCookie } from '../../shared/helpers/cookie.helpers';
+import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/vue'
+import { useWeb3Modal, useWeb3ModalProvider, useWeb3ModalAccount, useWeb3ModalEvents } from '@web3modal/ethers/vue'
+  
 
 export function useRegistration($app) {
     const router = useRouter()
@@ -530,6 +533,31 @@ export function useRegistration($app) {
             })
         } 
 
+        if ($app.store.registration.currentSignup === SignupMethods.WalletConnect) {
+            initPayload.wallet_connect_data = JSON.stringify({
+                signature: $app.store.registration.walletConnectData.signature,
+                address: $app.store.registration.walletConnectData.walletAddress,
+                message: $app.store.registration.walletConnectData?.signatureMessage,
+            });
+            await $app.api.eth.auth
+            .walletConnectInit(initPayload)
+            .then(() => {
+                isSubmitEmailForm.value = false;
+                $app.store.registration.currentStep = Steps.Link
+                $app.store.auth.accountMethod = "walletConnect";
+                $app.store.authTemp.response =  {
+                    signature: $app.store.registration.walletConnectData.signature,
+                    address: $app.store.registration.walletConnectData.walletAddress,
+                    message: $app.store.registration.walletConnectData?.signatureMessage,
+                };
+                startTimer()
+            })
+            .catch((e) => {
+                isSubmitEmailForm.value = false;
+                catchRegistration(e);
+            })
+        } 
+
         if($app.store.registration.currentSignup === SignupMethods.Email) {
             initPayload.fast = true;
             await $app.api.eth.auth
@@ -593,6 +621,58 @@ export function useRegistration($app) {
             })
     }
 
+    // walletConnect
+    const handleWalletConnect = async () => {
+        const { address, chainId, isConnected } = useWeb3ModalAccount()
+
+        if(address.value) {
+            const { walletProvider } = useWeb3ModalProvider()
+
+            async function onSignMessage() {
+                const provider = new BrowserProvider(walletProvider.value)
+                const signer = await provider.getSigner()
+                const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
+
+                $app.store.registration.walletConnectData.signature = signature;
+                $app.store.registration.walletConnectData.walletAddress = address.value;
+                
+            }
+            await onSignMessage();
+
+
+            $app.api.eth.auth.walletConnectGetAuthType({
+                wallet_connect_data: JSON.stringify({
+                    signature: $app.store.registration.walletConnectData.signature,
+                    address: $app.store.registration.walletConnectData.walletAddress,
+                    message: $app.store.registration.walletConnectData?.signatureMessage,
+                }),
+            }).then((r: any) => {
+                if(r.data.auth_type === 'registration') {
+                    $app.store.registration.currentSignup = SignupMethods.WalletConnect;
+                    $app.store.registration.currentStep = Steps.Email;
+                } else {
+                    $app.api.eth.auth.
+                    wallletConnectLogin({
+                        wallet_connect_data: JSON.stringify({
+                            signature: $app.store.registration.walletConnectData.signature,
+                            address: $app.store.registration.walletConnectData.walletAddress,
+                            message: $app.store.registration.walletConnectData?.signatureMessage,
+                        }),
+                    })
+                    .then((jwtResponse: any) => {
+                        continueLogin(jwtResponse);
+                    })
+                }
+            })
+
+        } else {
+            // 4. Use modal composable
+            const modal = useWeb3Modal()
+
+            modal.open();
+        }
+    }
+
 
     // methods
     const methods = [
@@ -625,6 +705,11 @@ export function useRegistration($app) {
             name: 'Facebook',
             img: '/img/icons/colorful/facebook-circle.svg',
             onClick: handleFacebookConnect
+        },
+        {
+            name: 'WalletConnect',
+            img: '/img/icons/colorful/walletConnect.svg',
+            onClick: handleWalletConnect
         },
     ]
 

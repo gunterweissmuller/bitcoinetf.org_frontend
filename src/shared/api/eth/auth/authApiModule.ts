@@ -280,7 +280,7 @@ export default class AuthApiModule {
     }
   }
 
-  async loginMetamask(payload: { signature: string; message: string, wallet_address }) {
+  async loginMetamask(payload: { signature: string; message: string, wallet_address: any }) {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/provider/metamask/login',
@@ -788,5 +788,117 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  // walletConnect
+
+  async walletConnectGetCredentials() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/credentials',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Get WalletConnect message',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async walletConnectInit(payload: {
+    username: string;
+    email: string;
+    refcode?: string,
+    method?: SignupMethods,
+    signature?: string,
+    wallet_address?: string,
+    message?: string,
+  }) {
+
+    try {
+
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/init',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'WalletConnect init',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async walletConnectConfirm(payload: { email: string; code: string; fast: boolean }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/confirm',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'WalletConnect confirm',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async walletConnectGetAuthType(payload: { wallet_connect_data: any }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/get-auth-type',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'WalletConnect get authorization type',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async wallletConnectLogin(payload: { signature: string; message: string, wallet_address: any }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/login',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Authorization. Retrieving a JWT pair',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
 
 }
