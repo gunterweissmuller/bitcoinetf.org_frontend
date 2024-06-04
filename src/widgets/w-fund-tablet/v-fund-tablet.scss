@@ -72,6 +72,7 @@
     &-charts {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 261px;
       grid-gap: torem(16);
 
       margin-bottom: torem(16);
