@@ -1,5 +1,5 @@
 <template>
-  Loading...
+  <m-loading-new v-show="true" />
   </template>
 
   <script setup lang="ts">
@@ -8,6 +8,7 @@
   import axios from "axios";
   import { SignupMethods } from '~/src/shared/constants/signupMethods';
   import { hostname } from '~/src/app/adapters/ethAdapter';
+  import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
 
   const { $app } = useNuxtApp()
   const router = useRouter()

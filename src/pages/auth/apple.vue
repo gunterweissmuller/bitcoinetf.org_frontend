@@ -1,5 +1,5 @@
 <template>
-Loading...
+<m-loading-new v-show="true" />
 
 <div class="AppleIDSignInOnSuccess">
 
@@ -16,6 +16,7 @@ import { useNuxtApp, useRouter } from '#app'
 import { onMounted } from 'vue';
 import axios from "axios";
 import { hostname } from '~/src/app/adapters/ethAdapter';
+import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
 
 const { $app } = useNuxtApp()
 const router = useRouter()
