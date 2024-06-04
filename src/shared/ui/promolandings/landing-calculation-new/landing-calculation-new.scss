@@ -3,6 +3,11 @@
   padding-bottom: 60px;
   background: #01040F;
   font-family: Dm, sans-serif;
+  &__loading-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   &__wrapper{
     text-align: center;
   }

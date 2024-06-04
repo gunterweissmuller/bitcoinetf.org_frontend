@@ -43,7 +43,7 @@
             <f-registration-success/>
           </template>
           <template v-else-if="$app.store.registration.currentStep === Steps.Loading">
-              <h3 class="f-registration-right__title">Loading...</h3>
+              <m-loading-new v-show="true" />
           </template>
       </div>
       </div>
@@ -69,6 +69,7 @@
   import { setCookie } from '~/src/shared/helpers/cookie.helpers';
   import { useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
   import { BrowserProvider } from 'ethers'
+  import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
   const { $app } = useNuxtApp()
   const router = useRouter()
