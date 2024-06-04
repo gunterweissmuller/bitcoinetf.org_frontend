@@ -384,31 +384,25 @@ const getMoonpayWallets = async () => {
 }
 
 const refCodeApply = async () => {
+  if (refApply.value) return
 
-  if(refApply.value) return
+  if ($app.store.user?.info?.referrals?.used_code === null) {
+    try {
+      const { data } = await $app.api.eth.referral.checkValidationCode(refCode.value)
 
-
-
-  if ($app.store.user?.info?.referrals?.used_code === null ) { //|| $app.store.user?.info?.referrals?.used_code === undefined
-    await $app.api.eth.referral
-      .checkReferralCode(refCode.value)
-      .then(() => {
-        refCodeError.value = false;
-        refCodeBtnText.value = 'Applied!';
-        refApply.value = true;
-        $app.store.user.info.referrals.used_code = refCode.value;
-      })
-      .catch((e) => {
-        refCodeError.value = true
-        if (e?.errors?.error?.message) {
-          refCodeMessage.value = e.errors.error.message
-        } else {
-          refCodeMessage.value = 'Something went wrong'
-        }
-      })
+      if (!data?.exists) {
+        throw { errorMessage: 'Referral code is not valid' }
+      }
+      await $app.api.eth.referral.applyReferralCode(refCode.value)
+      refCodeBtnText.value = 'Applied!'
+      refApply.value = true
+      $app.store.user.info.referrals.used_code = refCode.value
+    } catch (error) {
+      refCodeError.value = true
+      refCodeMessage.value = error?.errors?.error?.message || error?.errorMessage || 'Something went wrong'
+    }
   } else {
-    await $app.api.eth.referral
-      .checkValidationCode(refCode.value)
+    await $app.api.eth.referral.checkValidationCode(refCode.value)
   }
 }
 
