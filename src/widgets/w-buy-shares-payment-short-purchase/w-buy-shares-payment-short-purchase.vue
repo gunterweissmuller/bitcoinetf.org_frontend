@@ -19,7 +19,7 @@
     />
     <a-input
       class="flex justify-between mt-6 rounded-lg"
-      label="Deposit address on Tron chain:"
+      :label="`Deposit address on ${payType} chain:`"
       :model-value="computedAddr"
       :disabled="true"
       :text-icon="addressCopied"

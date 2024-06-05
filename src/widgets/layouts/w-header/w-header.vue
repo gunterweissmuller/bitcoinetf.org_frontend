@@ -295,11 +295,11 @@ const routeNames = computed(() => ({
     info: EPageInfoEarnings,
   },
   'personal-analytics-performance-latest-trades': {
-    title: 'Latest trades',
-    titleCrumb: 'Latest trades',
+    title: 'Last successful trades',
+    titleCrumb: 'Last successful trades',
     breadcrumbs: true,
     urlToBack: 'personal-protection',
-    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Latest Trades'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Last successful trades'],
   },
   'personal-analytics-shareholders-latest-purchases': {
     title: 'Latest purchases',

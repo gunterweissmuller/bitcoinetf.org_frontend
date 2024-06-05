@@ -1,7 +1,7 @@
 <template>
   <div v-if="renderedTrades.length" class="w-trades">
     <div class="w-trades__head">
-      <div class="w-trades__head-title">Latest Trades</div>
+      <div class="w-trades__head-title">Last successful trades</div>
       <nuxt-link v-if="!isPage && renderedTrades.length && !hideView" :to="fullPageNuxtLink" class="w-trades__head-info"
         >View All
       </nuxt-link>
