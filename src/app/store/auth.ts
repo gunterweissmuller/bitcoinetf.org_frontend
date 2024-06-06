@@ -10,6 +10,7 @@ interface authState {
     websocketToken: string,
     refCode: string,
     accountMethod: string,
+    isMetamaskSupported: boolean,
 }
 
 export const auth = defineStore('auth', {
@@ -20,6 +21,7 @@ export const auth = defineStore('auth', {
     websocketToken: '',
     refCode: '',
     accountMethod: 'email',
+    isMetamaskSupported: false,
   } as authState),
 
   actions: {

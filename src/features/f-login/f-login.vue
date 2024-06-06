@@ -57,13 +57,14 @@
   import fLoginLogin from '../f-login-login/f-login-login.vue'
   import fLoginLink from '../f-login-link/f-login-link.vue'
   import fLoginCheck from '../f-login-check/f-login-check.vue'
-  import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
-  import { BrowserProvider } from 'ethers'
+  import { useWeb3ModalAccount } from '@web3modal/ethers/vue'
   import { useLogin } from './useLogin'
+  import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
   import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
   const { $app } = useNuxtApp()
   const { continueLogin, checkAuthType } = useLogin($app);
+  const {initWalletConnect} = useWalletConnect($app);
 
   // reset 
   onUnmounted(() => {
@@ -76,19 +77,12 @@
   });
 
   // walletConnect
-  const { address, chainId, isConnected } = useWeb3ModalAccount()
+  const { address } = useWeb3ModalAccount()
 
-  const { walletProvider } = useWeb3ModalProvider()
+  const handleWalletConnect = async () => {
+    await initWalletConnect();
 
-  async function onSignMessage() {
-      const provider = new BrowserProvider(walletProvider.value)
-      const signer = await provider.getSigner()
-      const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
-
-      $app.store.registration.walletConnectData.signature = signature;
-      $app.store.registration.walletConnectData.walletAddress = address.value;
-
-      $app.api.eth.auth.walletConnectGetAuthType({
+    $app.api.eth.auth.walletConnectGetAuthType({
           wallet_connect_data: JSON.stringify({
               signature: $app.store.registration.walletConnectData.signature,
               address: $app.store.registration.walletConnectData.walletAddress,
@@ -118,7 +112,7 @@
     () => {
 
       if(address.value) {
-        onSignMessage()
+        handleWalletConnect();
       }
     }
   )

@@ -239,4 +239,23 @@ const modal = createWeb3Modal({
 $app.api.eth.auth.walletConnectGetCredentials().then((msg) => {
   $app.store.registration.walletConnectData.signatureMessage = msg.data?.message;
 })
+
+// metamask
+
+onMounted(() => {
+    // metamask support
+    
+    $app.store.auth.isMetamaskSupported = typeof (window as any).ethereum !== 'undefined'
+        if ($app.store.auth.isMetamaskSupported) {
+            (window as any).ethereum.on('chainChanged', (chainId: string) => {
+              // if (chainId !== '0x1') {
+              //     metamaskError.value = 'This network is not supported. Please change the network to Ethereum.'
+              // } else if (chainId === '0x1') {
+              //     metamaskError.value = ''
+              // }
+            })
+        } else {
+            console.log('Metamask is not installed')
+        }
+})
 </script>
