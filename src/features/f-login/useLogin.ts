@@ -16,7 +16,7 @@ export function useLogin($app) {
     const {initMetamask} = useMetamask($app);
     const {initApple} = useApple($app); 
     const {initTelegram} = useTelegram($app);
-    const {initFacebook} = useFacebook($app);
+    const {initFacebook, getFbSdk} = useFacebook($app);
     const {openWalletConnect} = useWalletConnect($app);
 
     // Email Field
@@ -220,66 +220,99 @@ export function useLogin($app) {
 
     // facebook
     const handleFacebookConnect = async () => {
-        const response = await initFacebook();
+        $app.api.eth.auth
+        .getCredintialsFacebook()
+        .then(async (res) => {
+            const facebookId = 934423128173330; // 934423128173330; //  res?.data?.client_id;
 
-        console.log(response);
+            const sdk = await getFbSdk(
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
+            ) //sdk === FB in this case
 
-        if (response?.authResponse) {
-            console.log("truee")
-            $app.store.authTemp.response = response.authResponse;
+            sdk.init(
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
+            );
 
-            $app.api.eth.auth
-            .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-            .then(async (res) => {
-                const tempLogin = () => {
-                    $app.api.eth.auth.
-                    loginFacebook({
-                        facebook_id: $app.store.authTemp.response?.userID,
-                        facebook_data: $app.store.authTemp.response?.accessToken,
+            sdk.login((response) => {
+                if (response?.authResponse) {
+                    $app.store.authTemp.response = response.authResponse;
+
+                    $app.api.eth.auth
+                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+                    .then(async (res) => {
+                        const tempLogin = () => {
+                            $app.api.eth.auth.
+                            loginFacebook({
+                                facebook_id: $app.store.authTemp.response?.userID,
+                                facebook_data: $app.store.authTemp.response?.accessToken,
+                            })
+                            .then((jwtResponse: any) => {
+                                continueLogin(jwtResponse);
+                            })
+                        }
+
+                        checkAuthType(res, tempLogin);
                     })
-                    .then((jwtResponse: any) => {
-                        continueLogin(jwtResponse);
+                    .catch((e) => {
+                        // Todo: notify something went wrond
+                        console.error(e)
                     })
                 }
-
-                checkAuthType(res, tempLogin);
-            })
-            .catch((e) => {
-                // Todo: notify something went wrond
-                console.error(e)
-            })
-        }
-
+            });
+        })
+        .catch((e) => {
+            // Todo: notify something went wrond
+            console.error(e)
+        })
     }
 
     //telegram
     const testTG = async () => {
-        let data : any = await initTelegram();
+        const dataTelegram = await $app.api.eth.auth.getCredintialsTelegram();
+        const telegramBotId = dataTelegram?.data?.bot_id;
 
-        console.log(data)
+        await (window as any).Telegram.Login.init(
+            'widget_login',
+            telegramBotId,
+            { origin: 'https:\/\/core.telegram.org' },
+            false,
+            'en',
+        )
 
-        if(data) {
-            console.log("TRUE")
-            $app.api.eth.auth
-            .telegramGetAuthType({
-                telegram_data: JSON.stringify(data),
-            })
-            .then((r: any) => {
-                const tempLogin = () => {
-                    $app.api.eth.auth
-                    .loginTelegram({
-                        telegram_data: JSON.stringify(data),
-                    })
-                    .then((jwtResponse: any) => {
-                        continueLogin(jwtResponse);
-                    })
-                }
+        await (window as any).Telegram.Login.auth({ bot_id: telegramBotId, request_access: true }, (data: any) => {
+            console.log(data);
+            if (!data) {
+            // authorization failed
+            } else {
+                $app.api.eth.auth
+                .telegramGetAuthType({
+                    telegram_data: JSON.stringify(data),
+                })
+                .then((r: any) => {
+                    const tempLogin = () => {
+                        $app.api.eth.auth
+                        .loginTelegram({
+                            telegram_data: JSON.stringify(data),
+                        })
+                        .then((jwtResponse: any) => {
+                            continueLogin(jwtResponse);
+                        })
+                    }
 
-                checkAuthType(r, tempLogin);
-                $app.store.authTelegram.setResponse({ response: data, method: SignupMethods.Telegram })
-            })
-            return data
-        }
+                    checkAuthType(r, tempLogin);
+                    $app.store.authTelegram.setResponse({ response: data, method: SignupMethods.Telegram })
+                });
+                return data;
+            }
+        });
     }
 
     //apple

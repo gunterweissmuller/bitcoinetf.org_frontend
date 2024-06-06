@@ -76,5 +76,6 @@ export function useFacebook($app) {
 
     return {
         initFacebook,
+        getFbSdk
     };
 }

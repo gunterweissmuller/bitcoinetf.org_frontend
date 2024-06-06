@@ -15,7 +15,7 @@ export function useRegistration($app) {
     const {initMetamask} = useMetamask($app);
     const {initApple} = useApple($app); 
     const {initTelegram} = useTelegram($app);
-    const {initFacebook} = useFacebook($app);
+    const {initFacebook, getFbSdk} = useFacebook($app);
     const {openWalletConnect} = useWalletConnect($app);
     const {connectToReplenishment} = useConnectReplenishmentChannel($app)
     const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
@@ -144,32 +144,48 @@ export function useRegistration($app) {
 
     // telegram
     const testTG = async () => {
-        let data : any = await initTelegram();
+        const dataTelegram = await $app.api.eth.auth.getCredintialsTelegram();
+        const telegramBotId = dataTelegram?.data?.bot_id;
 
-        if (data) {
-            $app.api.eth.auth.telegramGetAuthType({
-                telegram_data: JSON.stringify(data),
-            }).then((r: any) => {
-                if(r.data.auth_type === 'registration') {
-                    $app.store.authTelegram.setResponse({response: data, method: SignupMethods.Telegram});
-                    $app.store.registration.currentStep = Steps.Email
-                    $app.store.registration.currentSignup = SignupMethods.Telegram;
-                    $app.store.registration.firstName = $app.store.authTelegram.response.first_name;
-                    $app.store.registration.lastName = $app.store.authTelegram.response.last_name;
-                    $app.store.registration.email = $app.store.authTelegram.response.email;
-                } else {
-                    $app.store.registration.currentStep = Steps.Loading;
-                    $app.api.eth.auth.
-                    loginTelegram({
-                        telegram_data: JSON.stringify(data),
-                    })
-                    .then((jwtResponse: any) => {
-                        continueLogin(jwtResponse);
-                    })
-                }
-            })
-        }
-        return data;
+        await (window as any).Telegram.Login.init(
+            'widget_login',
+            telegramBotId,
+            { origin: 'https:\/\/core.telegram.org' },
+            false,
+            'en',
+        )
+
+        await (window as any).Telegram.Login.auth({ bot_id: telegramBotId, request_access: true }, (data: any) => {
+            console.log(data);
+            if (!data) {
+            // authorization failed
+            } else {
+                $app.api.eth.auth
+                .telegramGetAuthType({
+                    telegram_data: JSON.stringify(data),
+                })
+                .then((r: any) => {
+                    if(r.data.auth_type === 'registration') {
+                        $app.store.authTelegram.setResponse({response: data, method: SignupMethods.Telegram});
+                        $app.store.registration.currentStep = Steps.Email
+                        $app.store.registration.currentSignup = SignupMethods.Telegram;
+                        $app.store.registration.firstName = $app.store.authTelegram.response.first_name;
+                        $app.store.registration.lastName = $app.store.authTelegram.response.last_name;
+                        $app.store.registration.email = $app.store.authTelegram.response.email;
+                    } else {
+                        $app.store.registration.currentStep = Steps.Loading;
+                        $app.api.eth.auth.
+                        loginTelegram({
+                            telegram_data: JSON.stringify(data),
+                        })
+                        .then((jwtResponse: any) => {
+                            continueLogin(jwtResponse);
+                        })
+                    }
+                });
+                return data;
+            }
+        });
     }
 
     // apple
@@ -206,31 +222,57 @@ export function useRegistration($app) {
 
     //facebook
     const handleFacebookConnect = async () => {
-        const response = await initFacebook();
+        $app.api.eth.auth
+        .getCredintialsFacebook()
+        .then(async (res) => {
+            const facebookId = 934423128173330; // 934423128173330; //  res?.data?.client_id;
 
-        if (response?.authResponse) {
-            $app.store.authTemp.response = response.authResponse;
+            const sdk = await getFbSdk(
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
+            ) //sdk === FB in this case
 
-            $app.api.eth.auth
-            .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-            .then(async (res) => {
-                if(res.data.auth_type === 'registration') {
-                    $app.store.registration.currentStep = Steps.Email
-                    $app.store.registration.currentSignup = SignupMethods.Facebook;
-                } else {
-                    $app.store.registration.currentStep = Steps.Loading;
-                    $app.api.eth.auth.
-                    loginFacebook({
-                        facebook_id: $app.store.authTemp.response?.userID,
-                        facebook_data: $app.store.authTemp.response?.accessToken,
-                    })
-                    .then((jwtResponse: any) => {
-                        continueLogin(jwtResponse);
+            sdk.init(
+                {
+                    appId: facebookId, //You will need to change this
+                    cookie: true, // This is important, it's not enabled by default
+                    version: "v13.0"
+                }
+            );
+
+            sdk.login((response) => {
+                if (response?.authResponse) {
+                    $app.store.authTemp.response = response.authResponse;
+
+                    $app.api.eth.auth
+                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+                    .then(async (res) => {
+                        if(res.data.auth_type === 'registration') {
+                            $app.store.registration.currentStep = Steps.Email
+                            $app.store.registration.currentSignup = SignupMethods.Facebook;
+                        } else {
+                            $app.store.registration.currentStep = Steps.Loading;
+                            $app.api.eth.auth.
+                            loginFacebook({
+                                facebook_id: $app.store.authTemp.response?.userID,
+                                facebook_data: $app.store.authTemp.response?.accessToken,
+                            })
+                            .then((jwtResponse: any) => {
+                                continueLogin(jwtResponse);
+                            })
+                        }
+
                     })
                 }
-
-            })
-        }
+            });
+        })
+        .catch((e) => {
+            // Todo: notify something went wrond
+            console.error(e)
+        })
     }
 
     // Ref code field
