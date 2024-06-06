@@ -1,6 +1,7 @@
 <template>
   <div class="w-assets page-max-width--big" v-if="route.params?.symbol !== undefined">
     <m-slider
+      v-if="isDesktop"
       class="w-assets__info"
       id="w-assets__info-slider"
       loop
@@ -58,10 +59,12 @@ import WNews from '~/src/widgets/w-news/w-news.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
+import useMediaDevice from '~/composables/useMediaDevice'
 
 const { $app } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
+const { isDesktop } = useMediaDevice()
 
 
 const assets = computed(() => {

@@ -7,6 +7,7 @@ export const user = defineStore('user', {
     info: '',
     blockchainUserWallet: '',
     buyShares: null,
+    sellShares: null,
     statistic: null,
     totalFund: {
       totalAmountBtc: 0,
@@ -41,7 +42,7 @@ export const user = defineStore('user', {
     investType: 'btc',
     wallets: '',
     succesModal: {show: false, isBtc: false},
-    isMetamaskSupported: false
+    isMetamaskSupported: false,
   }),
 
   actions: {

@@ -4,9 +4,13 @@
       <div class="w-dividends__amount">
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
-          <div class="w-dividends__amount-sum">${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
+          <div class="w-dividends__amount-sum"> 
+            <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon> 
+            <span v-else>$</span>
+            {{orderType !== 'usdt' ? $app.filters.rounded(walletDividends?.btc_dividends_balance, 8)  : $app.filters.rounded(walletDividends?.usd_amount, 6) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
           </div>
-          <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
+          <div v-if="orderType === 'btc'" class="w-dividends__btc">${{ $app.filters.rounded(walletDividends?.btc_dividends_balance * $app.store.user.btcValue, 6) }}</div>
+          <div v-if="walletDividends?.btc_dividends_balance && $app.store.user?.info?.account?.order_type === 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
 
         <div class="w-dividends__timer" :style="timerStyle">
@@ -57,7 +61,8 @@
         <div class="w-dividends__cards-item w-dividends__cards-item-dividends">
           <div class="w-dividends__cards-header">
             <div class="w-dividends__cards-icon-dollar">
-              <a-icon width="14" height="14"  :name="Icon.MonoDollar" />
+              <a-icon v-if="orderType === 'btc'" width="14" height="14"  :name="Icon.MonoBtcUni" />
+              <a-icon v-else width="14" height="14"  :name="Icon.MonoDollar" />
             </div>
             <a-live />
           </div>
@@ -66,7 +71,9 @@
               TOTAL DIVIDENDS PAID
             </div>
             <div class="w-dividends__cards-title">
-              ${{$app.filters.rounded(tempDividendsEarnedBtc, 2) }}
+              <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon> 
+              <span v-else>$</span>
+              {{$app.filters.rounded(tempDividendsEarnedBtc, orderType ==='btc' ? 8 : 6) }}
             </div>
           </div>
           <div class="w-dividends__cards-footer">
@@ -124,11 +131,11 @@
             <div v-if="item.status === 'pending'" class="w-dividends__item_sums">Pending</div>
             <div v-else class="w-dividends__item_sums">
               <div class="w-dividends__item_info-usd">
-                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }} <!--8-->
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 6) }} <!--8-->
               </div>
               <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
-                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 6))"></span> <!--8-->
+                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span> <!--8-->
               </div>
             </div>
           </div>
@@ -331,9 +338,9 @@ const usdAmount = computed(() => {
 })
 
 const btcAmount = computed(() => {
-  if (!walletDividends.value?.btc_amount) return 0
+  if (!walletDividends.value?.btc_dividends_balance) return 0
 
-  return $app.filters.convertValue($app.filters.rounded(walletDividends.value?.btc_amount, 8))
+  return $app.filters.convertValue($app.filters.rounded(walletDividends.value?.btc_dividends_balance, 8))
 })
 
 const isMore200Usd = computed(() => {
@@ -530,7 +537,11 @@ const tempDividendsEarnedBtc = ref(0);
 
 onMounted(() => {
   $app.api.eth.statisticEth.getPersonalStats().then((res) => {
-    tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    if(orderType.value === 'btc') {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
+    } else {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    } 
   })
 })
 
@@ -554,7 +565,11 @@ const getTotalDividendsPaidPersonal = (time : any) => {
   }
 
   $app.api.eth.statisticEth.getPersonalStats({ filters: filterObj }).then((res) => {
-    tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    if(orderType.value === 'btc') {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
+    } else {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    } 
   })
 }
 

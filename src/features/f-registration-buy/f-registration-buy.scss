@@ -513,7 +513,10 @@
     }
 
     &-loading {
-      color: var(--text-primary)
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     &__ref-message--error {

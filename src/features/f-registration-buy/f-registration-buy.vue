@@ -224,7 +224,7 @@
 
               <template v-if="currentPayStep === StepsPay.Loading">
                 <div class="f-registration-buy__purchase-loading">
-                  Loading...
+                  <m-loading-new v-show="true" />
                 </div>
               </template>
 
@@ -288,6 +288,7 @@ import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
 import { useMoonpay } from '~/src/app/composables/useMoonpay';
 import { Centrifuge } from 'centrifuge';
 import { usePayment } from '~/src/app/composables/usePayment';
+import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
 const emit = defineEmits([ 'update'])
 
@@ -535,7 +536,7 @@ const openMoonpay = async () => {
   return await openMoonpayHandler(getMoonpayWallets, (ctx) => {
     paymentAmount.value.amount = ctx.data.message?.data?.amount;
     isOpenSuccessPaymentModal.value = true
-  })
+  }, true, false)
 }
 
 const openEth = async () => {

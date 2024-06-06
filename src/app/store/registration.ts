@@ -16,6 +16,7 @@ interface registrationState {
     lastName: string,
     email: string,
     phone: string,
+    walletConnectData: any,
 }
 
 export const registration = defineStore('registration', {
@@ -32,6 +33,7 @@ export const registration = defineStore('registration', {
     lastName: '',
     email: '',
     phone: '',
+    walletConnectData: {},
   } as registrationState),
 
   actions: {
