@@ -222,7 +222,10 @@ export function useLogin($app) {
     const handleFacebookConnect = async () => {
         const response = await initFacebook();
 
+        console.log(response);
+
         if (response?.authResponse) {
+            console.log("truee")
             $app.store.authTemp.response = response.authResponse;
 
             $app.api.eth.auth
@@ -253,7 +256,10 @@ export function useLogin($app) {
     const testTG = async () => {
         let data : any = await initTelegram();
 
+        console.log(data)
+
         if(data) {
+            console.log("TRUE")
             $app.api.eth.auth
             .telegramGetAuthType({
                 telegram_data: JSON.stringify(data),
@@ -272,8 +278,8 @@ export function useLogin($app) {
                 checkAuthType(r, tempLogin);
                 $app.store.authTelegram.setResponse({ response: data, method: SignupMethods.Telegram })
             })
+            return data
         }
-        return data
     }
 
     //apple
