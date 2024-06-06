@@ -13,14 +13,18 @@ export function useTelegram($app) {
             'en',
         )
 
-        await (window as any).Telegram.Login.auth({ bot_id: telegramBotId, request_access: true }, (tgData: any) => {
-            console.log(tgData);
-            if (!tgData) {
-            // authorization failed
-            } else {
-                return tgData;
-            }
-        })
+        const response = await (window as any).Telegram.Login.auth({ bot_id: telegramBotId, request_access: true }, (tgData: any) => {
+            // console.log(tgData);
+            // if (!tgData) {
+            // // authorization failed
+            // } else {
+            //     return tgData;
+            // }
+        });
+
+        console.log(response);
+        return response;
+
     }
 
 
