@@ -1,6 +1,7 @@
 
 export function useTelegram($app) {
     
+    // not work
     const initTelegram = async () => {
         const dataTelegram = await $app.api.eth.auth.getCredintialsTelegram();
         const telegramBotId = dataTelegram?.data?.bot_id;

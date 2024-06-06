@@ -32,7 +32,7 @@ export function useFacebook($app) {
         })
     }
 
-
+    // not work
     const initFacebook = async () => {
 
         $app.api.eth.auth

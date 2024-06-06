@@ -14,8 +14,7 @@ export function useRegistration($app) {
     const router = useRouter()
     const {initMetamask} = useMetamask($app);
     const {initApple} = useApple($app); 
-    const {initTelegram} = useTelegram($app);
-    const {initFacebook, getFbSdk} = useFacebook($app);
+    const {getFbSdk} = useFacebook($app);
     const {openWalletConnect} = useWalletConnect($app);
     const {connectToReplenishment} = useConnectReplenishmentChannel($app)
     const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
@@ -156,7 +155,6 @@ export function useRegistration($app) {
         )
 
         await (window as any).Telegram.Login.auth({ bot_id: telegramBotId, request_access: true }, (data: any) => {
-            console.log(data);
             if (!data) {
             // authorization failed
             } else {
@@ -225,7 +223,7 @@ export function useRegistration($app) {
         $app.api.eth.auth
         .getCredintialsFacebook()
         .then(async (res) => {
-            const facebookId = 934423128173330; // 934423128173330; //  res?.data?.client_id;
+            const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
 
             const sdk = await getFbSdk(
                 {

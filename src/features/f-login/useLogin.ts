@@ -15,8 +15,7 @@ export function useLogin($app) {
     const route = useRoute()
     const {initMetamask} = useMetamask($app);
     const {initApple} = useApple($app); 
-    const {initTelegram} = useTelegram($app);
-    const {initFacebook, getFbSdk} = useFacebook($app);
+    const {getFbSdk} = useFacebook($app);
     const {openWalletConnect} = useWalletConnect($app);
 
     // Email Field
@@ -223,7 +222,7 @@ export function useLogin($app) {
         $app.api.eth.auth
         .getCredintialsFacebook()
         .then(async (res) => {
-            const facebookId = 934423128173330; // 934423128173330; //  res?.data?.client_id;
+            const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
 
             const sdk = await getFbSdk(
                 {
@@ -288,7 +287,6 @@ export function useLogin($app) {
         )
 
         await (window as any).Telegram.Login.auth({ bot_id: telegramBotId, request_access: true }, (data: any) => {
-            console.log(data);
             if (!data) {
             // authorization failed
             } else {
