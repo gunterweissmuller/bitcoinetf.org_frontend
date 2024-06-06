@@ -1,16 +1,16 @@
 <template>
     <m-modal :modalSmall="true"  @close="handleClose" v-model="props.show">
-      <div class="e-sell-etf-modal">
-        <div class="e-sell-etf-modal-wrapper">
-            <div class="e-sell-etf-modal__title">
+      <div class="e-not-enough-balance-modal">
+        <div class="e-not-enough-balance-modal-wrapper">
+            <div class="e-not-enough-balance-modal__title">
                 Not enough balance
             </div>
 
-            <div class="e-sell-etf-modal__text">
+            <div class="e-not-enough-balance-modal__text">
                 Your balance must reach above $250 in order to use Bitcoin On-Chain withdrawals. Use Bitcoin Lightning for daily withdrawals without limit.
             </div>
 
-            <a-button class="e-sell-etf-modal__button" @click="handleContinue" text="Got it!" variant="primary"></a-button>
+            <a-button class="e-not-enough-balance-modal__button" @click="handleContinue" text="Got it!" variant="primary"></a-button>
         </div>
       </div>
     </m-modal>

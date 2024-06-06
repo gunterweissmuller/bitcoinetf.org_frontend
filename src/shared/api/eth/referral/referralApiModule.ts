@@ -14,7 +14,7 @@ export default class ReferralApiModule {
     this.store = store
   }
 
-  async checkReferralCode(code: string) {
+  async applyReferralCode(code: string) {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'referral/invite/apply',

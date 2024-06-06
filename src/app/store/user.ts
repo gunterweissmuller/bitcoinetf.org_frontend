@@ -7,6 +7,7 @@ export const user = defineStore('user', {
     info: '',
     blockchainUserWallet: '',
     buyShares: null,
+    sellShares: null,
     statistic: null,
     totalFund: {
       totalAmountBtc: 0,

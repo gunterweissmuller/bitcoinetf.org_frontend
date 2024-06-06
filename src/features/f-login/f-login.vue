@@ -17,6 +17,8 @@
       </div>
     </div>
 
+    
+
     <div class="f-login-new-content f-login-new-content-right">
       <div class="f-login-new-content-right-wrapper">
         <div class="f-registration w-full">
@@ -36,8 +38,9 @@
             <f-login-error/>
           </template>
           <template v-else-if="$app.store.login?.currentStep === Steps.Loading">
-            <div class="f-login__wrapper">Loading...</div>
+            <m-loading-new v-show="true" />
           </template>
+          
         </div>
       </div>
     </div>
@@ -57,6 +60,7 @@
   import { useWeb3ModalAccount } from '@web3modal/ethers/vue'
   import { useLogin } from './useLogin'
   import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
+  import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
   const { $app } = useNuxtApp()
   const { continueLogin, checkAuthType } = useLogin($app);

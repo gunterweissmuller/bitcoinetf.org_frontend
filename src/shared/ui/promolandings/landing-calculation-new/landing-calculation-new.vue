@@ -151,8 +151,8 @@
         </div>
       </template>
       <template v-if="signupStep === SignupSteps.Loading">
-        <div class="landing-calculation__wrapper">
-          Loading...
+        <div class="landing-calculation__loading-wrapper">
+          <m-loading-new v-show="true" />
         </div>
       </template>
 
@@ -223,6 +223,8 @@ import axios from "axios";
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { BrowserProvider, parseUnits } from "ethers";
 import { useDisconnect, useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
+import { LocationQueryRaw } from '#vue-router';
+import mLoadingNew from '../../molecules/m-loading-new/m-loading-new.vue';
 
 const router = useRouter()
 const route = useRoute()

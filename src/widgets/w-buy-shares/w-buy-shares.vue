@@ -311,7 +311,7 @@ const refApply = ref(!!$app.store.user?.info?.referrals?.used_code)
 const checkRefCode = async () => {
   if ($app.store.user.info.referrals.used_code === null) {
     await $app.api.eth.referral
-      .checkReferralCode(refCode.value)
+      .applyReferralCode(refCode.value)
       .then(() => {
         refCodeError.value = false
         refCodeMessage.value = 'Referral code applied'

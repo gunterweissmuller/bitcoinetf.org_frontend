@@ -45,7 +45,7 @@
         margin: var(--spacing-m-3) 0;
 
         &-title {
-            color: var(--Text-Primary, #22242B);
+            color: var(--text-primary);
             text-align: center;
             font-family: Dm,sans-serif;
             font-size: 14px;
@@ -71,12 +71,12 @@
             display: flex;
         }
 
-        @media (max-width: 440px) {
-            
+        @include breakpoint($break-mobile-475-minus) {
+
         }
 
-
         &-number {
+            min-width: 30px;
             padding: 10px 7px;
             border-radius: 2px;
             background: var(--surfaces-selection);
@@ -90,11 +90,12 @@
             line-height: normal;
             margin-left: torem(2);
 
-            @media (max-width: 440px) {
-                padding: 7px 5px;
+            @include breakpoint($break-mobile-475-minus) {
                 font-size: 10px;
+                padding: 10px 6px;
+                min-width: 20px;
             }
-            
+
             &:first-child {
                 margin-left: 0;
             }
