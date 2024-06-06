@@ -56,11 +56,14 @@ export function useFacebook($app) {
                 }
             );
 
-            sdk.login((response) => {
-                if (response?.authResponse) {
-                    return response;
-                }
+            const response = await sdk.login((response) => {
+                // if (response?.authResponse) {
+                //     return response;
+                // }
             });
+
+            console.log(response)
+            return response;
 
         })
         .catch((e) => {
