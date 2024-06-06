@@ -163,6 +163,8 @@
       line-height: 130%;
       margin-bottom: var(--spacing-xs);
 
+      display: flex;
+
       @include breakpoint($break-desktop-1024) {
         text-align: start;
       }

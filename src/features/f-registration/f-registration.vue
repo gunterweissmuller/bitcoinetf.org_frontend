@@ -67,12 +67,13 @@
   import { useRegistration } from './useRegistration'
   import { SignupMethods } from '~/src/shared/constants/signupMethods'
   import { setCookie } from '~/src/shared/helpers/cookie.helpers';
-  import { useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
-  import { BrowserProvider } from 'ethers'
+  import { useWeb3ModalAccount } from '@web3modal/ethers/vue'
+  import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
 
   const { $app } = useNuxtApp()
   const router = useRouter()
   const route = useRoute()
+  const {initWalletConnect} = useWalletConnect($app);
   const { continueLogin,  catchRegistration, } = useRegistration($app);
   const metamaskError = ref("");
 
@@ -213,44 +214,38 @@
   });
 
   // walletConnect
-  const { address, chainId, isConnected } = useWeb3ModalAccount()
+  const { address } = useWeb3ModalAccount()
 
-  const { walletProvider } = useWeb3ModalProvider()
+  const handleWalletConnect = async () => {
+    await initWalletConnect();
 
-  async function onSignMessage() {
-      const provider = new BrowserProvider(walletProvider.value)
-      const signer = await provider.getSigner()
-      const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
+    $app.store.registration.currentSignup = SignupMethods.WalletConnect;
+    $app.store.registration.currentStep = Steps.Email;
 
-      $app.store.registration.walletConnectData.signature = signature;
-      $app.store.registration.walletConnectData.walletAddress = address.value;
-      $app.store.registration.currentSignup = SignupMethods.WalletConnect;
-      $app.store.registration.currentStep = Steps.Email;
-
-      $app.api.eth.auth.walletConnectGetAuthType({
-          wallet_connect_data: JSON.stringify({
-              signature: $app.store.registration.walletConnectData.signature,
-              address: $app.store.registration.walletConnectData.walletAddress,
-              message: $app.store.registration.walletConnectData?.signatureMessage,
-          }),
-      }).then((r: any) => {
-          if(r.data.auth_type === 'registration') {
-              $app.store.registration.currentSignup = SignupMethods.WalletConnect;
-              $app.store.registration.currentStep = Steps.Email;
-          } else {
-              $app.api.eth.auth.
-              wallletConnectLogin({
-                  wallet_connect_data: JSON.stringify({
-                      signature: $app.store.registration.walletConnectData.signature,
-                      address: $app.store.registration.walletConnectData.walletAddress,
-                      message: $app.store.registration.walletConnectData?.signatureMessage,
-                  }),
-              })
-              .then((jwtResponse: any) => {
-                  continueLogin(jwtResponse);
-              })
-          }
-      })
+    $app.api.eth.auth.walletConnectGetAuthType({
+        wallet_connect_data: JSON.stringify({
+            signature: $app.store.registration.walletConnectData.signature,
+            address: $app.store.registration.walletConnectData.walletAddress,
+            message: $app.store.registration.walletConnectData?.signatureMessage,
+        }),
+    }).then((r: any) => {
+        if(r.data.auth_type === 'registration') {
+            $app.store.registration.currentSignup = SignupMethods.WalletConnect;
+            $app.store.registration.currentStep = Steps.Email;
+        } else {
+            $app.api.eth.auth.
+            wallletConnectLogin({
+                wallet_connect_data: JSON.stringify({
+                    signature: $app.store.registration.walletConnectData.signature,
+                    address: $app.store.registration.walletConnectData.walletAddress,
+                    message: $app.store.registration.walletConnectData?.signatureMessage,
+                }),
+            })
+            .then((jwtResponse: any) => {
+                continueLogin(jwtResponse);
+            })
+        }
+    })
   }
 
   watch(
@@ -258,7 +253,7 @@
     () => {
 
       if(address.value) {
-        onSignMessage()
+        handleWalletConnect();
       }
     }
   )

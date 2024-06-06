@@ -1,19 +1,26 @@
-import { useNuxtApp, useRouter, useRoute } from '#app'
+import { useRouter, useRoute } from '#app'
 import { SignupMethods } from '~/src/shared/constants/signupMethods'
 import { Steps } from './steps'
 import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
 import { HttpStatusCode } from '~/src/shared/constants/httpStatusCodes'
-import { BrowserProvider } from 'ethers'
-import { useWeb3Modal, useWeb3ModalProvider, useWeb3ModalAccount, useWeb3ModalEvents } from '@web3modal/ethers/vue'
+import { useMetamask } from '~/src/app/composables/useMetamask'
+import { useApple } from '~/src/app/composables/useApple'
+import { useTelegram } from '~/src/app/composables/useTelegram'
+import { useFacebook } from '~/src/app/composables/useFacebook'
+import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
 
 export function useLogin($app) {
     const { connectToReplenishment } = useConnectReplenishmentChannel($app)
     const router = useRouter()
     const route = useRoute()
+    const {initMetamask} = useMetamask($app);
+    const {initApple} = useApple($app); 
+    const {initTelegram} = useTelegram($app);
+    const {initFacebook} = useFacebook($app);
+    const {openWalletConnect} = useWalletConnect($app);
 
     // Email Field
     const backendError = ref('')
-    const email = ref(process.dev ? 'emard.roselyn11136@yahoo.com' : '')
     const emailErrorText = ref('')
     const isEmailValid = ref(false)
 
@@ -41,7 +48,6 @@ export function useLogin($app) {
     }
 
     // Password Field
-    const password = ref(process.dev ? 'k3kLXI0AEykmcJFc3dV44fSNDA6-jjvtiWDWPuT0n7DjzqmYPIm' : '')
     const passwordErrorText = ref('')
     const isPasswordValid = ref(false)
 
@@ -176,9 +182,6 @@ export function useLogin($app) {
             })
     }
 
-    const isMetamaskSupported = ref(false)
-    const metamaskError = ref('')
-
     onMounted(() => {
         // login one time link after redirect
         if (route.query.code && route.query.email) {
@@ -206,20 +209,6 @@ export function useLogin($app) {
             continueLogin({data : $app.store.authGoogle.response})
             $app.store.authGoogle.setResponse({}, SignupMethods.Google);
         }
-
-        // metamask support
-        isMetamaskSupported.value = typeof (window as any).ethereum !== 'undefined'
-            if (isMetamaskSupported.value) {
-                (window as any).ethereum.on('chainChanged', (chainId: string) => {
-                if (chainId !== '0x1') {
-                    metamaskError.value = 'This network is not supported. Please change the network to Ethereum.'
-                } else if (chainId === '0x1') {
-                    metamaskError.value = ''
-                }
-                })
-            } else {
-                console.log('Metamask is not installed')
-            }
     })
 
     // google 
@@ -230,128 +219,50 @@ export function useLogin($app) {
     }
 
     // facebook
-    function initFbSdk(options) {
-        return new Promise(resolve => {
-            window.fbAsyncInit = function () {
-                const defaults = { cookie: true, xfbml: true }
-                options = { ...defaults, ...options }
-                window.FB.init(options)
-                resolve()
-            };
-            /* eslint-disable */
-            (function (d, s, id) {
-                const fjs = d.getElementsByTagName(s)[0]
-                if (d.getElementById(id)) { return; }
-                const js = d.createElement(s); js.id = id
-                js.src = '//connect.facebook.net/zh_TW/sdk.js'
-                fjs.parentNode.insertBefore(js, fjs)
-            }(document, 'script', 'facebook-jssdk'))
-            /* eslint-enable */
-        })
-    }
+    const handleFacebookConnect = async () => {
+        const response = await initFacebook();
 
-    function getFbSdk(options) {
-        return new Promise(async resolve => {
-            if (window.FB) {
-                resolve(window.FB)
-            } else {
-            await initFbSdk(options)
-                resolve(window.FB)
-            }
-        })
-    }
+        if (response?.authResponse) {
+            $app.store.authTemp.response = response.authResponse;
 
-
-    const handleFacebookConnect = () => {
-
-        $app.api.eth.auth
-        .getCredintialsFacebook()
-        .then(async (res) => {
-            const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
-
-            const sdk = await getFbSdk(
-                {
-                    appId: facebookId, //You will need to change this
-                    cookie: true, // This is important, it's not enabled by default
-                    version: "v13.0"
-                }
-            ) //sdk === FB in this case
-
-            sdk.init(
-                {
-                    appId: facebookId, //You will need to change this
-                    cookie: true, // This is important, it's not enabled by default
-                    version: "v13.0"
-                }
-            );
-
-            sdk.login((response) => {
-                if (response?.authResponse) {
-                    $app.store.authTemp.response = response.authResponse;
-
-                    $app.api.eth.auth
-                    .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
-                    .then(async (res) => {
-                        const tempLogin = () => {
-                            $app.api.eth.auth.
-                            loginFacebook({
-                                facebook_id: $app.store.authTemp.response?.userID,
-                                facebook_data: $app.store.authTemp.response?.accessToken,
-                            })
-                            .then((jwtResponse: any) => {
-                                continueLogin(jwtResponse);
-                            })
-                        }
-
-                        checkAuthType(res, tempLogin);
+            $app.api.eth.auth
+            .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
+            .then(async (res) => {
+                const tempLogin = () => {
+                    $app.api.eth.auth.
+                    loginFacebook({
+                        facebook_id: $app.store.authTemp.response?.userID,
+                        facebook_data: $app.store.authTemp.response?.accessToken,
                     })
-                    .catch((e) => {
-                        // Todo: notify something went wrond
-                        console.error(e)
+                    .then((jwtResponse: any) => {
+                        continueLogin(jwtResponse);
                     })
-
                 }
-            });
 
-        })
-        .catch((e) => {
-            // Todo: notify something went wrond
-            console.error(e)
-        })
+                checkAuthType(res, tempLogin);
+            })
+            .catch((e) => {
+                // Todo: notify something went wrond
+                console.error(e)
+            })
+        }
 
     }
 
     //telegram
-
     const testTG = async () => {
+        let data : any = await initTelegram();
 
-        const dataTelegram = await $app.api.eth.auth.getCredintialsTelegram();
-        const telegramBotId = dataTelegram?.data?.bot_id;
-
-        let data = null
-        await (window as any).Telegram.Login.init(
-            'widget_login',
-            telegramBotId,
-            { origin: 'https:\/\/core.telegram.org' },
-            false,
-            'en',
-        )
-
-        await (window as any).Telegram.Login.auth({ bot_id: telegramBotId, request_access: true }, (tgData: any) => {
-            data = tgData
-
-            if (!tgData) {
-            // authorization failed
-            } else {
+        if(data) {
             $app.api.eth.auth
-                .telegramGetAuthType({
-                    telegram_data: JSON.stringify(tgData),
-                })
-                .then((r: any) => {
+            .telegramGetAuthType({
+                telegram_data: JSON.stringify(data),
+            })
+            .then((r: any) => {
                 const tempLogin = () => {
                     $app.api.eth.auth
                     .loginTelegram({
-                        telegram_data: JSON.stringify(tgData),
+                        telegram_data: JSON.stringify(data),
                     })
                     .then((jwtResponse: any) => {
                         continueLogin(jwtResponse);
@@ -359,86 +270,40 @@ export function useLogin($app) {
                 }
 
                 checkAuthType(r, tempLogin);
-                // ? $app.store.authTelegram.setResponse({ response: tgData, method: SignupMethods.Telegram })
-                })
-            }
-        })
+                $app.store.authTelegram.setResponse({ response: data, method: SignupMethods.Telegram })
+            })
+        }
         return data
     }
 
     //apple
     const handleAppleConnect = async () => {
+        const data = await initApple();
 
-        try {
-            const urlApple = await $app.api.eth.auth.getAppleRedirect();
-
-            function getJsonFromUrl(url) {
-                if (!url) url = location.search
-                var query = url.substr(1).split('?')[1]
-                var result = {}
-                query.split('&').forEach(function (part) {
-                    var item = part.split('=')
-                    result[item[0]] = decodeURIComponent(item[1])
+        $app.api.eth.auth
+        .getAppleAuthType({ apple_token: data.authorization.id_token })
+        .then(async (res) => {
+            const tempLogin = () => {
+            $app.api.eth.auth
+                .loginApple({
+                apple_token: $app.store.authTemp.response,
                 })
-                return result
+                .then((jwtResponse: any) => {
+                continueLogin(jwtResponse);
+                })
             }
 
-            const parsedUrl = getJsonFromUrl(urlApple.url);
-            
-            await (window as any).AppleID.auth.init({
-                clientId: parsedUrl?.client_id,
-                scope: parsedUrl?.scope,
-                redirectURI: parsedUrl?.redirect_uri,
-                usePopup: false,
-            })
+            checkAuthType(res, tempLogin);
+        })
 
-            const data = await (window as any).AppleID.auth.signIn()
-            $app.store.authTemp.response = data.authorization.id_token
-
-            $app.api.eth.auth
-            .getAppleAuthType({ apple_token: data.authorization.id_token })
-            .then(async (res) => {
-                const tempLogin = () => {
-                $app.api.eth.auth
-                    .loginApple({
-                    apple_token: $app.store.authTemp.response,
-                    })
-                    .then((jwtResponse: any) => {
-                    continueLogin(jwtResponse);
-                    })
-                }
-
-                checkAuthType(res, tempLogin);
-            })
-        } catch (error) {
-            console.error(error)
-        }
+       
     }
 
     //metamask
     const handleMetamaskConnect = async () => {
-        //if metamask is not installed
-        if (!isMetamaskSupported.value) {
-            window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn')
-            return;
-        }
+        const {msg,resMsg,signer} = await initMetamask();
 
-        try {
-            const provider = new BrowserProvider((window as any).ethereum);
-            const signer = await provider.getSigner();
-
-            //get accounts
-            const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
-
-            //switch to eth chain
-            await (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x1' }] });
-
-            // get metamask message
-            const resMsg = await $app.api.eth.auth.getMessageMetamask();
-
-            // sign message
-            const msg = await (window as any).ethereum.request({method: 'personal_sign', params: [resMsg?.message, accounts[0]]});
-
+        if(msg && resMsg && signer) {
             $app.api.eth.auth
             .loginMetamask({ signature: msg, message: resMsg?.message, wallet_address: signer?.address })
             .then((jwtResponse: any) => {
@@ -448,66 +313,15 @@ export function useLogin($app) {
             .catch((e) => {
                 catchLogin(e);
             })
-
-        } catch (e) {
-            console.error(e)
         }
     }
 
     // walletConnect
-
     const handleWalletConnect = async () => {
-       const { address, chainId, isConnected } = useWeb3ModalAccount()
-
-        if(address.value) {
-            const { walletProvider } = useWeb3ModalProvider()
-
-            async function onSignMessage() {
-                const provider = new BrowserProvider(walletProvider.value)
-                const signer = await provider.getSigner()
-                const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
-
-                $app.store.registration.walletConnectData.signature = signature;
-                $app.store.registration.walletConnectData.walletAddress = address.value;
-                
-            }
-            await onSignMessage();
-
-
-            $app.api.eth.auth.walletConnectGetAuthType({
-                wallet_connect_data: JSON.stringify({
-                    signature: $app.store.registration.walletConnectData.signature,
-                    address: $app.store.registration.walletConnectData.walletAddress,
-                    message: $app.store.registration.walletConnectData?.signatureMessage,
-                }),
-            }).then((r: any) => {
-                const tempLogin = () => {
-                    $app.api.eth.auth.
-                    wallletConnectLogin({
-                        wallet_connect_data: JSON.stringify({
-                            signature: $app.store.registration.walletConnectData.signature,
-                            address: $app.store.registration.walletConnectData.walletAddress,
-                            message: $app.store.registration.walletConnectData?.signatureMessage,
-                        }),
-                    })
-                    .then((jwtResponse: any) => {
-                        continueLogin(jwtResponse);
-                    })
-                }
-
-                checkAuthType(r, tempLogin)
-            })
-
-        } else {
-            // 4. Use modal composable
-            const modal = useWeb3Modal()
-
-            modal.open();
-        }
+        openWalletConnect();
     }
 
     // methods
-
     const methods = [
         {
             name: 'Email',
@@ -535,9 +349,9 @@ export function useLogin($app) {
             onClick: handleAppleConnect,
         },
         {
-          name: 'Facebook',
-          img: '/img/icons/colorful/facebook-circle.svg',
-          onClick: handleFacebookConnect,
+            name: 'Facebook',
+            img: '/img/icons/colorful/facebook-circle.svg',
+            onClick: handleFacebookConnect,
         },
         {
             name: 'WalletConnect',

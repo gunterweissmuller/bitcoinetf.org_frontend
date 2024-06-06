@@ -82,22 +82,6 @@
           <vue-tel-input :disabled="dataDisabled || isMainInputDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
 
-          <!-- <a-input-with-button
-            bgColor="tetherspecial"
-            class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
-            label="Email"
-            v-model="email"
-            :buttonText="codeSendText"
-            :buttonClickEnable="Boolean(email) && isEmailValid"
-            :buttonClick="() => {sendCode()}"
-            validation-reg-exp-key="email"
-            :disabled="dataDisabled || isEmailDisabled"
-            required
-            :error-text="emailErrorText"
-            @blur="emailFieldBlurHandler"
-            @update:is-valid="isEmailValid = $event"
-          /> -->
-
           <a-input
             bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
@@ -110,7 +94,6 @@
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-          <!--<a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />-->
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -224,27 +207,22 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import {useNuxtApp, useRouter, useRoute} from "#app";
-import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
 import WBuySharesPaymentShortTether from "~/src/widgets/w-buy-shares-payment-short-tether/w-buy-shares-payment-short-tether.vue";
 import {Icon} from "~/src/shared/constants/icons";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
-import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
 import VueTurnstile from 'vue-turnstile';
 import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
-import AInputWithButton from '~/src/shared/ui/atoms/a-input-with-button/a-input-with-button.vue'
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import ACheckbox from '~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
-import aInputPhoneCountry from "../../atoms/a-input-phone-country/a-input-phone-country.vue";
 import 'vue-tel-input/vue-tel-input.css';
 import ERegistrationBonusModal from "~/src/entities/e-registration-bonus-modal/e-registration-bonus-modal.vue";
 import axios from "axios";
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { BrowserProvider, parseUnits } from "ethers";
-import { LocationQueryRaw } from '#vue-router';
-import { useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
+import { useDisconnect, useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -1457,16 +1435,12 @@ watch(
   }
 )
 
+const { disconnect } = useDisconnect()
+
 const handleWalletConnect = async () => {
-
-  if(addressWalletConnect.value) {
-    onSignMessage()
-  } else {
-      // 4. Use modal composable
-      const modal = useWeb3Modal()
-
-      modal.open();
-  }
+  disconnect()
+  const modal = useWeb3Modal();
+  modal.open({ view: 'Connect' });
 }
 
 

@@ -4,7 +4,10 @@
       <div class="w-dividends__amount">
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
-          <div class="w-dividends__amount-sum">${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
+          <div class="w-dividends__amount-sum"> 
+            <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon> 
+            <span v-else>$</span>
+            {{orderType !== 'usdt' ? $app.filters.rounded(walletDividends?.btc_dividends_balance, 8)  : $app.filters.rounded(walletDividends?.usd_amount, 2) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
           </div>
           <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
