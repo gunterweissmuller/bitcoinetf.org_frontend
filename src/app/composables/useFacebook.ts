@@ -38,7 +38,7 @@ export function useFacebook($app) {
         $app.api.eth.auth
         .getCredintialsFacebook()
         .then(async (res) => {
-            const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
+            const facebookId = 934423128173330; // 934423128173330; //  res?.data?.client_id;
 
             const sdk = await getFbSdk(
                 {
