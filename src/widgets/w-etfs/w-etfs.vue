@@ -38,7 +38,7 @@
           </div> -->
 
           <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"  text="Buy" variant="primary" :icon="Icon.MonoPlus" size="small"/>
-          <a-button :disabled="$app.store.user.sellShares?.amount <= 0 || !$app.store.user.sellShares?.amount" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true" text="Sell" variant="secondary" :icon="Icon.MonoMinus" size="small"/>
+          <!-- <a-button :disabled="$app.store.user.sellShares?.amount <= 0 || !$app.store.user.sellShares?.amount" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true" text="Sell" variant="secondary" :icon="Icon.MonoMinus" size="small"/> -->
           <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="handleVerify" text="Verify" variant="secondary" :icon="Icon.MonoLinkToPage" size="small"/>
         </div>
       </div>
