@@ -47,75 +47,6 @@
       <div v-if="personalDividends.length" class="w-etfs__list">
         <transition-group name="fade" tag="div">
           <template v-for="item in personalDividends" :key="item?.uuid" class="w-etfs__item">
-            <div class="w-etfs__item" v-if="item.dividend_amount">
-              <div
-                :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
-              >
-                <a-icon
-                  width="18"
-                  height="18"
-                  :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
-                />
-              </div>
-              <div class="w-etfs__item_info">
-                <div class="w-etfs__item_info-title">Dividends Bonus ETFs</div>
-                <div class="w-etfs__item_info-date">
-                  {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
-                </div>
-              </div>
-              <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
-              <div v-else class="w-etfs__item_sums">
-                <div class="w-etfs__item_info-usd">
-                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item.dividend_amount, 0) }}
-                </div>
-              </div>
-            </div>
-            <div class="w-etfs__item" v-if="item.bonus_amount">
-              <div
-                :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
-              >
-                <a-icon
-                  width="18"
-                  height="18"
-                  :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
-                />
-              </div>
-              <div class="w-etfs__item_info">
-                <div class="w-etfs__item_info-title">Bonus ETFs</div>
-                <div class="w-etfs__item_info-date">
-                  {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
-                </div>
-              </div>
-              <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
-              <div v-else class="w-etfs__item_sums">
-                <div class="w-etfs__item_info-usd">
-                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item.bonus_amount, 0) }}
-                </div>
-              </div>
-            </div>
-            <div class="w-etfs__item" v-if="item.referral_amount">
-              <div
-                :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
-              >
-                <a-icon
-                  width="18"
-                  height="18"
-                  :name="item.type === DIVIDENDS_TYPES.PLUS ? Icon.MonoPlus : Icon.MonoMinus"
-                />
-              </div>
-              <div class="w-etfs__item_info">
-                <div class="w-etfs__item_info-title">Referal Bonus ETFs</div>
-                <div class="w-etfs__item_info-date">
-                  {{ $app.filters.dayjs(item?.created_at || `${item?.date_string} ${item?.time}`)?.format('D MMMM YY HH:mm') }}
-                </div>
-              </div>
-              <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
-              <div v-else class="w-etfs__item_sums">
-                <div class="w-etfs__item_info-usd">
-                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item.referral_amount, 0) }}
-                </div>
-              </div>
-            </div>
             <div class="w-etfs__item">
               <div
                 :class="['w-etfs__item-pic', { 'w-etfs__item-pic--minus': item.type !== DIVIDENDS_TYPES.PLUS }]"
@@ -135,7 +66,7 @@
               <div v-if="item.status === 'pending'" class="w-etfs__item_sums">Pending</div>
               <div v-else class="w-etfs__item_sums">
                 <div class="w-etfs__item_info-usd">
-                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded(item?.usd_amount || item?.real_amount, 0) }}
+                  {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} {{ $app.filters.rounded((item?.usd_amount || item?.real_amount) + item?.dividend_amount + item?.bonus_amount + item?.referral_amount, 0) }}
                 </div>
               </div>
             </div>
