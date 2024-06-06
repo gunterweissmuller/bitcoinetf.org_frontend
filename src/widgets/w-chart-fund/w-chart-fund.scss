@@ -120,7 +120,7 @@
     height: torem(152);
 
     @include breakpoint($break-desktop-1440) {
-      height: torem(210);
+      // height: torem(210);
     }
 
     &--no-indent {

@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="w-etfs__amount-buttons">
-          <!-- <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}">
+        <!--  <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}">
             <a-icon
                 width="18"
                 height="18"
@@ -19,14 +19,14 @@
               Buy
           </div>
 
-          <div :disable="$app.store.user.sellShares?.amount > 0" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
+           <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true">
             <a-icon
                 width="18"
                 height="18"
                 :name="Icon.MonoMinus"
               />
               Sell
-          </div>
+          </div> 
 
           <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" :class="{ disabled: !isNonEmptyUserEtfBalance }" @click="handleVerify">
             <a-icon
@@ -39,7 +39,7 @@
 
           <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-primary" @click="() => {$app.store.user.setIsInvestModalShow({show: true});}"  text="Buy" variant="primary" :icon="Icon.MonoPlus" size="small"/>
           <!-- <a-button :disabled="$app.store.user.sellShares?.amount <= 0 || !$app.store.user.sellShares?.amount" class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="() => isShowSureModal = true" text="Sell" variant="secondary" :icon="Icon.MonoMinus" size="small"/> -->
-          <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" @click="handleVerify" text="Verify" variant="secondary" :icon="Icon.MonoLinkToPage" size="small"/>
+          <a-button class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" :disabled="!isNonEmptyUserEtfBalance" @click="handleVerify" text="Verify" variant="secondary" :icon="Icon.MonoLinkToPage" size="small"/>
         </div>
       </div>
 
