@@ -173,6 +173,7 @@
                 </nuxt-link>
               </li>
             </template>
+
             <li class="w-aside__item w-aside__item-mobile">
               <nuxt-link
                 class="w-aside__link"
@@ -212,7 +213,25 @@
                 </div>
               </nuxt-link>
             </li>
-            <li class="w-aside__item w-aside__item--indent w-aside__item--avatar">
+            
+          <li  v-if="!isUserAuthenticated" class="w-aside__item w-aside__item--indent w-aside__item--avatar">
+            <a-button
+              size="small"
+              text="Register"
+              isFullWidth
+              @click="registerPage"
+          />
+          </li>
+          <li  v-if="!isUserAuthenticated" class="w-aside__item ">
+            <a-button
+              size="small"
+              variant="secondary"
+              text="Login"
+              isFullWidth
+              @click="loginPage"
+          />
+          </li>
+            <li  v-if="isUserAuthenticated" class="w-aside__item w-aside__item--indent w-aside__item--avatar" >
               <div class="w-aside__link">
                 <a-avatar
                   size="24px"
@@ -224,7 +243,7 @@
                 />
               </div>
             </li>
-            <li class="w-aside__item w-aside__item--logout" @click="logout">
+            <li  v-if="isUserAuthenticated" class="w-aside__item w-aside__item--logout" @click="logout" >
               <div class="w-aside__link">
                 <a-icon class="w-aside__link-img" :name="Icon.MonoLogout" width="24" height="24" />
                 <p class="w-aside__link-text">Log out</p>
@@ -473,6 +492,16 @@ watch(() => themeValue.value, (value) => {
 function goToHomePage() {
   const homePageUrl = window.location.origin.replace('app.', '')
   window.open(homePageUrl, '_blank')?.focus()
+}
+function loginPage(){
+  const homePageUrl = window.location.origin + '/personal/login'.replace('app.', '')
+  window.open(homePageUrl, '_self')
+
+}
+function registerPage(){
+  const homePageUrl = window.location.origin + '/personal/registration'.replace('app.', '')
+  window.open(homePageUrl, '_self')
+
 }
 </script>
 
