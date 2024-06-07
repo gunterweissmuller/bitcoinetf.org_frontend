@@ -17,6 +17,8 @@
       </div>
     </div>
 
+    
+
     <div class="f-login-new-content f-login-new-content-right">
       <div class="f-login-new-content-right-wrapper">
         <div class="f-registration w-full">
@@ -36,8 +38,9 @@
             <f-login-error/>
           </template>
           <template v-else-if="$app.store.login?.currentStep === Steps.Loading">
-            <div class="f-login__wrapper">Loading...</div>
+            <m-loading-new v-show="true" />
           </template>
+          
         </div>
       </div>
     </div>
@@ -54,8 +57,14 @@
   import fLoginLogin from '../f-login-login/f-login-login.vue'
   import fLoginLink from '../f-login-link/f-login-link.vue'
   import fLoginCheck from '../f-login-check/f-login-check.vue'
+  import { useWeb3ModalAccount } from '@web3modal/ethers/vue'
+  import { useLogin } from './useLogin'
+  import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
+  import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
   const { $app } = useNuxtApp()
+  const { continueLogin, checkAuthType } = useLogin($app);
+  const {initWalletConnect} = useWalletConnect($app);
 
   // reset 
   onUnmounted(() => {
@@ -66,6 +75,47 @@
     $app.store.login.email = '';
     $app.store.login.password = '';
   });
+
+  // walletConnect
+  const { address } = useWeb3ModalAccount()
+
+  const handleWalletConnect = async () => {
+    await initWalletConnect();
+
+    $app.api.eth.auth.walletConnectGetAuthType({
+          wallet_connect_data: JSON.stringify({
+              signature: $app.store.registration.walletConnectData.signature,
+              address: $app.store.registration.walletConnectData.walletAddress,
+              message: $app.store.registration.walletConnectData?.signatureMessage,
+          }),
+      }).then((r: any) => {
+          const tempLogin = () => {
+              $app.api.eth.auth.
+              wallletConnectLogin({
+                  wallet_connect_data: JSON.stringify({
+                      signature: $app.store.registration.walletConnectData.signature,
+                      address: $app.store.registration.walletConnectData.walletAddress,
+                      message: $app.store.registration.walletConnectData?.signatureMessage,
+                  }),
+              })
+              .then((jwtResponse: any) => {
+                  continueLogin(jwtResponse);
+              })
+          }
+
+          checkAuthType(r, tempLogin)
+      })
+  }
+
+  watch(
+    () => address.value,
+    () => {
+
+      if(address.value) {
+        handleWalletConnect();
+      }
+    }
+  )
 
 </script>
 

@@ -58,8 +58,12 @@
             <nuxt-img src="/img/icons/colorful/apple.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
-         <div @click="handleFacebookConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Facebook}]">
+          <div @click="handleFacebookConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.Facebook}]">
             <nuxt-img src="/img/icons/colorful/facebook-circle.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
+          </div>
+
+          <div @click="handleWalletConnect" class="landing-calculation__signup-buttons-item"  :class="[{'landing-calculation__signup-buttons-item-active': signupMethod === SignupMethods.WalletConnect}]">
+            <nuxt-img src="/img/icons/colorful/walletConnect.svg" class="landing-calculation__signup-buttons-item-img"></nuxt-img>
           </div>
 
         </div>
@@ -78,22 +82,6 @@
           <vue-tel-input :disabled="dataDisabled || isMainInputDisabled"  mode='international' v-on:country-changed="countryChanged" v-model="phone" validCharactersOnly autoFormat :inputOptions="{'showDialCode':true, 'placeholder': 'Phone Number', 'required': true}" ></vue-tel-input>
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'phone'">{{ backendError.value }}</p>
 
-          <!-- <a-input-with-button
-            bgColor="tetherspecial"
-            class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
-            label="Email"
-            v-model="email"
-            :buttonText="codeSendText"
-            :buttonClickEnable="Boolean(email) && isEmailValid"
-            :buttonClick="() => {sendCode()}"
-            validation-reg-exp-key="email"
-            :disabled="dataDisabled || isEmailDisabled"
-            required
-            :error-text="emailErrorText"
-            @blur="emailFieldBlurHandler"
-            @update:is-valid="isEmailValid = $event"
-          /> -->
-
           <a-input
             bgColor="tetherspecial"
             class="landing-calculation__signup-main-input landing-calculation__signup-main-input-email"
@@ -106,7 +94,6 @@
             @blur="emailFieldBlurHandler"
             @update:is-valid="isEmailValid = $event"
           />
-          <!--<a-input bgColor="tetherspecial" :disabled="dataDisabled" v-model="codeEmail" label="Email Confirmation Code" class="landing-calculation__signup-main-input landing-calculation__signup-main-input-code" />-->
           <p class="landing-calculation__error" v-if="backendError.value && backendError.field === 'default'">{{ backendError.value }}</p>
 
           <div class="landing-calculation__signup-main__agree">
@@ -164,8 +151,8 @@
         </div>
       </template>
       <template v-if="signupStep === SignupSteps.Loading">
-        <div class="landing-calculation__wrapper">
-          Loading...
+        <div class="landing-calculation__loading-wrapper">
+          <m-loading-new v-show="true" />
         </div>
       </template>
 
@@ -220,26 +207,24 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import {useNuxtApp, useRouter, useRoute} from "#app";
-import MProfitCalculator from "~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue";
 import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
 import WBuySharesPaymentShortTether from "~/src/widgets/w-buy-shares-payment-short-tether/w-buy-shares-payment-short-tether.vue";
 import {Icon} from "~/src/shared/constants/icons";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
-import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
 import VueTurnstile from 'vue-turnstile';
 import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
-import AInputWithButton from '~/src/shared/ui/atoms/a-input-with-button/a-input-with-button.vue'
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import ACheckbox from '~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
-import aInputPhoneCountry from "../../atoms/a-input-phone-country/a-input-phone-country.vue";
 import 'vue-tel-input/vue-tel-input.css';
 import ERegistrationBonusModal from "~/src/entities/e-registration-bonus-modal/e-registration-bonus-modal.vue";
 import axios from "axios";
 import { hostname } from '~/src/app/adapters/ethAdapter'
 import { BrowserProvider, parseUnits } from "ethers";
+import { useDisconnect, useWeb3Modal, useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/vue'
 import { LocationQueryRaw } from '#vue-router';
+import mLoadingNew from '../../molecules/m-loading-new/m-loading-new.vue';
 
 const router = useRouter()
 const route = useRoute()
@@ -333,124 +318,21 @@ onMounted(()=>{
         })
 
     } else if ($app.store.auth.accountMethod === 'telegram') {
-    $app.api.eth.auth.
-    confirmTelegram({
-      telegram_data: JSON.stringify($app.store.authTelegram?.response),
-      email: $app.filters.trimSpaceIntoString(email.value),
-      code: $app.filters.trimSpaceIntoString(codeEmail.value),
-    })
-    .then((jwtResponse: any) => {
-      // TODO falling user/me
-      $app.store.auth.setTokens(jwtResponse.data)
-      confirmResponse.value = jwtResponse.data
-
-    })
-    .then(async () => {
-      await $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
-      });
-
-      signupStep.value = SignupSteps.Default;
-      purchaseStep.value = PurchaseSteps.Purchase;
-      scrollToPurchase();
-
-      const aAid = window.localStorage.getItem('PAPVisitorId');
-      if(aAid) {
-        $app.api.eth.auth.papSignUp({
-          payload: {
-            pap_id: aAid,
-            utm_label: window.localStorage.getItem('a_utm'),
-          }}).then((r: any) => {
-          //window.localStorage.removeItem('a_aid');
-          //window.localStorage.removeItem('a_utm');
-        });
-      }
-    })
-    .catch((e) => {
-      isCodeContinueProcess.value = false;
-      if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'}
-
-          if(e?.errors?.error?.validation) {
-            if(e?.errors?.error?.validation?.first_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
-            }
-            if(e?.errors?.error?.validation?.last_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
-            }
-          }
-        } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'}
-        }
-    })
-    } else if ($app.store.auth.accountMethod === 'apple') {
-    $app.api.eth.auth.
-    confirmApple({
-      apple_token: $app.store.authTemp?.response,
-      email: $app.filters.trimSpaceIntoString(email.value),
-      code: $app.filters.trimSpaceIntoString(codeEmail.value),
-    })
-    .then((jwtResponse: any) => {
-      // TODO falling user/me
-      $app.store.auth.setTokens(jwtResponse.data)
-      confirmResponse.value = jwtResponse.data
-
-    })
-    .then(async () => {
-      await $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
-      });
-
-      signupStep.value = SignupSteps.Default;
-      purchaseStep.value = PurchaseSteps.Purchase;
-      scrollToPurchase();
-
-      const aAid = window.localStorage.getItem('PAPVisitorId');
-      if(aAid) {
-        $app.api.eth.auth.papSignUp({
-          payload: {
-            pap_id: aAid,
-            utm_label: window.localStorage.getItem('a_utm'),
-          }}).then((r: any) => {
-          //window.localStorage.removeItem('a_aid');
-          //window.localStorage.removeItem('a_utm');
-        });
-      }
-    })
-    .catch((e) => {
-      isCodeContinueProcess.value = false;
-      if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'}
-
-          if(e?.errors?.error?.validation) {
-            if(e?.errors?.error?.validation?.first_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
-            }
-            if(e?.errors?.error?.validation?.last_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
-            }
-          }
-        } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'}
-        }
-    })
-    } else if ($app.store.auth.accountMethod === 'facebook') {
-    $app.api.eth.auth.
-      confirmFacebook({
-        facebook_id: $app.store.authTemp.response?.userID,
+      $app.api.eth.auth.
+      confirmTelegram({
+        telegram_data: JSON.stringify($app.store.authTelegram?.response),
         email: $app.filters.trimSpaceIntoString(email.value),
         code: $app.filters.trimSpaceIntoString(codeEmail.value),
       })
       .then((jwtResponse: any) => {
         // TODO falling user/me
-        $app.store.auth.setTokens(jwtResponse.data);
-        confirmResponse.value = jwtResponse.data;
-        // isOpenModal.value = true;
-        dataDisabled.value = true;
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+
       })
       .then(async () => {
         await $app.api.eth.auth.getUser().then((resp) => {
-          $app.store.user.info = resp?.data;
+          $app.store.user.info = resp?.data
         });
 
         signupStep.value = SignupSteps.Default;
@@ -470,22 +352,176 @@ onMounted(()=>{
         }
       })
       .catch((e) => {
+        isCodeContinueProcess.value = false;
         if (e?.errors?.error?.message) {
-          backendError.value = {value: e.errors.error.message, field: 'default'}
+            backendError.value = {value: e.errors.error.message, field: 'default'}
 
-          if(e?.errors?.error?.validation) {
-            if(e?.errors?.error?.validation?.first_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
             }
-            if(e?.errors?.error?.validation?.last_name) {
-              backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
-            }
+          } else {
+            backendError.value = {value: 'Something went wrong', field: 'default'}
           }
-        } else {
-          backendError.value = {value: 'Something went wrong', field: 'default'}
+      })
+    } else if ($app.store.auth.accountMethod === 'apple') {
+      $app.api.eth.auth.
+      confirmApple({
+        apple_token: $app.store.authTemp?.response,
+        email: $app.filters.trimSpaceIntoString(email.value),
+        code: $app.filters.trimSpaceIntoString(codeEmail.value),
+      })
+      .then((jwtResponse: any) => {
+        // TODO falling user/me
+        $app.store.auth.setTokens(jwtResponse.data)
+        confirmResponse.value = jwtResponse.data
+
+      })
+      .then(async () => {
+        await $app.api.eth.auth.getUser().then((resp) => {
+          $app.store.user.info = resp?.data
+        });
+
+        signupStep.value = SignupSteps.Default;
+        purchaseStep.value = PurchaseSteps.Purchase;
+        scrollToPurchase();
+
+        const aAid = window.localStorage.getItem('PAPVisitorId');
+        if(aAid) {
+          $app.api.eth.auth.papSignUp({
+            payload: {
+              pap_id: aAid,
+              utm_label: window.localStorage.getItem('a_utm'),
+            }}).then((r: any) => {
+            //window.localStorage.removeItem('a_aid');
+            //window.localStorage.removeItem('a_utm');
+          });
         }
       })
-  } else {
+      .catch((e) => {
+        isCodeContinueProcess.value = false;
+        if (e?.errors?.error?.message) {
+            backendError.value = {value: e.errors.error.message, field: 'default'}
+
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
+          } else {
+            backendError.value = {value: 'Something went wrong', field: 'default'}
+          }
+      })
+    } else if ($app.store.auth.accountMethod === 'facebook') {
+      $app.api.eth.auth.
+        confirmFacebook({
+          facebook_id: $app.store.authTemp.response?.userID,
+          email: $app.filters.trimSpaceIntoString(email.value),
+          code: $app.filters.trimSpaceIntoString(codeEmail.value),
+        })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data);
+          confirmResponse.value = jwtResponse.data;
+          // isOpenModal.value = true;
+          dataDisabled.value = true;
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data;
+          });
+
+          signupStep.value = SignupSteps.Default;
+          purchaseStep.value = PurchaseSteps.Purchase;
+          scrollToPurchase();
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+              //window.localStorage.removeItem('a_aid');
+              //window.localStorage.removeItem('a_utm');
+            });
+          }
+        })
+        .catch((e) => {
+          if (e?.errors?.error?.message) {
+            backendError.value = {value: e.errors.error.message, field: 'default'}
+
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
+          } else {
+            backendError.value = {value: 'Something went wrong', field: 'default'}
+          }
+        })
+    } else if ($app.store.auth.accountMethod === 'walletConnect') {
+      $app.api.eth.auth.
+        walletConnectConfirm({
+          wallet_connect_data: JSON.stringify($app.store.authTemp.response),
+          email: $app.filters.trimSpaceIntoString(email.value),
+          code: $app.filters.trimSpaceIntoString(codeEmail.value),
+        })
+        .then((jwtResponse: any) => {
+          // TODO falling user/me
+          $app.store.auth.setTokens(jwtResponse.data);
+          confirmResponse.value = jwtResponse.data;
+          // isOpenModal.value = true;
+          dataDisabled.value = true;
+        })
+        .then(async () => {
+          await $app.api.eth.auth.getUser().then((resp) => {
+            $app.store.user.info = resp?.data;
+          });
+
+          signupStep.value = SignupSteps.Default;
+          purchaseStep.value = PurchaseSteps.Purchase;
+          scrollToPurchase();
+
+          const aAid = window.localStorage.getItem('PAPVisitorId');
+          if(aAid) {
+            $app.api.eth.auth.papSignUp({
+              payload: {
+                pap_id: aAid,
+                utm_label: window.localStorage.getItem('a_utm'),
+              }}).then((r: any) => {
+              //window.localStorage.removeItem('a_aid');
+              //window.localStorage.removeItem('a_utm');
+            });
+          }
+        })
+        .catch((e) => {
+          if (e?.errors?.error?.message) {
+            backendError.value = {value: e.errors.error.message, field: 'default'}
+
+            if(e?.errors?.error?.validation) {
+              if(e?.errors?.error?.validation?.first_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+              }
+              if(e?.errors?.error?.validation?.last_name) {
+                backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+              }
+            }
+          } else {
+            backendError.value = {value: 'Something went wrong', field: 'default'}
+          }
+        })
+    } else {
       $app.api.eth.auth
       .confirmFast({
         email: $app.filters.trimSpaceIntoString(email.value),
@@ -771,8 +807,8 @@ enum SignupMethods {
   Google = "Google",
   Telegram = "Telegram",
   Apple = "Apple",
-  Facebook = "Facebook"
-
+  Facebook = "Facebook",
+  WalletConnect = "WalletConnect",
 }
 
 const signupStep = ref(SignupSteps.Default);
@@ -1345,6 +1381,70 @@ const handleFacebookConnect = async () => {
 
 }
 
+// walletConnect
+
+const { address: addressWalletConnect, chainId, isConnected } = useWeb3ModalAccount()
+const { walletProvider } = useWeb3ModalProvider()
+
+async function onSignMessage() {
+    const provider = new BrowserProvider(walletProvider.value)
+    const signer = await provider.getSigner()
+    const signature = await signer?.signMessage($app.store.registration.walletConnectData?.signatureMessage);
+
+    $app.store.registration.walletConnectData.signature = signature;
+    $app.store.registration.walletConnectData.walletAddress = addressWalletConnect.value;
+
+    $app.api.eth.auth.walletConnectGetAuthType({
+        wallet_connect_data: JSON.stringify({
+            signature: $app.store.registration.walletConnectData.signature,
+            address: $app.store.registration.walletConnectData.walletAddress,
+            message: $app.store.registration.walletConnectData?.signatureMessage,
+        }),
+    }).then((r: any) => {
+        if(r.data.auth_type === 'registration') {
+          signupStep.value = SignupSteps.Signup;
+          signupMethod.value = SignupMethods.WalletConnect;
+          scrollToSignupFields();
+        } else {
+          $app.api.eth.auth.
+            wallletConnectLogin({
+                wallet_connect_data: JSON.stringify({
+                    signature: $app.store.registration.walletConnectData.signature,
+                    address: $app.store.registration.walletConnectData.walletAddress,
+                    message: $app.store.registration.walletConnectData?.signatureMessage,
+                }),
+            })
+            .then((jwtResponse: any) => {
+              $app.store.auth.setTokens(jwtResponse.data)
+            })
+            .then(async () => {
+              await $app.api.eth.auth.getUser().then((resp) => {
+                $app.store.user.info = resp?.data
+              });
+            });
+        }
+    })
+}
+
+watch(
+  () => addressWalletConnect.value,
+  () => {
+
+    if(addressWalletConnect.value) {
+      scrollToSignup()
+      onSignMessage()
+    }
+  }
+)
+
+const { disconnect } = useDisconnect()
+
+const handleWalletConnect = async () => {
+  disconnect()
+  const modal = useWeb3Modal();
+  modal.open({ view: 'Connect' });
+}
+
 
 const sendCodeLoading = ref(false)
 const codeSended = ref(false);
@@ -1505,6 +1605,46 @@ const sendCode = async () => {
         phone_number_code: countryCode.value,
       }).then((r: any) => {
         $app.store.auth.accountMethod = "facebook";
+    }).catch((e) => {
+      if (e?.errors?.error?.message) {
+        backendError.value = {value: e.errors.error.message, field: 'default'}
+
+        if(e?.errors?.error?.validation) {
+          if(e?.errors?.error?.validation?.first_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.first_name[0], field: 'first_name'};
+          }
+          if(e?.errors?.error?.validation?.last_name) {
+            backendError.value = {value: e?.errors?.error?.validation?.last_name[0], field: 'last_name'};
+          }
+        }
+      } else {
+        backendError.value = {value: 'Something went wrong', field: 'default'}
+      }
+    })
+
+    return;
+  } else if (signupMethod.value === SignupMethods.WalletConnect) {
+    $app.api.eth.auth
+    .walletConnectInit({
+      first_name: firstName.value,
+      last_name: lastName.value,
+      email: email.value,
+      ref_code: $app.store.auth.refCode,
+      phone_number: tempPhone,
+      phone_number_code: countryCode.value,
+      wallet_connect_data: JSON.stringify({
+          signature: $app.store.registration.walletConnectData.signature,
+          address: $app.store.registration.walletConnectData.walletAddress,
+          message: $app.store.registration.walletConnectData?.signatureMessage,
+      }),
+                  
+    }).then((r: any) => {
+      $app.store.auth.accountMethod = "walletConnect";
+      $app.store.authTemp.response =  {
+          signature: $app.store.registration.walletConnectData.signature,
+          address: $app.store.registration.walletConnectData.walletAddress,
+          message: $app.store.registration.walletConnectData?.signatureMessage,
+      };
     }).catch((e) => {
       if (e?.errors?.error?.message) {
         backendError.value = {value: e.errors.error.message, field: 'default'}
