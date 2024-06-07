@@ -300,14 +300,12 @@ import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue';
 import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
 import { vOnClickOutside } from '@vueuse/components'
-import { useAbility } from '@casl/vue';
-import { AppAbility } from '~/src/app/services/ability';
+
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const { width } = useWindowSize()
-const { can } = useAbility<AppAbility>();
 
 const orderType = computed(() => {
   return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
@@ -320,14 +318,12 @@ watch(
 )
 
 onMounted(() => {
-  console.log('readonly auth', can('readonly', 'auth'));
-  console.log('readonly demo', can('readonly', 'demo'));
+  $app.api.eth.auth.getUser().then((resp) => {
+    $app.store.user.info = resp?.data
+  });
 
-  if (can('publish', 'auth')){
-    $app.api.eth.auth.getUser().then((resp) => {
-      $app.store.user.info = resp?.data
-    });
-  }
+
+  
 })
 
 const isOpen = ref($app.store.user.isInvestModalShow.show);

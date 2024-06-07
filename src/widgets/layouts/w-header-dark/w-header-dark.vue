@@ -46,12 +46,12 @@
             size="small"
             text="Launch app"
             :variant="route.name === '' ? 'primary-website' : 'primary2'"
-            @click="$router.push({ name: 'personal-fund' })"
+            @click="$router.push({ name: 'personal-login' })"
           />
         </div>
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
-        <nuxt-link to="/personal/fund" v-if="!isUserAuthenticated"
+        <nuxt-link to="/personal/login" v-if="!isUserAuthenticated"
           ><a-button text="Launch app" size="small" :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
         /></nuxt-link>
         <a-avatar
