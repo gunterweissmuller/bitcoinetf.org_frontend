@@ -301,13 +301,12 @@ import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
 import { vOnClickOutside } from '@vueuse/components'
 import { useAbility } from '@casl/vue';
-import { AppAbility } from '~/src/app/services/ability';
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const { width } = useWindowSize()
-const { can } = useAbility<AppAbility>();
+const { can } = useAbility();
 
 const orderType = computed(() => {
   return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';

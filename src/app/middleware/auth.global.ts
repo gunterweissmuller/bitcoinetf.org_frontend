@@ -72,7 +72,6 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   const { can } = useAbility()
-  console.log(to.name)
 
   if (
     !$app.store.auth.isUserAuthenticated &&
@@ -89,7 +88,6 @@ export default defineNuxtRouteMiddleware((to) => {
     !$app.store.auth.isUserAuthenticated &&
     !can('readonly', 'demo')
   ) {
-    console.log('zdes2')
     return navigateTo({ name: 'personal-login' })
   }
 
