@@ -27,6 +27,7 @@ export const auth = defineStore('auth', {
       this.accessToken = payload.access_token
       this.refreshToken = payload.refresh_token
       this.websocketToken = payload.websocket_token
+      useNuxtApp().$app.store.user.setPermissions('auth')
     },
 
     logout(redirect = true) {
@@ -38,6 +39,7 @@ export const auth = defineStore('auth', {
       useNuxtApp().$app.store.user.dividends = 0
       useNuxtApp().$app.store.user.lastPayment = null
       useNuxtApp().$app.store.persiste.latestTronCheckDate = null
+      useNuxtApp().$app.store.user.setPermissions('demo')
 
       if(window.location.hostname === config.public.APP_DOMAIN) {
         const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`

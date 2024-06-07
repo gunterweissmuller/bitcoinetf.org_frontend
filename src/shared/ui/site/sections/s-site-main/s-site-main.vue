@@ -12,8 +12,7 @@
             height="18"
             loading="lazy"
           />
-          USDT 
-          or
+          USDT or
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[18px]"
             src="/img/icons/colorful/bitcoin.svg"
@@ -74,7 +73,7 @@
     <div class="s-site-main__line-gradient" style="position: absolute; bottom: -88px; right: 0"></div>
     <div class="s-site-main__slider-wrapper">
       <!-- <s-site-marquee :data="marqueeData" /> -->
-      <s-site-marquee-new  :data="marqueeData" />
+      <s-site-marquee-new :data="marqueeData" />
     </div>
   </section>
 </template>
@@ -139,11 +138,7 @@ const scrollToSection = () => {
 }
 
 function clickLaunch() {
-  if (authStore.isUserAuthenticated) {
-    router.push('/personal/fund')
-  } else {
-    window.open('/personal/registration', '_blank').focus()
-  }
+  router.push('/personal/fund')
 }
 
 onMounted(async () => {
