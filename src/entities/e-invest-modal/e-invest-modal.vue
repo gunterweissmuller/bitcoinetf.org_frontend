@@ -79,11 +79,14 @@
                 <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
                   Safety Rating
                   <span class="e-invest__invest--card-rating-stars">
-                    <span class="inline-flex" v-for="item in new Array(5)">
+                    <span class="inline-flex" v-for="item in new Array(4)">
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
+                    <span class="inline-flex">
+                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
+                    </span>
                   </span>
-                  5/5
+                  4.8/5
                 </p>
                 <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
 
@@ -223,11 +226,14 @@
                 <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
                   Safety Rating
                   <span class="e-invest__invest--card-rating-stars">
-                    <span class="inline-flex" v-for="item in new Array(5)">
+                    <span class="inline-flex" v-for="item in new Array(4)">
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
+                    <span class="inline-flex">
+                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
+                    </span>
                   </span>
-                  5/5
+                  4.8/5
                 </p>
                 <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
 
