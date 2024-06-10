@@ -43,7 +43,6 @@ export const user = defineStore('user', {
     wallets: '',
     succesModal: {show: false, isBtc: false},
     isMetamaskSupported: false,
-    permission: []
   }),
 
   actions: {
@@ -65,9 +64,6 @@ export const user = defineStore('user', {
     setInvestAmount(payload: {amount: any}) {
       this.investAmount = payload.amount;
     },
-    setPermissions(permission) {
-      this.permission = permission
-    }
   },
 
   getters: {
