@@ -35,8 +35,6 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@casl/ability": "^6.7.1",
-    "@casl/vue": "^2.2.2",
     "@chenfengyuan/vue-countdown": "^2.1.2",
     "@mdi/font": "^7.2.96",
     "@metamask/sdk": "^0.14.3",
