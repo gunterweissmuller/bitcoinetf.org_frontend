@@ -531,14 +531,11 @@ onMounted(() => {
   }
 })
 function loginPage(){
-  const homePageUrl = window.location.origin + '/personal/login'.replace('app.', '')
-  window.open(homePageUrl, '_self')
-
+  window.location.href  = window.location.origin + '/personal/login'.replace('app.', '')
 }
-function registerPage(){
-  const homePageUrl = window.location.origin + '/personal/registration'.replace('app.', '')
-  window.open(homePageUrl, '_self')
 
+function registerPage(){
+  window.location.href = window.location.origin + '/personal/registration'.replace('app.', '')
 }
 
 </script>
