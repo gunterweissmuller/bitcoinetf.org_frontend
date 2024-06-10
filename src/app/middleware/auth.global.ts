@@ -2,7 +2,9 @@ import { useNuxtApp, useRouter } from '#app'
 import useMediaDevice from '~/composables/useMediaDevice'
 import { useAbility } from '@casl/vue'
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware((to, from) => {
+  console.log(to, '-->', from)
+
   const { $app } = useNuxtApp()
   const router = useRouter()
   const { isLaptop, isDesktop } = useMediaDevice()
@@ -82,8 +84,12 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo({ name: 'personal-login' })
   }
 
-   
-   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated && !can('readonly', 'demo')) {
+  if (
+    !excludedRouteNames.includes(to.name) &&
+    includedRouteMask &&
+    !$app.store.auth.isUserAuthenticated &&
+    !can('readonly', 'demo')
+  ) {
     return navigateTo({ name: 'personal-login' })
   }
 
