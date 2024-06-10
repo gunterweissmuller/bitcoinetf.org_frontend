@@ -1,6 +1,6 @@
 import { Ability, AbilityClass } from '@casl/ability'
 import { defineAbility } from '@casl/ability'
-import roles_permissions from '~/src/shared/constants/roles_permissions'
+// import roles_permissions from '~/src/shared/constants/roles_permissions'
 
 type Actions = 'review' | 'publish' | 'read'
 type Subjects = 'demo' | 'auth'
@@ -19,15 +19,17 @@ const demoPermissions = [{ action: 'readonly', subject: 'demo' }]
 export const ability = defineAbility((can) => c(can, demoPermissions))
 
 export default defineNuxtPlugin(({ $app }) => {
-  const isUserAuthenticated = $app.store.auth.isUserAuthenticated
-  if (isUserAuthenticated) {
-    ability.update(roles_permissions['auth'])
-  }
+  console.log('test-ability-->', ability.rules);
+  
+  // const isUserAuthenticated = $app.store.auth.isUserAuthenticated
+  // if (isUserAuthenticated) {
+  //   ability.update(roles_permissions['auth'])
+  // }
 
-  $app.store.user.$onAction(({ name, args }) => {
-    if (name == 'setPermissions') {
-      const [role] = args
-      ability.update(roles_permissions[role])
-    }
-  })
+  // $app.store.user.$onAction(({ name, args }) => {
+  //   if (name == 'setPermissions') {
+  //     const [role] = args
+  //     ability.update(roles_permissions[role])
+  //   }
+  // })
 })
