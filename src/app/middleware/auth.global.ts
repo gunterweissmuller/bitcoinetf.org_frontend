@@ -1,11 +1,11 @@
-import {useNuxtApp, useRouter} from '#app'
-import useMediaDevice from '~/composables/useMediaDevice';
+import { useNuxtApp, useRouter } from '#app'
+import useMediaDevice from '~/composables/useMediaDevice'
 // import { useAbility } from '@casl/vue'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const {$app} = useNuxtApp();
+  const { $app } = useNuxtApp()
   const router = useRouter()
-  const { isLaptop, isDesktop } = useMediaDevice();
+  const { isLaptop, isDesktop } = useMediaDevice()
   const excludedRouteNames = [
     'personal-login',
     'personal-registration',
@@ -18,7 +18,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
   const excludedRoutesForDemoUser = [
     'personal-portfolio',
-    'personal-protection', 
+    'personal-protection',
     'personal-shareholders',
     'personal-fund',
     'personal-assets',
@@ -26,7 +26,7 @@ export default defineNuxtRouteMiddleware((to) => {
     'personal-login',
     'personal-registration',
     'personal-analytics-performance-latest-trades',
-    'personal-analytics-shareholders-latest-purchases'
+    'personal-analytics-shareholders-latest-purchases',
   ]
 
   const urlParams = new URLSearchParams(window.location.search)
@@ -34,16 +34,16 @@ export default defineNuxtRouteMiddleware((to) => {
     $app.store.auth.setTokens({
       access_token: urlParams.get('accessToken'),
       refresh_token: urlParams.get('refreshToken'),
-      websocket_token: urlParams.get('websocketToken')
-    });
+      websocket_token: urlParams.get('websocketToken'),
+    })
 
-    if(to.query.purchaseType) {
-      $app.store.purchase.type = urlParams.get('purchaseType');
+    if (to.query.purchaseType) {
+      $app.store.purchase.type = urlParams.get('purchaseType')
     }
 
-    if(to.query.amount) {
-      $app.store.purchase.amount = urlParams.get('amount');
-      $app.store.purchase.amountUS = urlParams.get('amount');
+    if (to.query.amount) {
+      $app.store.purchase.amount = urlParams.get('amount')
+      $app.store.purchase.amountUS = urlParams.get('amount')
     }
 
     //router.replace({ path: to.path, query: {} })
@@ -53,22 +53,22 @@ export default defineNuxtRouteMiddleware((to) => {
     $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
       $app.store.user.blockchainUserWallet = resp?.data.uid
     })
-    return navigateTo({path: to.path}, {replace: true})
+    return navigateTo({ path: to.path }, { replace: true })
     //router.replace({ query: {} })
     //window.location.search = '';
   }
 
-  if(to.query.logout || to.query.theme) {
-    if(to.query.logout) {
+  if (to.query.logout || to.query.theme) {
+    if (to.query.logout) {
       $app.store.auth.logout()
     }
 
-    if(to.query.theme) {
+    if (to.query.theme) {
       localStorage.setItem('theme', to.query.theme)
       document.body.dataset.theme = to.query.theme
       $app.store.user.theme = to.query.theme
     }
-    return navigateTo({path: to.path}, {replace: true})
+    return navigateTo({ path: to.path }, { replace: true })
   }
 
   // const { can } = useAbility()
@@ -82,29 +82,24 @@ export default defineNuxtRouteMiddleware((to) => {
   //   return navigateTo({ name: 'personal-login' })
   // }
 
-//  !can('readonly', 'demo')
-  if (
-    !excludedRouteNames.includes(to.name) &&
-    includedRouteMask &&
-    !$app.store.auth.isUserAuthenticated &&
-  ) {
+  //  !can('readonly', 'demo')
+  if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
     return navigateTo({ name: 'personal-login' })
   }
 
   if (excludedRouteNames.includes(to.name) && $app.store.auth.isUserAuthenticated) {
-    return navigateTo({name: 'personal-portfolio'})
+    return navigateTo({ name: 'personal-portfolio' })
   }
-
 
   if (includedRouteMask && $app.store.auth.isUserAuthenticated) {
     if (fundRouteNames.includes(to.name) && (isLaptop.value || isDesktop.value)) {
-      return navigateTo({name: 'personal-fund'})
+      return navigateTo({ name: 'personal-fund' })
     }
     if (to.name === 'personal-fund' && !(isLaptop.value || isDesktop.value)) {
-      return navigateTo({name: 'personal-portfolio'})
+      return navigateTo({ name: 'personal-portfolio' })
     }
     if (to.name === 'personal-wallet') {
-      return navigateTo({name: 'personal-dividends'})
+      return navigateTo({ name: 'personal-dividends' })
     }
   }
 })
