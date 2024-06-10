@@ -38,7 +38,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
       const newUrl = `https://${config.public.DOMAIN}${to.path === '/' ? from.path : to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
-        console.log('redirecting-->', newUrl);
+        console.log(window.location.origin,'redirecting-->', newUrl);
       window.location.href = newUrl;
 
       return abortNavigation()
