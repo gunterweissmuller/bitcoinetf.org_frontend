@@ -3,6 +3,7 @@
 
     <landingRegistrationMethods/>
 
+    <div class="landing-calculation__signup-main"></div>
     <template v-if="$app.store.tetherspecial.signupStep === SignupSteps.Signup">
       <landingRegistrationSignup/>
     </template>
@@ -81,8 +82,7 @@
         if(r.data.auth_type === 'registration') {
           $app.store.tetherspecial.signupStep = SignupSteps.Signup;
           $app.store.tetherspecial.signupMethod = SignupMethods.WalletConnect;
-          // todo fix scroll
-          // scrollToSignupFields();
+          scrollToSignupFields();
         } else {
           $app.api.eth.auth.
             wallletConnectLogin({
@@ -230,6 +230,13 @@
       });
     }
   });
+
+  watch(
+    () => $app.store.tetherspecial.signupMethod,
+    () => {
+      $app.store.tetherspecial.backendError = {value: '', field: 'default'};
+    }
+  )
 
   onUnmounted(() => {
     $app.store.tetherspecial.signupStep = SignupSteps.Default;

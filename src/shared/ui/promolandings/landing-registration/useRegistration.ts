@@ -21,6 +21,7 @@ export const useRegistration = ($app) => {
     const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 0;
     
     const handleMetamaskConnect = async () => {
+        
         const {msg,resMsg,signer} = await initMetamask();
 
         if(msg && resMsg && signer) {
