@@ -46,7 +46,7 @@
       <div style="background: rgba(255, 255, 255, 0.1); height: 1px" />
       <div style="padding-top: 32px; padding-bottom: 32px">
         <p style="font-size: 24px; text-align: center">
-          Original Investment is <span style="color: #4d94ff">NEVER at risk</span> <!--#4d94ff-->
+          Original Investment is <span style="color: #4d94ff">NEVER at risk</span>. <!--#4d94ff-->
         </p>
       </div>
     </div>
