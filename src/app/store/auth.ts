@@ -10,6 +10,7 @@ interface authState {
     websocketToken: string,
     refCode: string,
     accountMethod: string,
+    isAuth: boolean
 }
 
 export const auth = defineStore('auth', {
@@ -20,14 +21,20 @@ export const auth = defineStore('auth', {
     websocketToken: '',
     refCode: '',
     accountMethod: 'email',
+    isAuth: false
   } as authState),
 
   actions: {
-    setTokens(payload: { access_token: string; refresh_token: string; websocket_token: string }) {
+    setTokens(payload: { access_token: string; refresh_token: string; websocket_token: string, mode: "readonly" }) {
       this.accessToken = payload.access_token
       this.refreshToken = payload.refresh_token
       this.websocketToken = payload.websocket_token
+      if (payload?.mode){
+        useNuxtApp().$app.store.user.setPermissions('demo')
+        return
+      }
       useNuxtApp().$app.store.user.setPermissions('auth')
+      this.isAuth = true
     },
 
     logout(redirect = true) {
@@ -35,6 +42,7 @@ export const auth = defineStore('auth', {
       this.accessToken = ''
       this.refreshToken = ''
       this.websocketToken = ''
+      this.isAuth = false
       useNuxtApp().$app.store.user.buyShares = null
       useNuxtApp().$app.store.user.dividends = 0
       useNuxtApp().$app.store.user.lastPayment = null
@@ -179,7 +187,7 @@ export const auth = defineStore('auth', {
   },
 
   getters: {
-    isUserAuthenticated: (state) => !!state.accessToken,
+    isUserAuthenticated: (state) => state.isAuth,
     getTokens: (state) => ({
       accessToken: state.accessToken,
       refreshToken: state.refreshToken,
