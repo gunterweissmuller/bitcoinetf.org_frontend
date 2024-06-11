@@ -20,7 +20,7 @@
             />
           </template>
           <template #text>
-
+            {{ tooltipText[props.type] }}
           </template>
         </a-tooltip-info>
 
