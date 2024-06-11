@@ -10,7 +10,7 @@ import { authTemp } from '~/src/app/store/authTemp'
 import { purchase } from '~/src/app/store/purchase'
 import { login } from '~/src/app/store/login'
 import { registration } from '~/src/app/store/registration'
-
+import { tetherspecial } from '~/src/app/store/tetherspecial'
 export interface IStorePack {
   _name: string
   _auth: any
@@ -24,6 +24,7 @@ export interface IStorePack {
   _purchase: any
   _login: any
   _registration: any
+  _tetherspecial: any
   readonly name: string
   readonly auth: any
   readonly asset: any
@@ -35,6 +36,7 @@ export interface IStorePack {
   readonly purchase: any
   readonly login: any
   readonly registration: any
+  readonly tetherspecial: any
 }
 
 @injectable()
@@ -51,6 +53,7 @@ export default class StorePack implements IStorePack {
   readonly _purchase
   readonly _login
   readonly _registration
+  readonly _tetherspecial
 
   constructor() {
     this._auth = auth()
@@ -64,6 +67,7 @@ export default class StorePack implements IStorePack {
     this._purchase = purchase()
     this._login = login()
     this._registration = registration()
+    this._tetherspecial = tetherspecial()
   }
 
   get name() {
@@ -112,5 +116,9 @@ export default class StorePack implements IStorePack {
 
   get registration() {
     return this._registration
+  }
+
+  get tetherspecial() {
+    return this._tetherspecial
   }
 }

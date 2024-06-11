@@ -92,7 +92,7 @@
           :class="['w-chart-fund__info', { 'w-chart-fund__info--danger': !shareholdersStatistic?.is_growth }]"
         >
           <div :class="['w-chart-fund__info-difference', { 'w-chart-fund__info-difference--danger': !shareholdersStatistic?.is_growth }]">
-            {{ shareholdersStatistic?.is_growth ? '+' : '-'}}${{ $app.filters.rounded(shareholdersStatistic?.half_year_change_size_usd, 2) }}
+            {{ shareholdersStatistic?.is_growth ? '+' : '-'}}{{ $app.filters.rounded(shareholdersStatistic?.half_year_change_size_usd, 2) }}
             ({{
               $app.filters.rounded(shareholdersStatistic?.percent, 2)
             }}%)

@@ -101,7 +101,7 @@
             :type="userType"
             :username="$app.store.user?.info?.profile?.full_name"
             :shares="$app.store.user?.lastPayment?.total_balance_usd ?? 0"
-            :time="1094"
+            :time="maturityIn"
           />
         </div>
 
@@ -474,6 +474,44 @@ function goToHomePage() {
   const homePageUrl = window.location.origin.replace('app.', '')
   window.open(homePageUrl, '_blank')?.focus()
 }
+
+// maturity in
+
+const maturityIn = ref(0);
+
+const initTimer = () => {
+  if($app.store.user.sellShares?.created_at) {
+    const endDate = $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf() + (1000*60*60*24*1095);
+    const now = new Date();
+    const tempTime = (endDate - now.getTime())/1000;
+
+    if(tempTime <= 0) {
+      maturityIn.value = 0;
+    } else {
+      maturityIn.value = Math.floor(tempTime / (3600*24));
+    }
+  } else {
+    $app.api.eth.billingEth
+    .initSellShares()
+    .then((response: any) => {
+      $app.store.user.sellShares = response.data
+    })
+    .catch(() => {
+      // Todo: notify something went wrond
+    })
+  }
+}
+
+watch(
+  () => $app.store.user.sellShares?.created_at,
+  () => {
+      initTimer()
+  }
+)
+
+onMounted(() => {
+  initTimer();
+})
 </script>
 
 <style src="./w-aside.scss" lang="scss" />

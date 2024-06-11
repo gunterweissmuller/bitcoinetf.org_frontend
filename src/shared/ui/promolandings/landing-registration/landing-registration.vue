@@ -1,247 +1,255 @@
 <template>
-  <div class="landing-registration">
-    <div class="landing-registration__title">Please fill out the form to continue</div>
-    <div class="landing-registration__subtitle">
-      Get started by entering your name and email. If you already have an account, you can <nuxt-link to="/personal/login">log in here.</nuxt-link>
-    </div>
-    <div class="landing-registration__support" @click="scrollToChat">
-      <img src="/img/landginregsupport.png" alt="">
-      <span>Need help? Talk to one of our support agents!</span>
-      <a-icon :name="Icon.MonoChevronRight" />
-    </div>
-    <div class="landing-registration__captcha">
-      <vue-turnstile :site-key="siteKey" v-model="token" class="captchaTurn"/>
-    </div>
-    <form class="landing-registration__form" @submit.prevent="onSubmitEmailForm" v-if="token">
-      <div class="landing-registration__form-inputfield">
-        <a-input v-model="firstName" label="First name" required/>
+  <div  class="landing-calculation__signup">
+
+    <landingRegistrationMethods/>
+
+    <template v-if="$app.store.tetherspecial.signupStep === SignupSteps.Signup">
+      <landingRegistrationSignup/>
+    </template>
+
+    <template v-if="$app.store.tetherspecial.signupStep === SignupSteps.Google">
+      <landingRegistrationSignupGoogle/>
+    </template>
+
+    <template v-if="$app.store.tetherspecial.signupStep === SignupSteps.Loading">
+      <div class="landing-calculation__loading-wrapper">
+        <m-loading-new v-show="true" />
       </div>
-      <div class="landing-registration__form-inputfield">
-        <a-input v-model="lastName" label="Last name" required/>
+    </template>
+
+    <template v-if="$app.store.tetherspecial.signupStep === SignupSteps.Error">
+      <div class="landing-calculation__wrapper">
+        <p class="landing-calculation__error" v-if="$app.store.tetherspecial.backendError.value && $app.store.tetherspecial.backendError.field === 'default'">{{ $app.store.tetherspecial.backendError.value }}</p>
+        <a-button @click="() => router.go(0)" text="Try Again" variant="tertiary"></a-button>
       </div>
-      <div class="landing-registration__form-inputfield">
-        <a-input
-          label="Email"
-          validation-reg-exp-key="email"
-          required
-          :error-text="emailErrorText"
-          @blur="emailFieldBlurHandler"
-          @update:is-valid="isEmailValid = $event"
-          v-model="email"
-        />
-      </div>
-      <div class="landing-registration__form-inputfield">
-        <a-button
-          :disabled="!isEmailValid"
-          type="submit"
-          text="Get Confirmation Code"
-          is-full-width
-          :loading="sendCodeLoading"
-          v-if="!codeSended"
-        />
-        <a-input v-model="confirmCode" label="Email Confirmation Code" required v-if="codeSended"/>
-      </div>
-      <div class="landing-registration__form-agree">
-        <a-checkbox
-          v-model="registrationAgreed"
-          id="with_email"
-          label="<p>I agree to the <span class='link'>Terms & Conditions</a></p>"
-          @label-click="openTermsModal"
-          single
-        />
-      </div>
-      <div class="landing-registration__form-button">
-        <a-button
-          :disabled="emailButtonDisabled"
-          :text="`$${$app.filters.rounded(calcValueDiscount,1)} BUY`"
-          is-full-width
-          @click="fastRegistration"
-        />
-      </div>
-      <p class="f-registration__error" v-if="backendError">{{ backendError }}</p>
-    </form>
+    </template>
+
+    <div class="w-buy-shares-payment-short-tether"></div>
+    <template v-if="$app.store.tetherspecial.purchaseStep === PurchaseSteps.Purchase">
+      <landingRegistrationPurchase :isFiatLanding="props.isFiatLanding"/>
+    </template>
+
   </div>
-  <f-terms-modal v-model="isOpenTermsModal" />
-  <e-registration-bonus-modal
-    :confirmData="confirmResponse"
-    v-model="isOpenModal"
-    @close="closeModal"
-  />
+
+  <f-terms-modal v-model="$app.store.tetherspecial.isOpenTermsModal" />
 </template>
 
 <script setup lang="ts">
-import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
-import {Icon} from "~/src/shared/constants/icons";
-import AInput from "~/src/shared/ui/atoms/a-input/a-input.vue";
-import AButton from "~/src/shared/ui/atoms/a-button/a-button.vue";
-import VueTurnstile from "vue-turnstile";
-import ACheckbox from "~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue";
-import {computed, ref} from "vue";
-import {useNuxtApp, useRouter} from "#app";
-import FTermsModal from "~/src/features/f-terms-modal/f-terms-modal.vue";
-import ERegistrationBonusModal from "~/src/entities/e-registration-bonus-modal/e-registration-bonus-modal.vue";
-const { $app } = useNuxtApp()
-const router = useRouter()
-const props = withDefaults(
-  defineProps<{
-    calcValue: number
-    calcValueDiscount: number
-    refCode: string
-    isFiat: boolean
-  }>(),
-  {
-    calcValue: 1000,
-    calcValueDiscount: 950,
-    refCode: '',
-    isFiat: false
-  },
-)
-const token = ref('')
-const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
-const backendError = ref('')
+  import {useNuxtApp, useRouter, useRoute} from "#app";
+  import { useWeb3ModalAccount } from '@web3modal/ethers/vue'
+  import { useWalletConnect } from '~/src/app/composables/useWalletConnect';
+  import { useRegistration } from './useRegistration';
+  import { SignupMethods } from '~/src/shared/constants/signupMethods';
+  import { SignupSteps } from './SignupSteps';
+  import { PurchaseSteps } from "./PurchaseSteps";
+  import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
+  import mLoadingNew from '../../molecules/m-loading-new/m-loading-new.vue';
+  import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
+  import landingRegistrationMethods from '../landing-registration-methods/landing-registration-methods.vue';
+  import landingRegistrationSignup from "../landing-registration-signup/landing-registration-signup.vue";
+  import landingRegistrationSignupGoogle from "../landing-registration-signup-google/landing-registration-signup-google.vue";
+  import landingRegistrationPurchase from "../landing-registration-purchase/landing-registration-purchase.vue";
 
-const firstName = ref('')
-const lastName = ref('')
+  const { $app } = useNuxtApp()
+  const router = useRouter()
+  const route = useRoute()
+  const { initWalletConnect } = useWalletConnect($app);
+  const { scrollToSignup, scrollToSignupFields, handleCatch, scrollToPurchase, handleOpenPurchase, handleContinue } = useRegistration($app);
 
-// Email Field
-const email = ref('')
-const confirmCode = ref('')
-const emailErrorText = ref('')
-const isEmailValid = ref(false)
-const registrationAgreed = ref(false)
-const isOpenTermsModal = ref(false)
-function openTermsModal() {
-  isOpenTermsModal.value = true
-}
-const emailButtonDisabled = computed<boolean>(() => {
-  return !isEmailValid.value || !registrationAgreed.value || !firstName.value || !lastName.value || !Boolean(token.value) || !confirmCode.value
-})
-function emailFieldBlurHandler() {
-  if (isEmailValid.value) {
-    emailErrorText.value = ''
-    return
-  }
+  const props = withDefaults(
+    defineProps<{
+      isFiatLanding: boolean
+    }>(),
+    {
+      isFiatLanding: false,
+    },
+  )
 
-  if (email.value) {
-    emailErrorText.value = 'Invalid email address'
-    return
-  }
+  // walletConnect
+  const { address } = useWeb3ModalAccount()
 
-  emailErrorText.value = 'Required'
-}
-const sendCodeLoading = ref(false)
-const codeSended = ref(false)
-const onSubmitEmailForm = async () => {
-  backendError.value = ''
-  sendCodeLoading.value = true
+  const handleWalletConnect = async () => {
+    await initWalletConnect();
 
-  const initPayload = { first_name: $app.filters.trimSpaceIntoString(firstName.value), last_name: $app.filters.trimSpaceIntoString(lastName.value), email: $app.filters.trimSpaceIntoString(email.value), refcode: $app.filters.trimSpaceIntoString(props.refCode) }
-
-  await $app.api.eth.auth
-    .init(initPayload).then(()=>{
-      sendCodeLoading.value = false
-      codeSended.value = true
-    })
-    .catch((e) => {
-      if (e?.errors?.error?.message) {
-        if (e.errors.error.code === 'ETF:011002') {
-          router.push('/personal/login')
+    $app.api.eth.auth.walletConnectGetAuthType({
+        wallet_connect_data: JSON.stringify({
+            signature: $app.store.registration.walletConnectData.signature,
+            address: $app.store.registration.walletConnectData.walletAddress,
+            message: $app.store.registration.walletConnectData?.signatureMessage,
+        }),
+    }).then((r: any) => {
+        if(r.data.auth_type === 'registration') {
+          $app.store.tetherspecial.signupStep = SignupSteps.Signup;
+          $app.store.tetherspecial.signupMethod = SignupMethods.WalletConnect;
+          // todo fix scroll
+          // scrollToSignupFields();
+        } else {
+          $app.api.eth.auth.
+            wallletConnectLogin({
+                wallet_connect_data: JSON.stringify({
+                    signature: $app.store.registration.walletConnectData.signature,
+                    address: $app.store.registration.walletConnectData.walletAddress,
+                    message: $app.store.registration.walletConnectData?.signatureMessage,
+                }),
+            })
+            .then((jwtResponse: any) => {
+              handleContinue(jwtResponse);
+            });
         }
-        backendError.value = e.errors.error.message
-        sendCodeLoading.value = false
-      } else {
-        backendError.value = 'Something went wrong'
-      }
     })
-}
-const isOpenModal = ref(false)
-const confirmResponse = ref(null)
-
-const closeModal = () =>{
-  isOpenModal.value = false
-}
-const fastRegistration = async () => {
-  backendError.value = ''
-  await $app.api.eth.auth
-    .confirmFast({
-      email: $app.filters.trimSpaceIntoString(email.value),
-      code: $app.filters.trimSpaceIntoString(confirmCode.value),
-    })
-    .then((jwtResponse: any) => {
-      // TODO falling user/me
-      $app.store.auth.setTokens(jwtResponse.data)
-      confirmResponse.value = jwtResponse.data
-      isOpenModal.value = true
-    })
-    .then(async () => {
-      await $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
-      })
-      await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
-        $app.store.user.blockchainUserWallet = resp?.data.uid
-      })
-    })
-    .then(async () => {
-
-      const aAid = window.localStorage.getItem('PAPVisitorId');
-      if(aAid && window.localStorage.getItem('a_utm')) {
-        $app.api.eth.auth.papSignUp({
-          payload: {
-            pap_id: aAid,
-            utm_label: window.localStorage.getItem('a_utm'),
-          }}).then((r: any) => {
-          //window.localStorage.removeItem('a_aid');
-          //window.localStorage.removeItem('a_utm');
-        });
-      }
-
-      if (props.isFiat) {
-        await $app.api.eth.billingEth
-          .buyShares({
-            amount: 1000,
-            dividends: false,
-            referral: false,
-            bonus: false,
-          })
-          .then(({ data }) => {
-            if (data) {
-              router.replace({
-                query: { replenishment: data.uuid }
-              })
-              $app.store.user.buyShares = data
-            }
-          })
-      }
-    })
-    .catch((e) => {
-      if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
-      } else {
-        backendError.value = 'Something went wrong'
-      }
-    })
-}
-const scrollToChat = () =>{
-  if (window.innerWidth > 767) {
-    const element = document.querySelector(".langing-calculation__chat");
-    let headerOffset
-    if (window.innerWidth < 768) {
-      headerOffset = 155;
-    } else {
-      headerOffset = 155;
-
-    }
-    const elementPosition = element.offsetTop;
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth",
-    });
-  } else {
-    window?.LiveChatWidget.call('maximize')
   }
-}
+
+  watch(
+    () => address.value,
+    () => {
+
+      if(address.value) {
+        scrollToSignup()
+        handleWalletConnect();
+      }
+    }
+  )
+
+  //
+  onMounted(()=>{
+    // if verify link
+    if (route.query.code && route.query.email) {
+      const email = String(route.query.email);
+      const codeEmail = String(route.query.code);
+
+      router.replace({'query': ''});
+
+      $app.store.tetherspecial.signupStep = SignupSteps.Loading;
+
+      if($app.store.auth.accountMethod === 'metamask') {
+
+        $app.api.eth.auth.
+          confirmMetamask({
+          email: $app.filters.trimSpaceIntoString(email),
+          code: $app.filters.trimSpaceIntoString(codeEmail),
+          fast: true,
+        })
+          .then((jwtResponse: any) => {
+            handleContinue(jwtResponse);
+          })
+          .catch((e) => {
+            handleCatch(e);
+          })
+
+      } else if ($app.store.auth.accountMethod === 'telegram') {
+        $app.api.eth.auth.
+        confirmTelegram({
+          telegram_data: JSON.stringify($app.store.authTelegram?.response),
+          email: $app.filters.trimSpaceIntoString(email),
+          code: $app.filters.trimSpaceIntoString(codeEmail),
+        })
+        .then((jwtResponse: any) => {
+          handleContinue(jwtResponse);
+        })
+        .catch((e) => {
+          handleCatch(e);
+        })
+
+      } else if ($app.store.auth.accountMethod === 'apple') {
+        $app.api.eth.auth.
+        confirmApple({
+          apple_token: $app.store.authTemp?.response,
+          email: $app.filters.trimSpaceIntoString(email),
+          code: $app.filters.trimSpaceIntoString(codeEmail),
+        })
+        .then((jwtResponse: any) => {
+          handleContinue(jwtResponse);
+        })
+        .catch((e) => {
+          handleCatch(e);
+        })
+
+      } else if ($app.store.auth.accountMethod === 'facebook') {
+        $app.api.eth.auth.
+          confirmFacebook({
+            facebook_id: $app.store.authTemp.response?.userID,
+            email: $app.filters.trimSpaceIntoString(email),
+            code: $app.filters.trimSpaceIntoString(codeEmail),
+          })
+          .then((jwtResponse: any) => {
+            handleContinue(jwtResponse);
+          })
+          .catch((e) => {
+            handleCatch(e);
+          })
+
+      } else if ($app.store.auth.accountMethod === 'walletConnect') {
+        $app.api.eth.auth.
+          walletConnectConfirm({
+            wallet_connect_data: JSON.stringify($app.store.authTemp.response),
+            email: $app.filters.trimSpaceIntoString(email),
+            code: $app.filters.trimSpaceIntoString(codeEmail),
+          })
+          .then((jwtResponse: any) => {
+            handleContinue(jwtResponse);
+          })
+          .catch((e) => {
+            handleCatch(e);
+          })
+
+      } else {
+        $app.api.eth.auth
+        .confirmFast({
+          email: $app.filters.trimSpaceIntoString(email),
+          code: $app.filters.trimSpaceIntoString(codeEmail),
+        })
+        .then((jwtResponse: any) => {
+          handleContinue(jwtResponse);
+        })
+        .catch((e) => {
+          $app.store.tetherspecial.signupStep = SignupSteps.Error;
+          scrollToPurchase();
+          handleCatch(e);
+        })
+
+      }
+    }
+
+    localStorage.setItem('theme', 'dark');
+    $app.store.user.setTheme({theme: 'dark'});
+  })
+
+  onMounted(() => {
+    if($app.store.authGoogle.response?.email) {
+      $app.store.tetherspecial.signupStep = SignupSteps.Google;
+      $app.store.tetherspecial.signupMethod = SignupMethods.Google;
+      $app.store.tetherspecial.firstName = $app.store.authGoogle.response.first_name;
+      $app.store.tetherspecial.lastName = $app.store.authGoogle.response.last_name;
+      $app.store.tetherspecial.email = $app.store.authGoogle.response.email;
+      scrollToSignup()
+    } else if($app.store.authGoogle.response?.access_token) {
+      $app.store.auth.setTokens($app.store.authGoogle.response)
+      $app.api.eth.auth.getUser().then((resp) => {
+        $app.store.user.info = resp?.data
+        handleOpenPurchase();
+      });
+    }
+  });
+
+  onUnmounted(() => {
+    $app.store.tetherspecial.signupStep = SignupSteps.Default;
+    $app.store.tetherspecial.purchaseStep = PurchaseSteps.Default;
+    $app.store.tetherspecial.signupMethod = SignupMethods.None;
+    $app.store.tetherspecial.firstName = '';
+    $app.store.tetherspecial.lastName = '';
+    $app.store.tetherspecial.email = '';
+    $app.store.tetherspecial.dataDisabled = false;
+    $app.store.tetherspecial.isMainInputDisabled = false;
+    $app.store.tetherspecial.isEmailDisabled = false;
+    $app.store.tetherspecial.backendError = {value: '', field: 'default'};
+    $app.store.tetherspecial.countryCode = '';
+    $app.store.tetherspecial.phone = '';
+    $app.store.tetherspecial.isOpenTermsModal = false;
+    $app.store.tetherspecial.confirmResponse = null;
+    $app.store.tetherspecial.isOpenSuccessModal = false;
+  })
+
 </script>
 
-<style lang="scss" src="./landing-registration.scss" />
+<!-- todo split -->
+<!-- <style lang="scss" src="./landing-registration.scss" /> -->
