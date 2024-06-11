@@ -545,13 +545,13 @@ export const useRegistration = ($app) => {
 
     const signupAndBuyGoogle = () => {
         var re = /(?:\+)[\d\-\(\) ]{9,}\d/g;
-        var valid = re.test($app.store.tetherspecial.phone.value);
+        var valid = re.test($app.store.tetherspecial.phone);
 
         if(!valid) {
             $app.store.tetherspecial.backendError = {value: 'Phone number is not valid', field: 'phone'};
             return;
         }
-        if($app.store.tetherspecial.firstName.value === '' || $app.store.tetherspecial.lastName.value === '' || $app.store.tetherspecial.email.value === '' || !isEmailValid.value  || token.value === '') {
+        if($app.store.tetherspecial.firstName === '' || $app.store.tetherspecial.lastName === '' || $app.store.tetherspecial.email === '' || !isEmailValid.value  || token.value === '') {
             $app.store.tetherspecial.backendError = {value: 'Fill in all the fields', field: 'default'};
             return;
         }
@@ -559,7 +559,7 @@ export const useRegistration = ($app) => {
         if(isSignupAndBuyGoogle.value) return;
         isSignupAndBuyGoogle.value = true;
 
-        const tempPhone = $app.store.tetherspecial.phone.value.slice(countryCode.value.length+1);
+        const tempPhone = $app.store.tetherspecial.phone.slice(countryCode.value.length+1);
 
         const initPayload = {
             method: $app.store.tetherspecial.signupMethod,
