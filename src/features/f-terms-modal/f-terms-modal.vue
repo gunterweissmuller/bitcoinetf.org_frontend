@@ -51,13 +51,15 @@
           </div>
         </div>
       </div>
-      <a-button
-        v-if="download"
-        class="f-terms-modal__wrap-btn f-terms-modal__wrap-btn--indent"
-        @click="onDownload"
-        text="Download"
-      ></a-button>
-      <a-button class="f-terms-modal__wrap-btn" variant="secondary" @click="close" text="Close"></a-button>
+      <div style="width: 100%; padding-bottom: 2rem">
+        <a-button
+          v-if="download"
+          class="f-terms-modal__wrap-btn f-terms-modal__wrap-btn--indent"
+          @click="onDownload"
+          text="Download"
+        ></a-button>
+        <a-button class="f-terms-modal__wrap-btn" variant="secondary" @click="close" text="Close"></a-button>
+      </div>
     </div>
   </m-modal>
 </template>
