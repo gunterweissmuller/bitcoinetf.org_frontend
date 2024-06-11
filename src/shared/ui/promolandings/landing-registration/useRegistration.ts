@@ -21,7 +21,7 @@ export const useRegistration = ($app) => {
     const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 0;
     
     const handleMetamaskConnect = async () => {
-        
+
         const {msg,resMsg,signer} = await initMetamask();
 
         if(msg && resMsg && signer) {
@@ -552,7 +552,9 @@ export const useRegistration = ($app) => {
             $app.store.tetherspecial.backendError = {value: 'Phone number is not valid', field: 'phone'};
             return;
         }
-        if($app.store.tetherspecial.firstName === '' || $app.store.tetherspecial.lastName === '' || $app.store.tetherspecial.email === '' || !isEmailValid.value  || token.value === '') {
+        console.log($app.store.tetherspecial.firstName === '', $app.store.tetherspecial.lastName === '', $app.store.tetherspecial.email === '', !isEmailValid.value, token.value === '');
+        console.log($app.store.tetherspecial.firstName, $app.store.tetherspecial.lastName, $app.store.tetherspecial.email, !isEmailValid.value, token.value)
+        if($app.store.tetherspecial.firstName === '' || $app.store.tetherspecial.lastName === '' || $app.store.tetherspecial.email === '' || token.value === '') {
             $app.store.tetherspecial.backendError = {value: 'Fill in all the fields', field: 'default'};
             return;
         }
