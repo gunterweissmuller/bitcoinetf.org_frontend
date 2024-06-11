@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div style="width: 100%; padding-bottom: 2rem">
+      <div style="width: 100%;" :style="{ 'padding-bottom':  width < 1024 ? '2rem' : '0'}">
         <a-button
           v-if="download"
           class="f-terms-modal__wrap-btn f-terms-modal__wrap-btn--indent"
@@ -73,8 +73,11 @@ import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { termsList } from '~/src/features/f-terms-modal/constants'
 import print from 'print-js'
 import { useNuxtApp } from '#app'
+import { useWindowSize } from '@vueuse/core'
 
-const MAX_HEIGHT = 780
+const MAX_HEIGHT = 780;
+
+const { width } = useWindowSize();
 
 const props = withDefaults(
   defineProps<{
