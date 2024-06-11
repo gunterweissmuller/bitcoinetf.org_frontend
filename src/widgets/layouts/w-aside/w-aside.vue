@@ -250,7 +250,7 @@
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useNuxtApp } from '#app'
 import EApplyCreditCardModal from '~/src/entities/e-apply-credit-card-modal/e-apply-credit-card-modal.vue'
 import EApplyCreditSuccessModal from '~/src/entities/e-apply-credit-success-modal/e-apply-credit-success-modal.vue'
@@ -282,6 +282,7 @@ const isUserAuthenticated = computed(() => {
 
 const { isLaptop, isDesktop, isMobile, isTablet } = useMediaDevice()
 const route = useRoute()
+const router = useRouter()
 
 const isOpenModalCredit = ref(false)
 const isOpenModalCreditSuccess = ref(false)
@@ -511,6 +512,10 @@ watch(
 
 onMounted(() => {
   initTimer();
+  if (route.query?.action == 'modal-credit-card') {
+    openModalCredit()
+    router.replace({ query: {} })
+  }
 })
 </script>
 
