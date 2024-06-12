@@ -12,9 +12,6 @@
       </transition-group>
     </div>
     <e-empty-data v-else title="You don’t have any activities yet." />
-    <div v-if="isPage && hasNextPage && renderedSpillovers?.length" class="w-activity__more">
-      <div @click="loadMoreSpillovers" class="w-trades__more-text">Load more</div>
-    </div>
   </div>
 </template>
 
@@ -25,6 +22,7 @@ import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
+import { UseScrollDeals } from '~/composables/useScrollDeals';
 
 const { $app } = useNuxtApp()
 const route = useRoute()
@@ -41,6 +39,8 @@ const props = withDefaults(
     filters: null
   },
 )
+
+const ScrollDeal = new UseScrollDeals(50, () => loadMoreSpillovers());
 
 const spillovers = ref([])
 const currentPage = ref(1)
@@ -69,7 +69,7 @@ const getSpillovers = async () => {
   if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
-    per_page: props.perPage,
+    per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
     page: currentPage.value,
     filters: tradesFilters,
   }
@@ -111,6 +111,10 @@ onMounted(async () => {
 
 onUnmounted(() => {
   centrifuge.value?.disconnect()
+})
+
+onMounted(() => {
+  if (props.isPage) ScrollDeal.init();
 })
 
 watch(() => props.filters, () => {

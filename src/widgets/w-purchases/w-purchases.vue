@@ -14,7 +14,7 @@
       <div v-if="purchases?.length" class="w-purchases__content">
         <transition-group name="fade" tag="div">
           <m-deal
-            v-for="(purchase, idx) in purchases"
+            v-for="(purchase, idx) in renderedPurchases"
             :class="[
               'w-purchases__content-item',
               { 'w-purchases__content-item--active': purchase?.uuid === selectedPurchase?.uuid && isPage },
@@ -28,9 +28,6 @@
         </transition-group>
       </div>
       <e-empty-data v-else title="You don’t have any purchases yet." />
-      <div v-if="isPage && hasNextPage && purchases?.length" class="w-purchases__more">
-        <div @click="loadMorePurchases" class="w-purchases__more-text">Load more</div>
-      </div>
     </div>
 <!--    <div v-if="selectedPurchase && isPage" class="w-purchases__modal">-->
 <!--      <div class="w-purchases__modal__wrap">-->
@@ -89,11 +86,10 @@
 import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
 import { useNuxtApp } from '#app'
 import FPurchasesModal from '~/src/features/f-purchases-modal/f-purchases-modal.vue'
-import { Icon } from '~/src/shared/constants/icons'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import useMediaDevice from '~/composables/useMediaDevice'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { computed } from 'vue'
+import { UseScrollDeals } from '~/composables/useScrollDeals';
 
 const { isDesktop } = useMediaDevice()
 
@@ -109,6 +105,8 @@ const props = withDefaults(
     perPage: 4,
   },
 )
+
+const ScrollDeal = new UseScrollDeals(50, () => loadMorePurchases());
 
 const purchases = ref($app.store.user.lastPurchases)
 const currentPage = ref(1)
@@ -133,7 +131,7 @@ const loadMorePurchases = async () => {
 const getPurchases = async () => {
   await $app.api.info.event
     .getPurchases({
-      per_page: props.perPage,
+      per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
       page: currentPage.value,
     })
     .then((dealsResponse) => {
@@ -161,10 +159,13 @@ const openPurchase = () => {
   isOpenModal.value = true
 }
 
+const renderedPurchases = computed(() => {
+  return props.isPage ? purchases.value : purchases.value?.slice(0, 4)
+})
+
 onMounted(() => {
-  if (!purchases.value.length) {
-    getPurchases()
-  }
+  getPurchases()
+  if (props.isPage) ScrollDeal.init();
 })
 </script>
 
