@@ -24,7 +24,7 @@
           ref="swiperRef"
           :loop="loop"
           :grid="grid"
-          :modules="modules"
+          :modules="modulesComputed"
           :space-between="spaceBetween"
           :slides-per-view="slidesPerView"
           :slides-per-group="slidesPerGroup"
@@ -42,6 +42,7 @@
           :free-mode="freeMode"
           :active-index="activeIndex"
           class="m-slider__swiper"
+          :mousewheel="true"
           :observer="true"
           @reachEnd="onReachLastSlideEventHandler"
           @init="onSwiperInit"
@@ -70,6 +71,7 @@
 
 <script lang="ts" setup>
 import { Swiper } from 'swiper/vue'
+import { Mousewheel } from 'swiper/modules'
 import { computed, ref } from 'vue'
 import ACarouselControl from '~/src/shared/ui/atoms/a-carousel-control/a-carousel-control.vue'
 
@@ -138,6 +140,8 @@ const props = withDefaults(
 const swiperRef = ref<HTMLElement | null>(null)
 
 const clickableButtonsArea = ref<string>('')
+
+const modulesComputed = computed(() => [...props.modules, Mousewheel])
 
 const paginationConfig = {
   el: `.pagination-${props.id}`,

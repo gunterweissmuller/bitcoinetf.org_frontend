@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Autoplay } from 'swiper';
+import { Autoplay } from 'swiper/modules';
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
 import { SwiperSlide } from 'swiper/vue';
 import WTickerAssets from '~/src/widgets/w-ticker-assets/w-ticker-assets.vue';

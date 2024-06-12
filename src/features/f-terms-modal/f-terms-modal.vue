@@ -53,7 +53,7 @@
       </div>
       <a-button
         v-if="download"
-        class="f-terms-modal__wrap-btn f-terms-modal__wrap-btn--indent"
+        class="f-terms-modal__wrap-btn f-terms-modal__wrap-btn--indent mt-4"
         @click="onDownload"
         text="Download"
       ></a-button>
