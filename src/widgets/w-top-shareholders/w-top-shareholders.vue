@@ -22,9 +22,6 @@
       </transition-group>
     </div>
     <e-empty-data v-else title="You don’t have any shareholders yet." />
-    <div v-if="isPage && hasNextPage && shareholders?.length" class="w-shareholders__more">
-      <div @click="loadMoreshareholders" class="w-shareholders__more-text">Load more</div>
-    </div>
   </div>
 </template>
 
@@ -32,6 +29,7 @@
 import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
 import { useNuxtApp } from '#app'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
+import { UseScrollDeals } from '~/composables/useScrollDeals';
 
 const { $app } = useNuxtApp()
 
@@ -46,6 +44,8 @@ const props = withDefaults(
   },
 )
 
+const ScrollDeal = new UseScrollDeals(50, () => loadMoreshareholders());
+
 const shareholders = ref([])
 const currentPage = ref(1)
 const hasNextPage = ref(true)
@@ -58,7 +58,7 @@ const loadMoreshareholders = async () => {
 const getshareholders = async () => {
   await $app.api.eth.statisticEth
     .getShareholders({
-      per_page: props.perPage,
+      per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
       page: currentPage.value,
       // order_column: orderColumn.value,
       // order_by: orderBy.value,
@@ -70,7 +70,8 @@ const getshareholders = async () => {
 }
 
 onMounted(async () => {
-  await getshareholders()
+  await getshareholders();
+  if (props.isPage) ScrollDeal.init();
 })
 </script>
 

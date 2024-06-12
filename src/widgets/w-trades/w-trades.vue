@@ -37,9 +37,7 @@
       Expand
     </div>
 
-    <div v-if="isPage && hasNextPage && renderedTrades.length" class="w-trades__more">
-      <div @click="loadMoreTrades" class="w-trades__more-text">Load more</div>
-    </div>
+
   </div>
 </template>
 
@@ -51,6 +49,7 @@ import { onUnmounted } from 'vue'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
 import { useWindowSize } from '@vueuse/core'
+import { UseScrollDeals } from '~/composables/useScrollDeals';
 
 const { width } = useWindowSize()
 const route = useRoute()
@@ -77,6 +76,9 @@ const props = withDefaults(
   },
 )
 
+
+const ScrollDeal = new UseScrollDeals(50, () => loadMoreTrades());
+
 const trades = ref([])
 const currentPage = ref(1)
 const hasNextPage = ref(true)
@@ -95,10 +97,12 @@ const fullPageNuxtLink = computed(() => {
 })
 
 const loadMoreTrades = () => {
-  currentPage.value += 1
+  currentPage.value += 1;
 
-  getTrades()
+  getTrades();
 }
+
+
 
 const getTrades = async () => {
   const tradesFilters = props.filters ?? {};
@@ -106,7 +110,7 @@ const getTrades = async () => {
   if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
-    per_page: props.perPage,
+    per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
     page: currentPage.value,
     filters: tradesFilters,
   }
@@ -145,13 +149,19 @@ onMounted(async () => {
     .subscribe()
 })
 
+
+
 onUnmounted(() => {
-  centrifuge.value?.disconnect()
+  centrifuge.value?.disconnect();
+})
+
+onMounted(() => {
+  if (props.isPage) ScrollDeal.init();
 })
 
 watch(() => props.filters, () => {
   getTrades();
-})
+});
 </script>
 
 <style src="./w-trades.scss" lang="scss" />
