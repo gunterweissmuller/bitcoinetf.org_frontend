@@ -25,7 +25,7 @@
             <div class="s-site-footer__form">
               <p v-if="success">Thank you!</p>
               <a-input
-                label="E-mail"
+                label="Email"
                 validation-reg-exp-key="email"
                 required
                 :error-text="emailErrorText"
