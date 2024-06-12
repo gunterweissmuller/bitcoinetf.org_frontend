@@ -308,10 +308,10 @@ const shareSocials = [
     name: 'Email',
     icon: Icon.MonoMailLight,
   },
-  {
-    name: 'SMS',
-    icon: Icon.MonoMessage,
-  },
+  // {
+  //   name: 'SMS',
+  //   icon: Icon.MonoMessage,
+  // },
 ]
 
 const availableNetworks = {

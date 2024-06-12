@@ -71,8 +71,11 @@ import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { termsList } from '~/src/features/f-terms-modal/constants'
 import print from 'print-js'
 import { useNuxtApp } from '#app'
+import { useWindowSize } from '@vueuse/core'
 
-const MAX_HEIGHT = 780
+const MAX_HEIGHT = 780;
+
+const { width } = useWindowSize();
 
 const props = withDefaults(
   defineProps<{

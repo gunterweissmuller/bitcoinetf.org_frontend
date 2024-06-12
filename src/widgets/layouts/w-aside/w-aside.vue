@@ -101,7 +101,7 @@
             :type="userType"
             :username="$app.store.user?.info?.profile?.full_name"
             :shares="$app.store.user?.lastPayment?.total_balance_usd ?? 0"
-            :time="1094"
+            :time="maturityIn"
           />
         </div>
 
@@ -250,7 +250,7 @@
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useNuxtApp } from '#app'
 import EApplyCreditCardModal from '~/src/entities/e-apply-credit-card-modal/e-apply-credit-card-modal.vue'
 import EApplyCreditSuccessModal from '~/src/entities/e-apply-credit-success-modal/e-apply-credit-success-modal.vue'
@@ -282,6 +282,7 @@ const isUserAuthenticated = computed(() => {
 
 const { isLaptop, isDesktop, isMobile, isTablet } = useMediaDevice()
 const route = useRoute()
+const router = useRouter()
 
 const isOpenModalCredit = ref(false)
 const isOpenModalCreditSuccess = ref(false)
@@ -474,6 +475,48 @@ function goToHomePage() {
   const homePageUrl = window.location.origin.replace('app.', '')
   window.open(homePageUrl, '_blank')?.focus()
 }
+
+// maturity in
+
+const maturityIn = ref(0);
+
+const initTimer = () => {
+  if($app.store.user.sellShares?.created_at) {
+    const endDate = $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf() + (1000*60*60*24*1095);
+    const now = new Date();
+    const tempTime = (endDate - now.getTime())/1000;
+
+    if(tempTime <= 0) {
+      maturityIn.value = 0;
+    } else {
+      maturityIn.value = Math.floor(tempTime / (3600*24));
+    }
+  } else {
+    $app.api.eth.billingEth
+    .initSellShares()
+    .then((response: any) => {
+      $app.store.user.sellShares = response.data
+    })
+    .catch(() => {
+      // Todo: notify something went wrond
+    })
+  }
+}
+
+watch(
+  () => $app.store.user.sellShares?.created_at,
+  () => {
+      initTimer()
+  }
+)
+
+onMounted(() => {
+  initTimer();
+  if (route.query?.action == 'modal-credit-card') {
+    openModalCredit()
+    router.replace({ query: {} })
+  }
+})
 </script>
 
 <style src="./w-aside.scss" lang="scss" />
