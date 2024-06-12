@@ -100,7 +100,7 @@ import EAssets from '~/src/entities/e-assets/e-assets.vue'
 import {useNuxtApp} from '#app'
 import {Centrifuge} from 'centrifuge'
 import { onUnmounted, onMounted, computed } from 'vue'
-import { Autoplay } from 'swiper'
+import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 

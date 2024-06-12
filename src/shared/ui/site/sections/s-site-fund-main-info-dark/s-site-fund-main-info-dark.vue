@@ -82,7 +82,7 @@
   import {useNuxtApp} from '#app'
   import {Centrifuge} from 'centrifuge'
   import { onUnmounted, onMounted, computed } from 'vue'
-  import { Autoplay } from 'swiper'
+  import { Autoplay } from 'swiper/modules'
   import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
   import { SwiperSlide } from 'swiper/vue'
   import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
