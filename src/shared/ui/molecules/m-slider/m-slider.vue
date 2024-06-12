@@ -141,7 +141,14 @@ const swiperRef = ref<HTMLElement | null>(null)
 
 const clickableButtonsArea = ref<string>('')
 
-const modulesComputed = computed(() => [...props.modules, Mousewheel])
+const modulesComputed = computed(() => {
+  console.log(props.modules)
+  if (!props.modules) {
+    return [Mousewheel]
+  }
+  
+  return [...props.modules, Mousewheel]
+})
 
 const paginationConfig = {
   el: `.pagination-${props.id}`,
