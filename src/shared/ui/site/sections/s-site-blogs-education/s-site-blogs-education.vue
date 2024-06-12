@@ -3,7 +3,7 @@
     <div class="l-site">
       <h1 class="s-site-blogs-education__title site-title-h3">{{ title }}</h1>
       <div class="s-site-blogs-education__description">{{ description }}</div>
-      <m-site-tabs :tabs="categories" @get-active="getActive" />
+<!--      <m-site-tabs :tabs="categories" @get-active="getActive" />-->
       <div class="s-site-blogs-education__items">
         <template v-for="(blog, id) in newsList" :key="id">
           <m-site-blog
