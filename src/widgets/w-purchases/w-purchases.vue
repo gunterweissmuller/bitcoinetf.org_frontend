@@ -29,55 +29,6 @@
       </div>
       <e-empty-data v-else title="You don’t have any purchases yet." />
     </div>
-<!--    <div v-if="selectedPurchase && isPage" class="w-purchases__modal">-->
-<!--      <div class="w-purchases__modal__wrap">-->
-<!--        <m-deal class="w-purchases__modal__wrap-purchase" type="purchase" :deal="selectedPurchase" />-->
-<!--        <div class="w-purchases__modal__list">-->
-<!--          <div class="w-purchases__modal__item">-->
-<!--            <div class="w-purchases__modal__item-title">Basis in USD</div>-->
-<!--            <div class="w-purchases__modal__item-number">${{ selectedPurchase.amount }}</div>-->
-<!--          </div>-->
-<!--          <div class="w-purchases__modal__item">-->
-<!--            <div class="w-purchases__modal__item-title">Basis in {{ actualValue }}</div>-->
-<!--            <div-->
-<!--              class="w-purchases__modal__item-number"-->
-<!--              v-html="$app.filters.convertValue($app.filters.rounded(selectedPurchase.amount_in_btc, 2))"-->
-<!--            ></div>-->
-<!--          </div>-->
-<!--          <div class="w-purchases__modal__item">-->
-<!--            <div class="w-purchases__modal__item-title">Current value</div>-->
-<!--            <div class="w-purchases__modal__item-number">-->
-<!--              ${{ $app.filters.rounded(selectedPurchase.current_amount_in_usd, 3) }}-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="w-purchases__modal__item">-->
-<!--            <div class="w-purchases__modal__item-title">Ownership</div>-->
-<!--            <div class="w-purchases__modal__item-number">{{ $app.filters.rounded(purchase?.ownership, 2) }}%</div>-->
-<!--          </div>-->
-<!--          <div class="w-purchases__modal__item">-->
-<!--            <div class="w-purchases__modal__item-title">Ends:</div>-->
-<!--            <div class="w-purchases__modal__item-number">-->
-<!--              {{ $app.filters.dayjs(selectedPurchase.created_at)?.add(3, 'year')?.format('D MMMM YY') }}-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="w-purchases__modal__item">-->
-<!--            <div class="w-purchases__modal__item-title">Status:</div>-->
-<!--            <div class="w-purchases__modal__item-number">{{ selectedPurchase.status }}</div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <a-button-->
-<!--          :icon="Icon.MonoLink"-->
-<!--          class="w-purchases__modal__view w-purchases__modal__btn"-->
-<!--          text="View on Blockchain"-->
-<!--        />-->
-<!--        <a-button-->
-<!--          :icon="Icon.MonoLink"-->
-<!--          class="w-purchases__modal__issuing w-purchases__modal__btn"-->
-<!--          text="Issuing Transaction"-->
-<!--          variant="secondary"-->
-<!--        />-->
-<!--      </div>-->
-<!--    </div>-->
     <f-purchases-modal v-model="isOpenModal" :purchase="selectedPurchase" />
   </div>
 </template>
