@@ -25,7 +25,7 @@
             <div class="s-site-footer__form">
               <p v-if="success">Thank you!</p>
               <a-input
-                label="E-mail"
+                label="Email"
                 validation-reg-exp-key="email"
                 required
                 :error-text="emailErrorText"
@@ -142,7 +142,7 @@ const SOCIAL_LINKS = [
     icon: Icon.MonoUnknownBlack,
     link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl',
   },
-  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org', size: 14 },
+  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org',  },
 ]
 
 const subscribeEmail = ref('')
