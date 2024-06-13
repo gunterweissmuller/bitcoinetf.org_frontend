@@ -19,7 +19,7 @@
           :cost="`${$app.filters.rounded(fundTotalBtc, 2)} BTC`"
           body="The reserve fund serves as a safety net, absorbing losses and maintaining liquidity during times of market turmoil. By diversifying our holdings into Bitcoin, we can weather unexpected events and continue delivering steady returns to our investors."
           :currentBalance="true"
-          textButton="Verify on Blockchain"
+          textButton="Sign in to verify on blockchain"
           @click="goToRegistration"
         />
       </div>
@@ -30,7 +30,7 @@
           :cost="`$${$app.filters.rounded(fundTotalUsd, 0)}`"
           body="Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility."
           :currentBalance="true"
-          textButton="Verify on Blockchain"
+          textButton="Sign in to verify on blockchain"
           @click="goToRegistration"
         />
       </div>
@@ -41,8 +41,8 @@
           label="Protection 3"
           body="The funds holding company in Hong Kong will utilize its paid up capital to fulfill guarantees if necessary."
           :currentBalance="false"
-          textButton="Verify Official Record"
-          @click="goToRegistration"
+          textButton="View official documents"
+          @click="goToCompanyLicense"
         />
       </div>
 
@@ -85,9 +85,7 @@
                     continue delivering steady returns to our investors.
                   </p>
                 </div>
-                <button @click="goToRegistration" class="guarantees-card__button">
-                  Verify on Blockchain
-                </button>
+                <button @click="goToRegistration" class="guarantees-card__button">Verify on Blockchain</button>
               </div>
             </div>
           </swiper-slide>
@@ -130,9 +128,7 @@
                   </p>
                 </div>
                 <div class="s-site-main__item-value--footer">
-                  <button @click="goToRegistration" class="guarantees-card__button">
-                    Verify Official Record
-                  </button>
+                  <button @click="goToRegistration" class="guarantees-card__button">Verify Official Record</button>
                 </div>
               </div>
             </div>
@@ -158,8 +154,6 @@ const $router = useRouter()
 const authStore = auth()
 const isAuth = computed(() => authStore.isUserAuthenticated)
 
-  
-
 const fundTotalBtc = computed(() => {
   return $app.store.assets.fundTotalBtc
 })
@@ -168,18 +162,23 @@ const fundTotalUsd = computed(() => {
   return $app.store.user.fundTotalUsd
 })
 
-
 function goToRegistration() {
-    if (isAuth.value) {
-      const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
-      const blockchainLink = isProd
-        ? 'https://explorer.nextdev.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
-        : 'https://explorer.stage.techetf.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
-        
-      window.open(blockchainLink, '_blank').focus()
-    } else {
-      $router.push('/personal/registration')
-    }
+  if (isAuth.value) {
+    const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
+    const blockchainLink = isProd
+      ? 'https://explorer.nextdev.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
+      : 'https://explorer.stage.techetf.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
+
+    window.open(blockchainLink, '_blank').focus()
+  } else {
+    $router.push('/personal/login')
   }
+}
+
+function goToCompanyLicense() {
+  const companyLicenseLink = 'https://files.bitcoinetf.org/etf/public/company.pdf'
+  window.open(companyLicenseLink, '_blank').focus()
+}
 </script>
+
 <style src="./s-site-guarantees.scss" lang="scss" />
