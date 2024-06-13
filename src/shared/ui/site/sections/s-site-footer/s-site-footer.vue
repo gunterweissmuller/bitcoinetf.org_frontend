@@ -104,7 +104,7 @@ const menu = [
     title: 'Platform',
     items: [
       { text: 'Buy ETF Shares', href: '/personal/login' },
-      { text: 'Mastercard', href: '/#mastercard' }, 
+      { text: 'Mastercard', href: '/#mastercard' },
       { text: 'Bitcoin Education', href: '/bitcoin-education' },
       { text: 'Referrals', href: '/referrals' },
     ],
@@ -136,7 +136,7 @@ const menu = [
 ]
 
 const SOCIAL_LINKS = [
-  { icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org' },
+  { icon: Icon.MonoTelegram2Black, link: 'https://t.me/BitcoinETF_org' },
   { icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat' },
   {
     icon: Icon.MonoUnknownBlack,
