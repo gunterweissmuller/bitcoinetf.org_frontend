@@ -51,15 +51,13 @@
           </div>
         </div>
       </div>
-      <div style="width: 100%" :style="{ 'padding-bottom': width >= 1024 ? 0 : '2rem' }">
-        <a-button
-          v-if="download"
-          class="f-terms-modal__wrap-btn f-terms-modal__wrap-btn--indent mt-4"
-          @click="onDownload"
-          text="Download"
-        ></a-button>
-        <a-button class="f-terms-modal__wrap-btn" variant="secondary" @click="close" text="Close"></a-button>
-      </div>
+      <a-button
+        v-if="download"
+        class="f-terms-modal__wrap-btn f-terms-modal__wrap-btn--indent mt-4"
+        @click="onDownload"
+        text="Download"
+      ></a-button>
+      <a-button class="f-terms-modal__wrap-btn" :class="{ 'mb-4': !isDesktop }" variant="secondary" @click="close" text="Close"></a-button>
     </div>
   </m-modal>
 </template>
@@ -71,13 +69,14 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { termsList } from '~/src/features/f-terms-modal/constants'
-import print from 'print-js'
 import { useNuxtApp } from '#app'
+import useMediaDevice from '~/composables/useMediaDevice'
 import { useWindowSize } from '@vueuse/core'
 
 const MAX_HEIGHT = 780;
 
 const { width } = useWindowSize();
+const { isDesktop } = useMediaDevice()
 
 const props = withDefaults(
   defineProps<{
@@ -111,12 +110,17 @@ const accept = () => {
   emit('accept')
 }
 const onDownload = () => {
-  print({ printable: 'termsRef', documentTitle: 'Terms and conditions', type: 'html' })
+  download()
 }
 const close = () => {
   isOpenModal.value = false
   emit('close')
 }
+
+function download() {
+  window.open('/BitcoinETF.pdf', '_blank')
+}
+
 </script>
 
 <style src="./f-terms-modal.scss" lang="scss" />
