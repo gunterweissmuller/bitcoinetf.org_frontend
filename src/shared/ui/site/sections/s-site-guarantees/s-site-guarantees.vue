@@ -128,7 +128,7 @@
                   </p>
                 </div>
                 <div class="s-site-main__item-value--footer">
-                  <button @click="goToRegistration" class="guarantees-card__button">Verify Official Record</button>
+                  <button @click="goToCompanyLicense" class="guarantees-card__button">Verify Official Record</button>
                 </div>
               </div>
             </div>
@@ -137,11 +137,13 @@
       </m-slider>
     </div>
     <m-guarantees-table />
+    <m-guarantees-table-swiper />
   </section>
 </template>
 <script setup lang="ts">
 import MGuaranteesCard from '~/src/shared/ui/site/molecules/m-guarantees-card/m-guarantees-card.vue'
 import MGuaranteesTable from '~/src/shared/ui/site/molecules/m-guarantees-table/m-guarantees-table.vue'
+import MGuaranteesTableSwiper from '~/src/shared/ui/site/molecules/m-guarantees-table-swiper/m-guarantees-table-swiper.vue'
 
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'

@@ -4,7 +4,7 @@
       <div class="m-guarantees-table__table__wrapper">
         <div class="m-guarantees-table__table__header">
           <div class="m-guarantees-table__table__header-col">BITCOINETF.ORG VS. VOLATILE CRYPTO INVESTMENTS</div>
-          <div class="m-guarantees-table__m-guarantees-table__table__header-col">
+          <div class="m-guarantees-table__table__header-col">
             <NuxtImg src="/img/main-guarantees-table-title-1.svg" width="220" height="97" />
           </div>
           <div class="m-guarantees-table__table__header-col">
