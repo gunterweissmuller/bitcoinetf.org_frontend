@@ -67,4 +67,13 @@
       user-select: none;
     }
   }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding-top: torem(50);
+  }
 }

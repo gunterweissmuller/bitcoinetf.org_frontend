@@ -22,13 +22,17 @@
       </transition-group>
     </div>
     <e-empty-data v-else title="You don’t have any shareholders yet." />
+    <div v-if="props.isPage && loading && shareholders?.length" class="w-shareholders__loading">
+      <m-loading-new />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
-import { useNuxtApp } from '#app'
-import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
+import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue';
+import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
+import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
+import { useNuxtApp } from '#app';
 import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { $app } = useNuxtApp()
@@ -44,6 +48,8 @@ const props = withDefaults(
   },
 )
 
+const loading = ref<boolean>(true);
+
 const shareholders = ref([])
 const currentPage = ref(1)
 const hasNextPage = ref(true)
@@ -54,6 +60,7 @@ const loadMoreshareholders = async () => {
 }
 
 const getshareholders = async () => {
+  loading.value = true;
   await $app.api.eth.statisticEth
     .getShareholders({
       per_page: props.isPage ? 10 : props.perPage,
@@ -64,6 +71,7 @@ const getshareholders = async () => {
     .then((dealsResponse) => {
       hasNextPage.value = !!dealsResponse.data.next_page_url;
       shareholders.value = [...shareholders.value, ...dealsResponse.data.data];
+      loading.value = false;
       if (props.isPage) {
         setTimeout(changeObservable, 100);
       }

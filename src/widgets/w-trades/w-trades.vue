@@ -27,6 +27,10 @@
       </transition-group>
     </div>
 
+    <div v-if="props.isPage && loading && renderedTrades?.length" class="w-trades__loading">
+      <m-loading-new />
+    </div>
+
     <e-empty-data title="You don’t have any trades yet." v-if="!renderedTrades?.length" />
 
     <div
@@ -44,13 +48,14 @@
 </template>
 
 <script setup lang="ts">
-import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
-import { useNuxtApp } from '#app'
-import { Centrifuge } from 'centrifuge'
-import { onUnmounted } from 'vue'
-import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
-import { useRoute } from '#imports'
-import { useWindowSize } from '@vueuse/core'
+import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue';
+import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
+import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
+import { useNuxtApp } from '#app';
+import { Centrifuge } from 'centrifuge';
+import { onUnmounted } from 'vue';
+import { useRoute } from '#imports';
+import { useWindowSize } from '@vueuse/core';
 import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { width } = useWindowSize()
@@ -101,9 +106,10 @@ const loadMoreTrades = () => {
   getTrades();
 }
 
-
+const loading = ref<boolean>(true);
 
 const getTrades = async () => {
+  loading.value = true;
   const tradesFilters = props.filters ?? {};
 
   if (tradesFilters.asset_uuid === false) return;
@@ -117,6 +123,7 @@ const getTrades = async () => {
   await $app.api.info.event.getDeals(requestParams).then((dealsResponse) => {
     hasNextPage.value = !!dealsResponse.data.next_page_url;
     trades.value = [...trades.value, ...dealsResponse.data.data];
+    loading.value = false;
     if (props.isPage) {
       setTimeout(changeObservable, 100);
     }

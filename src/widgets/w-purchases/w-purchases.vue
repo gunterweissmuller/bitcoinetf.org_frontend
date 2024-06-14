@@ -28,18 +28,22 @@
         </transition-group>
       </div>
       <e-empty-data v-else title="You don’t have any purchases yet." />
+      <div v-if="props.isPage && loading && renderedPurchases?.length" class="w-purchases__loading">
+        <m-loading-new />
+      </div>
     </div>
     <f-purchases-modal v-model="isOpenModal" :purchase="selectedPurchase" />
   </div>
 </template>
 
 <script setup lang="ts">
-import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
-import { useNuxtApp } from '#app'
-import FPurchasesModal from '~/src/features/f-purchases-modal/f-purchases-modal.vue'
-import useMediaDevice from '~/composables/useMediaDevice'
-import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
-import { computed } from 'vue'
+import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue';
+import FPurchasesModal from '~/src/features/f-purchases-modal/f-purchases-modal.vue';
+import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
+import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
+import useMediaDevice from '~/composables/useMediaDevice';
+import { useNuxtApp } from '#app';
+import { computed } from 'vue';
 import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { isDesktop } = useMediaDevice()
@@ -56,6 +60,8 @@ const props = withDefaults(
     perPage: 4,
   },
 )
+
+const loading = ref<boolean>(true);
 
 const purchases = ref($app.store.user.lastPurchases)
 const currentPage = ref(1)
@@ -78,6 +84,8 @@ const loadMorePurchases = async () => {
 }
 
 const getPurchases = async () => {
+  loading.value = true;
+
   await $app.api.info.event
     .getPurchases({
       per_page: props.isPage ? 10 : props.perPage,
@@ -86,6 +94,7 @@ const getPurchases = async () => {
     .then((dealsResponse) => {
       hasNextPage.value = !!dealsResponse.data.next_page_url;
       purchases.value = [...purchases.value, ...dealsResponse.data.data];
+      loading.value = false;
       if (props.isPage) {
         setTimeout(changeObservable, 100);
       };
@@ -93,13 +102,15 @@ const getPurchases = async () => {
 }
 
 const getPurchase = async (uuid: string) => {
+  loading.value = true;
   await $app.api.info.event
     .getPurchase({
       uuid,
     })
     .then((purchaseResponse) => {
-      selectedPurchase.value = purchaseResponse.data
-      openPurchase()
+      selectedPurchase.value = purchaseResponse.data;
+      openPurchase();
+      loading.value = false;
     })
 }
 

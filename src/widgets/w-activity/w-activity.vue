@@ -12,16 +12,20 @@
       </transition-group>
     </div>
     <e-empty-data v-else title="You don’t have any activities yet." />
+    <div v-if="props.isPage && loading && renderedSpillovers?.length" class="w-activity__loading">
+      <m-loading-new />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
-import { useNuxtApp } from '#app'
-import { Centrifuge } from 'centrifuge'
-import { onUnmounted } from 'vue'
-import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
-import { useRoute } from '#imports'
+import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue';
+import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
+import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
+import { useNuxtApp } from '#app';
+import { Centrifuge } from 'centrifuge';
+import { onUnmounted } from 'vue';
+import { useRoute } from '#imports';
 import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { $app } = useNuxtApp()
@@ -39,6 +43,8 @@ const props = withDefaults(
     filters: null
   },
 )
+
+const loading = ref<boolean>(true);
 
 const spillovers = ref([])
 const currentPage = ref(1)
@@ -62,6 +68,7 @@ const loadMoreSpillovers = () => {
 }
 
 const getSpillovers = async () => {
+  loading.value = true;
   const tradesFilters = props.filters ?? {};
 
   if (tradesFilters.asset_uuid === false) return;
@@ -75,6 +82,7 @@ const getSpillovers = async () => {
   await $app.api.info.event.getSpillovers(requestParams).then((dealsResponse) => {
     hasNextPage.value = !!dealsResponse.data.next_page_url;
     spillovers.value = [...spillovers.value, ...dealsResponse.data.data];
+    loading.value = false;
     if (props.isPage) {
       setTimeout(changeObservable, 100);
     }
