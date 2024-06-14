@@ -112,7 +112,7 @@ const props = withDefaults(
 const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
 const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc')
-const selectedMethod = ref(orderType.value === 'usdt' ? 'polygon_usdt' : props.method)
+const selectedMethod = ref(orderType.value === 'usdt' ? 'polygon_usdt' : props.method || 'bitcoin_on_chain')
 const selectedAddress = ref(props.address)
 const copiedLink = ref(false)
 
@@ -244,8 +244,6 @@ watch(()=> selectedAddress.value, (value) => {
   }
   if(selectedMethod.value === 'polygon_usdt') {
     validMatic.value = window?.WAValidator?.validate(selectedAddress.value, 'matic')
-
-    //
   }
 })
 
@@ -291,7 +289,7 @@ const isNotEnoughModalShow = ref(false);
 
 const closeNotEnoughModal = () => {
   isNotEnoughModalShow.value = false;
-} 
+}
 
 
 </script>

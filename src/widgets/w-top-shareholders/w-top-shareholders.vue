@@ -5,12 +5,12 @@
       <!-- FIX :to name on features/fund_remake -->
       <nuxt-link
         v-if="!isPage && shareholders?.length"
-        :to="{ name: 'personal-analytics-fund-top-shareholders' }"
+        :to="{ name: 'personal-analytics-shareholders-top-shareholders' }"
         class="w-shareholders__head-info"
         >View all
       </nuxt-link>
     </div>
-    <div v-if="shareholders?.length" class="w-shareholders__content">
+    <div v-if="shareholders?.length" id="shareholdersList" class="w-shareholders__content">
       <transition-group name="fade" tag="div">
         <m-deal
           v-for="(trade, idx) in shareholders"
@@ -22,9 +22,6 @@
       </transition-group>
     </div>
     <e-empty-data v-else title="You don’t have any shareholders yet." />
-    <div v-if="isPage && hasNextPage && shareholders?.length" class="w-shareholders__more">
-      <div @click="loadMoreshareholders" class="w-shareholders__more-text">Load more</div>
-    </div>
   </div>
 </template>
 
@@ -32,6 +29,7 @@
 import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
 import { useNuxtApp } from '#app'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
+import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { $app } = useNuxtApp()
 
@@ -58,20 +56,40 @@ const loadMoreshareholders = async () => {
 const getshareholders = async () => {
   await $app.api.eth.statisticEth
     .getShareholders({
-      per_page: props.perPage,
+      per_page: props.isPage ? 10 : props.perPage,
       page: currentPage.value,
       // order_column: orderColumn.value,
       // order_by: orderBy.value,
     })
     .then((dealsResponse) => {
-      hasNextPage.value = !!dealsResponse.data.next_page_url
-      shareholders.value = [...shareholders.value, ...dealsResponse.data.data]
+      hasNextPage.value = !!dealsResponse.data.next_page_url;
+      shareholders.value = [...shareholders.value, ...dealsResponse.data.data];
+      if (props.isPage) {
+        setTimeout(changeObservable, 100);
+      }
     })
 }
 
-onMounted(async () => {
-  await getshareholders()
+const IntersctObs = new UseIntersectionObserver(() => loadMoreshareholders());
+const intersectionError = ref<boolean>(false);
+
+const changeObservable = () => {
+  IntersctObs.disconnect();
+  try {
+    IntersctObs.observe('#shareholdersList div .m-deal:last-child');
+  } catch(e) {
+    intersectionError.value = true;
+    console.log(e);
+  }
+}
+
+onUnmounted(() => {
+  IntersctObs.disconnect();
 })
+
+onMounted(async () => {
+  await getshareholders();
+});
 </script>
 
 <style src="./w-top-shareholders.scss" lang="scss" />

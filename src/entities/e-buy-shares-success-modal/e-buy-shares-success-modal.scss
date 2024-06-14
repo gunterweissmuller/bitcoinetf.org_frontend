@@ -57,6 +57,12 @@
     flex-direction: column;
     align-items: center;
 
+    max-height: 100vh;
+
+    @media (max-height: 740px) {
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
 
     &-pic {
       width: torem(298);

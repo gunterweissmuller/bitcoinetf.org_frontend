@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="w-header-dark__wrap">
-      <nuxt-link to="/" class="w-header-dark__logo">
+      <nuxt-link to="/" target="_blank" class="w-header-dark__logo">
         <a-icon class="w-aside__logo-icon" :name="Icon.ColorfulBtcDarkLogo" width="210" height="32" />
       </nuxt-link>
       <div :class="['w-header-dark__box', { 'w-header-dark__box__active': isOpenMenu }]">
@@ -36,7 +36,13 @@
           @click="$router.push({ name: 'personal-portfolio' })"
         />
         <div class="w-header-dark__links">
-          <nuxt-link v-for="(link, idx) in LINKS" :key="idx" :href="link.link" class="w-header-dark__link">
+          <nuxt-link
+            v-for="(link, idx) in LINKS"
+            :key="idx"
+            :href="link.link"
+            class="w-header-dark__link"
+            :class="[{ 'w-header-dark__link-light': route.name === 'index' || route.name === 'tetherspecial' }]"
+          >
             {{ link.text }}
           </nuxt-link>
         </div>
@@ -45,14 +51,17 @@
             v-if="!isUserAuthenticated"
             size="small"
             text="Launch app"
-            :variant="'primary'"
-            @click="$router.push({ name: 'personal-login' })"
+            :variant="route.name === '' ? 'primary-website' : 'primary2'"
+            @click="$router.push({ name: 'personal-registration' })"
           />
         </div>
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
-        <nuxt-link to="/personal/login" v-if="!isUserAuthenticated"
-          ><a-button text="Launch app" size="small" :variant="'primary'"
+        <nuxt-link to="/personal/registration" v-if="!isUserAuthenticated"
+          ><a-button
+            text="Launch app"
+            size="small"
+            :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
         /></nuxt-link>
         <a-avatar
           v-if="isUserAuthenticated"

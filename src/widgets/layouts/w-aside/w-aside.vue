@@ -3,9 +3,7 @@
     <aside ref="asideRef" :class="['w-aside', { 'w-aside--page': isPage }]">
       <div class="w-aside__inner">
         <div class="w-aside__logo">
-          <nuxt-link to="/">
-            <a-icon class="w-aside__logo-icon" :name="getLogo" width="142" height="24" />
-          </nuxt-link>
+          <a-icon class="w-aside__logo-icon" :name="getLogo" width="142" height="24" @click="goToHomePage" />
         </div>
 
         <div v-if="!isPage && isShowBuyButton" class="w-aside__button">
@@ -83,6 +81,7 @@
           <div class="w-aside__avatar">
             <div class="w-aside__avatar-logo">
               <a-icon
+                v-if="userType != 'init_btc'"
                 class="w-aside__avatar-type"
                 :name="userType === 'usdt' ? Icon.ColorfulUsdt : Icon.ColorfulBitcoin"
                 width="24" height="24"
@@ -102,7 +101,7 @@
             :type="userType"
             :username="$app.store.user?.info?.profile?.full_name"
             :shares="$app.store.user?.lastPayment?.total_balance_usd ?? 0"
-            :time="1094"
+            :time="maturityIn"
           />
         </div>
 
@@ -137,7 +136,7 @@
                 <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
               </nuxt-link>
             </li>
-            <li class="w-aside__item w-aside__item-mobile">
+            <li class="w-aside__item w-aside__item-mobile" @click="themeValue = !themeValue">
               <div
                 class="w-aside__link"
               >
@@ -146,8 +145,9 @@
                   Dark Theme
                 </p>
                 <div class="w-aside__link-switch">
-                  <a-switch
-                    v-model.modelValue="themeValue"
+                  <a-switch-new
+                    :modelValue="themeValue"
+                    @update:model-value="themeValue = !themeValue"
                   />
                 </div>
               </div>
@@ -228,7 +228,6 @@
               <div class="w-aside__link">
                 <a-icon class="w-aside__link-img" :name="Icon.MonoLogout" width="24" height="24" />
                 <p class="w-aside__link-text">Log out</p>
-                <a-icon class="w-aside__link-chevron" :name="Icon.MonoChevronRight" width="24" height="24" />
               </div>
             </li>
           </ul>
@@ -251,7 +250,7 @@
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useNuxtApp } from '#app'
 import EApplyCreditCardModal from '~/src/entities/e-apply-credit-card-modal/e-apply-credit-card-modal.vue'
 import EApplyCreditSuccessModal from '~/src/entities/e-apply-credit-success-modal/e-apply-credit-success-modal.vue'
@@ -262,7 +261,7 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { ref } from 'vue'
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import WCertificate from '~/src/widgets/w-certificate/w-certificate.vue';
-import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
+import ASwitchNew from '~/src/shared/ui/atoms/a-switch-new/a-switch-new.vue'
 
 const { $app } = useNuxtApp()
 
@@ -283,6 +282,7 @@ const isUserAuthenticated = computed(() => {
 
 const { isLaptop, isDesktop, isMobile, isTablet } = useMediaDevice()
 const route = useRoute()
+const router = useRouter()
 
 const isOpenModalCredit = ref(false)
 const isOpenModalCreditSuccess = ref(false)
@@ -408,7 +408,7 @@ const navList = ref([
   {
     title: 'Statement',
     icon: Icon.MonoFile,
-    link: '/personal/earnings/statements',
+    link: '/personal/more/statements',
   },
   {
     title: 'Purchase agreement',
@@ -419,7 +419,7 @@ const navList = ref([
   {
     title: 'Support',
     icon: Icon.MonoSupport,
-    link: '/personal/support',
+    link: '/personal/more/support',
   },
 ])
 
@@ -440,6 +440,10 @@ const activeLinkClass = (link: string): boolean => {
     case 'personal-fund':
       return (
         route.name === 'personal-protection' || route.name === 'personal-portfolio' || route.name === 'personal-shareholders'
+      )
+    case 'personal-assets':
+      return (
+        route.name === 'personal-assets-symbol'
       )
     case 'personal-protection':
       return (
@@ -466,6 +470,53 @@ watch(() => themeValue.value, (value) => {
   document.body.dataset.theme = theme;
   $app.store.user.theme = theme;
 });
+
+function goToHomePage() {
+  const homePageUrl = window.location.origin.replace('app.', '')
+  window.open(homePageUrl, '_blank')?.focus()
+}
+
+// maturity in
+
+const maturityIn = ref(0);
+
+const initTimer = () => {
+  if($app.store.user.sellShares?.created_at) {
+    const endDate = $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf() + (1000*60*60*24*1095);
+    const now = new Date();
+    const tempTime = (endDate - now.getTime())/1000;
+
+    if(tempTime <= 0) {
+      maturityIn.value = 0;
+    } else {
+      maturityIn.value = Math.floor(tempTime / (3600*24));
+    }
+  } else {
+    $app.api.eth.billingEth
+    .initSellShares()
+    .then((response: any) => {
+      $app.store.user.sellShares = response.data
+    })
+    .catch(() => {
+      // Todo: notify something went wrond
+    })
+  }
+}
+
+watch(
+  () => $app.store.user.sellShares?.created_at,
+  () => {
+      initTimer()
+  }
+)
+
+onMounted(() => {
+  initTimer();
+  if (route.query?.action == 'modal-credit-card') {
+    openModalCredit()
+    router.replace({ query: {} })
+  }
+})
 </script>
 
 <style src="./w-aside.scss" lang="scss" />

@@ -21,14 +21,18 @@
       {{ props.asset.description }}
     </p>
 
-    <!-- FIX HREF -->
     <a
       v-if="activeExplorerLink"
       :href="`https://${config.public.EXPLORER_API}/account/${config.public.RESERVE_WALLET_ADDRESS}`"
       target="_blank"
       class="w-ticker-assets__link"
     >
-      <img src="/img/icons/mono/action/link.svg" alt="">
+      <a-icon
+        class="w-ticker-assets__icon"
+        :name="Icon.MonoActionLink"
+        width="15"
+        height="15"
+      />
       View on blockchain
       <span></span>
     </a>
@@ -37,6 +41,8 @@
 
 <script lang='ts' setup>
 import { IAsset } from '~/src/shared/types/global';
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
+import { Icon } from '~/src/shared/constants/icons'
 
 const props = defineProps<{
   asset: IAsset

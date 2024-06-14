@@ -163,6 +163,10 @@
     grid-template-columns: 1fr;
     gap: var(--spacing-s);
 
+    &--fake {
+      width: 165.47px;
+    }
+
     &-avatar {
       display: flex;
       align-items: center;

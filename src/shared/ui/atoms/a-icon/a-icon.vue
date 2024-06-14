@@ -8,7 +8,7 @@
       <img :src="props.name" :style="iconStyles" style="width: 24px;" aria-hidden="true" class="a-icon__image"/>
       <figcaption class="visually-hidden">{{ props.name }}</figcaption>
     </figure>
-    <i v-else :class="[`a-icons`, `icon-${props.name}`]" :style="iconStyles" aria-hidden="true"/>
+    <i v-else :class="[`a-icons`, `icon-${props.name}`, {'icon-auto': props?.widthAuto}]" :style="iconStyles" aria-hidden="true"/>
   </div>
 </template>
 
@@ -21,13 +21,15 @@ interface Props {
   width?: number | string
   height?: number | string
   imgTrue?: boolean
+  widthAuto?: boolean
 }
 
 const src = ref<string>('')
 const props = withDefaults(defineProps<Props>(), {
   width: undefined,
   height: undefined,
-  imgTrue: false
+  imgTrue: false,
+  widthAuto: false
 })
 
 const isColorful = ref<boolean>(props.name.includes('colorful'))

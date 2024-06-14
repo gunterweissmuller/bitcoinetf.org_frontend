@@ -1,6 +1,6 @@
 .a-input {
   @include desktop-device {
-    &__input-container:hover  {
+    &__input-container:hover {
       background-color: var(--surfaces-surface-2);
       border-color: var(--accent-primary);
 
@@ -9,7 +9,7 @@
       }
     }
 
-    &__input-container:focus  {
+    &__input-container:focus {
       background-color: var(--surfaces-surface-2);
       border-color: var(--accent-primary);
 
@@ -50,6 +50,7 @@
 
     &--right {
       right: torem(15);
+      color: var(--accent-primary); // #0066ff;
     }
 
     &--left {
@@ -70,20 +71,21 @@
     &--tetherspecial {
       &:hover {
         .a-input__input-container {
-          // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
-          background: transparent;
+          background-color: var(--surfaces-surface-2);
+          // background: transparent;
         }
 
         .a-input__input {
-          background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
-          background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
+          // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
+          // background-color: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.5));
           // border: 1px solid transparent;
         }
       }
 
       .a-input__input-container {
         // background: var(--Surfaces-Surface-2, rgba(46, 47, 56, 0.50));
-        background: transparent;
+        background-color: var(--surfaces-surface-2);
+        // background: transparent;
       }
 
       .a-input__input {
@@ -337,7 +339,14 @@
     font-weight: 500;
     line-height: torem(16);
   }
-
+  &__icon--password {
+    position: absolute;
+    right: torem(16);
+    z-index: 2;
+    top: 50%;
+    transform: translate(0, -50%);
+    cursor: pointer;
+  }
   &--icon-left &__input {
     padding-left: torem(51);
   }
@@ -392,3 +401,4 @@
     width: 100%;
   }
 }
+

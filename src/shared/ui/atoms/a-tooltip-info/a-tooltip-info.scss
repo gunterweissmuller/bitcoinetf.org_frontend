@@ -24,7 +24,8 @@
 
     border-radius: torem(8);
     background: var(--surfaces-surface-glass);
-    filter: drop-shadow(0 0 6px 0 rgba(#000, .06));
+    filter: drop-shadow(0 0 6px rgba(#000, .06));
+    backdrop-filter: blur(3px);
 
     &--top            { bottom: calc(100% + #{torem(12)}) }
     &--top::before    { bottom: torem(-12); left: calc(50% - #{torem(8)}); transform: translateY(-50%) rotate(180deg); }

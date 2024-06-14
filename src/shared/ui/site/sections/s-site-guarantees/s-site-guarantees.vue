@@ -19,7 +19,7 @@
           :cost="`${$app.filters.rounded(fundTotalBtc, 2)} BTC`"
           body="The reserve fund serves as a safety net, absorbing losses and maintaining liquidity during times of market turmoil. By diversifying our holdings into Bitcoin, we can weather unexpected events and continue delivering steady returns to our investors."
           :currentBalance="true"
-          textButton="Verify on Blockchain"
+          textButton="Sign in to verify on blockchain"
           @click="goToRegistration"
         />
       </div>
@@ -28,9 +28,9 @@
           label="Protection 2"
           title="USDT Protection Vault"
           :cost="`$${$app.filters.rounded(fundTotalUsd, 0)}`"
-          body="Whenever our AI trading bot profits from the hedging operations, the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, irrespective of Bitcoin price volatility."
+          body="Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility."
           :currentBalance="true"
-          textButton="Verify on Blockchain"
+          textButton="Sign in to verify on blockchain"
           @click="goToRegistration"
         />
       </div>
@@ -41,8 +41,8 @@
           label="Protection 3"
           body="The funds holding company in Hong Kong will utilize its paid up capital to fulfill guarantees if necessary."
           :currentBalance="false"
-          textButton="Verify Official Record"
-          @click="goToRegistration"
+          textButton="View official documents"
+          @click="goToCompanyLicense"
         />
       </div>
 
@@ -85,9 +85,7 @@
                     continue delivering steady returns to our investors.
                   </p>
                 </div>
-                <button @click="goToRegistration" class="guarantees-card__button">
-                  Verify on Blockchain
-                </button>
+                <button @click="goToRegistration" class="guarantees-card__button">Verify on Blockchain</button>
               </div>
             </div>
           </swiper-slide>
@@ -116,9 +114,7 @@
                     stable, regardless of the Bitcoin price volatility.
                   </p>
                 </div>
-                <button @click="goToRegistration" class="guarantees-card__button">
-                  Verify on Blockchain
-                </button>
+                <button @click="goToRegistration" class="guarantees-card__button">Verify on Blockchain</button>
               </div>
             </div>
           </swiper-slide>
@@ -132,9 +128,7 @@
                   </p>
                 </div>
                 <div class="s-site-main__item-value--footer">
-                  <button @click="goToRegistration" class="guarantees-card__button">
-                    Verify Official Record
-                  </button>
+                  <button @click="goToCompanyLicense" class="guarantees-card__button">Verify Official Record</button>
                 </div>
               </div>
             </div>
@@ -142,141 +136,15 @@
         </template>
       </m-slider>
     </div>
-
-    <div class="s-site-guarantees__table-wrapper">
-      <div class="s-site-guarantees__table-container">
-        <div class="s-site-guarantees__table">
-          <div class="s-site-guarantees__table-head">
-            <div class="s-site-guarantees__table-head-item">
-              <p class="s-site-guarantees__table-head-item-title">
-                BITCOINETF.ORG <br />
-                VS. VOLATILE CRYPTO <br />
-                INVESTMENTS
-              </p>
-            </div>
-            <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-1.png" width="188" height="97" />
-            </div>
-            <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-2.png" width="188" height="97" />
-            </div>
-            <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-3.png" width="188" height="97" />
-            </div>
-            <div class="s-site-guarantees__table-head-item">
-              <NuxtImg src="/img/main-guarantees-table-title-4.png" width="220" />
-            </div>
-          </div>
-          <div class="s-site-guarantees__table-body">
-            <div class="s-site-guarantees__table-row first-row">
-              <div class="s-site-guarantees__table-row-item">Original investment loss</div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> <span>Mid to High Risk</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>High Risk</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/alert.svg" width="24" height="24" loading="lazy" /> <span>Mid Risk</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>No Risk (Triple
-                Protection)</span>
-              </div>
-            </div>
-            <div class="s-site-guarantees__table-row second-row">
-              <div class="s-site-guarantees__table-row-item">Dividends</div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>0%</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>0%</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>0%</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>14-100%+ dividends</span>
-              </div>
-            </div>
-            <div class="s-site-guarantees__table-row third-row">
-              <div class="s-site-guarantees__table-row-item">Accessible for non-U.S market</div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>Limited</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>Limited</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />  <span>Yes</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />
-                 <span>Worldwide</span>
-                <NuxtImg src="/img/world.png" width="16" height="16" loading="lazy" />
-              </div>
-            </div>
-            <div class="s-site-guarantees__table-row fourth-row">
-              <div class="s-site-guarantees__table-row-item">Legal No-Risk Guarantee</div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>No</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>No</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" />  <span>No</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
-              </div>
-            </div>
-            <div class="s-site-guarantees__table-row fifth-row">
-              <div class="s-site-guarantees__table-row-item">Smart-Contract Guarantee</div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
-              </div>
-            </div>
-            <div class="s-site-guarantees__table-row sixth-row">
-              <div class="s-site-guarantees__table-row-item">Blockchain Transparency</div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/no.svg" width="24" height="24" loading="lazy" /> <span>No</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
-              </div>
-              <div class="s-site-guarantees__table-row-item">
-                <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" /> <span>Yes</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div :class="[{'s-site-guarantees__drag-hide': !isDrag}]" class="s-site-guarantees__drag">
-          <div class="s-site-guarantees__drag-wrapper">
-            <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow" alt="arrow" />
-            drag 
-            <NuxtImg src="/img/icons/mono/arrow.svg" class="s-site-guarantees__drag-arrow s-site-guarantees__drag-arrow-reverse" alt="arrow" />
-          </div>
-        </div>
-      </div>
-    </div>
+    <m-guarantees-table />
+    <m-guarantees-table-swiper />
   </section>
 </template>
 <script setup lang="ts">
 import MGuaranteesCard from '~/src/shared/ui/site/molecules/m-guarantees-card/m-guarantees-card.vue'
+import MGuaranteesTable from '~/src/shared/ui/site/molecules/m-guarantees-table/m-guarantees-table.vue'
+import MGuaranteesTableSwiper from '~/src/shared/ui/site/molecules/m-guarantees-table-swiper/m-guarantees-table-swiper.vue'
+
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { useNuxtApp } from '#app'
@@ -288,8 +156,6 @@ const $router = useRouter()
 const authStore = auth()
 const isAuth = computed(() => authStore.isUserAuthenticated)
 
-  
-
 const fundTotalBtc = computed(() => {
   return $app.store.assets.fundTotalBtc
 })
@@ -298,43 +164,23 @@ const fundTotalUsd = computed(() => {
   return $app.store.user.fundTotalUsd
 })
 
-//drag 
+function goToRegistration() {
+  if (isAuth.value) {
+    const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
+    const blockchainLink = isProd
+      ? 'https://explorer.nextdev.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
+      : 'https://explorer.stage.techetf.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
 
-const isDrag = ref(true);
-
-const handleScroll = (event) => {
-  const element = document.querySelector(".s-site-guarantees__table-wrapper");
-  const elementPosition = element.offsetTop - (element.offsetHeight * 0.35);
-  const toTop = window.pageYOffset ? window.pageYOffset : document.body.scrollTop;
-
-  // console.log(toTop, elementPosition);
-
-  if(toTop >= elementPosition) {
-    setTimeout(() => {
-      isDrag.value = false;
-    },5000);
-  } 
+    window.open(blockchainLink, '_blank').focus()
+  } else {
+    $router.push('/personal/login')
+  }
 }
 
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll',handleScroll);
-})
-
-function goToRegistration() {
-    if (isAuth.value) {
-      const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
-      const blockchainLink = isProd
-        ? 'https://explorer.nextdev.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
-        : 'https://explorer.stage.techetf.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
-        
-      window.open(blockchainLink, '_blank').focus()
-    } else {
-      $router.push('/personal/registration')
-    }
-  }
+function goToCompanyLicense() {
+  const companyLicenseLink = 'https://files.bitcoinetf.org/etf/public/company.pdf'
+  window.open(companyLicenseLink, '_blank').focus()
+}
 </script>
+
 <style src="./s-site-guarantees.scss" lang="scss" />

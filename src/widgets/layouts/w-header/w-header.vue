@@ -1,14 +1,14 @@
 <template>
   <header
     v-if="route.name !== 'personal-kyc' && !(isFundPage && (isLaptop || isDesktop))"
-    :class="['w-header', { 'w-header--no-indent': route.path.includes('analytics') || route.path.includes('wallet'), 'w-header--empty': route.name === 'personal-purchase' }]"
+    :class="['w-header', { 'w-header--no-indent': route.path.includes('analytics') || route.path.includes('wallet'), 'w-header--empty': route.name === 'personal-purchase', 'w-header--wallet' : route.path.includes('wallet')}]"
   >
     <div class='w-header__wrap'>
       <div class='w-header__head'>
         <div class='w-header__head__back' v-if='routeNames[route.name]?.urlToBack' @click='$router.back()'>
           <a-icon width='24' :name='Icon.MonoChevronLeft' />
         </div>
-        <p v-if='isVisibleTitle' class='w-header__title' :class="{'w-header__title--left': route.name === 'personal-buy-shares' || route.name === 'personal-earnings'}">
+        <div v-if='isVisibleTitle' class='w-header__title' :class="{'w-header__title--left': route.name === 'personal-buy-shares' || route.name === 'personal-earnings'}">
           <div class='w-header__title-container' v-if='routeNames?.[route.name]?.customTitle'>
             {{ routeNames?.[route.name]?.firstTitle }}
             <a-icon :name='Icon.ColorfulBitcoin' />
@@ -26,14 +26,14 @@
             :name='Icon.MonoInfo'
             @click='openModal'
           />
-        </p>
+        </div>
 
         <e-breadcrumbs
           v-if='isVisibleBreadcrumbs'
           :key='route.name'
           :routes='routeNames'
           :breadcrumbs='routeNames?.[route.name]?.customBreadcrumbs'
-          title='Analytics'
+          title='Fund'
         />
         <e-header-links
           v-if='isVisibleLinks'
@@ -135,7 +135,7 @@ import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { nextTick, onUnmounted, onMounted, computed } from 'vue'
 import EFundTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
-import { Autoplay } from 'swiper'
+import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 // import { Centrifuge } from 'centrifuge'
@@ -189,21 +189,17 @@ const routeNames = computed(() => ({
     title: 'Assets',
     titleCrumb: 'Assets',
     breadcrumbs: false,
-    urlToBack: 'personal-portfolio',
-    info: EPageInfoAnalytics,
   },
   'personal-assets-symbol': {
     title: 'Assets',
     titleCrumb: 'Assets',
     breadcrumbs: false,
-    urlToBack: 'personal-portfolio',
-    info: EPageInfoAnalytics,
   },
   'personal-more': {
     title: 'Profile',
     titleCrumb: 'Profile',
     breadcrumbs: false,
-    urlToBack: 'personal-protection',
+    // urlToBack: 'personal-protection',
   },
   'personal-buy-shares-payment': {
     title: 'Payment',
@@ -254,7 +250,7 @@ const routeNames = computed(() => ({
   // FIX THIS
   'personal-fund': {
     title: 'Shareholders',
-    titleCrumb: 'Shareholders',
+    titleCrumb: 'Fund',
     breadcrumbs: false,
   },
   'personal-protection': {
@@ -291,43 +287,47 @@ const routeNames = computed(() => ({
     info: EPageInfoWallet,
   },
   'personal-kyc': { title: 'Kyc', breadcrumbs: false },
-  'personal-support': { title: 'Support', breadcrumbs: false },
+  'personal-more-support': { title: 'Support',titleCrumb: 'Support',  breadcrumbs: true,  urlToBack: 'personal-more' },
   'personal-earnings': {
     title: 'Dividends',
     titleCrumb: 'Dividends',
     breadcrumbs: false,
     info: EPageInfoEarnings,
   },
-  'personal-fund-protection-latest-trades': {
-    title: 'Latest trades',
-    titleCrumb: 'Latest trades',
+  'personal-analytics-performance-latest-trades': {
+    title: 'Last successful trades',
+    titleCrumb: 'Last successful trades',
     breadcrumbs: true,
     urlToBack: 'personal-protection',
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Last successful trades'],
   },
-  'personal-fund-shareholders-latest-purchases': {
+  'personal-analytics-shareholders-latest-purchases': {
     title: 'Latest purchases',
     titleCrumb: 'Latest purchases',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-shareholders' : 'personal-fund'), 'Latest Purchases'],
   },
-  'personal-fund-shareholders-top-shareholders': {
+  'personal-analytics-shareholders-top-shareholders': {
     title: 'Top 100 shareholders',
     titleCrumb: 'Top 100 shareholders',
     breadcrumbs: true,
     urlToBack: 'personal-shareholders',
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-shareholders' : 'personal-fund'), 'Top 100 Shareholders'],
   },
-  'personal-fund-portfolio-latest-activity': {
+  'personal-analytics-portfolio-latest-activity': {
     title: 'Latest activity',
     titleCrumb: 'Latest activity',
     breadcrumbs: true,
     urlToBack: 'personal-portfolio',
     info: EPageInfoActivity,
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Latest Activity'],
   },
-  'personal-earnings-statements': {
+  'personal-more-statements': {
     title: 'Statements',
     titleCrumb: 'Statements',
     breadcrumbs: true,
-    urlToBack: 'personal-earnings',
+    urlToBack: 'personal-more',
     info: EPageInfoStatements,
   },
   'personal-asset-id': {

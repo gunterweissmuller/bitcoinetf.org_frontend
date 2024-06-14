@@ -125,6 +125,25 @@ export default class BillingEthApiModule {
     }
   }
 
+  async getSharesTransactions(payload:any) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `billing/payment/shares/personal`,
+        request: {
+          method: HTTPMethod.GET,
+          params: payload,
+        },
+        operationDescription: 'Getting a list of transactions',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async setWithdrawalMethod({ walletType, method, address = null }) {
     try {
       return await this.adapter.requestJsonAsync({
@@ -321,6 +340,64 @@ export default class BillingEthApiModule {
         },
         data: payload,
         operationDescription: 'Buying shares',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initSellShares() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        apiVersion: 'v3',
+        parameterValue: `billing/shares/sell/init`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting a sell shares data',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getValuate() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        apiVersion: 'v3',
+        parameterValue: `billing/shares/sell/valuate`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Getting a sell shares data',
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async confirmSellShares(payload) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        apiVersion: 'v3',
+        parameterValue: `billing/shares/sell/confirm`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Confirm shares sell',
       })
     } catch (e) {
       if (e instanceof ApiErrorFlow) {

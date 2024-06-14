@@ -5,16 +5,16 @@
         <div class="s-site-footer__top-wrapper">
           <h2 class="s-site-footer__title title-first title-site-h1">
             DON’T BUY CRYPTO,
-            <h2 class="s-site-footer__title title-site-h1 title-sub">
+            <h2 class="s-site-footer__title title-site-h1 title-sub" ref="$animationWrapper">
               <p class="s-site-footer__title_sub_earn">EARN</p>
               <NuxtImg
-                src="/img/icons/colorful/bitcoin.svg"
+                :src="`/img/icons/colorful/${animation.icon}.svg`"
                 width="60"
                 height="60"
                 class="aspect-square w-[60px]"
                 loading="lazy"
               />
-              <p class="s-site-footer__title_sub_bitcoin">BITCOIN</p>
+              <p class="s-site-footer__title_sub_bitcoin">{{ animation.text }}</p>
             </h2>
           </h2>
 
@@ -25,7 +25,7 @@
             <div class="s-site-footer__form">
               <p v-if="success">Thank you!</p>
               <a-input
-                label="E-mail"
+                label="Email"
                 validation-reg-exp-key="email"
                 required
                 :error-text="emailErrorText"
@@ -104,7 +104,7 @@ const menu = [
     title: 'Platform',
     items: [
       { text: 'Buy ETF Shares', href: '/personal/login' },
-      { text: 'Mastercard', href: '/#' }, //
+      { text: 'Mastercard', href: '/#mastercard' },
       { text: 'Bitcoin Education', href: '/bitcoin-education' },
       { text: 'Referrals', href: '/referrals' },
     ],
@@ -122,7 +122,7 @@ const menu = [
     title: 'Account',
     items: [
       { text: 'Sign Up', href: '/personal/registration' },
-      { text: 'Offers', href: '/offers' },
+      // { text: 'Offers', href: '/offers' },
       { text: 'Tutorials', href: '/tutorials' },
     ],
   },
@@ -136,13 +136,13 @@ const menu = [
 ]
 
 const SOCIAL_LINKS = [
-  { icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org' },
+  { icon: Icon.MonoTelegram2Black, link: 'https://t.me/BitcoinETF_org' },
   { icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat' },
   {
     icon: Icon.MonoUnknownBlack,
     link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl',
   },
-  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org', size: 14 },
+  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org',  },
 ]
 
 const subscribeEmail = ref('')
@@ -166,6 +166,21 @@ const subscribeToChimp = async () => {
     emailErrorText.value = 'Invalid email address'
   }
 }
+
+const animation = reactive({ icon: '', text: '' })
+const intervalId = ref()
+const $animationWrapper = ref()
+
+onMounted(() => {
+  intervalId.value = setInterval(() => {
+    animation.icon = animation.icon == 'bitcoin' ? 'usdt' : 'bitcoin'
+    animation.text = animation.text == 'bitcoin' ? 'usdt' : 'bitcoin'
+    $animationWrapper.value?.classList?.add('active')
+    setTimeout(() => {
+      $animationWrapper.value?.classList.remove('active')
+    }, 2500)
+  }, 5000)
+})
 </script>
 
 <style src="./s-site-footer.scss" lang="scss" />

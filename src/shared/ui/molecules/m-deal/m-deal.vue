@@ -148,6 +148,36 @@
         <div class="m-deal__info-purchase">{{ $app.filters.rounded((deal.total_payments / fundTotalUsd * 100), 2) }}% of circulation</div>
       </div>
     </template>
+    <template v-else-if="type === 'asset'">
+      <div class="m-deal__trade m-deal__trade-asset">
+        <div class="m-deal__right m-deal__right--trade">
+          <div class="m-deal__name m-deal__name--trade">
+            <div class="m-deal__name-title">
+              <div :class="['m-deal__type', `bg--${deal.asset.symbol.toLowerCase()}`]"></div>
+              <span>{{ deal.asset.name }}</span>
+            </div>
+            <div class="m-deal__name-result--asset">
+              <template v-if="props.deal.type === 'close'">
+                Close | ${{ $app.filters.rounded(deal.initial_amount, 2) }}
+              </template>
+              <template v-if="props.deal.type === 'open'">
+                Open Long @ ${{ $app.filters.rounded(deal.initial_amount, 2) }}
+              </template>
+            </div>
+          </div>
+          <div class="m-deal__info m-deal__info--trade">
+            <div class="m-deal__info-deal">
+              <span class="m-deal__info-deal-date">
+                {{ $app.filters.dayjs(deal.created_at).format('D MMM YY hh:mm:ss') }}
+              </span>
+              <span class="m-deal__info-deal-right" :class="{ 'plus': props.deal.result_amount >= 0 }">
+                P&L: {{ props.deal.result_amount >= 0 ? '+' : '-' }}${{$app.filters.rounded(Math.abs(deal.result_amount), 2)}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -170,7 +200,7 @@ const sumDollars = ref('');
 const props = withDefaults(
   defineProps<{
     deal: any
-    type?: 'trade' | 'spillover' | 'purchase' | 'shareholder'
+    type?: 'trade' | 'spillover' | 'purchase' | 'shareholder' | 'asset'
     withId?: string
     isMain?: boolean
   }>(),
@@ -180,6 +210,8 @@ const props = withDefaults(
     isMain: false,
   },
 )
+
+// if (props.type === 'asset') console.log(props.deal)
 
 const btcValue = computed(() => {
   return props.deal?.bitcoin_price || $app.store.user.btcValue

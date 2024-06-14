@@ -232,4 +232,3 @@ before_script:
   - *auto_devops
   - type trdl && . $(trdl use werf 1.2 stable)
   - type werf && source $(werf ci-env gitlab --as-file)
- 

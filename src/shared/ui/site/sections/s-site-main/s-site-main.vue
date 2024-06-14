@@ -4,8 +4,7 @@
       <div class="s-site-main__wrapper-title">
         <h1 class="s-site-main__title s-site-main__title--h1-lowercase">WE MAKE BITCOIN ETFs ACCESSIBLE FOR ALL</h1>
         <p class="s-site-main__title_info">
-          Buy Bitcoin ETFs that pay dividends:<br />
-          choose to earn
+          Buy Bitcoin ETF that pays dividends: choose to earn
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[18px]"
             src="/img/icons/colorful/usdt.svg"
@@ -13,7 +12,8 @@
             height="18"
             loading="lazy"
           />
-          USDT or
+          USDT 
+          or
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[18px]"
             src="/img/icons/colorful/bitcoin.svg"
@@ -21,10 +21,7 @@
             height="18"
             loading="lazy"
           />
-          BTC.<br />
-          Dividends Distributed Daily.<br />
-          42%-100%+ Earnings on Your Investment.<br />
-          Contractually Guaranteed.
+          BTC. Dividends Distributed Daily & Contractually Guaranteed, with 42%-100%+ Earnings on Your Investment.
         </p>
         <div class="s-site-main__title_buttons_wrap">
           <button @click="scrollToSection" class="s-site-main__learn_more_button">Learn more</button>
@@ -76,7 +73,8 @@
     />
     <div class="s-site-main__line-gradient" style="position: absolute; bottom: -88px; right: 0"></div>
     <div class="s-site-main__slider-wrapper">
-      <s-site-marquee :data="marqueeData" />
+      <!-- <s-site-marquee :data="marqueeData" /> -->
+      <s-site-marquee-new  :data="marqueeData" />
     </div>
   </section>
 </template>
@@ -88,6 +86,8 @@ import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import MProfitCalculator from '~/src/shared/ui/molecules/m-profit-calculator/m-profit-calculator.vue'
 import SSiteMarquee from '../s-site-marquee/s-site-marquee.vue'
+import SSiteMarqueeNew from '../s-site-marquee-new/s-site-marquee-new.vue'
+import { auth } from '~/src/app/store/auth'
 
 defineProps<{
   data: any
@@ -95,6 +95,10 @@ defineProps<{
 }>()
 
 const { $app } = useNuxtApp()
+const router = useRouter()
+
+const authStore = auth()
+
 const btcValue = ref(0)
 
 const fundTotalBtc = computed(() => {
@@ -135,7 +139,11 @@ const scrollToSection = () => {
 }
 
 function clickLaunch() {
-  window.open('/personal/registration', '_blank').focus()
+  if (authStore.isUserAuthenticated) {
+    router.push('/personal/fund')
+  } else {
+    window.open('/personal/registration', '_blank').focus()
+  }
 }
 
 onMounted(async () => {

@@ -10,6 +10,7 @@ interface authState {
     websocketToken: string,
     refCode: string,
     accountMethod: string,
+    isMetamaskSupported: boolean,
 }
 
 export const auth = defineStore('auth', {
@@ -20,6 +21,7 @@ export const auth = defineStore('auth', {
     websocketToken: '',
     refCode: '',
     accountMethod: 'email',
+    isMetamaskSupported: false,
   } as authState),
 
   actions: {
@@ -29,7 +31,7 @@ export const auth = defineStore('auth', {
       this.websocketToken = payload.websocket_token
     },
 
-    logout() {
+    logout(redirect = true) {
       const config = useRuntimeConfig()
       this.accessToken = ''
       this.refreshToken = ''
@@ -38,13 +40,16 @@ export const auth = defineStore('auth', {
       useNuxtApp().$app.store.user.dividends = 0
       useNuxtApp().$app.store.user.lastPayment = null
       useNuxtApp().$app.store.persiste.latestTronCheckDate = null
-
       if(window.location.hostname === config.public.APP_DOMAIN) {
         const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`
         window.location.href = newUrl;
+
+        return ;
       }
 
-      //navigateTo({ name: 'personal-login' })
+      if (redirect) {
+        navigateTo({ name: 'personal-login' })
+      }
     },
 
     async refresh() {

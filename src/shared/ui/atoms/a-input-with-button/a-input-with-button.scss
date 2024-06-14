@@ -1,7 +1,7 @@
 .a-input-with-button {
   @include desktop-device {
     &__input-container:hover {
-     
+
       background-color: var(--surfaces-surface-2);
         border: 1px solid var(--accent-primary);
 
@@ -20,7 +20,7 @@
     }
 
     &__input-container:hover &__icon {
-      
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -111,7 +111,7 @@
     min-width: torem(100);
     height: torem(56);
     color: var(--text-primary);
-    background-color: var(--surfaces-surface-2);
+    // background-color: var(--surfaces-surface-2);
     border: torem(1) solid var(--surfaces-surface-2);
     border-radius: torem(8);
     caret-color: var(--text-primary);
@@ -137,7 +137,7 @@
 
 
     &:hover {
-      
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -146,8 +146,8 @@
     }
 
     &:focus {
-      
-      
+
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -155,8 +155,8 @@
     }
 
     &:active {
-    
-     
+
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -164,14 +164,14 @@
     }
 
     &--focused {
-      
+
       .a-input-with-button__input-container {
         background-color: var(--surfaces-surface-2);
       border-color: var(--accent-primary);
 
       }
-  
-      
+
+
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
@@ -229,7 +229,7 @@
       flex-direction: column;
       justify-content: center;
       max-width: 100%;
-      background-color: var(--surfaces-surface-2)
+      // background-color: var(--surfaces-surface-2)
     }
 
     &--open {
@@ -238,7 +238,7 @@
     }
 
     &--focused {
-     
+
     }
 
     &::placeholder {
@@ -293,7 +293,7 @@
       margin-right: var(--spacing-m-1);
       cursor: pointer;
       font-size: 10px;
-      line-height: 13px;
+      line-height: normal;
       white-space: nowrap;
       z-index: 10;
       position: relative;
@@ -360,12 +360,12 @@
     }
 
     &:hover {
-      
+
     }
 
     &:focus {
-      
-     
+
+
     }
 
     &:-internal-autofill-selected {
@@ -375,7 +375,7 @@
 
   &--disabled,
   :disabled {
-    color: var(--text-secondary);
+    color: var(--text-inverse-tertiary);
     // color: var(--text-primary);
     cursor: default;
     pointer-events: none;
@@ -390,5 +390,11 @@
     width: 100%;
   }
 
-  
+
+}
+
+body[data-theme='light'] {
+  .a-input-with-button__input-text {
+    color: var(--text-tertiary);
+  }
 }

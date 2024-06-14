@@ -23,16 +23,11 @@ export default class AuthApiModule {
     signature?: string,
     wallet_address?: string,
     message?: string,
+    fast?: boolean
   }) {
-
-    if(payload?.method === SignupMethods.Google) {
-      // не тут а после указания имя и фамилия const response = await axios.post("http://127.0.0.1/v1/auth/provider/google-auth/confirm", {payload});
-    }
-
     try {
-
       return await this.adapter.requestJsonAsync({
-        parameterValue: 'auth/register/init',
+        parameterValue: `auth/register/init${ payload?.fast ? '?fast' : '' }`,
         request: {
           method: HTTPMethod.POST,
         },
@@ -80,7 +75,6 @@ export default class AuthApiModule {
   }
 
   async initGoogle(payload: { username: string; email: string; refcode?: string, method?: SignupMethods }) {
-
     try {
 
       if(payload?.method === SignupMethods.Google) {
@@ -286,7 +280,7 @@ export default class AuthApiModule {
     }
   }
 
-  async loginMetamask(payload: { signature: string; message: string, wallet_address }) {
+  async loginMetamask(payload: { signature: string; message: string, wallet_address: any }) {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/provider/metamask/login',
@@ -295,6 +289,25 @@ export default class AuthApiModule {
         },
         data: payload,
         operationDescription: 'Authorization. Retrieving a JWT pair',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getMessageMetamask() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/metamask/message',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Get Metamask message',
         withoutPublic: true,
       })
     } catch (e) {
@@ -479,6 +492,25 @@ export default class AuthApiModule {
     }
   }
 
+  async getCredintialsTelegram() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/telegram/credentials',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Receiving telegram credentials',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async getAppleRedirect() {
     try {
       return await this.adapter.requestJsonAsync({
@@ -579,6 +611,25 @@ export default class AuthApiModule {
     }
   }
 
+  async getGoogleRedirectUrl() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/google-auth/redirect-url`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Receiving google redirect url',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
   async initOneTimeLink(payload: { email: string }) {
     try {
       return await this.adapter.requestJsonAsync({
@@ -638,4 +689,216 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
+
+  async getCredintialsFacebook() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/credentials`,
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async getAuthTypeFacebook(payload: { facebook_id: string }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/get-auth-type`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async initFacebook(payload: any) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/init`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async confirmFacebook(payload: { facebook_id: string, email: string; code: string; }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/confirm`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async loginFacebook(payload: { facebook_id: string, facebook_data: any}) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/provider/facebook/login`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  // walletConnect
+
+  async walletConnectGetCredentials() {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/credentials',
+        request: {
+          method: HTTPMethod.GET,
+        },
+        operationDescription: 'Get WalletConnect message',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async walletConnectInit(payload: {
+    username: string;
+    email: string;
+    refcode?: string,
+    method?: SignupMethods,
+    signature?: string,
+    wallet_address?: string,
+    message?: string,
+  }) {
+
+    try {
+
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/init',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'WalletConnect init',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async walletConnectConfirm(payload: { email: string; code: string; fast: boolean }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/confirm',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'WalletConnect confirm',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async walletConnectGetAuthType(payload: { wallet_connect_data: any }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/get-auth-type',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'WalletConnect get authorization type',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+  async wallletConnectLogin(payload: { signature: string; message: string, wallet_address: any }) {
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: 'auth/provider/wallet-connect/login',
+        request: {
+          method: HTTPMethod.POST,
+        },
+        data: payload,
+        operationDescription: 'Authorization. Retrieving a JWT pair',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+
+      return Promise.reject(new Error('Something bad happened'))
+    }
+  }
+
+
 }

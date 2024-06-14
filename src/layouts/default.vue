@@ -3,6 +3,7 @@
     :class="[
       { 'l-main': route.name !== 'personal-kyc' },
       { 'l-main--indent': isVisibleInfo },
+      { 'l-main--no-indent': route.name == 'personal-support' },
       // { 'l-main--indent-wallet': route.path.includes('wallet') },
       { 'l-main--indent-more': route.name === 'personal-more' },
       { 'l-main--purchase': route.name === 'personal-purchase' || route.name === 'personal-buy-shares'  },
@@ -15,7 +16,9 @@
     <template v-if="route.name !== 'personal-kyc'">
       <w-aside v-if="isDesktop || isLaptop"  />
     </template>
-    <m-loading v-show="!loading" @loading="changeLoadingStatus" />
+    <div class="loading-wrapper">
+      <m-loading-new v-show="!loading" @loading="changeLoadingStatus" />
+    </div>
     <main v-show="loading" class="l-main__content">
       <div class="l-container">
         <e-buy-shares-success-modal :values="infoPayment" v-model="isOpenSuccessModal" />
@@ -41,7 +44,7 @@ import EProcessingPayment from '~/src/entities/e-processing-payment/e-processing
 import { Centrifuge } from 'centrifuge'
 import EBuySharesSuccessModal from '~/src/entities/e-buy-shares-success-modal/e-buy-shares-success-modal.vue'
 import EInvestModal from '~/src/entities/e-invest-modal/e-invest-modal.vue'
-import MLoading from '~/src/shared/ui/molecules/m-loading/m-loading.vue'
+import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
 const route = useRoute()
 const { isLaptop, isDesktop } = useMediaDevice()
@@ -81,7 +84,6 @@ const changeLoadingStatus = async (status: boolean) => {
 }
 
 const isVisibleInfo = computed(() => {
-
   return (
     route.name === 'personal-fund' ||
     route.name === 'personal-protection' ||
@@ -148,5 +150,18 @@ onUnmounted(() => {
 .v-enter-from,
 .v-leave-to {
   transform: translateX(-100%);
+}
+.loading-wrapper {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: calc(50% + 9rem);
+  transform: translate(-50%,-50%);
+
+  @include breakpoint($break-desktop-1024-minus) {
+    left: 50%;
+  }
 }
 </style>

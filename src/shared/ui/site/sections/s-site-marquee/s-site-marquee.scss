@@ -1,61 +1,60 @@
-.s-site-marquee {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  background: #01040f;
-  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
+// .s-site-marquee {
+//   position: relative;
+//   overflow: hidden;
+//   width: 100%;
+//   background: #01040f;
+//   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
 
-  &-bg {
-    background: rgba(34, 36, 43, 0.5);
-    backdrop-filter: blur(10.5px);
-  }
-  &__item {
-    cursor: pointer;
-    min-width: 22vw;
-    @media screen and (max-width: 767px) {
-      min-width: 50vw;
-    }
-    img {
-      width: auto;
-      height: torem(24);
-    }
-  }
-  &__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    min-width: 100vw;
-    animation: marquee 60s linear infinite;
-    height: torem(88);
-    @media screen and (max-width: 767px) {
-      animation-duration: 30s;
-    }
-  }
-  &__wrapper {
-    padding: 0 10vw;
-    position: relative;
-    z-index: 2;
-    display: flex;
-    width: fit-content;
-    backdrop-filter: blur(32.5px);
-  }
+//   &-bg {
+//     background: rgba(34, 36, 43, 0.5);
+//     backdrop-filter: blur(10.5px);
+//   }
 
-  a {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &[href='/#'] {
-      pointer-events: none;
-    }
-  }
-}
+//   &__item {
+//     cursor: pointer;
+//     min-width: 25vw;
+//     @media screen and (max-width: 767px) {
+//       min-width: 50vw;
+//     }
+//     img {
+//       min-height: torem(24);
+//     }
+//   }
+//   &__row {
+//     display: flex;
+//     min-width: 100vw;
+//     animation: marquee 60s linear infinite;
+//     height: torem(88);
+//     @media screen and (max-width: 767px) {
+//       animation-duration: 30s;
+//     }
+//   }
+//   &__wrapper {
+    
+//     position: relative;
+//     z-index: 2;
+//     display: flex;
+//     width: fit-content;
+//     backdrop-filter: blur(32.5px);
+//   }
 
-@keyframes marquee {
-  0% {
-    transform: translate(0, 0);
-  }
+//   a {
+//     height: 100%;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     &[href='/#'] {
+//       pointer-events: none;
+//     }
+//   }
+// }
 
-  100% {
-    transform: translate(-100%, 0);
-  }
-}
+// @keyframes marquee {
+//   0% {
+//     transform: translate(0, 0);
+//   }
+
+//   100% {
+//     transform: translate(-100%, 0);
+//   }
+// }

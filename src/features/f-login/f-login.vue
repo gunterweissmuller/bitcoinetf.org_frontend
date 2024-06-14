@@ -1,586 +1,122 @@
 <template>
-  <template v-if="currentStep === Steps.Choice">
+  <div class="f-login-new">
+    <div class="f-login-new__bg" :class="{ 'f-login-new__bg-dark': $app.store.user.theme === 'dark' }">
+      <nuxt-img src="/img/signup/login_bg_new.png"></nuxt-img>
+    </div>
 
-    <div class="f-login">
-      <div class='f-login__back' @click='$router.back()'>
-        <a-icon class='f-login__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+    <div class="f-login-new-content f-login-new-content-left">
+      <div class="f-login-new-content__logo">
+        <nuxt-link to="/" class="w-header-dark__logo">
+          <a-icon class="w-aside__logo-icon" :name="Icon.ColorfulBtcDarkLogo" width="140" height="24" />
+        </nuxt-link>
       </div>
-      <h3 id="test_1" class="f-login__title">Log in</h3>
-      <h5 class="f-login__subtitle">
-        Please enter your email and password to get started. No account?
-        <nuxt-link to="/personal/registration">Create an account here.</nuxt-link>
-      </h5>
-
-      <div class="flex flex-col items-center pb-12">
-        <div @click="choiceToEmail"
-          class="f-login__button-main f-login__button-main-first">
-          <div class="f-login__button-main-wrapper">
-            <NuxtImg src="/img/icons/mono/mail-light.svg" width="18" height="14" class="aspect-square w-[18px]" loading="lazy" />
-            <div class="grow">Log in with Email</div>
-          </div>
-        </div>
-
-        <div
-          @click="handleMetamaskConnect"
-          class="f-login__button-main">
-          <div class="f-login__button-main-wrapper">
-            <NuxtImg src="/img/icons/colorful/metamask.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
-            <div class="grow">Log in with Metamask</div>
-          </div>
-        </div>
-
-        <div
-          @click="handleGoogleConnect"
-          class="f-login__button-main">
-          <div class="f-login__button-main-wrapper">
-            <NuxtImg src="/img/icons/colorful/google.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
-            <div class="grow">Log in with Google</div>
-          </div>
-        </div>
-
-        <div
-          @click="testTG"
-          class="f-login__button-main">
-          <div class="f-login__button-main-wrapper">
-            <NuxtImg src="/img/icons/colorful/telegram2.svg" width="18" height="18" class="aspect-square w-[18px]" loading="lazy" />
-            <div class="grow">Log in with Telegram</div>
-          </div>
-        </div>
-
-        <div
-            @click="handleAppleConnect"
-            class="f-login__button-main">
-            <div class="f-login__button-main-wrapper">
-                <NuxtImg src="/img/icons/mono/apple.svg" width="18" height="18"
-                    class="aspect-square w-[18px]" />
-                <div class="grow">Log in with Apple</div>
-            </div>
-        </div>
-
+      <div class="f-login-new-content__title">Passive Income for Smart Investors</div>
+      <div class="f-login-new-content__text">Bitcoin ETF that pays dividends: choose to earn USDT or BTC</div>
+      <div class="f-login-new-content__bg">
+        <nuxt-img src="/img/signup/rocket.png"></nuxt-img>
       </div>
     </div>
 
+    
 
-
-
-  </template>
-
-  <template v-else-if="currentStep === Steps.Login">
-    <div class="f-login">
-      <div class='f-login__back' @click='currentStep = Steps.Choice'>
-        <a-icon class='f-login__back-icon' width='24' :name='Icon.MonoChevronLeft' />
+    <div class="f-login-new-content f-login-new-content-right">
+      <div class="f-login-new-content-right-wrapper">
+        <div class="f-registration w-full">
+          <template v-if="$app.store.login?.currentStep === Steps.Choice">
+            <f-login-choice/>
+          </template>
+          <template v-else-if="$app.store.login?.currentStep === Steps.Login">  
+            <f-login-login/>
+          </template>
+          <template v-else-if="$app.store.login?.currentStep === Steps.OneTimeLink">
+            <f-login-link/>
+          </template>
+          <template v-else-if="$app.store.login?.currentStep === Steps.Check">
+            <f-login-check/>
+          </template>
+          <template v-else-if="$app.store.login?.currentStep === Steps.Error">
+            <f-login-error/>
+          </template>
+          <template v-else-if="$app.store.login?.currentStep === Steps.Loading">
+            <m-loading-new v-show="true" />
+          </template>
+          
+        </div>
       </div>
-      <h3 id="test_1" class="f-login__title">Log in</h3>
-      <h5 class="f-login__subtitle">
-        Please enter your email and password to get started. No account?
-        <nuxt-link to="/personal/registration">Create an account here.</nuxt-link>
-      </h5>
-      <form class="f-login__form" @submit.prevent="onSubmitEmailForm">
-        <div id="test_2">
-          <a-input class="f-login__email" label="Email" validation-reg-exp-key="email" required
-            :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
-            v-model="email" />
-        </div>
-
-        <a-input id="test_3" class="f-login__password" v-model="password" label="Password" type="password"
-          @blur="passwordFieldBlurHandler" @update:is-valid="isPasswordValid = $event" required></a-input>
-        <div id="test_4" class="f-login__forgot">
-          <span class="f-login__forgot-text" @click="onForgotPasswordClick">Forgot your password?</span>
-        </div>
-        <a-button id="test_5" class="f-login__button" text="Log in" :disabled="!isEmailValid || !password"
-          type="submit"></a-button>
-        <p v-if="backendError" class="f-login__error">{{ $app.filters.capitalize(backendError) }}</p>
-      </form>
     </div>
-  </template>
-
-  <template v-else-if="currentStep === Steps.Loading">
-    <div class="f-login">
-      Loading...
-    </div>
-  </template>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useNuxtApp, useRouter } from '#app'
-import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
-import { Icon } from '~/src/shared/constants/icons'
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import axios from "axios";
-import { SignupMethods } from '~/src/shared/constants/signupMethods'
-import { HttpStatusCode } from '~/src/shared/constants/httpStatusCodes'
-import { SiweMessage } from 'siwe'
-import { computed, ref } from 'vue'
-import { BrowserProvider, parseUnits } from "ethers";
-import { hostname } from '~/src/app/adapters/ethAdapter'
-import { useConnectReplenishmentChannel } from '~/src/app/composables/useConnectReplenishmentChannel'
+  import { useNuxtApp } from '#app'
+  import { Icon } from '~/src/shared/constants/icons'
+  import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
+  import { Steps } from './steps'
+  import fLoginChoice from '../f-login-choice/f-login-choice.vue'
+  import fLoginError from '../f-login-error/f-login-error.vue'
+  import fLoginLogin from '../f-login-login/f-login-login.vue'
+  import fLoginLink from '../f-login-link/f-login-link.vue'
+  import fLoginCheck from '../f-login-check/f-login-check.vue'
+  import { useWeb3ModalAccount } from '@web3modal/ethers/vue'
+  import { useLogin } from './useLogin'
+  import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
+  import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
-const { $app } = useNuxtApp()
-const router = useRouter()
+  const { $app } = useNuxtApp()
+  const { continueLogin, checkAuthType } = useLogin($app);
+  const {initWalletConnect} = useWalletConnect($app);
 
-const {connectToReplenishment} = useConnectReplenishmentChannel($app)
-
-const enum Steps {
-  Choice = 'Choice',
-  Login = 'Login',
-  Loading = 'Loading',
-}
-const currentLogin = ref(SignupMethods.Email);
-const currentStep = ref(Steps.Choice)
-
-// Choice step
-
-const choiceToEmail = () => {
-  currentStep.value = Steps.Login
-}
-
-
-// Email Field
-const backendError = ref('')
-const email = ref(process.dev ? 'emard.roselyn11136@yahoo.com' : '')
-const emailErrorText = ref('')
-const isEmailValid = ref(false)
-
-function emailFieldBlurHandler() {
-  if (isEmailValid.value) {
-    emailErrorText.value = ''
-    return
-  }
-
-  if (email.value) {
-    emailErrorText.value = 'Invalid email address'
-    return
-  }
-
-  emailErrorText.value = 'Required'
-}
-
-// Password Field
-const password = ref(process.dev ? 'k3kLXI0AEykmcJFc3dV44fSNDA6-jjvtiWDWPuT0n7DjzqmYPIm' : '')
-const passwordErrorText = ref('')
-const isPasswordValid = ref(false)
-
-function passwordFieldBlurHandler() {
-  if (isPasswordValid.value) {
-    passwordErrorText.value = ''
-    return
-  }
-
-  passwordErrorText.value = 'Required'
-}
-
-const isSubmitEmailForm = ref(false);
-
-const onSubmitEmailForm = () => {
-
-  if(isSubmitEmailForm.value) return;
-  isSubmitEmailForm.value = true;
-
-  $app.api.eth.auth
-    .login({ email: $app.filters.trimSpaceIntoString(email.value), password: $app.filters.trimSpaceIntoString(password.value) })
-    .then((jwtResponse: any) => {
-      $app.store.auth.setTokens(jwtResponse.data)
-    })
-    .then(async () => {
-      isSubmitEmailForm.value = false;
-
-      await $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
-      })
-
-      await $app.store.auth.reInitData()
-      connectToReplenishment()
-      await router.push('/personal/analytics/performance')
-    })
-    .catch((e) => {
-      isSubmitEmailForm.value = false;
-      if (e?.errors?.error?.message) {
-        backendError.value = e.errors.error.message
-      } else {
-        backendError.value = 'Something went wrong'
-      }
-
-      if(e?.errors === HttpStatusCode.CONFLICT) {
-        backendError.value = 'email is already in use';
-      }
-    })
-}
-
-// google
-
-const googleUrl = ref("");
-
-const isMetamaskSupported = ref(false);
-const address = ref("");
-const metamaskError = ref("");
-const computedAddress = computed(() => address.value.substring(0, 8) + '...');
-
-onMounted(() => {
-
-  isMetamaskSupported.value = typeof (window as any).ethereum !== "undefined";
-
-  if(isMetamaskSupported.value) {
-    (window as any).ethereum.on("chainChanged", (chainId: string) => {
-
-      if (chainId !== "0x1") {
-        metamaskError.value = "This network is not supported. Please change the network to Ethereum."
-      } else if (chainId === "0x1") {
-        metamaskError.value = "";
-      }
-    });
-  } else {
-    console.error("Metamask is not installed");
-  }
-
-  axios.get(`https://${hostname}/v1/auth/provider/google-auth/redirect-url`).then((url: any) => {
-    googleUrl.value = url.data.url //.replace("https%3A%2F%2Ffront.stage.techetf.org", "http%3A%2F%2Flocalhost:3000");
+  // reset 
+  onUnmounted(() => {
+    $app.store.login.currentStep = Steps.Choice;
+    $app.store.login.timerStarted = false;
+    $app.store.login.timeLeft = 0;
+    $app.store.login.timer = null;
+    $app.store.login.email = '';
+    $app.store.login.password = '';
   });
 
-  if($app.store.authGoogle.response?.access_token) {
-    currentStep.value = Steps.Loading;
+  // walletConnect
+  const { address } = useWeb3ModalAccount()
 
-    $app.store.auth.setTokens($app.store.authGoogle.response)
-    $app.store.authGoogle.setResponse({}, SignupMethods.Google);
-    $app.api.eth.auth.getUser().then((resp) => {
-      $app.store.user.info = resp?.data
-    })
+  const handleWalletConnect = async () => {
+    await initWalletConnect();
 
-    $app.store.auth.reInitData()
-    connectToReplenishment()
-    router.push('/personal/analytics/performance')
-
-  }
-});
-
-const handleGoogleConnect = () => {
-  currentLogin.value = SignupMethods.Google;
-  window.location.href = googleUrl.value;
-}
-
-//telegram
-
-const telegramRedirectUrl = ref('')
-const telegramBotName = ref('')
-const telegramBotId = ref('')
-
-const handleTelegramAuth = async () => {
-  (window as any).Telegram.Login.auth(
-    { bot_id: telegramBotId.value, request_access: true },
-    (tgData: any) => {
-
-      if (!tgData) {
-        // authorization failed
-      } else {
-
-
-        $app.api.eth.auth.telegramGetAuthType({
-          telegram_data: JSON.stringify(tgData),
-        }).then((r: any) => {
-          if(r.data.auth_type === 'registration') {
-            $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
-            router.push("/personal/registration");
-          } else {
-            $app.api.eth.auth.
-              loginTelegram({
-                telegram_data: JSON.stringify(tgData),
-              })
-                .then((jwtResponse: any) => {
-                  $app.store.auth.setTokens(jwtResponse.data)
-                })
-                .then(async () => {
-                  await $app.api.eth.auth.getUser().then((resp) => {
-                    $app.store.user.info = resp?.data
-                  });
-                  connectToReplenishment()
-                  await router.push('/personal/analytics/performance')
-                });
-          }
-        })
-
-
-
-      }
-
-      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
-    }
-  );
-}
-
-onMounted(() => {
-  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-
-    telegramRedirectUrl.value = r.data.data.redirect_url;
-    telegramBotName.value = r.data.data.bot_name;
-    telegramBotId.value = r.data.data.bot_id;
-
-  })
-})
-
-const testTG = async () => {
-
-  let data = null;
-  await (window as any).Telegram.Login.init('widget_login', telegramBotId.value, {"origin":"https:\/\/core.telegram.org"}, false, "en");
-
-  await (window as any).Telegram.Login.auth(
-    { bot_id: telegramBotId.value, request_access: true },
-    (tgData: any) => {
-      data = tgData;
-
-
-      if (!tgData) {
-          // authorization failed
-        } else {
-
-
-          $app.api.eth.auth.telegramGetAuthType({
-            telegram_data: JSON.stringify(tgData),
-          }).then((r: any) => {
-            if(r.data.auth_type === 'registration') {
-              $app.store.authTelegram.setResponse({response: tgData, method: SignupMethods.Telegram});
-              router.push("/personal/registration");
-            } else {
+    $app.api.eth.auth.walletConnectGetAuthType({
+          wallet_connect_data: JSON.stringify({
+              signature: $app.store.registration.walletConnectData.signature,
+              address: $app.store.registration.walletConnectData.walletAddress,
+              message: $app.store.registration.walletConnectData?.signatureMessage,
+          }),
+      }).then((r: any) => {
+          const tempLogin = () => {
               $app.api.eth.auth.
-                loginTelegram({
-                  telegram_data: JSON.stringify(tgData),
-                })
-                  .then((jwtResponse: any) => {
-                    $app.store.auth.setTokens(jwtResponse.data)
-                  })
-                  .then(async () => {
-                    await $app.api.eth.auth.getUser().then((resp) => {
-                      $app.store.user.info = resp?.data
-                    });
-                    connectToReplenishment()
-                    await router.push('/personal/analytics/performance')
-                  });
-            }
-          })
-
-
-
-        }
-
-      // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
-    }
-  );
-  return data;
-}
-
-const handleTelegramConnect = () => {
-  axios.get(`https://${hostname}/v1/auth/provider/telegram/credentials`).then((r: any) => {
-
-    telegramRedirectUrl.value = r.data.data.redirect_url;
-    telegramBotName.value = r.data.data.bot_name;
-    telegramBotId.value = r.data.data.bot_id;
-
-    handleTelegramAuth().then((res) => {
-
-    })
-  })
-}
-
-
-//apple
-
-onMounted(() => {
-
-$app.api.eth.auth
-  .getAppleRedirect()
-  .then(async (res) => {
-
-
-    function getJsonFromUrl(url) {
-      if(!url) url = location.search;
-      var query = url.substr(1).split("?")[1];
-      var result = {};
-      query.split("&").forEach(function(part) {
-        var item = part.split("=");
-        result[item[0]] = decodeURIComponent(item[1]);
-      });
-      return result;
-    }
-
-    const parsedUrl = getJsonFromUrl(res.url);
-
-
-
-    (window as any).AppleID.auth.init({
-        clientId : parsedUrl.client_id,
-        scope : parsedUrl.scope,
-        redirectURI : parsedUrl.redirect_uri,
-        usePopup : true
-    });
-
-  })
-  .catch((e) => {
-    // Todo: notify something went wrond
-    console.error(e)
-  })
-})
-
-const handleAppleConnect = async () => {
-
-try {
-    const data = await (window as any).AppleID.auth.signIn()
-    // Handle successful response.
-
-
-    $app.store.authTemp.response = data.authorization.id_token;
-
-
-
-
-    $app.api.eth.auth
-    .getAppleAuthType({apple_token: data.authorization.id_token})
-    .then(async (res) => {
-
-
-      if(res.data.auth_type === 'registration') {
-          router.push("/personal/registration");
-        } else {
-
-          //todo login apple request
-
-          $app.api.eth.auth.
-            loginApple({
-              apple_token: $app.store.authTemp.response,
-            })
-              .then((jwtResponse: any) => {
-                $app.store.auth.setTokens(jwtResponse.data)
+              wallletConnectLogin({
+                  wallet_connect_data: JSON.stringify({
+                      signature: $app.store.registration.walletConnectData.signature,
+                      address: $app.store.registration.walletConnectData.walletAddress,
+                      message: $app.store.registration.walletConnectData?.signatureMessage,
+                  }),
               })
-              .then(async () => {
-                await $app.api.eth.auth.getUser().then((resp) => {
-                  $app.store.user.info = resp?.data
-                });
-                connectToReplenishment()
-                await router.push('/personal/analytics/performance')
-              });
-        }
+              .then((jwtResponse: any) => {
+                  continueLogin(jwtResponse);
+              })
+          }
 
-    })
-    .catch((e) => {
-      // Todo: notify something went wrond
-      console.error(e)
-    })
-
-
-} catch ( error ) {
-    // Handle error.
-    console.error(error);
-}
-
-}
-
-//metamask
-
-const metamaskSignatureMessage = ref('')
-const metamaskSignature = ref('')
-const metamaskWalletAddress = ref('')
-
-const handleMetamaskConnect = async () => {
-  //if metamask is not installed
-  if (!isMetamaskSupported.value) {
-    // window.location.href = 'https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
-    window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn');
-    return;
+          checkAuthType(r, tempLogin)
+      })
   }
 
-  //currentSignup.value = SignupMethods.Metamask;
+  watch(
+    () => address.value,
+    () => {
 
-  //get accounts
-  (window as any).ethereum.request({ method: "eth_requestAccounts" }).then((accounts: string[]) => {
-    address.value = accounts[0];
-
-    //get chain id
-    (window as any).ethereum.request({
-      "method": "eth_chainId",
-      "params": []
-    }).then((chainId: string) => {
-      // let chainIdDec = parseInt(chainId, 16);
-
-      //switch to eth chain
-      (window as any).ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: "0x1" }] }).then(async () => {
-
-        axios.get(`https://${hostname}/v1/auth/provider/metamask/message`).then(async (res: any) => {
-          metamaskSignatureMessage.value = res.data.message;
-
-          const provider = new BrowserProvider((window as any).ethereum);
-          const signer = await provider.getSigner();
-          metamaskWalletAddress.value = signer.address;
-
-          const message = new SiweMessage({
-            domain: window.location.host,
-            address: signer.address, // error with accounts[0] ?
-            statement: res.data.message,
-            uri: window.location.origin,
-            version: '1',
-            chainId: 1
-          });
-          //message.prepareMessage()
-
-          const msg = `${window.location.host} wants you to sign in with your Ethereum account:\n${accounts[0]}\n\nI accept the MetaMask Terms of Service: https://community.metamask.io/tos\n\nURI: ${window.location.origin}\nVersion: 1\nChain ID: 1\nNonce: 32891757\nIssued At: 2021-09-30T16:25:24.000Z`;
-
-          //sign message
-          (window as any).ethereum.request({
-            "method": "personal_sign",
-            "params": [
-              //   msg,
-              res.data.message,
-              accounts[0],
-            ]
-          }).then((msg: string) => {
-
-            metamaskSignature.value = msg;
-            $app.api.eth.auth
-              .loginMetamask({ signature: msg, message: res.data.message, wallet_address: signer.address})
-              .then((jwtResponse: any) => {
-                // TODO falling user/me
-                $app.store.auth.setTokens(jwtResponse.data)
-                //confirmResponse.value = jwtResponse.data
-                //currentStep.value = Steps.Bonus
-              })
-              .then(async () => {
-                await $app.api.eth.auth.getUser().then((resp) => {
-                  $app.store.user.info = resp?.data
-                })
-
-                $app.store.auth.reInitData()
-                connectToReplenishment()
-                router.push('/personal/analytics/performance')
-              })
-              .catch((e) => {
-                if (e?.errors?.error?.message) {
-                  backendError.value = e.errors.error.message
-                } else {
-                  backendError.value = 'Something went wrong'
-                }
-              })
-            //currentStep.value = Steps.Email;
-          }).catch((err: any) => {
-            console.error(err);
-          });
-
-        }).catch((err: any) => {
-          console.error(err);
-        });
-      }).catch((err: any) => {
-        console.error(err);
-      });
-
-    }).catch((err: any) => {
-      console.error(err);
-    });
-
-  }).catch((err: any) => {
-    console.error(err);
-  });
-}
-
-const onForgotPasswordClick = () => {
-  router.push('/personal/reset')
-}
+      if(address.value) {
+        handleWalletConnect();
+      }
+    }
+  )
 
 </script>
 
-<style lang="scss" src="./f-login.scss"/>
+<style lang="scss" src="./f-login.scss" />

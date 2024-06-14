@@ -90,13 +90,9 @@ const { $app } = useNuxtApp()
 const { isMobile, isTablet } = useMediaDevice()
 
 const navList = [
-  { title: 'Fund', icon: Icon.MonoAnalytics, link: 'personal-portfolio' },
-  { title: 'Dividends', icon: Icon.MonoEarnings, link: 'personal-earnings' },
-  {
-    title: "ETFs",
-    icon: Icon.ColorfulBitcoin,
-    link: 'personal-buy-shares',
-  },
+  { title: 'Fund', icon: Icon.MonoActivity, link: 'personal-portfolio' },
+  { title: 'Assets', icon: Icon.MonoAnalytics, link: 'personal-assets' },
+  { title: "ETFs", icon: Icon.ColorfulBitcoin, link: 'personal-buy-shares' },
   { title: 'Wallet', icon: Icon.MonoWallet, link: 'personal-dividends' },
 ]
 
@@ -165,12 +161,17 @@ const closePopper = () => {
 
 const activeLinkClass = (link: string): boolean => {
   switch (link) {
-    case 'personal-protection':
+    case 'personal-portfolio':
       return (
-        route.name === 'personal-protection' ||
         route.name === 'personal-portfolio' ||
+        route.name === 'personal-protection' ||
         route.name === 'personal-shareholders' ||
-        route.name === 'personal-asset-id'
+        route.name === 'personal-fund'
+      )
+    case 'personal-assets':
+      return (
+        route.name === 'personal-assets' ||
+        route.name === 'personal-assets-symbol'
       )
     case 'personal-earnings':
       return route.name === 'personal-earnings'
@@ -178,7 +179,8 @@ const activeLinkClass = (link: string): boolean => {
       return route.name?.includes('personal-more')
     case 'personal-dividends':
       return (
-        route.name === 'personal-dividends' // || route.name === 'personal-referrals'
+        route.name === 'personal-dividends' || // || route.name === 'personal-referrals'
+        route.name === 'personal-etfs'
       )
 
     default:

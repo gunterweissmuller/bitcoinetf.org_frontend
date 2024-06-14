@@ -83,7 +83,7 @@
     -webkit-text-fill-color: transparent;
 
     @media (max-width: 991px) {
-      max-width: torem(400);
+      // max-width: torem(400);
       margin-bottom: torem(163);
     }
 
@@ -118,14 +118,14 @@
 
   &__learn_more_button {
     display: flex;
-    height: 56px;
+    height: torem(56);
     padding: var(--Spacing-M1, 16px) var(--Spacing-L2, 48px);
     justify-content: center;
     align-items: center;
     border-radius: var(--Spacing-S, 8px);
     background: var(--Button-Secondary, #252f44);
 
-    color: var(--Accent-Primary, #4d94ff);
+    color:  var(--blue-400);// var(--accent-primary);
     font-family: Dm, sans-serif;
     font-size: 16px;
     font-style: normal;
@@ -147,7 +147,7 @@
     justify-content: center;
     align-items: center;
     border-radius: var(--Spacing-S, 8px);
-    background: var(--Button-Primary, #4d94ff);
+    background: var(--blue-400);// var(--button-primary);
 
     color: var(--Text-Inverse-Primary, #fff);
     /* Body 1/Bold */
@@ -172,7 +172,7 @@
 
   &__title_info {
     text-align: center;
-    width: torem(648);
+    width: torem(740);
     font-size: torem(20);
     font-weight: 500;
     margin-bottom: var(--spacing-m-3);
@@ -181,7 +181,10 @@
     font-style: normal;
 
     @media (max-width: 767px) {
-      width: 343px;
+      width: torem(343);
+      br{
+        display: none;
+      }
     }
 
     & img {
@@ -319,6 +322,7 @@
     }
   }
   &__slider-wrapper {
+    width: 100%;
     position: absolute;
     bottom: 0;
     z-index: 2;
@@ -329,10 +333,10 @@
     flex-direction: column;
     align-items: center;
     padding: torem(40, 24);
-    background-color: var(--surfaces-surface-glass);
+    background-color: rgba(34, 36, 43, 0.502);
     backdrop-filter: blur(16px);
     border-radius: torem(16);
-    border: 1px solid var(--surfaces-surface-glass-border);
+    border: 1px solid  rgba(63, 66, 78, 0.078);
     max-width: torem(404);
     position: relative;
     font-family: 'Dm', sans-serif;
@@ -344,7 +348,7 @@
     font-weight: 800;
     font-size: torem(42);
     line-height: torem(54);
-    color: var(--text-primary);
+    color: #F1F2F4;
     @media screen and (max-width: 767px) {
       font-size: torem(32);
       line-height: torem(42);
@@ -354,7 +358,7 @@
     font-weight: 500;
     font-size: torem(20);
     line-height: torem(26);
-    color: var(--text-secondary);
+    color: #ABAEBE;
     @media screen and (max-width: 767px) {
       font-size: torem(16);
       line-height: torem(20);

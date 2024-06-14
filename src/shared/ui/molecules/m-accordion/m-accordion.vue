@@ -107,15 +107,19 @@ const updateValue = () => {
 watch(
   () => props.activeLink,
   (boolean) => {
-    if (typeof props.activeLink === 'boolean') {
-      isOpen.value = boolean
-    }
-  },
-  {
-    immediate: true,
+    setTimeout(() => {
+      if (typeof props.activeLink === 'boolean') {
+        isOpen.value = boolean
+      }
+    }, 0)
   },
 )
 
+onMounted(() => {
+  if (props.activeLink) {
+    isOpen.value = true
+  }
+})
 watch(isOpen, (boolean) => {
   if (!props.scroll) return
   if (boolean) {

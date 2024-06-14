@@ -5,12 +5,12 @@
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
           <div class="w-dividends__amount-sum">
-            ${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}
-            <span v-if="walletDividends?.difference" class="w-dividends__amount-plus"
-              >+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span
-            >
+            <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon>
+            <span v-else>$</span>
+            {{orderType !== 'usdt' ? $app.filters.rounded(walletDividends?.btc_dividends_balance, 8)  : $app.filters.rounded(walletDividends?.usd_amount, 6) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
           </div>
-          <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
+          <div v-if="orderType === 'btc'" class="w-dividends__btc">${{ $app.filters.rounded(walletDividends?.btc_dividends_balance * $app.store.user.btcValue, 6) }}</div>
+          <div v-if="walletDividends?.btc_dividends_balance && $app.store.user?.info?.account?.order_type === 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
 
         <div class="w-dividends__timer" :style="timerStyle">
@@ -22,8 +22,7 @@
 
       <div class="w-dividends__cards">
 
-        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw" @click="openModal">
-
+        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw" :class="{ disabled: !isNonEmptyDividendsBalance }" @click="openModal">
           <div class="w-dividends__cards-add">
             <div class="w-dividends__cards-add-img">
               <a-icon
@@ -36,7 +35,7 @@
               Add Withdrawal Method
             </div>
           </div>
-          
+
         </div>
 
         <div v-else class="w-dividends__cards-item w-dividends__cards-item-withdraw">
@@ -58,11 +57,12 @@
             </div>
           </div>
         </div>
-        
+
         <div class="w-dividends__cards-item w-dividends__cards-item-dividends">
           <div class="w-dividends__cards-header">
             <div class="w-dividends__cards-icon-dollar">
-              <a-icon width="14" height="14"  :name="Icon.MonoDollar" />
+              <a-icon v-if="orderType === 'btc'" width="14" height="14"  :name="Icon.MonoBtcUni" />
+              <a-icon v-else width="14" height="14"  :name="Icon.MonoDollar" />
             </div>
             <a-live />
           </div>
@@ -71,12 +71,16 @@
               TOTAL DIVIDENDS PAID
             </div>
             <div class="w-dividends__cards-title">
-              ${{$app.filters.rounded($app.store.user.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2) }}
+              <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon>
+              <span v-else>$</span>
+              {{$app.filters.rounded(tempDividendsEarnedBtc, orderType ==='btc' ? 8 : 6) }}
             </div>
           </div>
           <div class="w-dividends__cards-footer">
             <div class="w-dividends__cards-text w-dividends__cards-dropdown">
-              <m-dropdown :options="timeOptions"/>
+              <a-dropdown
+                @get-current-option="handleDropdown"
+              />
             </div>
           </div>
         </div>
@@ -89,7 +93,7 @@
         <span class="w-dividends__withdrawal-text">Add withdrawal method</span>
         <a-icon width="18" height="18" class="w-dividends__withdrawal-chevron" :name="Icon.MonoChevronRight" />
       </button>
-      
+
       <div v-else class="w-dividends__amount-method" @click="openModal">
         <div class="w-dividends__amount-method__wrap">
           <a-icon width="24" height="24" class="w-dividends__amount-method__icon" :name="typeMethodIcon" />
@@ -129,11 +133,11 @@
             <div v-if="item.status === 'pending'" class="w-dividends__item_sums">Pending</div>
             <div v-else class="w-dividends__item_sums">
               <div class="w-dividends__item_info-usd">
-                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }} <!--8-->
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 6) }} <!--8-->
               </div>
               <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
-                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 6))"></span> <!--8-->
+                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span> <!--8-->
               </div>
             </div>
           </div>
@@ -158,14 +162,11 @@
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import FWithdrawalModal from '~/src/features/f-withdrawal-modal/f-withdrawal-modal.vue'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
-import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
-import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
-import eNotEnoughBalanceModal from '~/src/entities/e-not-enough-balance-modal/e-not-enough-balance-modal.vue'
-import axios from "axios";
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
+import { ADropdownOption } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp()
 
@@ -178,6 +179,9 @@ const enum DIVIDENDS_TYPES {
   MINUS = 'credit_from_client',
   ESCAPE = 'withdrawal',
 }
+const handleDropdown = (currentOption : ADropdownOption) => {
+  getTotalDividendsPaidPersonal(currentOption.value);
+}
 
 const openModal = async () => {
   // const isKycFinished = await checkKyc()
@@ -187,7 +191,9 @@ const openModal = async () => {
   // } else {
   //   navigateTo({ name: 'personal-kyc' })
   // }
-
+  if (!isNonEmptyDividendsBalance.value){
+    return
+  }
   isOpenModal.value = true
 }
 
@@ -334,9 +340,9 @@ const usdAmount = computed(() => {
 })
 
 const btcAmount = computed(() => {
-  if (!walletDividends.value?.btc_amount) return 0
+  if (!walletDividends.value?.btc_dividends_balance) return 0
 
-  return $app.filters.convertValue($app.filters.rounded(walletDividends.value?.btc_amount, 8))
+  return $app.filters.convertValue($app.filters.rounded(walletDividends.value?.btc_dividends_balance, 8))
 })
 
 const isMore200Usd = computed(() => {
@@ -486,11 +492,11 @@ onMounted(() => {
   if(countDownDate - time.getTime() > senondsDay) {
     countDownDate = time.getTime()-secondsNow+secondsEnd+timeZone;
   }
-  
+
 
   // Update the count down every 1 second
   const x = setInterval(function() {
-    
+
     const now = new Date().getTime();
     // Find the distance between now and the count down date
     const distance = countDownDate - now;
@@ -529,16 +535,45 @@ const timerStyle = computed(() => {
 
 // time dropdown
 
-const timeOptions = [
-  {value : "All time"},
-  {value : "1 year"},
-  {value : "6 months"},
-  {value : "3 months"},
-  {value : "1 month"},
-  {value : "1 week"},
-  {value : "7 days"},
-  {value : "24 hours"},
-]
+const tempDividendsEarnedBtc = ref(0);
+
+onMounted(() => {
+  $app.api.eth.statisticEth.getPersonalStats().then((res) => {
+    if(orderType.value === 'btc') {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
+    } else {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    }
+  })
+})
+
+const getTotalDividendsPaid = (time : number | 'all') => {
+  const filterObj : Record<string, any> = {}
+
+  if (time !== 'all') {
+    filterObj.dividends_earned_btc_daily_filter = time;
+  }
+
+  $app.api.eth.statisticEth.getGlobalStats({ filters: filterObj }).then((res) => {
+    tempDividendsEarnedBtc.value = res.data.dividends_earned_btc;
+  })
+}
+
+const getTotalDividendsPaidPersonal = (time : any) => {
+  const filterObj : Record<string, any> = {}
+
+  if (time !== 'all') {
+    filterObj.days = time;
+  }
+
+  $app.api.eth.statisticEth.getPersonalStats({ filters: filterObj }).then((res) => {
+    if(orderType.value === 'btc') {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
+    } else {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    }
+  })
+}
 
 const methods = [
   {
@@ -550,7 +585,7 @@ const methods = [
 
 const timeValue = ref(methods[0]?.value);
 
-
+const isNonEmptyDividendsBalance = computed(() => walletDividends.value?.usd_amount > 0)
 </script>
 
 <style src="./w-dividends.scss" lang="scss" />

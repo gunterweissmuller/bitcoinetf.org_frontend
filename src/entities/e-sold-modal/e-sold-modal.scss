@@ -13,7 +13,7 @@
         color: var(--text-primary);
         text-align: center;
         font-family: Dm,sans-serif;
-        font-size: 18px;
+        font-size: 24px;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -30,6 +30,7 @@
         line-height: normal;
 
         margin-bottom: var(--spacing-m-3);
+        padding: 0 var(--spacing-m-1);
     }
 
     &__agree {
@@ -84,7 +85,7 @@
             border-radius: 2px;
             background: var(--surfaces-selection);
 
-            color: var(--Accent-Primary, #06F);
+            color: var(--accent-primary);
             text-align: center;
             font-family: Dm,sans-serif;
             font-size: 14px;

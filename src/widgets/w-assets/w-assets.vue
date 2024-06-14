@@ -1,6 +1,7 @@
 <template>
-  <div class="w-assets page-max-width--big" v-if="route.params.symbol !== undefined">
+  <div class="w-assets page-max-width--big" v-if="route.params?.symbol !== undefined">
     <m-slider
+      v-if="isDesktop"
       class="w-assets__info"
       id="w-assets__info-slider"
       loop
@@ -39,14 +40,14 @@
         :slider="false"
       />
     </div>
-    <w-trades :filters="filters" />
+    <w-trades :filters="filters" is-assets />
     <w-activity :filters="filters" />
     <w-news />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Autoplay } from 'swiper';
+import { Autoplay } from 'swiper/modules';
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
 import { SwiperSlide } from 'swiper/vue';
 import WTickerAssets from '~/src/widgets/w-ticker-assets/w-ticker-assets.vue';
@@ -55,27 +56,36 @@ import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.v
 import WTrades from '~/src/widgets/w-trades/w-trades.vue';
 import WActivity from '~/src/widgets/w-activity/w-activity.vue';
 import WNews from '~/src/widgets/w-news/w-news.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
+import useMediaDevice from '~/composables/useMediaDevice'
 
 const { $app } = useNuxtApp();
 const route = useRoute();
+const router = useRouter();
+const { isDesktop } = useMediaDevice()
+
 
 const assets = computed(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
 });
 
-if (route.params.symbol === undefined || route.name === 'personal-assets') {
-  if (assets.value) {
-    navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
-  } else {
-    watch(assets, () => navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } }));
+onMounted(() => {
+  if (route.params?.symbol === undefined || route.name === 'personal-assets') {
+    if (assets.value.length > 0) {
+      navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
+    } else {
+      watch(assets, () => {
+        navigateTo({ name: 'personal-assets-symbol', params: { symbol: assets.value[0].symbol.toLowerCase() } })
+      });
+    }
   }
-}
+})
+
 
 const symbol = computed<string>(() => {
-  return Array.isArray(route.params.symbol) ? route.params.symbol[0] : route.params.symbol;
+  return Array.isArray(route.params?.symbol) ? route.params?.symbol[0] : route.params?.symbol;
 });
 
 const asset = computed<IAsset | undefined>(() => {
@@ -84,9 +94,6 @@ const asset = computed<IAsset | undefined>(() => {
   return assets.value
     .find((item: { symbol: string; }) => item.symbol === symbol.value?.toUpperCase());
 });
-
-console.log(asset.value);
-
 
 const assetsChartData = computed(() => {
   const unset = {
@@ -98,7 +105,7 @@ const assetsChartData = computed(() => {
   return [asset.value, unset];
 });
 
-const filters = computed(() => ({ asset_uuid: asset.value?.uuid }));
+const filters = computed(() => ({ asset_uuid: asset.value ? asset.value?.uuid : false }));
 
 const btcUsdt = ref(null);
 

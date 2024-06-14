@@ -8,7 +8,7 @@
     </div>
     <div class="w-news__wrap">
       <m-slider
-        v-show="blogPosts?.length"
+        v-show="blogPosts.length"
         id="news-performance"
         :modules="[]"
         :navigation="false"

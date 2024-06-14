@@ -1,11 +1,13 @@
 .w-chart-fund {
   padding: var(--spacing-m-1);
-  margin-bottom: var(--spacing-m-1);
+  margin-bottom: var(--spacing-m-2);
   box-shadow: var(--b-shadow-1);
   border: torem(1) solid var(--surfaces-surface-glass-border);
   border-radius: var(--spacing-s);
   background: var(--surfaces-surface-glass);
-
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   &__caption {
     display: flex;
     align-items: center;
@@ -63,6 +65,30 @@
     height: 100%;
     flex-direction: column;
 
+    &-convert {
+      display: flex;
+      align-items: center;
+
+      .w-chart-fund__caption-icon {
+        &.bitcoin {
+          transform: translate(1px, -.5px);
+          color: var(--text-tertiary);
+        }
+
+        &.usdt {
+          transform: translate(-2px, -1px);
+          filter: grayscale(1);
+        }
+      }
+    }
+
+    &-text {
+      font-weight: 700;
+      font-size: torem(10);
+      line-height: torem(13);
+      color: var(--text-tertiary);
+    }
+
     &-difference {
       font-family: Dm, sans-serif;
       font-size: torem(10);
@@ -90,10 +116,11 @@
   }
 
   &__chart {
+    flex-grow: 1;
     height: torem(152);
 
     @include breakpoint($break-desktop-1440) {
-      height: torem(210);
+      // height: torem(210);
     }
 
     &--no-indent {

@@ -17,7 +17,7 @@
         <div class="s-site-fund-main__right">
           <div class="s-site-fund-main__text">{{ data.text }}</div>
           <nuxt-link to="/personal/registration">
-            <a-button :text="data.btn.text"/>
+            <a-button :text="data.btn.text" variant="primary2"/>
           </nuxt-link>
         </div>
       </div>

@@ -203,7 +203,12 @@
         font-weight: 700;
         line-height: normal;
         cursor: pointer;
-  
+        
+        &.disabled{
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
         &:first-child {
           margin-left: 0;
         }

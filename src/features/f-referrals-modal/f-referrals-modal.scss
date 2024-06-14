@@ -57,8 +57,15 @@
   }
 
   &__address {
-    margin-bottom: var(--spacing-m-2);
-
+    margin-top: torem(24);
+    &-text {
+      color: var(--text-tertiary);
+      font-family: Dm, sans-serif;
+      font-size: torem(12);
+      font-weight: 500;
+      line-height: normal;
+      margin: var(--spacing-s) 0 var(--spacing-m-2);
+    }
     .a-input__input-text {
       font-family: Dm, sans-serif;
       font-size: torem(12);
@@ -73,5 +80,12 @@
 
   &__btn {
     margin-bottom: var(--spacing-m-1);
+  }
+  &__remove {
+    text-align: center;
+    font-size: 12px;
+    margin: 10px 0;
+    color: var(--text-primary);
+    cursor: pointer;
   }
 }

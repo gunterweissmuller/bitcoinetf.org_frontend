@@ -10,12 +10,42 @@
   align-items: center;
   padding: torem(16, 0);
   padding-bottom: 0;
-  // background: var(--surfaces-surface-glass-2);
+  background: var(--surfaces-surface-glass-2);
   backdrop-filter: blur(32.5px);
   box-shadow: var(--b-shadow-1);
 
+  &--wallet {
+    background: transparent;
+
+    @include breakpoint($break-desktop-1024-minus) {
+      padding: 0;
+      box-shadow: none;
+    }
+
+    .w-header__head {
+      background: var(--surfaces-surface-glass-2);
+
+      @include breakpoint($break-desktop-1024-minus) {
+        padding: var(--spacing-m-1) 0;
+        box-shadow: var(--b-shadow-1);
+      }
+
+      @include breakpoint($break-desktop-1024) {
+        background: transparent;
+      }
+
+    }
+  }
+
+  &--wallet {
+    @include breakpoint($break-desktop-1024-minus) {
+      padding-top: torem(0) !important;
+    }
+  }
+
   @include breakpoint($break-desktop-1024-minus) {
     padding: 0;
+    padding-top: torem(16);
     box-shadow: none;
   }
 
@@ -55,16 +85,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--surfaces-surface-glass-2);
-
-    @include breakpoint($break-desktop-1024-minus) {
-      padding: var(--spacing-m-1) 0;
-      box-shadow: var(--b-shadow-1);
-    }
 
     @include breakpoint($break-desktop-1024) {
       justify-content: space-between;
-      background: transparent;
     }
 
     &__back {
@@ -249,7 +272,7 @@
       width: auto;
       display: flex;
     }
-    
+
     width: auto;
     border-radius: var(--spacing-xs);
     margin-right: var(--spacing-s);
@@ -273,7 +296,7 @@
     }
   }
 
-  
+
 
   .m-slider {
     padding-left: torem(8);

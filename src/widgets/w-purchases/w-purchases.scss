@@ -48,13 +48,13 @@
 
     &__list {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--spacing-m-1);
-      margin-bottom: var(--spacing-m-3);
-
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: var(--spacing-m-1);
+      gap: var(--spacing-s);
+      
       @include breakpoint($break-mobile-475) {
-        grid-template-columns: repeat(3, 1fr);
-
+        gap: var(--spacing-m-1);
+        margin-bottom: var(--spacing-m-3);
       }
     }
 

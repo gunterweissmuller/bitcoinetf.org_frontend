@@ -224,7 +224,7 @@
 
               <template v-if="currentPayStep === StepsPay.Loading">
                 <div class="f-registration-buy__purchase-loading">
-                  Loading...
+                  <m-loading-new v-show="true" />
                 </div>
               </template>
 
@@ -243,7 +243,7 @@
                   </a>
                   <p class="f-registration-buy__purchase--processing-text mt-4" v-if="!btnMoonpayActive">Processing payment, please wait</p>
 
-                  <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button">
+                  <footer class="mt-9 text-base text-blue-600" tabindex="0" role="button" @click="openChat">
                     Having trouble? Contact Support
                   </footer>
                 </div>
@@ -288,6 +288,7 @@ import ASwitch from '~/src/shared/ui/atoms/a-switch/a-switch.vue'
 import { useMoonpay } from '~/src/app/composables/useMoonpay';
 import { Centrifuge } from 'centrifuge';
 import { usePayment } from '~/src/app/composables/usePayment';
+import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
 const emit = defineEmits([ 'update'])
 
@@ -340,7 +341,7 @@ watch(
   () => currentStep.value,
   (step) => {
     backendError.value = ''
-   
+
   },
 )
 
@@ -384,31 +385,25 @@ const getMoonpayWallets = async () => {
 }
 
 const refCodeApply = async () => {
+  if (refApply.value) return
 
-  if(refApply.value) return
+  if ($app.store.user?.info?.referrals?.used_code === null) {
+    try {
+      const { data } = await $app.api.eth.referral.checkValidationCode(refCode.value)
 
-
-
-  if ($app.store.user?.info?.referrals?.used_code === null ) { //|| $app.store.user?.info?.referrals?.used_code === undefined
-    await $app.api.eth.referral
-      .checkReferralCode(refCode.value)
-      .then(() => {
-        refCodeError.value = false;
-        refCodeBtnText.value = 'Applied!';
-        refApply.value = true;
-        $app.store.user.info.referrals.used_code = refCode.value;
-      })
-      .catch((e) => {
-        refCodeError.value = true
-        if (e?.errors?.error?.message) {
-          refCodeMessage.value = e.errors.error.message
-        } else {
-          refCodeMessage.value = 'Something went wrong'
-        }
-      })
+      if (!data?.exists) {
+        throw { errorMessage: 'Referral code is not valid' }
+      }
+      await $app.api.eth.referral.applyReferralCode(refCode.value)
+      refCodeBtnText.value = 'Applied!'
+      refApply.value = true
+      $app.store.user.info.referrals.used_code = refCode.value
+    } catch (error) {
+      refCodeError.value = true
+      refCodeMessage.value = error?.errors?.error?.message || error?.errorMessage || 'Something went wrong'
+    }
   } else {
-    await $app.api.eth.referral
-      .checkValidationCode(refCode.value)
+    await $app.api.eth.referral.checkValidationCode(refCode.value)
   }
 }
 
@@ -541,7 +536,7 @@ const openMoonpay = async () => {
   return await openMoonpayHandler(getMoonpayWallets, (ctx) => {
     paymentAmount.value.amount = ctx.data.message?.data?.amount;
     isOpenSuccessPaymentModal.value = true
-  })
+  }, true, false)
 }
 
 const openEth = async () => {
@@ -718,6 +713,16 @@ const togglePurchase = (target: any) => {
 
 const paymentModalClose = () => {
   router.replace({ query: null })
+}
+
+const openChat = () => {
+  if (window?.LiveChatWidget) {
+    window.LiveChatWidget.call('maximize');
+
+    return
+  }
+
+  router.push('/personal/more/support')
 }
 </script>
 

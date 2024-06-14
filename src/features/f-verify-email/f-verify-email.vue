@@ -1,21 +1,21 @@
 <template>
     <div class="f-verify-email">
-        Loading...
+        <m-loading-new v-show="true" />
     </div>
 </template>
 
 <script setup lang="ts">
     import { useNuxtApp, useRouter } from '#app'
     import { onMounted } from 'vue';
+    import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
 
     const { $app } = useNuxtApp()
     const router = useRouter()
 
     onMounted(()=>{
-        console.log(location.search, localStorage.getItem('verifyLinkRedirect')?.search('/tetherspecial'));
 
         if(localStorage.getItem('verifyLinkRedirect')?.search('/tetherspecial') !== -1) {
-          localStorage.removeItem('googleRedirect');
+          localStorage.removeItem('verifyLinkRedirect');
           router.push(`/tetherspecial${location.search}`);
         } else {
             router.push(`/personal/registration${location.search}`);

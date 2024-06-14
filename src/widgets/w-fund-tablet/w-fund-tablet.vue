@@ -31,7 +31,7 @@
         </template>
       </m-slider>
       <div class="w-fund-tablet__fund-charts">
-        <w-chart-fund class="w-fund-tablet__fund-chart" title="AUM Growth" is-main is-total-assets />
+        <w-chart-fund class="w-fund-tablet__fund-chart" title="AUM Growth" is-main is-total-assets aum-size-usd />
         <w-chart-portfolio
           ref="chartPortfolioRef"
           class="w-fund-tablet__fund-chart"
@@ -83,7 +83,7 @@
 </template>
 
 <script lang='ts' setup>
-import { Autoplay, Parallax } from 'swiper';
+import { Autoplay, Parallax } from 'swiper/modules';
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
 import { SwiperSlide } from 'swiper/vue';
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';
@@ -107,13 +107,13 @@ const assets = computed(() => {
 const strategies = [
   {
     name: 'Tether',
-    percent: 0,
+    percent: 60,
     icon: Icon.ColorfulUsdt,
     color: '#1BA27A'
   },
   {
     name: 'Bitcoin',
-    percent: 0,
+    percent: 40,
     icon: Icon.ColorfulBitcoin,
     color: '#FF8D07'
   },

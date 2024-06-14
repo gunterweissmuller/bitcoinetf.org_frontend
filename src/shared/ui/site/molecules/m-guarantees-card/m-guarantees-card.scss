@@ -87,7 +87,7 @@
       align-items: center;
       border-radius: 4px;
 
-      background: var(--Accent-Primary, #4d94ff);
+      background: var(--blue-400);// var(--accent-primary);
 
       color: var(--Text-Inverse-Primary, #fff);
       /* Caption 2/Bold */
@@ -126,7 +126,7 @@
     align-items: center;
 
     border-radius: var(--Spacing-S, 8px);
-    background: var(--Button-Primary, #4d94ff);
+    background: var(--blue-400);// var(--button-primary);
 
     color: var(--Text-Inverse-Primary, #fff);
     /* Body 2/Bold */

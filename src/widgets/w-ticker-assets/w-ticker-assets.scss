@@ -1,5 +1,8 @@
 .w-ticker-assets {
+  position: relative;
+
   padding: var(--spacing-m-2) var(--spacing-m-1);
+  padding-bottom: torem(32);
 
   background: var(--surfaces-surface-glass);
   border-radius: var(--spacing-s);
@@ -60,7 +63,10 @@
   }
 
   &__link {
-    position: relative;
+    position: absolute;
+    bottom: var(--spacing-m-2);
+    left: var(--spacing-m-1);
+    right: var(--spacing-m-1);
 
     display: flex;
     align-items: center;
@@ -71,13 +77,6 @@
     font-size: torem(14);
     line-height: torem(18);
     color: var(--accent-primary);
-
-    img {
-      width: torem(15);
-      height: torem(15);
-
-      transform: translateY(torem(-1));
-    }
 
     span {
       position: absolute;
@@ -92,5 +91,9 @@
       border-right: torem(2) solid var(--accent-primary);
       border-radius: torem(1);
     }
+  }
+
+  &__icon {
+    transform: translateY(torem(-1));
   }
 }

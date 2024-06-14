@@ -9,20 +9,22 @@
   --text-inverse-tertiary: #ffffff99;
   --text-inverse-secondary: #FFFFFFCC;
 
-  --accent-primary: #0066ff;
+  --accent-primary: #0066ff; //#4d94ff
   --accent-success: #12df00;
   --accent-danger: #ec0202;
   --accent-secondary: #ff8d07;
   --accent-warning: #ffb445;
 
-  --button-primary: #06F;
+  --button-primary: #06F; // #4d94ff
+  --button-primary-website: #4d94ff;
   --button-secondary: #E3EEFF;
 
   --blue-50: #F3F8FF;
   --blue-100: #E3EEFF;
   --blue-200: #CBDFFF;
   --gray-200: #C8CAD7;
-  --blue-500: #06F;
+  --blue-500: #06F; // #06F #4d94ff
+  --blue-400: #4d94ff; // #06F 
 
   --color-bg: #FFFFFF;
 
@@ -51,7 +53,7 @@
   --popper-theme-border-color: #fff;
   --popper-theme-border-radius: 8px;
   --popper-theme-padding: 14px;
-  --popper-theme-box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
+  --popper-theme-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.16);
 
   // Onboarding
   --v-onboarding-overlay-fill: rgba(0, 70, 174, 0.20); // 0.1
@@ -64,8 +66,8 @@
 
   --checkbox-box: #F1F2F4;
   --checkbox-box-border: #BCBECC;
-  --checkbox-box--checked: #0066FF;
-  --checkbox-box-border--checked: #0066FF;
+  --checkbox-box--checked: #0066FF; //#4D94FF
+  --checkbox-box-border--checked: #0066FF; //#4D94FF
 }
 
 body[data-theme='dark'] {
@@ -84,13 +86,13 @@ body[data-theme='dark'] {
   --text-inverse-tertiary: rgba(255, 255, 255, 0.60);
   --text-inverse-secondary: rgba(255, 255, 255, 0.80);
 
-  --accent-primary: #4D94FF;
+  --accent-primary: #4D94FF; //#4D94FF
   --accent-secondary: #FF8D07;
   --accent-success: #12DF00;
   --accent-danger: #EC0202;
   --accent-warning: #FFB445;
 
-  --button-primary: #4D94FF;
+  --button-primary: #4D94FF; //#4D94FF
   --button-secondary: #252F44;
 
   --surfaces-background: #000;

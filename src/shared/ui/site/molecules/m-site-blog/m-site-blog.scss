@@ -42,7 +42,7 @@
       font-weight: 700;
       font-size: torem(12);
       line-height: torem(16);
-      color: var(--accent-primary);
+      color: var(--blue-500); //var(--accent-primary);
       text-align: center;
 
       margin-bottom: var(--spacing-s);
@@ -92,7 +92,7 @@
       font-size: torem(16);
       line-height: torem(20);
       font-weight: 600;
-      color: var(--accent-primary);
+      color: var(--blue-400); //var(--accent-primary);
 
       cursor: pointer;
     }

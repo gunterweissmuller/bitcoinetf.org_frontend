@@ -1,9 +1,12 @@
-export default defineNuxtPlugin(async ({ $app }: any) => {
+export default defineNuxtPlugin(async ({ $app, _route }: any) => {
   const isUserAuthenticated = $app.store.auth.isUserAuthenticated
 
+  if (_route.path === '/personal/reset') {
+    $app.store.auth.logout(false)
+  }
   try {
     await $app.store.auth.refresh()
-    if (isUserAuthenticated) {
+    if (isUserAuthenticated && !_route.query?.accessToken) {
       await $app.api.eth.auth.getUser().then((resp) => {
         $app.store.user.info = resp?.data
       })

@@ -1,4 +1,4 @@
-.e-sell-etf-modal {
+.e-not-enough-balance-modal {
     padding: var(--spacing-m-1);
     &-wrapper {
         margin: auto;
@@ -87,7 +87,7 @@
             border-radius: 2px;
             background: var(--surfaces-selection);
 
-            color: var(--Accent-Primary, #06F);
+            color: var(--accent-primary);
             text-align: center;
             font-family: Dm,sans-serif;
             font-size: 14px;
