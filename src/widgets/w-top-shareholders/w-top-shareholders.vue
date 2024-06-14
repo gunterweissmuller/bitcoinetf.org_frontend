@@ -10,7 +10,7 @@
         >View all
       </nuxt-link>
     </div>
-    <div v-if="shareholders?.length" class="w-shareholders__content">
+    <div v-if="shareholders?.length" id="shareholdersList" class="w-shareholders__content">
       <transition-group name="fade" tag="div">
         <m-deal
           v-for="(trade, idx) in shareholders"
@@ -29,7 +29,7 @@
 import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
 import { useNuxtApp } from '#app'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
-import { UseScrollDeals } from '~/composables/useScrollDeals';
+import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { $app } = useNuxtApp()
 
@@ -44,8 +44,6 @@ const props = withDefaults(
   },
 )
 
-const ScrollDeal = new UseScrollDeals(50, () => loadMoreshareholders());
-
 const shareholders = ref([])
 const currentPage = ref(1)
 const hasNextPage = ref(true)
@@ -58,21 +56,40 @@ const loadMoreshareholders = async () => {
 const getshareholders = async () => {
   await $app.api.eth.statisticEth
     .getShareholders({
-      per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
+      per_page: props.isPage ? 10 : props.perPage,
       page: currentPage.value,
       // order_column: orderColumn.value,
       // order_by: orderBy.value,
     })
     .then((dealsResponse) => {
-      hasNextPage.value = !!dealsResponse.data.next_page_url
-      shareholders.value = [...shareholders.value, ...dealsResponse.data.data]
+      hasNextPage.value = !!dealsResponse.data.next_page_url;
+      shareholders.value = [...shareholders.value, ...dealsResponse.data.data];
+      if (props.isPage) {
+        setTimeout(changeObservable, 100);
+      }
     })
 }
 
+const IntersctObs = new UseIntersectionObserver(() => loadMoreshareholders());
+const intersectionError = ref<boolean>(false);
+
+const changeObservable = () => {
+  IntersctObs.disconnect();
+  try {
+    IntersctObs.observe('#shareholdersList div .m-deal:last-child');
+  } catch(e) {
+    intersectionError.value = true;
+    console.log(e);
+  }
+}
+
+onUnmounted(() => {
+  IntersctObs.disconnect();
+})
+
 onMounted(async () => {
   await getshareholders();
-  if (props.isPage) ScrollDeal.init();
-})
+});
 </script>
 
 <style src="./w-top-shareholders.scss" lang="scss" />

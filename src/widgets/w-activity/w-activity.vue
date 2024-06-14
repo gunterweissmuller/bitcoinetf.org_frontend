@@ -6,7 +6,7 @@
         >View all
       </nuxt-link>
     </div>
-    <div v-if="renderedSpillovers?.length" class="w-activity__content">
+    <div v-if="renderedSpillovers?.length" id="spinloversList" class="w-activity__content">
       <transition-group name="fade" tag="div">
         <m-deal v-for="spillover in renderedSpillovers" :key="spillover?.uuid" :deal="spillover" type="spillover" />
       </transition-group>
@@ -22,7 +22,7 @@ import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
-import { UseScrollDeals } from '~/composables/useScrollDeals';
+import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { $app } = useNuxtApp()
 const route = useRoute()
@@ -39,8 +39,6 @@ const props = withDefaults(
     filters: null
   },
 )
-
-const ScrollDeal = new UseScrollDeals(50, () => loadMoreSpillovers());
 
 const spillovers = ref([])
 const currentPage = ref(1)
@@ -69,14 +67,17 @@ const getSpillovers = async () => {
   if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
-    per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
+    per_page: props.isPage ? 10 : props.perPage,
     page: currentPage.value,
     filters: tradesFilters,
   }
 
   await $app.api.info.event.getSpillovers(requestParams).then((dealsResponse) => {
-    hasNextPage.value = !!dealsResponse.data.next_page_url
-    spillovers.value = [...spillovers.value, ...dealsResponse.data.data]
+    hasNextPage.value = !!dealsResponse.data.next_page_url;
+    spillovers.value = [...spillovers.value, ...dealsResponse.data.data];
+    if (props.isPage) {
+      setTimeout(changeObservable, 100);
+    }
   })
 }
 
@@ -109,16 +110,28 @@ onMounted(async () => {
     .subscribe()
 })
 
-onUnmounted(() => {
-  centrifuge.value?.disconnect()
-})
 
-onMounted(() => {
-  if (props.isPage) ScrollDeal.init();
-})
+
+const IntersctObs = new UseIntersectionObserver(() => loadMoreSpillovers());
+const intersectionError = ref<boolean>(false);
+
+const changeObservable = () => {
+  IntersctObs.disconnect();
+  try {
+    IntersctObs.observe('#spinloversList div .m-deal:last-child');
+  } catch(e) {
+    intersectionError.value = true;
+    console.log(e);
+  }
+}
 
 watch(() => props.filters, () => {
   getSpillovers();
+})
+
+onUnmounted(() => {
+  centrifuge.value?.disconnect();
+  IntersctObs.disconnect();
 })
 </script>
 

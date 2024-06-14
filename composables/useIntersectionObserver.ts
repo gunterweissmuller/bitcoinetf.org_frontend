@@ -64,6 +64,7 @@ export class UseIntersectionObserver implements UseInterSectionObserver {
       throw new Error(`Observable is passed incorrectly: ${observable}`);
     }
 
+
     if (target) {
       this.observer?.observe(target);
     } else {

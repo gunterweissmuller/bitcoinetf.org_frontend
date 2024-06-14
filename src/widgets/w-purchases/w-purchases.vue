@@ -11,7 +11,7 @@
           >View all
         </nuxt-link>
       </div>
-      <div v-if="purchases?.length" class="w-purchases__content">
+      <div v-if="purchases?.length" id="purchasesList" class="w-purchases__content">
         <transition-group name="fade" tag="div">
           <m-deal
             v-for="(purchase, idx) in renderedPurchases"
@@ -40,7 +40,7 @@ import FPurchasesModal from '~/src/features/f-purchases-modal/f-purchases-modal.
 import useMediaDevice from '~/composables/useMediaDevice'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { computed } from 'vue'
-import { UseScrollDeals } from '~/composables/useScrollDeals';
+import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { isDesktop } = useMediaDevice()
 
@@ -56,8 +56,6 @@ const props = withDefaults(
     perPage: 4,
   },
 )
-
-const ScrollDeal = new UseScrollDeals(50, () => loadMorePurchases());
 
 const purchases = ref($app.store.user.lastPurchases)
 const currentPage = ref(1)
@@ -82,12 +80,15 @@ const loadMorePurchases = async () => {
 const getPurchases = async () => {
   await $app.api.info.event
     .getPurchases({
-      per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
+      per_page: props.isPage ? 10 : props.perPage,
       page: currentPage.value,
     })
     .then((dealsResponse) => {
-      hasNextPage.value = !!dealsResponse.data.next_page_url
-      purchases.value = [...purchases.value, ...dealsResponse.data.data]
+      hasNextPage.value = !!dealsResponse.data.next_page_url;
+      purchases.value = [...purchases.value, ...dealsResponse.data.data];
+      if (props.isPage) {
+        setTimeout(changeObservable, 100);
+      };
     })
 }
 
@@ -115,8 +116,24 @@ const renderedPurchases = computed(() => {
 })
 
 onMounted(() => {
-  getPurchases()
-  if (props.isPage) ScrollDeal.init();
+  getPurchases();
+})
+
+const IntersctObs = new UseIntersectionObserver(() => loadMorePurchases());
+const intersectionError = ref<boolean>(false);
+
+const changeObservable = () => {
+  IntersctObs.disconnect();
+  try {
+    IntersctObs.observe('#purchasesList div .m-deal:last-child');
+  } catch(e) {
+    intersectionError.value = true;
+    console.log(e);
+  }
+}
+
+onUnmounted(() => {
+  IntersctObs.disconnect();
 })
 </script>
 
