@@ -1,6 +1,6 @@
 .a-snackbar {
   @include breakpoint($break-desktop-1024) {
-    max-width: 100%;
+    max-width: torem(390);
     min-height: torem(72);
     padding: torem(16, 20, 16, 24);
   }
@@ -33,10 +33,6 @@
   }
 
   &--error {
-    background: rgba(236, 2, 2, .1);
-    border-radius: var(--spacing-s);
-    border: 1px solid var(--accent-danger);
-
     .a-snackbar {
       &__text {
         color: var(--accent-danger);
@@ -45,10 +41,6 @@
   }
 
   &--warning {
-    background: rgba(255, 180, 69, .1);
-    border-radius: var(--spacing-s);
-    border: 1px solid var(--accent-warning);
-
     .a-snackbar {
       &__text {
         color: var(--accent-warning);
