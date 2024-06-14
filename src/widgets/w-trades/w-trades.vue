@@ -117,7 +117,9 @@ const getTrades = async () => {
   await $app.api.info.event.getDeals(requestParams).then((dealsResponse) => {
     hasNextPage.value = !!dealsResponse.data.next_page_url;
     trades.value = [...trades.value, ...dealsResponse.data.data];
-    setTimeout(changeObserver, 100);
+    if (props.isPage) {
+      setTimeout(changeObservable, 100);
+    }
   })
 }
 
@@ -156,7 +158,7 @@ watch(() => props.filters, () => {
 const IntersctObs = new UseIntersectionObserver(() => loadMoreTrades());
 const intersectionError = ref<boolean>(false);
 
-const changeObserver = () => {
+const changeObservable = () => {
   IntersctObs.disconnect();
   try {
     IntersctObs.observe('#dealsList div .m-deal:last-child');
