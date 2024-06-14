@@ -142,7 +142,6 @@ const swiperRef = ref<HTMLElement | null>(null)
 const clickableButtonsArea = ref<string>('')
 
 const modulesComputed = computed(() => {
-  console.log(props.modules)
   if (!props.modules) {
     return [Mousewheel]
   }
