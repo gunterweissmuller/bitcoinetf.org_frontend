@@ -13,7 +13,7 @@
       </transition-group>
     </div>
 
-    <div v-if="renderedTrades.length && !isExpand && !props.isMain" class="w-trades__content">
+    <div v-if="renderedTrades.length && !isExpand && !props.isMain" id="dealsList" class="w-trades__content">
       <transition-group name="fade" tag="div">
         <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :type="props.isAssets ? 'asset' : 'trade'" />
       </transition-group>
@@ -37,7 +37,9 @@
       Expand
     </div>
 
-
+    <div v-if="isPage && hasNextPage && renderedTrades.length && intersectionError" class="w-trades__more">
+      <div @click="loadMoreTrades" class="w-trades__more-text">Load more</div>
+    </div>
   </div>
 </template>
 
@@ -49,7 +51,7 @@ import { onUnmounted } from 'vue'
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
 import { useRoute } from '#imports'
 import { useWindowSize } from '@vueuse/core'
-import { UseScrollDeals } from '~/composables/useScrollDeals';
+import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { width } = useWindowSize()
 const route = useRoute()
@@ -75,9 +77,6 @@ const props = withDefaults(
     isAssets: false,
   },
 )
-
-
-const ScrollDeal = new UseScrollDeals(50, () => loadMoreTrades());
 
 const trades = ref([])
 const currentPage = ref(1)
@@ -110,14 +109,15 @@ const getTrades = async () => {
   if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
-    per_page: props.isPage ? ScrollDeal.perPageComp.value : props.perPage,
+    per_page: props.isPage ? 10 : props.perPage,
     page: currentPage.value,
     filters: tradesFilters,
   }
 
   await $app.api.info.event.getDeals(requestParams).then((dealsResponse) => {
-    hasNextPage.value = !!dealsResponse.data.next_page_url
-    trades.value = [...trades.value, ...dealsResponse.data.data]
+    hasNextPage.value = !!dealsResponse.data.next_page_url;
+    trades.value = [...trades.value, ...dealsResponse.data.data];
+    setTimeout(changeObserver, 100);
   })
 }
 
@@ -149,18 +149,26 @@ onMounted(async () => {
     .subscribe()
 })
 
+watch(() => props.filters, () => {
+  getTrades();
+});
 
+const IntersctObs = new UseIntersectionObserver(() => loadMoreTrades());
+const intersectionError = ref<boolean>(false);
+
+const changeObserver = () => {
+  IntersctObs.disconnect();
+  try {
+    IntersctObs.observe('#dealsList div .m-deal:last-child');
+  } catch(e) {
+    intersectionError.value = true;
+    console.log(e);
+  }
+}
 
 onUnmounted(() => {
   centrifuge.value?.disconnect();
-})
-
-onMounted(() => {
-  if (props.isPage) ScrollDeal.init();
-})
-
-watch(() => props.filters, () => {
-  getTrades();
+  IntersctObs.disconnect();
 });
 </script>
 
