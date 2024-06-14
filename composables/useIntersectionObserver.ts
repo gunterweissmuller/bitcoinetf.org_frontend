@@ -1,4 +1,4 @@
-import { watch, WatchStopHandle } from 'vue';
+import { computed, watch, WatchStopHandle } from 'vue';
 import { useWindowSize } from '@vueuse/core';
 
 interface IntersectionObserverConfig {
