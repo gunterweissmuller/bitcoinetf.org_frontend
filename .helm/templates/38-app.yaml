@@ -1,7 +1,7 @@
 {{- $globals := ternary .Values.global.stage (ternary .Values.global.prod .Values.global.dev (eq .Values.global.env_name "prod")) (eq .Values.global.env_name "stage") -}}
 apiVersion: apps/v1
 kind: Deployment
-metadata: 
+metadata:
   name: {{ .Values.global.app_name }}
 spec:
   replicas: 2
