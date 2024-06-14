@@ -25,3 +25,6 @@ export class UseScrollDeals {
 
   public perPageComp = computed<number>(() => !this.firstScroll ? this.deals * 2 : this.deals);
 }
+
+
+UseIntersectionObserver
