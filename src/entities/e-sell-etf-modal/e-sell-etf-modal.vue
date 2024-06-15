@@ -144,36 +144,43 @@
 
     const startTimer = () => {
         const timer = setInterval(() => {
-            time.value.seconds += 1;
+            time.value.seconds -= 1;
 
-            if(time.value.seconds >= 60) {
-                time.value.seconds = 0;
-                time.value.minutes += 1;
+            if(time.value.seconds <= 0) {
+                time.value.seconds = 59;
+                time.value.minutes -= 1;
             }
 
-            if(time.value.minutes >= 60) {
-                time.value.minutes = 0;
-                time.value.hours += 1;
+            if(time.value.minutes <= 0) {
+                time.value.minutes = 59;
+                time.value.hours -= 1;
             }
 
-            if(time.value.hours >= 24) {
-                time.value.hours = 0;
-                time.value.days += 1;
+            if(time.value.hours <= 0) {
+                time.value.hours = 23;
+                time.value.days -= 1;
             }
         }, 1000)
     }
 
     const initTimer = () => {
         if($app.store.user.sellShares?.created_at) {
-            const tempDate = new Date();
-            const tempTime = (tempDate.getTime() - $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf())/1000; // seconds after buy
+            const endDate = $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf() + (1000*60*60*24*1095);
+            const now = new Date();
+            const tempTime = (endDate - now.getTime())/1000;
 
-            time.value.days = Math.floor(tempTime / (3600*24));
-            time.value.hours = Math.floor(tempTime % (3600*24) / 3600);
-            time.value.minutes = Math.floor(tempTime % 3600 / 60);
-            time.value.seconds = Math.floor(tempTime % 60);
-
-            startTimer();
+            if(tempTime <= 0) {
+                time.value.days = 0;
+                time.value.hours = 0;
+                time.value.minutes = 0;
+                time.value.seconds = 0;
+            } else {
+                time.value.days = Math.floor(tempTime / (3600*24));
+                time.value.hours = Math.floor(tempTime % (3600*24) / 3600);
+                time.value.minutes = Math.floor(tempTime % 3600 / 60);
+                time.value.seconds = Math.floor(tempTime % 60);
+                startTimer();
+            }
         }
     }
 

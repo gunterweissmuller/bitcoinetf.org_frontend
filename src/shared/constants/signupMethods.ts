@@ -1,4 +1,5 @@
 export const enum SignupMethods {
+    None = 'None',
     Email = 'Email',
     Metamask = 'Metamask',
     Google = 'Google',

@@ -79,9 +79,7 @@ export function useRegistration($app) {
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
             connectToReplenishment();
-            setTimeout(() => {
-                router.push('/personal/fund/portfolio');
-            },2000);
+            router.push('/personal/fund/portfolio');
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');

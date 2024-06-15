@@ -5,6 +5,9 @@ $last-col: torem(300);
 .m-guarantees-table {
   &__box {
     margin: torem(80, 20, 0);
+    @media screen and (max-width: 1270px) {
+      display: none;
+    }
     @media screen and (max-width: 768px) {
       margin: torem(80, 0, 0);
     }

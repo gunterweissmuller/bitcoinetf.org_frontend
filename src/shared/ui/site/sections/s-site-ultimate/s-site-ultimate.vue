@@ -14,11 +14,8 @@
             </div> -->
           </div>
           <div class="s-site-ultimate__info">
-            <div v-html="data.info.text" class="s-site-ultimate__info-text"/>
-            <nuxt-link :to="`/personal/registration`">
-
-              <a-button :text="data.info.btn.text" variant="primary2"/>
-            </nuxt-link>
+            <div v-html="data.info.text" class="s-site-ultimate__info-text" />
+            <a-button :text="data.info.btn.text" variant="primary2" @click="goToRegistration" />
           </div>
         </div>
         <div class="s-site-ultimate__points">
@@ -37,11 +34,25 @@
 
 <script setup lang="ts">
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
+import { useRouter } from 'vue-router'
+import { useNuxtApp } from '#app'
 
 defineProps<{
   data: any
   files?: any
 }>()
+
+const { $app } = useNuxtApp()
+const router = useRouter()
+
+function goToRegistration() {
+  if ($app.store.auth.isUserAuthenticated) {
+    
+    router.push({ name: 'personal-more', query: { action: 'modal-credit-card' } })
+    return
+  }
+  router.push('/personal/registration')
+}
 </script>
 
 <style src="./s-site-ultimate.scss" lang="scss"/>

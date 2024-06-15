@@ -19,7 +19,7 @@
     />
     <a-input
       class="flex justify-between mt-6 rounded-lg"
-      label="Deposit address on Tron chain:"
+      :label="`Deposit address on ${payType} chain:`"
       :model-value="computedAddr"
       :disabled="true"
       :text-icon="addressCopied"
@@ -51,7 +51,7 @@
     </button>
     <footer class="text-center py-6">
 
-      <nuxt-link to="/personal/support" target="_blank" >
+      <nuxt-link to="/personal/more/support" target="_blank" >
         <a-button text="Contact support" variant="tertiary" isFullWidth />
       </nuxt-link>
 

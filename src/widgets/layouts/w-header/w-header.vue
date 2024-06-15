@@ -135,7 +135,7 @@ import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { nextTick, onUnmounted, onMounted, computed } from 'vue'
 import EFundTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
-import { Autoplay } from 'swiper'
+import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 // import { Centrifuge } from 'centrifuge'
@@ -295,11 +295,11 @@ const routeNames = computed(() => ({
     info: EPageInfoEarnings,
   },
   'personal-analytics-performance-latest-trades': {
-    title: 'Latest trades',
-    titleCrumb: 'Latest trades',
+    title: 'Last successful trades',
+    titleCrumb: 'Last successful trades',
     breadcrumbs: true,
     urlToBack: 'personal-protection',
-    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Latest Trades'],
+    customBreadcrumbs: [(!(isLaptop.value || isDesktop.value) ? 'personal-protection' : 'personal-fund'), 'Last successful trades'],
   },
   'personal-analytics-shareholders-latest-purchases': {
     title: 'Latest purchases',

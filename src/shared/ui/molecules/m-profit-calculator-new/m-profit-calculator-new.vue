@@ -125,7 +125,7 @@
           <div class="landing-calculation__journey__invest--card landing-calculation__journey__invest--card-front landing-calculation__journey__invest-font flex  relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Guaranteed Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto" @click="showAmountDropdown = true"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto" @click.stop="showAmountDropdown = true"> ${{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2)  }} </p><!-- {{ $app.filters.rounded(investmentAmount + guaranteedPayout * 3, 2) }} -->
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Your Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around ">
@@ -161,7 +161,7 @@
           <div  class="landing-calculation__journey__invest--card-back landing-calculation__journey__invest--card landing-calculation__journey__invest-font flex  relative flex-col justify-center w-full rounded-lg">
             <!-- <NuxtImg src="/img/icons/colorful/usdt.svg" class="landing-calculation__journey__invest--card-icon w-6 aspect-square cursor-pointer" alt="USDT logo" /> -->
             <p class="landing-calculation__journey__invest--card-title landing-calculation__journey--text-normal relative font-semibold text-white text-opacity-80 mx-auto"> In Total Projected Payout </p>
-            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto" @click="showAmountDropdown = true"> ${{ roundedGuaranteedPayout }} </p>
+            <p class="landing-calculation__journey__invest--card-sum landing-calculation__journey--text-normal relative font-black text-white mx-auto" @click.stop="showAmountDropdown = true"> ${{ roundedGuaranteedPayout }} </p>
             <p class="landing-calculation__journey__invest--card-subtitle landing-calculation__journey--text-normal relative font-medium text-white text-opacity-80 mx-auto"> Interest + Original Investment Amount </p>
             <div class="landing-calculation__journey__invest--card-line relative shrink-0"></div>
             <div class="landing-calculation__journey__invest--card-stats-wrapper flex relative justify-around">
@@ -219,10 +219,10 @@ import AInput from "~/src/shared/ui/atoms/a-input/a-input.vue";
 import {computed, ref, watch} from "vue";
 import {useNuxtApp, useRouter} from "#app";
 import VueWriter from 'vue-writer'
-import InputNumber from 'primevue/inputnumber';
 import { useWindowSize } from '@vueuse/core'
 import { vOnClickOutside } from '@vueuse/components'
 import { useRoute } from 'vue-router'
+import { useRegistration } from "../../promolandings/landing-registration/useRegistration";
 
 const { width } = useWindowSize()
 const route = useRoute()
@@ -233,24 +233,21 @@ const props = withDefaults(
     openSignup?: any
     openPurchase?: any
     isInputDisbled?: boolean
-    isUserAuth?: boolean
     disabledAmount?: boolean
   }>(),
   {
     openSignup: () => {},
     openPurchase: () => {},
     isInputDisbled: false,
-    isUserAuth: false,
     disabledAmount: false
   },
 )
 
 const { $app } = useNuxtApp()
+const {isUserAuthenticated} = useRegistration($app);
 const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 
 // invest
-
-
 const currencies = ref([
   {
     value: 'USDT',
@@ -270,20 +267,16 @@ const currencies = ref([
     apy: 33.333333333333333333333333333333,
     apy3: 100
 
-  }, ]);
-
+  }
+]);
 
 const orderType = computed(() => {
-  // return 'usdt';
   return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc'
 });
 
 const selectedCurrency = ref( orderType.value === 'init_btc' ? currencies.value[Math.floor((Math.random() * 2) + 0)] : orderType.value === 'usdt' ? currencies.value[0] : orderType.value === 'btc' ? currencies.value[1] : currencies.value[0]);
 
 let apyValue = computed(() => selectedCurrency.value.apy);
-let apyValue3 = ref(selectedCurrency.value.apy3);
-const pickerValue = ref(2500)
-const refCode = ref('')
 const refCodeValid = ref(false)
 const typeAPY = ref('Guaranteed')
 
@@ -293,9 +286,6 @@ const inputMaxWidth = ref(defaultInputWith.value);
 
 const investmentAmountDisplay = ref('2,500');
 const investmentAmount = ref(2500);
-const investmentAmountWithDiscount = ref(2375);
-
-
 
 onMounted(() => {
   const { isUserAuthenticated } = $app.store.auth
@@ -307,9 +297,6 @@ onMounted(() => {
   }
 })
 
-
-
-
 onMounted(()=>{
   if(localStorage.getItem('investmentAmount')) {
 
@@ -320,8 +307,6 @@ onMounted(()=>{
       investmentAmountDisplay.value = String(investmentAmount.value) ;
       $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
     }
-
-
   }
 
   $app.store.purchase.type = selectedCurrency.value.value;
@@ -329,32 +314,6 @@ onMounted(()=>{
 
 function validate(event) {
   if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
-
-  // var theEvent = event || window.event;
-  // var key = theEvent.keyCode || theEvent.which;
-  // key = String.fromCharCode( key );
-  // var regex = /[0-9\s\+\-]|\./;
-  // if( !regex.test(key) ) {
-  //   theEvent.returnValue = false;
-  //   if(theEvent.preventDefault) theEvent.preventDefault();
-  // }
-}
-
-const onPickerValueInput = (event) => {
-  const replacedStringValue = event.target.value.replace(/,/g, '').replaceAll('$', '')
-  investmentAmount.value = Number(replacedStringValue);
-  investmentAmountDisplay.value = replacedStringValue;
-  // investmentAmount.value = replacedStringValue
-
-
-  // let originalNumber = investmentAmount.value;
-
-  // investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-  // $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
-
-  // // investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
-  // investmentAmount.value = investmentAmount.value.split(",").join("");
 }
 
 watch(
@@ -376,8 +335,6 @@ watch(
       const replacedStringValue = tempOriginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       investmentAmountDisplay.value = replacedStringValue;
     }
-
-
   }
 )
 
@@ -395,10 +352,6 @@ watch(
       investmentAmount.value = 2500;
     }
 
-    // if (+newValue < 0) {
-    //   investmentAmount.value = 0;
-    // }
-
     localStorage.setItem('investmentAmount', String(investmentAmount.value));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
 
@@ -407,20 +360,8 @@ watch(
     } else if(String(newValue).length > 4 && String(newValue).length < 7) {
       inputMaxWidth.value =  defaultInputWith.value+((String(newValue).length - 4)*defaultInputPlus.value);
     }
-
   },
 )
-
-// watch(
-//   () => investmentAmount.value,
-//   (newValue) => {
-//     investmentAmountWithDiscount.value = investmentAmount.value - (investmentAmount.value/100)*5;
-
-//     if(!Number.isInteger(investmentAmountWithDiscount.value)) {
-//       investmentAmountWithDiscount.value = investmentAmountWithDiscount.value.toFixed(1)
-//     }
-//   }
-//  )
 
 watch(
   () => width.value,
@@ -441,12 +382,6 @@ watch(
   },
 )
 
-
-
-const dayliDivs = computed(() => {
-  return guaranteedPayout.value / 365
-  // return Math.trunc( (guaranteedPayout.value / 365) * 100 ) / 100;
-})
 const dayliDivsDisplay = computed(() => {
   const tempVal = guaranteedPayout.value / 365;
   let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
@@ -469,7 +404,6 @@ const monthlyDivsDisplay = computed(() => {
 
 const apyValueComputed = computed(() => {
   return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? apyValue.value + 5 : apyValue.value
-  // return refCodeValid.value === true && typeAPY.value === 'Guaranteed' ? (apyValue3.value/3) + 5 : (apyValue3.value/3)
 })
 
 const guaranteedPayout = computed(() => {
@@ -481,22 +415,7 @@ const roundedGuaranteedPayout = computed(() => {
 
 })
 
-
 const showDropdown = ref(false);
-
-// onMounted(()=>{
-//   localStorage.setItem("selectedCurrency", JSON.stringify(currencies.value[0])); //for old users
-//   if(localStorage.getItem("selectedCurrency") && localStorage.getItem("selectedCurrency") !== null) {
-//     selectedCurrency.value = JSON.parse(localStorage.getItem("selectedCurrency"));
-//   }
-// });
-
-// watch(
-//   () => selectedCurrency.value,
-//   (newValue) => {
-//     localStorage.setItem("selectedCurrency", JSON.stringify(newValue));
-//   }
-// )
 
 const toggleCurrencyDropdown = () => {
   showDropdown.value = !showDropdown.value;
@@ -509,7 +428,6 @@ const selectCurrency = (currency : any) => {
 }
 
 // amount dropdown
-
 const currentAmount = ref('CUSTOM');
 
 const amounts = ref([
@@ -562,10 +480,8 @@ const outSideClick =  (ev) => {
   }
 }
 
-
 const toggleAmountDropdown = () => {
   if (props.disabledAmount || props.isInputDisbled) return
-
   showAmountDropdown.value = !showAmountDropdown.value;
 };
 
@@ -590,7 +506,7 @@ const handleContinue = () => {
     $app.store.purchase.amount = investmentAmount.value;
     $app.store.purchase.amountUS = investmentAmount.value;
   } else {
-    if (props.isUserAuth) {
+    if (isUserAuthenticated.value) {
       props.openPurchase();
     } else {
       props.openSignup();

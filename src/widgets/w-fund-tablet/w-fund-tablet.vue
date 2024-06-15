@@ -83,7 +83,7 @@
 </template>
 
 <script lang='ts' setup>
-import { Autoplay, Parallax } from 'swiper';
+import { Autoplay, Parallax } from 'swiper/modules';
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
 import { SwiperSlide } from 'swiper/vue';
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';

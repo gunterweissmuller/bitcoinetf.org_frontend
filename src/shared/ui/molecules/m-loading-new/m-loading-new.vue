@@ -11,8 +11,6 @@
 import { useNuxtApp } from '#app'
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { Icon } from '~/src/shared/constants/icons'
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import AProgressbar from '~/src/shared/ui/atoms/a-progressbar/a-progressbar.vue'
 import { useRoute } from 'vue-router'
 
 const emit = defineEmits(['loading'])

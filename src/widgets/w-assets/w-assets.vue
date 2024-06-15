@@ -1,7 +1,6 @@
 <template>
   <div class="w-assets page-max-width--big" v-if="route.params?.symbol !== undefined">
     <m-slider
-      v-if="isDesktop"
       class="w-assets__info"
       id="w-assets__info-slider"
       loop
@@ -47,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Autoplay } from 'swiper';
+import { Autoplay } from 'swiper/modules';
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
 import { SwiperSlide } from 'swiper/vue';
 import WTickerAssets from '~/src/widgets/w-ticker-assets/w-ticker-assets.vue';
@@ -59,12 +58,10 @@ import WNews from '~/src/widgets/w-news/w-news.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
-import useMediaDevice from '~/composables/useMediaDevice'
 
 const { $app } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
-const { isDesktop } = useMediaDevice()
 
 
 const assets = computed(() => {

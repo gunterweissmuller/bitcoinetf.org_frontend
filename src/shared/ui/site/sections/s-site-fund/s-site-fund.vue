@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import {SwiperSlide} from 'swiper/vue'
-import {Scrollbar} from 'swiper'
+import {Scrollbar} from 'swiper/modules'
 import {computed, ref} from 'vue'
 import {useNuxtApp} from '#app'
 

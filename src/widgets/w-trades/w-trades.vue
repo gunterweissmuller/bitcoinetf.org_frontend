@@ -1,7 +1,7 @@
 <template>
   <div v-if="renderedTrades.length" class="w-trades">
     <div class="w-trades__head">
-      <div class="w-trades__head-title">Latest Trades</div>
+      <div class="w-trades__head-title">Last successful trades</div>
       <nuxt-link v-if="!isPage && renderedTrades.length && !hideView" :to="fullPageNuxtLink" class="w-trades__head-info"
         >View All
       </nuxt-link>
@@ -13,7 +13,7 @@
       </transition-group>
     </div>
 
-    <div v-if="renderedTrades.length && !isExpand && !props.isMain" class="w-trades__content">
+    <div v-if="renderedTrades.length && !isExpand && !props.isMain" id="dealsList" class="w-trades__content">
       <transition-group name="fade" tag="div">
         <m-deal v-for="(trade, idx) in renderedTrades" :key="trade?.uuid" :deal="trade" :type="props.isAssets ? 'asset' : 'trade'" />
       </transition-group>
@@ -27,6 +27,10 @@
       </transition-group>
     </div>
 
+    <div v-if="props.isPage && loading && renderedTrades?.length" class="w-trades__loading">
+      <m-loading-new />
+    </div>
+
     <e-empty-data title="You don’t have any trades yet." v-if="!renderedTrades?.length" />
 
     <div
@@ -37,20 +41,22 @@
       Expand
     </div>
 
-    <div v-if="isPage && hasNextPage && renderedTrades.length" class="w-trades__more">
+    <div v-if="isPage && hasNextPage && renderedTrades.length && intersectionError" class="w-trades__more">
       <div @click="loadMoreTrades" class="w-trades__more-text">Load more</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
-import { useNuxtApp } from '#app'
-import { Centrifuge } from 'centrifuge'
-import { onUnmounted } from 'vue'
-import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
-import { useRoute } from '#imports'
-import { useWindowSize } from '@vueuse/core'
+import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue';
+import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
+import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
+import { useNuxtApp } from '#app';
+import { Centrifuge } from 'centrifuge';
+import { onUnmounted } from 'vue';
+import { useRoute } from '#imports';
+import { useWindowSize } from '@vueuse/core';
+import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { width } = useWindowSize()
 const route = useRoute()
@@ -95,25 +101,32 @@ const fullPageNuxtLink = computed(() => {
 })
 
 const loadMoreTrades = () => {
-  currentPage.value += 1
+  currentPage.value += 1;
 
-  getTrades()
+  getTrades();
 }
 
+const loading = ref<boolean>(true);
+
 const getTrades = async () => {
+  loading.value = true;
   const tradesFilters = props.filters ?? {};
 
   if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
-    per_page: props.perPage,
+    per_page: props.isPage ? 10 : props.perPage,
     page: currentPage.value,
     filters: tradesFilters,
   }
 
   await $app.api.info.event.getDeals(requestParams).then((dealsResponse) => {
-    hasNextPage.value = !!dealsResponse.data.next_page_url
-    trades.value = [...trades.value, ...dealsResponse.data.data]
+    hasNextPage.value = !!dealsResponse.data.next_page_url;
+    trades.value = [...trades.value, ...dealsResponse.data.data];
+    loading.value = false;
+    if (props.isPage) {
+      setTimeout(changeObservable, 100);
+    }
   })
 }
 
@@ -145,13 +158,27 @@ onMounted(async () => {
     .subscribe()
 })
 
-onUnmounted(() => {
-  centrifuge.value?.disconnect()
-})
-
 watch(() => props.filters, () => {
   getTrades();
-})
+});
+
+const IntersctObs = new UseIntersectionObserver(() => loadMoreTrades());
+const intersectionError = ref<boolean>(false);
+
+const changeObservable = () => {
+  IntersctObs.disconnect();
+  try {
+    IntersctObs.observe('#dealsList div .m-deal:last-child');
+  } catch(e) {
+    intersectionError.value = true;
+    console.log(e);
+  }
+}
+
+onUnmounted(() => {
+  centrifuge.value?.disconnect();
+  IntersctObs.disconnect();
+});
 </script>
 
 <style src="./w-trades.scss" lang="scss" />

@@ -199,13 +199,13 @@
         }
 
         &-title {
-          font-family: Dm, sans-serif;
-          font-size: torem(32);
-          font-weight: 500;
-          line-height: torem(42);
+           font-family: Dm, sans-serif;
+           font-size: torem(32);
+           font-weight: 500;
+           line-height: torem(42);
 
           @include breakpoint($break-tablet-minus) {
-            font-size: torem(18);
+             font-size: torem(18);
           }
         }
 
@@ -215,7 +215,7 @@
           margin-top: var(--spacing-xs);
           line-height: 130%; /* 54.6px */
           font-family: Jakarta, sans-serif;
-          cursor: pointer;
+           cursor: pointer;
           @include breakpoint($break-tablet-minus) {
             font-size: torem(30);
           }

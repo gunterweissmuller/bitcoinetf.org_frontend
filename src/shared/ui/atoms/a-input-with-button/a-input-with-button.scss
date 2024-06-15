@@ -1,7 +1,7 @@
 .a-input-with-button {
   @include desktop-device {
     &__input-container:hover {
-     
+
       background-color: var(--surfaces-surface-2);
         border: 1px solid var(--accent-primary);
 
@@ -20,7 +20,7 @@
     }
 
     &__input-container:hover &__icon {
-      
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -137,7 +137,7 @@
 
 
     &:hover {
-      
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -146,8 +146,8 @@
     }
 
     &:focus {
-      
-      
+
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -155,8 +155,8 @@
     }
 
     &:active {
-    
-     
+
+
 
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
@@ -164,14 +164,14 @@
     }
 
     &--focused {
-      
+
       .a-input-with-button__input-container {
         background-color: var(--surfaces-surface-2);
       border-color: var(--accent-primary);
 
       }
-  
-      
+
+
       .a-input-with-button__input-title--small {
         color: var(--accent-primary);
       }
@@ -238,7 +238,7 @@
     }
 
     &--focused {
-     
+
     }
 
     &::placeholder {
@@ -360,12 +360,12 @@
     }
 
     &:hover {
-      
+
     }
 
     &:focus {
-      
-     
+
+
     }
 
     &:-internal-autofill-selected {
@@ -390,5 +390,11 @@
     width: 100%;
   }
 
-  
+
+}
+
+body[data-theme='light'] {
+  .a-input-with-button__input-text {
+    color: var(--text-tertiary);
+  }
 }

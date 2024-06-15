@@ -4,8 +4,8 @@
       <div class="w-dividends__amount">
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
-          <div class="w-dividends__amount-sum"> 
-            <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon> 
+          <div class="w-dividends__amount-sum">
+            <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon>
             <span v-else>$</span>
             {{orderType !== 'usdt' ? $app.filters.rounded(walletDividends?.btc_dividends_balance, 8)  : $app.filters.rounded(walletDividends?.usd_amount, 6) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
           </div>
@@ -71,14 +71,16 @@
               TOTAL DIVIDENDS PAID
             </div>
             <div class="w-dividends__cards-title">
-              <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon> 
+              <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon>
               <span v-else>$</span>
               {{$app.filters.rounded(tempDividendsEarnedBtc, orderType ==='btc' ? 8 : 6) }}
             </div>
           </div>
           <div class="w-dividends__cards-footer">
             <div class="w-dividends__cards-text w-dividends__cards-dropdown">
-              <m-dropdown :options="timeOptions"/>
+              <a-dropdown
+                @get-current-option="handleDropdown"
+              />
             </div>
           </div>
         </div>
@@ -160,14 +162,11 @@
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import FWithdrawalModal from '~/src/features/f-withdrawal-modal/f-withdrawal-modal.vue'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
-import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
-import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
-import eNotEnoughBalanceModal from '~/src/entities/e-not-enough-balance-modal/e-not-enough-balance-modal.vue'
-import axios from "axios";
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
+import { ADropdownOption } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp()
 
@@ -179,6 +178,9 @@ const enum DIVIDENDS_TYPES {
   PLUS = 'debit_to_client',
   MINUS = 'credit_from_client',
   ESCAPE = 'withdrawal',
+}
+const handleDropdown = (currentOption : ADropdownOption) => {
+  getTotalDividendsPaidPersonal(currentOption.value);
 }
 
 const openModal = async () => {
@@ -541,11 +543,11 @@ onMounted(() => {
       tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
     } else {
       tempDividendsEarnedBtc.value = res.data.sum_dividends;
-    } 
+    }
   })
 })
 
-const getTotalDividendsPaid = (time : any) => {
+const getTotalDividendsPaid = (time : number | 'all') => {
   const filterObj : Record<string, any> = {}
 
   if (time !== 'all') {
@@ -569,20 +571,9 @@ const getTotalDividendsPaidPersonal = (time : any) => {
       tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
     } else {
       tempDividendsEarnedBtc.value = res.data.sum_dividends;
-    } 
+    }
   })
 }
-
-const timeOptions = [
-  {value : "All time", callback: () => getTotalDividendsPaidPersonal('all')},
-  {value : "1 year", callback: () => getTotalDividendsPaidPersonal(365)},
-  {value : "6 months", callback: () => getTotalDividendsPaidPersonal(180)},
-  {value : "3 months", callback: () => getTotalDividendsPaidPersonal(90)},
-  {value : "1 month", callback: () => getTotalDividendsPaidPersonal(30)},
-  {value : "1 week", callback: () => getTotalDividendsPaidPersonal(7)},
-  {value : "7 days", callback: () => getTotalDividendsPaidPersonal(7)},
-  {value : "24 hours", callback: () => getTotalDividendsPaidPersonal(1)},
-]
 
 const methods = [
   {

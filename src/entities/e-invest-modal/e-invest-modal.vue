@@ -4,8 +4,8 @@
 
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
           <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> 
-            <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" />
-            <!-- <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest</h1> -->
+            <!-- <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" /> -->
+            <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest</h1>
 
             <div class="e-invest__invest-input e-invest__invest--text-primary ml-4 grow flex justify-center font-semibold">
               <span class="e-invest__invest--text-input e-invest--text-normal flex items-center">$</span>
@@ -23,11 +23,11 @@
             </div>
 
           </header>
-          <VueWriter :start="1100" :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center" :array="['and receive my daily']" :iterations="1" />
-          <!-- <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center">and receive my daily</p> -->
+          <!-- <VueWriter :start="1100" :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center" :array="['and receive my daily']" :iterations="1" /> -->
+          <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center">and receive my daily</p>
           <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
-            <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" />
-            <!-- <span class="grow">dividends in</span> -->
+            <!-- <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" /> -->
+            <span class="grow">dividends in</span>
             <div class="relative" v-on-click-outside="() => showDropdown = false">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
                 <div @click="toggleCurrencyDropdown" class="e-invest__invest-select-value"> <!--@click="toggleCurrencyDropdown"-->
@@ -79,11 +79,14 @@
                 <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
                   Safety Rating
                   <span class="e-invest__invest--card-rating-stars">
-                    <span class="inline-flex" v-for="item in new Array(5)">
+                    <span class="inline-flex" v-for="item in new Array(4)">
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
+                    <span class="inline-flex">
+                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
+                    </span>
                   </span>
-                  5/5
+                  4.8/5
                 </p>
                 <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
 
@@ -127,10 +130,10 @@
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
                     <span class="inline-flex">
-                      <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" loading="lazy" />
+                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
                     </span>
                   </span>
-                  4.5/5
+                  4.8/5
                 </p>
                 <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
               </div>
@@ -150,8 +153,8 @@
     <!--orderType == 'usdt' || orderType == 'btc'--><m-modal modalBig v-if="orderType == 'usdt' || orderType == 'btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!---->
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
           <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap">
-            <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" />
-            <!-- <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1> -->
+            <!-- <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" /> -->
+            <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1>
 
           </header>
           <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center flex">
@@ -171,12 +174,12 @@
               />
             </div>
 
-            <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" />
-            <!-- and increase my -->
+            <!-- <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" /> -->
+            and increase my
           </p>
           <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
-            <VueWriter :start="2800" :typeSpeed="60" class="grow" :array="['daily dividends in']" :iterations="1" />
-            <!-- <span class="grow">daily dividends in</span> -->
+            <!-- <VueWriter :start="2800" :typeSpeed="60" class="grow" :array="['daily dividends in']" :iterations="1" /> -->
+            <span class="grow">daily dividends in</span>
 
             <div class="ml-2 relative opacity-50">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
@@ -223,11 +226,14 @@
                 <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
                   Safety Rating
                   <span class="e-invest__invest--card-rating-stars">
-                    <span class="inline-flex" v-for="item in new Array(5)">
+                    <span class="inline-flex" v-for="item in new Array(4)">
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
+                    <span class="inline-flex">
+                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
+                    </span>
                   </span>
-                  5/5
+                  4.8/5
                 </p>
                 <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
 
@@ -271,10 +277,10 @@
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
                     <span class="inline-flex">
-                      <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" loading="lazy" />
+                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
                     </span>
                   </span>
-                  4.5/5
+                  4.8/5
                 </p>
                 <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
               </div>

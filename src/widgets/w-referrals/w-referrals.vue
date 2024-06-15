@@ -244,7 +244,7 @@ import { ADropdownOption, TPromoCardDetails } from '~/src/shared/types/global'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 //@ts-ignore
-import { Pagination, Navigation } from 'swiper'
+import { Pagination, Navigation } from 'swiper/modules'
 import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-promo-card.vue'
 import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
 import { user } from '~/src/app/store/user'
@@ -308,10 +308,10 @@ const shareSocials = [
     name: 'Email',
     icon: Icon.MonoMailLight,
   },
-  {
-    name: 'SMS',
-    icon: Icon.MonoMessage,
-  },
+  // {
+  //   name: 'SMS',
+  //   icon: Icon.MonoMessage,
+  // },
 ]
 
 const availableNetworks = {
