@@ -84,7 +84,8 @@ export class EthAdapter extends ApiAdapter {
 
         if (response.status === HttpStatusCode.UNAUTHORIZED) {
           if (errors.error.code === ADAPTERS_ERRORS_CODES.ETF.JWT_EXPIRED) {
-            await this.store.auth.refresh()
+            // await this.store.auth.refresh()
+            this.store.auth.logout()
             req.headers.set('Authorization', `JWTBearer ${this.store.auth.accessToken}`)
 
             response = await fetch(endpoint, req)
