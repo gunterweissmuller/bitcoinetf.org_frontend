@@ -6,6 +6,9 @@
     <h5 class="f-registration-right__subtitle">
         Enter your details below and press Continue. We will send you a confirmation code shortly.
     </h5>
+    <p class="f-registration-right__notification">
+        Only Email confirmation is required.
+    </p>
     <form class="f-registration-right__form" @submit.prevent="onSubmitEmailForm">
 
         <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'first_name' ? $app.store.registration.backendError.value : ''" v-model="$app.store.registration.firstName" label="First name" required class="f-registration-right__name" />

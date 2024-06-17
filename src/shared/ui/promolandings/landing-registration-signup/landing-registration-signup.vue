@@ -1,6 +1,9 @@
 <template>
       
     <div class="landing-calculation__signup-main">
+      <p class="landing-calculation__signup-main-notification">
+        Only Email confirmation is required.
+      </p>
       <vue-turnstile :theme="'dark'" :site-key="siteKey" v-model="token" class="captchaTurn" />
       <a-input bgColor="tetherspecial" :disabled="$app.store.tetherspecial.dataDisabled || $app.store.tetherspecial.isMainInputDisabled" v-model="$app.store.tetherspecial.firstName" label="First Name" required class="landing-calculation__signup-main-input landing-calculation__signup-main-input-first-name" />
       <p class="landing-calculation__error" v-if="$app.store.tetherspecial.backendError.value && $app.store.tetherspecial.backendError.field === 'first_name'">{{ $app.store.tetherspecial.backendError.value }}</p>

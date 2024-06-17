@@ -383,6 +383,14 @@
       @include breakpoint($break-tablet-minus) {
         padding: 0 var(--spacing-m-1);
       }
+      &-notification {
+        font-family: DM, sans-serif;
+        font-size: torem(16);
+        line-height: torem(21);
+        margin: torem(24,0);
+        text-align: center;
+        color: var(--text-secondary);
+      }
 
       &-input {
         margin-top: 16px;

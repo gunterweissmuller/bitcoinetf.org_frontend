@@ -139,7 +139,7 @@ const SOCIAL_LINKS = [
   { icon: Icon.MonoTelegram2Black, link: 'https://t.me/BitcoinETF_org' },
   { icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat' },
   {
-    icon: Icon.MonoUnknownBlack,
+    icon: Icon.MonoNostr,
     link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl',
   },
   { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org',  },
