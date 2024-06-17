@@ -23,7 +23,7 @@
               Sign up to our newsletter and receive our new research, portfolio news and content direct to your inbox.
             </div>
             <div class="s-site-footer__form">
-              <p v-if="success">Thank you!</p>
+              <p v-if="success">Successfully subscribed!</p>
               <a-input
                 label="Email"
                 validation-reg-exp-key="email"
@@ -159,10 +159,9 @@ function emailFieldBlurHandler() {
 }
 const subscribeToChimp = async () => {
   try {
-    await $app.api.eth.news.mailchimpSub({ email: subscribeEmail.value }).then(() => {
-      success.value = true
-    })
-  } catch (e) {
+    await $app.api.eth.news.mailchimpSub({ email: subscribeEmail.value })
+    success.value = true
+  } catch (error) {
     emailErrorText.value = 'Invalid email address'
   }
 }

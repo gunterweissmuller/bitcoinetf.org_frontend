@@ -53,7 +53,7 @@
             </div>
           </div>
 
-          <m-dropdown :options="timeOptions" />
+          <a-dropdown @get-current-option="getPersonalReferralsStats($event.value)"/>
         </div>
       </div>
 
@@ -246,7 +246,6 @@ import { SwiperSlide } from 'swiper/vue'
 //@ts-ignore
 import { Pagination, Navigation } from 'swiper/modules'
 import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-promo-card.vue'
-import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
 import { user } from '~/src/app/store/user'
 
 interface ISetMethodBody {
@@ -466,7 +465,8 @@ const getPersonalReferrals = async (initial: boolean = false): Promise<void> => 
     })
 }
 
-const getPersonalReferralsStats = async (time: any = '') => {
+const getPersonalReferralsStats = async (time: 'all' | number) => {
+  
   const filterObj: Record<string, any> = {}
 
   if (time !== 'all') {
@@ -489,22 +489,12 @@ const config = useRuntimeConfig()
 const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
-const timeOptions = [
-  { value: 'All time', callback: () => getPersonalReferralsStats('all') },
-  { value: '1 year', callback: () => getPersonalReferralsStats(365) },
-  { value: '6 months', callback: () => getPersonalReferralsStats(180) },
-  { value: '3 months', callback: () => getPersonalReferralsStats(90) },
-  { value: '1 month', callback: () => getPersonalReferralsStats(30) },
-  { value: '1 week', callback: () => getPersonalReferralsStats(7) },
-  { value: '7 days', callback: () => getPersonalReferralsStats(7) },
-  { value: '24 hours', callback: () => getPersonalReferralsStats(1) },
-]
 
 onMounted(async () => {
   await getWalletReferrals()
   await getPersonalReferrals(true)
 
-  getPersonalReferralsStats()
+  getPersonalReferralsStats('all')
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken,
