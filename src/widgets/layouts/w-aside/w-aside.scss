@@ -487,6 +487,6 @@
 
 .w-aside__link:hover .w-aside__link-img--referrals svg path {
   @include breakpoint($break-desktop-1024) {
-    fill: #fff;
+    fill: var(--text-primary);
   }
 }
