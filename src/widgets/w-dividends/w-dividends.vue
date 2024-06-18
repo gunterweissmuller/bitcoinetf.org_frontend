@@ -22,7 +22,7 @@
 
       <div class="w-dividends__cards">
 
-        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw" :class="{ disabled: !isNonEmptyDividendsBalance }" @click="openModal">
+        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw"  @click="openModal">
           <div class="w-dividends__cards-add">
             <div class="w-dividends__cards-add-img">
               <a-icon
@@ -191,9 +191,7 @@ const openModal = async () => {
   // } else {
   //   navigateTo({ name: 'personal-kyc' })
   // }
-  if (!isNonEmptyDividendsBalance.value){
-    return
-  }
+ 
   isOpenModal.value = true
 }
 

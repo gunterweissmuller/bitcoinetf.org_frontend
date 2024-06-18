@@ -11,7 +11,6 @@
           class="w-referrals__amount-withdraw"
           variant="secondary"
           text="Add Withdrawal Method"
-          :disabled="!walletReferrals?.usd_amount"
           :icon="Icon.MonoPlus"
           @click="openModal"
         />
