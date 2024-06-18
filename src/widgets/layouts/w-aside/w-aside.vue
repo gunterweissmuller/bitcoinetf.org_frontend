@@ -29,13 +29,20 @@
 
         <div class="w-aside__links">
           <ul class="w-aside__list">
-            <li v-for="(nav, index) in routesList" :key="index" class="w-aside__item" :id="`menu-${nav.link}`">
+            <li
+              v-for="(nav, index) in routesList"
+              :key="index"
+              class="w-aside__item"
+              :class="{ 'w-aside__item--disabled': nav?.noClickable }"
+              :id="`menu-${nav.link}`"
+            >
               <m-accordion
                 v-if="nav.subNav"
                 :icon="nav.icon"
                 :top-link="nav.link"
                 ref="accordionRef"
                 class="w-aside__accordion"
+                :class="{ 'w-aside__link--disabled': nav?.noClickable }"
                 :title="nav.title"
                 :activeLink="activeLinkClass(nav.link)"
               >
@@ -45,6 +52,7 @@
                       v-for="(item, idx) in nav.subNav"
                       :key="idx"
                       class="w-aside__sub-nav__link"
+                      :class="{'w-aside__link--disabled': nav?.noClickable}"
                       :to="{ name: item.link }"
                       active-class="w-aside__sub-nav__link--active"
                       >{{ item.title }}
@@ -55,7 +63,13 @@
 
               <nuxt-link
                 v-else
-                :class="['w-aside__link', { 'w-aside__link--active': activeLinkClass(nav.link) }]"
+                :class="[
+                  'w-aside__link',
+                  {
+                    'w-aside__link--active': activeLinkClass(nav.link),
+                    'w-aside__link--disabled': nav?.show
+                  },
+                ]"
                 :to="{ name: nav.link }"
                 active-class="w-aside__link--active"
               >
@@ -67,9 +81,15 @@
           </ul>
         </div>
 
-        <div class="w-aside__item w-aside__item--more">
+        <div class="w-aside__item w-aside__item--more" :class="{ 'w-aside__item--disabled': !isUserAuthenticated }">
           <nuxt-link
-            :class="['w-aside__link', { 'w-aside__link--active': activeLinkClass('personal-more') }]"
+            :class="[
+              'w-aside__link',
+              {
+                'w-aside__link--active': activeLinkClass('personal-more'),
+                'w-aside__link--disabled': !isUserAuthenticated,
+              },
+            ]"
             to="/personal/more"
             active-class="w-aside__link--active"
             @click="onClickLink"
@@ -376,6 +396,7 @@ const routesList = [
     title: 'Wallet',
     icon: Icon.MonoWallet,
     link: 'personal-dividends',
+    noClickable: !isUserAuthenticated.value,
     subNav: [
       {
         title: 'Dividends',
@@ -534,10 +555,9 @@ function loginPage(){
   window.location.href  = window.location.origin + '/personal/login'.replace('app.', '')
 }
 
-function registerPage(){
+function registerPage() {
   window.location.href = window.location.origin + '/personal/registration'.replace('app.', '')
 }
-
 </script>
 
 <style src="./w-aside.scss" lang="scss" />
