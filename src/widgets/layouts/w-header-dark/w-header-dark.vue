@@ -52,7 +52,10 @@
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
         <nuxt-link to="/personal/fund" v-if="!isUserAuthenticated"
-          ><a-button text="Launch app" size="small" :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
+          ><a-button text="Register" size="small" :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
+        /></nuxt-link>
+        <nuxt-link to="/personal/fund" v-if="!isUserAuthenticated"
+          ><a-button text="Launch app" size="small" variant="tertiary"
         /></nuxt-link>
         <a-avatar
           v-if="isUserAuthenticated"
