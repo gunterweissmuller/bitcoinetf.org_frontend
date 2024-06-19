@@ -29,13 +29,7 @@
 
         <div class="w-aside__links">
           <ul class="w-aside__list">
-            <li
-              v-for="(nav, index) in routesList"
-              :key="index"
-              class="w-aside__item"
-              :class="{ 'w-aside__item--disabled': nav?.noClickable }"
-              :id="`menu-${nav.link}`"
-            >
+            <li v-for="(nav, index) in routesList" :key="index" class="w-aside__item" :id="`menu-${nav.link}`">
               <m-accordion
                 v-if="nav.subNav"
                 :icon="nav.icon"
@@ -52,7 +46,6 @@
                       v-for="(item, idx) in nav.subNav"
                       :key="idx"
                       class="w-aside__sub-nav__link"
-                      :class="{'w-aside__link--disabled': nav?.noClickable}"
                       :to="{ name: item.link }"
                       active-class="w-aside__sub-nav__link--active"
                       >{{ item.title }}
@@ -67,7 +60,6 @@
                   'w-aside__link',
                   {
                     'w-aside__link--active': activeLinkClass(nav.link),
-                    'w-aside__link--disabled': nav?.show
                   },
                 ]"
                 :to="{ name: nav.link }"
@@ -81,13 +73,12 @@
           </ul>
         </div>
 
-        <div class="w-aside__item w-aside__item--more" :class="{ 'w-aside__item--disabled': !isUserAuthenticated }">
+        <div class="w-aside__item w-aside__item--more">
           <nuxt-link
             :class="[
               'w-aside__link',
               {
                 'w-aside__link--active': activeLinkClass('personal-more'),
-                'w-aside__link--disabled': !isUserAuthenticated,
               },
             ]"
             to="/personal/more"
@@ -396,7 +387,6 @@ const routesList = [
     title: 'Wallet',
     icon: Icon.MonoWallet,
     link: 'personal-dividends',
-    noClickable: !isUserAuthenticated.value,
     subNav: [
       {
         title: 'Dividends',
@@ -512,47 +502,47 @@ function goToHomePage() {
 
 // maturity in
 
-const maturityIn = ref(0);
+const maturityIn = ref(0)
 
 const initTimer = () => {
-  if($app.store.user.sellShares?.created_at) {
-    const endDate = $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf() + (1000*60*60*24*1095);
-    const now = new Date();
-    const tempTime = (endDate - now.getTime())/1000;
+  if ($app.store.user.sellShares?.created_at) {
+    const endDate = $app.filters.dayjs($app.store.user.sellShares?.created_at).valueOf() + 1000 * 60 * 60 * 24 * 1095
+    const now = new Date()
+    const tempTime = (endDate - now.getTime()) / 1000
 
-    if(tempTime <= 0) {
-      maturityIn.value = 0;
+    if (tempTime <= 0) {
+      maturityIn.value = 0
     } else {
-      maturityIn.value = Math.floor(tempTime / (3600*24));
+      maturityIn.value = Math.floor(tempTime / (3600 * 24))
     }
   } else {
     $app.api.eth.billingEth
-    .initSellShares()
-    .then((response: any) => {
-      $app.store.user.sellShares = response.data
-    })
-    .catch(() => {
-      // Todo: notify something went wrond
-    })
+      .initSellShares()
+      .then((response: any) => {
+        $app.store.user.sellShares = response.data
+      })
+      .catch(() => {
+        // Todo: notify something went wrond
+      })
   }
 }
 
 watch(
   () => $app.store.user.sellShares?.created_at,
   () => {
-      initTimer()
-  }
+    initTimer()
+  },
 )
 
 onMounted(() => {
-  initTimer();
+  initTimer()
   if (route.query?.action == 'modal-credit-card') {
     openModalCredit()
     router.replace({ query: {} })
   }
 })
-function loginPage(){
-  window.location.href  = window.location.origin + '/personal/login'.replace('app.', '')
+function loginPage() {
+  window.location.href = window.location.origin + '/personal/login'.replace('app.', '')
 }
 
 function registerPage() {

@@ -253,10 +253,6 @@
 
     }
 
-    &--disabled {
-      cursor: not-allowed;
-    }
-
     &--logout .w-aside__link-text {
       color: var(--text-tertiary);
     }
@@ -369,10 +365,7 @@
       }
 
     }
-    &--disabled {
-      opacity: 0.7;
-      pointer-events: none;
-    }
+    
   }
 
 
