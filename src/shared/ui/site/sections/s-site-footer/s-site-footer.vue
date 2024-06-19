@@ -115,7 +115,7 @@ const menu = [
       { text: 'Fund', href: '/fund' },
       { text: 'News', href: '/blog' },
       { text: 'Bitcoin Whitepaper', href: 'https://files.bitcoinetf.org/etf/public/bitcoin.pdf' },
-      { text: 'PR Package', href: '/#' }, //
+      // { text: 'PR Package', href: '/#' }, //
     ],
   },
   {
