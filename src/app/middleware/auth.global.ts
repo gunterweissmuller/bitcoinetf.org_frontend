@@ -14,10 +14,9 @@ export default defineNuxtRouteMiddleware((to) => {
     'personal-fund',
     'personal-assets',
     'personal-assets-symbol',
-    'personal-login',
-    'personal-registration',
     'personal-analytics-performance-latest-trades',
     'personal-analytics-shareholders-latest-purchases',
+    ...excludedRouteNames
   ]
 
   const fundRouteNames = [ 'personal-portfolio', 'personal-protection', 'personal-shareholders' ]
