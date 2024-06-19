@@ -542,11 +542,11 @@ onMounted(() => {
   }
 })
 function loginPage() {
-  window.location.href = window.location.origin + '/personal/login'.replace('app.', '')
+  router.push({ name: 'personal-login' })
 }
 
 function registerPage() {
-  window.location.href = window.location.origin + '/personal/registration'.replace('app.', '')
+  router.push({ name: 'personal-registration' })
 }
 </script>
 

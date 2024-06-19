@@ -626,7 +626,6 @@ const fetchDemoUserToken = async () => {
   }
 }
 onMounted(async () => {
-  console.log('rules -->',rules);
   if (can('readonly', 'demo')){
     await fetchDemoUserToken()
   }

@@ -214,6 +214,8 @@
       @media (max-width: 767px) {
         width: torem(56);
         height: torem(56);
+        top: torem(4);
+        right: torem(4);
       }
     }
   }
@@ -325,7 +327,7 @@
       }
       &[href='/#'] {
         color: #ffffff80;
-
+        pointer-events: none;
         &:hover {
           cursor: default;
           opacity: 1;
