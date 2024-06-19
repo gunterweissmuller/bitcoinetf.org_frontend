@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <a-dropdown @get-current-option="getPersonalReferralsStats($event.value)"/>
+          <a-dropdown @get-current-option="getPersonalReferralsStats($event.value)" />
         </div>
       </div>
 
@@ -246,6 +246,7 @@ import { SwiperSlide } from 'swiper/vue'
 import { Pagination, Navigation } from 'swiper/modules'
 import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-promo-card.vue'
 import { user } from '~/src/app/store/user'
+import { getCookie, deleteCookie } from '../../shared/helpers/cookie.helpers'
 
 interface ISetMethodBody {
   address: string
@@ -259,19 +260,8 @@ const isOpenShareModal = ref(false)
 
 const { $app } = useNuxtApp()
 
-const checkKyc = async () => {
-  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
-    return formsResponse.data[0].status === 'passed'
-  })
-}
 const openModal = async () => {
-  const isKycFinished = await checkKyc()
-
-  if (isKycFinished) {
-    isOpenModal.value = true
-  } else {
-    navigateTo({ name: 'personal-kyc', query: { redirect: 'personal-more-referrals' } })
-  }
+  isOpenModal.value = true
 }
 
 const route = useRoute()
@@ -465,7 +455,6 @@ const getPersonalReferrals = async (initial: boolean = false): Promise<void> => 
 }
 
 const getPersonalReferralsStats = async (time: 'all' | number) => {
-  
   const filterObj: Record<string, any> = {}
 
   if (time !== 'all') {
@@ -488,9 +477,20 @@ const config = useRuntimeConfig()
 const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
-
 onMounted(async () => {
-  await getWalletReferrals()
+  const savedWalletOptions = getCookie('wallet_options')
+  if (savedWalletOptions){
+    const jsonParsed = JSON.parse(savedWalletOptions)
+    if (jsonParsed.status == 'finished'){
+      await setMethod({...jsonParsed?.walletOptions})
+      deleteCookie('wallet_options')
+    }else{
+      await getWalletReferrals()
+    }
+  }else{
+    await getWalletReferrals()
+  }
+
   await getPersonalReferrals(true)
 
   getPersonalReferralsStats('all')

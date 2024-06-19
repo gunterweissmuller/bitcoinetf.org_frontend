@@ -167,7 +167,7 @@ import { onUnmounted } from 'vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
 import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
 import { ADropdownOption } from '~/src/shared/types/global';
-
+import { deleteCookie, getCookie } from '~/src/shared/helpers/cookie.helpers'
 const { $app } = useNuxtApp()
 
 const isOpenModal = ref(false)
@@ -368,6 +368,19 @@ const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
 onMounted(async () => {
+  const savedWalletOptions = getCookie('wallet_options')
+  if (savedWalletOptions){
+    const jsonParsed = JSON.parse(savedWalletOptions)
+    if (jsonParsed.status == 'finished'){
+      await setMethod({...jsonParsed?.walletOptions})
+      deleteCookie('wallet_options')
+    }else{
+      await getWalletDividends()
+    }
+  }else{
+    await getWalletDividends()
+  }
+
   await getWalletDividends()
   await getPersonalDividends()
 
