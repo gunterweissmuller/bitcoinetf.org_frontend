@@ -139,12 +139,14 @@ import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { auth } from '~/src/app/store/auth';
+import { useAbility } from '@casl/vue';
 // import { Centrifuge } from 'centrifuge'
 
 const { $app } = useNuxtApp()
 const authStore = auth()
 
 const route = useRoute();
+const { can, rules } = useAbility()
 
 const { isLaptop, isDesktop, isMobile, isTablet } = useMediaDevice()
 
@@ -624,7 +626,10 @@ const fetchDemoUserToken = async () => {
   }
 }
 onMounted(async () => {
-  await fetchDemoUserToken()
+  console.log('rules -->',rules);
+  if (can('readonly', 'demo')){
+    await fetchDemoUserToken()
+  }
   await getWalletDividends()
   await getDividendsByYear()
   await getLastPayment()
