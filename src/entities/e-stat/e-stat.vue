@@ -31,7 +31,7 @@
         v-if="props.bottom === 'link'"
       >
         <a-icon width="14" :name="Icon.MonoExternalLink" />
-        <a :href="`https://${config.public.EXPLORER_API}/account/${config.public.RESERVE_WALLET_ADDRESS}`" target="_blank" class="e-stat__blockchain-title">
+        <a @click="goToRegistration" target="_blank" class="e-stat__blockchain-title">
           Verify on Blockchain
         </a>
       </button>
@@ -80,6 +80,8 @@ import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import { Icon } from '~/src/shared/constants/icons';
 import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
 import { ADropdownOption } from '~/src/shared/types/global';
+import { auth } from '~/src/app/store/auth';
+const authStore = auth()
 
 const props = withDefaults(
   defineProps<{
@@ -120,13 +122,24 @@ const props = withDefaults(
   },
 );
 
-const config = useRuntimeConfig();
 
 const emit = defineEmits(['get-current-option', 'click-file']);
 
 const handleDropdown = (currentOption : ADropdownOption) => {
   emit('get-current-option', currentOption);
 }
+function goToRegistration() {
+    if (authStore.isAuth) {
+      const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
+      const blockchainLink = isProd
+        ? 'https://explorer.nextdev.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
+        : 'https://explorer.stage.techetf.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
+        
+      window.open(blockchainLink, '_blank').focus()
+    } else {
+      window.location.href = window.location.origin + '/personal/registration'.replace('app.', '')
+    }
+  }
 </script>
 
 <style src="./e-stat.scss" lang="scss" />

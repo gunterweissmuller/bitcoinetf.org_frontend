@@ -1,11 +1,25 @@
-import {useNuxtApp, useRouter} from '#app'
-import useMediaDevice from '~/composables/useMediaDevice';
+import { useNuxtApp, useRouter } from '#app'
+import useMediaDevice from '~/composables/useMediaDevice'
+import { useAbility } from '@casl/vue'
 
 export default defineNuxtRouteMiddleware((to) => {
   const {$app} = useNuxtApp();
   const router = useRouter()
   const { isLaptop, isDesktop } = useMediaDevice();
   const excludedRouteNames = ['personal-login', 'personal-registration', 'personal-reset', 'personal-verify-email', 'personal-login-one-time']
+  const excludedRoutesForDemoUser = [
+    'personal-portfolio',
+    'personal-protection',
+    'personal-shareholders',
+    'personal-fund',
+    'personal-assets',
+    'personal-assets-symbol',
+    'personal-login',
+    'personal-registration',
+    'personal-analytics-performance-latest-trades',
+    'personal-analytics-shareholders-latest-purchases',
+  ]
+
   const fundRouteNames = [ 'personal-portfolio', 'personal-protection', 'personal-shareholders' ]
   const includedRouteMask = to.path.includes('personal')
   const urlParams = new URLSearchParams(window.location.search);
@@ -50,9 +64,20 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo({path: to.path}, {replace: true})
   }
 
+  const { can } = useAbility()
 
-  if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated) {
-    return navigateTo({name: 'personal-login'})
+  if (
+    !$app.store.auth.isUserAuthenticated &&
+    can('readonly', 'demo') &&
+    !excludedRoutesForDemoUser.includes(to.name) &&
+    (to.name as string).includes('personal')
+  ) {
+    return navigateTo({ name: 'personal-login' })
+  }
+
+   
+   if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated && !can('readonly', 'demo')) {
+    return navigateTo({ name: 'personal-login' })
   }
 
   if (excludedRouteNames.includes(to.name) && $app.store.auth.isUserAuthenticated) {

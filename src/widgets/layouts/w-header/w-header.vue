@@ -138,9 +138,11 @@ import EFundTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
 import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
+import { auth } from '~/src/app/store/auth';
 // import { Centrifuge } from 'centrifuge'
 
 const { $app } = useNuxtApp()
+const authStore = auth()
 
 const route = useRoute();
 
@@ -613,8 +615,16 @@ const getLastPayment = async () => {
     // Todo: notify something went wrond
   })
 }
-
+const fetchDemoUserToken = async () => {
+  try {
+    const {data} =  await $app.api.eth.auth.getDemoUserToken()  
+    authStore.setTokens(data)
+  } catch (error) {
+    console.error(error);
+  }
+}
 onMounted(async () => {
+  await fetchDemoUserToken()
   await getWalletDividends()
   await getDividendsByYear()
   await getLastPayment()
