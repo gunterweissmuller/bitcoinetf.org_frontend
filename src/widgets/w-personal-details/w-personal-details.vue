@@ -1,6 +1,9 @@
 <template>
   <div class="w-personal-details page-max-width--small">
     <div class="w-personal-details__wrap">
+      <div v-if="isMobile" class="w-personal-details__note">
+        Here you can find the personal details you provided when completing the KYC. Please contact support in order to update or change any of your personal details.
+      </div>
       <div v-if="isLaptop || isDesktop" class="w-personal-details__info">
         <div class="w-personal-details__avatar">
           <a-avatar size="64px" photo-src="/img/avatar.png" class="w-personal-details__avatar-pic" :robot-data="$app.store.user?.info?.account?.uuid"/>
@@ -31,7 +34,7 @@ import AAvatar from '~/src/shared/ui/atoms/a-avatar/a-avatar.vue'
 import { useNuxtApp } from '#app'
 import FReferFriends from '~/src/features/f-refer-friends/f-refer-friends.vue'
 
-const { isLaptop, isDesktop } = useMediaDevice()
+const { isLaptop, isDesktop, isMobile } = useMediaDevice()
 
 const { $app } = useNuxtApp()
 
