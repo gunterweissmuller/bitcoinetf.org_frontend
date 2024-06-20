@@ -12,7 +12,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   //config.public.DOMAIN = 'localhost';
   //config.public.APP_DOMAIN = 'app.localhost'
 
-  if(!process.dev && !to.path.includes('.')) {
+  if(!process.dev) {
     /*if(window.location.hostname === config.public.APP_DOMAIN && to.path === '/') {
       const newUrl = `http://${config.public.DOMAIN}${to.path}`
       window.location.href = newUrl;
@@ -21,8 +21,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     // $app.store.purchase.type = selectedCurrency.value.value;
     // $app.store.purchase.amount = investmentAmount.value;
     // $app.store.purchase.amountUS = investmentAmount.value;
-
-    const custom = to.query.action || ''
+    const custom = to.query.action || from.query.action || ''
 
     if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name) && to.path !== '/redirect') {
       let newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
