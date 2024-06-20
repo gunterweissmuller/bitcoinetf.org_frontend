@@ -37,11 +37,12 @@ export default defineNuxtRouteMiddleware((to, from) => {
       }
 
       console.log('custom', custom)
+
       if (custom){
         newUrl += `&action=${custom}`
       }
 
-      window.location.href = newUrl;
+      // window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
@@ -53,7 +54,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
         newUrl += `&action=${custom}`
       }
 
-      window.location.href = newUrl;
+
+      // window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     }
