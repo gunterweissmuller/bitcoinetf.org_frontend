@@ -3,11 +3,11 @@
 }
 
 .e-apply-credit-success-modal {
-  background: var(--Blue-500);
-  background-position-x: left;
-  background-position-y: bottom;
-  background-size: 85%;
-  background-repeat: no-repeat;
+  background: var(--blue-500) !important;
+  background-position-x: left !important;
+  background-position-y: bottom !important;
+  background-size: 85% !important;
+  background-repeat: no-repeat !important;
   background-image: url("/img/hand-card.png") !important;
   padding: 0 !important;
 
@@ -17,7 +17,7 @@
     background: var(--surfaces-surface-1);
     width: 100%;
     max-width: torem(480);
-    max-height: torem(348);
+    height: 80%;
   }
 
   &__wrap {
