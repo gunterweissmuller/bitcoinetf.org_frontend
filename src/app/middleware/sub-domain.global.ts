@@ -22,8 +22,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     // $app.store.purchase.amount = investmentAmount.value;
     // $app.store.purchase.amountUS = investmentAmount.value;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const custom = urlParams.get('action');
+    const custom = to.query.custom || ''
 
     if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name) && to.path !== '/redirect') {
       let newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
