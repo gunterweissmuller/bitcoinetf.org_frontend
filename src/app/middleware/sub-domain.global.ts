@@ -12,7 +12,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   //config.public.DOMAIN = 'localhost';
   //config.public.APP_DOMAIN = 'app.localhost'
 
-  if(!process.dev) {
+  if(!process.dev && !to.path.includes('.')) {
     /*if(window.location.hostname === config.public.APP_DOMAIN && to.path === '/') {
       const newUrl = `http://${config.public.DOMAIN}${to.path}`
       window.location.href = newUrl;
