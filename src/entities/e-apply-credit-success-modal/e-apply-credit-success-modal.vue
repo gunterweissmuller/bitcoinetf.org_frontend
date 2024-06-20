@@ -1,12 +1,13 @@
 <template>
-  <m-modal @close="close" class="e-apply-credit-success-modal" :max-height="MAX_HEIGHT" v-model="isOpenModal">
+  <m-modal @close="close" class="e-apply-credit-success-modal" full-screen v-model="isOpenModal">
     <div class="e-apply-credit-success-modal__wrap">
-      <img src="/img/mini-credit.png" alt="bonus" class="e-apply-credit-success-modal__wrap-pic" />
       <div class="e-apply-credit-success-modal__wrap-title">Thank you!</div>
       <div class="e-apply-credit-success-modal__wrap-text">
-        There's {{ count - 1 }} ahead of you, we will notify you when the card is ready to be shipped. Thank you!
+        You're added to our credit card waiting list, your number in the queue is #{{ count - 1 }}
       </div>
-      <a-button class="e-apply-credit-success-modal__wrap-btn" @click="close" text="Close" variant="primary" />
+      <div>
+        <a-button class="e-apply-credit-success-modal__wrap-btn" @click="close" text="Got it!" variant="primary" is-full-width />
+      </div>
     </div>
   </m-modal>
 </template>
@@ -15,8 +16,6 @@
 import { computed } from 'vue'
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
-
-const MAX_HEIGHT = 400
 
 const props = withDefaults(
   defineProps<{

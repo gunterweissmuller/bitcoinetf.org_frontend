@@ -60,6 +60,7 @@ import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { useClipboard } from '@vueuse/core/index'
 import { setCookie } from '~/src/shared/helpers/cookie.helpers'
+import { useKyc } from '~/src/app/composables/useKyc'
 
 const MAX_HEIGHT = 555
 
@@ -100,6 +101,7 @@ const props = withDefaults(
 )
 
 const { $app } = useNuxtApp()
+const { checkKyc } = useKyc($app)
 
 const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
@@ -137,12 +139,6 @@ watch(
     selectedAddress.value = value
   },
 )
-
-const checkKyc = async () => {
-  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
-    return formsResponse.data[0].status === 'passed'
-  })
-}
 
 const accept = async () => {
   const isKycFinished = await checkKyc()

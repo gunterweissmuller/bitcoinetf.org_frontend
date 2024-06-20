@@ -1,4 +1,16 @@
+.m-modal-wrapper:has(.e-apply-credit-success-modal) {
+  padding: 0;
+}
+
 .e-apply-credit-success-modal {
+  background: var(--Blue-500);
+  background-position-x: left;
+  background-position-y: bottom;
+  background-size: 85%;
+  background-repeat: no-repeat;
+  background-image: url("/img/hand-card.png") !important;
+  padding: 0 !important;
+
 
   @include breakpoint($break-tablet) {
     border-radius: var(--spacing-m-3);
@@ -12,8 +24,8 @@
     display: flex;
     padding: var(--spacing-l-2) var(--spacing-m-2);
     flex-direction: column;
-    align-items: center;
-
+    justify-content: space-evenly;
+    height: 100%;
 
     &-pic {
       width: torem(80);
@@ -22,27 +34,27 @@
     }
 
     &-title {
-      text-align: center;
-      color: var(--text-primary);
+      color: var(--text-inverse-primary);
       font-family: Dm, sans-serif;
-      font-size: torem(18);
+      font-size: torem(32);
       font-weight: 700;
       line-height: torem(23);
-      margin-bottom: var(--spacing-s);
+      margin-bottom: var(--spacing-m-1);
     }
 
     &-text {
       text-align: center;
-      color: var(--text-secondary);
+      color: var(--text-inverse-secondary);
       font-family: Dm, sans-serif;
       font-size: torem(16);
-      font-weight: 400;
+      font-weight: 500;
       line-height: torem(21);
       margin-bottom: var(--spacing-m-3);
+      flex: 1;
     }
 
     &-btn {
-      width: 100%;
+      background-color: var(--button-secondary);
     }
   }
 }
