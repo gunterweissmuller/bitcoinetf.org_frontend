@@ -6,7 +6,7 @@
   background-color: var(--blue-500) !important;
   background-position-x: left !important;
   background-position-y: bottom !important;
-  background-size: 85% !important;
+  background-size: 80% !important;
   background-repeat: no-repeat !important;
   background-image: url("https://files.bitcoinetf.org/etf/public/image/hand-card.png") !important;
   padding: 0 !important;
@@ -54,7 +54,8 @@
     }
 
     &-btn {
-      background-color: var(--button-secondary);
+      background-color: var(--button-secondary-1);
+      color: var(--accent-primary);
     }
   }
 }
