@@ -136,8 +136,12 @@ const menu = [
 ]
 
 const SOCIAL_LINKS = [
-  { icon: Icon.MonoTelegram2Black, link: 'https://t.me/BitcoinETF_org' },
+  { icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org' },
+  { icon: Icon.MonoInstagramBlack, link: 'https://www.instagram.com/bitcoinetf_org/' },
+  { icon: Icon.MonoFacebookBlack, link: 'https://www.facebook.com/groups/bitcoinetforg' },
+  { icon: Icon.MonoLinkedinBlack, link: 'https://www.linkedin.com/groups/9521487/' },
   { icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat' },
+  { icon: Icon.MonoX, link: 'https://twitter.com/BitcoinETF_org',  },
   {
     icon: Icon.MonoNostr,
     link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl',

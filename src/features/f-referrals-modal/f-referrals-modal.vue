@@ -3,7 +3,7 @@
     <div class="f-referrals-modal__wrap">
       <div class="f-referrals-modal__title">Withdraw Method</div>
       <div class="f-referrals-modal__subtitle">Choose how you want to withdraw.</div>
-      
+
       <a-input
         :left-icon="METHODS_OPTIONS?.[selectedMethod]?.icon"
         custom
@@ -59,6 +59,7 @@ import MSelect from '~/src/shared/ui/molecules/m-select/m-select.vue'
 import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { useClipboard } from '@vueuse/core/index'
+import { setCookie } from '~/src/shared/helpers/cookie.helpers'
 
 const MAX_HEIGHT = 555
 
@@ -137,11 +138,26 @@ watch(
   },
 )
 
+const checkKyc = async () => {
+  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
+    return formsResponse.data[0].status === 'passed'
+  })
+}
+
 const accept = async () => {
-  isOpenModal.value = false
-  await setMethod({ method: selectedMethod.value, address: selectedAddress.value })
-  // await withdrawalReferrals()
-  emit('accept', { method: selectedMethod.value, address: selectedAddress.value })
+  const isKycFinished = await checkKyc()
+  const walletOptions = { method: selectedMethod.value, address: selectedAddress.value }
+
+  if (isKycFinished) {
+    isOpenModal.value = false
+    await setMethod(walletOptions)
+    await withdrawalReferrals()
+    emit('accept', walletOptions)
+  } else {
+    const day = 86_400
+    setCookie('wallet_options', JSON.stringify({ path: 'referrals', walletOptions }), { 'max-age': day })
+    navigateTo({ name: 'personal-kyc', query: { redirect: 'personal-more-referrals' } })
+  }
 }
 const removeWallet = () => {
   isOpenModal.value = false

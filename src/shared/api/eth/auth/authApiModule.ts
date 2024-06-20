@@ -788,7 +788,22 @@ export default class AuthApiModule {
       return Promise.reject(new Error('Something bad happened'))
     }
   }
-
+  async getDemoUserToken(){
+    try {
+      return await this.adapter.requestJsonAsync({
+        parameterValue: `auth/login/demo`,
+        request: {
+          method: HTTPMethod.POST,
+        },
+        operationDescription: 'Receiving a purchase',
+        withoutPublic: true,
+      })
+    } catch (e) {
+      if (e instanceof ApiErrorFlow) {
+        throw new ApiErrorFlow(e.errors)
+      }
+    }
+  }
   // walletConnect
 
   async walletConnectGetCredentials() {

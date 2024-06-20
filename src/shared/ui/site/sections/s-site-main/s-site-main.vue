@@ -139,11 +139,7 @@ const scrollToSection = () => {
 }
 
 function clickLaunch() {
-  if (authStore.isUserAuthenticated) {
-    router.push('/personal/fund')
-  } else {
-    window.open('/personal/registration', '_blank').focus()
-  }
+  router.push('/personal/fund')
 }
 
 onMounted(async () => {

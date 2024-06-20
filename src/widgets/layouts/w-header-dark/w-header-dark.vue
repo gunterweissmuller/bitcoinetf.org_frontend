@@ -47,21 +47,30 @@
           </nuxt-link>
         </div>
         <div class="w-header-dark__controls w-header-dark__controls-mobile">
+        <nuxt-link to="/personal/registration" v-if="!isUserAuthenticated">
           <a-button
-            v-if="!isUserAuthenticated"
+            size="small"
+            text="Register"
+            isFullWidth
+            :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
+          />
+        </nuxt-link>
+        <nuxt-link to="/personal/fund" v-if="!isUserAuthenticated">
+          <a-button
             size="small"
             text="Launch app"
-            :variant="route.name === '' ? 'primary-website' : 'primary2'"
-            @click="$router.push({ name: 'personal-registration' })"
+            variant="tertiary"
+            isFullWidth
           />
+        </nuxt-link>
         </div>
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
         <nuxt-link to="/personal/registration" v-if="!isUserAuthenticated"
-          ><a-button
-            text="Launch app"
-            size="small"
-            :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
+          ><a-button text="Register" size="small" :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
+        /></nuxt-link>
+        <nuxt-link to="/personal/fund" v-if="!isUserAuthenticated"
+          ><a-button text="Launch app" size="small" variant="tertiary"
         /></nuxt-link>
         <a-avatar
           v-if="isUserAuthenticated"

@@ -17,7 +17,6 @@
             v-for="(purchase, idx) in renderedPurchases"
             :class="[
               'w-purchases__content-item',
-              { 'w-purchases__content-item--active': purchase?.uuid === selectedPurchase?.uuid && isPage },
             ]"
             :key="purchase?.uuid"
             :with-id="idx === 0 ? 'purchase' : ''"
@@ -41,12 +40,10 @@ import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue';
 import FPurchasesModal from '~/src/features/f-purchases-modal/f-purchases-modal.vue';
 import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
 import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
-import useMediaDevice from '~/composables/useMediaDevice';
 import { useNuxtApp } from '#app';
 import { computed } from 'vue';
 import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
-const { isDesktop } = useMediaDevice()
 
 const { $app } = useNuxtApp()
 
@@ -63,7 +60,7 @@ const props = withDefaults(
 
 const loading = ref<boolean>(true);
 
-const purchases = ref($app.store.user.lastPurchases)
+const purchases = ref([])
 const currentPage = ref(1)
 const hasNextPage = ref(true)
 const isOpenModal = ref(false)
@@ -115,9 +112,6 @@ const getPurchase = async (uuid: string) => {
 }
 
 const openPurchase = () => {
-  if (isDesktop.value && props.isPage) {
-    return
-  }
 
   isOpenModal.value = true
 }

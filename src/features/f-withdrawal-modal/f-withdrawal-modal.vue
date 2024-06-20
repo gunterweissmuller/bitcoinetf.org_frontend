@@ -92,6 +92,7 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { useClipboard } from '@vueuse/core'
 import { validate } from 'bitcoin-address-validation';
 import { useNuxtApp } from '#app'
+import { setCookie } from '../../shared/helpers/cookie.helpers';
 const { $app } = useNuxtApp()
 
 const MAX_HEIGHT = 555
@@ -262,12 +263,14 @@ const accept = async () => {
   }
 
   const isKycFinished = await checkKyc()
-
+  const walletOptions = { method: selectedMethod.value, address: selectedAddress.value }
   if (isKycFinished) {
     isOpenModal.value = false
-    emit('accept', { method: selectedMethod.value, address: selectedAddress.value })
+    emit('accept', walletOptions)
   } else {
-    navigateTo({ name: 'personal-kyc' })
+    const day = 86_400
+    setCookie('wallet_options', JSON.stringify({ path: 'dividens', walletOptions }), { "max-age": day })
+    navigateTo({ name: 'personal-kyc'})
   }
 }
 const removeWallet = () =>{
