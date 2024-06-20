@@ -22,18 +22,10 @@
         </div>
       </div>
 
-      <a-dropdown
-        v-if="props.bottom === 'dropdown'"
-        @get-current-option="handleDropdown"
-      />
-      <button
-        class="e-stat__blockchain"
-        v-if="props.bottom === 'link'"
-      >
+      <a-dropdown v-if="props.bottom === 'dropdown'" @get-current-option="handleDropdown" />
+      <button class="e-stat__blockchain" v-if="props.bottom === 'link'">
         <a-icon width="14" :name="Icon.MonoExternalLink" />
-        <a @click="goToRegistration" target="_blank" class="e-stat__blockchain-title">
-          Verify on Blockchain
-        </a>
+        <a @click="goToRegistration" target="_blank" class="e-stat__blockchain-title"> Verify on Blockchain </a>
       </button>
       <div v-if="props.bottom === 'none'" style="height: 21px"></div>
     </template>
@@ -48,11 +40,15 @@
         <div v-if="listType === 'items'" v-for="(item, idx) in list" :key="idx" class="e-stat-list__item">
           <div class="e-stat-list__item-left">
             <div class="e-stat-list__date">{{ item.date }}</div>
-<!--            <div class="e-stat-list__time">{{ item.time }}</div>-->
+            <!--            <div class="e-stat-list__time">{{ item.time }}</div>-->
           </div>
-          <div :class="['e-stat-list__item-right', {'e-stat-list__item-right--minus': item.type === 'withdrawal'}]">
+          <div :class="['e-stat-list__item-right', { 'e-stat-list__item-right--minus': item.type === 'withdrawal' }]">
             <div class="e-stat-list__usd">{{ item.usd }}</div>
-            <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="e-stat-list__btc" v-html="item.btc"></div>
+            <div
+              v-if="$app.store.user?.info?.account?.order_type !== 'usdt'"
+              class="e-stat-list__btc"
+              v-html="item.btc"
+            ></div>
           </div>
         </div>
         <div
@@ -75,71 +71,54 @@
 </template>
 
 <script setup lang="ts">
-import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
-import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
-import { Icon } from '~/src/shared/constants/icons';
-import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
-import { ADropdownOption } from '~/src/shared/types/global';
-import { auth } from '~/src/app/store/auth';
+import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
+import { Icon } from '~/src/shared/constants/icons'
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue'
+import { ADropdownOption } from '~/src/shared/types/global'
+import { LINKS } from '~/src/shared/constants/global'
+
+import type { Props } from './e-stat.type'
+
+import { auth } from '~/src/app/store/auth'
 const authStore = auth()
 
-const props = withDefaults(
-  defineProps<{
-    title: string
-    date?: string
-    titleColor?: 'primary' | 'success'
-    titleLink?: string
-    difference?: string | undefined
-    subtitle?: string | undefined
-    info: string
-    options?: any
-    toggleTitle?: string
-    modelValue?: any
-    listType?: 'items' | 'files'
-    type?: 'default' | 'list'
-    list?: any
-    popper?: any
-    fixedHeader?: boolean
-    icon: string
-    iconType: 'full' | 'small'
-    bottom: 'dropdown' | 'link' | 'none'
-  }>(),
-  {
-    titleColor: 'primary',
-    titleLink: '/',
-    toggleTitle: '',
-    date: '',
-    options: null,
-    type: 'default',
-    listType: 'items',
-    list: [],
-    popper: undefined,
-    fixedHeader: false,
-    icon: Icon.ColorfulBitcoin,
-    iconType: 'full',
-    subtitle: '',
-    bottom: 'none'
-  },
-);
+const props = withDefaults(defineProps<Props>(), {
+  titleColor: 'primary',
+  titleLink: '/',
+  toggleTitle: '',
+  date: '',
+  options: null,
+  type: 'default',
+  listType: 'items',
+  list: [],
+  popper: undefined,
+  fixedHeader: false,
+  icon: Icon.ColorfulBitcoin,
+  iconType: 'full',
+  subtitle: '',
+  bottom: 'none',
+})
 
+const emit = defineEmits<{
+  'get-current-option': [option: ADropdownOption]
+  'click-file': [file: any]
+}>()
 
-const emit = defineEmits(['get-current-option', 'click-file']);
-
-const handleDropdown = (currentOption : ADropdownOption) => {
-  emit('get-current-option', currentOption);
+const handleDropdown = (currentOption: ADropdownOption) => {
+  emit('get-current-option', currentOption)
 }
 function goToRegistration() {
-    if (authStore.isAuth) {
-      const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
-      const blockchainLink = isProd
-        ? 'https://explorer.nextdev.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
-        : 'https://explorer.stage.techetf.org/account/PccUG4tvCYT8RaaCozjCzRXyxpryAgowJ4'
-        
-      window.open(blockchainLink, '_blank').focus()
-    } else {
-      window.location.href = window.location.origin + '/personal/registration'.replace('app.', '')
-    }
+  if (authStore.isAuth) {
+    const isProd = ['bitcoinetf.org', 'app.bitcoinetf.org'].includes(window.location.host) ? true : false
+
+    const blockchainLink = isProd ? LINKS.BLOCKCHAIN_EXPLORER_LINK.PROD : LINKS.BLOCKCHAIN_EXPLORER_LINK.STAGE
+
+    ;(window.open(blockchainLink, '_blank') as Window).focus()
+  } else {
+    navigateTo({ name: 'personal-registration' })
   }
+}
 </script>
 
 <style src="./e-stat.scss" lang="scss" />
