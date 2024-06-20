@@ -320,7 +320,7 @@ const checkCardRequest = async () => {
   const isKycFinished = await checkKyc()
 
   if (!isKycFinished) {
-    router.push({ name: 'personal-kyc' })
+    router.push({ name: 'personal-kyc', query: { action: 'modal-credit-card' } })
     return
   }
 

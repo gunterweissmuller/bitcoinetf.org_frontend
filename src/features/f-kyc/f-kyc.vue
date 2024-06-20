@@ -371,6 +371,12 @@ const saveScreen = async () => {
         currentScreenId.value = screens.value[currentStep.value].uuid
         currentStep.value += 1
       } else {
+        if (route.query.action === 'modal-credit-card') {
+          router.push({ name: 'personal-more', query: { action: 'modal-credit-card' } })
+
+          return
+        }
+        
         alreadyPassedForm.value = true
         finishKycModel.value = true
       }
