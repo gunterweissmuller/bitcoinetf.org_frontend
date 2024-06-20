@@ -282,6 +282,7 @@ import { ref } from 'vue'
 import FTermsModal from '~/src/features/f-terms-modal/f-terms-modal.vue'
 import WCertificate from '~/src/widgets/w-certificate/w-certificate.vue'
 import ASwitchNew from '~/src/shared/ui/atoms/a-switch-new/a-switch-new.vue'
+import { useKyc } from '~/src/app/composables/useKyc'
 
 const { $app } = useNuxtApp()
 
@@ -303,6 +304,7 @@ const isUserAuthenticated = computed(() => {
 const { isLaptop, isDesktop, isMobile, isTablet } = useMediaDevice()
 const route = useRoute()
 const router = useRouter()
+const { checkKyc } = useKyc($app)
 
 const isOpenModalCredit = ref(false)
 const isOpenModalCreditSuccess = ref(false)
@@ -315,6 +317,13 @@ const isHiddenTerms = computed(() => {
 })
 
 const checkCardRequest = async () => {
+  const isKycFinished = await checkKyc()
+
+  if (!isKycFinished) {
+    router.push({ name: 'personal-kyc' })
+    return
+  }
+
   await $app.api.eth.billingEth
     .getCreditCardRequestInfo()
     .then((response) => {
