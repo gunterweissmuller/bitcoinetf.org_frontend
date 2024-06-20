@@ -6,14 +6,14 @@
     :is-fiat="isFiatLanding"
   />
 
-  <div class="langing-calculation__chat" v-if="width > 767">
+  <div class="landing-calculation__chat" v-if="width > 767">
     <iframe src="https://secure.livechatinc.com/licence/16652127/open_chat.cgi"></iframe>
   </div>
-  <div class="w-buy-shares-payment__divider">Or</div>
-  <div class="langing-calculation__processWith">
+  <div class="landing-calculation__divider">Or</div>
+  <div class="landing-calculation__processWith">
     <span>Proceed with</span>
     <nuxt-link to="/tetherspecial" v-if="isFiatLanding">
-      <a-icon :name="Icon.ColorfulUsdttron" class="langing-calculation__processWith--tron"/>
+      <a-icon :name="Icon.ColorfulUsdttron" class="landing-calculation__processWith--tron"/>
     </nuxt-link>
     <nuxt-link to="/weloverussia" v-if="!isFiatLanding">
       <NuxtImg src="/img/icons/colorful/visawhite.svg" class="w-[64px]" />
@@ -42,6 +42,4 @@
   )
 </script>
 
-<!-- todo split -->
-<!-- <style lang="scss" src="./landing-calculation.scss" /> -->
   

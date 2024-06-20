@@ -1,6 +1,6 @@
 .w-buy-shares-payment-short-tether {
 
-  margin-top: 60px;
+  margin: torem(60, 0);
 
   @include breakpoint($break-tablet-minus) {
     padding: 0 var(--spacing-m-1);
