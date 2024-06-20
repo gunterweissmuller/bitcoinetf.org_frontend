@@ -224,6 +224,7 @@
       }
 
       &__back {
+        cursor: pointer;
         width: torem(24);
         height: torem(24);
         margin-bottom: var(--spacing-m-2);
