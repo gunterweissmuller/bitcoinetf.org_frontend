@@ -33,17 +33,23 @@ export default defineNuxtRouteMiddleware((to, from) => {
         newUrl += "&amount=" + $app.store.purchase.amountUS;
       }
       const urlParams = new URLSearchParams(window.location.search);
-      
+
       const  custom = urlParams.get('action');
       if (custom){
         newUrl += `&action=${custom}`
       }
-      
+
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
       const newUrl = `https://${config.public.DOMAIN}${to.path === '/' ? from.path : to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
+
+      const  custom = urlParams.get('action');
+      if (custom){
+        newUrl += `&action=${custom}`
+      }
+
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
