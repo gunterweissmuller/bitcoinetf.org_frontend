@@ -22,6 +22,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
     // $app.store.purchase.amount = investmentAmount.value;
     // $app.store.purchase.amountUS = investmentAmount.value;
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const custom = urlParams.get('action');
+
     if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name) && to.path !== '/redirect') {
       let newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
 
@@ -32,9 +35,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
       if ($app.store.purchase.amountUS) {
         newUrl += "&amount=" + $app.store.purchase.amountUS;
       }
-      const urlParams = new URLSearchParams(window.location.search);
 
-      const  custom = urlParams.get('action');
+      console.log('custom', custom)
       if (custom){
         newUrl += `&action=${custom}`
       }
@@ -43,9 +45,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
-      const newUrl = `https://${config.public.DOMAIN}${to.path === '/' ? from.path : to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
+      let newUrl = `https://${config.public.DOMAIN}${to.path === '/' ? from.path : to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
 
-      const  custom = urlParams.get('action');
+      console.log('custom', custom)
+
       if (custom){
         newUrl += `&action=${custom}`
       }
