@@ -45,7 +45,21 @@ export default defineNuxtRouteMiddleware((to) => {
     $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
       $app.store.user.blockchainUserWallet = resp?.data.uid
     })
-    return navigateTo({path: to.path}, {replace: true})
+
+    const route = {
+      path: to.path,
+      query: {}
+    }
+
+    const action = urlParams.get('action')
+    
+    if (action) {
+      route.query = {
+        action
+      }
+    }
+
+    return navigateTo(route, {replace: true})
     //router.replace({ query: {} })
     //window.location.search = '';
   }
@@ -74,7 +88,7 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo({ name: 'personal-login' })
   }
 
-   
+
    if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated && !can('readonly', 'demo')) {
     return navigateTo({ name: 'personal-login' })
   }
