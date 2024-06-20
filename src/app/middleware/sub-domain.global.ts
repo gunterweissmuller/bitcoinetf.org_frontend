@@ -32,7 +32,13 @@ export default defineNuxtRouteMiddleware((to, from) => {
       if ($app.store.purchase.amountUS) {
         newUrl += "&amount=" + $app.store.purchase.amountUS;
       }
-
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      const  custom = urlParams.get('action');
+      if (custom){
+        newUrl += `&action=${custom}`
+      }
+      
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
