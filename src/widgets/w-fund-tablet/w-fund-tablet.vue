@@ -4,32 +4,17 @@
       <div class="w-fund-tablet__title">
         Fund
       </div>
-      <m-slider
-        class="w-fund-tablet__info"
-        id="w-fund-tablet__info-slider"
-        loop
-        :speed="30000"
-        :space-between="0"
-        slides-per-view="auto"
-        :mousewheel="false"
-        :looped-slides="0"
-        :modules="[Autoplay]"
-        :autoplay="{
-          delay: 0,
-          disableOnInteraction: false,
-        }"
-        :allowTouchMove="false"
-        disableOnInteraction
-      >
-        <template #slides>
-          <swiper-slide class="w-header__item-row" v-for="index in 3" :key="index">
+      <client-only>
+        <Vue3Marquee :duration="95" class="w-fund-tablet__info">
+          <div class="w-header__item-row" v-for="index in 3" :key="index">
             <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
               <div class="w-header__item-title">{{ item.text }}</div>
               <div class="w-header__item-text" v-html="item.modifyValue"></div>
             </div>
-          </swiper-slide>
-        </template>
-      </m-slider>
+          </div>
+        </Vue3Marquee>
+      </client-only>
+    
       <div class="w-fund-tablet__fund-charts">
         <w-chart-fund class="w-fund-tablet__fund-chart" title="AUM Growth" is-main is-total-assets aum-size-usd />
         <w-chart-portfolio
@@ -248,6 +233,21 @@ onMounted(async () => {
     btcUsdt.value = resp?.data?._value?.lastPrice
   })
 })
+watch(
+  () => marqueList.value,
+  (newValue, oldValue) => {
+    let changedValues = ''
+    newValue.forEach((el, index) => {
+      if (el.value != oldValue[index].value) {
+        changedValues += `${el.text} -  ${oldValue[index].modifyValue} -> ${el.modifyValue} \n`
+      }
+    })
+    if (changedValues) {
+      console.log(changedValues)
+    }
+  },
+  { deep: true },
+)
 </script>
 
 <style lang='scss' src="./v-fund-tablet.scss"></style>
