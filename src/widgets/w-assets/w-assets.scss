@@ -27,6 +27,10 @@
   }
 
   &__info {
+    display: none !important;
+    @include breakpoint($break-desktop-1024){
+      display: flex !important;
+    }
     .m-slider__wrap {
       width: 100%;
 
