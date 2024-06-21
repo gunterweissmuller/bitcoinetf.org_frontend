@@ -10,6 +10,7 @@ export interface IAsset {
   name: string
   description: string
   full_balance: number
+  incoming_amount_btc: number
 }
 
 interface IDealActivityType {
