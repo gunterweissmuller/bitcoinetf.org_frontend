@@ -1,32 +1,15 @@
 <template>
   <div class="w-assets page-max-width--big" v-if="route.params?.symbol !== undefined">
-    <m-slider
-      class="w-assets__info"
-      id="w-assets__info-slider"
-      loop
-      :speed="30000"
-      :space-between="0"
-      slides-per-view="auto"
-      :mousewheel="false"
-      :looped-slides="0"
-      :autoplay="{
-        delay: 0,
-        disableOnInteraction: false,
-      }"
-      :modules="[Autoplay]"
-      :allowTouchMove="false"
-      disableOnInteraction
-    >
-      <template #slides>
-        <swiper-slide class="w-header__item-row" v-for="index  in 3" :key="index">
-        <div class='w-header__item' v-for='(item, id) in filteredMarqueList' :key='id'>
-            <div class='w-header__item-title'>{{ item.text }}</div>
-            <div class='w-header__item-text' v-html="item.modifyValue"></div>
+    <client-only>
+      <Vue3Marquee :duration="95" class="w-assets__info">
+        <div class="w-header__item-row" v-for="index in 3" :key="index">
+          <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
+            <div class="w-header__item-title">{{ item.text }}</div>
+            <div class="w-header__item-text" v-html="item.modifyValue"></div>
+          </div>
         </div>
-        </swiper-slide>
-      </template>
-
-    </m-slider>
+      </Vue3Marquee>
+    </client-only>
     <div class="w-assets__charts">
       <w-ticker-assets :asset="asset" :active-explorer-link="['USDT', 'BRF'].includes(asset?.symbol)" />
       <w-chart-fund title="Value" type="asset" is-main is-total-assets :asset="asset" v-if="asset" />
@@ -47,9 +30,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Autoplay } from 'swiper/modules';
-import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue';
-import { SwiperSlide } from 'swiper/vue';
 import WTickerAssets from '~/src/widgets/w-ticker-assets/w-ticker-assets.vue';
 import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue';
 import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.vue';
@@ -196,7 +176,7 @@ const marqueList = computed(() => [
   {
     text: 'Bitcoin Reserve Fund Balance',
     value: shareholdersTotalBtc.value,
-    modifyValue: `${$app.filters.convertValue($app.filters.rounded(shareholdersTotalBtc.value, 5)) }`,
+    modifyValue: `${$app.filters.convertValue($app.filters.rounded(shareholdersTotalBtc.value, 5))}`,
   },
   {
     text: 'BTC Options TD Balance',
