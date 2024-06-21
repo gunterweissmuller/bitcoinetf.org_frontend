@@ -98,7 +98,8 @@ const assetsChartData = computed(() => {
     full_balance: 0
   }
   assets.value
-    .forEach((el : { full_balance: string }) => unset.full_balance += Number(el.full_balance))
+    .filter((item : { symbol: string }) => item.symbol !== symbol.value?.toUpperCase())
+    .forEach((item : { full_balance: string }) => unset.full_balance += Number(item.full_balance))
   return [asset.value, unset];
 });
 
