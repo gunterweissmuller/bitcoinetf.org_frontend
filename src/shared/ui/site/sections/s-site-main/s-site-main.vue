@@ -12,8 +12,7 @@
             height="18"
             loading="lazy"
           />
-          USDT 
-          or
+          USDT or
           <NuxtImg
             class="s-site-main__title_icon aspect-square w-[18px]"
             src="/img/icons/colorful/bitcoin.svg"
@@ -25,13 +24,14 @@
         </p>
         <div class="s-site-main__title_buttons_wrap">
           <button @click="scrollToSection" class="s-site-main__learn_more_button">Learn more</button>
-          <button @click="clickLaunch" class="s-site-main__launch_app_button">
+          <button @click="clickLaunch()" class="s-site-main__launch_app_button">
             <NuxtImg
               class="s-site-main__title_icon aspect-square w-[18px]"
               src="/img/icons/colorful/external-link.svg"
               width="18"
               height="18"
               loading="lazy"
+              @click.stop="clickLaunch('_blank')"
             />
             <span>Launch App</span>
           </button>
@@ -74,7 +74,7 @@
     <div class="s-site-main__line-gradient" style="position: absolute; bottom: -88px; right: 0"></div>
     <div class="s-site-main__slider-wrapper">
       <!-- <s-site-marquee :data="marqueeData" /> -->
-      <s-site-marquee-new  :data="marqueeData" />
+      <s-site-marquee-new :data="marqueeData" />
     </div>
   </section>
 </template>
@@ -138,8 +138,9 @@ const scrollToSection = () => {
   })
 }
 
-function clickLaunch() {
-  router.push('/personal/fund')
+function clickLaunch(target: string = '_self') {
+  const routeData = router.resolve({ name: 'personal-fund' })
+  ;(window.open(routeData.href, target) as Window).focus()
 }
 
 onMounted(async () => {

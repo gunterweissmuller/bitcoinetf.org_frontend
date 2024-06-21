@@ -175,6 +175,7 @@
 
       background: var(--surfaces-surface-glass);
       border-radius: var(--spacing-s);
+      box-shadow: var(--b-shadow-3);
 
       @include breakpoint($break-desktop-1024) {
         aspect-ratio: auto;
@@ -357,7 +358,7 @@
     padding: var(--spacing-m-1);
     border-radius: var(--spacing-s);
     border: 1px solid var(--surfaces-surface-glass-border);
-    box-shadow: var(--b-shadow-1);
+    box-shadow: var(--b-shadow-3);
 
     &-info {
       display: flex;
@@ -404,7 +405,7 @@
 
   &__list {
     border-radius: var(--spacing-s);
-    box-shadow: var(--b-shadow-1);
+    box-shadow: var(--b-shadow-3);
     backdrop-filter: blur(32.5px);
     background: var(--surfaces-surface-glass);
   }
@@ -500,7 +501,7 @@
     align-items: center;
     border-radius: var(--spacing-m-1);
     border: 1px solid var(--surfaces-surface-glass-border);
-    box-shadow: var(--b-shadow-1);
+    box-shadow: var(--b-shadow-3);
     backdrop-filter: blur(32.5px);
     background: var(--surfaces-surface-1);
     padding: var(--spacing-m-3) var(--spacing-m-2);
@@ -564,7 +565,7 @@
     border: 1px solid var(--surfaces-surface-glass-border);
     border-radius: torem(8);
     background: var(--surfaces-surface-glass);
-    box-shadow: 0 0 6px 0 rgba(#000, 0.06);
+    box-shadow: var(--b-shadow-3);
 
     margin-top: torem(24);
     @include breakpoint($break-desktop-1024) {
@@ -703,7 +704,7 @@
     border: 1px solid var(--surfaces-surface-glass-border);
     border-radius: var(--spacing-s);
     background: var(--surfaces-surface-glass);
-    box-shadow: 0 0 6px 0 rgba(#000, 0.06);
+    box-shadow: var(--b-shadow-3);
 
     margin-top: torem(24);
     @include breakpoint($break-desktop-1024) {

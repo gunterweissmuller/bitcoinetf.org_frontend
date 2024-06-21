@@ -92,6 +92,8 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { useClipboard } from '@vueuse/core'
 import { validate } from 'bitcoin-address-validation';
 import { useNuxtApp } from '#app'
+import { useKyc } from '~/src/app/composables/useKyc'
+
 import { setCookie } from '../../shared/helpers/cookie.helpers';
 const { $app } = useNuxtApp()
 
@@ -109,6 +111,7 @@ const props = withDefaults(
     modelValue: false,
   },
 )
+const { checkKyc } = useKyc($app)
 
 const emit = defineEmits(['update:modelValue', 'close', 'accept'])
 
@@ -248,11 +251,6 @@ watch(()=> selectedAddress.value, (value) => {
   }
 })
 
-const checkKyc = async () => {
-  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
-    return formsResponse.data[0].status === 'passed'
-  })
-}
 
 const accept = async () => {
   if (selectedMethod.value === 'bitcoin_on_chain') {

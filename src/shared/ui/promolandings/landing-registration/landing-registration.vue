@@ -258,5 +258,3 @@
 
 </script>
 
-<!-- todo split -->
-<!-- <style lang="scss" src="./landing-registration.scss" /> -->
