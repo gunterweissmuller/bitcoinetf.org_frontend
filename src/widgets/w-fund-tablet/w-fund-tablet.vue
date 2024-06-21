@@ -233,6 +233,21 @@ onMounted(async () => {
     btcUsdt.value = resp?.data?._value?.lastPrice
   })
 })
+watch(
+  () => marqueList.value,
+  (newValue, oldValue) => {
+    let changedValues = ''
+    newValue.forEach((el, index) => {
+      if (el.value != oldValue[index].value) {
+        changedValues += `${el.text} -  ${oldValue[index].modifyValue} -> ${el.modifyValue} \n`
+      }
+    })
+    if (changedValues) {
+      console.log(changedValues)
+    }
+  },
+  { deep: true },
+)
 </script>
 
 <style lang='scss' src="./v-fund-tablet.scss"></style>
