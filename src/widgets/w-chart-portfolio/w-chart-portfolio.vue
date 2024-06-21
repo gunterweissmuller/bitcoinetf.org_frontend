@@ -42,7 +42,7 @@
                   {{ asset.name }}
                 </span>
                 <span class="w-chart-portfolio__type-price">
-                  ${{ $app.filters.rounded(asset.full_balance, 2) }}
+                  ${{ $app.filters.rounded(asset.symbol === 'BRF' ? asset.incoming_amount_btc * props.btcValue  : asset.full_balance, 2) }}
                 </span>
               </div>
             </nuxt-link>
