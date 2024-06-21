@@ -37,6 +37,7 @@
         :btc-value="$app.store.user.btcValue"
         title="AUM Allocation"
         :slider="false"
+        type="asset"
       />
     </div>
     <w-trades :filters="filters" is-assets />
@@ -55,13 +56,12 @@ import WChartPortfolio from '~/src/widgets/w-chart-portfolio/w-chart-portfolio.v
 import WTrades from '~/src/widgets/w-trades/w-trades.vue';
 import WActivity from '~/src/widgets/w-activity/w-activity.vue';
 import WNews from '~/src/widgets/w-news/w-news.vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp();
 const route = useRoute();
-const router = useRouter();
 
 
 const assets = computed(() => {
@@ -99,7 +99,7 @@ const assetsChartData = computed(() => {
   }
   assets.value
     .filter((item : { symbol: string }) => item.symbol !== symbol.value?.toUpperCase())
-    .forEach((item : { full_balance: string }) => unset.full_balance += Number(item.full_balance))
+    .forEach((item : { full_balance: number }) => unset.full_balance += Number(item.full_balance))
   return [asset.value, unset];
 });
 

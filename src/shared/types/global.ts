@@ -9,6 +9,7 @@ export interface IAsset {
   uuid: number
   name: string
   description: string
+  full_balance: number
 }
 
 interface IDealActivityType {
