@@ -121,7 +121,8 @@ const textCenter = {
     const { ctx } = chart
     const xCoor = chart.getDatasetMeta(0).data[0]?.x
     const yCoor = chart.getDatasetMeta(0).data[0]?.y
-    const assetBalance = computed(() => props.assets.filter((item : { symbol: string }) => item.symbol !== 'OTHERS')[0]?.full_balance);
+    const selectedAsset = computed(() => props.assets.filter((item : { symbol: string }) => item.symbol !== 'OTHERS')[0]);
+    const assetBalance = computed(() => (selectedAsset.value.symbol === 'BRF' ? selectedAsset.value.incoming_amount_btc * props.btcValue : selectedAsset.value.full_balance));
     ctx.save()
     ctx.textAlign = 'center'
     ctx.font = 'bold 16px Dm, sans-serif'
@@ -129,6 +130,8 @@ const textCenter = {
     if (props.type === 'assets') {
       ctx.fillText('$' + $app.filters.rounded(fullBalanceFund.value, 2), xCoor, yCoor + 0);
     } else {
+      console.log('$' + $app.filters.rounded(assetBalance.value, 2), xCoor, yCoor + 0);
+
       ctx.fillText('$' + $app.filters.rounded(assetBalance.value, 2), xCoor, yCoor + 0);
     }
 
@@ -178,7 +181,7 @@ const options = ref({
       callbacks: {
         label: function(context) {
           let label = context.parsed;
-          return `$${$app.filters.rounded(label, 2)}(${$app.filters.rounded(label / fullBalanceFund.value * 100, 2)})%`;
+          return `$${$app.filters.rounded(label, 2)} (${$app.filters.rounded(label / fullBalanceFund.value * 100, 2)})%`;
         }
       }
     },
