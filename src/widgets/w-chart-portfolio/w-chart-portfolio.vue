@@ -178,7 +178,7 @@ const options = ref({
       callbacks: {
         label: function(context) {
           let label = context.parsed;
-          return `$${$app.filters.rounded(label, 2)}`;
+          return `$${$app.filters.rounded(label, 2)}(${$app.filters.rounded(label / fullBalanceFund.value * 100, 2)})%`;
         }
       }
     },
