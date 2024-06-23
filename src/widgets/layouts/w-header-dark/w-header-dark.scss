@@ -54,14 +54,11 @@
       align-items: center;
       font-size: torem(14);
       line-height: 1;
-
-      & > * {
-        margin-left: torem(4);
-  
-        &:first-child {
-          margin-left: 0;
-        }
+      &--icon{
+        color: var(--accent-success);
+        margin-right: torem(4);
       }
+     
     }
   }
 

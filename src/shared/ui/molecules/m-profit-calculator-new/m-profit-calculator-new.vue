@@ -52,7 +52,7 @@
 
       </header>
 
-      <p :class="{'landing-calculation__journey-reinvest-wrapper-active': orderType === 'btc' || orderType === 'usdt'}" class="landing-calculation__journey-reinvest-wrapper">
+      <div :class="{'landing-calculation__journey-reinvest-wrapper-active': orderType === 'btc' || orderType === 'usdt'}" class="landing-calculation__journey-reinvest-wrapper">
 
         <div v-if="orderType === 'btc' || orderType === 'usdt'" class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary mr-4 grow flex justify-center font-semibold">
           <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
@@ -96,24 +96,22 @@
         </div>
 
         <VueWriter :start="1100" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="mx-auto landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing font-medium text-center" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'and increase my' : 'and receive my daily']" :iterations="1" />
-      </p>
+      </div>
 
       <div class="mx-auto landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
         <VueWriter :start="2300" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="grow" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'daily dividends in' : 'dividends in']" :iterations="1" />
 
         <div class="ml-2 relative">
-          <div class="landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
-            <div @click="toggleCurrencyDropdown" class="landing-calculation__journey__invest-select-wrapper">
-              <NuxtImg :src="selectedCurrency.icon" class="landing-calculation__journey__invest-select-currency aspect-square cursor-pointer" alt="USDT logo" loading="lazy"/>
-              <span class="landing-calculation__journey__invest-select-text landing-calculation__journey__invest--text-primary landing-calculation__journey--text-normal">{{ selectedCurrency.value }}</span>
-              <NuxtImg v-if="orderType !== 'btc' && orderType !== 'usdt'" src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon"/>
-            </div>
-          </div>
-          <div  v-on-click-outside="() => showDropdown = false"  v-if="showDropdown && orderType !== 'btc' && orderType !== 'usdt'" :class="[{'landing-calculation__journey__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'landing-calculation__journey__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
-            <ul class=" text-sm font-medium">
-              <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['landing-calculation__journey__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
-            </ul>
-          </div>
+          <a-dropdown-selector 
+            :model-value="selectedCurrency"
+            :options="currencies"
+            option-key="icon"
+            option-value="value"
+            @update:model-value="selectCurrencyItem"
+            :type="selectedCurrency.value.toLowerCase()"
+            size="big"
+          />
+          
         </div>
 
       </div>
@@ -151,7 +149,7 @@
               </span>
               5/5
             </p>
-            <div class="landing-calculation__journey__invest--card-term landing-calculation__journey--text-normal mx-auto">Term: 1095 Days</div>
+            <!-- <div class="landing-calculation__journey__invest--card-term landing-calculation__journey--text-normal mx-auto">Term: 1095 Days</div> -->
 
           </div>
 
@@ -199,8 +197,6 @@
               </span>
               4.5/5
             </p>
-            <div class="landing-calculation__journey__invest--card-term landing-calculation__journey--text-normal mx-auto">Term: 1095 Days</div>
-
           </div>
         </div>
 
@@ -216,6 +212,7 @@ import {Icon} from "~/src/shared/constants/icons";
 import AButton from "~/src/shared/ui/atoms/a-button/a-button.vue";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 import AInput from "~/src/shared/ui/atoms/a-input/a-input.vue";
+import ADropdownSelector from "../../atoms/a-dropdown-selector/a-dropdown-selector.vue";
 import {computed, ref, watch} from "vue";
 import {useNuxtApp, useRouter} from "#app";
 import VueWriter from 'vue-writer'
@@ -250,8 +247,9 @@ const emit = defineEmits(['calculator-amount','refCode', 'update:value'])
 // invest
 const currencies = ref([
   {
+    id:0,
     value: 'USDT',
-    icon: "/img/icons/colorful/usdt.svg",
+    icon: Icon.ColorfulUsdt,
     background: "/img/usdtbg2.png",
     stars: 5,
     totalProfit: "42%",
@@ -259,8 +257,9 @@ const currencies = ref([
     apy3: 42,
   },
   {
+    id:1,
     value: 'BTC',
-    icon: "/img/icons/colorful/bitcoin.svg",
+    icon: Icon.ColorfulBitcoin,
     background: "/img/bitcoinbg.png",
     stars: 4.5,
     totalProfit: "100%+",
@@ -415,16 +414,9 @@ const roundedGuaranteedPayout = computed(() => {
 
 })
 
-const showDropdown = ref(false);
-
-const toggleCurrencyDropdown = () => {
-  showDropdown.value = !showDropdown.value;
-};
-
-const selectCurrency = (currency : any) => {
-  selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
-  $app.store.purchase.type = selectedCurrency.value.value;
-  toggleCurrencyDropdown();
+const selectCurrencyItem = (currency:any) => {
+  selectedCurrency.value = currency
+  $app.store.purchase.type = currency.value
 }
 
 // amount dropdown
