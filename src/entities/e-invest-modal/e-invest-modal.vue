@@ -5,49 +5,32 @@
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
           <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> 
             <!-- <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" /> -->
-            <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest</h1>
+            <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow mr-4">I want to invest</h1>
 
-            <div class="e-invest__invest-input e-invest__invest--text-primary ml-4 grow flex justify-center font-semibold">
-              <span class="e-invest__invest--text-input e-invest--text-normal flex items-center">$</span>
-              <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
-              <input
-                :disabled="false"
-                :style="'max-width: '+inputMaxWidth+'px'"
-                v-model="investmentAmountDisplay"
-                class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
-                placeholder="2,500"
-                type="text"
-                :min="1"
-                :max="10000000"
-              />
-            </div>
+            <a-dropdown-amount 
+              option-value="modifyValue"
+              scroll
+              :model-value="selectedAmount"
+              :options="amounts"
+              :isInputField="selectedAmount.value == null"
+              :amount="amount"
+              @update:model-value="selectAmount"
+              @update:amount-value="updateAmountValue"
+            />
 
           </header>
           <!-- <VueWriter :start="1100" :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center" :array="['and receive my daily']" :iterations="1" /> -->
           <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center">and receive my daily</p>
           <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
             <!-- <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" /> -->
-            <span class="grow">dividends in</span>
-            <div class="relative" v-on-click-outside="() => showDropdown = false">
-              <div class="e-invest__invest-select flex text-center whitespace-nowrap">
-                <div @click="toggleCurrencyDropdown" class="e-invest__invest-select-value"> <!--@click="toggleCurrencyDropdown"-->
-                  <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square cursor-pointer" alt="USDT logo" loading="lazy" />
-                  <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
-                  <NuxtImg :src="$app.store.user.theme === 'dark' ? '/img/icons/mono/chevron-bottom-dark.svg' : '/img/icons/mono/chevron-bottom.svg'"  :class="['w-[18px] aspect-square cursor-pointer', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/>
-                </div>
-              </div>
-              <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
-                <ul class="text-sm font-medium text-gray-700">
-                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-currency px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
-                </ul>
-              </div>
-
-              <div v-if="showDropdown" :class="[{'e-invest__invest-select-dropdown-btc': selectedCurrency.value === 'BTC', 'e-invest__invest-select-dropdown-usdt': selectedCurrency.value === 'USDT'}]" class="e-invest__invest-select-dropdown w-full absolute mt-1 z-10">
-                <ul class=" text-sm font-medium">
-                  <li v-for="currency in currencies" :key="currency" @click="() => selectCurrency(currency)" :class="['e-invest__invest-select-dropdown-item px-4 py-2 cursor-pointer']">{{ currency.value }}</li>
-                </ul>
-              </div>
-            </div>
+            <span class="grow mr-4">dividends in</span>
+            <a-dropdown-selector 
+              :model-value="selectedCurrency"
+              :options="currencies"
+              option-key="icon"
+              option-value="value"
+              @update:model-value="selectCurrencyItem"
+            />
 
           </div>
 
@@ -79,16 +62,12 @@
                 <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
                   Safety Rating
                   <span class="e-invest__invest--card-rating-stars">
-                    <span class="inline-flex" v-for="item in new Array(4)">
+                    <span class="inline-flex" v-for="item in new Array(5)">
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
-                    <span class="inline-flex">
-                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
-                    </span>
                   </span>
-                  4.8/5
+                  5/5
                 </p>
-                <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
 
               </div>
 
@@ -130,12 +109,11 @@
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
                     <span class="inline-flex">
-                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
+                      <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" loading="lazy" />
                     </span>
                   </span>
-                  4.8/5
+                  4.5/5
                 </p>
-                <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
               </div>
             </div>
 
@@ -157,22 +135,19 @@
             <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1>
 
           </header>
-          <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center flex">
+          <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center flex ">
 
-            <div class="e-invest__invest-input e-invest__invest--text-primary mr-4 grow flex justify-center font-semibold">
-              <span class="e-invest__invest--text-input e-invest--text-normal flex items-center">$</span>
-              <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModifiedReinvest" class="e-invest__invest--text-input e-invest--text-normal max-w-[60px] flex-1 bg-transparent" placeholder="2,500"/> -->
-              <input
-                :disabled="false"
-                :style="'max-width: '+inputMaxWidth+'px'"
-                v-model="investmentAmountDisplay"
-                class="e-invest__invest--text-input e-invest--text-normal flex-1 bg-transparent"
-                placeholder="2,500"
-                type="text"
-                :min="1"
-                :max="10000000"
-              />
-            </div>
+            <a-dropdown-amount 
+            class="mr-4"
+              option-value="modifyValue"
+              scroll
+              :model-value="selectedAmount"
+              :options="amounts"
+              :isInputField="selectedAmount.value == null"
+              :amount="amount"
+              @update:model-value="selectAmount"
+              @update:amount-value="updateAmountValue"
+            />
 
             <!-- <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" /> -->
             and increase my
@@ -184,7 +159,8 @@
             <div class="ml-2 relative opacity-50">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
                 <div  class="e-invest__invest-select-value">
-                  <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square " alt="USDT logo" loading="lazy" />
+                  <!-- <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square" alt="USDT logo" loading="lazy" /> -->
+                  <a-icon :name="selectedCurrency.icon" class="w-6 aspect-square"/>
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
                   <!-- <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square ', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/> -->
                 </div>
@@ -226,16 +202,12 @@
                 <p class="e-invest__invest--card-rating e-invest--text-normal relative flex items-center">
                   Safety Rating
                   <span class="e-invest__invest--card-rating-stars">
-                    <span class="inline-flex" v-for="item in new Array(4)">
+                    <span class="inline-flex" v-for="item in new Array(5)">
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
-                    <span class="inline-flex">
-                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
-                    </span>
                   </span>
-                  4.8/5
+                  5/5
                 </p>
-                <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
 
               </div>
 
@@ -277,12 +249,11 @@
                       <NuxtImg src="/img/icons/colorful/star.svg" width="18" height="18" loading="lazy" />
                     </span>
                     <span class="inline-flex">
-                      <NuxtImg src="/img/icons/colorful/star-progress.svg" width="18" height="18" loading="lazy" />
+                      <NuxtImg src="/img/icons/colorful/star-half.svg" width="18" height="18" loading="lazy" />
                     </span>
                   </span>
-                  4.8/5
+                  4.5/5
                 </p>
-                <div class="e-invest__invest--card-term e-invest--text-normal">Term: 1095 Days</div>
               </div>
             </div>
 
@@ -299,6 +270,7 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '~/src/shared/constants/icons';
 import { useNuxtApp, useRouter, useRoute } from '#app'
 import { computed, ref } from 'vue'
 import { BrowserProvider, parseUnits } from "ethers";
@@ -306,7 +278,9 @@ import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue';
 import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
 import { vOnClickOutside } from '@vueuse/components'
-
+import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
+import ADropdownAmount from '~/src/shared/ui/atoms/a-dropdown-amount/a-dropdown-amount.vue';
+import ADropdownSelector from '~/src/shared/ui/atoms/a-dropdown-selector/a-dropdown-selector.vue';
 
 const { $app } = useNuxtApp()
 const router = useRouter()
@@ -356,18 +330,6 @@ onMounted(()=>{
   }
 })
 
-function validate(event) {
-  if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
-}
-
-const onPickerValueInput = (event) => {
-  const replacedStringValue = event.target.value.replace(/,/g, '').replaceAll('$', '')
-  investmentAmount.value = Number(replacedStringValue)
-  let originalNumber = investmentAmount.value;
-  investmentAmount.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  $app.store.user.setInvestAmount({amount: {original: Number(originalNumber), parsed: investmentAmount}});
-  investmentAmount.value = Number(investmentAmount.value.split(",").join(""));
-}
 
 watch(
   () => investmentAmountDisplay.value,
@@ -455,8 +417,9 @@ const investmentAmountModifiedReinvest = computed<string>({
 
 const currencies = ref([
   {
+    id:0,
     value: 'USDT',
-    icon: "/img/icons/colorful/usdt.svg",
+    icon: Icon.ColorfulUsdt,
     background: "/img/usdtbg2.png",
     stars: 5,
     totalProfit: "42%",
@@ -465,8 +428,9 @@ const currencies = ref([
 
   },
   {
+    id: 1,
     value: 'BTC',
-    icon: "/img/icons/colorful/bitcoin.svg",
+    icon: Icon.ColorfulBitcoin,
     background: "/img/bitcoinbg.png",
     stars: 4.5,
     totalProfit: "100%+",
@@ -523,20 +487,104 @@ watch(
     if (orderType.value !== 'init_btc') {
       selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
     } else if($app.store.purchase.type) {
-      selectCurrency({value: $app.store.purchase.type.toLowerCase()});
+      const getCurrencyByPurchase = currencies.find(currency => currency.value == $app.store.purchase.type)
+      selectCurrencyItem(getCurrencyByPurchase)
     }
   }
 )
 
-const showDropdown = ref(false);
 
-const toggleCurrencyDropdown = () => {
-  showDropdown.value = !showDropdown.value;
-};
+const selectCurrencyItem = (currency:any) => {
+  selectedCurrency.value = currency
+  $app.store.purchase.type = currency.value
+}
 
-const selectCurrency = (currency : any) => {
-  selectedCurrency.value = currencies.value.find((el) => el.value === currency.value) ?? currencies.value[0];
-  showDropdown.value = false;
+// amount dropdown
+
+type TAmountField = number | string
+const amounts = ref([
+  {
+    id: 0,
+    value: 100,
+    modifyValue: '100',
+  },
+  {
+    id: 1,
+    value: 250,
+    modifyValue: '250',
+  },
+  {
+    id: 2,
+    value: 500,
+    modifyValue: '500',
+  },
+  {
+    id: 3,
+    value: 1000,
+    modifyValue: '1,000',
+  },
+  {
+    id: 4,
+    value: 2500,
+    modifyValue: '2,500',
+  },
+  {
+    id: 5,
+    value: 5000,
+    modifyValue: '5,000',
+  },
+  {
+    id: 6,
+    value: 10000,
+    modifyValue: '10,000',
+  },
+  {
+    id: 7,
+    value: 15000,
+    modifyValue: '15,000',
+  },
+  {
+    id: 8,
+    value: 25000,
+    modifyValue: '25,000',
+  },
+  {
+    id: 9,
+    value: 50000,
+    modifyValue: '50,000',
+  },
+  {
+    id: 10,
+    value: 75000,
+    modifyValue: '75,000',
+  },
+  {
+    id: 11,
+    value: 100000,
+    modifyValue: '100,000',
+  },
+  {
+    id: 12,
+    value: null,
+    modifyValue: 'CUSTOM',
+  },
+])
+
+const selectedAmount = ref(amounts.value[0])
+const amount = ref<TAmountField>(amounts.value[0].value as TAmountField)
+
+function selectAmount(amount) {
+  selectedAmount.value = amount
+
+  if (amount.value !== null) {
+    updateAmountValue(amount.value)
+  }
+}
+
+// const amount = ref<number>(amounts[0].amount)
+
+function updateAmountValue(event: string | number) {
+  amount.value = Number(event)
 }
 
 // modal

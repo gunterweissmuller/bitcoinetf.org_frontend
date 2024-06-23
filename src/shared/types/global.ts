@@ -41,6 +41,7 @@ export type IMethod = 'none' | 'manual' | 'automatic_daily'
 export interface ADropdownOption {
   name: string
   value: any
+  icon?: string
 }
 
 export type OrderType = 'init_btc' | 'usdt' | 'btc'
