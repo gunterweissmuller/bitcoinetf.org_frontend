@@ -3,19 +3,19 @@
     <div class="w-header-dark__top">
       <div class="w-header-dark__top-item">
         <div class="w-header-dark__top-item--icon">
-          <a-icon :name="Icon.MonoActionCheckMark" />
+          <a-icon :name="Icon.MonoActionCheckMark" width="16" height="16" />
         </div>
         <div class="w-header-dark__top-item--text">Security</div>
       </div>
       <div class="w-header-dark__top-item">
         <div class="w-header-dark__top-item--icon">
-          <a-icon :name="Icon.MonoActionCheckMark" />
+          <a-icon :name="Icon.MonoActionCheckMark" width="16" height="16" />
         </div>
         <div class="w-header-dark__top-item--text">Innovation</div>
       </div>
       <div class="w-header-dark__top-item">
         <div class="w-header-dark__top-item--icon">
-          <a-icon :name="Icon.MonoActionCheckMark" />
+          <a-icon :name="Icon.MonoActionCheckMark" width="16" height="16" />
         </div>
         <div class="w-header-dark__top-item--text">Transparency</div>
       </div>
