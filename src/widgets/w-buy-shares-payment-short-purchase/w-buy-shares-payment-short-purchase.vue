@@ -202,6 +202,7 @@ onMounted(async () => {
       body: JSON.stringify({
         dividends: props.switches?.dividends ? true : false,
         referral: props.switches?.referral ? true : false,
+        check_discount: props.switches?.discount ? true : false,
         bonus: false,
         amount: props.calcValue,
         order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'

@@ -508,8 +508,19 @@
           }
         }
       }
-
-      
+      &--notification {
+        margin-top: torem(32);
+        font-size: torem(16);
+        line-height: torem(20);
+        font-weight: 700;
+      }
+      &--title {
+        margin-bottom: torem(16);
+      }
+      &--subtitle {
+        color: var(--accent-primary);
+        cursor: pointer;
+      }
     }
 
     &-loading {
@@ -525,7 +536,7 @@
 
     &__switch {
       border-radius: torem(6);
-      padding: var(--spacing-s);
+      padding: var(--spacing-s) 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -535,15 +546,27 @@
       }
   
      
-  
+      &-header{
+        font-size: torem(14);
+        color: var(--text-tertiary);
+      }
       &-text {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         color: var(--text-primary);
   
         &-icon {
           margin-right: var(--spacing-xs);
         }
+      }
+    }
+    &-discounted {
+      color: var(--accent-danger);
+      text-decoration-line: line-through;
+      &--price {
+        color: var(--text-tertiary);
+        font-size: torem(14);
+        line-height: torem(18);
       }
     }
   }
