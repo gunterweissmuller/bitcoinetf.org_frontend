@@ -99,6 +99,18 @@ export function useRegistration($app) {
         })
     }
 
+    const registerNewUser = async (payload: {email: string, password: string}) => {
+        $app.api.eth.auth
+          .confirm({
+            ...payload,
+          })
+          .then((jwtResponse: any) => {
+            continueLogin(jwtResponse)
+          })
+          .catch((e) => {})
+      }
+
+
     const catchRegistration = async (e) => {
         if (e?.errors?.error?.message) {
             $app.store.registration.backendError = {value: e.errors.error.message, field: 'default'};
@@ -572,6 +584,7 @@ export function useRegistration($app) {
 
 
     return {
+        registerNewUser,
         onSubmitEmailForm,
         emailErrorText,
         emailFieldBlurHandler,

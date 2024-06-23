@@ -34,7 +34,7 @@
             <f-registration-email/>
           </template>
           <template v-else-if="$app.store.registration.currentStep === Steps.Link">
-              <f-registration-link/>
+            <f-registration-verify-password />
           </template>
           <template v-else-if="$app.store.registration.currentStep === Steps.Error">
             <f-registration-error/>
@@ -61,7 +61,7 @@
   import { Steps } from './steps'
   import fRegistrationChoice from '../f-registration-choice/f-registration-choice.vue'
   import fRegistrationEmail from '../f-registration-email/f-registration-email.vue'
-  import fRegistrationLink from '../f-registration-link/f-registration-link.vue'
+  import fRegistrationVerifyPassword from '../f-registration-verify-password/f-registration-verify-password.vue'
   import fRegistrationSuccess from '../f-registration-success/f-registration-success.vue'
   import fRegistrationError from '../f-registration-error/f-registration-error.vue'
   import { useRegistration } from './useRegistration'
