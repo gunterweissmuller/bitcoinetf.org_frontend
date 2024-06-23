@@ -487,7 +487,7 @@ watch(
     if (orderType.value !== 'init_btc') {
       selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
     } else if($app.store.purchase.type) {
-      const getCurrencyByPurchase = currencies.find(currency => currency.value == $app.store.purchase.type)
+      const getCurrencyByPurchase = currencies.value.find(currency => currency.value == $app.store.purchase.type)
       selectCurrencyItem(getCurrencyByPurchase)
     }
   }
