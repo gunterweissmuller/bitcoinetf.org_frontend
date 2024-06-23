@@ -13,7 +13,7 @@
               :model-value="selectedAmount"
               :options="amounts"
               :isInputField="selectedAmount.value == null"
-              :amount="amount"
+              :amount="investmentAmount"
               @update:model-value="selectAmount"
               @update:amount-value="updateAmountValue"
             />
@@ -138,13 +138,13 @@
           <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center flex ">
 
             <a-dropdown-amount 
-            class="mr-4"
+              class="mr-4"
               option-value="modifyValue"
               scroll
               :model-value="selectedAmount"
               :options="amounts"
               :isInputField="selectedAmount.value == null"
-              :amount="amount"
+              :amount="investmentAmount"
               @update:model-value="selectAmount"
               @update:amount-value="updateAmountValue"
             />
@@ -501,7 +501,6 @@ const selectCurrencyItem = (currency:any) => {
 
 // amount dropdown
 
-type TAmountField = number | string
 const amounts = ref([
   {
     id: 0,
@@ -571,20 +570,18 @@ const amounts = ref([
 ])
 
 const selectedAmount = ref(amounts.value[0])
-const amount = ref<TAmountField>(amounts.value[0].value as TAmountField)
 
-function selectAmount(amount) {
-  selectedAmount.value = amount
+function selectAmount(payload) {
+  selectedAmount.value = payload
 
-  if (amount.value !== null) {
-    updateAmountValue(amount.value)
+  if (payload.value !== null) {
+    updateAmountValue(payload.value)
   }
 }
 
-// const amount = ref<number>(amounts[0].amount)
 
 function updateAmountValue(event: string | number) {
-  amount.value = Number(event)
+  investmentAmount.value = Number(event)
 }
 
 // modal
