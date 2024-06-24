@@ -116,7 +116,7 @@ const statistic = computed(() => {
 })
 
 const fundTotalUsd = computed(() => {
-  return $app.filters.rounded($app.store.user.fundTotalUsd, 0)
+  return $app.filters.rounded($app.store.assets.fullBalanceFund, 0)
 })
 
 const scrollToSection = () => {
