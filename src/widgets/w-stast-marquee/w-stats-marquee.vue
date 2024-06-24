@@ -138,7 +138,7 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   {
     text: 'Latest Bitcoin ETF Share Issuance',
     value: $app.filters.rounded(purchases.value?.[0]?.amount, 2),
-    modifyValue: `$${$app.filters.rounded(purchases.value?.[0]?.amount, 2)}`,
+    modifyValue: `${$app.filters.rounded(purchases.value?.[0]?.amount, 2)}`,
   },
 ]);
 
