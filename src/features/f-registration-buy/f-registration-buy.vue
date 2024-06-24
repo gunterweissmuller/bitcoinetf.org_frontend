@@ -739,13 +739,7 @@ const paymentModalClose = () => {
 }
 
 const openChat = () => {
-  if (window?.LiveChatWidget) {
-    window.LiveChatWidget.call('maximize');
-
-    return
-  }
-
-  router.push('/personal/more/support')
+  window.open('https://t.me/bitcoinetf_chat', '_blank')?.focus()
 }
 </script>
 
