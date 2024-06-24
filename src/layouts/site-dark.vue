@@ -3,10 +3,19 @@
   <main class="site-dark">
     <slot/>
   </main>
+  <button class="l-main__support--button" @click="openSupportPage">
+    <a-icon :name="Icon.ColorfulTelegram3" width="64" height="64"/>
+  </button>
 </template>
 
 <script setup lang="ts">
 import WHeaderDark from "~/src/widgets/layouts/w-header-dark/w-header-dark.vue";
+import { Icon } from "../shared/constants/icons";
+import AIcon from "../shared/ui/atoms/a-icon/a-icon.vue";
+
+const openSupportPage = () => {
+  window.open('https://t.me/bitcoinetf_chat', '_blank')?.focus()
+}
 </script>
 
 <style lang="scss">
@@ -76,5 +85,12 @@ section {
       color: #41434b;
     }
   }
+}
+.l-main__support--button{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  cursor: pointer;
 }
 </style>

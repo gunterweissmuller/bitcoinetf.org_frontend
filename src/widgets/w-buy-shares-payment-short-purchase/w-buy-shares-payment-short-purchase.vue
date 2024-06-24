@@ -51,7 +51,7 @@
     </button>
     <footer class="text-center py-6">
 
-      <nuxt-link to="/personal/more/support" target="_blank" >
+      <nuxt-link href="https://t.me/bitcoinetf_chat" target="_blank" >
         <a-button text="Contact support" variant="tertiary" isFullWidth />
       </nuxt-link>
 
@@ -202,6 +202,7 @@ onMounted(async () => {
       body: JSON.stringify({
         dividends: props.switches?.dividends ? true : false,
         referral: props.switches?.referral ? true : false,
+        check_discount: props.switches?.discount ? true : false,
         bonus: false,
         amount: props.calcValue,
         order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'

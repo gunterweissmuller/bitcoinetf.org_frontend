@@ -353,7 +353,8 @@ watch(
 
     localStorage.setItem('investmentAmount', String(investmentAmount.value));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
-
+    $app.store.purchase.amount = newValue
+    $app.store.purchase.amountUS = newValue
     if(String(newValue).length <= 4) {
       inputMaxWidth.value = defaultInputWith.value;
     } else if(String(newValue).length > 4 && String(newValue).length < 7) {

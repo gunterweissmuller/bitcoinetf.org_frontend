@@ -380,7 +380,9 @@ const isOpenTermsModal = ref(false)
 const openTermsModal = () => {
   isOpenTermsModal.value = true
 }
-
+const openSupportPage = () => {
+  window.open('https://t.me/bitcoinetf_chat', '_blank')?.focus()
+}
 const routesList = [
   {
     title: 'Fund',
@@ -447,7 +449,8 @@ const navList = ref([
   {
     title: 'Support',
     icon: Icon.MonoSupport,
-    link: '/personal/more/support',
+     type: 'button',
+    callback: openSupportPage,
   },
 ])
 
