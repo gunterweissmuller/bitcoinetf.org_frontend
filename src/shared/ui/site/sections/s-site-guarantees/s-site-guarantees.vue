@@ -16,7 +16,7 @@
         <m-guarantees-card
           :label="'Protection 1'"
           title="BTC Reserve Fund"
-          :cost="`${$app.filters.rounded(fundTotalBtc, 2)} BTC`"
+          :cost="`${$app.filters.rounded(btcReserve, 2)} BTC`"
           body="The reserve fund serves as a safety net, absorbing losses and maintaining liquidity during times of market turmoil. By diversifying our holdings into Bitcoin, we can weather unexpected events and continue delivering steady returns to our investors."
           :currentBalance="true"
           textButton="Sign in to verify on blockchain"
@@ -27,7 +27,7 @@
         <m-guarantees-card
           label="Protection 2"
           title="USDT Protection Vault"
-          :cost="`$${$app.filters.rounded(fundTotalUsd, 0)}`"
+          :cost="`$${$app.filters.rounded(usdtReserve, 0)}`"
           body="Every time our bot makes a profit from these hedging operations the profit is deposited into the Protection Vault in the form of stablecoins. This ensures that the value of these funds remains stable, regardless of the Bitcoin price volatility."
           :currentBalance="true"
           textButton="Sign in to verify on blockchain"
@@ -65,7 +65,7 @@
               <div class="s-site-main__item-value--wrapper">
                 <div class="s-site-main__item-value-body">
                   <p class="s-site-main__item-value--title" style="font-size: 20px">BTC Reserve Fund</p>
-                  <p style="font-size: 32px; text-align: left">{{ $app.filters.rounded(fundTotalBtc, 2) }} BTC</p>
+                  <p style="font-size: 32px; text-align: left">{{ $app.filters.rounded(btcReserve, 2) }} BTC</p>
                   <p class="guarantees-card__current_balance" style="font-size: 20px; text-align: left">
                     Current Balance
                     <span
@@ -94,7 +94,7 @@
               <div class="s-site-main__item-value--wrapper">
                 <div class="s-site-main__item-value--body">
                   <p class="s-site-main__item-value--title" style="font-size: 20px">USDT Protection Vault</p>
-                  <p style="font-size: 32px; text-align: left">${{ $app.filters.rounded(fundTotalUsd, 0) }}</p>
+                  <p style="font-size: 32px; text-align: left">${{ $app.filters.rounded(usdtReserve, 0) }}</p>
                   <p class="guarantees-card__current_balance" style="font-size: 20px; text-align: left">
                     Current Balance
                     <span
@@ -156,13 +156,8 @@ const $router = useRouter()
 const authStore = auth()
 const isAuth = computed(() => authStore.isUserAuthenticated)
 
-const fundTotalBtc = computed(() => {
-  return $app.store.assets.fundTotalBtc
-})
-
-const fundTotalUsd = computed(() => {
-  return $app.store.user.fundTotalUsd
-})
+const usdtReserve = computed(() => $app.store.assets.usdt?.full_balance)
+const btcReserve = computed(() => $app.store.assets.brf?.incoming_amount_btc)
 
 function goToRegistration() {
   if (isAuth.value) {
