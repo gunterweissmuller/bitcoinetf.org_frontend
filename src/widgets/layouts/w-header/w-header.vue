@@ -47,33 +47,7 @@
         <div class="w-header__live">
           <a-live />
         </div>
-        <m-slider
-          class="w-header__info"
-          id="w-header__info-slider"
-          :modules="[Autoplay]"
-          loop
-          :speed="3000"
-          :space-between="0"
-          slides-per-view="auto"
-          :mousewheel="false"
-          :looped-slides="0"
-          :autoplay="{
-            delay: 0,
-            disableOnInteraction: false,
-          }"
-          centeredSlides
-          :allowTouchMove="false"
-          disableOnInteraction
-
-        >
-          <template #slides>
-            <swiper-slide class='w-header__item' v-for='(item, id) in filteredMarqueList' :key='id'>
-                <div class='w-header__item-title'>{{ item.text }}</div>
-                <div class='w-header__item-text' v-html="item.modifyValue"></div>
-            </swiper-slide>
-          </template>
-
-        </m-slider>
+        <w-stats-marquee />
       </div>
 
       <e-fund-tabs :tab-bars='tabs' />
@@ -124,18 +98,15 @@ import useMediaDevice from '~/composables/useMediaDevice'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import { useNuxtApp } from '#app'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
+import WStatsMarquee from '~/src/widgets/w-stast-marquee/w-stats-marquee.vue';
 import EPageInfoModal from '~/src/entities/e-page-info-modal/e-page-info-modal.vue'
 import EPageInfoEarnings from '~/src/entities/e-page-info-modal/ui/e-page-info-earnings.vue'
-import EPageInfoAnalytics from '~/src/entities/e-page-info-modal/ui/e-page-info-analytics.vue'
 import EPageInfoActivity from '~/src/entities/e-page-info-modal/ui/e-page-info-activity.vue'
 import EPageInfoWallet from '~/src/entities/e-page-info-modal/ui/e-page-info-wallet.vue'
 import EPageInfoBuyShares from '~/src/entities/e-page-info-modal/ui/e-page-info-buy-shares.vue'
 import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info-statements.vue'
-import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
-import { nextTick, onUnmounted, onMounted, computed } from 'vue'
+import { nextTick, onMounted, computed } from 'vue'
 import EFundTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
-import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { auth } from '~/src/app/store/auth';
@@ -416,20 +387,12 @@ const isShowBuyPopper = computed<boolean>(() => {
 })
 
 const isOpenModal = ref(false)
-// const purchases = ref(null)
-const purchases = computed(() => {
-  return $app.store.user.lastPurchases || []
-})
+
 const dividendByYear = ref(null)
 
 const closePopper = () => {
   showBuyPopper.value = false
 }
-
-const assets = computed(() => {
-  console.log($app.store.assets.items);
-  return $app.store.assets.items;
-});
 
 const navAssets = computed(() => {
   return $app.store.assets.items.filter((item) => item?.symbol !== 'VAULT');
@@ -441,132 +404,6 @@ const activeAsset = (symbol : string) : boolean => {
   }
   return false;
 };
-
-const totalSum = computed(() => {
-  if (!assets.value?.length) return 0
-  return assets.value.reduce((sum, item) => {
-    sum += item.full_balance
-    return sum
-  }, 0)
-})
-
-const assetsByKey = computed(() => {
-  if (!assets.value) return {}
-  return assets.value.reduce((acc, item) => {
-    acc[item?.symbol] = {
-      ...item,
-    }
-    return acc
-  }, {})
-})
-
-const shareholdersTotalBtc = computed(() => {
-  return $app.store.assets.shareholdersTotalBtc
-})
-
-const marqueList = computed(() => [
-  {
-    text: 'Bitcoin ETF Dividends Paid in 2023',
-    value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2),
-    modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2)}`,
-  },
-  {
-    text: 'Total Bitcoin ETF Dividends Paid',
-    value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2),
-    modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2)}`,
-  },
-  {
-    text: 'USDT APY',
-    value: $app.filters.rounded(assetsByKey.value?.USDT?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.USDT?.apy, 2)}%`,
-  },
-  {
-    text: 'BTC AI APY',
-    value: $app.filters.rounded(assetsByKey.value?.BAA?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.BAA?.apy, 2)}%`,
-  },
-  {
-    text: 'BTC Options APY',
-    value: $app.filters.rounded(assetsByKey.value?.BOA?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.BOA?.apy, 2)}%`,
-  },
-  {
-    text: 'BTC Futures APY',
-    value: $app.filters.rounded(assetsByKey.value?.FBA?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.FBA?.apy, 2)}%`,
-  },
-  {
-    text: 'Spot BTC TD APY',
-    value: $app.filters.rounded(assetsByKey.value?.SBA?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.SBA?.apy, 2)}%`,
-  },
-  {
-    text: 'Latest trade',
-    value: $app.store.user.latestTrade || $app.filters.rounded($app.store.user.lastTrades?.find((item) => item.type === 'close')?.result_amount, 2),
-    modifyValue: `$${$app.filters.rounded(
-      $app.store.user.latestTrade || $app.store.user.lastTrades?.find((item) => item.type === 'close')?.result_amount,
-      2,
-    )}`,
-  },
-  {
-    text: 'BTC/USDT',
-    value: $app.filters.rounded(btcUsdt.value, 2),
-    modifyValue: `$${$app.filters.rounded(btcUsdt.value, 2)}`,
-  },
-  {
-    text: 'Bitcoin ETF Share / USDT',
-    value: 1,
-    modifyValue: 1,
-  },
-  {
-    text: 'High Yield USDT Staking Balance',
-    value: $app.filters.rounded(assetsByKey.value?.USDT?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.USDT?.full_balance, 2)}`,
-  },
-  {
-    text: 'BTC AI Arbitrage Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BAA?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BAA?.full_balance, 2)}`,
-  },
-  {
-    text: 'Bitcoin Reserve Fund Balance',
-    value: shareholdersTotalBtc.value,
-    modifyValue: `${$app.filters.convertValue($app.filters.rounded(shareholdersTotalBtc.value, 5)) }`,
-  },
-  {
-    text: 'BTC Options TD Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BOA?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BOA?.full_balance, 2)}`,
-  },
-  {
-    text: 'BTC Futures TD Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2)}`,
-  },
-  {
-    text: 'BTC Spot TD Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2)}`,
-  },
-  {
-    text: 'Total AUM',
-    value: $app.filters.rounded(shareholdersTotalUsd.value, 2),
-    modifyValue: `$${$app.filters.rounded(shareholdersTotalUsd.value, 2)}`,
-  },
-  {
-    text: 'Latest Bitcoin ETF Share Issuance',
-    value: $app.filters.rounded(purchases.value?.[0]?.amount, 2),
-    modifyValue: `$${$app.filters.rounded(purchases.value?.[0]?.amount, 2)}`,
-  },
-])
-
-const filteredMarqueList = computed(() => {
-  return marqueList.value.filter((el) => el?.value)
-})
-
-const shareholdersTotalUsd = computed(() => {
-  return $app.store.user.shareholdersTotalUsd
-})
 
 const getDividendsByYear = async () => {
   await $app.api.eth.statisticEth
