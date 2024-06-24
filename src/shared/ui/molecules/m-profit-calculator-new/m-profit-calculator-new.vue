@@ -494,7 +494,12 @@ const selectAmount = (amount : any) => {
 
 const handleContinue = () => {
   if(route.path === '/') {
-    router.push("/personal/registration");
+    router.push({
+      name: 'personal-registration',
+      query: {
+        routeFrom: 'tetherspecial',
+      },
+    })
     $app.store.purchase.type = selectedCurrency.value.value;
     $app.store.purchase.amount = investmentAmount.value;
     $app.store.purchase.amountUS = investmentAmount.value;

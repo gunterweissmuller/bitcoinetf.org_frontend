@@ -10,6 +10,7 @@ interface purchaseState {
     totalPayout: number,
     apy: number,
     currentStep: string,
+    initialDiscount: boolean
 }
 
 export const purchase = defineStore('purchase', {
@@ -19,10 +20,14 @@ export const purchase = defineStore('purchase', {
     type: 'USDT',
     totalPayout: 142,
     apy: 14,
-    currentStep: 'Confirm'
+    currentStep: 'Confirm',
+    initialDiscount: false
   } as purchaseState),
 
   actions: {
+    setInitialDiscount(payload: boolean){
+      this.initialDiscount = payload
+    }
   },
 
   getters: {
