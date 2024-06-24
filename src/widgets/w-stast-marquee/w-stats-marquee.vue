@@ -24,13 +24,7 @@ const assets = computed<IAsset[]>(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
 });
 
-const shareholdersTotalUsd = computed<number>(() => {
-  return $app.store.user.shareholdersTotalUsd;
-});
-
-const shareholdersTotalBtc = computed<number>(() => {
-  return $app.store.assets.shareholdersTotalBtc;
-});
+const fullBalanceFund = computed(() => $app.store.assets.fullBalanceFund);
 
 const purchases = computed(() => {
   return $app.store.user.lastPurchases || [];
@@ -48,11 +42,6 @@ const assetsByKey = computed<Record<string, IAsset>>(() => {
 
 const marqueList = computed<Record<string, number | string>[]>(() => [
   {
-    text: 'Bitcoin ETF Dividends Paid in 2023',
-    value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2),
-    modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2)}`,
-  },
-  {
     text: 'Total Bitcoin ETF Dividends Paid',
     value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2),
     modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2)}`,
@@ -68,19 +57,9 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
     modifyValue: `${$app.filters.rounded(assetsByKey.value?.BAA?.apy, 2)}%`,
   },
   {
-    text: 'BTC Options APY',
-    value: $app.filters.rounded(assetsByKey.value?.BOA?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.BOA?.apy, 2)}%`,
-  },
-  {
-    text: 'BTC Futures APY',
-    value: $app.filters.rounded(assetsByKey.value?.FBA?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.FBA?.apy, 2)}%`,
-  },
-  {
     text: 'Spot BTC TD APY',
-    value: $app.filters.rounded(assetsByKey.value?.SBA?.apy, 2),
-    modifyValue: `${$app.filters.rounded(assetsByKey.value?.SBA?.apy, 2)}%`,
+    value: $app.filters.rounded(assetsByKey.value?.BST?.apy, 2),
+    modifyValue: `${$app.filters.rounded(assetsByKey.value?.BST?.apy, 2)}%`,
   },
   {
     text: 'Latest trade',
@@ -110,16 +89,16 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
     value: $app.filters.rounded(assetsByKey.value?.BAA?.full_balance, 2),
     modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BAA?.full_balance, 2)}`,
   },
-  {
-    text: 'Bitcoin Reserve Fund Balance',
-    value: shareholdersTotalBtc.value,
-    modifyValue: `${$app.filters.convertValue($app.filters.rounded(shareholdersTotalBtc.value, 5)) }`,
-  },
-  {
-    text: 'BTC Options TD Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BOA?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BOA?.full_balance, 2)}`,
-  },
+  // {
+  //   text: 'Bitcoin Reserve Fund Balance',
+  //   value: $app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2),
+  //   modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2)}`,
+  // },
+  // {
+  //   text: 'BTC Options TD Balance',
+  //   value: $app.filters.rounded(assetsByKey.value?.BOT?.full_balance, 2),
+  //   modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BOT?.full_balance, 2)}`,
+  // },
   {
     text: 'BTC Futures TD Balance',
     value: $app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2),
@@ -132,8 +111,8 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   },
   {
     text: 'Total AUM',
-    value: $app.filters.rounded(shareholdersTotalUsd.value, 2),
-    modifyValue: `$${$app.filters.rounded(shareholdersTotalUsd.value, 2)}`,
+    value: $app.filters.rounded(fullBalanceFund.value, 2),
+    modifyValue: `$${$app.filters.rounded(fullBalanceFund.value, 2)}`,
   },
   {
     text: 'Latest Bitcoin ETF Share Issuance',
@@ -142,13 +121,14 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   },
 ]);
 
-const filteredMarqueList = computed(() => {
-  return marqueList.value.filter((el) => el?.value)
-});
+const filteredMarqueList = computed(() => marqueList.value.filter((el) => el?.value));
 
 onMounted(async () => {
   await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
     btcUsdt.value = resp?.data?._value?.lastPrice;
+    setTimeout(() => {
+      console.log(marqueList.value, filteredMarqueList.value)
+    }, 2000);
   })
 })
 </script>
