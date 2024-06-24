@@ -427,6 +427,7 @@ const closePopper = () => {
 }
 
 const assets = computed(() => {
+  console.log($app.store.assets.items);
   return $app.store.assets.items;
 });
 
@@ -619,7 +620,7 @@ const getLastPayment = async () => {
 }
 const fetchDemoUserToken = async () => {
   try {
-    const {data} =  await $app.api.eth.auth.getDemoUserToken()  
+    const {data} =  await $app.api.eth.auth.getDemoUserToken()
     authStore.setTokens(data)
   } catch (error) {
     console.error(error);
