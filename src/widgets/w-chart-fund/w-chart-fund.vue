@@ -165,7 +165,7 @@ const props = withDefaults(
 
 const fullBalanceFund = computed(() => $app.store.assets.fullBalanceFund);
 
-const btcPrice = computed(() => $app.store.user?.statistic?.btc_price);
+const btcPrice = computed(() => $app.store.user.btcValue);
 const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc');
 
 // always unique id
