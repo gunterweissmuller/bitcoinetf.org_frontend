@@ -76,14 +76,17 @@ export function useRegistration($app) {
     const continueLogin = async (response) => {
         $app.store.registration.currentStep = Steps.Success
         $app.store.auth.setTokens(response.data);
+        let action = {}
+
         if (route.query?.routeFrom == 'tetherspecial'){
             $app.store.purchase.setInitialDiscount(true)
+            action = {routeFrom: 'tetherspecial'}
         }
         
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
             connectToReplenishment();
-            router.push('/personal/fund/portfolio');
+            router.push({name: 'personal-fund', query: action});
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
