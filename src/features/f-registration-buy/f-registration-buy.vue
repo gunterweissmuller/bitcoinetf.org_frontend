@@ -250,7 +250,7 @@
               </template>
 
               <template v-if="currentPayStep === StepsPay.Process">
-                <w-buy-shares-payment-short-purchase :switches="switches" :refCode="refCode" :payType="currentPayType"  :calc-value="$app.store.purchase.amountUS" :is-fiat="false"/> <!--buyAmount-->
+                <w-buy-shares-payment-short-purchase :switches="switches" :refCode="refCode" :payType="currentPayType"  :calc-value="switches.discount ? discountedAmount :$app.store.purchase.amountUS" :is-fiat="false"/> <!--buyAmount-->
               </template>
 
               <template v-if="currentPayStep === StepsPay.Paid">
