@@ -259,27 +259,27 @@ function validate(event) {
 }
 
 
-watch(
-  () => investmentAmountDisplay.value,
-  (newValue, oldValue) => {
-    let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
+// watch(
+//   () => investmentAmount.value,
+//   (newValue, oldValue) => {
+//     // let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
 
-    if(isNaN(tempOriginal)) {
-      investmentAmount.value = Number(oldValue.split(",").join(""));
-      investmentAmountDisplay.value = oldValue;
-      return;
-    }
-
-    if(Number(tempOriginal) > 500000) {
-      investmentAmount.value = 500000;
-      investmentAmountDisplay.value = '500,000';
-    } else {
-      investmentAmount.value = Number(tempOriginal);
-      const replacedStringValue = tempOriginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      investmentAmountDisplay.value = replacedStringValue;
-    }
-  }
-)
+//     // if(isNaN(tempOriginal)) {
+//     //   investmentAmount.value = Number(oldValue.split(",").join(""));
+//     //   investmentAmountDisplay.value = oldValue;
+//     //   return;
+//     // }
+//     console.log('new-->',newValue);
+    
+//     if(Number(newValue) > 500000) {
+//       investmentAmount.value = 500000;
+//     } else {
+//       // investmentAmount.value = Number(tempOriginal);
+//       // const replacedStringValue = tempOriginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//       // investmentAmountDisplay.value = replacedStringValue;
+//     }
+//   }
+// )
 
 watch(
   () => investmentAmount.value,

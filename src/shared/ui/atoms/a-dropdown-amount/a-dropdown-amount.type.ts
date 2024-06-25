@@ -8,5 +8,6 @@ export type Props = {
   type?: 'default' | 'btc' | 'usdt'
   isInputField?: boolean
   amount: string | number
-  scroll?: boolean
+  scroll?: boolean,
+  maxAmount?: number
 }

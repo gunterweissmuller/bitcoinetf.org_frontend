@@ -14,9 +14,15 @@
           <a-icon v-if="modelValue?.icon" :name="modelValue.icon" />
           $ {{ modelValue[optionValue] }}
         </div>
-        <div v-else class="dropdown__amount-input" :style="`width: ${inputLength}px;`">
+        <div v-else class="dropdown__amount-input" :class="{ 'dropdown__amount-input--big': size == 'big' }">
           $
-          <input ref="$input" type="text" :value="localedAmount.get()" @input="updateAmount" />
+          <input
+            ref="$input"
+            type="text"
+            :value="localedAmount.get()"
+            @input="updateAmount"
+            :style="`width: ${inputLength};`"
+          />
         </div>
         <a-icon
           @click.stop="isActiveDropdown = !isActiveDropdown"
@@ -78,6 +84,7 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'default',
   isInputField: false,
   scroll: false,
+  maxAmount: 500_000,
 })
 
 const emit = defineEmits<{
@@ -90,10 +97,14 @@ function updateAmount(event: Event) {
   let value = target.value
 
   value = value.replaceAll(',', '')
+  if (Number(value) > props.maxAmount) {
+    emit('update:amountValue', props.maxAmount)
+    return
+  }
   emit('update:amountValue', value)
 }
 
-const inputLength = computed(() => String(props.amount).length * 18)
+const inputLength = computed(() => localedAmount.value.get().length  + 'ch')
 
 const isActiveDropdown = ref<boolean>(false)
 
