@@ -493,23 +493,20 @@ const selectAmount = (amount : any) => {
 }
 
 const handleContinue = () => {
-  if(route.path === '/') {
-    router.push({
-      name: 'personal-registration',
-      query: {
-        routeFrom: 'tetherspecial',
-      },
-    })
-    $app.store.purchase.type = selectedCurrency.value.value;
-    $app.store.purchase.amount = investmentAmount.value;
-    $app.store.purchase.amountUS = investmentAmount.value;
-  } else {
-    if (isUserAuthenticated.value) {
+  if (isUserAuthenticated.value) {
       props.openPurchase();
-    } else {
-      props.openSignup();
-    }
+    return
   }
+
+  $app.store.purchase.type = selectedCurrency.value.value;
+  $app.store.purchase.amount = investmentAmount.value;
+  $app.store.purchase.amountUS = investmentAmount.value;
+  router.push({
+    name: 'personal-registration',
+    query: {
+      routeFrom: 'tetherspecial',
+    },
+  })
 }
 </script>
 
