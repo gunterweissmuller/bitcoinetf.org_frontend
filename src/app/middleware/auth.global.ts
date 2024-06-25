@@ -81,7 +81,11 @@ export default defineNuxtRouteMiddleware((to) => {
       document.body.dataset.theme = to.query.theme
       $app.store.user.theme = to.query.theme
     }
-    return navigateTo({path: to.path}, {replace: true})
+    let query = {}
+    if (to.query?.action){
+      query = {action: to.query?.action}
+    }
+    return navigateTo({path: to.path, query}, {replace: true})
   }
 
   const { can } = useAbility()
@@ -92,12 +96,12 @@ export default defineNuxtRouteMiddleware((to) => {
     !excludedRoutesForDemoUser.includes(to.name) &&
     (to.name as string).includes('personal')
   ) {
-    return navigateTo({ name: 'personal-login' })
+    return navigateTo({ name: 'personal-login', query: {action: 'open-purchase-modal'} })
   }
 
 
    if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated && !can('readonly', 'demo')) {
-    return navigateTo({ name: 'personal-login' })
+    return navigateTo({ name: 'personal-login', query: {action: 'open-purchase-modal'} })
   }
 
   if (excludedRouteNames.includes(to.name) && $app.store.auth.isUserAuthenticated) {
