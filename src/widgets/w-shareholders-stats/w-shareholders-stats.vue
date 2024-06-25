@@ -58,7 +58,7 @@ const globalStatistic = computed(() => $app.store.user?.statistic);
 
 const dividentsPaid = computed<number>(() => (filteredValues.dividends_earned_btc ?? $app.store.user?.statistic?.dividends_earned_btc) * $app.store.user?.btcValue);
 
-const btcReserve = computed(() => $app.store.assets.brf?.full_balance);
+const btcReserve = computed(() => ($app.store.assets.brf?.incoming_amount_btc * $app.store.user?.btcValue));
 const usdtReserve = computed(() => $app.store.assets.usdt?.full_balance);
 
 
