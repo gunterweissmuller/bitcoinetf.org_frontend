@@ -80,9 +80,13 @@ export function useRegistration($app) {
 
         if (route.query?.routeFrom == 'tetherspecial'){
             $app.store.purchase.setInitialDiscount(true)
-            action = {routeFrom: 'tetherspecial'}
+            action = {...action, routeFrom: 'tetherspecial'}
         }
         
+        if (route.query.action){
+            action = {...action, ...route.query}
+        }
+
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
             connectToReplenishment();

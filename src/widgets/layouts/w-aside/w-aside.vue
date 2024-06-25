@@ -554,11 +554,11 @@ onMounted(() => {
   }
 })
 function loginPage() {
-  router.push({ name: 'personal-login' })
+  router.push({ name: 'personal-login', query: { action: 'open-purchase-modal' } })
 }
 
 function registerPage() {
-  router.push({ name: 'personal-registration' })
+  router.push({ name: 'personal-registration', query: { action: 'open-purchase-modal' } })
 }
 </script>
 

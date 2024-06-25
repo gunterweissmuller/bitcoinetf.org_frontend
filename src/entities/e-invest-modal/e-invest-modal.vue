@@ -569,7 +569,12 @@ const handleContinue = () => {
   $app.store.purchase.apy = selectedCurrency.value.apy;
   $app.store.purchase.currentStep = 'Confirm';
   $app.store.purchase.totalPayout = investmentAmount.value + guaranteedPayout.value * 3;
-  router.push('/personal/buy-shares');
+  if ($app.store.auth.isUserAuthenticated){
+    router.push('/personal/buy-shares');
+    return
+  }
+  navigateTo({name: 'personal-registration', query: {action: 'open-buy-shares'}})
+  
 }
 
 </script>

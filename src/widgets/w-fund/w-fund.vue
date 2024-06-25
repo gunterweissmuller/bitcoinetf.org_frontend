@@ -8,12 +8,13 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import useMediaDevice from '~/composables/useMediaDevice';
 import { Breakpoints } from '~/src/shared/constants/breakpoints';
 
 const {$app} = useNuxtApp()
 const route = useRoute();
+const router = useRouter();
 const { isLaptop, isDesktop } = useMediaDevice();
 const { width } = useWindowSize()
 
@@ -53,8 +54,17 @@ watch(width, (newWidth : number, oldWidth : number) => {
 onMounted(() => {
   if (route.query?.routeFrom){
     $app.store.purchase.setInitialDiscount(true)
+    router.push('/personal/buy-shares');
   }
-
+  const action = route.query?.action
+  
+  if (action == 'open-purchase-modal'){
+    $app.store.user.isInvestModalShow.show = true
+    router.replace({name:'personal-fund'})
+  }
+  if (action == 'open-buy-shares'){
+    router.replace({name: 'personal-buy-shares'})
+  }
 })
 </script>
 
