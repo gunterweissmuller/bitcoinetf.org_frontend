@@ -58,7 +58,11 @@ export default defineNuxtRouteMiddleware((to) => {
         action
       }
     }
-
+    if (route.query?.routeFrom == 'tetherspecial'){
+      $app.store.purchase.setInitialDiscount(true)
+      route.query = {...route.query, routeFrom: 'tetherspecial'}
+    }
+    
     return navigateTo(route, {replace: true})
     //router.replace({ query: {} })
     //window.location.search = '';
