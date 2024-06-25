@@ -8,94 +8,35 @@
     <div class="landing-calculation__journey__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
       <header class="mx-auto landing-calculation__journey__invest--text flex items-center font-medium text-center whitespace-nowrap">
         <VueWriter :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary grow" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'I want to invest additional' : 'I want to invest']" :iterations="1" />
-
-        <div v-if="orderType !== 'btc' && orderType !== 'usdt'" class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary ml-4 grow flex justify-center font-semibold">
-          <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
-          <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
-          <input
-            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM' || disabledAmount"
-            :style="['max-width: '+inputMaxWidth+'px', currentAmount !== 'CUSTOM' ? 'pointer-events: none' : '' ]"
-            v-model="investmentAmountDisplay"
-            class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
-            placeholder="2,500"
-            type="text"
-            @keypress="validate"
-            :min="1"
-            :max="10000000"
-
-          /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
-
-          <div class="relative" :class="{'landing_calculation__dropdown-isdisabled': (disabledAmount || props.isInputDisbled)}">
-            <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
-              <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center cursor-pointer">
-                <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
-              </div>
-            </div>
-            <div v-on-click-outside="outSideClick"  v-if="showAmountDropdown" :class="[{'landing-calculation__journey__invest-select-amount-dropdown-btc': selectedCurrency.value === 'BTC', 'landing-calculation__journey__invest-select-amount-dropdown-usdt': selectedCurrency.value === 'USDT'}]"  class="landing-calculation__journey__invest-select-amount-dropdown landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
-              <ul class=" text-sm font-medium">
-                <li v-for="amount in amounts" :key="amount.amount" @click="selectAmount(amount.amount)" :class="[{'landing-calculation__journey__invest-select-amount-dropdown-item-active': amount.amount === currentAmount},'landing-calculation__journey__invest-select-amount-dropdown-item landing-calculation__journey__invest-select-dropdown-item cursor-pointer']">
-                  {{ amount.amount !== 'CUSTOM' ? '$' : ''}} {{amount.amount}}
-                  <a-icon
-                    class="landing-calculation__journey__invest-select-amount-check"
-                    v-if="amount.amount === currentAmount"
-                    :name="Icon.MonoActionCheckMark"
-                    width="18"
-                    height="18"
-                  />
-
-                </li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-
+        <a-dropdown-amount 
+        v-if="orderType != 'btc' && orderType != 'usdt'"
+          option-value="modifyValue" 
+            :model-value="selectedAmount"
+            :options="amounts"
+            :isInputField="selectedAmount.value == null"
+            :amount="investmentAmount"
+            :type="selectedCurrency.value.toLowerCase()"
+            size="big"
+            @update:model-value="selectAmount"
+            @update:amount-value="updateAmountValue" 
+        />
+       
       </header>
-
-      <div :class="{'landing-calculation__journey-reinvest-wrapper-active': orderType === 'btc' || orderType === 'usdt'}" class="landing-calculation__journey-reinvest-wrapper">
-
-        <div v-if="orderType === 'btc' || orderType === 'usdt'" class="landing-calculation__journey__invest-input landing-calculation__journey__invest--text-primary mr-4 grow flex justify-center font-semibold">
-          <span class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex items-center">$</span>
-          <!-- <input :style="'max-width: '+inputMaxWidth+'px'" v-model="investmentAmountModified" class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent" placeholder="2,500"/> -->
-          <input
-            :disabled="props.isInputDisbled || currentAmount !== 'CUSTOM' || disabledAmount"
-            :style="['max-width: '+inputMaxWidth+'px', currentAmount !== 'CUSTOM' ? 'pointer-events: none' : '' ]"
-            v-model="investmentAmountDisplay"
-            class="landing-calculation__journey__invest--text-input landing-calculation__journey--text-normal flex-1 bg-transparent"
-            placeholder="2,500"
-            type="text"
-            @keypress="validate"
-            :min="1"
-            :max="10000000"
-
-          /> <!-- @input="onPickerValueInput" @keypress="validate" :value="investmentAmount2" -->
-
-          <div class="relative"  :class="{'landing_calculation__dropdown-isdisabled': disabledAmount}">
-            <div @click="toggleAmountDropdown" class="landing-calculation__journey__invest-select-amount landing-calculation__journey__invest-select flex text-center whitespace-nowrap">
-              <div class="landing-calculation__journey__invest-select-amount-arrow-wrapper relative flex items-center justify-center cursor-pointer">
-                <NuxtImg src="/img/icons/mono/chevron-light-bottom.svg" :class="['landing-calculation__journey__invest-select-amount-arrow landing-calculation__journey__invest-select-arrow aspect-square cursor-pointer', {'rotate-180': showAmountDropdown}]" alt="Down arrow icon"/>
-              </div>
-            </div>
-            <div v-on-click-outside="outSideClick"  v-if="showAmountDropdown" :class="[{'landing-calculation__journey__invest-select-amount-dropdown-reinvest': orderType === 'btc' || orderType === 'usdt', 'landing-calculation__journey__invest-select-amount-dropdown-btc': selectedCurrency.value === 'BTC', 'landing-calculation__journey__invest-select-amount-dropdown-usdt': selectedCurrency.value === 'USDT'}]"  class="landing-calculation__journey__invest-select-amount-dropdown landing-calculation__journey__invest-select-dropdown w-full absolute mt-1 z-10">
-              <ul class=" text-sm font-medium">
-                <li v-for="amount in amounts" :key="amount.amount" @click="selectAmount(amount.amount)" :class="[{'landing-calculation__journey__invest-select-amount-dropdown-item-active': amount.amount === currentAmount},'landing-calculation__journey__invest-select-amount-dropdown-item landing-calculation__journey__invest-select-dropdown-item cursor-pointer']">
-                  {{ amount.amount !== 'CUSTOM' ? '$' : ''}} {{amount.amount}}
-                  <a-icon
-                    class="landing-calculation__journey__invest-select-amount-check"
-                    v-if="amount.amount === currentAmount"
-                    :name="Icon.MonoActionCheckMark"
-                    width="18"
-                    height="18"
-                  />
-
-                </li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-
-        <VueWriter :start="1100" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="mx-auto landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing font-medium text-center" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'and increase my' : 'and receive my daily']" :iterations="1" />
+      <div class="flex gap-2 justify-center w-full" >
+        <a-dropdown-amount 
+            v-if="orderType === 'btc' || orderType === 'usdt'"
+            option-value="modifyValue" 
+            :model-value="selectedAmount"
+            :options="amounts"
+            :isInputField="selectedAmount.value == null"
+            :amount="investmentAmount"
+            :type="selectedCurrency.value.toLowerCase()"
+            size="big"
+            @update:model-value="selectAmount"
+            @update:amount-value="updateAmountValue" 
+        />
+      
+        <VueWriter  :start="1100" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class=" landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing font-medium text-center" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'and increase my' : 'and receive my daily']" :iterations="1" />
       </div>
 
       <div class="mx-auto landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
@@ -213,6 +154,8 @@ import AButton from "~/src/shared/ui/atoms/a-button/a-button.vue";
 import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
 import AInput from "~/src/shared/ui/atoms/a-input/a-input.vue";
 import ADropdownSelector from "../../atoms/a-dropdown-selector/a-dropdown-selector.vue";
+import ADropdownAmount from "../../atoms/a-dropdown-amount/a-dropdown-amount.vue";
+
 import {computed, ref, watch} from "vue";
 import {useNuxtApp, useRouter} from "#app";
 import VueWriter from 'vue-writer'
@@ -314,6 +257,7 @@ onMounted(()=>{
 function validate(event) {
   if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;
 }
+
 
 watch(
   () => investmentAmountDisplay.value,
@@ -423,47 +367,79 @@ const selectCurrencyItem = (currency:any) => {
 // amount dropdown
 const currentAmount = ref('CUSTOM');
 
+
 const amounts = ref([
   {
-    amount: '100',
+    id: 0,
+    value: 100,
+    modifyValue: '100',
   },
   {
-    amount: '250',
+    id: 1,
+    value: 250,
+    modifyValue: '250',
   },
   {
-    amount: '500',
+    id: 2,
+    value: 500,
+    modifyValue: '500',
   },
   {
-    amount: '1,000',
+    id: 3,
+    value: 1000,
+    modifyValue: '1,000',
   },
   {
-    amount: '2,500',
+    id: 4,
+    value: 2500,
+    modifyValue: '2,500',
   },
   {
-    amount: '5,000',
+    id: 5,
+    value: 5000,
+    modifyValue: '5,000',
   },
   {
-    amount: '10,000',
+    id: 6,
+    value: 10000,
+    modifyValue: '10,000',
   },
   {
-    amount: '15,000',
+    id: 7,
+    value: 15000,
+    modifyValue: '15,000',
   },
   {
-    amount: '25,000',
+    id: 8,
+    value: 25000,
+    modifyValue: '25,000',
   },
   {
-    amount: '50,000',
+    id: 9,
+    value: 50000,
+    modifyValue: '50,000',
   },
   {
-    amount: '75,000',
+    id: 10,
+    value: 75000,
+    modifyValue: '75,000',
   },
   {
-    amount: '100,000',
+    id: 11,
+    value: 100000,
+    modifyValue: '100,000',
   },
   {
-    amount: 'CUSTOM',
+    id: 12,
+    value: null,
+    modifyValue: 'CUSTOM',
   },
-]);
+])
+
+const selectedAmount = ref(amounts.value[0])
+onMounted(() => {
+  selectedAmount.value = amounts.value.find(el => el.value == $app.store.purchase?.amount) || amounts.value[amounts.value.length - 1]
+})
 
 const showAmountDropdown = ref(false);
 
@@ -478,18 +454,16 @@ const toggleAmountDropdown = () => {
   showAmountDropdown.value = !showAmountDropdown.value;
 };
 
-const selectAmount = (amount : any) => {
-  if (props.disabledAmount) return
+function selectAmount(payload) {
+  selectedAmount.value = payload
 
-  if(amount === 'CUSTOM') {
-    currentAmount.value = amounts.value.find((el) => el.amount === amount)?.amount ?? amounts.value[0].amount;
-  } else {
-    const temp = amounts.value.find((el) => el.amount === amount)?.amount ?? amounts.value[0].amount;
-    investmentAmountDisplay.value = temp;
-    currentAmount.value = temp;
+  if (payload.value !== null) {
+    updateAmountValue(payload.value)
   }
+}
 
-  toggleAmountDropdown();
+function updateAmountValue(event: string | number) {
+  investmentAmount.value = Number(event)
 }
 
 const handleContinue = () => {

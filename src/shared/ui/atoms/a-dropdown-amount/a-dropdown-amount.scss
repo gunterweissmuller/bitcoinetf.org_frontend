@@ -23,7 +23,12 @@
     background-color: var(--surfaces-surface-1);
     border-radius: var(--spacing-s);
     padding: var(--spacing-s);
-
+    &--usdt {
+      background-color: #57ae94;
+    }
+    &--btc {
+      background-color: #e9a14a;
+    }
     &--enabled {
       height: torem(308);
       overflow-y: scroll;
@@ -120,12 +125,7 @@
     &.active {
       display: flex;
     }
-    &--usdt {
-      background-color: #57ae94;
-    }
-    &--btc {
-      background-color: #e9a14a;
-    }
+   
   }
   &__amount-item-checkmark {
     color: currentColor;

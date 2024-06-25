@@ -12,7 +12,7 @@
           v-if="modelValue.value != null"
         >
           <a-icon v-if="modelValue?.icon" :name="modelValue.icon" />
-          ${{ modelValue[optionValue] }}
+          $ {{ modelValue[optionValue] }}
         </div>
         <div v-else class="dropdown__amount-input" :style="`width: ${inputLength}px;`">
           $
@@ -31,9 +31,13 @@
     <div
       class="dropdown__amount-scroll"
       v-if="isActiveDropdown"
-      :class="[scroll ? `dropdown__amount-scroll--enabled` : '', { active: isActiveDropdown }]"
+      :class="[
+        scroll ? `dropdown__amount-scroll--enabled` : '',
+        `dropdown__amount-scroll--${type}`,
+        { active: isActiveDropdown },
+      ]"
     >
-      <ul class="dropdown__amount-items" :class="[`dropdown__amount-items--${type}`, { active: isActiveDropdown }]">
+      <ul class="dropdown__amount-items" :class="{ active: isActiveDropdown }">
         <li
           class="dropdown__amount-item"
           :class="{ active: activeItem?.id == item.id }"
@@ -42,7 +46,7 @@
           @click="onSelect(item)"
         >
           <div class="dropdown__amount-item-details">
-            <a-icon v-if="item?.icon" :name="item.icon" /> {{ item.value !== null ? '$' : '' }}{{ item[optionValue] }}
+            <a-icon v-if="item?.icon" :name="item.icon" /> {{ item.value !== null ? '$ ' : '' }}{{ item[optionValue] }}
           </div>
           <a-icon
             class="dropdown__amount-item-checkmark"
