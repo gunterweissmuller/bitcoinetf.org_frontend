@@ -38,12 +38,21 @@ export default defineNuxtRouteMiddleware((to, from) => {
         newUrl += `&action=${custom}`
       }
 
+      if ($app.store.purchase.initialDiscount){
+        newUrl += `&fromRoute=tetherspecial`
+      }
+
+
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
       let newUrl = `https://${config.public.DOMAIN}${to.path === '/' ? from.path : to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
-
+      
+      if ($app.store.purchase.initialDiscount){
+        newUrl += `&fromRoute=tetherspecial`
+      }
+      
       if (custom){
         newUrl += `&action=${custom}`
       }
