@@ -239,7 +239,7 @@
                 </div>
                 <div class="f-registration-buy__purchase-pay--notification">
                   <p class="f-registration-buy__purchase-pay--title">Don’t Have USDT? No Problem!</p>
-                  <p class="f-registration-buy__purchase-pay--subtitle" @click="() => {openPurchase(purchaseStepsArr[0])}">Cancel USDT Discount and Proceed with Credit/Debit Card Payment</p>
+                  <p class="f-registration-buy__purchase-pay--subtitle" @click="handlePayMethod('openMoonpay')">Cancel USDT Discount and Proceed with Credit/Debit Card Payment</p>
                 </div>
               </template>
 
