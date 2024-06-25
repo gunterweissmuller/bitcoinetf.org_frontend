@@ -42,7 +42,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
         newUrl += `&fromRoute=tetherspecial`
       }
 
-      console.log('sub-domain url->', newUrl);
       
       window.location.href = newUrl;
       return abortNavigation()
