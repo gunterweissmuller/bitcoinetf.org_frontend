@@ -3,11 +3,11 @@
     <!--orderType == 'init_btc'--><m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
 
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap"> 
+          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap">
             <!-- <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" /> -->
             <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow mr-2">I want to invest</h1>
 
-            <a-dropdown-amount 
+            <a-dropdown-amount
               option-value="modifyValue"
               scroll
               :model-value="selectedAmount"
@@ -24,7 +24,7 @@
           <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
             <!-- <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" /> -->
             <span class="grow mr-4">dividends in</span>
-            <a-dropdown-selector 
+            <a-dropdown-selector
               :model-value="selectedCurrency"
               :options="currencies"
               option-key="icon"
@@ -130,15 +130,9 @@
     <!-- REINVEST -->
     <!--orderType == 'usdt' || orderType == 'btc'--><m-modal modalBig v-if="orderType == 'usdt' || orderType == 'btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!---->
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap">
-            <!-- <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest additional']" :iterations="1" /> -->
-            <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow">I want to invest additional</h1>
-
-          </header>
-          <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center flex ">
-
-            <a-dropdown-amount 
-              class="mr-2"
+          <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center ">
+            I want to invest additional
+            <a-dropdown-amount
               option-value="modifyValue"
               scroll
               :model-value="selectedAmount"
@@ -148,31 +142,16 @@
               @update:model-value="selectAmount"
               @update:amount-value="updateAmountValue"
             />
-
-            <!-- <VueWriter :start="1700" :typeSpeed="60" :array="['and increase my']" :iterations="1" /> -->
-            and increase my
-          </p>
-          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
-            <!-- <VueWriter :start="2800" :typeSpeed="60" class="grow" :array="['daily dividends in']" :iterations="1" /> -->
-            <span class="grow">daily dividends in</span>
-
-            <div class="ml-2 relative opacity-50">
+            and increase my daily dividends in
+            <div class="ml-2 relative opacity-50 inline-block">
               <div class="e-invest__invest-select flex text-center whitespace-nowrap">
                 <div  class="e-invest__invest-select-value">
-                  <!-- <NuxtImg :src="selectedCurrency.icon" class="w-6 aspect-square" alt="USDT logo" loading="lazy" /> -->
                   <a-icon :name="selectedCurrency.icon" class="w-6 aspect-square"/>
                   <span class="e-invest__invest-select-text e-invest--text-normal">{{ selectedCurrency.value }}</span>
-                  <!-- <NuxtImg src="/img/icons/mono/chevron-bottom.svg" :class="['w-[18px] aspect-square ', {'rotate-180': showDropdown}]" alt="Down arrow icon" loading="lazy"/> -->
                 </div>
               </div>
-              <!-- <div v-if="showDropdown" class="w-full absolute mt-1 bg-sky-50 shadow-lg rounded-lg z-10">
-                <ul class="text-sm font-medium text-gray-700">
-                  <li v-for="currency in currencies" :key="currency" @click="selectCurrency(currency)" :class="['px-4 py-2 hover:bg-gray-100 cursor-pointer']">{{ currency.value }}</li>
-                </ul>
-              </div> -->
             </div>
-
-          </div>
+          </p>
 
           <article class="e-invest__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
 
@@ -303,7 +282,7 @@ onMounted(() => {
   });
 
 
-  
+
 })
 
 const isOpen = ref($app.store.user.isInvestModalShow.show);
