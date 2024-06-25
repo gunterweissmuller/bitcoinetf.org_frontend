@@ -3,10 +3,8 @@
     <!--orderType == 'init_btc'--><m-modal v-if="orderType == 'init_btc'"  bgBasic @close="closeModal" full-screen v-model="isOpen"> <!--v-if="orderType == 'init_btc' || orderType == 'btc'"-->
 
       <div class="e-invest__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
-          <header class="e-invest__invest-text flex items-center font-medium text-center whitespace-nowrap">
-            <!-- <VueWriter :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow" :array="['I want to invest']" :iterations="1" /> -->
-            <h1 class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow mr-2">I want to invest</h1>
-
+          <header class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary grow e-invest__invest-text font-medium text-center">
+            I want to invest
             <a-dropdown-amount
               option-value="modifyValue"
               scroll
@@ -17,13 +15,7 @@
               @update:model-value="selectAmount"
               @update:amount-value="updateAmountValue"
             />
-
-          </header>
-          <!-- <VueWriter :start="1100" :typeSpeed="60" class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center" :array="['and receive my daily']" :iterations="1" /> -->
-          <p class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing font-medium text-center">and receive my daily</p>
-          <div class="e-invest__invest--text-main e-invest--text-normal e-invest__invest--text-secondary e-invest__invest--text-spacing flex items-center font-medium text-center whitespace-nowrap">
-            <!-- <VueWriter :start="2300" :typeSpeed="60" class="grow" :array="['dividends in']" :iterations="1" /> -->
-            <span class="grow mr-4">dividends in</span>
+            and receive my daily dividends in
             <a-dropdown-selector
               :model-value="selectedCurrency"
               :options="currencies"
@@ -31,8 +23,7 @@
               option-value="value"
               @update:model-value="selectCurrencyItem"
             />
-
-          </div>
+          </header>
 
           <article class="e-invest__invest--card-wrapper flex flex-col self-stretch whitespace-nowrap rounded-lg">
 
@@ -252,18 +243,14 @@
 import { Icon } from '~/src/shared/constants/icons';
 import { useNuxtApp, useRouter, useRoute } from '#app'
 import { computed, ref } from 'vue'
-import { BrowserProvider, parseUnits } from "ethers";
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue';
-import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
-import { vOnClickOutside } from '@vueuse/components'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import ADropdownAmount from '~/src/shared/ui/atoms/a-dropdown-amount/a-dropdown-amount.vue';
 import ADropdownSelector from '~/src/shared/ui/atoms/a-dropdown-selector/a-dropdown-selector.vue';
 
 const { $app } = useNuxtApp()
 const router = useRouter()
-const route = useRoute()
 const { width } = useWindowSize()
 
 const orderType = computed(() => {

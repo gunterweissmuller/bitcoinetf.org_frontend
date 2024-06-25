@@ -22,6 +22,8 @@ export default defineNuxtRouteMiddleware((to) => {
   const fundRouteNames = [ 'personal-portfolio', 'personal-protection', 'personal-shareholders' ]
   const includedRouteMask = to.path.includes('personal')
   const urlParams = new URLSearchParams(window.location.search);
+  console.log('urlParams-->',urlParams);
+  
   if(to.query.accessToken) {
     $app.store.auth.setTokens({
       access_token: urlParams.get('accessToken'),
@@ -64,6 +66,7 @@ export default defineNuxtRouteMiddleware((to) => {
       $app.store.purchase.setInitialDiscount(true)
       route.query = {...route.query, routeFrom: 'tetherspecial'}
     }
+    console.log('route-->', route);
     
     return navigateTo(route, {replace: true})
     //router.replace({ query: {} })
