@@ -58,7 +58,9 @@ export default defineNuxtRouteMiddleware((to) => {
         action
       }
     }
-    if (route.query?.routeFrom == 'tetherspecial'){
+    const routeFrom  = urlParams.get('routeFrom')
+
+    if (routeFrom){
       $app.store.purchase.setInitialDiscount(true)
       route.query = {...route.query, routeFrom: 'tetherspecial'}
     }
