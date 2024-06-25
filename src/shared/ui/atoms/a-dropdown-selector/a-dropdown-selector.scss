@@ -37,13 +37,15 @@
     }
 
     &--big {
-      font-family: Jakarta, sans-serif;
-      font-size: torem(34);
-      line-height: torem(44);
-      font-weight: 700;
-      & .a-icon img {
-        width: torem(40) !important;
-        height: torem(40) !important;
+      @include breakpoint($break-tablet) {
+        font-family: Jakarta, sans-serif;
+        font-size: torem(34);
+        line-height: torem(44);
+        font-weight: 700;
+        & .a-icon img {
+          width: torem(40) !important;
+          height: torem(40) !important;
+        }
       }
     }
   }

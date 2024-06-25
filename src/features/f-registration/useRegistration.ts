@@ -12,6 +12,7 @@ import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
 
 export function useRegistration($app) {
     const router = useRouter()
+    const route = useRoute()
     const {initMetamask} = useMetamask($app);
     const {initApple} = useApple($app); 
     const {getFbSdk} = useFacebook($app);
@@ -75,7 +76,10 @@ export function useRegistration($app) {
     const continueLogin = async (response) => {
         $app.store.registration.currentStep = Steps.Success
         $app.store.auth.setTokens(response.data);
-
+        if (route.query?.routeFrom == 'tetherspecial'){
+            $app.store.purchase.setInitialDiscount(true)
+        }
+        
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
             connectToReplenishment();
@@ -105,6 +109,7 @@ export function useRegistration($app) {
             ...payload,
           })
           .then((jwtResponse: any) => {
+           
             continueLogin(jwtResponse)
           })
           .catch((e) => {})

@@ -130,8 +130,6 @@ const textCenter = {
     if (props.type === 'assets') {
       ctx.fillText('$' + $app.filters.rounded(fullBalanceFund.value, 2), xCoor, yCoor + 0);
     } else {
-      console.log('$' + $app.filters.rounded(assetBalance.value, 2), xCoor, yCoor + 0);
-
       ctx.fillText('$' + $app.filters.rounded(assetBalance.value, 2), xCoor, yCoor + 0);
     }
 

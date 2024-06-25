@@ -107,7 +107,7 @@
                       {{$app.store.user.statistic?.trc_bonus?.percent || 0}}% Discount
                     </div>
                     <div class="f-registration-buy__purchase__switch-button">
-                      <a-switch v-model="switches.discount"  label-position="left" />
+                      <a-switch v-model="switches.discount"  label-position="left" @click="$app.store.purchase.setInitialDiscount(!switches.discount)"/>
                     </div>
                   </div>
                 </div>
@@ -239,7 +239,7 @@
                 </div>
                 <div class="f-registration-buy__purchase-pay--notification">
                   <p class="f-registration-buy__purchase-pay--title">Don’t Have USDT? No Problem!</p>
-                  <p class="f-registration-buy__purchase-pay--subtitle" @click="() => {openPurchase(purchaseStepsArr[0])}">Cancel USDT Discount and Proceed with Credit/Debit Card Payment</p>
+                  <p class="f-registration-buy__purchase-pay--subtitle" @click="handlePayMethod('openMoonpay')">Cancel USDT Discount and Proceed with Credit/Debit Card Payment</p>
                 </div>
               </template>
 
@@ -455,6 +455,9 @@ const totalPayout = ref($app.store.purchase.totalPayout);
 onMounted(async () => {
   $app.store.purchase.amountUS = originalWithDiscount.value;
 
+  if ($app.store.purchase.initialDiscount) {
+    switches.discount = true
+  }
 
   refCode.value = $app.store.user?.info?.referrals?.used_code || '';
   await getWallets()

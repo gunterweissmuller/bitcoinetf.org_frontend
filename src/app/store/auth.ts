@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useNuxtApp } from '#app'
 import { SignupMethods } from '~/src/shared/constants/signupMethods';
 import { useRuntimeConfig } from 'nuxt/app';
+import { purchase } from './purchase';
 
 interface authState {
   accessToken: string,
@@ -50,6 +51,7 @@ export const auth = defineStore('auth', {
       useNuxtApp().$app.store.user.lastPayment = null
       useNuxtApp().$app.store.persiste.latestTronCheckDate = null
       useNuxtApp().$app.store.user.setPermissions('demo')
+      useNuxtApp().$app.store.purchase.setInitialDiscount(false)
       if(window.location.hostname === config.public.APP_DOMAIN) {
         const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`
         window.location.href = newUrl;

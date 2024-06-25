@@ -23,7 +23,12 @@
     background-color: var(--surfaces-surface-1);
     border-radius: var(--spacing-s);
     padding: var(--spacing-s);
-
+    &--usdt {
+      background-color: #57ae94;
+    }
+    &--btc {
+      background-color: #e9a14a;
+    }
     &--enabled {
       height: torem(308);
       overflow-y: scroll;
@@ -57,6 +62,11 @@
       transform: rotate(180deg);
     }
   }
+  &__amount-input {
+    min-width: torem(55);
+    max-width: torem(134);
+    gap: 0;
+  }
   &__amount-details,
   &__amount-input {
     display: flex;
@@ -69,28 +79,29 @@
       font-size: torem(20);
       line-height: torem(26);
     }
-
-    &--big {
-      font-family: Jakarta, sans-serif;
-      font-size: torem(34);
-      line-height: torem(44);
-      font-weight: 700;
-      & .a-icon img {
-        width: torem(40) !important;
-        height: torem(40) !important;
-      }
-    }
     & input {
       background-color: transparent;
       min-width: torem(55);
       max-width: torem(134);
     }
+    &--big {
+      @include breakpoint($break-tablet) {
+        font-family: Jakarta, sans-serif;
+        font-size: torem(34);
+        line-height: torem(44);
+        font-weight: 700;
+        & .a-icon img {
+          width: torem(40) !important;
+          height: torem(40) !important;
+        }
+        max-width: torem(242);
+        & input {
+          max-width: torem(242);
+        }
+      }
+    }
   }
-  &__amount-input {
-    min-width: torem(55);
-    max-width: torem(134);
-    gap: 0;
-  }
+
   &__amount-item {
     display: flex;
     padding: var(--spacing-m-1) var(--spacing-s);
@@ -119,12 +130,6 @@
     }
     &.active {
       display: flex;
-    }
-    &--usdt {
-      background-color: #57ae94;
-    }
-    &--btc {
-      background-color: #e9a14a;
     }
   }
   &__amount-item-checkmark {
