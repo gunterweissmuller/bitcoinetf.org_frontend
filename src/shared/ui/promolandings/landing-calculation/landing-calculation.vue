@@ -29,7 +29,7 @@
     <m-profit-calculator-new :isInputDisbled="$app.store.tetherspecial.purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup"/>
 
     <!-- SIGNUP LAYOUT -->
-    <landingRegistration :isFiatLanding="props.isFiatLanding"/>
+    <!-- <landingRegistration :isFiatLanding="props.isFiatLanding"/> -->
 
   </div>
 
