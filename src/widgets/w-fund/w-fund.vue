@@ -12,6 +12,7 @@ import { useRoute } from 'vue-router';
 import useMediaDevice from '~/composables/useMediaDevice';
 import { Breakpoints } from '~/src/shared/constants/breakpoints';
 
+const {$app} = useNuxtApp()
 const route = useRoute();
 const { isLaptop, isDesktop } = useMediaDevice();
 const { width } = useWindowSize()
@@ -47,6 +48,13 @@ watch(width, (newWidth : number, oldWidth : number) => {
   if ((newWidth < Breakpoints.Laptop && oldWidth < Breakpoints.Laptop) || (newWidth >= Breakpoints.Laptop && oldWidth >= Breakpoints.Laptop)) return;
   if (newWidth >= Breakpoints.Laptop) navigateTo({ name: 'personal-fund' });
   if (newWidth < Breakpoints.Laptop) navigateTo({ name: 'personal-portfolio' });
+})
+
+onMounted(() => {
+  if (route.query?.routeFrom){
+    $app.store.purchase.setInitialDiscount(true)
+  }
+
 })
 </script>
 
