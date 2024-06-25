@@ -14,16 +14,16 @@
           <a-icon v-if="modelValue?.icon" :name="modelValue.icon" />
           $ {{ modelValue[optionValue] }}
         </div>
-        <div v-else class="dropdown__amount-input" :class="{ 'dropdown__amount-input--big': size == 'big' }">
+        <div v-else class="dropdown__amount-input" :class="{ 'dropdown__amount-input--big': size == 'big' }"  :style="`width: ${inputLength}px;`">
           $
-          <!-- <input
+          <input
             ref="$input"
             type="text"
             :value="localedAmount.get()"
             @input="updateAmount"
-            :style="`width: ${inputLength};`"
-          /> -->
-          <div
+            @keydown="validateInput"
+          />
+          <!-- <div
             ref="$input"
             class="dropdown__amount-div"
             contenteditable
@@ -32,7 +32,7 @@
             @blur="blurInput"
           >
             0
-          </div>
+          </div> -->
         </div>
         <a-icon
           @click.stop="isActiveDropdown = !isActiveDropdown"
@@ -104,16 +104,16 @@ const emit = defineEmits<{
 function updateAmount(event: Event) {
   const target = event.target as HTMLInputElement
   let value = target.value
-
   value = value.replaceAll(',', '')
   if (Number(value) > props.maxAmount) {
+    ($input.value as HTMLInputElement).value  = numberWithDivisions(props.maxAmount)
     emit('update:amountValue', props.maxAmount)
     return
   }
   emit('update:amountValue', value)
 }
 
-const inputLength = computed(() => localedAmount.value.get().length  + 'ch')
+const inputLength = computed(() => (localedAmount.value.get().length + 1)  * 16)
 
 const isActiveDropdown = ref<boolean>(false)
 
