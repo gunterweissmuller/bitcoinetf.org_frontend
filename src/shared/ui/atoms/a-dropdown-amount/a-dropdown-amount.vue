@@ -16,13 +16,23 @@
         </div>
         <div v-else class="dropdown__amount-input" :class="{ 'dropdown__amount-input--big': size == 'big' }">
           $
-          <input
+          <!-- <input
             ref="$input"
             type="text"
             :value="localedAmount.get()"
             @input="updateAmount"
             :style="`width: ${inputLength};`"
-          />
+          /> -->
+          <div
+            ref="$input"
+            class="dropdown__amount-div"
+            contenteditable
+            spellcheck="false"
+            @keydown="validateInput"
+            @blur="blurInput"
+          >
+            0
+          </div>
         </div>
         <a-icon
           @click.stop="isActiveDropdown = !isActiveDropdown"
@@ -69,7 +79,6 @@
 
 <script setup lang="ts">
 import { vOnClickOutside } from '@vueuse/components'
-
 import { Icon } from '~/src/shared/constants/icons'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import type { Props } from './a-dropdown-amount.type'
@@ -136,7 +145,30 @@ const localedAmount = computed(() => ({
   },
 }))
 
-const $input = ref<HTMLInputElement | null>(null)
+const validateInput = (event : KeyboardEvent) => {
+  if (event.key === 'Enter') {
+    (event.target as HTMLDivElement).blur();
+    return;
+  }
+  if (event.key.length !== 1) return;
+  if (event.key.match(/[^\d]/)) {
+    event.preventDefault();
+  }
+}
+
+const blurInput = () => {
+  const input = $input.value as HTMLDivElement;
+  let value = Number(input.textContent?.replaceAll(',', ''));
+
+  if (value > props.maxAmount) {
+    value = props.maxAmount;
+  }
+
+  input.textContent = numberWithDivisions(value);
+  emit('update:amountValue', value);
+}
+
+const $input = ref<HTMLInputElement | null>(null);
 </script>
 
 <style src="./a-dropdown-amount.scss"></style>
