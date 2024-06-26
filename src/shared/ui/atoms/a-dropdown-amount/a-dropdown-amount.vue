@@ -14,16 +14,16 @@
           <a-icon v-if="modelValue?.icon" :name="modelValue.icon" />
           $ {{ modelValue[optionValue] }}
         </div>
-        <div v-else class="dropdown__amount-input" :class="{ 'dropdown__amount-input--big': size == 'big' }"  :style="`width: ${inputLength}px;`">
+        <div v-else class="dropdown__amount-input" :class="{ 'dropdown__amount-input--big': size == 'big' }" >
           $
-          <input
+          <!-- <input
             ref="$input"
             type="text"
             :value="localedAmount.get()"
             @input="updateAmount"
             @keydown="validateInput"
-          />
-          <!-- <div
+          /> -->
+          <div
             ref="$input"
             class="dropdown__amount-div"
             contenteditable
@@ -31,8 +31,8 @@
             @keydown="validateInput"
             @blur="blurInput"
           >
-            0
-          </div> -->
+            2,500
+          </div>
         </div>
         <a-icon
           @click.stop="isActiveDropdown = !isActiveDropdown"
@@ -148,24 +148,45 @@ const localedAmount = computed(() => ({
 const validateInput = (event : KeyboardEvent) => {
   if (event.key === 'Enter') {
     (event.target as HTMLDivElement).blur();
+    updateValue();
     return;
   }
-  if (event.key.length !== 1) return;
+  if (event.key.length !== 1) {
+    updateValue();
+    return;
+  };
   if (event.key.match(/[^\d]/)) {
     event.preventDefault();
+    return;
   }
+  updateValue();
 }
 
 const blurInput = () => {
-  const input = $input.value as HTMLDivElement;
-  let value = Number(input.textContent?.replaceAll(',', ''));
+  setTimeout(() => {
+    const input = $input.value as HTMLDivElement;
+    let value = Number(input.textContent?.replaceAll(',', ''));
 
-  if (value > props.maxAmount) {
-    value = props.maxAmount;
-  }
+    if (value > props.maxAmount) {
+      value = props.maxAmount;
+    }
 
-  input.textContent = numberWithDivisions(value);
-  emit('update:amountValue', value);
+    input.textContent = numberWithDivisions(value);
+    emit('update:amountValue', value);
+  },1)
+}
+
+const updateValue = () => {
+  setTimeout(() => {
+    const input = $input.value as HTMLDivElement;
+    let value = Number(input.textContent?.replaceAll(',', ''));
+
+    if (value > props.maxAmount) {
+      value = props.maxAmount;
+    }
+
+    emit('update:amountValue', value);
+  },1)
 }
 
 const $input = ref<HTMLInputElement | null>(null);
