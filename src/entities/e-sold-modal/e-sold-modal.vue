@@ -16,7 +16,7 @@
         </div>
       </m-modal>
   </template>
-  
+
 <script setup lang="ts">
     import { useNuxtApp } from '#app'
     import { computed, ref } from 'vue'
@@ -40,11 +40,11 @@
 
     const router = useRouter();
 
-    // agree 
+    // agree
     const payAgreed = ref(false)
 
     const continueDisabled = computed<boolean>(() => {
-        return !payAgreed.value 
+        return !payAgreed.value
     });
 
     enum Steps {
@@ -61,19 +61,18 @@
     }
 
     const handleContinue = () => {
-        $app.api.eth.billingEth
-        .getValuate()
-        .then((response: any) => {
-            $app.store.user.sellShares = Object.assign($app.store.user.sellShares, response.data);
-            handleClose();
-            navigateTo({name: 'personal-etfs'});
-        })
-        .catch(() => {
-            // Todo: notify something went wrond
-        })
+        // $app.api.eth.billingEth
+        // .getValuate()
+        // .then((response: any) => {
+        //     $app.store.user.sellShares = Object.assign($app.store.user.sellShares, response.data);
+        //     handleClose();
+        //     navigateTo({name: 'personal-etfs'});
+        // })
+        // .catch(() => {
+        //     // Todo: notify something went wrond
+        // })
     }
 </script>
 
 <style lang="scss" src="./e-sold-modal.scss" />
-  
-  
+

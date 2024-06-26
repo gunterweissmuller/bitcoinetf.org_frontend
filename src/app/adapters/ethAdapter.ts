@@ -71,7 +71,7 @@ export class EthAdapter extends ApiAdapter {
       if (!response.ok) {
         // eslint-disable-next-line max-len
         const msg = `\x1B[103m ${method}\x1B[30m |${operationDescription}: failed, status ${response.status} / ${response.statusText}`
-        console.error(msg)
+        // console.error(msg)
         const errors = await response.json()
 
         if(response.status === HttpStatusCode.CONFLICT) {
