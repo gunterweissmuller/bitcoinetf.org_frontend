@@ -11,7 +11,7 @@
       <div class="s-site-tutorials__steps">
         <div class="s-site-tutorials__step" v-for="(item, idx) in tutorial.items" :key="idx">
           <div class="s-site-tutorials__step-img">
-            <img :src="item.img" alt="">
+            <img :src="item.img">
           </div>
           <div class="s-site-tutorials__step-info">
             <div class="s-site-tutorials__step-title">{{ item.title }}</div>
