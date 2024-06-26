@@ -471,7 +471,7 @@ const handleContinue = () => {
     router.push({
     name: 'personal-fund',
     query: {
-      routeFrom: 'tetherspecial',
+      fromRoute: 'tetherspecial',
       action: 'open-buy-shares'
     },
   })
@@ -484,7 +484,7 @@ const handleContinue = () => {
   router.push({
     name: 'personal-registration',
     query: {
-      routeFrom: 'tetherspecial',
+      fromRoute: 'tetherspecial',
     },
   })
 }

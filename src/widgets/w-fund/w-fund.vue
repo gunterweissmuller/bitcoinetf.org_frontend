@@ -52,7 +52,7 @@ watch(width, (newWidth : number, oldWidth : number) => {
 })
 
 onMounted(() => {
-  if (route.query?.routeFrom){
+  if (route.query?.fromRoute){
     $app.store.purchase.setInitialDiscount(true)
     router.push('/personal/buy-shares');
   }
