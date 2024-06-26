@@ -574,7 +574,7 @@ const handleContinue = () => {
     return
   }
   navigateTo({name: 'personal-registration', query: {action: 'open-buy-shares'}})
-
+  
 }
 
 </script>
