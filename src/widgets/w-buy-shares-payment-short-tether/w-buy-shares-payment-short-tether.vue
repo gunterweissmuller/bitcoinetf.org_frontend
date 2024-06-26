@@ -170,6 +170,7 @@ const route = useRoute()
 const { $app } = useNuxtApp()
 const {
   orderType,
+  switches,
   payWith,
   initPayment: initApolloPayment,
   getPayWallets,
@@ -345,6 +346,7 @@ const initPayment = async () => {
   allPaymentsTypesMerchant.value = merchantMethods.data?.value?.data?.methods
 }
 onMounted(async () => {
+  switches.discount = true
   if (true && $app.store.user?.buyShares?.uuid) { //props.isFiat
     // await initPayment()
     await initApolloPayment()

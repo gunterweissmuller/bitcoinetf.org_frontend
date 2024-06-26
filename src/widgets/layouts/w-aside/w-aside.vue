@@ -380,7 +380,9 @@ const isOpenTermsModal = ref(false)
 const openTermsModal = () => {
   isOpenTermsModal.value = true
 }
-
+const openSupportPage = () => {
+  window.open('https://t.me/bitcoinetf_chat', '_blank')?.focus()
+}
 const routesList = [
   {
     title: 'Fund',
@@ -447,7 +449,8 @@ const navList = ref([
   {
     title: 'Support',
     icon: Icon.MonoSupport,
-    link: '/personal/more/support',
+     type: 'button',
+    callback: openSupportPage,
   },
 ])
 
@@ -525,14 +528,14 @@ const initTimer = () => {
       maturityIn.value = Math.floor(tempTime / (3600 * 24))
     }
   } else {
-    $app.api.eth.billingEth
-      .initSellShares()
-      .then((response: any) => {
-        $app.store.user.sellShares = response.data
-      })
-      .catch(() => {
-        // Todo: notify something went wrond
-      })
+    // $app.api.eth.billingEth
+    //   .initSellShares()
+    //   .then((response: any) => {
+    //     $app.store.user.sellShares = response.data
+    //   })
+    //   .catch(() => {
+    //     // Todo: notify something went wrond
+    //   })
   }
 }
 
@@ -551,11 +554,11 @@ onMounted(() => {
   }
 })
 function loginPage() {
-  router.push({ name: 'personal-login' })
+  router.push({ name: 'personal-login', query: { action: 'open-purchase-modal' } })
 }
 
 function registerPage() {
-  router.push({ name: 'personal-registration' })
+  router.push({ name: 'personal-registration', query: { action: 'open-purchase-modal' } })
 }
 </script>
 

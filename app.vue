@@ -38,31 +38,11 @@ const currentTheme = computed<string>(() => {
   $app.store.user.theme = theme || 'dark'
   return $app.store.user.theme || 'dark'
 })
-const ignoredChatRoutesSpecial = ['tetherspecial','weloverussia']
-const ignoredChatRoutesAlways = ['personal']
-const ignoreChatSpecial = ref(false)
-const ignoreChatAlways = ref(false)
-const bodyAttrIgnoreSpecial = computed(() => {
-  return ignoreChatSpecial.value
-})
-const bodyAttrIgnoreAlways = computed(() => {
-  return ignoreChatAlways.value
-})
-watch(
-  () => route.name,
-  (value) => {
-    ignoreChatSpecial.value = ignoredChatRoutesSpecial.some(v => value?.includes(v))
-    ignoreChatAlways.value = ignoredChatRoutesAlways.some(v => value?.includes(v))
-  },
-  {
-    immediate: true,
-  },
-)
+
+
 useHead({
   bodyAttrs: {
     'data-theme': computed<string>(() => currentTheme.value),
-    'ignore-mini-chat-specials': computed(() => bodyAttrIgnoreSpecial.value),
-    'ignore-mini-chat-always': computed(() => bodyAttrIgnoreAlways.value),
   }
 })
 

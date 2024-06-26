@@ -46,8 +46,10 @@
                 <div class="f-registration-buy__purchase--confirm-item">
                   <p class="f-registration-buy__purchase--step-title f-registration-buy--text-normal">Total Investment Amount</p>
 
-                  <div class="flex justify-between">
-                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal flex-auto">US${{ $app.filters.rounded($app.store.purchase.amountUS, 2) }} </p>
+                  <div class="flex ">
+                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal mr-2" :class="{'f-registration-buy__purchase-discounted': switches.discount}" >US${{ $app.filters.rounded($app.store.purchase.amountUS, 2) }} </p>
+                    <p class="f-registration-buy__purchase--step-text f-registration-buy--text-normal" v-if="switches.discount" >US${{ $app.filters.rounded(discountedAmount, 2) }} <span class="f-registration-buy__purchase-discounted--price">{{`($${$app.filters.rounded(discountedPrice, 2)} off)`}}</span></p>
+                    
                   </div>
 
                 </div>
@@ -73,24 +75,39 @@
                 <div class="f-registration-buy__purchase--confirm-item-full">
                   <div :class="['f-registration-buy__purchase__switch', { 'f-registration-buy__purchase__switch--active': switches.referral }]">
                     <div class="f-registration-buy__purchase__switch-text">
-                      Apply referral
+                      <p class="f-registration-buy__purchase__switch-header">
+                        Apply referral
+                      </p>
+                      {{ referralAmount }}
                     </div>
                     <div class="f-registration-buy__purchase__switch-button">
                       <a-switch
                         :disabled="!wallets?.referral?.usd_amount || wallets?.referral?.usd_amount < 1"
                         v-model="switches.referral"
-                        :label="referralAmount"
-                        label-position="left"
-                      ></a-switch> <!--  -->
+                      />
                     </div>
                   </div>
 
                   <div :class="['f-registration-buy__purchase__switch', { 'f-registration-buy__purchase__switch--active': switches.dividends }]">
                     <div class="f-registration-buy__purchase__switch-text">
-                      Apply dividends
+                      <p class="f-registration-buy__purchase__switch-header">
+                        Apply dividends
+                      </p>
+                      {{ dividendsAmount }}
                     </div>
                     <div class="f-registration-buy__purchase__switch-button">
-                      <a-switch v-model="switches.dividends" :label="dividendsAmount" label-position="left" :disabled="!wallets?.dividends?.usd_amount || wallets?.dividends?.usd_amount < 1"></a-switch>
+                      <a-switch v-model="switches.dividends" :disabled="!wallets?.dividends?.usd_amount || wallets?.dividends?.usd_amount < 1" />
+                    </div>
+                  </div>
+                  <div :class="['f-registration-buy__purchase__switch', { 'f-registration-buy__purchase__switch--active': switches.dividends }]">
+                    <div class="f-registration-buy__purchase__switch-text">
+                      <p class="f-registration-buy__purchase__switch-header">
+                        Pay with Tether USDT
+                      </p>
+                      {{$app.store.user.statistic?.trc_bonus?.percent || 0}}% Discount
+                    </div>
+                    <div class="f-registration-buy__purchase__switch-button">
+                      <a-switch v-model="switches.discount"  label-position="left" @click="$app.store.purchase.setInitialDiscount(!switches.discount)"/>
                     </div>
                   </div>
                 </div>
@@ -220,6 +237,10 @@
 
                   </div>
                 </div>
+                <div class="f-registration-buy__purchase-pay--notification">
+                  <p class="f-registration-buy__purchase-pay--title">Don’t Have USDT? No Problem!</p>
+                  <p class="f-registration-buy__purchase-pay--subtitle" @click="handlePayMethod('openMoonpay')">Cancel USDT Discount and Proceed with Credit/Debit Card Payment</p>
+                </div>
               </template>
 
               <template v-if="currentPayStep === StepsPay.Loading">
@@ -229,7 +250,7 @@
               </template>
 
               <template v-if="currentPayStep === StepsPay.Process">
-                <w-buy-shares-payment-short-purchase :switches="switches" :refCode="refCode" :payType="currentPayType"  :calc-value="$app.store.purchase.amountUS" :is-fiat="false"/> <!--buyAmount-->
+                <w-buy-shares-payment-short-purchase :switches="switches" :refCode="refCode" :payType="currentPayType"  :calc-value="switches.discount ? discountedAmount :$app.store.purchase.amountUS" :is-fiat="false"/> <!--buyAmount-->
               </template>
 
               <template v-if="currentPayStep === StepsPay.Paid">
@@ -421,6 +442,8 @@ const dividendsAmount = computed(() => {
   return `$${ $app.filters.rounded(Math.floor(wallets.value?.dividends?.usd_amount), 0) || 0}`;
   return `$${$app.filters.rounded(wallets.value?.dividends?.usd_amount, 0) || 0}`
 })
+const discountedPrice = computed(() => $app.store.purchase.amountUS / 100 * $app.store.user.statistic?.trc_bonus?.percent)
+const discountedAmount = computed(() => $app.store.purchase.amountUS - discountedPrice.value)
 
 const discountAmount = ref(0);
 const origAmount = $app.store.purchase.amount;
@@ -432,6 +455,9 @@ const totalPayout = ref($app.store.purchase.totalPayout);
 onMounted(async () => {
   $app.store.purchase.amountUS = originalWithDiscount.value;
 
+  if ($app.store.purchase.initialDiscount) {
+    switches.discount = true
+  }
 
   refCode.value = $app.store.user?.info?.referrals?.used_code || '';
   await getWallets()
@@ -716,13 +742,7 @@ const paymentModalClose = () => {
 }
 
 const openChat = () => {
-  if (window?.LiveChatWidget) {
-    window.LiveChatWidget.call('maximize');
-
-    return
-  }
-
-  router.push('/personal/more/support')
+  window.open('https://t.me/bitcoinetf_chat', '_blank')?.focus()
 }
 </script>
 

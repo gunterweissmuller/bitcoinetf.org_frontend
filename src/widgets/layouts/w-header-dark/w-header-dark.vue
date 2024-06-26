@@ -3,19 +3,19 @@
     <div class="w-header-dark__top">
       <div class="w-header-dark__top-item">
         <div class="w-header-dark__top-item--icon">
-          <a-icon :name="Icon.MonoActionCheckMark" />
+          <a-icon :name="Icon.MonoActionCheckMark" width="16" height="16" />
         </div>
         <div class="w-header-dark__top-item--text">Security</div>
       </div>
       <div class="w-header-dark__top-item">
         <div class="w-header-dark__top-item--icon">
-          <a-icon :name="Icon.MonoActionCheckMark" />
+          <a-icon :name="Icon.MonoActionCheckMark" width="16" height="16" />
         </div>
         <div class="w-header-dark__top-item--text">Innovation</div>
       </div>
       <div class="w-header-dark__top-item">
         <div class="w-header-dark__top-item--icon">
-          <a-icon :name="Icon.MonoActionCheckMark" />
+          <a-icon :name="Icon.MonoActionCheckMark" width="16" height="16" />
         </div>
         <div class="w-header-dark__top-item--text">Transparency</div>
       </div>
@@ -47,7 +47,7 @@
           </nuxt-link>
         </div>
         <div class="w-header-dark__controls w-header-dark__controls-mobile">
-        <nuxt-link to="/personal/registration" v-if="!isUserAuthenticated">
+        <nuxt-link to="/personal/registration?action=open-purchase-modal" v-if="!isUserAuthenticated">
           <a-button
             size="small"
             text="Register"
@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
-        <nuxt-link to="/personal/registration" v-if="!isUserAuthenticated"
+        <nuxt-link to="/personal/registration?action=open-purchase-modal" v-if="!isUserAuthenticated"
           ><a-button text="Register" size="small" :variant="route.name === 'index' || route.name === 'tetherspecial' ? 'primary-website' : 'primary2'"
         /></nuxt-link>
         <nuxt-link to="/personal/fund" v-if="!isUserAuthenticated"

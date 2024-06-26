@@ -139,7 +139,7 @@ export default class AuthApiModule {
     }
   }
 
-  async confirm(payload: { email: string; code: string; password: string }) {
+  async confirm(payload: { email: string; code?: string; password: string }) {
     try {
       return await this.adapter.requestJsonAsync({
         parameterValue: 'auth/register/confirm',

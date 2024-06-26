@@ -14,12 +14,12 @@ export const useRegistration = ($app) => {
     const { openWalletConnect } = useWalletConnect($app);
 
     const router = useRouter()
-    
+
     const token = ref('')
     const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
-   
+
     const discountPercent = $app.store.user.statistic?.trc_bonus?.percent ? $app.store.user.statistic?.trc_bonus?.percent : 0;
-    
+
     const handleMetamaskConnect = async () => {
 
         const {msg,resMsg,signer} = await initMetamask();
@@ -32,17 +32,17 @@ export const useRegistration = ($app) => {
             $app.store.tetherspecial.signupMethod = SignupMethods.Metamask;
         }
     }
-    
+
     const defaultBuyAmount = $app.store.user.investAmount - ($app.store.user.investAmount/100)*discountPercent;
     const amountDiscount = computed(() => {
         return isNaN(defaultBuyAmount) ? 100 : defaultBuyAmount;
     })
-    
+
     const isUserAuthenticated = computed(() => {
         return $app.store.auth.isUserAuthenticated
     })
     const refCode = ref('')
-   
+
     // sign up
     const signupToggle = (method: any) => {
         if($app.store.tetherspecial.signupStep === SignupSteps.Default) {
@@ -58,7 +58,7 @@ export const useRegistration = ($app) => {
             }
         }
     }
-    
+
     const scrollToSignup = () => {
         const element = document.querySelector(".landing-calculation__signup");
         let headerOffset
@@ -69,7 +69,7 @@ export const useRegistration = ($app) => {
         }
         const elementPosition = element.offsetTop;
         const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-    
+
         setTimeout(()=>{
             window.scrollTo({
                 top: offsetPosition,
@@ -77,7 +77,7 @@ export const useRegistration = ($app) => {
             });
         },1)
     }
-    
+
     const scrollToSignupFields = () => {
         const element = document.querySelector(".landing-calculation__signup-main");
         let headerOffset
@@ -88,7 +88,7 @@ export const useRegistration = ($app) => {
         }
         const elementPosition = element?.offsetTop;
         const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-    
+
         setTimeout(()=>{
             window.scrollTo({
                 top: offsetPosition,
@@ -96,58 +96,59 @@ export const useRegistration = ($app) => {
             });
         },1)
     }
-    
-    
+
+
     const investBuySignup = () => {
         $app.store.tetherspecial.signupStep = SignupSteps.Signup;
         $app.store.tetherspecial.signupMethod = SignupMethods.Email;
         scrollToSignup();
       }
-    
+
     const handleOpenPurchase = () => {
         $app.store.purchase.amountUS = amountDiscount.value;
         $app.store.tetherspecial.signupStep = SignupSteps.Default;
         $app.store.tetherspecial.purchaseStep = PurchaseSteps.Purchase;
-        scrollToPurchase();
+        // scrollToPurchase();
+        navigateTo({name: 'personal-fund', query: { action: 'open-purchase-modal' }})
     }
 
     const investBuy = async () => {
         if($app.store.user.investAmount < 100) return
-      
+
         $app.store.tetherspecial.signupStep = SignupSteps.Default;
         $app.store.tetherspecial.signupMethod = SignupMethods.None;
         handleOpenPurchase();
-      
+
         await $app.api.eth.auth.getUser().then((resp) => {
           $app.store.user.info = resp?.data
         })
-      
+
         await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
           $app.store.user.blockchainUserWallet = resp?.data.uid
         })
     }
-    
+
     const scrollToPurchase = () => {
-        // const element = document.querySelector(".w-buy-shares-payment");
-        const element = document.querySelector(".w-buy-shares-payment-short-tether");
-        let headerOffset
-        if (window.innerWidth < 768) {
-            headerOffset = 145;
-        } else {
-            headerOffset = 155;
-        }
-        const elementPosition = element.offsetTop;
-        const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
-    
-    
-        setTimeout(()=>{
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth",
-            });
-        },1)
+      // const element = document.querySelector(".w-buy-shares-payment");
+      const element = document.querySelector(".w-buy-shares-payment-short-tether");
+      let headerOffset
+      if (window.innerWidth < 768) {
+          headerOffset = 145;
+      } else {
+          headerOffset = 155;
+      }
+      const elementPosition = element.offsetTop;
+      const offsetPosition = elementPosition  - headerOffset; //+ window.pageYOffset
+
+
+      setTimeout(()=>{
+          window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth",
+          });
+      },1)
     }
-    
+
     const email = ref('')
     const isEmailDisabled = ref(false);
     const countryCode = ref(null);
@@ -158,36 +159,36 @@ export const useRegistration = ($app) => {
 
     const emailErrorText = ref('')
     const isEmailValid = ref(false)
-    
+
     function emailFieldBlurHandler() {
         if (isEmailValid.value) {
             emailErrorText.value = ''
             return
         }
-    
+
         if (email.value) {
             emailErrorText.value = 'Invalid email address'
             return
         }
-    
+
         emailErrorText.value = 'Required'
     }
-    
+
     // sign up / terms
     function openTermsModal() {
         $app.store.tetherspecial.isOpenTermsModal = true;
     }
-    
-    
+
+
     // telegram
     const isTelegramConnection = ref(false);
-    
+
     const testTG = async () => {
         const dataTelegram = await $app.api.eth.auth.getCredintialsTelegram();
         const telegramBotId = dataTelegram?.data?.bot_id;
         let data = null;
         await (window as any).Telegram.Login.init('widget_login', telegramBotId, {"origin":"https:\/\/core.telegram.org"}, false, "en");
-    
+
         await (window as any).Telegram.Login.auth(
         { bot_id: telegramBotId, request_access: true },
         (tgData: any) => {
@@ -225,15 +226,15 @@ export const useRegistration = ($app) => {
         );
         return data;
     }
-    
-    
+
+
     const handleGoogleConnect = async () => {
         $app.api.eth.auth.getGoogleRedirectUrl().then((url: any) => {
             localStorage.setItem('googleRedirect', router.currentRoute.value.fullPath)
             window.location.href = url.url;
         });
     }
-    
+
     // apple
     const handleAppleConnect = async () => {
         const data = await initApple();
@@ -242,20 +243,20 @@ export const useRegistration = ($app) => {
         .getAppleAuthType({apple_token: data.authorization.id_token})
         .then(async (res) => {
             if(res.data.auth_type === 'registration') {
-                
+
                 $app.store.tetherspecial.signupStep = SignupSteps.Signup;
                 $app.store.tetherspecial.signupMethod= SignupMethods.Apple;
-    
+
                 if(data?.user?.email) {
                     $app.store.tetherspecial.email = data?.user?.email;
                     isEmailDisabled.value = true;
                 }
-    
+
                 if(data?.user?.name) {
                     $app.store.tetherspecial.firstName = data?.user?.name?.firstName ? data?.user?.name?.firstName : '';
                     $app.store.tetherspecial.lastName = data?.user?.name?.lastName ? data?.user?.name?.lastName : '';
                 }
-    
+
                 scrollToSignupFields();
             } else {
                 $app.api.eth.auth.
@@ -268,7 +269,7 @@ export const useRegistration = ($app) => {
             }
         });
     }
-    
+
     // facebook
     function initFbSdk(options) {
         return new Promise(resolve => {
@@ -289,7 +290,7 @@ export const useRegistration = ($app) => {
             /* eslint-enable */
         })
     }
-    
+
     function getFbSdk(options) {
         return new Promise(async resolve => {
             if (window.FB) {
@@ -300,13 +301,13 @@ export const useRegistration = ($app) => {
             }
         })
     }
-    
+
     const handleFacebookConnect = async () => {
         $app.api.eth.auth
         .getCredintialsFacebook()
         .then(async (res) => {
             const facebookId = res?.data?.client_id; // 934423128173330; //  res?.data?.client_id;
-        
+
             const sdk = await getFbSdk(
                 {
                     appId: facebookId, //You will need to change this
@@ -314,7 +315,7 @@ export const useRegistration = ($app) => {
                     version: "v13.0"
                 }
             ) //sdk === FB in this case
-        
+
             sdk.init(
                 {
                     appId: facebookId, //You will need to change this
@@ -322,11 +323,11 @@ export const useRegistration = ($app) => {
                     version: "v13.0"
                 }
             );
-        
+
             sdk.login((response) => {
                 if (response?.authResponse) {
                     $app.store.authTemp.response = response.authResponse;
-            
+
                     $app.api.eth.auth
                     .getAuthTypeFacebook({facebook_id: $app.store.authTemp.response?.userID})
                     .then(async (res) => {
@@ -349,13 +350,13 @@ export const useRegistration = ($app) => {
                                     });
                                 });
                         }
-            
+
                     })
                     .catch((e) => {
                         // Todo: notify something went wrond
                         console.error(e)
                     })
-        
+
                 }
             });
         })
@@ -363,9 +364,9 @@ export const useRegistration = ($app) => {
             // Todo: notify something went wrond
             console.error(e)
         })
-    
+
     }
-    
+
     // walletConnect
     const handleWalletConnect = async () => {
         openWalletConnect();
@@ -541,7 +542,7 @@ export const useRegistration = ($app) => {
             })
         }
     }
-  
+
     const isSignupAndBuyGoogle = ref(false);
 
     const signupAndBuyGoogle = () => {
@@ -599,7 +600,7 @@ export const useRegistration = ($app) => {
     const closeModal = () =>{
         $app.store.tetherspecail.isOpenModal = false
     }
-    
+
     return {
         signupToggle,
         handleMetamaskConnect,

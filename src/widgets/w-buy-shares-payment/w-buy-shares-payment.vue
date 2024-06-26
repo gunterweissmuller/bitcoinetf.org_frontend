@@ -71,7 +71,7 @@
         </div>
         <a-button :text="tronButtonCheckPayment" variant="secondary" isFullWidth @click="startTronTimer" :disabled="timerStarted"/>
         <div data-id="eTMkMlXnt9I" class="livechat_button">
-          <nuxt-link to="/personal/more/support" target="_blank">
+          <nuxt-link href="https://t.me/bitcoinetf_chat" target="_blank">
             <a-button text="Contact support" variant="tertiary" isFullWidth />
           </nuxt-link>
         </div>

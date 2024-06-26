@@ -76,7 +76,7 @@ export function useLogin($app) {
 
         await $app.store.auth.reInitData()
         connectToReplenishment()
-        router.push('/personal/fund/portfolio')
+        router.push({name: 'personal-fund', query: {action: 'open-purchase-modal'}})
 
     }
 

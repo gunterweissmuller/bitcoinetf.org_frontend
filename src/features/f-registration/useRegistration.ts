@@ -12,6 +12,7 @@ import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
 
 export function useRegistration($app) {
     const router = useRouter()
+    const route = useRoute()
     const {initMetamask} = useMetamask($app);
     const {initApple} = useApple($app); 
     const {getFbSdk} = useFacebook($app);
@@ -75,11 +76,21 @@ export function useRegistration($app) {
     const continueLogin = async (response) => {
         $app.store.registration.currentStep = Steps.Success
         $app.store.auth.setTokens(response.data);
+        let action = {}
+
+        if (route.query?.routeFrom == 'tetherspecial'){
+            $app.store.purchase.setInitialDiscount(true)
+            action = {...action, routeFrom: 'tetherspecial'}
+        }
+        
+        if (route.query.action){
+            action = {...action, ...route.query}
+        }
 
         await $app.api.eth.auth.getUser().then((resp) => {
             $app.store.user.info = resp?.data;
             connectToReplenishment();
-            router.push('/personal/fund/portfolio');
+            router.push({name: 'personal-fund', query: action});
         });
 
         const aAid = window.localStorage.getItem('PAPVisitorId');
@@ -98,6 +109,19 @@ export function useRegistration($app) {
             $app.store.user.blockchainUserWallet = resp?.data.uid
         })
     }
+
+    const registerNewUser = async (payload: {email: string, password: string}) => {
+        $app.api.eth.auth
+          .confirm({
+            ...payload,
+          })
+          .then((jwtResponse: any) => {
+           
+            continueLogin(jwtResponse)
+          })
+          .catch((e) => {})
+      }
+
 
     const catchRegistration = async (e) => {
         if (e?.errors?.error?.message) {
@@ -572,6 +596,7 @@ export function useRegistration($app) {
 
 
     return {
+        registerNewUser,
         onSubmitEmailForm,
         emailErrorText,
         emailFieldBlurHandler,

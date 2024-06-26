@@ -22,6 +22,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const fundRouteNames = [ 'personal-portfolio', 'personal-protection', 'personal-shareholders' ]
   const includedRouteMask = to.path.includes('personal')
   const urlParams = new URLSearchParams(window.location.search);
+  
   if(to.query.accessToken) {
     $app.store.auth.setTokens({
       access_token: urlParams.get('accessToken'),
@@ -58,7 +59,13 @@ export default defineNuxtRouteMiddleware((to) => {
         action
       }
     }
+    const fromRoute  = urlParams.get('fromRoute')
 
+    if (fromRoute){
+      $app.store.purchase.setInitialDiscount(true)
+      route.query = {...route.query, fromRoute: 'tetherspecial'}
+    }
+    
     return navigateTo(route, {replace: true})
     //router.replace({ query: {} })
     //window.location.search = '';
@@ -74,7 +81,11 @@ export default defineNuxtRouteMiddleware((to) => {
       document.body.dataset.theme = to.query.theme
       $app.store.user.theme = to.query.theme
     }
-    return navigateTo({path: to.path}, {replace: true})
+    let query = {}
+    if (to.query?.action){
+      query = {action: to.query?.action}
+    }
+    return navigateTo({path: to.path, query}, {replace: true})
   }
 
   const { can } = useAbility()
@@ -85,12 +96,12 @@ export default defineNuxtRouteMiddleware((to) => {
     !excludedRoutesForDemoUser.includes(to.name) &&
     (to.name as string).includes('personal')
   ) {
-    return navigateTo({ name: 'personal-login' })
+    return navigateTo({ name: 'personal-login', query: {action: 'open-purchase-modal'} })
   }
 
 
    if (!excludedRouteNames.includes(to.name) && includedRouteMask && !$app.store.auth.isUserAuthenticated && !can('readonly', 'demo')) {
-    return navigateTo({ name: 'personal-login' })
+    return navigateTo({ name: 'personal-login', query: {action: 'open-purchase-modal'} })
   }
 
   if (excludedRouteNames.includes(to.name) && $app.store.auth.isUserAuthenticated) {

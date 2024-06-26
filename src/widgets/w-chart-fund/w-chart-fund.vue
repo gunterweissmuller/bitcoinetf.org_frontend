@@ -33,7 +33,7 @@
             v-if="!!assetsStatistic && props.type === 'assets'"
             class="w-chart-fund__titles-title"
           >
-            ${{$app.filters.rounded(totalAmountUsdComp, 0)}}
+            ${{$app.filters.rounded(fullBalanceFund, 0)}}
           </div>
 
           <!-- asset -->
@@ -41,7 +41,7 @@
             v-if="!!assetStatistic && props.type === 'asset'"
             class="w-chart-fund__titles-title"
           >
-          ${{$app.filters.rounded(dataAmount, 0)}}
+          ${{$app.filters.rounded(props.asset.symbol === 'BRF' ? props.asset.incoming_amount_btc * btcPrice : props.asset.full_balance, 0)}}
           </div>
 
           <!-- shareholders -->
@@ -81,7 +81,7 @@
               :name="(orderType === 'usdt' ? Icon.ColorfulAssetUsd : Icon.MonoBitcoinB)"
             />
             <div class="w-chart-fund__info-text">
-              {{$app.filters.rounded(((dataAmount ?? 0)) / (orderType === 'usdt' ? 1 : btcPrice), 0)}}
+              {{$app.filters.rounded(((props.asset.symbol === 'BRF' ? props.asset.incoming_amount_btc * btcPrice : props.asset.full_balance ?? 0)) / (orderType === 'usdt' ? 1 : btcPrice), 0)}}
             </div>
           </div>
         </div>
@@ -163,7 +163,9 @@ const props = withDefaults(
   },
 );
 
-const btcPrice = computed(() => $app.store.user?.statistic?.btc_price);
+const fullBalanceFund = computed(() => $app.store.assets.fullBalanceFund);
+
+const btcPrice = computed(() => $app.store.user.btcValue);
 const orderType = computed(() => $app.store.user?.info?.account?.order_type || 'init_btc');
 
 // always unique id

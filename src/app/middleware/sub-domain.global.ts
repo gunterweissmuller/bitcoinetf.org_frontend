@@ -22,7 +22,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     // $app.store.purchase.amount = investmentAmount.value;
     // $app.store.purchase.amountUS = investmentAmount.value;
     const custom = to.query.action || from.query.action || ''
-
+    const fromTetherspecial = to.query?.fromRoute || ''
     if (window.location.hostname === config.public.DOMAIN && includedRouteMask && !excludedRouteNames.includes(to.name) && to.path !== '/redirect') {
       let newUrl = `https://${config.public.APP_DOMAIN}${to.path}?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&websocketToken=${tokens.websocketToken}`
 
@@ -38,12 +38,21 @@ export default defineNuxtRouteMiddleware((to, from) => {
         newUrl += `&action=${custom}`
       }
 
+      if (fromTetherspecial || $app.store.purchase.initialDiscount){
+        newUrl += `&fromRoute=tetherspecial`
+      }
+
+      
       window.location.href = newUrl;
       return abortNavigation()
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
       let newUrl = `https://${config.public.DOMAIN}${to.path === '/' ? from.path : to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
-
+      
+      if ($app.store.purchase.initialDiscount){
+        newUrl += `&fromRoute=tetherspecial`
+      }
+      
       if (custom){
         newUrl += `&action=${custom}`
       }
