@@ -104,11 +104,11 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
     value: $app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2),
     modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2)}`,
   },
-  {
-    text: 'BTC Spot TD Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2)}`,
-  },
+  // {
+  //   text: 'BTC Spot TD Balance',
+  //   value: $app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2),
+  //   modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2)}`,
+  // },
   {
     text: 'Total AUM',
     value: $app.filters.rounded(fullBalanceFund.value, 2),
@@ -126,9 +126,6 @@ const filteredMarqueList = computed(() => marqueList.value.filter((el) => el?.va
 onMounted(async () => {
   await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
     btcUsdt.value = resp?.data?._value?.lastPrice;
-    setTimeout(() => {
-      console.log(marqueList.value, filteredMarqueList.value)
-    }, 2000);
   })
 })
 </script>

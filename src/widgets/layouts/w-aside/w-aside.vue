@@ -528,14 +528,14 @@ const initTimer = () => {
       maturityIn.value = Math.floor(tempTime / (3600 * 24))
     }
   } else {
-    $app.api.eth.billingEth
-      .initSellShares()
-      .then((response: any) => {
-        $app.store.user.sellShares = response.data
-      })
-      .catch(() => {
-        // Todo: notify something went wrond
-      })
+    // $app.api.eth.billingEth
+    //   .initSellShares()
+    //   .then((response: any) => {
+    //     $app.store.user.sellShares = response.data
+    //   })
+    //   .catch(() => {
+    //     // Todo: notify something went wrond
+    //   })
   }
 }
 

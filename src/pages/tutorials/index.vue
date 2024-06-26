@@ -89,7 +89,7 @@ const { data: sections, pending } = useAsyncData('tutorials', async () => {
         data.value[section.data.title].description = section.data.description
       } else {
         data.value[currentTitleKey].items.push({
-          img: section.files[0].real_path,
+          img: section.files[0]?.real_path,
           title: section.data.title,
           description: section.data.description,
         })
