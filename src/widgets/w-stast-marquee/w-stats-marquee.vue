@@ -126,9 +126,6 @@ const filteredMarqueList = computed(() => marqueList.value.filter((el) => el?.va
 onMounted(async () => {
   await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
     btcUsdt.value = resp?.data?._value?.lastPrice;
-    setTimeout(() => {
-      console.log(marqueList.value, filteredMarqueList.value)
-    }, 2000);
   })
 })
 </script>
