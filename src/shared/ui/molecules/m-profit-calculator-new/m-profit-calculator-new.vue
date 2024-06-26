@@ -468,7 +468,13 @@ function updateAmountValue(event: string | number) {
 
 const handleContinue = () => {
   if (isUserAuthenticated.value) {
-      props.openPurchase();
+    router.push({
+    name: 'personal-fund',
+    query: {
+      routeFrom: 'tetherspecial',
+      action: 'open-buy-shares'
+    },
+  })
     return
   }
 
