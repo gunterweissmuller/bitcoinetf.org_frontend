@@ -4,21 +4,21 @@
     <NuxtImg class="landing-calculation__journey-bg1" src="/img/tetherspecial/bg-img1.png" loading="lazy" />
     <NuxtImg class="landing-calculation__journey-bg2" src="/img/tetherspecial/bg-img2.png" loading="lazy" />
 
-    <div class="landing-calculation__journey-title">Start your bitcoin etf journey 🚀</div>
+    <div class="landing-calculation__journey-title">Start your Bitcoin ETF journey 🚀</div>
     <div class="landing-calculation__journey__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
       <header class="mx-auto landing-calculation__journey__invest--text flex items-center font-medium text-center whitespace-nowrap">
         <VueWriter :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary grow" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'I want to invest additional' : 'I want to invest']" :iterations="1" />
         <a-dropdown-amount
-        v-if="orderType != 'btc' && orderType != 'usdt'"
+          v-if="orderType != 'btc' && orderType != 'usdt'"
           option-value="modifyValue"
-            :model-value="selectedAmount"
-            :options="amounts"
-            :isInputField="selectedAmount.value == null"
-            :amount="investmentAmount"
-            :type="selectedCurrency.value.toLowerCase()"
-            size="big"
-            @update:model-value="selectAmount"
-            @update:amount-value="updateAmountValue"
+          :model-value="selectedAmount"
+          :options="amounts"
+          :isInputField="selectedAmount.value == null"
+          :amount="investmentAmount"
+          :type="selectedCurrency.value.toLowerCase()"
+          size="big"
+          @update:model-value="selectAmount"
+          @update:amount-value="updateAmountValue"
         />
 
       </header>
