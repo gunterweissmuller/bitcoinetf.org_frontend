@@ -104,11 +104,11 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
     value: $app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2),
     modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2)}`,
   },
-  {
-    text: 'BTC Spot TD Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2)}`,
-  },
+  // {
+  //   text: 'BTC Spot TD Balance',
+  //   value: $app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2),
+  //   modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2)}`,
+  // },
   {
     text: 'Total AUM',
     value: $app.filters.rounded(fullBalanceFund.value, 2),
