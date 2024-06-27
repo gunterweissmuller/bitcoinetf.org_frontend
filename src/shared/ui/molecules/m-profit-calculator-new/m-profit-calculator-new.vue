@@ -174,12 +174,14 @@ const props = withDefaults(
     openPurchase?: any
     isInputDisbled?: boolean
     disabledAmount?: boolean
+    useDiscount?: boolean
   }>(),
   {
     openSignup: () => {},
     openPurchase: () => {},
     isInputDisbled: false,
-    disabledAmount: false
+    disabledAmount: false,
+    useDiscount: false
   },
 )
 
@@ -467,11 +469,12 @@ function updateAmountValue(event: string | number) {
 }
 
 const handleContinue = () => {
+  const actionMethod = props.useDiscount ? 'use-discount' : 'open-buy-shares'
   if (isUserAuthenticated.value) {
     router.push({
     name: 'personal-fund',
     query: {
-      action: 'use-discount'
+      action: actionMethod
     },
   })
     return
@@ -483,7 +486,7 @@ const handleContinue = () => {
   router.push({
     name: 'personal-registration',
     query: {
-      action: 'use-discount',
+      action: actionMethod,
     },
   })
 }

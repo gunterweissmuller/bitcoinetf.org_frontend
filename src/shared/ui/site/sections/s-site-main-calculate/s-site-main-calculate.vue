@@ -1,15 +1,11 @@
 <template>
   <section class="s-site-main-calculate" :data-name="'Buy Bitcoin ETF Shares'">
-    <landing-calculation />
+    <m-profit-calculator-new  />
   </section>
 </template>
 
 <script setup lang="ts">
-  import { defineAsyncComponent } from 'vue'
-
-  const LandingCalculation = defineAsyncComponent(
-    () => import('~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue'),
-  )
+  import MProfitCalculatorNew from "~/src/shared/ui/molecules/m-profit-calculator-new/m-profit-calculator-new.vue";
 
 </script>
 
