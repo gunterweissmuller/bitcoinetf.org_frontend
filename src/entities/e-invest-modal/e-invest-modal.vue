@@ -241,83 +241,35 @@
 
 <script setup lang="ts">
 import { Icon } from '~/src/shared/constants/icons';
-import { useNuxtApp, useRouter, useRoute } from '#app'
+import { useNuxtApp, useRouter } from '#app'
 import { computed, ref } from 'vue'
 import MModal from '~/src/shared/ui/molecules/m-modal/m-modal.vue';
-import { useWindowSize } from '@vueuse/core'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import ADropdownAmount from '~/src/shared/ui/atoms/a-dropdown-amount/a-dropdown-amount.vue';
 import ADropdownSelector from '~/src/shared/ui/atoms/a-dropdown-selector/a-dropdown-selector.vue';
 
 const { $app } = useNuxtApp()
 const router = useRouter()
-const { width } = useWindowSize()
 
 const orderType = computed(() => {
   return $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
 });
-watch(
-  () => $app.store.user.info,
-  () => {
-    orderType.value = $app.store.user?.info?.account?.order_type && $app.store.user?.info?.account?.order_type !== undefined ? $app.store.user?.info?.account?.order_type : 'init_btc';
-  }
-)
-
-onMounted(() => {
-  // $app.api.eth.auth.getUser().then((resp) => {
-  //   $app.store.user.info = resp?.data
-  // });
 
 
+const isOpen = computed(() => $app.store.user.isInvestModalShow.show)
 
-})
-
-const isOpen = ref($app.store.user.isInvestModalShow.show);
 // Invest Step
-const inputMaxWidth = ref(width.value < 768 ? 55 : 65);
-const defaultInputWith = ref(width.value < 768 ? 55 : 65);
-const defaultInputPlus = ref(width.value < 768 ? 10 : 15);
-const investmentAmountDisplay = ref('2,500');
 const investmentAmount : any = ref(2500);
 
 onMounted(()=>{
-  // if(localStorage.getItem('investmentAmount')) {
-  //   investmentAmount.value = Number(localStorage.getItem('investmentAmount'));
-  //   investmentAmountDisplay.value = localStorage.getItem('investmentAmount') || '2,500';
-  //   // $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
-  // }
   if($app.store?.purchase?.amountUS) {
     const temp = Math.ceil(Number($app.store.purchase.amountUS));
 
     if(!isNaN(temp)) {
       investmentAmount.value = temp;
-      investmentAmountDisplay.value = String(temp);
     }
   }
 })
-
-
-watch(
-  () => investmentAmountDisplay.value,
-  (newValue, oldValue) => {
-    let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
-
-    if(isNaN(tempOriginal)) {
-      investmentAmount.value = Number(oldValue.split(",").join(""));
-      investmentAmountDisplay.value = oldValue;
-      return;
-    }
-
-    if(Number(tempOriginal) > 500000) {
-      investmentAmount.value = 500000;
-      investmentAmountDisplay.value = '500,000';
-    } else {
-      investmentAmount.value = Number(tempOriginal);
-      const replacedStringValue = tempOriginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      investmentAmountDisplay.value = replacedStringValue;
-    }
-  }
-)
 
 watch(
   () => investmentAmount.value,
@@ -334,51 +286,10 @@ watch(
 
     localStorage.setItem('investmentAmount', String(investmentAmount.value));
     $app.store.user.setInvestAmount({amount: Number(investmentAmount.value)});
-
-    if(String(newValue).length <= 4) {
-      inputMaxWidth.value = defaultInputWith.value;
-    } else if(String(newValue).length > 4 && String(newValue).length < 7) {
-      inputMaxWidth.value =  defaultInputWith.value+((String(newValue).length - 4)*defaultInputPlus.value);
-    }
-
   },
 )
 
-watch(
-  () => width.value,
-  (newValue) => {
-    if(width.value < 768) {
-      defaultInputWith.value = 55;
-      defaultInputPlus.value = 10;
-    } else {
-      defaultInputWith.value = 65;
-      defaultInputPlus.value = 15;
-    }
 
-    if(String(investmentAmount.value).length <= 4) {
-      inputMaxWidth.value = defaultInputWith.value;
-    } else if(String(investmentAmount.value).length > 4 && String(investmentAmount.value).length < 7) {
-      inputMaxWidth.value =  defaultInputWith.value+((String(investmentAmount.value).length - 4)*defaultInputPlus.value);
-    }
-  },
-)
-
-// reinvest
-
-const inputMaxWidthReinvest = ref(60);
-const investmentAmountReinvest = ref('2,500');
-const investmentAmountModifiedReinvest = computed<string>({
-  get: () => investmentAmount.value,
-  set: (newValue) => {
-    const originalNumber = newValue.split(",").join("");
-    if(originalNumber.length <= 4) {
-      inputMaxWidthReinvest.value = 60;
-    } else if(originalNumber.length > 4 && originalNumber.length < 7) {
-      inputMaxWidthReinvest.value =  60+((originalNumber.length - 4)*20);
-    }
-    investmentAmountReinvest.value = originalNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-},
-});
 
 
 const currencies = ref([
@@ -404,65 +315,27 @@ const currencies = ref([
     apy3: 100
 
   }, ]);
-const selectedCurrency = ref(currencies.value[1]); //orderType.value == 'btc' ? currencies.value[1] : currencies.value[0]
 
-const apyValue = ref(selectedCurrency.value.apy);
+const selectedCurrency = ref(currencies.value[1]); //orderType.value == 'btc' ? currencies.value[1] : currencies.value[0]
+onMounted(() => {
+  const order_type = $app.store.user?.info?.account?.order_type || 'USDT'
+  
+  const findOrder = currencies.value.find((el) => el.value.toLowerCase() === order_type.toLowerCase()) || currencies.value[1]
+  selectCurrencyItem(findOrder)
+  
+})
+
+
 const dayliDivs = computed(() => {
   return guaranteedPayout.value / 365
 });
-
-onMounted(() => {
-  // if(localStorage.getItem("investType")) {
-  //   selectCurrency({value: localStorage.getItem("investType")});
-  // }
-
-  // if($app.store.purchase.type) {
-  //   selectCurrency({value: $app.store.purchase.type.toLowerCase()});
-  // }
-})
-
-const dayliDivsDisplay = computed(() => {
-  const tempVal = guaranteedPayout.value / 365;
-  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
-
-  if(tempVal.toString().split(".")[1]?.length > 2) {
-    resValue = resValue + "+";
-  }
-  return resValue;
-})
-
-const monthlyDivsDisplay = computed(() => {
-  const tempVal = guaranteedPayout.value / 12;
-  let resValue = (Math.trunc( tempVal * 100 ) / 100).toString();
-
-  if(tempVal.toString().split(".")[1]?.length > 2) {
-    resValue = resValue + "+";
-  }
-  return resValue;
-})
 
 const guaranteedPayout = computed(() => {
   return investmentAmount.value * (selectedCurrency.value.apy / 100)
 })
 
-watch(
-  () => $app.store.user.isInvestModalShow.show,
-  () => {
-    isOpen.value = $app.store.user.isInvestModalShow.show;
-
-    if (orderType.value !== 'init_btc') {
-      selectedCurrency.value = currencies.value.find((el) => el.value.toLowerCase() === orderType.value.toLowerCase()) || currencies.value[1];
-    } else if($app.store.purchase.type) {
-      const getCurrencyByPurchase = currencies.value.find(currency => currency.value == $app.store.purchase.type)
-      selectCurrencyItem(getCurrencyByPurchase)
-    }
-  }
-)
-
-
 const selectCurrencyItem = (currency:any) => {
   selectedCurrency.value = currency
-  $app.store.purchase.type = currency.value
 }
 
 // amount dropdown

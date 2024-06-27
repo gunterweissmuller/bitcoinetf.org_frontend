@@ -113,7 +113,8 @@ function updateAmount(event: Event) {
   emit('update:amountValue', value)
 }
 
-const inputLength = computed(() => (localedAmount.value.get().length + 1)  * 16)
+const fontWidth = computed(() => props.size == 'big' ? 22 : 16 )
+const inputLength = computed(() => (localedAmount.value.get().length + 1)  * fontWidth.value)
 
 const isActiveDropdown = ref<boolean>(false)
 

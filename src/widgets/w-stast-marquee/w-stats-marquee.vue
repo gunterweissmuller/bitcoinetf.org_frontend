@@ -89,26 +89,26 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
     value: $app.filters.rounded(assetsByKey.value?.BAA?.full_balance, 2),
     modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BAA?.full_balance, 2)}`,
   },
-  // {
-  //   text: 'Bitcoin Reserve Fund Balance',
-  //   value: $app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2),
-  //   modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2)}`,
-  // },
-  // {
-  //   text: 'BTC Options TD Balance',
-  //   value: $app.filters.rounded(assetsByKey.value?.BOT?.full_balance, 2),
-  //   modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BOT?.full_balance, 2)}`,
-  // },
+  {
+    text: 'Bitcoin Reserve Fund Balance',
+    value: $app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2),
+    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2)}`,
+  },
+  {
+    text: 'BTC Options TD Balance',
+    value: $app.filters.rounded(assetsByKey.value?.BOT?.full_balance, 2),
+    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BOT?.full_balance, 2)}`,
+  },
   {
     text: 'BTC Futures TD Balance',
     value: $app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2),
     modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BFT?.full_balance, 2)}`,
   },
-  // {
-  //   text: 'BTC Spot TD Balance',
-  //   value: $app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2),
-  //   modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2)}`,
-  // },
+  {
+    text: 'BTC Spot TD Balance',
+    value: $app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2),
+    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BST?.full_balance, 2)}`,
+  },
   {
     text: 'Total AUM',
     value: $app.filters.rounded(fullBalanceFund.value, 2),
