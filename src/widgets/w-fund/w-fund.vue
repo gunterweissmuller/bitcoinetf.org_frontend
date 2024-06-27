@@ -52,18 +52,24 @@ watch(width, (newWidth : number, oldWidth : number) => {
 })
 
 onMounted(() => {
-  if (route.query?.fromRoute){
-    $app.store.purchase.setInitialDiscount(true)
-    router.push('/personal/buy-shares');
-  }
   const action = route.query?.action
-  
-  if (action == 'open-purchase-modal'){
-    $app.store.user.isInvestModalShow.show = true
-    router.replace({name:'personal-fund'})
-  }
-  if (action == 'open-buy-shares'){
-    router.replace({name: 'personal-buy-shares'})
+  const actionsCallback = {
+    'open-purchase-modal': () => {
+      $app.store.user.isInvestModalShow.show = true
+      router.replace({name:'personal-fund'})
+    },
+    'open-buy-shares': () => {
+      router.replace({name: 'personal-buy-shares'})
+    },
+    'use-discount': () => {
+      $app.store.purchase.setInitialDiscount(true)
+      router.push('/personal/buy-shares');
+    }
+  } 
+  const checkActionToCallback = Object.keys(actionsCallback).find(callback => callback == action)
+
+  if (action && checkActionToCallback){
+    actionsCallback[action as string]()
   }
 })
 </script>
