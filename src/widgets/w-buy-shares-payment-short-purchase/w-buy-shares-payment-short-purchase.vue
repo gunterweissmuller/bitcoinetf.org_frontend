@@ -204,8 +204,8 @@ onMounted(async () => {
         referral: props.switches?.referral ? true : false,
         check_discount: props.switches?.discount ? true : false,
         bonus: false,
-        amount: props.calcValue,
-        order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'
+        amount: $app.store.purchase.amount,
+        order_type: $app.store.purchase.type.includes('init') ?  $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc' : $app.store.user.info.account.order_type
       })
     });
 
