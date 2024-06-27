@@ -264,9 +264,9 @@ watch(
 )
 
 onMounted(() => {
-  $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
-  });
+  // $app.api.eth.auth.getUser().then((resp) => {
+  //   $app.store.user.info = resp?.data
+  // });
 
 
 
@@ -574,7 +574,7 @@ const handleContinue = () => {
     return
   }
   navigateTo({name: 'personal-registration', query: {action: 'open-buy-shares'}})
-  
+
 }
 
 </script>
