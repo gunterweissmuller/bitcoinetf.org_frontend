@@ -16,7 +16,7 @@
     justify-content: center;
     transition: 1s;
     opacity: 1;
-    
+
     right: -60px;
     top: 50%;
     transform: translateY(-50%);
@@ -27,7 +27,7 @@
     font-size: 14px;
     font-weight: 600;
     line-height: 120%; /* 16.8px */
-    
+
     &-hide {
       opacity: 0;
     }
@@ -81,6 +81,9 @@
   }
 
   &__slide {
+    display: grid;
+    grid-template-rows: torem(76) torem(295) torem(205);
+
     max-width: torem(658);
     color: #01040F;
     border-radius: torem(20);

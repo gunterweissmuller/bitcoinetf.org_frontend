@@ -26,7 +26,7 @@
                 :name="Icon.MonoMinus"
               />
               Sell
-          </div> 
+          </div>
 
           <div class="w-etfs__amount-buttons-item w-etfs__amount-buttons-item-secondary" :class="{ disabled: !isNonEmptyUserEtfBalance }" @click="handleVerify">
             <a-icon
@@ -117,7 +117,7 @@ const centrifuge = ref(null)
 
 const getSellEtfs = async () => {
   $app.api.eth.billingEth
-  .initSellShares()
+  .initSellShares() // need fix
   .then((response: any) => {
     $app.store.user.sellShares = response.data
   })
@@ -128,7 +128,7 @@ const getSellEtfs = async () => {
 
 const getValuate = async () => {
   $app.api.eth.billingEth
-  .getValuate()
+  .getValuate() // need fix
   .then((response: any) => {
     $app.store.user.sellShares = Object.assign($app.store.user.sellShares, response.data);
   })
@@ -232,8 +232,8 @@ onMounted(async () => {
   await getWalletDividends()
   await getPersonalDividends()
   await getLastPayment()
-  await getSellEtfs()
-  await getValuate()
+  // await getSellEtfs() // need fix
+  // await getValuate() // need fix
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
@@ -249,8 +249,8 @@ onMounted(async () => {
         await getPersonalDividends(true)
         await getWalletDividends()
         await getLastPayment()
-        await getSellEtfs()
-        await getValuate()
+        // await getSellEtfs()
+        // await getValuate()
       }, 1500)
     })
     .subscribe()

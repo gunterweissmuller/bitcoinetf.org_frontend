@@ -4,28 +4,28 @@
     <NuxtImg class="landing-calculation__journey-bg1" src="/img/tetherspecial/bg-img1.png" loading="lazy" />
     <NuxtImg class="landing-calculation__journey-bg2" src="/img/tetherspecial/bg-img2.png" loading="lazy" />
 
-    <div class="landing-calculation__journey-title">Start your bitcoin etf journey 🚀</div>
+    <div class="landing-calculation__journey-title">Start your Bitcoin ETF journey 🚀</div>
     <div class="landing-calculation__journey__invest flex flex-col justify-end items-start"> <!--max-w-[375px]-->
       <header class="mx-auto landing-calculation__journey__invest--text flex items-center font-medium text-center whitespace-nowrap">
         <VueWriter :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary grow" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'I want to invest additional' : 'I want to invest']" :iterations="1" />
-        <a-dropdown-amount 
-        v-if="orderType != 'btc' && orderType != 'usdt'"
-          option-value="modifyValue" 
-            :model-value="selectedAmount"
-            :options="amounts"
-            :isInputField="selectedAmount.value == null"
-            :amount="investmentAmount"
-            :type="selectedCurrency.value.toLowerCase()"
-            size="big"
-            @update:model-value="selectAmount"
-            @update:amount-value="updateAmountValue" 
+        <a-dropdown-amount
+          v-if="orderType != 'btc' && orderType != 'usdt'"
+          option-value="modifyValue"
+          :model-value="selectedAmount"
+          :options="amounts"
+          :isInputField="selectedAmount.value == null"
+          :amount="investmentAmount"
+          :type="selectedCurrency.value.toLowerCase()"
+          size="big"
+          @update:model-value="selectAmount"
+          @update:amount-value="updateAmountValue"
         />
-       
+
       </header>
       <div class="flex gap-2 justify-center w-full" >
-        <a-dropdown-amount 
+        <a-dropdown-amount
             v-if="orderType === 'btc' || orderType === 'usdt'"
-            option-value="modifyValue" 
+            option-value="modifyValue"
             :model-value="selectedAmount"
             :options="amounts"
             :isInputField="selectedAmount.value == null"
@@ -33,9 +33,9 @@
             :type="selectedCurrency.value.toLowerCase()"
             size="big"
             @update:model-value="selectAmount"
-            @update:amount-value="updateAmountValue" 
+            @update:amount-value="updateAmountValue"
         />
-      
+
         <VueWriter  :start="1100" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class=" landing-calculation__journey__invest--text-main landing-calculation__journey--text-normal landing-calculation__journey__invest--text-secondary landing-calculation__journey__invest--text-spacing font-medium text-center" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'and increase my' : 'and receive my daily']" :iterations="1" />
       </div>
 
@@ -43,7 +43,7 @@
         <VueWriter :start="2300" :typeSpeed="60" :class="{'landing-calculation__journey__invest--text-reinvest':orderType == 'btc' || orderType == 'usdt'}" class="grow" :array="[ orderType == 'btc' || orderType == 'usdt' ? 'daily dividends in' : 'dividends in']" :iterations="1" />
 
         <div class="ml-2 relative">
-          <a-dropdown-selector 
+          <a-dropdown-selector
             :model-value="selectedCurrency"
             :options="currencies"
             option-key="icon"
@@ -52,7 +52,7 @@
             :type="selectedCurrency.value.toLowerCase()"
             size="big"
           />
-          
+
         </div>
 
       </div>
@@ -270,7 +270,7 @@ function validate(event) {
 //     //   return;
 //     // }
 //     console.log('new-->',newValue);
-    
+
 //     if(Number(newValue) > 500000) {
 //       investmentAmount.value = 500000;
 //     } else {
@@ -468,7 +468,13 @@ function updateAmountValue(event: string | number) {
 
 const handleContinue = () => {
   if (isUserAuthenticated.value) {
-      props.openPurchase();
+    router.push({
+    name: 'personal-fund',
+    query: {
+      fromRoute: 'tetherspecial',
+      action: 'open-buy-shares'
+    },
+  })
     return
   }
 
@@ -478,7 +484,7 @@ const handleContinue = () => {
   router.push({
     name: 'personal-registration',
     query: {
-      routeFrom: 'tetherspecial',
+      fromRoute: 'tetherspecial',
     },
   })
 }
