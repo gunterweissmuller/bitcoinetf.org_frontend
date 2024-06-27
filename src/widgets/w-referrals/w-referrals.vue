@@ -104,6 +104,8 @@
         </div>
       </div>
 
+      <div class="w-referrals__line"></div>
+
       <ul class="w-referrals__stats w-referrals__stats--desktop">
         <li class="w-referrals__stat">
           <div class="w-referrals__stat-heading">Total referrals earned</div>

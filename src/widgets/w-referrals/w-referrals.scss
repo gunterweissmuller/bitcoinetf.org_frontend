@@ -1,4 +1,15 @@
 .w-referrals {
+  &__line {
+    display: block;
+    margin: torem(24) 0;
+    height: 1px;
+    background: var(--surfaces-border-1);
+
+    @include breakpoint($break-desktop-1024) {
+      margin: torem(32) 0;
+    }
+  }
+
   &__amount {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -629,9 +640,8 @@
     flex-direction: column;
     gap: torem(16);
 
-    margin-top: torem(24);
-
     &--mobile {
+      margin-top: torem(24);
       margin-bottom: 24px;
       display: flex;
 
