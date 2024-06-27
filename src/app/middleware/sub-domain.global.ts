@@ -38,7 +38,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         newUrl += `&action=${custom}`
       }
 
-      if (fromTetherspecial || $app.store.purchase.initialDiscount){
+      if (fromTetherspecial){
         newUrl += `&fromRoute=tetherspecial`
       }
 
@@ -48,8 +48,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
       //return navigateTo({path: '/redirect'})
     } else if (window.location.hostname === config.public.APP_DOMAIN && (!includedRouteMask || excludedRouteNames.includes(to.name)) && to.path !== '/redirect') {
       let newUrl = `https://${config.public.DOMAIN}${to.path === '/' ? from.path : to.path}?theme=${localStorage.getItem('theme') || 'dark'}`
-      
-      if ($app.store.purchase.initialDiscount){
+      const fromTetherspecial = to.query?.fromRoute
+      if (fromTetherspecial){
         newUrl += `&fromRoute=tetherspecial`
       }
       
