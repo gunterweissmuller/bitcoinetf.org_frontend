@@ -64,21 +64,15 @@
         </div>
 
         <w-trades :isMain="true" :gridTemplate="3" :per-page="6" :hideView="true"/> <!--:isExpand="true"-->
-
-
-
       </div>
     </section>
   </template>
 
   <script setup lang="ts">
-  import WChartProtection from '~/src/widgets/w-chart-protection/w-chart-protection.vue'
   import WChartProtectionFund from '~/src/widgets/w-chart-protection-fund/w-chart-protection-fund.vue'
   import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue'
   import WChartFundMain from '~/src/widgets/w-chart-fund-main/w-chart-fund-main.vue'
-  import WChartEarnings from '~/src/widgets/w-chart-earmings/w-chart-earnings.vue'
   import WTrades from '~/src/widgets/w-trades/w-trades.vue'
-  import EAssets from '~/src/entities/e-assets/e-assets.vue'
   import {useNuxtApp} from '#app'
   import {Centrifuge} from 'centrifuge'
   import { onUnmounted, onMounted, computed } from 'vue'

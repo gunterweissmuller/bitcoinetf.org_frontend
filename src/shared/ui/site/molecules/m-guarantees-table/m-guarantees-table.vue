@@ -107,7 +107,9 @@
             <div class="m-guarantees-table__table__col-box">
               <div class="m-guarantees-table__table__col">
                 <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />
-                <p>Worldwide 🌏</p>
+                <p>Worldwide
+                  <NuxtImg src="/img/planet.png" width="18" height="18" loading="lazy" style="display: inline"/>
+                </p>
               </div>
             </div>
           </div>
