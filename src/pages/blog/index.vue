@@ -1,5 +1,14 @@
 <template>
   <s-site-blogs
+    :title="caption.title"
+    :description="caption.description"
+    :sectionSlug="detailSectionInfo?.data?.slug"
+    :newsList="blogPosts"
+    :totalItems="blogPagination.pages"
+    :page="blogPagination.page"
+    @update:current-page="handlePagination"
+  />
+  <!-- <s-site-blogs
     :title="detailSectionInfo?.data?.title"
     :description="detailSectionInfo?.data?.description"
     :sectionSlug="detailSectionInfo?.data?.slug"
@@ -7,7 +16,7 @@
     :totalItems="blogPagination.pages"
     :page="blogPagination.page"
     @update:current-page="handlePagination"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -21,14 +30,23 @@ definePageMeta({
   layout: 'site-texts',
 })
 
+const caption = reactive({
+  title: 'Blog',
+  description: ''
+})
+
 const { data: detailSectionInfo } = await useLazyAsyncData('detailSectionInfo', () => {
-  return $app.api.eth.news.getNewsSections({ uuid: BLOG_NEWS_UUID })
+  return $app.api.eth.news.getNewsSections({ uuid: BLOG_NEWS_UUID }).then((data) => console.log(data));
 })
 
 useSeoMeta({
-  title: () => detailSectionInfo.value?.data?.meta_title,
-  description: () => detailSectionInfo.value?.data?.meta_description,
+  title: () => caption.title,
+  description: () => caption.description,
 });
+// useSeoMeta({
+//   title: () => detailSectionInfo.value?.data?.meta_title,
+//   description: () => detailSectionInfo.value?.data?.meta_description,
+// });
 
 interface Post {
   slug: string;
