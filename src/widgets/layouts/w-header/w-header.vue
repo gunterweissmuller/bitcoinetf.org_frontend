@@ -114,7 +114,6 @@ import { useAbility } from '@casl/vue';
 // import { Centrifuge } from 'centrifuge'
 
 const { $app } = useNuxtApp()
-const authStore = auth()
 
 const route = useRoute();
 const { can, rules } = useAbility()
@@ -455,18 +454,8 @@ const getLastPayment = async () => {
     // Todo: notify something went wrond
   })
 }
-const fetchDemoUserToken = async () => {
-  try {
-    const {data} =  await $app.api.eth.auth.getDemoUserToken()
-    authStore.setTokens(data)
-  } catch (error) {
-    console.error(error);
-  }
-}
+
 onMounted(async () => {
-  if (can('readonly', 'demo')){
-    await fetchDemoUserToken()
-  }
   await getWalletDividends()
   await getDividendsByYear()
   await getLastPayment()

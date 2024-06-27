@@ -1,9 +1,18 @@
+import { useDemo } from '~/src/app/composables/useDemo';
+
 export default defineNuxtPlugin(async ({ $app, _route }: any) => {
   const isUserAuthenticated = $app.store.auth.isUserAuthenticated
+
+  const { fetchDemoUserToken } = useDemo()
 
   if (_route.path === '/personal/reset') {
     $app.store.auth.logout(false)
   }
+
+  if (!isUserAuthenticated && !_route.query?.accessToken && _route.path.includes('personal')) {
+    await fetchDemoUserToken()
+  }
+
   try {
     await $app.store.auth.refresh()
     if (isUserAuthenticated && !_route.query?.accessToken) {
