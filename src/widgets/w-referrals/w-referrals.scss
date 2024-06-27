@@ -230,6 +230,10 @@
       line-height: torem(21);
       color: var(--text-primary);
     }
+
+    &-share {
+      color: var(--text-tertiary);
+    }
   }
 
   &__withdrawal {
