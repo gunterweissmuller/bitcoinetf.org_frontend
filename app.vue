@@ -147,16 +147,45 @@ const wsUpdateAum = () => {
     .subscribe()
 }
 
+const centrifugeLatestTrade = ref(null);
+
+const waUpateLatestTrade = async () => {
+  const requestParams = {
+    per_page: 4,
+    page: 1,
+  }
+
+  await $app.api.info.event.getDeals(requestParams).then((dealsResponse) => {
+    $app.store.user.latestTrade = dealsResponse.data.data[dealsResponse.data.data.length - 1].result_amount;
+  });
+
+  centrifugeLatestTrade.value = new Centrifuge(centrifugeURL, {
+    token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken
+  })
+
+  centrifugeLatestTrade.value.connect()
+
+  const sub = centrifugeLatestTrade.value.newSubscription('event_deal')
+  sub
+    .on('publication', function (ctx) {
+      $app.store.user.latestTrade = ctx.data.message?.result_amount
+    })
+    .subscribe()
+}
+
+waUpateLatestTrade();
+
 onMounted(() => {
-  wsUpdateBtcPrice()
-  wsUpdateAssets()
-  wsUpdateAum()
+  wsUpdateBtcPrice();
+  wsUpdateAssets();
+  wsUpdateAum();
 })
 
 onUnmounted(() => {
   centrifuge.value?.disconnect()
   centrifugeAssets.value?.disconnect()
   centrifugeAum.value?.disconnect()
+  centrifugeLatestTrade.value?.disconnect();
 })
 
 const router = useRouter()
@@ -224,7 +253,7 @@ $app.api.eth.auth.walletConnectGetCredentials().then((msg) => {
 
 onMounted(() => {
     // metamask support
-    
+
     $app.store.auth.isMetamaskSupported = typeof (window as any).ethereum !== 'undefined'
         if ($app.store.auth.isMetamaskSupported) {
             (window as any).ethereum.on('chainChanged', (chainId: string) => {

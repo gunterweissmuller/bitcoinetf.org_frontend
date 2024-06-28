@@ -149,8 +149,6 @@ onMounted(async () => {
   const sub = centrifuge.value.newSubscription('event_deal')
   sub
     .on('publication', function (ctx) {
-      $app.store.user.latestTrade = ctx.data.message?.result_amount
-
       if (route.name !== 'personal-assets-symbol' || ctx.data.message.asset_uuid === props.filters?.asset_uuid) {
         trades.value = [ctx.data.message, ...trades.value]
       }

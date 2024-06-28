@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <Vue3Marquee :duration="0" class="w-fund-tablet__info">
+    <Vue3Marquee :duration="95" class="w-fund-tablet__info">
       <div class="w-header__item-row" v-for="index in 3" :key="index">
         <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
           <div class="w-header__item-title">{{ item.text }}</div>
@@ -41,7 +41,7 @@ const assetsByKey = computed<Record<string, IAsset>>(() => {
   }, {});
 });
 
-const latestTrade = computed(() => $app.store.user.latestTrade || $app.store.user.lastTrades?.find((item : { type: string }) => item.type === 'close')?.result_amount);
+const latestTrade = computed(() => $app.store.user.latestTrade);
 
 const marqueList = computed<Record<string, number | string>[]>(() => [
   {
@@ -127,10 +127,6 @@ onMounted(async () => {
   await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
     btcUsdt.value = resp?.data?._value?.lastPrice;
   });
-
-  watch(() => filteredMarqueList.value.length, () => {
-    console.log(filteredMarqueList.value)
-  }, { immediate: true });
 })
 </script>
 
