@@ -26,7 +26,7 @@
     </div>
 
     <!-- JOURNEY LAYOUT -->
-    <m-profit-calculator-new :isInputDisbled="$app.store.tetherspecial.purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup"/>
+    <m-profit-calculator-new :isInputDisbled="$app.store.tetherspecial.purchaseStep == PurchaseSteps.Purchase" :openPurchase="investBuy" :openSignup="investBuySignup" use-discount/>
 
     <!-- SIGNUP LAYOUT -->
     <!-- <landingRegistration :isFiatLanding="props.isFiatLanding"/> -->
