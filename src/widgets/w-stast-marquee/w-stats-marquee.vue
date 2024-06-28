@@ -4,7 +4,8 @@
       <div class="w-header__item-row" v-for="index in 3" :key="index">
         <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
           <div class="w-header__item-title">{{ item.text }}</div>
-          <div class="w-header__item-text" v-html="item.modifyValue"></div>
+          <div class="w-header__item-text" v-if="item.modifyValue !== '...'" v-html="item.modifyValue"></div>
+          <div class="w-header__item-loading w-header__item-text" v-else></div>
         </div>
       </div>
     </Vue3Marquee>
@@ -40,6 +41,8 @@ const assetsByKey = computed<Record<string, IAsset>>(() => {
   }, {});
 });
 
+const latestTrade = computed(() => $app.store.user.latestTrade);
+
 const marqueList = computed<Record<string, number | string>[]>(() => [
   {
     text: 'Total Bitcoin ETF Dividends Paid',
@@ -63,11 +66,8 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   },
   {
     text: 'Latest trade',
-    value: $app.store.user.latestTrade || $app.filters.rounded($app.store.user.lastTrades?.find((item : { type: string }) => item.type === 'close')?.result_amount, 2),
-    modifyValue: `$${$app.filters.rounded(
-      $app.store.user.latestTrade || $app.store.user.lastTrades?.find((item : { type: string }) => item.type === 'close')?.result_amount,
-      2,
-    )}`,
+    value: latestTrade.value || '...',
+    modifyValue: `${ latestTrade.value ? `$` : '...' }${ latestTrade.value ? $app.filters.rounded(latestTrade.value, 2) : '' }`,
   },
   {
     text: 'BTC/USDT',
@@ -126,7 +126,7 @@ const filteredMarqueList = computed(() => marqueList.value.filter((el) => el?.va
 onMounted(async () => {
   await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
     btcUsdt.value = resp?.data?._value?.lastPrice;
-  })
+  });
 })
 </script>
 
