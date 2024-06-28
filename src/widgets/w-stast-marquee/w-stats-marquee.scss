@@ -18,6 +18,7 @@ $_dot_loading_height: 35%;
   16.67%{-webkit-mask-position: 0% $_dot_loading_height, 50% 0%,                   100% 0%                   }
   33.33%{-webkit-mask-position: 0% $_dot_loading_height, 50% $_dot_loading_height, 100% 0%                   }
   50%   {-webkit-mask-position: 0% $_dot_loading_height, 50% $_dot_loading_height, 100% $_dot_loading_height }
+  66.67%{-webkit-mask-position: 0% 0%,                   50% $_dot_loading_height, 100% $_dot_loading_height }
   83.33%{-webkit-mask-position: 0% 0%,                   50% 0%,                   100% $_dot_loading_height }
   100%  {-webkit-mask-position: 0% 0%,                   50% 0%,                   100% 0%                   }
 }
