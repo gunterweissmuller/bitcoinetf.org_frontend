@@ -122,7 +122,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
         check_discount: switches?.discount ? true : false,
         bonus: false,
         amount: $app.store.purchase.amountUS,
-        order_type: $app.store.purchase.type.includes('init') ?  $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc' : $app.store.user.info.account.order_type
+        order_type: $app.store.purchase.type.toLowerCase()
       })
     });
 
