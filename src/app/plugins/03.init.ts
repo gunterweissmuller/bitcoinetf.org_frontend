@@ -15,9 +15,9 @@ export default defineNuxtPlugin(async ({ $app, _route }: any) => {
 
   if(_route.query.accessToken) {
     $app.store.auth.setTokens({
-      access_token: urlParams.get('accessToken'),
-      refresh_token: urlParams.get('refreshToken'),
-      websocket_token: urlParams.get('websocketToken')
+      access_token: _route.query.accessToken,
+      refresh_token: _route.query.refreshToken,
+      websocket_token: _route.query.websocketToken
     });
   }
 
