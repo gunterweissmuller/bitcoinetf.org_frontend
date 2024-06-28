@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <Vue3Marquee :duration="0" class="w-fund-tablet__info">
+    <Vue3Marquee :duration="95" class="w-fund-tablet__info">
       <div class="w-header__item-row" v-for="index in 3" :key="index">
         <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
           <div class="w-header__item-title">{{ item.text }}</div>
