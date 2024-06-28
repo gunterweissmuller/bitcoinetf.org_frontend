@@ -13,6 +13,14 @@ export default defineNuxtPlugin(async ({ $app, _route }: any) => {
     await fetchDemoUserToken()
   }
 
+  if(_route.query.accessToken) {
+    $app.store.auth.setTokens({
+      access_token: urlParams.get('accessToken'),
+      refresh_token: urlParams.get('refreshToken'),
+      websocket_token: urlParams.get('websocketToken')
+    });
+  }
+
   try {
     await $app.store.auth.refresh()
     if (isUserAuthenticated && !_route.query?.accessToken) {
