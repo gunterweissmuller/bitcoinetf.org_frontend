@@ -156,7 +156,7 @@ const waUpateLatestTrade = async () => {
   }
 
   await $app.api.info.event.getDeals(requestParams).then((dealsResponse) => {
-    $app.store.user.latestTrade = dealsResponse.data.data[dealsResponse.data.data.length - 1].result_amount;
+    $app.store.user.latestTrade = dealsResponse.data.data[0].result_amount;
   });
 
   centrifugeLatestTrade.value = new Centrifuge(centrifugeURL, {
