@@ -33,7 +33,7 @@
             v-if="!!assetsStatistic && props.type === 'assets'"
             class="w-chart-fund__titles-title"
           >
-            ${{$app.filters.rounded(fullBalanceFund, 0)}}
+            ${{$app.filters.rounded(fullBalanceFund, 2)}}
           </div>
 
           <!-- asset -->
