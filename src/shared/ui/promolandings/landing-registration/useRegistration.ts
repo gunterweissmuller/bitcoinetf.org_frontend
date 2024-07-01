@@ -120,7 +120,7 @@ export const useRegistration = ($app) => {
         handleOpenPurchase();
 
         await $app.api.eth.auth.getUser().then((resp) => {
-          $app.store.user.info = resp?.data
+          $app.store.user.setUserInfo(resp?.data)
         })
 
         await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
@@ -346,7 +346,7 @@ export const useRegistration = ($app) => {
                                 })
                                 .then(async () => {
                                     await $app.api.eth.auth.getUser().then((resp) => {
-                                        $app.store.user.info = resp?.data
+                                        $app.store.user.setUserInfo(resp?.data)
                                     });
                                 });
                         }
@@ -389,7 +389,7 @@ export const useRegistration = ($app) => {
         $app.store.tetherspecial.dataDisabled = true;
 
         await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data
+            $app.store.user.setUserInfo(resp?.data)
         });
 
         handleOpenPurchase();

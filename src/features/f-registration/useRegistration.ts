@@ -83,7 +83,7 @@ export function useRegistration($app) {
         }
 
         await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data;
+            $app.store.user.setUserInfo(resp?.data);
             connectToReplenishment();
             router.push({name: 'personal-fund', query: action});
         });
@@ -388,7 +388,7 @@ export function useRegistration($app) {
             })
             .then(async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
-                        $app.store.user.info = resp?.data;
+                        $app.store.user.setUserInfo(resp?.data);
                         router.push('/personal/fund/portfolio');
                     })
 
