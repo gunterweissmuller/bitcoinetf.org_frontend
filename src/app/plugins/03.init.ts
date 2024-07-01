@@ -24,7 +24,6 @@ export default defineNuxtPlugin(async ({ $app, _route }: any) => {
   try {
     await $app.store.auth.refresh()
     if (isUserAuthenticated && !_route.query?.accessToken) {
-      console.log('init-endpoint-me');
       await $app.api.eth.auth.getUser().then((resp) => {
         $app.store.user.setUserInfo(resp?.data)
       })
