@@ -28,7 +28,6 @@ export default defineNuxtPlugin(({ $app }) => {
     if (name == 'setPermissions') {
       const [role] = args
       ability.update(roles_permissions[role])
-      console.log('ability-->', role)
     }
   })
 })
