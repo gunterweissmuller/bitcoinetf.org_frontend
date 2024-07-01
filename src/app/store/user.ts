@@ -67,10 +67,12 @@ export const user = defineStore('user', {
     },
     setPermissions(permission: string){
       this.userPermission = permission
+      console.log(permission);
       
     },
     setUserInfo(payload: any){
       this.info = payload
+      console.log(payload);
       if (payload?.readonly){
         this.setPermissions('demo')
         return
