@@ -51,7 +51,7 @@
             })
             .then(async () => {
               await $app.api.eth.auth.getUser().then((resp) => {
-                $app.store.user.info = resp?.data
+                $app.store.user.setUserInfo(resp?.data)
               });
 
               await router.push('/personal/fund/portfolio')

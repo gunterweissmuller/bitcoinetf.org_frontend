@@ -67,7 +67,7 @@ export function useLogin($app) {
         isSubmitEmailForm.value = false
 
         await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data
+            $app.store.user.setUserInfo(resp?.data)
         })
 
         await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
