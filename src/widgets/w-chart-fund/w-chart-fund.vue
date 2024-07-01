@@ -81,7 +81,7 @@
               :name="(orderType === 'usdt' ? Icon.ColorfulAssetUsd : Icon.MonoBitcoinB)"
             />
             <div class="w-chart-fund__info-text">
-              {{$app.filters.rounded(((props.asset.symbol === 'BRF' ? props.asset.incoming_amount_btc * btcPrice : props.asset.full_balance ?? 0)) / (orderType === 'usdt' ? 1 : btcPrice), 0)}}
+              {{$app.filters.rounded(((props.asset.symbol === 'BRF' ? props.asset.incoming_amount_btc * btcPrice : props.asset.full_balance ?? 0)) / (orderType === 'usdt' ? 1 : btcPrice), 2)}}
             </div>
           </div>
         </div>
