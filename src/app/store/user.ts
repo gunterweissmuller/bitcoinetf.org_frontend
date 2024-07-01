@@ -66,6 +66,8 @@ export const user = defineStore('user', {
       this.investAmount = payload.amount;
     },
     setPermissions(permission: string){
+      console.log('store-->', permission);
+      
       this.userPermission = permission
       
     },
