@@ -243,7 +243,7 @@ export default class AuthApiModule {
   async resend(payload: { email: string }) {
     try {
       return await this.adapter.requestJsonAsync({
-        parameterValue: 'auth/code/resend',
+        parameterValue: 'auth/register/resend-pass',
         request: {
           method: HTTPMethod.POST,
         },
