@@ -1,38 +1,38 @@
 import { defineStore } from 'pinia'
 import { useNuxtApp } from '#app'
-import { SignupMethods } from '~/src/shared/constants/signupMethods';
-import { useRuntimeConfig } from 'nuxt/app';
-import { purchase } from './purchase';
+import { useRuntimeConfig } from 'nuxt/app'
+import { user } from './user'
 
 interface authState {
-  accessToken: string,
-    refreshToken: string,
-    userAgent: string,
-    websocketToken: string,
-    refCode: string,
-    accountMethod: string,
-    isMetamaskSupported: boolean,
-    isAuth: boolean
+  accessToken: string
+  refreshToken: string
+  userAgent: string
+  websocketToken: string
+  refCode: string
+  accountMethod: string
+  isMetamaskSupported: boolean
+  isAuth: boolean
 }
 
 export const auth = defineStore('auth', {
-  state: () => ({
-    accessToken: '',
-    refreshToken: '',
-    userAgent: '',
-    websocketToken: '',
-    refCode: '',
-    accountMethod: 'email',
-    isMetamaskSupported: false,
-    isAuth: false
-  } as authState),
+  state: () =>
+    ({
+      accessToken: '',
+      refreshToken: '',
+      userAgent: '',
+      websocketToken: '',
+      refCode: '',
+      accountMethod: 'email',
+      isMetamaskSupported: false,
+      isAuth: false,
+    }) as authState,
 
   actions: {
-    setTokens(payload: { access_token: string; refresh_token: string; websocket_token: string, mode: "readonly" }) {
+    setTokens(payload: { access_token: string; refresh_token: string; websocket_token: string; mode: 'readonly' }) {
       this.accessToken = payload.access_token
       this.refreshToken = payload.refresh_token
       this.websocketToken = payload.websocket_token
-      if (payload?.mode){
+      if (payload?.mode) {
         useNuxtApp().$app.store.user.setPermissions('demo')
         return
       }
@@ -52,11 +52,11 @@ export const auth = defineStore('auth', {
       useNuxtApp().$app.store.persiste.latestTronCheckDate = null
       useNuxtApp().$app.store.user.setPermissions('demo')
       useNuxtApp().$app.store.purchase.setInitialDiscount(false)
-      if(window.location.hostname === config.public.APP_DOMAIN) {
+      if (window.location.hostname === config.public.APP_DOMAIN) {
         const newUrl = `https://${config.public.DOMAIN}/personal/login?logout=1`
-        window.location.href = newUrl;
+        window.location.href = newUrl
 
-        return ;
+        return
       }
 
       if (redirect) {
@@ -184,14 +184,16 @@ export const auth = defineStore('auth', {
       ])
     },
 
-    setRefCode(payload: {ref_code: string }) {
-      this.refCode = payload.ref_code;
-    }
-
+    setRefCode(payload: { ref_code: string }) {
+      this.refCode = payload.ref_code
+    },
   },
 
   getters: {
-    isUserAuthenticated: (state) => state.isAuth,
+    isUserAuthenticated: (state) => {
+      const userStore = user()
+      return state.isAuth && userStore.userPermission == 'auth'
+    },
     getTokens: (state) => ({
       accessToken: state.accessToken,
       refreshToken: state.refreshToken,
