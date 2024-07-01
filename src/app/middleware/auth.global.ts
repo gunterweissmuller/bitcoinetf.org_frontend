@@ -41,7 +41,6 @@ export default defineNuxtRouteMiddleware((to) => {
 
     //router.replace({ path: to.path, query: {} })
     $app.api.eth.auth.getUser().then((resp) => {
-      console.log('auth-global-me');
       $app.store.user.setUserInfo(resp?.data)
     })
     $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
