@@ -95,7 +95,6 @@ Chart.register(...registerables, getChartLabelPlugin());
 const { $app } = useNuxtApp();
 
 const orderType = computed<OrderType>(() => $app.store.user?.info?.account?.order_type || 'init_btc');
-setTimeout(() => console.log(orderType.value), 2000)
 
 const CHART_ID = 'chart-portfolio'
 let CHART_INSTANCE = null
@@ -144,13 +143,13 @@ const textCenter = {
     let text = ''
     if (props.type === 'assets') {
       if (value === 'btc') {
-        text = orderType.value === 'usdt' ? `$${$app.filters.rounded(fullBalanceFund.value, 8)}` : `₿${$app.filters.rounded(resultSumBtc.value, 8)}`
+        text = orderType.value === 'usdt' ? `₮${$app.filters.rounded(fullBalanceFund.value, 8)}` : `₿${$app.filters.rounded(resultSumBtc.value, 8)}`
       } else {
         text = `丰 ${$app.filters.rounded(resultSumBtc.value * 100000000)}`
       }
     } else {
       if (value === 'btc') {
-        text = orderType.value === 'usdt' ? `$${$app.filters.rounded(assetBalance.value, 8)}` : `₿${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value, 8)}`
+        text = orderType.value === 'usdt' ? `₮${$app.filters.rounded(assetBalance.value, 8)}` : `₿${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value, 8)}`
       } else {
         text = `丰 ${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value * 100000000)}`
       }
