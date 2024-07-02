@@ -62,17 +62,7 @@ export default defineNuxtPlugin(async ({ $app, _route }: any) => {
       .catch(() => {
         // Todo: notify something went wrond
       }),
-    $app.api.info.event
-      .getPurchases({
-        per_page: 4,
-        page: 1,
-      })
-      .then((dealsResponse) => {
-        $app.store.user.lastPurchases = dealsResponse.data.data
-      })
-      .catch(() => {
-        // Todo: notify something went wrond
-      }),
+
     $app.api.eth.statisticEth
       .getGlobalStats()
       .then((resp) => {
