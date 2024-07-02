@@ -19,7 +19,7 @@ import { IAsset } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp();
 
-const btcUsdt = ref<null | number>(null);
+const { btcUsdt } = toRefs($app.store.statistic)
 
 const assets = computed<IAsset[]>(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
@@ -124,9 +124,10 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
 const filteredMarqueList = computed(() => marqueList.value.filter((el) => el?.value));
 
 onMounted(async () => {
-  await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
-    btcUsdt.value = resp?.data?._value?.lastPrice;
-  });
+  if (!btcUsdt.value) {
+    const { data: { _value: { lastPrice } } } = await $app.api.info.statistic.getBinanceTicker24hr('BTCUSDT')
+    btcUsdt.value = lastPrice
+  }
 })
 </script>
 
