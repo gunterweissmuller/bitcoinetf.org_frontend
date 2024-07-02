@@ -63,6 +63,7 @@ import { Icon } from '~/src/shared/constants/icons';
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import ATooltipInfo from '~/src/shared/ui/atoms/a-tooltip-info/a-tooltip-info.vue';
+import { OrderType } from '~/src/shared/types/global';
 
 const props = defineProps({
   slider: {
@@ -89,9 +90,12 @@ const props = defineProps({
   }
 });
 
-Chart.register(...registerables, getChartLabelPlugin())
+Chart.register(...registerables, getChartLabelPlugin());
 
-const { $app } = useNuxtApp()
+const { $app } = useNuxtApp();
+
+const orderType = computed<OrderType>(() => $app.store.user?.info?.account?.order_type || 'init_btc');
+setTimeout(() => console.log(orderType.value), 2000)
 
 const CHART_ID = 'chart-portfolio'
 let CHART_INSTANCE = null
@@ -140,13 +144,13 @@ const textCenter = {
     let text = ''
     if (props.type === 'assets') {
       if (value === 'btc') {
-        text = `₿${$app.filters.rounded(resultSumBtc.value, 8)}`
+        text = orderType.value === 'usdt' ? `$${$app.filters.rounded(fullBalanceFund.value, 8)}` : `₿${$app.filters.rounded(resultSumBtc.value, 8)}`
       } else {
         text = `丰 ${$app.filters.rounded(resultSumBtc.value * 100000000)}`
       }
     } else {
       if (value === 'btc') {
-        text = `₿${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value, 8)}`
+        text = orderType.value === 'usdt' ? `$${$app.filters.rounded(assetBalance.value, 8)}` : `₿${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value, 8)}`
       } else {
         text = `丰 ${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value * 100000000)}`
       }
