@@ -192,7 +192,7 @@ onMounted(async () => {
     await initPayment()
   }
   if (true && !$app.store.user?.buyShares?.uuid && isUserAuthenticated) { //props.isFiat
-
+    const enabled_discount = $app.store.purchase.type.toLowerCase() == 'usdt' || $app.store.purchase.type.toLowerCase() == 'init_usdt'
     const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
       method: 'POST',
       headers: new Headers({
@@ -202,7 +202,7 @@ onMounted(async () => {
       body: JSON.stringify({
         dividends: props.switches?.dividends ? true : false,
         referral: props.switches?.referral ? true : false,
-        check_discount: props.switches?.discount ? true : false,
+        check_discount: props.switches?.discount && enabled_discount ? true : false,
         bonus: false,
         amount: $app.store.purchase.amount,
         order_type: $app.store.purchase.type.toLowerCase()
