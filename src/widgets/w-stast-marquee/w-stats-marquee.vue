@@ -13,13 +13,14 @@
 </template>
 
 <script lang='ts' setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp();
 
-const { btcUsdt } = toRefs($app.store.statistic)
+const { btcUsdt } = toRefs($app.store.statistic);
+const btcPrice = computed(() => $app.store.user.btcValue);
 
 const assets = computed<IAsset[]>(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
@@ -46,8 +47,8 @@ const latestTrade = computed(() => $app.store.user.latestTrade);
 const marqueList = computed<Record<string, number | string>[]>(() => [
   {
     text: 'Total Bitcoin ETF Dividends Paid',
-    value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2),
-    modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2)}`,
+    value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * btcPrice.value, 2),
+    modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * btcPrice.value, 2)}`,
   },
   {
     text: 'USDT APY',
@@ -71,8 +72,8 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   },
   {
     text: 'BTC/USDT',
-    value: $app.filters.rounded(btcUsdt.value, 2),
-    modifyValue: `$${$app.filters.rounded(btcUsdt.value, 2)}`,
+    value: $app.filters.rounded(btcPrice.value, 2),
+    modifyValue: `$${$app.filters.rounded(btcPrice.value, 2)}`,
   },
   {
     text: 'Bitcoin ETF Share / USDT',
@@ -91,8 +92,8 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   },
   {
     text: 'Bitcoin Reserve Fund Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2)}`,
+    value: $app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * btcPrice.value, 2),
+    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * btcPrice.value, 2)}`,
   },
   {
     text: 'BTC Options TD Balance',
@@ -125,8 +126,8 @@ const filteredMarqueList = computed(() => marqueList.value.filter((el) => el?.va
 
 onMounted(async () => {
   if (!btcUsdt.value) {
-    const { data: { _value: { lastPrice } } } = await $app.api.info.statistic.getBinanceTicker24hr('BTCUSDT')
-    btcUsdt.value = lastPrice
+    const { data: { _value: { lastPrice } } } = await $app.api.info.statistic.getBinanceTicker24hr('BTCUSDT');
+    // btcUsdtBinance.value = lastPrice;
   }
 })
 </script>
