@@ -202,21 +202,29 @@
         line-height: torem(42);
         margin-bottom: var(--spacing-m-1);
       }
-    
-      &__subtitle {
-        margin-bottom: torem(32);
+
+      &__subtitle, &__notification {
+        font-family: Dm, sans-serif;
         font-weight: 400;
         font-size: torem(16);
         line-height: torem(21);
         color: var(--text-secondary);
-    
         a {
           color: var(--accent-primary);
           font-weight: 600;
         }
       }
-    
+
+      &__subtitle {
+        margin-bottom: torem(24);
+      }
+
+      &__notification {
+        margin-bottom: torem(32);
+      }
+
       &__back {
+        cursor: pointer;
         width: torem(24);
         height: torem(24);
         margin-bottom: var(--spacing-m-2);

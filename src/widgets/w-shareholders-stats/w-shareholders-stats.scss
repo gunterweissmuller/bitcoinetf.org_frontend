@@ -6,6 +6,7 @@
 
   @include breakpoint($break-desktop-1024) {
     grid-gap: torem(16);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .e-stat {

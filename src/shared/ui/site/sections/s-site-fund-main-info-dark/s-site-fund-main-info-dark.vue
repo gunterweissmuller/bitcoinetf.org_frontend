@@ -64,25 +64,19 @@
         </div>
 
         <w-trades :isMain="true" :gridTemplate="3" :per-page="6" :hideView="true"/> <!--:isExpand="true"-->
-
-
-
       </div>
     </section>
   </template>
 
   <script setup lang="ts">
-  import WChartProtection from '~/src/widgets/w-chart-protection/w-chart-protection.vue'
   import WChartProtectionFund from '~/src/widgets/w-chart-protection-fund/w-chart-protection-fund.vue'
   import WChartFund from '~/src/widgets/w-chart-fund/w-chart-fund.vue'
   import WChartFundMain from '~/src/widgets/w-chart-fund-main/w-chart-fund-main.vue'
-  import WChartEarnings from '~/src/widgets/w-chart-earmings/w-chart-earnings.vue'
   import WTrades from '~/src/widgets/w-trades/w-trades.vue'
-  import EAssets from '~/src/entities/e-assets/e-assets.vue'
   import {useNuxtApp} from '#app'
   import {Centrifuge} from 'centrifuge'
   import { onUnmounted, onMounted, computed } from 'vue'
-  import { Autoplay } from 'swiper'
+  import { Autoplay } from 'swiper/modules'
   import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
   import { SwiperSlide } from 'swiper/vue'
   import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
@@ -104,8 +98,6 @@
   })
 
   const centrifuge = ref(null)
-
-  const bottomInfo = ref(null)
 
   const priceChange = ref('low')
 
@@ -135,7 +127,7 @@
   const purchases = computed(() => {
     return $app.store.user.lastPurchases || []
   })
-  const btcUsdt = ref(null)
+  const { btcUsdt, bottomInfo } = toRefs($app.store.statistic)
 
   const getDividendsByYear = async () => {
     await $app.api.eth.statisticEth
@@ -258,13 +250,14 @@
   onMounted(async () => {
     await getDividendsByYear()
 
-    await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
-      btcUsdt.value = resp?.data?._value?.lastPrice
-    })
+    if (!btcUsdt.value) {
+      const { data: { _value: { lastPrice } } } = await $app.api.info.statistic.getBinanceTicker24hr('BTCUSDT')
+      btcUsdt.value = lastPrice
+    }
 
-    bottomInfo.value = await useFetch(
-      `https://api3.binance.com/api/v3/ticker/24hr?symbols=["ETHBTC","ETHUSDT","BTCUSDT","USDTRON","DOGEBTC"]`,
-    )
+    if (!bottomInfo.value) {
+      bottomInfo.value = await $app.api.info.statistic.getBinanceTicker24hr(["ETHBTC","ETHUSDT","BTCUSDT","USDTRON","DOGEBTC"])
+    }
 
     const config = useRuntimeConfig()
     const centrifugeURL = config.public.WS_URL

@@ -38,7 +38,10 @@
     display: flex;
     align-items: center;
     // gap: torem(32);
-
+    img {
+      min-width: 180px;
+      max-width: 180px;
+    }
     & > * {
       margin-left: torem(32);
 
@@ -48,15 +51,15 @@
     }
 
     @media (max-width: 767px) {
-      flex-direction: column;
+      flex-direction: column-reverse;
 
       & > * {
-        margin-top: torem(32);
+        margin-bottom: torem(32);
         margin-left: 0;
-  
-        &:first-child {
-          margin-top: 0;
-        }
+
+        // &:last-child {
+        //   margin-bottom: 0;
+        // }
       }
     }
 

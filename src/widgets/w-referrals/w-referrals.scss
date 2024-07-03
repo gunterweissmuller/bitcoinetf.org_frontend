@@ -1,4 +1,15 @@
 .w-referrals {
+  &__line {
+    display: block;
+    margin: torem(24) 0;
+    height: 1px;
+    background: var(--surfaces-border-1);
+
+    @include breakpoint($break-desktop-1024) {
+      margin: torem(32) 0;
+    }
+  }
+
   &__amount {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -175,6 +186,7 @@
 
       background: var(--surfaces-surface-glass);
       border-radius: var(--spacing-s);
+      box-shadow: var(--b-shadow-3);
 
       @include breakpoint($break-desktop-1024) {
         aspect-ratio: auto;
@@ -217,6 +229,10 @@
       font-size: torem(16);
       line-height: torem(21);
       color: var(--text-primary);
+    }
+
+    &-share {
+      color: var(--text-tertiary);
     }
   }
 
@@ -357,7 +373,7 @@
     padding: var(--spacing-m-1);
     border-radius: var(--spacing-s);
     border: 1px solid var(--surfaces-surface-glass-border);
-    box-shadow: var(--b-shadow-1);
+    box-shadow: var(--b-shadow-3);
 
     &-info {
       display: flex;
@@ -404,7 +420,7 @@
 
   &__list {
     border-radius: var(--spacing-s);
-    box-shadow: var(--b-shadow-1);
+    box-shadow: var(--b-shadow-3);
     backdrop-filter: blur(32.5px);
     background: var(--surfaces-surface-glass);
   }
@@ -500,7 +516,7 @@
     align-items: center;
     border-radius: var(--spacing-m-1);
     border: 1px solid var(--surfaces-surface-glass-border);
-    box-shadow: var(--b-shadow-1);
+    box-shadow: var(--b-shadow-3);
     backdrop-filter: blur(32.5px);
     background: var(--surfaces-surface-1);
     padding: var(--spacing-m-3) var(--spacing-m-2);
@@ -564,7 +580,7 @@
     border: 1px solid var(--surfaces-surface-glass-border);
     border-radius: torem(8);
     background: var(--surfaces-surface-glass);
-    box-shadow: 0 0 6px 0 rgba(#000, 0.06);
+    box-shadow: var(--b-shadow-3);
 
     margin-top: torem(24);
     @include breakpoint($break-desktop-1024) {
@@ -628,9 +644,8 @@
     flex-direction: column;
     gap: torem(16);
 
-    margin-top: torem(24);
-
     &--mobile {
+      margin-top: torem(24);
       margin-bottom: 24px;
       display: flex;
 
@@ -703,7 +718,7 @@
     border: 1px solid var(--surfaces-surface-glass-border);
     border-radius: var(--spacing-s);
     background: var(--surfaces-surface-glass);
-    box-shadow: 0 0 6px 0 rgba(#000, 0.06);
+    box-shadow: var(--b-shadow-3);
 
     margin-top: torem(24);
     @include breakpoint($break-desktop-1024) {

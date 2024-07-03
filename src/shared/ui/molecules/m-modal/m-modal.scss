@@ -86,7 +86,7 @@
           padding: var(--spacing-l-2);
           border-radius: var(--spacing-m-3);
           margin: 0 auto;
-          max-width: torem(480);
+          max-width: torem(552);
           background-size: cover;
           background-image: url("/img/ref-bg.jpg");
           background-repeat: no-repeat;
@@ -100,7 +100,7 @@
 
         &-big {
           @include breakpoint($break-tablet) {
-            max-width: torem(520);
+            max-width: torem(552);
           }
         }
       }
@@ -155,7 +155,7 @@
   }
 
   &-small {
-    
+
   }
 
   &-mobile {
@@ -172,10 +172,10 @@
           width: auto;
           display: table-cell;
         }
-  
+
         &-container {
           width: 100%;
-  
+
           padding: var(--spacing-l-2);
           border-radius: var(--spacing-m-3);
           margin: 0 auto;
@@ -189,7 +189,7 @@
             background: var(--surfaces-surface-1);
           }
 
-  
+
           &-big {
             max-width: torem(520);
           }

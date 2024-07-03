@@ -118,6 +118,14 @@
             <!--            <a-icon :name="inputButtonIcon" :width="24" :height="24" />-->
             <!--          </div>-->
           </div>
+          <a-icon
+            v-if="passwordEye"
+            width="24"
+            height="24"
+            class="a-input__icon--password"
+            :name="inputButtonIcon"
+            @click="buttonEvent"
+          />
         </label>
       </a-tooltip>
       <template v-if="isStartValidation && !validation.isValid && !errorText.length && !errorInTooltip">
@@ -184,6 +192,7 @@ const props = withDefaults(
     isBoldInput?: boolean
     isTextInputSmall?: boolean
     bgColor?: 'default' | 'tetherspecial'
+    passwordEye?: boolean 
   }>(),
   {
     modelValue: '',
@@ -213,6 +222,7 @@ const props = withDefaults(
     isBoldInput: false,
     isTextInputSmall: false,
     bgColor: 'default',
+    passwordEye: false
   },
 )
 

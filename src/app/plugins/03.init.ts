@@ -1,16 +1,33 @@
+import { useDemo } from '~/src/app/composables/useDemo';
+
 export default defineNuxtPlugin(async ({ $app, _route }: any) => {
   const isUserAuthenticated = $app.store.auth.isUserAuthenticated
+
+  const { fetchDemoUserToken } = useDemo()
 
   if (_route.path === '/personal/reset') {
     $app.store.auth.logout(false)
   }
+
+  if (!isUserAuthenticated && !_route.query?.accessToken && _route.path.includes('personal')) {
+    await fetchDemoUserToken()
+  }
+
+  if(_route.query.accessToken) {
+    $app.store.auth.setTokens({
+      access_token: _route.query.accessToken,
+      refresh_token: _route.query.refreshToken,
+      websocket_token: _route.query.websocketToken
+    });
+  }
+
   try {
     await $app.store.auth.refresh()
     if (isUserAuthenticated && !_route.query?.accessToken) {
       await $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
+        $app.store.user.setUserInfo(resp?.data)
       })
-      await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+      $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
         $app.store.user.blockchainUserWallet = resp?.data.uid
       })
     }
@@ -45,17 +62,7 @@ export default defineNuxtPlugin(async ({ $app, _route }: any) => {
       .catch(() => {
         // Todo: notify something went wrond
       }),
-    $app.api.info.event
-      .getPurchases({
-        per_page: 4,
-        page: 1,
-      })
-      .then((dealsResponse) => {
-        $app.store.user.lastPurchases = dealsResponse.data.data
-      })
-      .catch(() => {
-        // Todo: notify something went wrond
-      }),
+
     $app.api.eth.statisticEth
       .getGlobalStats()
       .then((resp) => {

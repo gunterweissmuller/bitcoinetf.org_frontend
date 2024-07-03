@@ -1,19 +1,31 @@
+.m-modal-wrapper:has(.e-apply-credit-success-modal) {
+  padding: 0;
+}
+
 .e-apply-credit-success-modal {
+  background-color: var(--blue-500) !important;
+  background-position-x: left !important;
+  background-position-y: bottom !important;
+  background-size: 80% !important;
+  background-repeat: no-repeat !important;
+  background-image: url("https://files.bitcoinetf.org/etf/public/image/hand-card.png") !important;
+  padding: 0 !important;
+
 
   @include breakpoint($break-tablet) {
     border-radius: var(--spacing-m-3);
     background: var(--surfaces-surface-1);
     width: 100%;
     max-width: torem(480);
-    max-height: torem(348);
+    height: 80%;
   }
 
   &__wrap {
     display: flex;
     padding: var(--spacing-l-2) var(--spacing-m-2);
     flex-direction: column;
-    align-items: center;
-
+    justify-content: space-evenly;
+    height: 100%;
 
     &-pic {
       width: torem(80);
@@ -22,27 +34,28 @@
     }
 
     &-title {
-      text-align: center;
-      color: var(--text-primary);
+      color: var(--text-inverse-primary);
       font-family: Dm, sans-serif;
-      font-size: torem(18);
+      font-size: torem(32);
       font-weight: 700;
       line-height: torem(23);
-      margin-bottom: var(--spacing-s);
+      margin-bottom: var(--spacing-m-1);
     }
 
     &-text {
       text-align: center;
-      color: var(--text-secondary);
+      color: var(--text-inverse-secondary);
       font-family: Dm, sans-serif;
       font-size: torem(16);
-      font-weight: 400;
+      font-weight: 500;
       line-height: torem(21);
       margin-bottom: var(--spacing-m-3);
+      flex: 1;
     }
 
     &-btn {
-      width: 100%;
+      background-color: var(--button-secondary-1);
+      color: var(--accent-primary);
     }
   }
 }

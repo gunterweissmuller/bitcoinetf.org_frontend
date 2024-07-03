@@ -153,6 +153,7 @@ import EKycThanksModal from '~/src/entities/e-kyc-thanks-modal/e-kyc-thanks-moda
 import ACheckbox from '~/src/shared/ui/atoms/a-checkbox/a-checkbox.vue'
 import AProgressbar from '~/src/shared/ui/atoms/a-progressbar/a-progressbar.vue'
 import useNotification from '~/composables/useNotification'
+import { getCookie, setCookie } from '../../shared/helpers/cookie.helpers';
 
 const { addNotification } = useNotification()
 
@@ -370,6 +371,12 @@ const saveScreen = async () => {
         currentScreenId.value = screens.value[currentStep.value].uuid
         currentStep.value += 1
       } else {
+        if (route.query.action === 'modal-credit-card') {
+          router.push({ name: 'personal-more', query: { action: 'modal-credit-card' } })
+
+          return
+        }
+        
         alreadyPassedForm.value = true
         finishKycModel.value = true
       }
@@ -405,6 +412,13 @@ const onCancelStartKyc = () => {
 
 const onFinishKycClick = () => {
   const redirectRoute = route.query?.redirect as string
+  const savedWalletOptions = getCookie('wallet_options')
+
+  if (savedWalletOptions) {
+    const jsonParsed = JSON.parse(savedWalletOptions)
+    const day = 86_400
+    setCookie('wallet_options', JSON.stringify({ ...jsonParsed, status: 'finished' }), { "max-age": day })
+  }
   router.push({ name: redirectRoute || 'personal-dividends' })
 }
 

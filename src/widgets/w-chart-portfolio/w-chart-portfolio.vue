@@ -42,7 +42,7 @@
                   {{ asset.name }}
                 </span>
                 <span class="w-chart-portfolio__type-price">
-                  ${{ $app.filters.rounded(asset.full_balance, 2) }}
+                  ${{ $app.filters.rounded(asset.symbol === 'BRF' ? asset.incoming_amount_btc * props.btcValue  : asset.full_balance, 2) }}
                 </span>
               </div>
             </nuxt-link>
@@ -63,6 +63,7 @@ import { Icon } from '~/src/shared/constants/icons';
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue';
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue';
 import ATooltipInfo from '~/src/shared/ui/atoms/a-tooltip-info/a-tooltip-info.vue';
+import { OrderType } from '~/src/shared/types/global';
 
 const props = defineProps({
   slider: {
@@ -81,12 +82,19 @@ const props = defineProps({
   title: {
     type: String,
     required: true
+  },
+  type: {
+    type: String as PropType<'asset' | 'assets'>,
+    required: false,
+    default: 'assets'
   }
 });
 
-Chart.register(...registerables, getChartLabelPlugin())
+Chart.register(...registerables, getChartLabelPlugin());
 
-const { $app } = useNuxtApp()
+const { $app } = useNuxtApp();
+
+const orderType = computed<OrderType>(() => $app.store.user?.info?.account?.order_type || 'init_btc');
 
 const CHART_ID = 'chart-portfolio'
 let CHART_INSTANCE = null
@@ -116,22 +124,37 @@ const textCenter = {
     const { ctx } = chart
     const xCoor = chart.getDatasetMeta(0).data[0]?.x
     const yCoor = chart.getDatasetMeta(0).data[0]?.y
+    const selectedAsset = computed(() => props.assets.filter((item : { symbol: string }) => item.symbol !== 'OTHERS')[0]);
+    const assetBalance = computed(() => (selectedAsset.value.symbol === 'BRF' ? selectedAsset.value.incoming_amount_btc * props.btcValue : selectedAsset.value.full_balance));
     ctx.save()
     ctx.textAlign = 'center'
     ctx.font = 'bold 16px Dm, sans-serif'
     ctx.fillStyle = $app.store.user.theme === 'dark' ? '#F1F2F4' : '#22242b'
-    ctx.fillText('$' + $app.filters.rounded(fullBalanceFund.value, 2), xCoor, yCoor + 0)
+    if (props.type === 'assets') {
+      ctx.fillText('$' + $app.filters.rounded(fullBalanceFund.value, 2), xCoor, yCoor + 0);
+    } else {
+      ctx.fillText('$' + $app.filters.rounded(assetBalance.value, 2), xCoor, yCoor + 0);
+    }
 
     ctx.font = 'bold 12px Dm, sans-serif'
     ctx.fillStyle = '#888ca0'
 
     const value = localStorage.getItem('display-currency') || 'btc'
     let text = ''
-    if (value === 'btc') {
-      text = `₿${$app.filters.rounded(resultSumBtc.value, 8)}`
+    if (props.type === 'assets') {
+      if (value === 'btc') {
+        text = orderType.value === 'usdt' ? `₮${$app.filters.rounded(fullBalanceFund.value, 8)}` : `₿${$app.filters.rounded(resultSumBtc.value, 8)}`
+      } else {
+        text = `丰 ${$app.filters.rounded(resultSumBtc.value * 100000000)}`
+      }
     } else {
-      text = `丰 ${$app.filters.rounded(resultSumBtc.value * 100000000)}`
+      if (value === 'btc') {
+        text = orderType.value === 'usdt' ? `₮${$app.filters.rounded(assetBalance.value, 8)}` : `₿${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value, 8)}`
+      } else {
+        text = `丰 ${$app.filters.rounded((1 / $app.store.user.btcValue) * assetBalance.value * 100000000)}`
+      }
     }
+
     ctx.fillText(text, xCoor, yCoor + 20)
   },
 }
@@ -159,7 +182,7 @@ const options = ref({
       callbacks: {
         label: function(context) {
           let label = context.parsed;
-          return `$${$app.filters.rounded(label, 2)}`;
+          return `$${$app.filters.rounded(label, 2)} (${$app.filters.rounded(label / fullBalanceFund.value * 100, 2)})%`;
         }
       }
     },

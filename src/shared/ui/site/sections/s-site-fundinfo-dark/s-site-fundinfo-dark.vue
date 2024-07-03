@@ -100,7 +100,7 @@ import EAssets from '~/src/entities/e-assets/e-assets.vue'
 import {useNuxtApp} from '#app'
 import {Centrifuge} from 'centrifuge'
 import { onUnmounted, onMounted, computed } from 'vue'
-import { Autoplay } from 'swiper'
+import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 
@@ -121,8 +121,6 @@ const fundTotalBtc = computed(() => {
 })
 
 const centrifuge = ref(null)
-
-const bottomInfo = ref(null)
 
 const priceChange = ref('low')
 
@@ -152,7 +150,8 @@ const dividendByYear = ref(null)
 const purchases = computed(() => {
   return $app.store.user.lastPurchases || []
 })
-const btcUsdt = ref(null)
+
+const { btcUsdt, bottomInfo } = toRefs($app.store.statistic)
 
 const getDividendsByYear = async () => {
   await $app.api.eth.statisticEth
@@ -275,13 +274,14 @@ const centrifugeURL = process.dev ? 'wss://wss.stage.techetf.org/connection/webs
 onMounted(async () => {
   await getDividendsByYear()
 
-  await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
-    btcUsdt.value = resp?.data?._value?.lastPrice
-  })
+  if (!btcUsdt.value) {
+    const { data: { _value: { lastPrice } } } = await $app.api.info.statistic.getBinanceTicker24hr('BTCUSDT')
+    btcUsdt.value = lastPrice
+  }
 
-  bottomInfo.value = await useFetch(
-    `https://api3.binance.com/api/v3/ticker/24hr?symbols=["ETHBTC","ETHUSDT","BTCUSDT","USDTRON","DOGEBTC"]`,
-  )
+  if (!bottomInfo.value) {
+    bottomInfo.value = await $app.api.info.statistic.getBinanceTicker24hr(["ETHBTC","ETHUSDT","BTCUSDT","USDTRON","DOGEBTC"])
+  }
 
   const config = useRuntimeConfig()
   const centrifugeURL = config.public.WS_URL

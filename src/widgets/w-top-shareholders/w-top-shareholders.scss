@@ -30,7 +30,7 @@
 
   &__content {
     height: 100%;
-    box-shadow: var(--b-shadow-1);
+    box-shadow: var(--b-shadow-3);
     border: torem(1) solid var(--surfaces-surface-glass-border);
     background: var(--surfaces-surface-glass);
     border-radius: var(--spacing-s);
@@ -55,5 +55,14 @@
       line-height: torem(21);
       user-select: none;
     }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding-top: torem(50);
   }
 }

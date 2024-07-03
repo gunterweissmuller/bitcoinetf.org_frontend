@@ -18,13 +18,14 @@
   --button-primary: #06F; // #4d94ff
   --button-primary-website: #4d94ff;
   --button-secondary: #E3EEFF;
+  --button-secondary-1: #E3EEFF;
 
   --blue-50: #F3F8FF;
   --blue-100: #E3EEFF;
   --blue-200: #CBDFFF;
   --gray-200: #C8CAD7;
   --blue-500: #06F; // #06F #4d94ff
-  --blue-400: #4d94ff; // #06F 
+  --blue-400: #4d94ff; // #06F
 
   --color-bg: #FFFFFF;
 
@@ -44,7 +45,8 @@
 
   --b-shadow-1: #{torem(0, 0, 6, 0)} #0000000F;
   --b-shadow-2: #{torem(1, 0, 11, 0)} #00000012;
-
+  --b-shadow-3: #{torem(0, 0, 16, 0)} #00000029;
+  
   --popper-theme-background-color: #fff;
   --popper-theme-background-color-hover: #fff;
   --popper-theme-text-color: inherit;
@@ -53,7 +55,7 @@
   --popper-theme-border-color: #fff;
   --popper-theme-border-radius: 8px;
   --popper-theme-padding: 14px;
-  --popper-theme-box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.06);
+  --popper-theme-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.16);
 
   // Onboarding
   --v-onboarding-overlay-fill: rgba(0, 70, 174, 0.20); // 0.1
@@ -94,6 +96,7 @@ body[data-theme='dark'] {
 
   --button-primary: #4D94FF; //#4D94FF
   --button-secondary: #252F44;
+  --button-secondary-1: #E3EEFF;
 
   --surfaces-background: #000;
   --surfaces-surface-1: #22242B;

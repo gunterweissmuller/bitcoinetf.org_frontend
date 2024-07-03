@@ -18,6 +18,14 @@
     margin-bottom: var(--spacing-m-2);
   }
 
+  &__note {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-m-2);
+    font-size: torem(16);
+    font-weight: 400;
+    line-height: normal;
+  }
+
   &__avatar {
     display: flex;
     align-items: center;

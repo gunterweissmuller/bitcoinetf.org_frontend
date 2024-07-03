@@ -9,6 +9,8 @@ export interface IAsset {
   uuid: number
   name: string
   description: string
+  full_balance: number
+  incoming_amount_btc: number
 }
 
 interface IDealActivityType {
@@ -39,6 +41,7 @@ export type IMethod = 'none' | 'manual' | 'automatic_daily'
 export interface ADropdownOption {
   name: string
   value: any
+  icon?: string
 }
 
 export type OrderType = 'init_btc' | 'usdt' | 'btc'

@@ -34,7 +34,7 @@
             <f-registration-email/>
           </template>
           <template v-else-if="$app.store.registration.currentStep === Steps.Link">
-              <f-registration-link/>
+            <f-registration-verify-password />
           </template>
           <template v-else-if="$app.store.registration.currentStep === Steps.Error">
             <f-registration-error/>
@@ -43,7 +43,7 @@
             <f-registration-success/>
           </template>
           <template v-else-if="$app.store.registration.currentStep === Steps.Loading">
-              <h3 class="f-registration-right__title">Loading...</h3>
+              <m-loading-new v-show="true" />
           </template>
       </div>
       </div>
@@ -61,16 +61,20 @@
   import { Steps } from './steps'
   import fRegistrationChoice from '../f-registration-choice/f-registration-choice.vue'
   import fRegistrationEmail from '../f-registration-email/f-registration-email.vue'
-  import fRegistrationLink from '../f-registration-link/f-registration-link.vue'
+  import fRegistrationVerifyPassword from '../f-registration-verify-password/f-registration-verify-password.vue'
   import fRegistrationSuccess from '../f-registration-success/f-registration-success.vue'
   import fRegistrationError from '../f-registration-error/f-registration-error.vue'
   import { useRegistration } from './useRegistration'
   import { SignupMethods } from '~/src/shared/constants/signupMethods'
   import { setCookie } from '~/src/shared/helpers/cookie.helpers';
+  import { useWeb3ModalAccount } from '@web3modal/ethers/vue'
+  import { useWalletConnect } from '~/src/app/composables/useWalletConnect'
+  import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue'
 
   const { $app } = useNuxtApp()
   const router = useRouter()
   const route = useRoute()
+  const {initWalletConnect} = useWalletConnect($app);
   const { continueLogin,  catchRegistration, } = useRegistration($app);
   const metamaskError = ref("");
 
@@ -139,6 +143,18 @@
                     catchRegistrationLink(e);
                 });
                 break;
+            case 'walletConnect':
+                body.fast = true;
+                body.wallet_connect_data = JSON.stringify($app.store.authTemp.response);
+                $app.api.eth.auth.walletConnectConfirm(body)
+                .then((jwtResponse: any) => {
+                    // TODO falling user/me
+                    continueLogin(jwtResponse);
+                })
+                .catch((e) => {
+                    catchRegistrationLink(e);
+                });
+                break;
             default:
                 $app.api.eth.auth.confirmFast(body)
                 .then((jwtResponse: any) => {
@@ -197,6 +213,51 @@
     $app.store.registration.email ='';
     $app.store.registration.phone = '';
   });
+
+  // walletConnect
+  const { address } = useWeb3ModalAccount()
+
+  const handleWalletConnect = async () => {
+    await initWalletConnect();
+
+    $app.store.registration.currentSignup = SignupMethods.WalletConnect;
+    $app.store.registration.currentStep = Steps.Email;
+
+    $app.api.eth.auth.walletConnectGetAuthType({
+        wallet_connect_data: JSON.stringify({
+            signature: $app.store.registration.walletConnectData.signature,
+            address: $app.store.registration.walletConnectData.walletAddress,
+            message: $app.store.registration.walletConnectData?.signatureMessage,
+        }),
+    }).then((r: any) => {
+        if(r.data.auth_type === 'registration') {
+            $app.store.registration.currentSignup = SignupMethods.WalletConnect;
+            $app.store.registration.currentStep = Steps.Email;
+        } else {
+            $app.api.eth.auth.
+            wallletConnectLogin({
+                wallet_connect_data: JSON.stringify({
+                    signature: $app.store.registration.walletConnectData.signature,
+                    address: $app.store.registration.walletConnectData.walletAddress,
+                    message: $app.store.registration.walletConnectData?.signatureMessage,
+                }),
+            })
+            .then((jwtResponse: any) => {
+                continueLogin(jwtResponse);
+            })
+        }
+    })
+  }
+
+  watch(
+    () => address.value,
+    () => {
+
+      if(address.value) {
+        handleWalletConnect();
+      }
+    }
+  )
 
 
 </script>

@@ -51,7 +51,7 @@
       grid-template-columns: repeat(3, 1fr);
       margin-bottom: var(--spacing-m-1);
       gap: var(--spacing-s);
-      
+
       @include breakpoint($break-mobile-475) {
         gap: var(--spacing-m-1);
         margin-bottom: var(--spacing-m-3);
@@ -152,5 +152,14 @@
       line-height: torem(21);
       user-select: none;
     }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding-top: torem(50);
   }
 }

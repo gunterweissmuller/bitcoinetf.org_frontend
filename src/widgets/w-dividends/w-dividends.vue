@@ -4,9 +4,13 @@
       <div class="w-dividends__amount">
         <div class="w-dividends__amount-wrap">
           <div class="w-dividends__amount-title">Total Balance</div>
-          <div class="w-dividends__amount-sum">${{ $app.filters.rounded(orderType !== 'usdt' ? walletDividends?.btc_amount * $app.store.user.btcValue : walletDividends?.usd_amount, 2) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
+          <div class="w-dividends__amount-sum">
+            <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon>
+            <span v-else>$</span>
+            {{orderType !== 'usdt' ? $app.filters.rounded(walletDividends?.btc_dividends_balance, 8)  : $app.filters.rounded(walletDividends?.usd_amount, 6) }}<span v-if="walletDividends?.difference" class="w-dividends__amount-plus">+{{ $app.filters.rounded(walletDividends?.difference, 2) }}%</span>
           </div>
-          <div v-if="walletDividends?.btc_amount && $app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
+          <div v-if="orderType === 'btc'" class="w-dividends__btc">${{ $app.filters.rounded(walletDividends?.btc_dividends_balance * $app.store.user.btcValue, 6) }}</div>
+          <div v-if="walletDividends?.btc_dividends_balance && $app.store.user?.info?.account?.order_type === 'usdt'" class="w-dividends__btc" v-html="btcAmount"></div>
         </div>
 
         <div class="w-dividends__timer" :style="timerStyle">
@@ -18,7 +22,7 @@
 
       <div class="w-dividends__cards">
 
-        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw" :class="{ disabled: !isNonEmptyDividendsBalance }" @click="openModal">
+        <div v-if="!address" class="w-dividends__cards-item w-dividends__cards-item-withdraw"  @click="openModal">
           <div class="w-dividends__cards-add">
             <div class="w-dividends__cards-add-img">
               <a-icon
@@ -57,7 +61,8 @@
         <div class="w-dividends__cards-item w-dividends__cards-item-dividends">
           <div class="w-dividends__cards-header">
             <div class="w-dividends__cards-icon-dollar">
-              <a-icon width="14" height="14"  :name="Icon.MonoDollar" />
+              <a-icon v-if="orderType === 'btc'" width="14" height="14"  :name="Icon.MonoBtcUni" />
+              <a-icon v-else width="14" height="14"  :name="Icon.MonoDollar" />
             </div>
             <a-live />
           </div>
@@ -66,12 +71,16 @@
               TOTAL DIVIDENDS PAID
             </div>
             <div class="w-dividends__cards-title">
-              ${{$app.filters.rounded(tempDividendsEarnedBtc, 2) }}
+              <a-icon v-if="orderType === 'btc'" widthAuto :name="Icon.MonoBtcUni"></a-icon>
+              <span v-else>$</span>
+              {{$app.filters.rounded(tempDividendsEarnedBtc, orderType ==='btc' ? 8 : 6) }}
             </div>
           </div>
           <div class="w-dividends__cards-footer">
             <div class="w-dividends__cards-text w-dividends__cards-dropdown">
-              <m-dropdown :options="timeOptions"/>
+              <a-dropdown
+                @get-current-option="handleDropdown"
+              />
             </div>
           </div>
         </div>
@@ -124,11 +133,11 @@
             <div v-if="item.status === 'pending'" class="w-dividends__item_sums">Pending</div>
             <div v-else class="w-dividends__item_sums">
               <div class="w-dividends__item_info-usd">
-                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 2) }} <!--8-->
+                {{ item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-' }} ${{ $app.filters.rounded(item?.usd_amount, 6) }} <!--8-->
               </div>
               <div v-if="$app.store.user?.info?.account?.order_type !== 'usdt'" class="w-dividends__item_info-btc">
                 <span v-html="item.type === DIVIDENDS_TYPES.PLUS ? '+' : '-'"></span>
-                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 6))"></span> <!--8-->
+                <span v-html="$app.filters.convertValue($app.filters.rounded(item?.btc_amount, 8))"></span> <!--8-->
               </div>
             </div>
           </div>
@@ -153,15 +162,12 @@
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import FWithdrawalModal from '~/src/features/f-withdrawal-modal/f-withdrawal-modal.vue'
-import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import { Centrifuge } from 'centrifuge'
 import { onUnmounted } from 'vue'
-import WOnboarding from '~/src/widgets/w-onboarding/w-onboarding.vue'
 import ALive from '~/src/shared/ui/atoms/a-live/a-live.vue'
-import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
-import eNotEnoughBalanceModal from '~/src/entities/e-not-enough-balance-modal/e-not-enough-balance-modal.vue'
-import axios from "axios";
-
+import ADropdown from '~/src/shared/ui/atoms/a-dropdown/a-dropdown.vue';
+import { ADropdownOption } from '~/src/shared/types/global';
+import { deleteCookie, getCookie } from '~/src/shared/helpers/cookie.helpers'
 const { $app } = useNuxtApp()
 
 const isOpenModal = ref(false)
@@ -173,6 +179,9 @@ const enum DIVIDENDS_TYPES {
   MINUS = 'credit_from_client',
   ESCAPE = 'withdrawal',
 }
+const handleDropdown = (currentOption : ADropdownOption) => {
+  getTotalDividendsPaidPersonal(currentOption.value);
+}
 
 const openModal = async () => {
   // const isKycFinished = await checkKyc()
@@ -182,9 +191,7 @@ const openModal = async () => {
   // } else {
   //   navigateTo({ name: 'personal-kyc' })
   // }
-  if (!isNonEmptyDividendsBalance.value){
-    return
-  }
+ 
   isOpenModal.value = true
 }
 
@@ -331,9 +338,9 @@ const usdAmount = computed(() => {
 })
 
 const btcAmount = computed(() => {
-  if (!walletDividends.value?.btc_amount) return 0
+  if (!walletDividends.value?.btc_dividends_balance) return 0
 
-  return $app.filters.convertValue($app.filters.rounded(walletDividends.value?.btc_amount, 8))
+  return $app.filters.convertValue($app.filters.rounded(walletDividends.value?.btc_dividends_balance, 8))
 })
 
 const isMore200Usd = computed(() => {
@@ -361,6 +368,19 @@ const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
 onMounted(async () => {
+  const savedWalletOptions = getCookie('wallet_options')
+  if (savedWalletOptions){
+    const jsonParsed = JSON.parse(savedWalletOptions)
+    if (jsonParsed.status == 'finished'){
+      await setMethod({...jsonParsed?.walletOptions})
+      deleteCookie('wallet_options')
+    }else{
+      await getWalletDividends()
+    }
+  }else{
+    await getWalletDividends()
+  }
+
   await getWalletDividends()
   await getPersonalDividends()
 
@@ -530,11 +550,15 @@ const tempDividendsEarnedBtc = ref(0);
 
 onMounted(() => {
   $app.api.eth.statisticEth.getPersonalStats().then((res) => {
-    tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    if(orderType.value === 'btc') {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
+    } else {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    }
   })
 })
 
-const getTotalDividendsPaid = (time : any) => {
+const getTotalDividendsPaid = (time : number | 'all') => {
   const filterObj : Record<string, any> = {}
 
   if (time !== 'all') {
@@ -554,20 +578,13 @@ const getTotalDividendsPaidPersonal = (time : any) => {
   }
 
   $app.api.eth.statisticEth.getPersonalStats({ filters: filterObj }).then((res) => {
-    tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    if(orderType.value === 'btc') {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends_btc;
+    } else {
+      tempDividendsEarnedBtc.value = res.data.sum_dividends;
+    }
   })
 }
-
-const timeOptions = [
-  {value : "All time", callback: () => getTotalDividendsPaidPersonal('all')},
-  {value : "1 year", callback: () => getTotalDividendsPaidPersonal(365)},
-  {value : "6 months", callback: () => getTotalDividendsPaidPersonal(180)},
-  {value : "3 months", callback: () => getTotalDividendsPaidPersonal(90)},
-  {value : "1 month", callback: () => getTotalDividendsPaidPersonal(30)},
-  {value : "1 week", callback: () => getTotalDividendsPaidPersonal(7)},
-  {value : "7 days", callback: () => getTotalDividendsPaidPersonal(7)},
-  {value : "24 hours", callback: () => getTotalDividendsPaidPersonal(1)},
-]
 
 const methods = [
   {

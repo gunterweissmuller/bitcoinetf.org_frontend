@@ -8,11 +8,13 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import useMediaDevice from '~/composables/useMediaDevice';
 import { Breakpoints } from '~/src/shared/constants/breakpoints';
 
+const {$app} = useNuxtApp()
 const route = useRoute();
+const router = useRouter();
 const { isLaptop, isDesktop } = useMediaDevice();
 const { width } = useWindowSize()
 
@@ -47,6 +49,28 @@ watch(width, (newWidth : number, oldWidth : number) => {
   if ((newWidth < Breakpoints.Laptop && oldWidth < Breakpoints.Laptop) || (newWidth >= Breakpoints.Laptop && oldWidth >= Breakpoints.Laptop)) return;
   if (newWidth >= Breakpoints.Laptop) navigateTo({ name: 'personal-fund' });
   if (newWidth < Breakpoints.Laptop) navigateTo({ name: 'personal-portfolio' });
+})
+
+onMounted(() => {
+  const action = route.query?.action
+  const actionsCallback = {
+    'open-purchase-modal': () => {
+      $app.store.user.isInvestModalShow.show = true
+      router.replace({name:'personal-fund'})
+    },
+    'open-buy-shares': () => {
+      router.replace({name: 'personal-buy-shares'})
+    },
+    'use-discount': () => {
+      $app.store.purchase.setInitialDiscount(true)
+      router.push('/personal/buy-shares');
+    }
+  } 
+  const checkActionToCallback = Object.keys(actionsCallback).find(callback => callback == action)
+
+  if (action && checkActionToCallback){
+    actionsCallback[action as string]()
+  }
 })
 </script>
 

@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   font-family: Dm, sans-serif;
-  
 
   @include breakpoint($break-desktop-1024) {
     flex-grow: 0;
@@ -41,7 +40,7 @@
         @include breakpoint($break-tablet-minus) {
           font-size: torem(20);
         }
-        
+
       }
 
       &-primary {
@@ -63,10 +62,10 @@
     }
 
     &--card {
-      
+
       &-wrapper {
         margin-top: var(--spacing-m-3);
-        perspective: 500px;	
+        perspective: 500px;
         width: 100%;
         height: 217px;
 
@@ -124,13 +123,13 @@
         font-size: torem(14);
         font-weight: 700;
       }
-  
+
       &-sum {
         font-size: torem(18);
         font-weight: 700;
         margin-top: var(--spacing-xs);
       }
-  
+
       &-subtitle {
         font-size: torem(10);
         font-weight: 500;
@@ -142,7 +141,7 @@
           font-size: torem(12);
           font-weight: 700;
         }
-  
+
         &-value {
           font-size: torem(18);
           font-weight: 700;
@@ -266,7 +265,7 @@
       }
 
     }
-    
+
   }
 
   &__button {
@@ -297,7 +296,9 @@
   }
 }
 
-
-
-
+.m-modal-container {
+  .dropdown__amount, .dropdown__selector-details {
+    color: var(--text-primary) !important;
+  }
+}
 

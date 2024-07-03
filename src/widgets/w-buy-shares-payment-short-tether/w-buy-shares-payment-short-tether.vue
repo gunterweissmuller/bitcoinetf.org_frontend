@@ -170,6 +170,7 @@ const route = useRoute()
 const { $app } = useNuxtApp()
 const {
   orderType,
+  switches,
   payWith,
   initPayment: initApolloPayment,
   getPayWallets,
@@ -193,7 +194,7 @@ const openTrc = async () => {
   currentPayType.value = PayTypes.Tron;
 
   await $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
+    $app.store.user.setUserInfo(resp?.data)
   });
 
   await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
@@ -345,6 +346,7 @@ const initPayment = async () => {
   allPaymentsTypesMerchant.value = merchantMethods.data?.value?.data?.methods
 }
 onMounted(async () => {
+  switches.discount = true
   if (true && $app.store.user?.buyShares?.uuid) { //props.isFiat
     // await initPayment()
     await initApolloPayment()

@@ -1,10 +1,11 @@
 <template>
-  Loading...
+  <m-loading-new v-show="true" />
 </template>
 
 <script setup lang="ts">
   import { useNuxtApp, useRouter, useRoute } from '#app'
   import { SignupMethods } from '~/src/shared/constants/signupMethods';
+  import mLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
 
   const { $app } = useNuxtApp()
   const router = useRouter()
@@ -50,7 +51,7 @@
             })
             .then(async () => {
               await $app.api.eth.auth.getUser().then((resp) => {
-                $app.store.user.info = resp?.data
+                $app.store.user.setUserInfo(resp?.data)
               });
 
               await router.push('/personal/fund/portfolio')

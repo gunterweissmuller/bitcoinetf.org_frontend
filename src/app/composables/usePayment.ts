@@ -9,6 +9,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
   const switches = reactive({
     referral: false,
     dividends: false,
+    discount: false
   })
 
   const centrifuge = ref(null)
@@ -41,7 +42,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     return $app.store.user?.wallets?.polygon && !isMoonpaySelected.value;
   });
 
-  const payWith = ref([
+  const payWith =  computed(() => [
     {
       icon: "/img/icons/colorful/usdt-trc20.svg",
       iconType: Icon.ColorfulTron,
@@ -56,7 +57,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       iconType: Icon.ColorfulMoonpay,
       value: 'moonpay',
       onClick: 'openMoonpay',
-      show: true,
+      show: !switches?.discount ,
     },
     {
       icon: "/img/icons/colorful/usdt-trc20.svg",
@@ -108,7 +109,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     }
   }
 
-  const initPayment = async () => {
+  const initPayment = async (enabled_discount: boolean = true ) => {
     const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
       method: 'POST',
       headers: new Headers({
@@ -118,9 +119,10 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       body: JSON.stringify({
         dividends: switches?.dividends ? true : false,
         referral: switches?.referral ? true : false,
+        check_discount: switches?.discount && enabled_discount ? true : false,
         bonus: false,
         amount: $app.store.purchase.amountUS,
-        order_type: $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc'
+        order_type: $app.store.purchase.type.toLowerCase()
       })
     });
 
@@ -144,7 +146,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     isMoonpaySelected.value = true
 
     if (init) {
-      await initPayment()
+      await initPayment(false)
     }
 
     await callback()

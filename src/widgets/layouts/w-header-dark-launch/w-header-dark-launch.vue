@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="w-header-dark__controls w-header-dark__controls-desktop">
-        <nuxt-link to="/personal/login" class="w-header-dark__controls-launch">Launch App</nuxt-link>
+        <nuxt-link to="/personal/registration" class="w-header-dark__controls-launch">Launch App</nuxt-link>
         <!-- <span v-if="!isUserAuthenticated">&nbsp;/&nbsp;</span>
         <nuxt-link to="/personal/registration" v-if="!isUserAuthenticated" class="w-header-dark__to">Sign up</nuxt-link> -->
         <!-- <a-avatar

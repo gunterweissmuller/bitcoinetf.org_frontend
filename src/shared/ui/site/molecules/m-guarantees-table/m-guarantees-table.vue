@@ -4,7 +4,7 @@
       <div class="m-guarantees-table__table__wrapper">
         <div class="m-guarantees-table__table__header">
           <div class="m-guarantees-table__table__header-col">BITCOINETF.ORG VS. VOLATILE CRYPTO INVESTMENTS</div>
-          <div class="m-guarantees-table__m-guarantees-table__table__header-col">
+          <div class="m-guarantees-table__table__header-col">
             <NuxtImg src="/img/main-guarantees-table-title-1.svg" width="220" height="97" />
           </div>
           <div class="m-guarantees-table__table__header-col">
@@ -107,7 +107,9 @@
             <div class="m-guarantees-table__table__col-box">
               <div class="m-guarantees-table__table__col">
                 <NuxtImg src="/img/icons/colorful/check.svg" width="24" height="24" loading="lazy" />
-                <p>Worldwide 🌏</p>
+                <p>Worldwide
+                  <NuxtImg src="/img/planet.png" width="18" height="18" loading="lazy" style="display: inline"/>
+                </p>
               </div>
             </div>
           </div>

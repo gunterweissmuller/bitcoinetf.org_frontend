@@ -3,6 +3,7 @@
   background: #01040f;
   .a-input__input-title {
     color: #fff;
+    padding-left: torem(24);
   }
   &__content {
     position: relative;
@@ -175,10 +176,12 @@
     }
     .a-input__input-container {
       background: none;
+      border-radius: torem(16);
       .a-input__input--custom {
         background: none;
         border: torem(1) solid #ffffff33;
         min-height: torem(72);
+        border-radius: torem(16);
         @media screen and (max-width: 767px) {
           min-height: torem(64);
         }
@@ -197,19 +200,22 @@
 
     button {
       position: absolute;
-      top: 4px;
-      right: torem(4);
+      top: torem(8);
+      right: torem(8);
+
       display: flex;
       align-items: center;
       justify-content: center;
-      width: torem(64);
-      height: torem(64);
-      border-radius: torem(12);
+      width: torem(56);
+      height: torem(56);
+      border-radius: torem(16);
       padding: torem(16);
 
       @media (max-width: 767px) {
         width: torem(56);
         height: torem(56);
+        top: torem(4);
+        right: torem(4);
       }
     }
   }
@@ -321,7 +327,7 @@
       }
       &[href='/#'] {
         color: #ffffff80;
-
+        pointer-events: none;
         &:hover {
           cursor: default;
           opacity: 1;

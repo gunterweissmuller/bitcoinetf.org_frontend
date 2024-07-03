@@ -1,30 +1,61 @@
 <template>
-  <div class="f-reset-password ">
-    <a-icon v-if="withBackLink" class="f-reset-password__back cursor-pointer" width="24" height="24"
-      :name="Icon.MonoChevronLeft" @click="$router.go(-1)" />
+  <div class="f-reset-password">
+    <a-icon
+      v-if="withBackLink"
+      class="f-reset-password__back cursor-pointer"
+      width="24"
+      height="24"
+      :name="Icon.MonoChevronLeft"
+      @click="$router.go(-1)"
+    />
     <h3 class="f-reset-password__title">Reset your password</h3>
     <template v-if="currentStep === Steps.Email">
       <h5 class="f-reset-password__subtitle">
         Please enter the email associated to this account and we will send you a recovery link.
       </h5>
       <form class="f-reset-password__form w-full" @submit.prevent="onSubmitEmailForm">
-        <a-input class="f-reset-password__email" label="Email" validation-reg-exp-key="email" required
-          :error-text="emailErrorText" @blur="emailFieldBlurHandler" @update:is-valid="isEmailValid = $event"
-          v-model="email" />
-        <vue-turnstile :theme="$app.store.user.theme === 'dark' ? 'dark' : 'light'" :site-key="siteKey" v-model="token" class="captchaTurn" />
+        <a-input
+          class="f-reset-password__email"
+          label="Email"
+          validation-reg-exp-key="email"
+          required
+          :error-text="emailErrorText"
+          @blur="emailFieldBlurHandler"
+          @update:is-valid="isEmailValid = $event"
+          v-model="email"
+        />
+        <vue-turnstile
+          :theme="$app.store.user.theme === 'dark' ? 'dark' : 'light'"
+          :site-key="siteKey"
+          v-model="token"
+          class="captchaTurn"
+        />
 
         <p class="f-reset-password__error" v-if="backendError">{{ backendError }}</p>
-        <a-button class="f-reset__button" :text="isSuccessEmailSend ? sentText : 'Continue'" type="submit"
-          :disabled="emailButtonDisabled || isSuccessEmailSend" />
+        <a-button
+          class="f-reset__button"
+          :text="isSuccessEmailSend ? sentText : 'Continue'"
+          type="submit"
+          :disabled="emailButtonDisabled || isSuccessEmailSend"
+        />
         <!--        <p v-if="sentText" style="margin-top: 20px">{{ sentText }}</p>-->
       </form>
     </template>
     <template v-else-if="currentStep === Steps.Password">
       <h5 class="f-reset-password__subtitle">Please set a secure password for your account.</h5>
       <form class="f-reset-password__form" @submit.prevent="onSubmitPasswordForm">
-        <a-input class="f-reset-password__password" label="New password" v-model="password" type="password"
-          validation-reg-exp-key="password" :error-text="passwordErrorText" @blur="passwordFieldBlurHandler"
-          @update:is-valid="isPasswordValid = $event" required></a-input>
+        <a-input
+          class="f-reset-password__password"
+          label="New password"
+          v-model="password"
+          type="password"
+          passwordEye
+          validation-reg-exp-key="password"
+          :error-text="passwordErrorText"
+          @blur="passwordFieldBlurHandler"
+          @update:is-valid="isPasswordValid = $event"
+          required
+        ></a-input>
         <a-button class="f-reset-password__button" :disabled="!isPasswordValid" text="Continue" type="submit">
         </a-button>
       </form>
@@ -38,14 +69,14 @@ import AButton from '~/src/shared/ui/atoms/a-button/a-button.vue'
 import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 import { Icon } from '~/src/shared/constants/icons'
 import AIcon from '~/src/shared/ui/atoms/a-icon/a-icon.vue'
-import VueTurnstile from 'vue-turnstile';
+import VueTurnstile from 'vue-turnstile'
 import { ref } from 'vue'
 
 const { $app } = useNuxtApp()
 const router = useRouter()
 const route = useRoute()
 const token = ref('')
-const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA');
+const siteKey = ref(window.location.host === 'bitcoinetf.org' ? '0x4AAAAAAAO0YJKv_riZdNZX' : '1x00000000000000000000AA')
 const props = withDefaults(
   defineProps<{
     withBackLink: boolean
@@ -75,10 +106,10 @@ const isSuccessEmailSend = ref(false)
 watch(
   () => isEmailValid.value,
   () => {
-    if(isEmailValid.value) {
+    if (isEmailValid.value) {
       emailErrorText.value = ''
     }
-  }
+  },
 )
 
 function emailFieldBlurHandler() {

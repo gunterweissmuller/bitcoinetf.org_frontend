@@ -11,7 +11,6 @@
           class="w-referrals__amount-withdraw"
           variant="secondary"
           text="Add Withdrawal Method"
-          :disabled="!walletReferrals?.usd_amount"
           :icon="Icon.MonoPlus"
           @click="openModal"
         />
@@ -53,7 +52,7 @@
             </div>
           </div>
 
-          <m-dropdown :options="timeOptions" />
+          <a-dropdown @get-current-option="getPersonalReferralsStats($event.value)" />
         </div>
       </div>
 
@@ -104,6 +103,8 @@
           <div class="w-referrals__empty-text">Start inviting your friends to earn referral bonuses!</div>
         </div>
       </div>
+
+      <div class="w-referrals__line"></div>
 
       <ul class="w-referrals__stats w-referrals__stats--desktop">
         <li class="w-referrals__stat">
@@ -244,10 +245,10 @@ import { ADropdownOption, TPromoCardDetails } from '~/src/shared/types/global'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 //@ts-ignore
-import { Pagination, Navigation } from 'swiper'
+import { Pagination, Navigation } from 'swiper/modules'
 import WReferralPromoCard from '~/src/widgets/w-referral-promo-card/w-referral-promo-card.vue'
-import mDropdown from '~/src/shared/ui/molecules/m-dropdown/m-dropdown.vue'
 import { user } from '~/src/app/store/user'
+import { getCookie, deleteCookie } from '../../shared/helpers/cookie.helpers'
 
 interface ISetMethodBody {
   address: string
@@ -261,19 +262,8 @@ const isOpenShareModal = ref(false)
 
 const { $app } = useNuxtApp()
 
-const checkKyc = async () => {
-  return await $app.api.eth.kyc.getForms().then((formsResponse: any) => {
-    return formsResponse.data[0].status === 'passed'
-  })
-}
 const openModal = async () => {
-  const isKycFinished = await checkKyc()
-
-  if (isKycFinished) {
-    isOpenModal.value = true
-  } else {
-    navigateTo({ name: 'personal-kyc', query: { redirect: 'personal-more-referrals' } })
-  }
+  isOpenModal.value = true
 }
 
 const route = useRoute()
@@ -308,10 +298,10 @@ const shareSocials = [
     name: 'Email',
     icon: Icon.MonoMailLight,
   },
-  {
-    name: 'SMS',
-    icon: Icon.MonoMessage,
-  },
+  // {
+  //   name: 'SMS',
+  //   icon: Icon.MonoMessage,
+  // },
 ]
 
 const availableNetworks = {
@@ -466,7 +456,7 @@ const getPersonalReferrals = async (initial: boolean = false): Promise<void> => 
     })
 }
 
-const getPersonalReferralsStats = async (time: any = '') => {
+const getPersonalReferralsStats = async (time: 'all' | number) => {
   const filterObj: Record<string, any> = {}
 
   if (time !== 'all') {
@@ -489,22 +479,23 @@ const config = useRuntimeConfig()
 const centrifugeURL = config.public.WS_URL
 const centrifugeToken = config.public.WS_TOKEN
 
-const timeOptions = [
-  { value: 'All time', callback: () => getPersonalReferralsStats('all') },
-  { value: '1 year', callback: () => getPersonalReferralsStats(365) },
-  { value: '6 months', callback: () => getPersonalReferralsStats(180) },
-  { value: '3 months', callback: () => getPersonalReferralsStats(90) },
-  { value: '1 month', callback: () => getPersonalReferralsStats(30) },
-  { value: '1 week', callback: () => getPersonalReferralsStats(7) },
-  { value: '7 days', callback: () => getPersonalReferralsStats(7) },
-  { value: '24 hours', callback: () => getPersonalReferralsStats(1) },
-]
-
 onMounted(async () => {
-  await getWalletReferrals()
+  const savedWalletOptions = getCookie('wallet_options')
+  if (savedWalletOptions){
+    const jsonParsed = JSON.parse(savedWalletOptions)
+    if (jsonParsed.status == 'finished'){
+      await setMethod({...jsonParsed?.walletOptions})
+      deleteCookie('wallet_options')
+    }else{
+      await getWalletReferrals()
+    }
+  }else{
+    await getWalletReferrals()
+  }
+
   await getPersonalReferrals(true)
 
-  getPersonalReferralsStats()
+  getPersonalReferralsStats('all')
 
   centrifuge.value = new Centrifuge(centrifugeURL, {
     token: $app.store.auth.websocketToken ? $app.store.auth.websocketToken : centrifugeToken,

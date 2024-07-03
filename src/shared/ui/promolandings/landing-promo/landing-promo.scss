@@ -1,4 +1,4 @@
-.landing-promo{
+.landing-promo-new{
   background: url('/img/landingtronbg.jpg') no-repeat center center;
   background-size: cover;
   padding-top: torem(256);
@@ -42,7 +42,7 @@
     span{
       font-size: 18px;
       font-weight: 700;
-      color: var(--accent-primary);
+      color: var(--blue-400);// var(--accent-primary);
     }
     @media screen and (max-width: 767px) {
       font-size: 14px;
@@ -51,16 +51,16 @@
   &__title{
     color: #FFF;
     text-align: center;
-    font-size: 64px;
+    font-size: 60px;
     font-weight: 800;
     line-height: 120%;
-    max-width: 1092px;
+    max-width: 1150px;
     margin: 0 auto;
     margin-bottom: 32px;
     span{
       padding: 0 16px;
       background: #1ba27a;
-      border-radius: 16px;
+      border-radius: var(--spacing-s);
       white-space: nowrap;
     }
     @media screen and (max-width: 991px) {

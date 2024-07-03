@@ -23,9 +23,9 @@
               Sign up to our newsletter and receive our new research, portfolio news and content direct to your inbox.
             </div>
             <div class="s-site-footer__form">
-              <p v-if="success">Thank you!</p>
+              <p v-if="success">Successfully subscribed!</p>
               <a-input
-                label="E-mail"
+                label="Email"
                 validation-reg-exp-key="email"
                 required
                 :error-text="emailErrorText"
@@ -104,7 +104,7 @@ const menu = [
     title: 'Platform',
     items: [
       { text: 'Buy ETF Shares', href: '/personal/login' },
-      { text: 'Mastercard', href: '/#mastercard' }, 
+      { text: 'Mastercard', href: '/#mastercard' },
       { text: 'Bitcoin Education', href: '/bitcoin-education' },
       { text: 'Referrals', href: '/referrals' },
     ],
@@ -115,7 +115,7 @@ const menu = [
       { text: 'Fund', href: '/fund' },
       { text: 'News', href: '/blog' },
       { text: 'Bitcoin Whitepaper', href: 'https://files.bitcoinetf.org/etf/public/bitcoin.pdf' },
-      { text: 'PR Package', href: '/#' }, //
+      // { text: 'PR Package', href: '/#' }, //
     ],
   },
   {
@@ -136,13 +136,17 @@ const menu = [
 ]
 
 const SOCIAL_LINKS = [
-  { icon: Icon.MonoTelegramBlack, link: 'https://t.me/BitcoinETF_org' },
+  { icon: Icon.MonoTelegram2Black, link: 'https://t.me/BitcoinETF_org' },
+  // { icon: Icon.MonoInstagramBlack, link: 'https://www.instagram.com/bitcoinetf_org/' },
+  // { icon: Icon.MonoFacebookBlack, link: 'https://www.facebook.com/groups/bitcoinetforg' },
+  // { icon: Icon.MonoLinkedinBlack, link: 'https://www.linkedin.com/groups/9521487/' },
   { icon: Icon.MonoTelegram2Black, link: 'https://t.me/bitcoinetf_chat' },
+  // { icon: Icon.MonoX, link: 'https://twitter.com/BitcoinETF_org',  },
   {
-    icon: Icon.MonoUnknownBlack,
+    icon: Icon.MonoNostr,
     link: 'https://snort.social/npub1wtr2vx2z90dfque30k9j7kk9etqlectmk2nt9q438gemsz8awt8q6z4mfl',
   },
-  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org', size: 14 },
+  { icon: Icon.MonoMedium, link: 'https://medium.com/@BitcoinETF_org',  },
 ]
 
 const subscribeEmail = ref('')
@@ -159,10 +163,9 @@ function emailFieldBlurHandler() {
 }
 const subscribeToChimp = async () => {
   try {
-    await $app.api.eth.news.mailchimpSub({ email: subscribeEmail.value }).then(() => {
-      success.value = true
-    })
-  } catch (e) {
+    await $app.api.eth.news.mailchimpSub({ email: subscribeEmail.value })
+    success.value = true
+  } catch (error) {
     emailErrorText.value = 'Invalid email address'
   }
 }

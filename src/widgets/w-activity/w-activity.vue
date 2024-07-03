@@ -6,25 +6,27 @@
         >View all
       </nuxt-link>
     </div>
-    <div v-if="renderedSpillovers?.length" class="w-activity__content">
+    <div v-if="renderedSpillovers?.length" id="spinloversList" class="w-activity__content">
       <transition-group name="fade" tag="div">
         <m-deal v-for="spillover in renderedSpillovers" :key="spillover?.uuid" :deal="spillover" type="spillover" />
       </transition-group>
     </div>
     <e-empty-data v-else title="You don’t have any activities yet." />
-    <div v-if="isPage && hasNextPage && renderedSpillovers?.length" class="w-activity__more">
-      <div @click="loadMoreSpillovers" class="w-trades__more-text">Load more</div>
+    <div v-if="props.isPage && loading && renderedSpillovers?.length" class="w-activity__loading">
+      <m-loading-new />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue'
-import { useNuxtApp } from '#app'
-import { Centrifuge } from 'centrifuge'
-import { onUnmounted } from 'vue'
-import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue'
-import { useRoute } from '#imports'
+import MDeal from '~/src/shared/ui/molecules/m-deal/m-deal.vue';
+import MLoadingNew from '~/src/shared/ui/molecules/m-loading-new/m-loading-new.vue';
+import EEmptyData from '~/src/entities/e-empty-data/e-empty-data.vue';
+import { useNuxtApp } from '#app';
+import { Centrifuge } from 'centrifuge';
+import { onUnmounted } from 'vue';
+import { useRoute } from '#imports';
+import { UseIntersectionObserver } from '~/composables/useIntersectionObserver';
 
 const { $app } = useNuxtApp()
 const route = useRoute()
@@ -41,6 +43,8 @@ const props = withDefaults(
     filters: null
   },
 )
+
+const loading = ref<boolean>(true);
 
 const spillovers = ref([])
 const currentPage = ref(1)
@@ -64,19 +68,24 @@ const loadMoreSpillovers = () => {
 }
 
 const getSpillovers = async () => {
+  loading.value = true;
   const tradesFilters = props.filters ?? {};
 
   if (tradesFilters.asset_uuid === false) return;
 
   const requestParams = {
-    per_page: props.perPage,
+    per_page: props.isPage ? 10 : props.perPage,
     page: currentPage.value,
     filters: tradesFilters,
   }
 
   await $app.api.info.event.getSpillovers(requestParams).then((dealsResponse) => {
-    hasNextPage.value = !!dealsResponse.data.next_page_url
-    spillovers.value = [...spillovers.value, ...dealsResponse.data.data]
+    hasNextPage.value = !!dealsResponse.data.next_page_url;
+    spillovers.value = [...spillovers.value, ...dealsResponse.data.data];
+    loading.value = false;
+    if (props.isPage) {
+      setTimeout(changeObservable, 100);
+    }
   })
 }
 
@@ -109,12 +118,28 @@ onMounted(async () => {
     .subscribe()
 })
 
-onUnmounted(() => {
-  centrifuge.value?.disconnect()
-})
+
+
+const IntersctObs = new UseIntersectionObserver(() => loadMoreSpillovers());
+const intersectionError = ref<boolean>(false);
+
+const changeObservable = () => {
+  IntersctObs.disconnect();
+  try {
+    IntersctObs.observe('#spinloversList div .m-deal:last-child');
+  } catch(e) {
+    intersectionError.value = true;
+    console.log(e);
+  }
+}
 
 watch(() => props.filters, () => {
   getSpillovers();
+})
+
+onUnmounted(() => {
+  centrifuge.value?.disconnect();
+  IntersctObs.disconnect();
 })
 </script>
 
