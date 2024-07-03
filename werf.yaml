@@ -3,7 +3,7 @@
 {{- $values := .Files.Get ".helm/values.yaml" | fromYaml -}}
 {{- $globals := ternary $values.global.prod $values.global.stage (eq .EnvName "production") -}}
 {{- $appUrl := env "APP_URL" | trimSuffix "/" | trimPrefix "https://" | trunc 49 | trimSuffix "-" -}}
-{{- $app0Url := env "APP0_URL" | trimSuffix "/" | trimPrefix "https://" | trunc 49 | trimSuffix "-" -}}
+{{- $app0Url := env "APP_URL0" | trimSuffix "/" | trimPrefix "https://" | trunc 49 | trimSuffix "-" -}}
 {{- $_ := set . "DOMAIN" $appUrl -}}
 {{- $_ := set . "APP_DOMAIN" $app0Url -}}
 
