@@ -58,7 +58,7 @@ const convertToLabel = (key: string) => {
 
 onBeforeMount(async () => {
   await $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
+    $app.store.user.setUserInfo(resp?.data)
   })
   await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
     $app.store.user.blockchainUserWallet = resp?.data.uid

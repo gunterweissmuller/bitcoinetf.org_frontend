@@ -442,6 +442,10 @@ const handleContinue = () => {
   $app.store.purchase.apy = selectedCurrency.value.apy;
   $app.store.purchase.currentStep = 'Confirm';
   $app.store.purchase.totalPayout = investmentAmount.value + guaranteedPayout.value * 3;
+  
+  if (selectedCurrency.value.value.toLowerCase() == 'btc'){
+    $app.store.purchase.setInitialDiscount(false)
+  }
   if ($app.store.auth.isUserAuthenticated){
     router.push('/personal/buy-shares');
     return

@@ -109,7 +109,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     }
   }
 
-  const initPayment = async () => {
+  const initPayment = async (enabled_discount: boolean = true ) => {
     const response = await fetch(`https://${hostname}/v3/public/billing/shares/buy/init`, {
       method: 'POST',
       headers: new Headers({
@@ -119,10 +119,10 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
       body: JSON.stringify({
         dividends: switches?.dividends ? true : false,
         referral: switches?.referral ? true : false,
-        check_discount: switches?.discount ? true : false,
+        check_discount: switches?.discount && enabled_discount ? true : false,
         bonus: false,
         amount: $app.store.purchase.amountUS,
-        order_type: $app.store.purchase.type.includes('init') ?  $app.store.purchase.type === 'USDT' ? 'init_usdt' : 'init_btc' : $app.store.user.info.account.order_type
+        order_type: $app.store.purchase.type.toLowerCase()
       })
     });
 
@@ -146,7 +146,7 @@ export function usePayment($app, disabledMethods: Array<any> = []) {
     isMoonpaySelected.value = true
 
     if (init) {
-      await initPayment()
+      await initPayment(false)
     }
 
     await callback()

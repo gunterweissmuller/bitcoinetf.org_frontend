@@ -55,4 +55,12 @@ export default class StatisticApiModule {
     }
   }
 
+  async getBinanceTicker24hr(tokens) {
+    if (Array.isArray(tokens)) {
+      return await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbols=${tokens}`)
+    }
+
+    return await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=${tokens}`)
+  }
+
 }

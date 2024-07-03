@@ -9,7 +9,7 @@
     <a-button
       class="f-login__button w-full mt-8"
       text="Continue"
-      :disabled="!$app.store.login.password"
+      :disabled="!$app.store.login.password || isLoading"
       type="submit"
     />
   </form>
@@ -32,21 +32,25 @@ import AInput from '~/src/shared/ui/atoms/a-input/a-input.vue'
 import { useRegistration } from '../f-registration/useRegistration'
 
 const { $app } = useNuxtApp()
-const { resendCodeClick, registerNewUser } = useRegistration($app)
+const { resendCodeClick, registerNewUser, stopTimer } = useRegistration($app)
 
+const isLoading = ref(false)
 const submitRegistrationFields = async () => {
   try {
+    isLoading.value = true
     const payload = {
       email: $app.filters.trimSpaceIntoString($app.store.registration.email) as string,
       password: $app.filters.trimSpaceIntoString($app.store.login.password) as string,
     }
     await registerNewUser(payload)
-  } catch (error) {}
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
 }
 onUnmounted(() => {
-  $app.store.registration.timerStarted = false
-  $app.store.registration.timeLeft = 0
-  $app.store.registration.timer = null
+  stopTimer()
   $app.store.login.password = ''
 })
 </script>

@@ -131,7 +131,7 @@ const props = withDefaults(
 
 
 
-const btcUsdt = ref(null)
+const { btcUsdt } = toRefs($app.store.statistic)
 const apyValue = ref(14)
 
 const btnPopperText = computed(() => {
@@ -459,9 +459,12 @@ onMounted(async () => {
   await getWalletDividends()
   await getDividendsByYear()
   await getLastPayment()
-  await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
-    btcUsdt.value = resp?.data?._value?.lastPrice
-  })
+
+  console.log('btcUsdt', btcUsdt.value)
+  if (!btcUsdt.value) {
+    const { data: { _value: { lastPrice } } } = await $app.api.info.statistic.getBinanceTicker24hr('BTCUSDT')
+    btcUsdt.value = lastPrice
+  }
 
   nextTick(() => {
     showBuyPopper.value = isShowBuyPopper.value

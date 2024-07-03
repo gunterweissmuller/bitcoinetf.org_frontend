@@ -107,7 +107,7 @@
                       {{$app.store.user.statistic?.trc_bonus?.percent || 0}}% Discount
                     </div>
                     <div class="f-registration-buy__purchase__switch-button">
-                      <a-switch v-model="switches.discount"  label-position="left" @click="$app.store.purchase.setInitialDiscount(!switches.discount)"/>
+                      <a-switch v-model="switches.discount"  label-position="left" :disabled="isDisabledDiscount" @click="$app.store.purchase.setInitialDiscount(!switches.discount)"/>
                     </div>
                   </div>
                 </div>
@@ -433,7 +433,7 @@ watch(refCode, (value) => {
 })
 
 // discount
-
+const isDisabledDiscount = computed(() => $app.store.user?.info?.account?.order_type == 'btc' || $app.store.purchase?.type == 'BTC')
 const referralAmount = computed(() => {
   return `$${ $app.filters.rounded(Math.floor(wallets.value?.referral?.usd_amount), 0) || 0}`;
   // return `$${$app.filters.rounded(wallets.value?.referral?.usd_amount, 0) || 0}`
@@ -463,7 +463,7 @@ onMounted(async () => {
   await getWallets()
 
   await $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
+    $app.store.user.setUserInfo(resp?.data)
   })
 
   if(refCode.value !== '') {
@@ -539,7 +539,7 @@ const openTrc = async () => {
   currentPayType.value = PayTypes.Tron;
 
   await $app.api.eth.auth.getUser().then((resp) => {
-    $app.store.user.info = resp?.data
+    $app.store.user.setUserInfo(resp?.data)
   });
 
   await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
@@ -656,6 +656,12 @@ watch(
   }
 )
 
+watch(
+  () => $app.store.purchase.initialDiscount,
+  (value) => {
+    switches.discount = value
+  }
+)
 const loadPayWallets = async () => {
   currentPayStep.value = StepsPay.Loading;
 

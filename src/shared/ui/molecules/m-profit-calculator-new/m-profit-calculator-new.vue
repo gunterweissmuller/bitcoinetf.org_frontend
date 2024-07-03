@@ -150,9 +150,6 @@
 </template>
 <script setup lang="ts">
 import {Icon} from "~/src/shared/constants/icons";
-import AButton from "~/src/shared/ui/atoms/a-button/a-button.vue";
-import AIcon from "~/src/shared/ui/atoms/a-icon/a-icon.vue";
-import AInput from "~/src/shared/ui/atoms/a-input/a-input.vue";
 import ADropdownSelector from "../../atoms/a-dropdown-selector/a-dropdown-selector.vue";
 import ADropdownAmount from "../../atoms/a-dropdown-amount/a-dropdown-amount.vue";
 
@@ -160,12 +157,9 @@ import {computed, ref, watch} from "vue";
 import {useNuxtApp, useRouter} from "#app";
 import VueWriter from 'vue-writer'
 import { useWindowSize } from '@vueuse/core'
-import { vOnClickOutside } from '@vueuse/components'
-import { useRoute } from 'vue-router'
 import { useRegistration } from "../../promolandings/landing-registration/useRegistration";
 
 const { width } = useWindowSize()
-const route = useRoute()
 const router = useRouter()
 
 const props = withDefaults(
@@ -236,7 +230,7 @@ onMounted(() => {
 
   if (isUserAuthenticated) {
     $app.api.eth.auth.getUser().then((resp) => {
-      $app.store.user.info = resp?.data
+      $app.store.user.setUserInfo(resp?.data)
     });
   }
 })
@@ -261,27 +255,6 @@ function validate(event) {
 }
 
 
-// watch(
-//   () => investmentAmount.value,
-//   (newValue, oldValue) => {
-//     // let tempOriginal = Math.ceil(Number(newValue.split(",").join(""))); //Number
-
-//     // if(isNaN(tempOriginal)) {
-//     //   investmentAmount.value = Number(oldValue.split(",").join(""));
-//     //   investmentAmountDisplay.value = oldValue;
-//     //   return;
-//     // }
-//     console.log('new-->',newValue);
-
-//     if(Number(newValue) > 500000) {
-//       investmentAmount.value = 500000;
-//     } else {
-//       // investmentAmount.value = Number(tempOriginal);
-//       // const replacedStringValue = tempOriginal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-//       // investmentAmountDisplay.value = replacedStringValue;
-//     }
-//   }
-// )
 
 watch(
   () => investmentAmount.value,
@@ -366,10 +339,6 @@ const selectCurrencyItem = (currency:any) => {
   $app.store.purchase.type = currency.value
 }
 
-// amount dropdown
-const currentAmount = ref('CUSTOM');
-
-
 const amounts = ref([
   {
     id: 0,
@@ -445,16 +414,7 @@ onMounted(() => {
 
 const showAmountDropdown = ref(false);
 
-const outSideClick =  (ev) => {
-  if(ev.target.className.search('landing-calculation__journey__invest-select-amount') == -1) {
-    showAmountDropdown.value = false;
-  }
-}
 
-const toggleAmountDropdown = () => {
-  if (props.disabledAmount || props.isInputDisbled) return
-  showAmountDropdown.value = !showAmountDropdown.value;
-};
 
 function selectAmount(payload) {
   selectedAmount.value = payload
@@ -469,7 +429,8 @@ function updateAmountValue(event: string | number) {
 }
 
 const handleContinue = () => {
-  const actionMethod = props.useDiscount ? 'use-discount' : 'open-buy-shares'
+  const activeCurrency = selectedCurrency.value.value
+  const actionMethod = props.useDiscount && activeCurrency == 'USDT' ? 'use-discount' : 'open-buy-shares'
   if (isUserAuthenticated.value) {
     router.push({
     name: 'personal-fund',

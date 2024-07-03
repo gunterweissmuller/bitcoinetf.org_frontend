@@ -9,7 +9,7 @@
     <p class="f-registration-right__notification">
         Only Email confirmation is required.
     </p>
-    <form class="f-registration-right__form" @submit.prevent="onSubmitEmailForm">
+    <form class="f-registration-right__form" @submit.prevent="onSubmitEmail">
 
         <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'first_name' ? $app.store.registration.backendError.value : ''" v-model="$app.store.registration.firstName" label="First name" required class="f-registration-right__name" />
         <a-input :errorText="$app.store.registration.backendError.value && $app.store.registration.backendError.field === 'last_name' ? $app.store.registration.backendError.value : ''"  v-model="$app.store.registration.lastName" label="Last name" required class="f-registration-right__name" />
@@ -62,15 +62,26 @@
     const token = ref('')
     const registrationAgreedUS = ref(false)
     const registrationAgreedTerms = ref(false)
+    const isLoading = ref(false)
 
     const termsContinueDisabled = computed<boolean>(() => {
         return !registrationAgreedUS.value || !registrationAgreedTerms.value
     });
 
     const emailButtonDisabled = computed<boolean>(() => {
-        return !isEmailValid.value || !$app.store.registration.firstName || !$app.store.registration.lastName || !Boolean(token.value) //!registrationAgreed.value
+        return !isEmailValid.value || !$app.store.registration.firstName || !$app.store.registration.lastName || !Boolean(token.value)  || isLoading.value//!registrationAgreed.value
     })
-
+    
+    async function onSubmitEmail(){
+        try {
+            isLoading.value = true
+            await onSubmitEmailForm()
+        } catch (error) {
+            console.error(error)
+        }finally{
+            isLoading.value = false
+        }
+    }
 </script>
 
 <!-- <style lang="scss" src="./f-registration.scss" /> -->

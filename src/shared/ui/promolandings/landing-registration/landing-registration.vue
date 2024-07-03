@@ -225,7 +225,7 @@
     } else if($app.store.authGoogle.response?.access_token) {
       $app.store.auth.setTokens($app.store.authGoogle.response)
       $app.api.eth.auth.getUser().then((resp) => {
-        $app.store.user.info = resp?.data
+        $app.store.user.setUserInfo(resp?.data)
         handleOpenPurchase();
       });
     }

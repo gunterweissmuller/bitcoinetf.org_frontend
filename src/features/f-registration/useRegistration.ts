@@ -77,18 +77,13 @@ export function useRegistration($app) {
         $app.store.registration.currentStep = Steps.Success
         $app.store.auth.setTokens(response.data);
         let action = {}
-
-        if (route.query?.routeFrom == 'tetherspecial'){
-            $app.store.purchase.setInitialDiscount(true)
-            action = {...action, routeFrom: 'tetherspecial'}
-        }
-        
+    
         if (route.query.action){
             action = {...action, ...route.query}
         }
 
         await $app.api.eth.auth.getUser().then((resp) => {
-            $app.store.user.info = resp?.data;
+            $app.store.user.setUserInfo(resp?.data);
             connectToReplenishment();
             router.push({name: 'personal-fund', query: action});
         });
@@ -111,15 +106,12 @@ export function useRegistration($app) {
     }
 
     const registerNewUser = async (payload: {email: string, password: string}) => {
-        $app.api.eth.auth
-          .confirm({
-            ...payload,
-          })
-          .then((jwtResponse: any) => {
-           
-            continueLogin(jwtResponse)
-          })
-          .catch((e) => {})
+        try {
+           const jwtResponse =  await $app.api.eth.auth.confirm(payload)
+           continueLogin(jwtResponse)
+        } catch (error) {
+            console.log(error);
+        }
       }
 
 
@@ -396,7 +388,7 @@ export function useRegistration($app) {
             })
             .then(async () => {
                     await $app.api.eth.auth.getUser().then((resp) => {
-                        $app.store.user.info = resp?.data;
+                        $app.store.user.setUserInfo(resp?.data);
                         router.push('/personal/fund/portfolio');
                     })
 
@@ -518,7 +510,11 @@ export function useRegistration($app) {
             }
         }, 1000 / 25)
     }
-
+    const stopTimer = () => {
+        clearInterval($app.store.registration.timer)
+        $app.store.registration.timerStarted = false
+        $app.store.registration.timeLeft = 0
+    }
     // Code Step
     const resendCodeClick = async () => {
         if ($app.store.registration.timerStarted) {
@@ -610,5 +606,6 @@ export function useRegistration($app) {
         siteKey,
         catchRegistration,
         continueLogin,
+        stopTimer
     };
 }

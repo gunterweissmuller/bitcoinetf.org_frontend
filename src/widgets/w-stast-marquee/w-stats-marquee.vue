@@ -4,7 +4,8 @@
       <div class="w-header__item-row" v-for="index in 3" :key="index">
         <div class="w-header__item" v-for="(item, id) in filteredMarqueList" :key="id">
           <div class="w-header__item-title">{{ item.text }}</div>
-          <div class="w-header__item-text" v-html="item.modifyValue"></div>
+          <div class="w-header__item-text" v-if="item.modifyValue !== '...'" v-html="item.modifyValue"></div>
+          <div class="w-header__item-loading w-header__item-text" v-else></div>
         </div>
       </div>
     </Vue3Marquee>
@@ -12,13 +13,14 @@
 </template>
 
 <script lang='ts' setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useNuxtApp } from '#app';
 import { IAsset } from '~/src/shared/types/global';
 
 const { $app } = useNuxtApp();
 
-const btcUsdt = ref<null | number>(null);
+const { btcUsdt } = toRefs($app.store.statistic);
+const btcPrice = computed(() => $app.store.user.btcValue);
 
 const assets = computed<IAsset[]>(() => {
   return $app.store.assets.items.filter((item : { symbol: string }) => item?.symbol !== 'VAULT')
@@ -40,11 +42,13 @@ const assetsByKey = computed<Record<string, IAsset>>(() => {
   }, {});
 });
 
+const latestTrade = computed(() => $app.store.user.latestTrade);
+
 const marqueList = computed<Record<string, number | string>[]>(() => [
   {
     text: 'Total Bitcoin ETF Dividends Paid',
-    value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2),
-    modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * $app.store.user.btcValue, 2)}`,
+    value: $app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * btcPrice.value, 2),
+    modifyValue: `$${$app.filters.rounded($app.store.user?.statistic?.dividends_earned_btc * btcPrice.value, 2)}`,
   },
   {
     text: 'USDT APY',
@@ -63,16 +67,13 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   },
   {
     text: 'Latest trade',
-    value: $app.store.user.latestTrade || $app.filters.rounded($app.store.user.lastTrades?.find((item : { type: string }) => item.type === 'close')?.result_amount, 2),
-    modifyValue: `$${$app.filters.rounded(
-      $app.store.user.latestTrade || $app.store.user.lastTrades?.find((item : { type: string }) => item.type === 'close')?.result_amount,
-      2,
-    )}`,
+    value: latestTrade.value || '...',
+    modifyValue: `${ latestTrade.value ? `$` : '...' }${ latestTrade.value ? $app.filters.rounded(latestTrade.value, 2) : '' }`,
   },
   {
     text: 'BTC/USDT',
-    value: $app.filters.rounded(btcUsdt.value, 2),
-    modifyValue: `$${$app.filters.rounded(btcUsdt.value, 2)}`,
+    value: $app.filters.rounded(btcPrice.value, 2),
+    modifyValue: `$${$app.filters.rounded(btcPrice.value, 2)}`,
   },
   {
     text: 'Bitcoin ETF Share / USDT',
@@ -91,8 +92,8 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
   },
   {
     text: 'Bitcoin Reserve Fund Balance',
-    value: $app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2),
-    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * (btcUsdt.value ?? 1), 2)}`,
+    value: $app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * btcPrice.value, 2),
+    modifyValue: `$${$app.filters.rounded(assetsByKey.value?.BRF?.incoming_amount_btc * btcPrice.value, 2)}`,
   },
   {
     text: 'BTC Options TD Balance',
@@ -124,9 +125,10 @@ const marqueList = computed<Record<string, number | string>[]>(() => [
 const filteredMarqueList = computed(() => marqueList.value.filter((el) => el?.value));
 
 onMounted(async () => {
-  await useFetch(`https://api3.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT`).then((resp) => {
-    btcUsdt.value = resp?.data?._value?.lastPrice;
-  })
+  if (!btcUsdt.value) {
+    const { data: { _value: { lastPrice } } } = await $app.api.info.statistic.getBinanceTicker24hr('BTCUSDT');
+    // btcUsdtBinance.value = lastPrice;
+  }
 })
 </script>
 
