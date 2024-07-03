@@ -266,7 +266,8 @@ export default defineNuxtConfig({
   },
   router: {
     // https://router.vuejs.org/api/interfaces/routeroptions.html
-    options: {}
+    options: {},
+    prefetchLinks: false,
   },
   devtools: {
     timeline: {

@@ -27,7 +27,7 @@ export default defineNuxtPlugin(async ({ $app, _route }: any) => {
       await $app.api.eth.auth.getUser().then((resp) => {
         $app.store.user.setUserInfo(resp?.data)
       })
-      await $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
+      $app.api.info.blockchainProxy.getUserBlockchainWallet().then((resp) => {
         $app.store.user.blockchainUserWallet = resp?.data.uid
       })
     }
