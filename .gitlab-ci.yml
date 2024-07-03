@@ -42,6 +42,7 @@ build:stage:
     - runner-stage
   only:
     - staging
+    - staging_frontend_test
   script:
     - build_image
 
@@ -51,6 +52,7 @@ deploy:stage:
     - runner-stage
   only:
     - staging
+    - staging_frontend_test
   environment:
     name: ${CI_COMMIT_REF_SLUG}
     url: "${STAGE_DOMAIN}${PRODUCTION_PATH}"
@@ -64,6 +66,7 @@ test:stage:
     - runner-stage
   only:
     - staging
+    - staging_frontend_test
   script:
     - test_app
 
@@ -73,6 +76,7 @@ destroy:stage:
     - runner-stage
   only:
     - staging
+    - staging_frontend_test
   environment:
     name: ${CI_COMMIT_REF_SLUG}
     action: stop
