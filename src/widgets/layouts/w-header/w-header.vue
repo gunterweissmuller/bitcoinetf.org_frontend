@@ -135,7 +135,7 @@ import EPageInfoStatements from '~/src/entities/e-page-info-modal/ui/e-page-info
 import MPopper from '~/src/shared/ui/molecules/m-popper/m-popper.vue'
 import { nextTick, onUnmounted, onMounted, computed } from 'vue'
 import EFundTabs from '~/src/features/e-fund-tabs/e-fund-tabs.vue'
-import { Autoplay } from 'swiper'
+import { Autoplay } from 'swiper/modules'
 import MSlider from '~/src/shared/ui/molecules/m-slider/m-slider.vue'
 import { SwiperSlide } from 'swiper/vue'
 import { auth } from '~/src/app/store/auth';
@@ -617,7 +617,7 @@ const getLastPayment = async () => {
 }
 const fetchDemoUserToken = async () => {
   try {
-    const {data} =  await $app.api.eth.auth.getDemoUserToken()  
+    const {data} =  await $app.api.eth.auth.getDemoUserToken()
     authStore.setTokens(data)
   } catch (error) {
     console.error(error);
