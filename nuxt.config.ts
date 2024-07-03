@@ -88,27 +88,27 @@ export default defineNuxtConfig({
       },
     ],
   ],
-  components: {
-    global: true,
-    dirs: [
-      {
-        path: 'src/shared/ui/site/sections',
-        extensions: ['vue'],
-      },
-      {
-        path: 'src/shared/ui/site/molecules',
-        extensions: ['vue'],
-      },
-      {
-        path: 'src/widgets/w-news',
-        extensions: ['vue'],
-      },
-      {
-        path: 'src/shared/ui/promolandings',
-        extensions: ['vue'],
-      }
-    ],
-  },
+  // components: {
+  //   global: true,
+  //   dirs: [
+  //     {
+  //       path: 'src/shared/ui/site/sections',
+  //       extensions: ['vue'],
+  //     },
+  //     {
+  //       path: 'src/shared/ui/site/molecules',
+  //       extensions: ['vue'],
+  //     },
+  //     {
+  //       path: 'src/widgets/w-news',
+  //       extensions: ['vue'],
+  //     },
+  //     {
+  //       path: 'src/shared/ui/promolandings',
+  //       extensions: ['vue'],
+  //     }
+  //   ],
+  // },
   dir: {
     layouts: 'src/layouts',
     pages: 'src/pages',
