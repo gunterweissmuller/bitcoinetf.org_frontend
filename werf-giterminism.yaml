@@ -5,4 +5,4 @@ config:
       - CI_PROJECT_PATH_SLUG
       - ENV_FULL_NAME
       - APP_URL
-      - APP0_URL
+      - APP_URL0
