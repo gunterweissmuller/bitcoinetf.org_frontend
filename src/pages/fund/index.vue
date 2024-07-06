@@ -7,7 +7,7 @@
   <s-site-fund-main :data="mainData"/>
   <s-site-marquee-new :data="marqueeData" :isBackground="false"/>
   <s-site-fund-vision :data="visionData"/>
-  <s-site-fund-ceo :data="ceoData"/>
+  <!-- <s-site-fund-ceo :data="ceoData"/> -->
   <s-site-fund-main-info-dark/>
   <s-site-fund/>
   <s-site-footer/>
@@ -18,7 +18,7 @@ import MScrollNavigation from "~/src/shared/ui/site/molecules/m-scroll-navigatio
 import SSiteFundMain from "~/src/shared/ui/site/sections/s-site-fund-main/s-site-fund-main.vue";
 import SSiteMarqueeNew from "~/src/shared/ui/site/sections/s-site-marquee-new/s-site-marquee-new.vue";
 import SSiteFundVision from "~/src/shared/ui/site/sections/s-site-fund-vision/s-site-fund-vision.vue";
-import SSiteFundCeo from "~/src/shared/ui/site/sections/s-site-fund-ceo/s-site-fund-ceo.vue";
+// import SSiteFundCeo from "~/src/shared/ui/site/sections/s-site-fund-ceo/s-site-fund-ceo.vue";
 import SSiteFundMainInfoDark from '~/src/shared/ui/site/sections/s-site-fund-main-info-dark/s-site-fund-main-info-dark.vue'
 import SSiteFund from '~/src/shared/ui/site/sections/s-site-fund/s-site-fund.vue'
 import SSiteFooter from "~/src/shared/ui/site/sections/s-site-footer/s-site-footer.vue";
@@ -118,35 +118,35 @@ const visionData = {
   ],
 };
 
-const ceoData = {
-  name: 'Our CEO',
-  title: 'MEET JALAL SAID <span>OUR TRUSTED CEO</span>',
-  img: '/img/site-dark/s-site-fund-ceo/1.png',
-  info: {
-    text: `
-      <p>Jalal has been at the helm of BitcoinETF since 2023, expertly managing over $1 Billion.</p>
-      <p>With roles in global financial hubs like Tokyo, Hong Kong, and Dubai, he's a recognized voice in Bitcoin and fintech.</p>
-    `,
-    btn: {
-      text: 'Invest with Confidence',
-    }
-  },
-  message: 'Management you can rely on',
-  points: [
-    {
-      title: 'Expert Management',
-      text: 'Oversees a portfolio exceeding $1 billion',
-    },
-    {
-      title: 'Global Expertise',
-      text: 'Across continents from Asia to Europe',
-    },
-    {
-      title: 'Fintech Pioneer',
-      text: 'A regular speaker at major industry events',
-    },
-  ],
-};
+// const ceoData = {
+//   name: 'Our CEO',
+//   title: 'MEET JALAL SAID <span>OUR TRUSTED CEO</span>',
+//   img: '/img/site-dark/s-site-fund-ceo/1.png',
+//   info: {
+//     text: `
+//       <p>Jalal has been at the helm of BitcoinETF since 2023, expertly managing over $1 Billion.</p>
+//       <p>With roles in global financial hubs like Tokyo, Hong Kong, and Dubai, he's a recognized voice in Bitcoin and fintech.</p>
+//     `,
+//     btn: {
+//       text: 'Invest with Confidence',
+//     }
+//   },
+//   message: 'Management you can rely on',
+//   points: [
+//     {
+//       title: 'Expert Management',
+//       text: 'Oversees a portfolio exceeding $1 billion',
+//     },
+//     {
+//       title: 'Global Expertise',
+//       text: 'Across continents from Asia to Europe',
+//     },
+//     {
+//       title: 'Fintech Pioneer',
+//       text: 'A regular speaker at major industry events',
+//     },
+//   ],
+// };
 
 // const marqueeData = {
 //   low_cards: [
